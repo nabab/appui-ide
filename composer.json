@@ -1,0 +1,19 @@
+{
+  "name": "bbn/appui-ide",
+  "description": "IDE for APPUI",
+  "keywords": ["ide","appui"],
+  "homepage": "https://github.com/nabab/ide-appui",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Thomas Nabet",
+      "email": "thomas.nabet@gmail.com",
+      "homepage": "http://bbn.solutions",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">=5.4.0",
+    "bbn/bbn": "dev-master"
+  }
+}
