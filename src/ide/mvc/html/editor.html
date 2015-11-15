@@ -1,0 +1,93 @@
+<ul class="apst-ide-context"></ul>
+<div class="apst_ide_container appui-full-height">
+  <div class="pane-content appui_ide"></div>
+  <div class="pane-content apst_code_container">
+    <div class="pane-content tree"></div>
+    <div class="pane-content" style="padding:0px">
+      <div style="position: absolute; top: auto; left: auto; margin: 50%; text-align: center">
+        Tool's description comes here
+      </div>
+      <div class="appui-full-height" id="tabstrip_editor"></div>
+    </div>
+    <div class="pane-content">Help</div>
+  </div>
+</div>
+<script type="text/html" id="ide_new_template">
+<form action="ide/actions" method="post" autocomplete="off">
+  <input type="hidden" name="act" value="insert">
+  <input type="hidden" name="type">
+  <input type="hidden" name="dir">
+  <input type="hidden" name="uid">
+  <input type="hidden" name="src">
+  <label for="ide_new_name" class="appui-form-label">Name</label>
+  <div class="appui-form-field">
+    <input type="text" name="name" class="k-textbox" id="ide_new_name" required="required">
+    <input type="hidden" name="ext">
+  </div>
+  <label class="appui-form-label">Path</label>
+  <div class="appui-form-field">
+    <input type="text" name="path" class="k-textbox" readonly="readonly" required>
+    <button class="k-button" onclick="appui.f.IDE.selectDir(); return false;">Browse</button>
+    <button class="k-button" onclick="$(this).prevAll('input').val('./'); return false;">Root</button>
+  </div>
+  <div class="appui-form-label"> </div>
+  <div class="appui-form-field">
+    <button class="k-button" type="submit">
+      <i class="fa fa-new"> </i> Save
+    </button>
+  </div>
+</form>
+</script>
+<script type="text/html" id="ide_rename_template">
+<form action="ide/actions" method="post">
+  <input type="hidden" name="act" value="rename">
+  <input type="hidden" name="uid">
+  <input type="hidden" name="dir">
+  <input type="hidden" name="path">
+  <label for="ide_new_name" class="appui-form-label">Name</label>
+  <input type="text" name="name" class="appui-form-field k-textbox" id="ide_new_name" required="required">
+  <div class="appui-form-label"> </div>
+  <div class="appui-form-field">
+    <button class="k-button" type="submit">
+      <i class="fa fa-edit"> </i> Rename
+    </button>
+  </div>
+</form>
+</script>
+<script type="text/html" id="ide_manage_directories_template">
+  <div id="ide_manage_dirs" class="appui-full-height">
+      <div id="ide_manage_dirs_grid" class="appui-full-height"></div>
+  </div>
+</script>
+<script type="text/html" id="ide_appearance_template">
+  <div class="appui-full-height" style="padding-top: 10px">
+    <form>
+      Theme: <input id="ide_theme_sel" name="theme">
+      Font: <input id="ide_font_sel" name="font">
+      Size: <input id="ide_font_size_sel" name="font_size">
+      <br><br>
+      <textarea id="code" style="width: 100%; height: 300px">
+function findSequence(goal) {
+  function find(start, history) {
+    if (start == goal)
+      return history;
+    else if (start > goal)
+      return null;
+    else
+      return find(start + 5, "(" + history + " + 5)") ||
+             find(start * 3, "(" + history + " * 3)");
+  }
+  return find(1, "1");
+}
+      </textarea>
+      <br><br>
+      <div align="right">
+        <button class="k-button" type="button" onclick="appui.f.closeAlert();"><i class="fa fa-close"></i> Annule</button>
+        <button class="k-button" type="button"><i class="fa fa-save"></i> Sauver</button>
+      </div>
+  </form>
+  </div>
+</script>
+<script type="text/html" id="upd_perms_template">
+  <div class="tree_groups"></div>
+</script>
