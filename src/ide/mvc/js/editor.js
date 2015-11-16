@@ -1,6 +1,6 @@
 appui.f.IDE.tabstrip = $("#tabstrip_editor");
 appui.f.IDE.editor = kappui.tabstrip.ele.tabNav("getContainer", appui.f.IDE.tabstrip);
-
+appui.f.log(data);
 var panel,
     $tree = $("div.tree", appui.f.IDE.editor),
   	treeDS = new kendo.data.HierarchicalDataSource({
@@ -11,7 +11,7 @@ var panel,
         read: {
           dataType: "json",
           type: "POST",
-          url: "ide/tree",
+          url: data.root + "tree",
           data: {
             mode: function(){
               return $("input.ide-dir_select", appui.f.IDE.editor).data("kendoDropDownList").value()
@@ -101,7 +101,7 @@ $tree.kendoTreeView({
     }
     else if ( r.is_viewable ){
       var dir = $("input.ide-dir_select", appui.f.IDE.editor).data("kendoDropDownList").value();
-      appui.f.post('ide/load', {
+      appui.f.post(data.root + 'load', {
         dir: dir,
         file: r.path
       }, function(d){
@@ -109,7 +109,7 @@ $tree.kendoTreeView({
           if ( appui.f.IDE.tabstrip.tabNav("search", d.data.url) === -1 ) {
             appui.f.IDE.add(d.data);
           }
-          appui.f.IDE.tabstrip.tabNav("activate", 'ide/editor/' + d.data.url + (d.data.def ? '/' + d.data.def : ''));
+          appui.f.IDE.tabstrip.tabNav("activate", data.root + 'editor/' + d.data.url + (d.data.def ? '/' + d.data.def : ''));
           $tree.data("kendoTreeView").select(e.node);
           // Set theme
           if ( data.theme ){
@@ -148,7 +148,7 @@ $tree.kendoTreeView({
       var dd = this.dataItem(e.destinationNode),
           ds = this.dataItem(e.sourceNode),
           dir = $("input.ide-dir_select").data("kendoDropDownList").value();
-      appui.f.post('ide/actions', {dpath: dd.path, spath: ds.path, dir: dir, act: 'move'}, function(d){
+      appui.f.post(data.root + 'actions', {dpath: dd.path, spath: ds.path, dir: dir, act: 'move'}, function(d){
         if ( d.success ) {
           dd.loaded(false);
           dd.load();
@@ -254,9 +254,8 @@ $("ul.apst-ide-context").kendoContextMenu({
   }
 });
 
-$("input.ide-dir_select", appui.f.IDE.editor).kendoDropDownList({
-  value: data.current_dir,
-  dataSource: data.dirs,
+var $dirDropDown = $("input.ide-dir_select", appui.f.IDE.editor).kendoDropDownList({
+  dataSource: [],
   dataTextField: "text",
   dataValueField: "value",
   change: function(e){
@@ -272,14 +271,16 @@ $("input.ide-dir_select", appui.f.IDE.editor).kendoDropDownList({
     }
     treeDS.read();
   }
-}).data("kendoDropDownList").trigger("change");
+}).data("kendoDropDownList");
+appui.f.IDE.dirDropDownSource(data.dirs, data.current_dir);
+$dirDropDown.trigger("change");
 
 $("input.ide-tree_search", appui.f.IDE.editor).on('keyup', function(){
   treeDS.filter([{field: "name", operator: "contains", value: $(this).val()}]);
   //treeDS.read();
 });
 
-appui.f.IDE.build(data.config, appui.f.IDE.tabstrip, 'ide/editor', 'IDE - ');
+appui.f.IDE.build(data.config, appui.f.IDE.tabstrip, data.root + 'editor', 'IDE - ');
 
 kappui.tabstrip.ele.tabNav("activate", data.url);
 
@@ -294,7 +295,7 @@ kappui.tabstrip.ele.tabNav("set", "close", function(){
     return confirm($.ui.codemirror.confirmation);
   }
   return 1;
-}, 'ide/editor');
+}, data.root + 'editor');
 
 // Set theme
 if ( data.theme ) {

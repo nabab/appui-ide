@@ -9,6 +9,6 @@ if ( isset($this->post['log']) ){
 else{
   $this->obj->title = "Log files";
   $this->data = $this->get_model();
-  echo $this->add_js()->get_view();
+  echo $this->add_js(['root' => $this->say_dir().'/'])->get_view();
 }
 ?>

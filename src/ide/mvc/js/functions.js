@@ -1,6 +1,6 @@
 if ( appui.f.IDE === undefined ){
   appui.f.IDE = {
-    url: 'ide/editor',
+    url: data.root + 'editor',
     title: 'IDE - ',
     selected: 0,
     resize: function(ele){
@@ -20,7 +20,7 @@ if ( appui.f.IDE === undefined ){
       if ( !conf || ( conf && confirm($.ui.codemirror.confirmation) ) ){
         var tabUrl = cfg.url,
           sIdx = tabUrl.indexOf("/");
-        appui.f.post("ide/actions", {
+        appui.f.post(data.root + "actions", {
           dir: tabUrl.slice(0, sIdx),
           file: tabUrl.slice(sIdx+1, tabUrl.lenght),
           act: 'close'
@@ -32,6 +32,42 @@ if ( appui.f.IDE === undefined ){
         return true;
       }
       return false;
+    },
+
+    dirDropDownSource: function(dirs, value){
+      var r = [],
+          $sel = $("input.ide-dir_select", appui.f.IDE.editor).data("kendoDropDownList"),
+          o;
+      if ( !value ){
+        value = $sel.value();
+      }
+      $.each(dirs, function(i, a){
+        if ( a.files.CTRL !== undefined ){
+          for ( var j in a.files ){
+            o = {};
+            if ( j !== 'CTRL' ){
+              if ( a.files[j].default ){
+                o.bcolor = a.bcolor;
+                o.fcolor = a.fcolor;
+              }
+              o.group = a.value;
+              o.value = j;
+              o.text = j;
+              r.push($.extend({}, a.files[j], o));
+            }
+          }
+        }
+        else{
+          a.group = a.value;
+          r.push(a);
+        }
+      });
+      appui.f.log(r);
+      $sel.setDataSource({
+        data: r,
+        group: { field: "group" }
+      });
+      $sel.value(value);
     },
 
     test: function(mode){
@@ -51,7 +87,7 @@ if ( appui.f.IDE === undefined ){
       if ( typeof(m) === 'string' ){
         switch ( m ){
           case "php":
-            appui.f.window("ide/test", {code:c}, "90%", "90%");
+            appui.f.window(data.root + "test", {code:c}, "90%", "90%");
             break;
           case "js":
             eval(c);
@@ -112,7 +148,7 @@ if ( appui.f.IDE === undefined ){
             read: {
               dataType: "json",
               type: "POST",
-              url: "ide/tree",
+              url: data.root + "tree",
               data: {
                 mode: mode,
                 onlydir: true
@@ -163,7 +199,7 @@ if ( appui.f.IDE === undefined ){
         msg = "Are you sure that you want to delete the file " + dataItem.path + "?";
       }
       if ( confirm(msg) ){
-        appui.f.post("ide/actions", {
+        appui.f.post(data.root + "actions", {
           path: dataItem.path,
           id: dataItem.id,
           type: dataItem.type,
@@ -185,14 +221,15 @@ if ( appui.f.IDE === undefined ){
     },
 
     rename: function(dataItem){
-      var $sel = $("input.ide-dir_select", appui.f.IDE.editor).data("kendoDropDownList");
-      //$sel.trigger("change");
+      var $sel = $("input.ide-dir_select", appui.f.IDE.editor).data("kendoDropDownList"),
+        selectedValue = $sel.value(),
+        idx = appui.f.search(data.dirs, "value", selectedValue);
       appui.f.alert($("#ide_rename_template").html(), 'Rename element', 450, 100, function(ele) {
         $("input[name=name]", ele).val(dataItem.name).focus();
         $("input[name=uid]", ele).val(dataItem.uid);
-        $("input[name=dir]", ele).val($sel.value());
+        $("input[name=dir]", ele).val(selectedValue);
         $("input[name=path]", ele).val(dataItem.path);
-        if ( $sel.value() === 'MVC' ){
+        if ( data.dirs[idx].files.CTRL !== undefined ){
           var cb =  '<div class="appui-form-label">Update permissions</div>' +
                     '<div class="appui-form-field">' +
                       '<input type="checkbox" id="cb_upd_perms" class="k-checkbox" val="1">' +
@@ -238,7 +275,7 @@ if ( appui.f.IDE === undefined ){
               appui.f.IDE.tabstrip.tabNav("setTitle", d.new_file.replace(/^.*[\\\/]/, ''), tab.url);
               tab.url = $sel.value() + '/' + d.new_file + (d.new_file_ext ? '.' + d.new_file_ext : '.php');
               if ( appui.f.IDE.tabstrip.tabNav("getSubTabNav", tab.url) ){
-                appui.f.IDE.tabstrip.tabNav("getSubTabNav", tab.url).options.baseURL = "ide/editor/" + tab.url + "/";
+                appui.f.IDE.tabstrip.tabNav("getSubTabNav", tab.url).options.baseURL = data.root + "editor/" + tab.url + "/";
               }
               appui.f.IDE.tabstrip.tabNav("activate", tab.url);
             }
@@ -251,8 +288,9 @@ if ( appui.f.IDE === undefined ){
     },
 
     duplicate: function(dataItem){
-      var $sel = $("input.ide-dir_select", appui.f.IDE.editor).data("kendoDropDownList");
-      //$sel.trigger("change");
+      var $sel = $("input.ide-dir_select", appui.f.IDE.editor).data("kendoDropDownList"),
+        selectedValue = $sel.value(),
+        idx = appui.f.search(data.dirs, "value", selectedValue);
       appui.f.alert($("#ide_new_template").html(), 'Duplicate', 490, 150, function(ele){
         appui.v.tmp = dataItem.path.split("/");
         if ( appui.v.tmp.length ) {
@@ -264,7 +302,7 @@ if ( appui.f.IDE === undefined ){
         $("input[name=uid]", ele).val(dataItem.uid);
         $("input[name=path]", ele).val(appui.v.tmp.join('/'));
         $("input[name=src]", ele).val(dataItem.path);
-        if ( $sel.value() === 'MVC' ){
+        if ( data.dirs[idx].files.CTRL !== undefined ){
           var cb =  '<div class="appui-form-label">Update permissions</div>' +
                     '<div class="appui-form-field">' +
                       '<input type="checkbox" id="cb_upd_perms" class="k-checkbox" val="1">' +
@@ -277,7 +315,7 @@ if ( appui.f.IDE === undefined ){
             e.preventDefault();
             $(this).trigger("submit");
           }
-        }).attr("action", "ide/actions").data("script", function(d){
+        }).attr("action", data.root + "actions").data("script", function(d){
           if ( d.success ) {
             var uid = $("input[name=uid]", ele).val(),
               tree = $('div.tree', appui.f.IDE.editor).data('kendoTreeView'),
@@ -316,7 +354,7 @@ if ( appui.f.IDE === undefined ){
 
   	export: function(dataItem){
       var $sel = $("input.ide-dir_select", appui.f.IDE.editor).data("kendoDropDownList");
-      appui.f.post_out('ide/actions', {
+      appui.f.post_out(data.root + 'actions', {
         dir: $sel.value(),
         name: dataItem.name,
         path: dataItem.path,
@@ -330,7 +368,7 @@ if ( appui.f.IDE === undefined ){
 
     update_permissions: function(path){
       appui.f.alert($("#upd_perms_template").html(), 'Update permissions', 900, 700, function(pop){
-        appui.f.post('ide/permissions', {}, function(d){
+        appui.f.post(data.root + 'permissions', {}, function(d){
           if ( d.data ){
             appui.f.log(d);
             var tree_groups = $("div.tree_groups").kendoTreeView({
@@ -350,7 +388,9 @@ if ( appui.f.IDE === undefined ){
     },
 
     newDir: function(path, uid){
-      var $sel = $("input.ide-dir_select", appui.f.IDE.editor).data("kendoDropDownList");
+      var $sel = $("input.ide-dir_select", appui.f.IDE.editor).data("kendoDropDownList"),
+        selectedValue = $sel.value(),
+        idx = appui.f.search(data.dirs, "value", selectedValue);
       //$sel.trigger("change");
       appui.f.alert($("#ide_new_template").html(), 'New directory', 540, 150, function(ele){
         $("input[name=name]", ele).focus();
@@ -362,7 +402,7 @@ if ( appui.f.IDE === undefined ){
         if ( uid ){
           $("input[name=uid]", ele).val(uid);
         }
-        if ( $sel.value() === 'MVC' ){
+        if ( data.dirs[idx].files.CTRL !== undefined ){
           var cb =  '<div class="appui-form-label">Update permissions</div>' +
                     '<div class="appui-form-field">' +
                       '<input type="checkbox" id="cb_upd_perms" class="k-checkbox" val="1">' +
@@ -414,10 +454,11 @@ if ( appui.f.IDE === undefined ){
 
     newFile: function(dir, path, uid){
       var n,
-        title = dir === 'MVC' ? 'New MVC' : 'New File',
-        ext = [],
         dirs = data.dirs,
-      files = dirs[appui.f.search(dirs, 'value', dir)]['files'];
+        idx = appui.f.search(data.dirs, 'value', dir),
+        title = data.dirs[idx].files.CTRL !== undefined ? 'New MVC' : 'New File',
+        ext = [],
+      files = dirs[idx]['files'];
       $.map(files, function(f){
         ext.push({text: '.' + f.ext, value: f.ext});
       });
@@ -508,7 +549,7 @@ if ( appui.f.IDE === undefined ){
         $c = $("div.code:visible", appui.f.IDE.tabstrip);
       if ( $c.length ){
         var state = $c.codemirror("getState");
-        appui.f.post("ide/actions", {
+        appui.f.post(data.root + "actions", {
           selections: state.selections,
           marks: state.marks,
           file: appui.v.path.substr(appui.f.IDE.url.length+1),
@@ -639,14 +680,14 @@ if ( appui.f.IDE === undefined ){
             transport: {
               type: "json",
               read: function(o){
-                appui.f.post('ide/directories', function(d){
+                appui.f.post(data.root + 'directories', function(d){
                   if ( d.data ) {
                     o.success(d.data);
                   }
                 });
               },
               update: function(o){
-                appui.f.post('ide/directories', o.data, function(d){
+                appui.f.post(data.root + 'directories', o.data, function(d){
                   if ( d.data ){
                     o.success();
                   }
@@ -656,7 +697,7 @@ if ( appui.f.IDE === undefined ){
                 });
               },
               destroy: function(o){
-                appui.f.post('ide/directories', {id: o.data.id}, function(d){
+                appui.f.post(data.root + 'directories', {id: o.data.id}, function(d){
                   if ( d.data ){
                     o.success();
                   }
@@ -666,7 +707,7 @@ if ( appui.f.IDE === undefined ){
                 });
               },
               create: function(o){
-                appui.f.post('ide/directories', o.data, function(d){
+                appui.f.post(data.root + 'directories', o.data, function(d){
                   if ( d.data ){
                     o.success(d.data);
                   }
@@ -997,7 +1038,7 @@ if ( appui.f.IDE === undefined ){
               ]);
               target = grid.dataSource.getByUid(target.uid);
               dest = grid.dataSource.getByUid(dest.uid);
-              appui.f.post('ide/directories', {
+              appui.f.post(data.root + 'directories', {
                 id: target.id,
                 name: target.name,
                 root_path: target.root_path,
@@ -1007,7 +1048,7 @@ if ( appui.f.IDE === undefined ){
                 position: target.position
               }, function(d){
                 if ( d.data ){
-                  appui.f.post('ide/directories', {
+                  appui.f.post(data.root + 'directories', {
                     id: dest.id,
                     name: dest.name,
                     root_path: dest.root_path,
@@ -1083,7 +1124,7 @@ if ( appui.f.IDE === undefined ){
         $("i.fa-save", alert).parent().on("click", function(){
           var formdata = appui.f.formdata($("form", alert));
           formdata.font_size = formdata.font_size + 'px';
-          appui.f.post('ide/appearance', formdata, function(d){
+          appui.f.post(data.root + 'appearance', formdata, function(d){
             if ( d.success ){
               appui.f.closeAlert();
               data.theme = formdata.theme;

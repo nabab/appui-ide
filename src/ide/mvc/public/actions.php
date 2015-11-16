@@ -18,7 +18,6 @@ if ( $this->inc->user->is_admin() ){
       else{
         if ( $this->data['act'] === 'save' ){
           if ( $id_option = $this->inc->options->get_id($this->data['file'], BBN_ID_SCRIPT) ){
-            var_dump($id_option);
             $this->inc->pref->set($id_option, [
               'code' => md5($this->post['code']),
               'selections' => isset($this->post['selections']) ? $this->post['selections'] : [],

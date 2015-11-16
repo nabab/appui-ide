@@ -8,7 +8,7 @@ if ( isset($this->post['mode']) ){
   $this->data['mode'] = $this->post['mode'];
   $_SESSION[BBN_SESS_NAME]['ide']['dir'] = $this->post['mode'];
 }
-$d = $this->get_model("ide/editor");
+$d = $this->get_model("./editor");
 if ( isset($this->data['mode'], $d['dirs'][$this->data['mode']]) ){
   $files = $d['dirs'][$this->data['mode']]['files'];
 }

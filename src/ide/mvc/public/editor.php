@@ -20,7 +20,7 @@ if ( empty($_SESSION[BBN_SESS_NAME]['ide']['list']) ){
 }
 foreach ( $_SESSION[BBN_SESS_NAME]['ide']['list'] as $l ){
   $this->data = $l;
-  if ( $tmp = $this->get_model('ide/load') ){
+  if ( $tmp = $this->get_model('./load') ){
     array_push($list, $tmp);
   }
 }
@@ -59,14 +59,17 @@ $this->data = \bbn\tools::merge_arrays($model, [
   'font_size' => !empty($ide_cfg['font_size']) ? $ide_cfg['font_size'] : ''
 ]);
 
-$this->obj->url = 'ide/editor';
 echo $this
   ->set_title("IDE")
-  ->add_js('ide/functions', ['dirs' => $dirs])
+  ->add_js('./functions', [
+    'dirs' => $dirs,
+    'root' => $this->say_dir().'/'
+  ])
   ->add_js([
     'menu' => $model['menu'],
     'config' => $list,
     'dirs' => $dirs,
+    'root' => $this->say_dir().'/',
     'url' => implode('/',$this->params),
     'current_dir' => $current_dir ? $current_dir : $model['default_dir'],
     'theme' => !empty($ide_cfg['theme']) ? $ide_cfg['theme'] : '',

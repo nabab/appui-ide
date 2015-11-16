@@ -18,7 +18,7 @@ var log_file = $("#apst_log_splitter select:first").kendoDropDownList({
       var v = log_file.data("kendoDropDownList").value(),
           n = num_lines.data("kendoDropDownList").value();
       if ( v ){
-        appui.f.post('ide/logs', {log: v, clear: clear ? 1 : "0", num_lines: n}, function(d){
+        appui.f.post(data.root + 'logs', {log: v, clear: clear ? 1 : "0", num_lines: n}, function(d){
           $("#log_viewer").codemirror("setOption", "value", d.content);
           appui.f.log($("#log_viewer").codemirror("getMode"));
         });
