@@ -12,7 +12,10 @@ if ( !isset($_SESSION[BBN_SESS_NAME]['ide']) ){
 }
 
 if ( (count($this->arguments) > 1) && isset($model['dirs'][$this->arguments[0]]) ){
-  $current_dir = $this->arguments[0];
+  $current_dir = [
+    'dir' => $this->arguments[0],
+    'subdir' => $this->arguments[0]
+  ];
 }
 
 if ( empty($_SESSION[BBN_SESS_NAME]['ide']['list']) ){

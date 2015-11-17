@@ -13,11 +13,16 @@ var panel,
           type: "POST",
           url: data.root + "tree",
           data: {
+            group: function(){
+              if ( $("input.ide-dir_select", appui.f.IDE.editor).data("kendoDropDownList").value().length ){
+                return $("input.ide-dir_select", appui.f.IDE.editor).data("kendoDropDownList").dataItem().group;
+              }
+            },
             mode: function(){
-              return $("input.ide-dir_select", appui.f.IDE.editor).data("kendoDropDownList").value()
+              return $("input.ide-dir_select", appui.f.IDE.editor).data("kendoDropDownList").value();
             },
             filter: function(){
-              return $("input.ide-tree_search", appui.f.IDE.editor).val()
+              return $("input.ide-tree_search", appui.f.IDE.editor).val();
             }
           }
         }
@@ -67,7 +72,7 @@ $("div.appui_ide", appui.f.IDE.editor).kendoToolBar({
   }, {
     type: "separator"
   }, {
-    template: '<input class="ide-dir_select" style="width: 150px;">'
+    template: '<input class="ide-dir_select" style="width: 300px;">'
   }, {
     type: "separator"
   }, {
@@ -100,9 +105,10 @@ $tree.kendoTreeView({
       window.open(appui.v.host+'/'+r.path);
     }
     else if ( r.is_viewable ){
-      var dir = $("input.ide-dir_select", appui.f.IDE.editor).data("kendoDropDownList").value();
+      var dir = $("input.ide-dir_select", appui.f.IDE.editor).data("kendoDropDownList").dataItem();
       appui.f.post(data.root + 'load', {
-        dir: dir,
+        dir: dir.group,
+        subdir: dir.value,
         file: r.path
       }, function(d){
         if ( d.data ){
@@ -160,15 +166,15 @@ $tree.kendoTreeView({
     }
   },
   template: function(e){
-    var idx = appui.f.search(data.dirs, "text", $("input.ide-dir_select").data("kendoDropDownList").value()),
+    var sel = $("input.ide-dir_select").data("kendoDropDownList").dataItem(),
         color = false;
     if ( e.item.icon ){
       return '<span class="k-sprite ' + e.item.icon + '"></span>' + e.item.name;
     }
     else if ( e.item.ext ){
-      color = appui.f.get_field(data.dirs[idx].files, 'ext', e.item.ext, 'bcolor');
+      color = appui.f.get_field(sel.files, 'ext', e.item.ext, 'bcolor');
       if ( !color ){
-        color = data.dirs[idx].bcolor;
+        color = sel.bcolor;
       }
       return '<span class="k-sprite ' + e.item.ext + '-icon" ' + (color ? 'style="color:' + color + '"' : '') + '></span>' + e.item.name;
     }
@@ -259,15 +265,12 @@ var $dirDropDown = $("input.ide-dir_select", appui.f.IDE.editor).kendoDropDownLi
   dataTextField: "text",
   dataValueField: "value",
   change: function(e){
-    var idx = appui.f.search(data.dirs, "text", e.sender.value());
-    if ( idx === -1 ){
-      idx = 1;
+    var sel = e.sender.dataItem();
+    if ( sel.bcolor ){
+      e.sender.wrapper.find(".k-input").css({backgroundColor: sel.bcolor});
     }
-    if ( data.dirs[idx].bcolor ){
-      e.sender.wrapper.find(".k-input").css({backgroundColor: data.dirs[idx].bcolor});
-    }
-    if ( data.dirs[idx].fcolor ){
-      e.sender.wrapper.find(".k-input").css({color: data.dirs[idx].fcolor});
+    if ( sel.fcolor ){
+      e.sender.wrapper.find(".k-input").css({color: sel.fcolor});
     }
     treeDS.read();
   }

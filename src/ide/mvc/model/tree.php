@@ -140,7 +140,7 @@ if ( isset($this->data['dir']) ){
       }));
     }
 
-    $model = empty($this->data['onlydir']) ?array_merge($dirs, $files) : $dirs;
+    $model = empty($this->data['onlydir']) ? array_merge($dirs, $files) : $dirs;
     chdir($old_path);
     return $model;
   }

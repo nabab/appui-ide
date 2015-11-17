@@ -35,11 +35,13 @@ if ( appui.f.IDE === undefined ){
     },
 
     dirDropDownSource: function(dirs, value){
+      appui.f.log(value);
       var r = [],
           $sel = $("input.ide-dir_select", appui.f.IDE.editor).data("kendoDropDownList"),
           o;
       if ( !value ){
-        value = $sel.value();
+        value.dir = $sel.dataItem().group;
+        value.subdir = $sel.value();
       }
       $.each(dirs, function(i, a){
         if ( a.files.CTRL !== undefined ){
@@ -67,7 +69,10 @@ if ( appui.f.IDE === undefined ){
         data: r,
         group: { field: "group" }
       });
-      $sel.value(value);
+      //$sel.value(value);
+      $sel.select(function(dataItem){
+        return ( (dataItem.group === value.dir) && (dataItem.value === value.subdir) );
+      })
     },
 
     test: function(mode){

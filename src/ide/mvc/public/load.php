@@ -3,17 +3,12 @@
 if ( $cfg = $this->get_model('./directory', [
   'path' => empty($this->post['dir']) ? $this->data['dir'] : $this->post['dir']
 ]) ) {
-  if (isset($this->post['file'])) {
-    $this->data = [
-      'dir' => $this->post['dir'],
-      'file' => isset($cfg['files']['CTRL']) && (\bbn\str\text::file_ext($this->post['file']) !== 'php') ? substr($this->post['file'], 0, strrpos($this->post['file'], "/")) : $this->post['file']
-    ];
-  }
-
-  if (isset($this->data['dir'], $this->data['file'])) {
+  if ( !empty($this->post['file']) && !empty($this->post['dir']) && !empty($this->post['subdir']) ){
+    $this->data = $this->post;
     if (!in_array($this->data, $_SESSION[BBN_SESS_NAME]['ide']['list'])) {
       array_push($_SESSION[BBN_SESS_NAME]['ide']['list'], [
         'dir' => $this->data['dir'],
+        'subdir' => $this->data['subdir'],
         'file' => $this->data['file']
       ]);
     }

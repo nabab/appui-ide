@@ -3,11 +3,11 @@
 
 
 $res = false;
-if ( isset($this->data['dir'], $this->data['file']) &&
+if ( isset($this->data['dir'], $this->data['subdir'], $this->data['file']) &&
   ($ofile = \bbn\str\text::parse_path($this->data['file'])) &&
   ($cfg = $this->get_model('./directory', ['path' => $this->data['dir']]))
 ){
-  $path = isset($cfg['files']['CTRL']) ? $cfg['files']['Controller']['fpath'] : $cfg['files'][key($cfg['files'])]['fpath'];
+  $path = isset($cfg['files']['CTRL']) ? $cfg['files'][$this->data['subdir']]['fpath'] : $cfg['files'][key($cfg['files'])]['fpath'];
   $file = $path.$ofile;
 
   if ( !is_file($file) && isset($cfg['files']['CTRL']) ){
@@ -22,7 +22,7 @@ if ( isset($this->data['dir'], $this->data['file']) &&
   $fcolor = $cfg['fcolor'];
   if ( is_file($file) ){
     $def = '';
-    if ( isset($cfg['files']['CTRL']) ) {
+    if ( isset($cfg['files']['CTRL']) && $this->data['subdir'] === 'Controller' ) {
       $list = [];
       foreach ($cfg['files'] as $i => $f) {
         switch ($i) {
@@ -103,7 +103,7 @@ if ( isset($this->data['dir'], $this->data['file']) &&
         'def' => $def
       ];
     }
-    else{
+    else {
       $content = file_get_contents($path.$ofile);
       if ( $id_option = $this->inc->options->get_id($this->data['dir'].'/'.$ofile, BBN_ID_SCRIPT) ){
         $o = $this->inc->pref->get($id_option, $this->inc->user->get_id());
