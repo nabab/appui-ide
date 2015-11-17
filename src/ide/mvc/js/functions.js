@@ -242,7 +242,7 @@ if ( appui.f.IDE === undefined ){
                     '</div>';
           $('input.appui-form-field:last', 'form', ele).after($(cb));
         }
-        $("form", ele).data("script", function(d){
+        $("form", ele).attr("action", data.root + '/actions').data("script", function(d){
           if ( d.success && d.new_file ) {
             var uid = $("input[name=uid]", ele).val(),
               tree = $('div.tree', appui.f.IDE.editor).data('kendoTreeView'),
@@ -297,6 +297,7 @@ if ( appui.f.IDE === undefined ){
         selectedValue = $sel.value(),
         idx = appui.f.search(data.dirs, "value", selectedValue);
       appui.f.alert($("#ide_new_template").html(), 'Duplicate', 490, 150, function(ele){
+        ele.find("form").attr("action", data.root + '/actions');
         appui.v.tmp = dataItem.path.split("/");
         if ( appui.v.tmp.length ) {
           appui.v.tmp.pop();
@@ -398,6 +399,7 @@ if ( appui.f.IDE === undefined ){
         idx = appui.f.search(data.dirs, "value", selectedValue);
       //$sel.trigger("change");
       appui.f.alert($("#ide_new_template").html(), 'New directory', 540, 150, function(ele){
+        ele.find("form").attr("action", data.root + '/actions');
         $("input[name=name]", ele).focus();
         $("input[name=type]", ele).val('dir');
         $("input[name=dir]", ele).val($sel.value());
@@ -468,6 +470,7 @@ if ( appui.f.IDE === undefined ){
         ext.push({text: '.' + f.ext, value: f.ext});
       });
       appui.f.alert($("#ide_new_template").html(), title, 540, 130, function(ele){
+        ele.find("form").attr("action", data.root + '/actions');
         if ( (ext.length > 0) && (dir != 'MVC')  ){
           if ( ext.length > 1 ){
             $("input[name=ext]").attr("type", "text").width("70px").kendoDropDownList({
