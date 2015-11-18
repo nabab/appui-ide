@@ -226,6 +226,7 @@ if ( appui.f.IDE === undefined ){
     },
 
     rename: function(dataItem){
+
       var $sel = $("input.ide-dir_select", appui.f.IDE.editor).data("kendoDropDownList"),
         selectedValue = $sel.value(),
         idx = appui.f.search(data.dirs, "value", selectedValue);
@@ -296,6 +297,7 @@ if ( appui.f.IDE === undefined ){
       var $sel = $("input.ide-dir_select", appui.f.IDE.editor).data("kendoDropDownList"),
         selectedValue = $sel.value(),
         idx = appui.f.search(data.dirs, "value", selectedValue);
+      appui.f.log(data.dirs, selectedValue);
       appui.f.alert($("#ide_new_template").html(), 'Duplicate', 490, 150, function(ele){
         ele.find("form").attr("action", data.root + '/actions');
         appui.v.tmp = dataItem.path.split("/");

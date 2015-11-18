@@ -264,12 +264,18 @@ var $dirDropDown = $("input.ide-dir_select", appui.f.IDE.editor).kendoDropDownLi
   dataSource: [],
   dataTextField: "text",
   dataValueField: "value",
+  valueTemplate: function(v){
+    if ( v.group ){
+      return v.text + '<div style="background: #ccc none repeat scroll 0 0; border-bottom-left-radius: 5px; line-height: 1.8; padding: 0 0.5em; position: absolute; right: 23px; top: 0; text-transform: uppercase">' + v.group + '</div>';
+    }
+    return v.text;
+  },
   change: function(e){
     var sel = e.sender.dataItem();
-    if ( sel.bcolor ){
+    if ( sel && sel.bcolor ){
       e.sender.wrapper.find(".k-input").css({backgroundColor: sel.bcolor});
     }
-    if ( sel.fcolor ){
+    if ( sel && sel.fcolor ){
       e.sender.wrapper.find(".k-input").css({color: sel.fcolor});
     }
     treeDS.read();

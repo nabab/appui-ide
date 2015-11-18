@@ -27,7 +27,6 @@ foreach ( $_SESSION[BBN_SESS_NAME]['ide']['list'] as $l ){
     array_push($list, $tmp);
   }
 }
-
 $dirs = [];
 foreach ( $model['dirs'] as $k => $v ){
   array_push($dirs, [
@@ -79,4 +78,4 @@ echo $this
     'font' => !empty($ide_cfg['font']) ? $ide_cfg['font'] : '',
     'font_size' => !empty($ide_cfg['font_size']) ? $ide_cfg['font_size'] : ''
   ])
-  ->get_view();
+  ->get_view().$this->get_less();
