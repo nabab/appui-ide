@@ -3,7 +3,7 @@
 div.CodeMirror {
   font-size: small;
   font-family: Inconsolata;
-  .cm-js,.cm-php,.cm-html {
+  .cm-js, .cm-php, .cm-html {
     color: #0ca;
   }
   .cm-trailingspace {
@@ -12,23 +12,25 @@ div.CodeMirror {
     background-repeat: repeat-x;
   }
 }
-.CodeMirror-fullscreen{
+
+.CodeMirror-fullscreen {
   z-index: 12;
 }
-div.apst_ide_container{
+
+div.apst_ide_container {
   overflow: hidden;
 }
 
-div.apst_ide_container, div.appui-logger{
+div.apst_ide_container, div.appui-logger {
   .treeInlineEdit > input {
-      font-size: 1.5em;
-      min-width: 10em;
-      min-height: 2em;
-      border-radius: 5px 5px 5px 5px;
-      -moz-border-radius: 5px 5px 5px 5px;
-      border: 0px solid #ffffff;
+    font-size: 1.5em;
+    min-width: 10em;
+    min-height: 2em;
+    border-radius: 5px 5px 5px 5px;
+    -moz-border-radius: 5px 5px 5px 5px;
+    border: 0px solid #ffffff;
   }
-  .tree{
+  .tree {
     // ICONS
     // Icons fonts
     .fa {
@@ -43,19 +45,61 @@ div.apst_ide_container, div.appui-logger{
       display: inline-block;
     }
     // Icons types
-    .folder-icon:before   { .fa; content: "\f07b"; color: #F4BF75 }
-    .default-icon:before  { .mf; content: "\f128"; }
-    .css-icon:before      { .mf; content: "\f13c"; }
-    .less-icon:before     { .mf; content: "\f13c"; }
-    .html-icon:before     { .fa; content: "\f13b"; }
-    .js-icon:before       { .mf; content: "\f12e"; }
-    .py-icon:before       { .mf; content: "\f153"; }
-    .php-icon:before      { .mf; content: "\f14d"; }
-    .sql-icon:before      { .mf; content: "\f10f"; }
-    .svg-icon:before      { .mf; content: "\f111"; }
-    .txt-icon:before      { .fa; content: "\f15c"; font-size: medium !important; }
-    .md-icon:before       { .fa; content: "\f15c"; font-size: medium !important; }
-    .json-icon:before     { .mf; content: "\f12d"; }
+    .folder-icon:before {
+      .fa;
+      content: "\f07b";
+      color: #F4BF75
+    }
+    .default-icon:before {
+      .mf;
+      content: "\f128";
+    }
+    .css-icon:before {
+      .mf;
+      content: "\f13c";
+    }
+    .less-icon:before {
+      .mf;
+      content: "\f13c";
+    }
+    .html-icon:before {
+      .fa;
+      content: "\f13b";
+    }
+    .js-icon:before {
+      .mf;
+      content: "\f12e";
+    }
+    .py-icon:before {
+      .mf;
+      content: "\f153";
+    }
+    .php-icon:before {
+      .mf;
+      content: "\f14d";
+    }
+    .sql-icon:before {
+      .mf;
+      content: "\f10f";
+    }
+    .svg-icon:before {
+      .mf;
+      content: "\f111";
+    }
+    .txt-icon:before {
+      .fa;
+      content: "\f15c";
+      font-size: medium !important;
+    }
+    .md-icon:before {
+      .fa;
+      content: "\f15c";
+      font-size: medium !important;
+    }
+    .json-icon:before {
+      .mf;
+      content: "\f12d";
+    }
 
     // Fix for kendo
     .k-sprite {
@@ -66,23 +110,24 @@ div.apst_ide_container, div.appui-logger{
     }
   }
 }
-div.apst_ide_container{
-  div.appui_ide{
+
+div.apst_ide_container {
+  div.appui_ide {
     overflow: visible;
     z-index: 11
   }
-  ul.menu{
+  ul.menu {
     overflow: visible;
     z-index: 11
   }
-  div.k-splitbar.k-splitbar-draggable-horizontal{
+  div.k-splitbar.k-splitbar-draggable-horizontal {
     background-color: #CCC;
   }
   ul.k-tabstrip-items > li.k-item > span.k-link:after {
-    content:" ";
+    content: " ";
   }
   ul.k-tabstrip-items > li.k-item.changed > span.k-link:after {
-    content:"*";
+    content: "*";
   }
 }
 

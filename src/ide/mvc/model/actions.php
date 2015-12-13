@@ -1,6 +1,6 @@
 <?php
 /* @var $this \bbn\mvc */
-if ( !empty($this->data['act']) ) {
+if ( !empty($this->data['act']) ){
   $actions = new \bbn\ide\actions($this->db);
   $act = $this->data['act'];
   if ( method_exists($actions, $act) ){

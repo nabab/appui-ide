@@ -1,22 +1,23 @@
 <?php
-/* @var $this \bbn\mvc */
-if ( $cfg = $this->get_model('./directory', [
-  'path' => empty($this->post['dir']) ? $this->data['dir'] : $this->post['dir']
-]) ) {
-  if ( !empty($this->post['file']) && !empty($this->post['dir']) && !empty($this->post['subdir']) ){
-    $this->data = $this->post;
-    if (!in_array($this->data, $_SESSION[BBN_SESS_NAME]['ide']['list'])) {
-      array_push($_SESSION[BBN_SESS_NAME]['ide']['list'], [
-        'dir' => $this->data['dir'],
-        'subdir' => $this->data['subdir'],
-        'file' => $this->data['file']
-      ]);
+/** @var $this \bbn\mvc\controller */
+
+if ( isset($this->post['dir']) ){
+  $this->data = $this->post;
+}
+if ( !empty($this->data['file']) && !empty($this->data['dir']) ){
+
+  $dir = new \bbn\ide\directories($this->inc->options);
+
+  if ( $this->obj->data = $dir->load($this->data['file'], $this->data['dir'], $this->inc->pref) ){
+
+    if ( !empty($this->obj->data['def']) ){
+      $this->obj->url = $this->obj->data['url'].'/'.$this->obj->data['def'];
     }
-    $this->obj->data = $this->get_model();
-    if (!empty($this->obj->data['def'])) {
-      $this->obj->url = $this->data['file'] . '/' . $this->obj->data['def'];
-    } else {
-      $this->obj->url = $this->data['file'];
+    else{
+      $this->obj->url = $this->obj->data['url'];
     }
+  }
+  else{
+    $this->obj->error = $dir->get_last_error();
   }
 }

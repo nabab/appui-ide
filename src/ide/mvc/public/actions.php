@@ -6,10 +6,10 @@ if ( $this->inc->user->is_admin() ){
   $model = $this->get_model()['res'];
 
   // If present a error show the error
-  if ( (count($model) === 1) && isset($model['error']) ) {
+  if ( (count($model) === 1) && isset($model['error']) ){
     $this->obj->error = $model['error'];
   }
-  else {
+  else{
     if ( !empty($model) ){
       if ( $this->data['act'] === 'export' ){
         $this->obj->file = $model;
@@ -26,7 +26,7 @@ if ( $this->inc->user->is_admin() ){
           }
         }
         $this->obj->success = 1;
-        if ( isset($model['path']) ) {
+        if ( isset($model['path']) ){
           $this->obj->path = $model['path'];
         }
         if ( isset($model['new_file']) ){
@@ -45,6 +45,6 @@ if ( $this->inc->user->is_admin() ){
     }
   }
 }
-else {
+else{
   $this->obj->error = 'Error.';
 }

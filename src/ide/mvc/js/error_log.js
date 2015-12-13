@@ -3,9 +3,9 @@ $("#error_log_grid").kendoGrid({
   filterable: true,
   sortable: true,
   pageable: {
-	  pageSize: 30
+    pageSize: 30
   },
-  dataSource:{
+  dataSource: {
     data: data,
     sort: {
       field: "last_date",
@@ -48,9 +48,9 @@ $("#error_log_grid").kendoGrid({
     field: "last_date",
     title: "Last",
     width: 100,
-    template: function(e){
-  		return apst.fdate(e.last_date);
-		}
+    template: function (e) {
+      return apst.fdate(e.last_date);
+    }
   }, {
     field: "count",
     title: "#",
@@ -70,16 +70,16 @@ $("#error_log_grid").kendoGrid({
     title: "First",
     width: 100,
     hidden: true,
-    template: function(e){
-  		return apst.fdate(e.first_date);
-		}
+    template: function (e) {
+      return apst.fdate(e.first_date);
+    }
   }],
-  detailInit: function(e){
-  	appui.f.log(e);
+  detailInit: function (e) {
+    appui.f.log(e);
     var stable = $("<div/>");
     stable.appendTo(e.detailCell).kendoGrid({
       sortable: true,
-      dataSource:{
+      dataSource: {
         data: e.data.trace,
         sort: {
           field: "index",
@@ -97,14 +97,14 @@ $("#error_log_grid").kendoGrid({
           }
         }
       },
-      columns:[{
+      columns: [{
         field: "index",
         title: "#",
         width: 40
       }, {
         field: "text",
         title: "Message",
-    	}]
+      }]
     });
-	}
+  }
 });

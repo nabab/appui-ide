@@ -7,6 +7,6 @@ if ( isset($this->post['theme'], $this->post['font'], $this->post['font_size']) 
   $this->obj->success = 1;
   $this->obj->script = 'appui.f.closeAlert();';
 }
-else {
+else{
   $this->error = "One or more values are missing";
 }

@@ -1,7 +1,7 @@
 <?php
-$dirs = new \bbn\ide\directories($this->db);
+$dirs = new \bbn\ide\directories($this->inc->options);
 $res = [
-  'default_dir' => isset($_SESSION[BBN_SESS_NAME]['ide']['dir']) ? $_SESSION[BBN_SESS_NAME]['ide']['dir'] : ['dir' => 'MVC', 'subdir' => 'Controller'],
+  'default_dir' => isset($_SESSION[BBN_SESS_NAME]['ide']['dir']) ? $_SESSION[BBN_SESS_NAME]['ide']['dir'] : 'main_mvc/php',
   'dirs' => $dirs->dirs(),
   'modes' => $dirs->modes(),
   'menu' => [
@@ -22,6 +22,12 @@ $res = [
         'text' => 'Duplicate',
       ], [
         'text' => 'Search',
+      ], [
+        'text' => 'Close',
+        'function' => "appui.f.IDE.tabstrip.tabNav('close');"
+      ], [
+        'text' => 'Close all tabs',
+        'function' => "appui.f.IDE.tabstrip.tabNav('closeAll');"
       ]]
     ], [
       'text' => 'Code',
@@ -74,7 +80,7 @@ $res = [
 ];
 foreach ( $res['dirs'] as $name => $d ){
   array_push($res['menu'][0]['items'], [
-  	'text' => $d['name'],
+    'text' => $d['text'],
     'function' => "appui.f.IDE.newFile('$name')"
   ]);
 }
