@@ -1,6 +1,9 @@
 <?php
-if ( isset($this->post['dir'], $this->post['path'], $this->post['name'], $this->post['type']) ){
-  $dir = new \bbn\ide\directories($this->inc->options);
+/**
+ * @var \bbn\mvc\controller $this
+ * @var \bbn\ide\directories $dir
+ */
+if ( isset($dir, $this->post['dir'], $this->post['path'], $this->post['name'], $this->post['type']) ){
   $res = $dir->create(
     $this->post['dir'],
     $this->post['path'],

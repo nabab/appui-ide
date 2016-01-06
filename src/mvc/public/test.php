@@ -32,7 +32,7 @@ if ( BBN_IS_DEV || $_SESSION[BBN_SESS_NAME]['user']['id'] === 38 ){
       chdir($s['dir']);
     }
     echo '<p>Current directory :'.getcwd().'</p>';
-    echo '<p><a onclick="appui.f.closeAlert(); setTimeout(function(){appui.f.IDE.test()}, 2000);" href="javascript:;">Refresh</a></p>';
+    echo '<p><a onclick="appui.f.closeAlert(); setTimeout(function(){appui.ide.test()}, 2000);" href="javascript:;">Refresh</a></p>';
     $t = new \bbn\util\timer();
     $t->start();
     ob_start();

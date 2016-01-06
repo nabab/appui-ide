@@ -1,17 +1,32 @@
-if (appui.f.IDE === undefined) {
-  appui.f.IDE = {
+if (appui.ide === undefined) {
+  
+  appui.ide = {
+
     url: data.root + 'editor',
     title: 'IDE - ',
     selected: 0,
     resize: function (ele) {
-      appui.f.IDE.tabstrip.tabNav("resize");
+      appui.ide.tabstrip.tabNav("resize");
       $(ele).redraw();
       $("div.code:visible", ele).find(".CodeMirror:first").parent().codemirror("refresh");
+    },
+
+    currentSelection: function(){
+      return $("input.ide-dir_select", appui.ide.editor).data("kendoDropDownList").value();
+    },
+
+    currentSrc: function(){
+      return appui.ide.currentSelection().split('/')[0];
+    },
+
+    currentTab: function(){
+
     },
 
     close: function (ele, cfg, idx) {
       var conf = false,
           editors = [];
+      appui.f.log(cfg);
       $(".ui-codemirror", ele).each(function (i) {
         var $$ = $(this);
         editors.push({name: $$.attr("data-id")});
@@ -26,26 +41,42 @@ if (appui.f.IDE === undefined) {
         }
       });
       if (!conf || ( conf && confirm($.ui.codemirror.confirmation) )) {
-        var tabUrl = cfg.url,
-          sIdx = tabUrl.indexOf("/");
-        appui.f.post(data.root + "action/close", {
-          dir: tabUrl.slice(0, sIdx),
-          file: tabUrl.slice(sIdx + 1, tabUrl.lenght),
-          editors: editors
-        }, function(){
-          $('div.tree', appui.f.IDE.editor).data('kendoTreeView').select(false);
-          if (!appui.f.IDE.tabstrip.tabNav("getLength").length) {
-            appui.f.setNavigationVars(appui.f.IDE.url, 'IDE ');
+        var p2,
+            tabUrl = cfg.url,
+            sIdx = tabUrl.indexOf("/"),
+            dir = tabUrl.substr(0, sIdx),
+            sIdx2 = tabUrl.indexOf('/', sIdx+1);
+        if ( data.dirs[dir] ){
+          if ( data.dirs[dir].tabs ){
+            if ( sIdx2 > -1 ){
+              sIdx++;
+              var p2 = tabUrl.substr(sIdx, sIdx2 - sIdx);
+              if ( data.dirs[dir].tabs[p2] ){
+
+                dir += '/' + p2;
+              }
+            }
           }
-        });
-        return true;
+          appui.f.log("DIR", dir, tabUrl.slice(dir.length+1), p2);
+          appui.f.post(data.root + "actions/close", {
+            dir: dir,
+            file: tabUrl.slice(dir.length+1),
+            editors: editors
+          }, function(){
+            $('div.tree', appui.ide.editor).data('kendoTreeView').select(false);
+            if (!appui.ide.tabstrip.tabNav("getLength").length) {
+              appui.f.setNavigationVars(appui.ide.url, 'IDE ');
+            }
+          });
+          return true;
+        }
       }
       return false;
     },
 
     dirDropDownSource: function (dirs, value) {
       var r = [],
-        $sel = $("input.ide-dir_select", appui.f.IDE.editor).data("kendoDropDownList"),
+        $sel = $("input.ide-dir_select", appui.ide.editor).data("kendoDropDownList"),
         o;
       $.each(dirs, function (i, a) {
         if (a.tabs !== undefined) {
@@ -80,45 +111,47 @@ if (appui.f.IDE === undefined) {
       });
     },
 
-    test: function (mode) {
-      var $c = $("div.k-content.k-state-active div.code:visible", appui.f.IDE.tabstrip),
-        url = appui.f.IDE.tabstrip.tabNav("getURL"),
-        ctrl_path = "MVC/",
-        path = url.substr(ctrl_path.length, url.length - ctrl_path.length - 4);
-      if (!$c.length) {
-        return;
-      }
-      if (url.indexOf(ctrl_path) === 0) {
-        appui.f.link(path, 1);
-        return 1;
-      }
-      var c = $c.codemirror("getValue"),
-        m = mode ? mode : $c.codemirror("getMode");
-      if (typeof(m) === 'string') {
-        switch (m) {
-          case "php":
-            appui.f.window(data.root + "test", {code: c}, "90%", "90%");
-            break;
-          case "js":
-            eval(c);
-            break;
-          case "svg":
-            var oDocument = new DOMParser().parseFromString(c, "text/xml");
-            if (oDocument.documentElement.nodeName == "parsererror" || !oDocument.documentElement) {
-              alert("There is an XML error in this SVG");
-            }
-            else {
-              appui.f.alert($("<div/>").append(document.importNode(oDocument.documentElement, true)).html(), "Problem with SVG");
-            }
-            break;
-          default:
-            appui.f.alert(c, "Test: " + m);
+    test: function () {
+      var $c = $("div.k-content.k-state-active div.code:visible", appui.ide.tabstrip),
+          url = appui.ide.tabstrip.tabNav("getURL"),
+          src = url.substr(0, url.indexOf('/')),
+          path = appui.ide.tabstrip.tabNav("getObs").title,
+          dir = data.dirs[src] !== undefined ? data.dirs[src] : false;
+      appui.f.log(path);
+      if ( dir && $c.length ){
+        if ( dir.is_mvc ) {
+          appui.f.link(path, 1);
+          return 1;
+        }
+        var c = $c.codemirror("getValue"),
+          m = mode ? mode : $c.codemirror("getMode");
+        if (typeof(m) === 'string') {
+          switch (m) {
+            case "php":
+              appui.f.window(data.root + "test", {code: c}, "90%", "90%");
+              break;
+            case "js":
+              eval(c);
+              break;
+            case "svg":
+              var oDocument = new DOMParser().parseFromString(c, "text/xml");
+              if (oDocument.documentElement.nodeName == "parsererror" || !oDocument.documentElement) {
+                alert("There is an XML error in this SVG");
+              }
+              else {
+                appui.f.alert($("<div/>").append(document.importNode(oDocument.documentElement, true)).html(), "Problem with SVG");
+              }
+              break;
+            default:
+              appui.f.alert(c, "Test: " + m);
+          }
         }
       }
+      appui.f.log("SRC: " + src + " PATH: " + path + " URL: " + url);
     },
 
     view: function (d) {
-      var mode = $("input.ide-dir_select", appui.f.IDE.editor).data("kendoDropDownList").value();
+      var mode = appui.ide.currentSelection();
       var m;
       if (d.code && d.file) {
         if (d.ext === 'js') {
@@ -142,13 +175,13 @@ if (appui.f.IDE === undefined) {
         else {
           m = 'text/html';
         }
-        $("div.k-content.k-state-active div.code:visible", appui.f.IDE.tabstrip).codemirror({
+        $("div.k-content.k-state-active div.code:visible", appui.ide.tabstrip).codemirror({
           value: d.code,
           mode: m
         }).scrollTop(0);
       }
       else if (d.st) {
-        $("div.k-content.k-state-active div.code:visible", appui.f.IDE.tabstrip).html(d.st).scrollTop(0);
+        $("div.k-content.k-state-active div.code:visible", appui.ide.tabstrip).html(d.st).scrollTop(0);
       }
     },
 
@@ -212,20 +245,19 @@ if (appui.f.IDE === undefined) {
         msg = "Are you sure that you want to delete the file " + dataItem.path + "?";
       }
       if (confirm(msg)) {
-        appui.f.post(data.root + "actions", {
+        appui.f.post(data.root + "actions/delete", {
           path: dataItem.path,
           id: dataItem.id,
           type: dataItem.type,
           name: dataItem.name,
           uid: dataItem.uid,
-          dir: $("input.ide-dir_select", appui.f.IDE.editor).data("kendoDropDownList").value(),
-          act: 'delete'
+          dir: appui.ide.currentSelection()
         }, function (d) {
           var files = d.sub_files.length ? d.sub_files : d.tab_url;
           $.each(files, function (i, v) {
-            var idx = appui.f.IDE.tabstrip.tabNav("search", v);
+            var idx = appui.ide.tabstrip.tabNav("search", v);
             if (idx !== -1) {
-              appui.f.IDE.tabstrip.tabNav("close", idx);
+              appui.ide.tabstrip.tabNav("close", idx);
             }
           });
           treeDS.remove(dataItem);
@@ -234,16 +266,14 @@ if (appui.f.IDE === undefined) {
     },
 
     rename: function (dataItem) {
-
-      var $sel = $("input.ide-dir_select", appui.f.IDE.editor).data("kendoDropDownList"),
-        selectedValue = $sel.value(),
-        idx = appui.f.search(data.dirs, "value", selectedValue);
+      var src = appui.ide.currentSrc();
+      appui.f.log(dataItem, data, src);
       appui.f.alert($("#ide_rename_template").html(), 'Rename element', 450, 100, function (ele) {
         $("input[name=name]", ele).val(dataItem.name).focus();
         $("input[name=uid]", ele).val(dataItem.uid);
-        $("input[name=dir]", ele).val(selectedValue);
+        $("input[name=dir]", ele).val(src);
         $("input[name=path]", ele).val(dataItem.path ? dataItem.path : './');
-        if (data.dirs[idx].files.CTRL !== undefined) {
+        if ( data.dirs[src].is_mvc ) {
           var cb = '<div class="appui-form-label">Update permissions</div>' +
             '<div class="appui-form-field">' +
             '<input type="checkbox" id="cb_upd_perms" class="k-checkbox" val="1">' +
@@ -251,10 +281,10 @@ if (appui.f.IDE === undefined) {
             '</div>';
           $('input.appui-form-field:last', 'form', ele).after($(cb));
         }
-        $("form", ele).attr("action", data.root + '/actions').data("script", function (d) {
+        $("form", ele).attr("action", data.root + "actions/rename").data("script", function (d) {
           if (d.success && d.new_file) {
             var uid = $("input[name=uid]", ele).val(),
-              tree = $('div.tree', appui.f.IDE.editor).data('kendoTreeView'),
+              tree = $('div.tree', appui.ide.editor).data('kendoTreeView'),
               upd_perms = $("#cb_upd_perms:checked").val();
             appui.f.closeAlert();
             if (uid) {
@@ -282,19 +312,19 @@ if (appui.f.IDE === undefined) {
               tree.dataSource.read();
             }
             var url = $sel.value() + '/' + dataItem.path,
-              idx = appui.f.IDE.tabstrip.tabNav("search", url),
+              idx = appui.ide.tabstrip.tabNav("search", url),
               tab;
             if (idx !== -1) {
-              tab = appui.f.IDE.tabstrip.tabNav("getObs", idx);
-              appui.f.IDE.tabstrip.tabNav("setTitle", d.new_file.replace(/^.*[\\\/]/, ''), tab.url);
+              tab = appui.ide.tabstrip.tabNav("getObs", idx);
+              appui.ide.tabstrip.tabNav("setTitle", d.new_file.replace(/^.*[\\\/]/, ''), tab.url);
               tab.url = $sel.value() + '/' + d.new_file + (d.new_file_ext ? '.' + d.new_file_ext : '.php');
-              if (appui.f.IDE.tabstrip.tabNav("getSubTabNav", tab.url)) {
-                appui.f.IDE.tabstrip.tabNav("getSubTabNav", tab.url).options.baseURL = data.root + "editor/" + tab.url + "/";
+              if (appui.ide.tabstrip.tabNav("getSubTabNav", tab.url)) {
+                appui.ide.tabstrip.tabNav("getSubTabNav", tab.url).options.baseURL = data.root + "editor/" + tab.url + "/";
               }
-              appui.f.IDE.tabstrip.tabNav("activate", tab.url);
+              appui.ide.tabstrip.tabNav("activate", tab.url);
             }
             if (upd_perms) {
-              appui.f.IDE.update_permissions();
+              appui.ide.update_permissions();
             }
           }
         });
@@ -302,40 +332,38 @@ if (appui.f.IDE === undefined) {
     },
 
     load: function(path, dir){
-      appui.f.log(path, dir, data);
       appui.f.post(data.root + 'load', {
         dir: dir,
         file: path
       }, function (d) {
         if (d.data) {
-          if (appui.f.IDE.tabstrip.tabNav("search", d.data.url) === -1) {
-            appui.f.IDE.add(d.data);
+          if (appui.ide.tabstrip.tabNav("search", d.data.url) === -1) {
+            appui.ide.add(d.data);
           }
-          appui.f.IDE.tabstrip.tabNav("activate", data.root + 'editor/' + d.data.url + (d.data.def ? '/' + d.data.def : ''));
+          appui.ide.tabstrip.tabNav("activate", data.root + 'editor/' + d.data.url + (d.data.def ? '/' + d.data.def : ''));
           //$tree.data("kendoTreeView").select(e.node);
           // Set theme
           if (data.theme) {
-            $("div.code", appui.f.IDE.editor).each(function () {
+            $("div.code", appui.ide.editor).each(function () {
               $(this).codemirror("settheme", data.theme);
             });
           }
           // Set font
           if (data.font) {
-            $("div.CodeMirror", appui.f.IDE.editor).css("font-family", data.font);
+            $("div.CodeMirror", appui.ide.editor).css("font-family", data.font);
           }
           // Set font size
           if (data.font_size) {
-            $("div.CodeMirror", appui.f.IDE.editor).css("font-size", data.font_size);
+            $("div.CodeMirror", appui.ide.editor).css("font-size", data.font_size);
           }
         }
       });
     },
 
     duplicate: function (dataItem) {
-      var $sel = $("input.ide-dir_select", appui.f.IDE.editor).data("kendoDropDownList"),
-        selectedValue = $sel.value(),
-        dir = selectedValue.split('/')[0],
-        cfg = data.dirs[dir];
+      var selectedValue = appui.ide.currentSelection(),
+          dir = selectedValue.split('/')[0],
+          cfg = data.dirs[dir];
       appui.f.log(selectedValue, data.dirs);
       if ( cfg ) {
         //appui.f.log(data.dirs, selectedValue);
@@ -347,7 +375,7 @@ if (appui.f.IDE === undefined) {
           }
           $("input[name=act]", ele).val("duplicate");
           $("input[name=name]", ele).val(dataItem.name + ' - Copy').focus();
-          $("input[name=dir]", ele).val($sel.value());
+          $("input[name=dir]", ele).val(selectedValue);
           $("input[name=uid]", ele).val(dataItem.uid);
           $("input[name=path]", ele).val(appui.v.tmp.length ? appui.v.tmp.join('/') : './');
           $("input[name=src]", ele).val(dataItem.path);
@@ -367,16 +395,16 @@ if (appui.f.IDE === undefined) {
           }).attr("action", data.root + "actions").data("script", function (d) {
             if (d.success) {
               var uid = $("input[name=uid]", ele).val(),
-                tree = $('div.tree', appui.f.IDE.editor).data('kendoTreeView'),
-                upd_perms = $("#cb_upd_perms:checked").val();
+                  tree = $('div.tree', appui.ide.editor).data('kendoTreeView'),
+                  upd_perms = $("#cb_upd_perms:checked").val();
               appui.f.closeAlert();
               if (uid) {
                 var item = tree.findByUid(uid),
-                  dataItem = tree.dataItem(item),
-                  dataParent = dataItem.parentNode();
+                    dataItem = tree.dataItem(item),
+                    dataParent = dataItem.parentNode();
                 if (dataParent === undefined) {
-                  dataItem.loaded(false);
-                  tree.one("dataBound", function (e) {
+                    dataItem.loaded(false);
+                    tree.one("dataBound", function (e) {
                     e.sender.expandPath([dataItem.path]);
                   });
                   tree.dataSource.read();
@@ -394,7 +422,7 @@ if (appui.f.IDE === undefined) {
                 tree.dataSource.read();
               }
               if (upd_perms) {
-                appui.f.IDE.update_permissions();
+                appui.ide.update_permissions();
               }
             }
           });
@@ -403,9 +431,8 @@ if (appui.f.IDE === undefined) {
     },
 
     export: function (dataItem) {
-      var $sel = $("input.ide-dir_select", appui.f.IDE.editor).data("kendoDropDownList");
       appui.f.post_out(data.root + 'actions', {
-        dir: $sel.value(),
+        dir: appui.ide.currentSelection(),
         name: dataItem.name,
         path: dataItem.path,
         type: dataItem.type,
@@ -436,13 +463,11 @@ if (appui.f.IDE === undefined) {
     },
 
     newDir: function (path, uid) {
-      var $sel = $("input.ide-dir_select", appui.f.IDE.editor).data("kendoDropDownList"),
-        selectedValue = $sel.value(),
-        cfg = data.dirs[selectedValue.split('/')[0]];
+      var selectedValue = appui.ide.currentSelection(),
+          cfg = data.dirs[selectedValue.split('/')[0]];
       if ( cfg ){
-        //$sel.trigger("change");
         appui.f.alert($("#ide_new_template").html(), 'New directory', 540, 150, function (ele) {
-          ele.find("form").attr("action", data.root + '/action/create');
+          ele.find("form").attr("action", data.root + '/actions/create');
           $("input[name=name]", ele).focus();
           $("input[name=type]", ele).val('dir');
           $("input[name=dir]", ele).val(selectedValue);
@@ -468,7 +493,7 @@ if (appui.f.IDE === undefined) {
               var path = $("input[name=path]", ele).val(),
                 dir = $("input[name=dir]", ele).val(),
                 name = $("input[name=name]", ele).val(),
-                tree = $('div.tree', appui.f.IDE.editor).data('kendoTreeView'),
+                tree = $('div.tree', appui.ide.editor).data('kendoTreeView'),
                 upd_perms = $("#cb_upd_perms:checked").val();
               appui.f.closeAlert();
               if (path && dir && name) {
@@ -492,7 +517,7 @@ if (appui.f.IDE === undefined) {
                   }
                 });
                 if (upd_perms) {
-                  appui.f.IDE.update_permissions();
+                  appui.ide.update_permissions();
                 }
               }
             }
@@ -502,12 +527,11 @@ if (appui.f.IDE === undefined) {
     },
 
     newFile: function (dir, path, uid) {
-      var $sel = $("input.ide-dir_select", appui.f.IDE.editor).data("kendoDropDownList"),
-        selectedValue = $sel.value(),
-        dir = dir.split('/'),
-        cfg = data.dirs[dir[0]],
-        ext = [],
-        extensions;
+      var selectedValue = appui.ide.currentSelection(),
+          dir = dir.split('/'),
+          cfg = data.dirs[dir[0]],
+          ext = [],
+          extensions;
       if (cfg) {
         if (cfg.is_mvc && dir[1]) {
           for ( var n in cfg.tabs ){
@@ -525,7 +549,7 @@ if (appui.f.IDE === undefined) {
         });
         dir = dir.join('/');
         appui.f.alert($("#ide_new_template").html(), 'New ' + cfg.text, 540, 130, function (ele) {
-          ele.find("form").attr("action", data.root + '/action/create');
+          ele.find("form").attr("action", data.root + '/actions/create');
           if (ext.length > 0) {
             if (ext.length > 1) {
               $("input[name=ext]").attr("type", "text").width("70px").kendoDropDownList({
@@ -561,11 +585,11 @@ if (appui.f.IDE === undefined) {
           }).data("script", function (d) {
             if (d.success) {
               var path = $("input[name=path]", ele).val(),
-                dir = $("input[name=dir]", ele).val(),
-                name = $("input[name=name]", ele).val(),
-                ext = $("input[name=ext]", ele).val(),
-                tree = $('div.tree', appui.f.IDE.editor).data('kendoTreeView'),
-                upd_perms = $("#cb_upd_perms:checked").val();
+                  dir = $("input[name=dir]", ele).val(),
+                  name = $("input[name=name]", ele).val(),
+                  ext = $("input[name=ext]", ele).val(),
+                  tree = $('div.tree', appui.ide.editor).data('kendoTreeView'),
+                  upd_perms = $("#cb_upd_perms:checked").val();
               appui.f.closeAlert();
               if (path && dir && name) {
                 var ideDir = $('input.ide-dir_select').data("kendoDropDownList");
@@ -598,7 +622,7 @@ if (appui.f.IDE === undefined) {
                 });
               }
               if (upd_perms) {
-                appui.f.IDE.update_permissions();
+                appui.ide.update_permissions();
               }
             }
           });
@@ -608,13 +632,13 @@ if (appui.f.IDE === undefined) {
 
     save: function () {
       var v,
-        $c = $("div.code:visible", appui.f.IDE.tabstrip);
+        $c = $("div.code:visible", appui.ide.tabstrip);
       if ($c.length) {
         var state = $c.codemirror("getState");
-        appui.f.post(data.root + "action/save", {
+        appui.f.post(data.root + "actions/save", {
           selections: state.selections,
           marks: state.marks,
-          file: appui.v.path.substr(appui.f.IDE.url.length + 1),
+          file: appui.v.path.substr(appui.ide.url.length + 1),
           act: 'save',
           code: state.value
         }, function (d) {
@@ -639,14 +663,14 @@ if (appui.f.IDE === undefined) {
           callonce: function (m, n) {
             if (n.def) {
               this.callonce = false;
-              appui.f.IDE.tabstrip.tabNav("activate", n.def);
+              appui.ide.tabstrip.tabNav("activate", n.def);
             }
           },
           content: a.cfg === undefined ?
             '<div class="appui-full-height"></div>' :
             '<div class="code appui-full-height"></div>',
           close: function (a, b, c) {
-            return appui.f.IDE.close(a, b, c);
+            return appui.ide.close(a, b, c);
           }
         }
         if (a.cfg !== undefined) {
@@ -665,11 +689,11 @@ if (appui.f.IDE === undefined) {
           var $$ = $(this);
           if (!$$.children("div.CodeMirror").length) {
             $$.codemirror($.extend(a.cfg, {
-              save: appui.f.IDE.save,
+              save: appui.ide.save,
               keydown: function (widget, e) {
                 if (e.ctrlKey && e.shiftKey && (e.key.toLowerCase() === 't')) {
                   e.preventDefault();
-                  appui.f.IDE.test();
+                  appui.ide.test();
                 }
               },
               changeFromOriginal: function (wid) {
@@ -694,7 +718,7 @@ if (appui.f.IDE === undefined) {
         });
       }
       else if (a.list) {
-        appui.f.IDE.build(a.list, $("div:first", panel), (url.indexOf("/" + a.url) > 0) ? url : url + '/' + a.url, title + a.title + ' - ');
+        appui.ide.build(a.list, $("div:first", panel), (url.indexOf("/" + a.url) > 0) ? url : url + '/' + a.url, title + a.title + ' - ');
       }
     },
 
@@ -703,48 +727,48 @@ if (appui.f.IDE === undefined) {
         baseURL: url + '/',
         baseTitle: title,
         list: $.map(list, function (a) {
-          return appui.f.IDE.tabObj(a);
+          return appui.ide.tabObj(a);
         })
       });
       $.each(list, function (i, a) {
-        appui.f.IDE.arrange(ele.tabNav("getContainer", i), a, url + '/' + a.url, title + a.title);
+        appui.ide.arrange(ele.tabNav("getContainer", i), a, url + '/' + a.url, title + a.title);
       });
     },
 
     add: function (obj, ele, url, title) {
       if (!ele) {
-        ele = appui.f.IDE.tabstrip;
+        ele = appui.ide.tabstrip;
       }
       if (!url) {
-        url = appui.f.IDE.url;
-        title = appui.f.IDE.title;
+        url = appui.ide.url;
+        title = appui.ide.title;
       }
-      ele.tabNav("add", appui.f.IDE.tabObj(obj));
-      appui.f.IDE.arrange(ele.tabNav("getContainer", ele.tabNav("getLength") - 1), obj, url, title);
+      ele.tabNav("add", appui.ide.tabObj(obj));
+      appui.ide.arrange(ele.tabNav("getContainer", ele.tabNav("getLength") - 1), obj, url, title);
     },
 
     search: function (v) {
-      $("div.code:visible", appui.f.IDE.tabstrip).codemirror("search", v || '');
+      $("div.code:visible", appui.ide.tabstrip).codemirror("search", v || '');
     },
 
     replaceAll: function (v) {
-      $("div.code:visible", appui.f.IDE.tabstrip).codemirror("replaceAll", v || '');
+      $("div.code:visible", appui.ide.tabstrip).codemirror("replaceAll", v || '');
     },
 
     replace: function (v) {
-      $("div.code:visible", appui.f.IDE.tabstrip).codemirror("replace", v || '');
+      $("div.code:visible", appui.ide.tabstrip).codemirror("replace", v || '');
     },
 
     findNext: function (v) {
-      $("div.code:visible", appui.f.IDE.tabstrip).codemirror("findNext", v || '');
+      $("div.code:visible", appui.ide.tabstrip).codemirror("findNext", v || '');
     },
 
     findPrev: function (v) {
-      $("div.code:visible", appui.f.IDE.tabstrip).codemirror("findPrev", v || '');
+      $("div.code:visible", appui.ide.tabstrip).codemirror("findPrev", v || '');
     },
 
     cfgDirs: function () {
-      appui.f.alert($('#ide_manage_directories_template', appui.f.IDE.editor).html(), 'Manage directories', 1000, 800, function (alert) {
+      appui.f.alert($('#ide_manage_directories_template', appui.ide.editor).html(), 'Manage directories', 1000, 800, function (alert) {
         var grid = $("#ide_manage_dirs_grid").kendoGrid({
           dataSource: {
             transport: {
@@ -1137,11 +1161,11 @@ if (appui.f.IDE === undefined) {
     },
 
     cfgStyle: function () {
-      appui.f.alert($('#ide_appearance_template', appui.f.IDE.editor).html(), 'Appearence Preferences', 800, 430, function (alert) {
+      appui.f.alert($('#ide_appearance_template', appui.ide.editor).html(), 'Appearence Preferences', 800, 430, function (alert) {
         var code = $("#code", alert),
           cm = code.codemirror({"mode": "js"}),
           divCM = $("div.CodeMirror", alert),
-          oldCM = $("div.CodeMirror", appui.f.IDE.editor),
+          oldCM = $("div.CodeMirror", appui.ide.editor),
           themes = [],
           fonts = [
             {"text": "Inconsolata", "value": "Inconsolata"},
@@ -1200,7 +1224,7 @@ if (appui.f.IDE === undefined) {
               data.theme = formdata.theme;
               data.font = formdata.font;
               data.font_size = formdata.font_size;
-              $("div.code", appui.f.IDE.editor).each(function () {
+              $("div.code", appui.ide.editor).each(function () {
                 $(this).codemirror("setTheme", data.theme);
               });
               oldCM.css("font-family", data.font);
@@ -1228,7 +1252,7 @@ if (appui.f.IDE === undefined) {
           if (o.items && o.items.length) {
             st += '<ul>';
             $.each(o.items, function (i, v) {
-              st += appui.f.IDE.mkMenu(v);
+              st += appui.ide.mkMenu(v);
             });
             st += '</ul>';
           }
@@ -1241,7 +1265,7 @@ if (appui.f.IDE === undefined) {
 
   $(window).resize(function () {
     setTimeout(function () {
-      appui.f.IDE.resize();
+      appui.ide.resize();
     }, 1000);
   });
 }

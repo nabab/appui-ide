@@ -9,13 +9,13 @@ $res = [
       'text' => 'New',
       'items' => [[
         'text' => 'Directory',
-        'function' => "appui.f.IDE.newDir()"
+        'function' => "appui.ide.newDir()"
       ]]
     ], [
       'text' => 'File',
       'items' => [[
         'text' => 'Save',
-        'function' => "appui.f.IDE.save();"
+        'function' => "appui.ide.save();"
       ], [
         'text' => 'Delete',
       ], [
@@ -24,31 +24,31 @@ $res = [
         'text' => 'Search',
       ], [
         'text' => 'Close',
-        'function' => "appui.f.IDE.tabstrip.tabNav('close');"
+        'function' => "appui.ide.tabstrip.tabNav('close');"
       ], [
         'text' => 'Close all tabs',
-        'function' => "appui.f.IDE.tabstrip.tabNav('closeAll');"
+        'function' => "appui.ide.tabstrip.tabNav('closeAll');"
       ]]
     ], [
       'text' => 'Code',
       'items' => [[
         'text' => 'Find <small>CTRL+F</small>',
-        'function' => "appui.f.IDE.search();"
+        'function' => "appui.ide.search();"
       ], [
         'text' => 'Find next <small>CTRL+G</small>',
-        'function' => "appui.f.IDE.findNext();"
+        'function' => "appui.ide.findNext();"
       ], [
         'text' => 'Find previous <small>SHIFT+CTRL+G</small>',
-        'function' => "appui.f.IDE.findPrev();"
+        'function' => "appui.ide.findPrev();"
       ], [
         'text' => 'Replace <small>SHIFT+CTRL+F</small>',
-        'function' => "appui.f.IDE.replace();"
+        'function' => "appui.ide.replace();"
       ], [
         'text' => 'Replace All <small>SHIFT+CTRL+R</small>',
-        'function' => "appui.f.IDE.replaceAll();"
+        'function' => "appui.ide.replaceAll();"
       ], [
         'text' => 'Test! <small>SHIFT+CTRL+T</small>',
-        'function' => "appui.f.IDE.test();"
+        'function' => "appui.ide.test();"
       ]]
     ], [
       'text' => 'Documentation',
@@ -70,10 +70,10 @@ $res = [
       'text' => 'Preferences',
       'items' => [[
         'text' => 'Manage directories',
-        'function' => "appui.f.IDE.cfgDirs();"
+        'function' => "appui.ide.cfgDirs();"
       ], [
         'text' => 'IDE style',
-        'function' => "appui.f.IDE.cfgStyle();"
+        'function' => "appui.ide.cfgStyle();"
       ]]
     ]
   ]
@@ -81,7 +81,7 @@ $res = [
 foreach ( $res['dirs'] as $name => $d ){
   array_push($res['menu'][0]['items'], [
     'text' => $d['text'],
-    'function' => "appui.f.IDE.newFile('$name')"
+    'function' => "appui.ide.newFile('$name')"
   ]);
 }
 
