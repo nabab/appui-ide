@@ -124,7 +124,7 @@ if (appui.ide === undefined) {
           return 1;
         }
         var c = $c.codemirror("getValue"),
-          m = mode ? mode : $c.codemirror("getMode");
+            m = $c.codemirror("getMode");
         if (typeof(m) === 'string') {
           switch (m) {
             case "php":
