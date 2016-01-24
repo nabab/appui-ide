@@ -26,7 +26,7 @@ if (appui.ide === undefined) {
     close: function (ele, cfg, idx) {
       var conf = false,
           editors = [];
-      appui.f.log(cfg);
+      appui.fn.log(cfg);
       $(".ui-codemirror", ele).each(function (i) {
         var $$ = $(this);
         editors.push({name: $$.attr("data-id")});
@@ -57,15 +57,15 @@ if (appui.ide === undefined) {
               }
             }
           }
-          appui.f.log("DIR", dir, tabUrl.slice(dir.length+1), p2);
-          appui.f.post(data.root + "actions/close", {
+          appui.fn.log("DIR", dir, tabUrl.slice(dir.length+1), p2);
+          appui.fn.post(data.root + "actions/close", {
             dir: dir,
             file: tabUrl.slice(dir.length+1),
             editors: editors
           }, function(){
             $('div.tree', appui.ide.editor).data('kendoTreeView').select(false);
             if (!appui.ide.tabstrip.tabNav("getLength").length) {
-              appui.f.setNavigationVars(appui.ide.url, 'IDE ');
+              appui.fn.setNavigationVars(appui.ide.url, 'IDE ');
             }
           });
           return true;
@@ -104,7 +104,7 @@ if (appui.ide === undefined) {
         group: {field: "code"}
       });
       if (!value) {
-        appui.f.log("NO VAL");
+        appui.fn.log("NO VAL");
       }
       $sel.select(function (dataItem) {
         return dataItem.url ? (dataItem.code + '/' + dataItem.url === value) : (dataItem.code === value);
@@ -117,10 +117,10 @@ if (appui.ide === undefined) {
           src = url.substr(0, url.indexOf('/')),
           path = appui.ide.tabstrip.tabNav("getObs").title,
           dir = data.dirs[src] !== undefined ? data.dirs[src] : false;
-      appui.f.log(path);
+      appui.fn.log(path);
       if ( dir && $c.length ){
         if ( dir.is_mvc ) {
-          appui.f.link(path, 1);
+          appui.fn.link(path, 1);
           return 1;
         }
         var c = $c.codemirror("getValue"),
@@ -128,7 +128,7 @@ if (appui.ide === undefined) {
         if (typeof(m) === 'string') {
           switch (m) {
             case "php":
-              appui.f.window(data.root + "test", {code: c}, "90%", "90%");
+              appui.fn.window(data.root + "test", {code: c}, "90%", "90%");
               break;
             case "js":
               eval(c);
@@ -139,15 +139,15 @@ if (appui.ide === undefined) {
                 alert("There is an XML error in this SVG");
               }
               else {
-                appui.f.alert($("<div/>").append(document.importNode(oDocument.documentElement, true)).html(), "Problem with SVG");
+                appui.fn.alert($("<div/>").append(document.importNode(oDocument.documentElement, true)).html(), "Problem with SVG");
               }
               break;
             default:
-              appui.f.alert(c, "Test: " + m);
+              appui.fn.alert(c, "Test: " + m);
           }
         }
       }
-      appui.f.log("SRC: " + src + " PATH: " + path + " URL: " + url);
+      appui.fn.log("SRC: " + src + " PATH: " + path + " URL: " + url);
     },
 
     view: function (d) {
@@ -187,7 +187,7 @@ if (appui.ide === undefined) {
 
     selectDir: function (input) {
       var $tree,
-        mode = $("input[name=dir]", appui.f.get_popup()).val(),
+        mode = $("input[name=dir]", appui.fn.get_popup()).val(),
         treeDS = new kendo.data.HierarchicalDataSource({
           filterable: true,
           transport: {
@@ -216,7 +216,7 @@ if (appui.ide === undefined) {
             }
           }
         });
-      appui.f.alert('<div class="tree"></tree>', 'Choose directory', 250, 500, function (ele) {
+      appui.fn.alert('<div class="tree"></tree>', 'Choose directory', 250, 500, function (ele) {
         $tree = $("div.tree", ele);
         $tree.kendoTreeView({
           dataTextField: "name",
@@ -225,7 +225,7 @@ if (appui.ide === undefined) {
             var r = this.dataItem(e.node);
             $(".appui-logger:visible input[name=path]").val(r.path);
             $(".appui-logger:visible input[name=uid]").val(r.uid);
-            appui.f.closeAlert();
+            appui.fn.closeAlert();
           },
           template: function (e) {
             if (e.item.icon && e.item.type === 'dir') {
@@ -245,7 +245,7 @@ if (appui.ide === undefined) {
         msg = "Are you sure that you want to delete the file " + dataItem.path + "?";
       }
       if (confirm(msg)) {
-        appui.f.post(data.root + "actions/delete", {
+        appui.fn.post(data.root + "actions/delete", {
           path: dataItem.path,
           id: dataItem.id,
           type: dataItem.type,
@@ -267,8 +267,8 @@ if (appui.ide === undefined) {
 
     rename: function (dataItem) {
       var src = appui.ide.currentSrc();
-      appui.f.log(dataItem, data, src);
-      appui.f.alert($("#ide_rename_template").html(), 'Rename element', 450, 100, function (ele) {
+      appui.fn.log(dataItem, data, src);
+      appui.fn.alert($("#ide_rename_template").html(), 'Rename element', 450, 100, function (ele) {
         $("input[name=name]", ele).val(dataItem.name).focus();
         $("input[name=uid]", ele).val(dataItem.uid);
         $("input[name=dir]", ele).val(src);
@@ -286,7 +286,7 @@ if (appui.ide === undefined) {
             var uid = $("input[name=uid]", ele).val(),
               tree = $('div.tree', appui.ide.editor).data('kendoTreeView'),
               upd_perms = $("#cb_upd_perms:checked").val();
-            appui.f.closeAlert();
+            appui.fn.closeAlert();
             if (uid) {
               var item = tree.findByUid(uid),
                 dataItem = tree.dataItem(item),
@@ -332,7 +332,7 @@ if (appui.ide === undefined) {
     },
 
     load: function(path, dir){
-      appui.f.post(data.root + 'load', {
+      appui.fn.post(data.root + 'load', {
         dir: dir,
         file: path
       }, function (d) {
@@ -364,10 +364,10 @@ if (appui.ide === undefined) {
       var selectedValue = appui.ide.currentSelection(),
           dir = selectedValue.split('/')[0],
           cfg = data.dirs[dir];
-      appui.f.log(selectedValue, data.dirs);
+      appui.fn.log(selectedValue, data.dirs);
       if ( cfg ) {
-        //appui.f.log(data.dirs, selectedValue);
-        appui.f.alert($("#ide_new_template").html(), 'Duplicate', 550, 170, function (ele) {
+        //appui.fn.log(data.dirs, selectedValue);
+        appui.fn.alert($("#ide_new_template").html(), 'Duplicate', 550, 170, function (ele) {
           ele.find("form").attr("action", data.root + '/action/copy');
           appui.v.tmp = dataItem.path.split("/");
           if (appui.v.tmp.length) {
@@ -397,7 +397,7 @@ if (appui.ide === undefined) {
               var uid = $("input[name=uid]", ele).val(),
                   tree = $('div.tree', appui.ide.editor).data('kendoTreeView'),
                   upd_perms = $("#cb_upd_perms:checked").val();
-              appui.f.closeAlert();
+              appui.fn.closeAlert();
               if (uid) {
                 var item = tree.findByUid(uid),
                     dataItem = tree.dataItem(item),
@@ -431,20 +431,20 @@ if (appui.ide === undefined) {
     },
 
     export: function (dataItem) {
-      appui.f.post_out(data.root + 'actions', {
+      appui.fn.post_out(data.root + 'actions', {
         dir: appui.ide.currentSelection(),
         name: dataItem.name,
         path: dataItem.path,
         type: dataItem.type,
         act: 'export'
       }, function (d) {
-        kappui.notifs.wid.show("Exported!", "success");
+        appui.app.notifs.wid.show("Exported!", "success");
       });
     },
 
     update_permissions: function (path) {
-      appui.f.alert($("#upd_perms_template").html(), 'Update permissions', 900, 700, function (pop) {
-        appui.f.post(data.root + 'permissions', {}, function (d) {
+      appui.fn.alert($("#upd_perms_template").html(), 'Update permissions', 900, 700, function (pop) {
+        appui.fn.post(data.root + 'permissions', {}, function (d) {
           if (d.data) {
             var tree_groups = $("div.tree_groups").kendoTreeView({
               dataSource: {
@@ -466,7 +466,7 @@ if (appui.ide === undefined) {
       var selectedValue = appui.ide.currentSelection(),
           cfg = data.dirs[selectedValue.split('/')[0]];
       if ( cfg ){
-        appui.f.alert($("#ide_new_template").html(), 'New directory', 540, 150, function (ele) {
+        appui.fn.alert($("#ide_new_template").html(), 'New directory', 540, 150, function (ele) {
           ele.find("form").attr("action", data.root + '/actions/create');
           $("input[name=name]", ele).focus();
           $("input[name=type]", ele).val('dir');
@@ -495,7 +495,7 @@ if (appui.ide === undefined) {
                 name = $("input[name=name]", ele).val(),
                 tree = $('div.tree', appui.ide.editor).data('kendoTreeView'),
                 upd_perms = $("#cb_upd_perms:checked").val();
-              appui.f.closeAlert();
+              appui.fn.closeAlert();
               if (path && dir && name) {
                 var ideDir = $('input.ide-dir_select').data("kendoDropDownList");
                 if (ideDir.value() !== dir) {
@@ -548,7 +548,7 @@ if (appui.ide === undefined) {
           ext.push({text: '.' + e.ext, value: e.ext});
         });
         dir = dir.join('/');
-        appui.f.alert($("#ide_new_template").html(), 'New ' + cfg.text, 540, 130, function (ele) {
+        appui.fn.alert($("#ide_new_template").html(), 'New ' + cfg.text, 540, 130, function (ele) {
           ele.find("form").attr("action", data.root + '/actions/create');
           if (ext.length > 0) {
             if (ext.length > 1) {
@@ -590,7 +590,7 @@ if (appui.ide === undefined) {
                   ext = $("input[name=ext]", ele).val(),
                   tree = $('div.tree', appui.ide.editor).data('kendoTreeView'),
                   upd_perms = $("#cb_upd_perms:checked").val();
-              appui.f.closeAlert();
+              appui.fn.closeAlert();
               if (path && dir && name) {
                 var ideDir = $('input.ide-dir_select').data("kendoDropDownList");
                 if (ideDir.value() !== dir) {
@@ -635,15 +635,15 @@ if (appui.ide === undefined) {
         $c = $("div.code:visible", appui.ide.tabstrip);
       if ($c.length) {
         var state = $c.codemirror("getState");
-        appui.f.post(data.root + "actions/save", {
+        appui.fn.post(data.root + "actions/save", {
           selections: state.selections,
           marks: state.marks,
-          file: appui.v.path.substr(appui.ide.url.length + 1),
+          file: appui.env.path.substr(appui.ide.url.length + 1),
           act: 'save',
           code: state.value
         }, function (d) {
           if (d.success) {
-            kappui.notifs.wid.show("File saved!", "success");
+            appui.app.notifs.wid.show("File saved!", "success");
           }
         });
         return 1;
@@ -768,20 +768,20 @@ if (appui.ide === undefined) {
     },
 
     cfgDirs: function () {
-      appui.f.alert($('#ide_manage_directories_template', appui.ide.editor).html(), 'Manage directories', 1000, 800, function (alert) {
+      appui.fn.alert($('#ide_manage_directories_template', appui.ide.editor).html(), 'Manage directories', 1000, 800, function (alert) {
         var grid = $("#ide_manage_dirs_grid").kendoGrid({
           dataSource: {
             transport: {
               type: "json",
               read: function (o) {
-                appui.f.post(data.root + 'directories', function (d) {
+                appui.fn.post(data.root + 'directories', function (d) {
                   if (d.data) {
                     o.success(d.data);
                   }
                 });
               },
               update: function (o) {
-                appui.f.post(data.root + 'directories', o.data, function (d) {
+                appui.fn.post(data.root + 'directories', o.data, function (d) {
                   if (d.data) {
                     o.success();
                   }
@@ -791,7 +791,7 @@ if (appui.ide === undefined) {
                 });
               },
               destroy: function (o) {
-                appui.f.post(data.root + 'directories', {id: o.data.id}, function (d) {
+                appui.fn.post(data.root + 'directories', {id: o.data.id}, function (d) {
                   if (d.data) {
                     o.success();
                   }
@@ -801,7 +801,7 @@ if (appui.ide === undefined) {
                 });
               },
               create: function (o) {
-                appui.f.post(data.root + 'directories', o.data, function (d) {
+                appui.fn.post(data.root + 'directories', o.data, function (d) {
                   if (d.data) {
                     o.success(d.data);
                   }
@@ -1059,7 +1059,7 @@ if (appui.ide === undefined) {
             $(".k-edit-form-container").parent().css({
               height: "auto",
               width: 1000,
-              "max-height": appui.v.height - 100
+              "max-height": appui.env.height - 100
             }).restyle().data("kendoWindow").title(d.model.id ? "Edit directory" : "New directory").center();
             //Drag and drop to reorder rows
             subgrid.table.kendoDraggable({
@@ -1096,7 +1096,7 @@ if (appui.ide === undefined) {
               if ($(d.container).find(".k-grid-edit-row").length) {
                 ele.preventDefault();
                 ele.stopPropagation();
-                var not = jQuery.extend(true, {}, kappui.notifs.wid);
+                var not = jQuery.extend(true, {}, appui.app.notifs.wid);
                 not.options.appendTo = $(".k-grid", d.container).parent();
                 not.show("Save or cancel the row's setting.", "warning");
               }
@@ -1132,7 +1132,7 @@ if (appui.ide === undefined) {
               ]);
               target = grid.dataSource.getByUid(target.uid);
               dest = grid.dataSource.getByUid(dest.uid);
-              appui.f.post(data.root + 'directories', {
+              appui.fn.post(data.root + 'directories', {
                 id: target.id,
                 name: target.name,
                 root_path: target.root_path,
@@ -1142,7 +1142,7 @@ if (appui.ide === undefined) {
                 position: target.position
               }, function (d) {
                 if (d.data) {
-                  appui.f.post(data.root + 'directories', {
+                  appui.fn.post(data.root + 'directories', {
                     id: dest.id,
                     name: dest.name,
                     root_path: dest.root_path,
@@ -1161,7 +1161,7 @@ if (appui.ide === undefined) {
     },
 
     cfgStyle: function () {
-      appui.f.alert($('#ide_appearance_template', appui.ide.editor).html(), 'Appearence Preferences', 800, 430, function (alert) {
+      appui.fn.alert($('#ide_appearance_template', appui.ide.editor).html(), 'Appearence Preferences', 800, 430, function (alert) {
         var code = $("#code", alert),
           cm = code.codemirror({"mode": "js"}),
           divCM = $("div.CodeMirror", alert),
@@ -1216,11 +1216,11 @@ if (appui.ide === undefined) {
           divCM.css("font-size", data.font_size);
         }
         $("i.fa-save", alert).parent().on("click", function () {
-          var formdata = appui.f.formdata($("form", alert));
+          var formdata = appui.fn.formdata($("form", alert));
           formdata.font_size = formdata.font_size + 'px';
-          appui.f.post(data.root + 'appearance', formdata, function (d) {
+          appui.fn.post(data.root + 'appearance', formdata, function (d) {
             if (d.success) {
-              appui.f.closeAlert();
+              appui.fn.closeAlert();
               data.theme = formdata.theme;
               data.font = formdata.font;
               data.font_size = formdata.font_size;

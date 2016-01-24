@@ -1,53 +1,53 @@
 <?php
 //$old_path = getcwd();
 //chdir(BBN_ROOT_PATH);
-if ( BBN_IS_DEV || $_SESSION[BBN_SESS_NAME]['user']['id'] === 38 ){
-  if ( isset($this->post['code']) && strlen($this->post['code']) > 5 ){
-    $c = $this->post['code'];
-    $_SESSION[BBN_SESS_NAME]['code'] = $c;
-    $opening = strpos($c, '<?php');
-    $closing = strrpos($c, '?>');
-    $num_open = preg_match_all('#<\\?php[\\s+]#', $c);
-    $num_close = preg_match_all('#[\\s+]\\?>#', $c);
-    if ( $opening === false ){
-      $c = ' ?>'.$c.'<?php ';
+if ( BBN_IS_DEV || $this->inc->user->is_admin() ){
+  if ( isset($this->post['code']) && (strlen($this->post['code']) > 5) ){
+    $bbn_code = $this->post['code'];
+    $_SESSION[BBN_SESS_NAME]['code'] = $bbn_code;
+    $bbn_opening = strpos($bbn_code, '<?php');
+    $bbn_closing = strrpos($bbn_code, '?>');
+    $bbn_num_open = preg_match_all('#<\\?php[\\s+]#', $bbn_code);
+    $bbn_num_close = preg_match_all('#[\\s+]\\?>#', $bbn_code);
+    if ( $bbn_opening === false ){
+      $bbn_code = ' ?>'.$bbn_code.'<?php ';
     }
     else{
-      if ( $opening > 0 ){
-        $c = ' ?>'.$c;
+      if ( $bbn_opening > 0 ){
+        $bbn_code = ' ?>'.$bbn_code;
       }
       else{
-        $c = substr($c, 5);
+        $bbn_code = substr($bbn_code, 5);
       }
-      if ( substr($c, -2) === '?>' ){
-        $c = substr($c, 0, -2);
+      if ( substr($bbn_code, -2) === '?>' ){
+        $bbn_code = substr($bbn_code, 0, -2);
       }
       else{
-        if ( $num_open === $num_close ){
-          $c = $c.'<?php ';
+        if ( $bbn_num_open === $bbn_num_close ){
+          $bbn_code = $bbn_code.'<?php ';
         }
       }
     }
-    if ( isset($s['dir']) && is_dir($s['dir']) ){
-      chdir($s['dir']);
+    if ( isset($this->post['dir']) && is_dir($this->post['dir']) ){
+      chdir($this->post['dir']);
     }
     echo '<p>Current directory :'.getcwd().'</p>';
-    echo '<p><a onclick="appui.f.closeAlert(); setTimeout(function(){appui.ide.test()}, 2000);" href="javascript:;">Refresh</a></p>';
-    $t = new \bbn\util\timer();
-    $t->start();
+    echo '<p><a onclick="appui.fn.closeAlert(); setTimeout(function(){appui.ide.test()}, 2000);" href="javascript:;">Refresh</a></p>';
+    $bbn_timer = new \bbn\util\timer();
+    $bbn_timer->start();
     ob_start();
     try{
-      eval($c);
+      eval($bbn_code);
     }
     catch ( Exception $e ){
       die(var_dump($e));
       echo 'Error!';
     }
-    $t->stop();
-    $res = ob_get_contents();
+    $bbn_timer->stop();
+    $bbn_res = ob_get_contents();
     ob_end_clean();
-    echo '<p>Time for processing: '.$t->result()['total'].' sec.</p>';
-    echo $res;
+    echo '<p>Time for processing: '.$bbn_timer->result()['total'].' sec.</p>';
+    echo $bbn_res;
     $this->set_title("Testing code...");
   }
   else{

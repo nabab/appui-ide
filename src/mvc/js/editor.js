@@ -1,7 +1,7 @@
 $(function(){
-  appui.f.log(data);
+  appui.fn.log(data);
   appui.ide.tabstrip = $("#tabstrip_editor");
-  appui.ide.editor = kappui.tabstrip.ele.tabNav("getContainer", appui.ide.tabstrip);
+  appui.ide.editor = appui.app.tabstrip.ele.tabNav("getContainer", appui.ide.tabstrip);
   var panel,
     $tree = $("div.tree", appui.ide.editor),
     treeDS = new kendo.data.HierarchicalDataSource({
@@ -96,7 +96,7 @@ $(function(){
       e.preventDefault();
       var r = this.dataItem(e.node);
       if (r.has_index) {
-        window.open(appui.v.host + '/' + r.path);
+        window.open(appui.env.host + '/' + r.path);
       }
       else if (r.is_viewable) {
         var dir = $("input.ide-dir_select", appui.ide.editor).data("kendoDropDownList").dataItem();
@@ -106,7 +106,7 @@ $(function(){
     drag: function (e) {
       var dt = false;
       if (e.dropTarget !== undefined && ( dt = this.dataItem(e.dropTarget))) {
-        //appui.f.log(dt);
+        //appui.fn.log(dt);
         if (!dt.parenthood) {
           if (e.setStatusClass !== undefined) {
             e.setStatusClass("k-denied");
@@ -122,7 +122,7 @@ $(function(){
         var dd = this.dataItem(e.destinationNode),
           ds = this.dataItem(e.sourceNode),
           dir = $("input.ide-dir_select").data("kendoDropDownList").value();
-        appui.f.post(data.root + 'actions', {dpath: dd.path, spath: ds.path, dir: dir, act: 'move'}, function (d) {
+        appui.fn.post(data.root + 'actions', {dpath: dd.path, spath: ds.path, dir: dir, act: 'move'}, function (d) {
           if (d.success) {
             dd.loaded(false);
             dd.load();
@@ -141,7 +141,7 @@ $(function(){
       }
       else if (e.item.ext) {
         if (sel.is_mvc && sel.tabs) {
-          color = appui.f.get_field(sel.tabs, 'ext', e.item.ext, 'bcolor');
+          color = appui.fn.get_field(sel.tabs, 'ext', e.item.ext, 'bcolor');
         }
         else {
           color = sel.bcolor;
@@ -262,9 +262,9 @@ $(function(){
 
   appui.ide.build(data.config, appui.ide.tabstrip, data.root + 'editor', 'IDE - ');
 
-  //kappui.tabstrip.ele.tabNav("activate", data.url);
+  //appui.app.tabstrip.ele.tabNav("activate", data.url);
 
-  kappui.tabstrip.ele.tabNav("set", "close", function () {
+  appui.app.tabstrip.ele.tabNav("set", "close", function () {
     var conf = false;
     $(".ui-codemirror").each(function () {
       if ($(this).codemirror("isChanged")) {
@@ -293,7 +293,7 @@ $(function(){
     $("div.CodeMirror", appui.ide.editor).css("font-size", data.font - size);
   }
 
-  kappui.tabstrip.ele.tabNav("addCallback", function(){
+  appui.app.tabstrip.ele.tabNav("addCallback", function(){
     appui.ide.tabstrip.resize();
   }, appui.ide.tabstrip);
 

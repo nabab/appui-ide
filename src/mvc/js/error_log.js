@@ -75,7 +75,7 @@ $("#error_log_grid").kendoGrid({
     }
   }],
   detailInit: function (e) {
-    appui.f.log(e);
+    appui.fn.log(e);
     var stable = $("<div/>");
     stable.appendTo(e.detailCell).kendoGrid({
       sortable: true,

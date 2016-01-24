@@ -29,7 +29,7 @@ var log_file = $("select:first", $ele).kendoDropDownList({
     var v = log_file.data("kendoDropDownList").value(),
       n = num_lines.data("kendoDropDownList").value();
     if (v) {
-      appui.f.post(data.root + 'logs', {log: v, clear: clear ? 1 : "0", num_lines: n}, function (d) {
+      appui.fn.post(data.root + 'logs', {log: v, clear: clear ? 1 : "0", num_lines: n}, function (d) {
         $("#log_viewer", $ele).codemirror("setOption", "value", d.content);
       });
     }
@@ -40,4 +40,4 @@ $("button:first", $ele).click(function (e) {
 $("button:last", $ele).click(function (e) {
   onChange(e);
 });
-log_file.data("kendoDropDownList").trigger("change");
+onChange();

@@ -5,7 +5,7 @@ if ( isset($this->post['dir']) ){
   $this->data = $this->post;
 }
 if ( $this->obj->data = $this->get_model() ){
-  if ( $this->obj->data['error'] ){
+  if ( !empty($this->obj->data['error']) ){
     $this->obj->error = $this->obj->data['error'];
   }
   else{

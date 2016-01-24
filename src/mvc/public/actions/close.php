@@ -14,9 +14,9 @@ if ( isset($dir, $this->post['dir'], $this->post['file'], $this->post['editors']
   if ( $idx !== false ){
     array_splice($list, $idx, 1);
     $this->inc->session->set($list, 'ide', 'list');
-    echo "1";
+    $this->obj->success = 1;
   }
   else{
-    echo $r;
+    $this->obj->error = $r;
   }
 }

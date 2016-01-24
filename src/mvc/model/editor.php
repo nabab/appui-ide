@@ -1,7 +1,7 @@
 <?php
 $dirs = new \bbn\ide\directories($this->inc->options);
 $res = [
-  'default_dir' => isset($_SESSION[BBN_SESS_NAME]['ide']['dir']) ? $_SESSION[BBN_SESS_NAME]['ide']['dir'] : 'main_mvc/php',
+  'default_dir' => $this->inc->session->has('ide', 'dir') ? $this->inc->session->get('ide', 'dir') : 'main_mvc/php',
   'dirs' => $dirs->dirs(),
   'modes' => $dirs->modes(),
   'menu' => [
