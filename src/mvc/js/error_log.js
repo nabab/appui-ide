@@ -49,7 +49,7 @@ $("#error_log_grid").kendoGrid({
     title: "Last",
     width: 100,
     template: function (e) {
-      return apst.fdate(e.last_date);
+      return appui.fn.fdate(e.last_date);
     }
   }, {
     field: "count",
@@ -71,7 +71,7 @@ $("#error_log_grid").kendoGrid({
     width: 100,
     hidden: true,
     template: function (e) {
-      return apst.fdate(e.first_date);
+      return appui.fn.fdate(e.first_date);
     }
   }],
   detailInit: function (e) {
