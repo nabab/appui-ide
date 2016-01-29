@@ -4,6 +4,7 @@ grid.kendoGrid({
   sortable: true,
   filterable: {
     extra: false,
+    mode: "row"
   },
   columns: [{
     field: "name",

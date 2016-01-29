@@ -76,7 +76,6 @@ if ( isset($this->data['dir']) ){
       }
       */
 
-      $s =& $_SESSION[BBN_SESS_NAME];
       $old_path = getcwd();
       $excluded = array('.svn', '_notes', '.git', '_ctrl.php');
       $max_history = 50;

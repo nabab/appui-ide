@@ -3,6 +3,7 @@
 
 $model = $this->get_model();
 $list = [];
+$sess = [];
 $current_dir = false;
 
 // We define ide array in session
@@ -35,18 +36,17 @@ if ( count($this->arguments) && isset($model['dirs'][$this->arguments[0]]) ){
 
 foreach ( $this->inc->session->get('ide', 'list') as $l ){
   if ( $tmp = $this->get_model('./load', $l) ){
-    \bbn\tools::log("OK MODEL", 'ide');
-    \bbn\tools::log($l, 'ide');
-    array_push($list, $tmp);
-  }
-  else{
-    \bbn\tools::log("PAS OK MODEL", 'ide');
-    \bbn\tools::log($l, 'ide');
+    if ( !isset($tmp['error']) ){
+      array_push($list, $tmp);
+      array_push($sess, $l);
+    }
   }
 }
 
-if ( !$current_dir && isset($_SESSION[BBN_SESS_NAME]['ide']['dir']) ){
-  $current_dir = $_SESSION[BBN_SESS_NAME]['ide']['dir'];
+$this->inc->session->set($sess, 'ide', 'list');
+
+if ( !$current_dir && $this->inc->session->has('ide', 'dir') ){
+  $current_dir = $this->inc->session->get('ide', 'dir');
 }
 
 $ide_cfg = $this->inc->user->get_cfg('ide');

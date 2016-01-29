@@ -26,7 +26,6 @@ if (appui.ide === undefined) {
     close: function (ele, cfg, idx) {
       var conf = false,
           editors = [];
-      appui.fn.log(cfg);
       $(".ui-codemirror", ele).each(function (i) {
         var $$ = $(this);
         editors.push({name: $$.attr("data-id")});
@@ -57,10 +56,9 @@ if (appui.ide === undefined) {
               }
             }
           }
-          appui.fn.log("DIR", dir, tabUrl.slice(dir.length+1), p2);
           appui.fn.post(data.root + "actions/close", {
             dir: dir,
-            file: tabUrl.slice(dir.length+1),
+            url: tabUrl,
             editors: editors
           }, function(){
             $('div.tree', appui.ide.editor).data('kendoTreeView').select(false);
@@ -78,6 +76,9 @@ if (appui.ide === undefined) {
       var r = [],
         $sel = $("input.ide-dir_select", appui.ide.editor).data("kendoDropDownList"),
         o;
+      if ( (dirs.toJSON !== undefined) && $.isFunction(dirs.toJSON) ){
+        dirs = dirs.toJSON();
+      }
       $.each(dirs, function (i, a) {
         if (a.tabs !== undefined) {
           for (var j in a.tabs) {
@@ -268,7 +269,7 @@ if (appui.ide === undefined) {
     rename: function (dataItem) {
       var src = appui.ide.currentSrc();
       appui.fn.log(dataItem, data, src);
-      appui.fn.alert($("#ide_rename_template").html(), 'Rename element', 450, 100, function (ele) {
+      appui.fn.alert($("#ide_rename_template").html(), 'Rename element', 450, 100, function(ele){
         $("input[name=name]", ele).val(dataItem.name).focus();
         $("input[name=uid]", ele).val(dataItem.uid);
         $("input[name=dir]", ele).val(src);
@@ -281,7 +282,7 @@ if (appui.ide === undefined) {
             '</div>';
           $('input.appui-form-field:last', 'form', ele).after($(cb));
         }
-        $("form", ele).attr("action", data.root + "actions/rename").data("script", function (d) {
+        $("form", ele).attr("action", data.root + "actions/rename").data("script", function(d){
           if (d.success && d.new_file) {
             var uid = $("input[name=uid]", ele).val(),
               tree = $('div.tree', appui.ide.editor).data('kendoTreeView'),
@@ -369,15 +370,15 @@ if (appui.ide === undefined) {
         //appui.fn.log(data.dirs, selectedValue);
         appui.fn.alert($("#ide_new_template").html(), 'Duplicate', 550, 170, function (ele) {
           ele.find("form").attr("action", data.root + '/action/copy');
-          appui.v.tmp = dataItem.path.split("/");
-          if (appui.v.tmp.length) {
-            appui.v.tmp.pop();
+          appui.var.tmp = dataItem.path.split("/");
+          if (appui.var.tmp.length) {
+            appui.var.tmp.pop();
           }
           $("input[name=act]", ele).val("duplicate");
           $("input[name=name]", ele).val(dataItem.name + ' - Copy').focus();
           $("input[name=dir]", ele).val(selectedValue);
           $("input[name=uid]", ele).val(dataItem.uid);
-          $("input[name=path]", ele).val(appui.v.tmp.length ? appui.v.tmp.join('/') : './');
+          $("input[name=path]", ele).val(appui.var.tmp.length ? appui.var.tmp.join('/') : './');
           $("input[name=src]", ele).val(dataItem.path);
           if (cfg.tabs !== undefined) {
             var cb = '<div class="appui-form-label">Update permissions</div>' +

@@ -18,7 +18,8 @@ if ( $this->obj->data = $this->get_model() ){
     $list = $this->inc->session->get('ide', 'list');
     $r = [
       'dir' => $this->data['dir'],
-      'file' => $this->data['file']
+      'file' => $this->data['file'],
+      'url' => $this->obj->data['url']
     ];
     if ( !in_array($list, $r) ){
       array_push($list, $r);
