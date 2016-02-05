@@ -5,6 +5,8 @@ if ( empty($file) && defined('BBN_LOG_PATH') ){
   $file = BBN_LOG_PATH.'error_log';
 }
 if ( is_file($file) ){
+  // Cache name
+  $ln = 'bbn-ide-error_log-';
   $res = [];
   $lines = file($file);
   foreach ( $lines as $o ){

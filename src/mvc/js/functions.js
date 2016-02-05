@@ -24,6 +24,7 @@ if (appui.ide === undefined) {
     },
 
     close: function (ele, cfg, idx) {
+      appui.fn.log(cfg);
       var conf = false,
           editors = [];
       $(".ui-codemirror", ele).each(function (i) {
@@ -59,6 +60,7 @@ if (appui.ide === undefined) {
           appui.fn.post(data.root + "actions/close", {
             dir: dir,
             url: tabUrl,
+            file: cfg.id_script,
             editors: editors
           }, function(){
             $('div.tree', appui.ide.editor).data('kendoTreeView').select(false);
