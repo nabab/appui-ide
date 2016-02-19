@@ -1,10 +1,12 @@
 <?php
 /* @var $this \bbn\mvc */
 //die(\bbn\file\dir::get_files(BBN_LOG_PATH));
-$log_files = \bbn\tools::merge_arrays(
-  \bbn\file\dir::get_files(BBN_LOG_PATH),
-  \bbn\file\dir::get_files(BBN_DATA_PATH.'logs')
-);
+$log_files = array_filter(\bbn\file\dir::get_files(BBN_DATA_PATH.'logs'), function($a){
+  return substr($a, -3) === 'log';
+});
+if ( ($log_file = ini_get('error_log')) && (strpos($log_file, BBN_DATA_PATH.'logs') === false) ){
+  array_unshift($log_files, $log_file);
+}
 $res = [];
 foreach ( $log_files as $lf ){
   $res[basename($lf)] = $lf;

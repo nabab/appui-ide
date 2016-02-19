@@ -16,8 +16,7 @@ if ( $this->obj->data = $this->get_model() ){
       $this->obj->url = $this->obj->data['url'];
     }
     $list = $this->inc->session->get('ide', 'list');
-
-    if ( !in_array($list, $this->obj->data['url']) ){
+    if ( !in_array($this->obj->data['url'], $list) ){
       array_push($list, $this->obj->data['url']);
       $this->inc->session->set($list, 'ide', 'list');
     }

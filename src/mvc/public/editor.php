@@ -35,7 +35,11 @@ if ( count($this->arguments) && isset($model['dirs'][$this->arguments[0]]) ){
 }
 
 foreach ( $this->inc->session->get('ide', 'list') as $l ){
-  if ( $tmp = $this->get_model('./load', $l) ){
+  $dirfile = explode('/', $l);
+  if ( $tmp = $this->get_model('./load', [
+    'dir' => array_shift($dirfile),
+    'file' => implode('/', $dirfile)
+  ]) ){
     if ( !isset($tmp['error']) ){
       array_push($list, $tmp);
       array_push($sess, $l);

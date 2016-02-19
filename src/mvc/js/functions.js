@@ -1,5 +1,5 @@
 if (appui.ide === undefined) {
-  
+
   appui.ide = {
 
     url: data.root + 'editor',
@@ -24,7 +24,6 @@ if (appui.ide === undefined) {
     },
 
     close: function (ele, cfg, idx) {
-      appui.fn.log(cfg);
       var conf = false,
           editors = [];
       $(".ui-codemirror", ele).each(function (i) {
@@ -64,9 +63,6 @@ if (appui.ide === undefined) {
             editors: editors
           }, function(){
             $('div.tree', appui.ide.editor).data('kendoTreeView').select(false);
-            if (!appui.ide.tabstrip.tabNav("getLength").length) {
-              appui.fn.setNavigationVars(appui.ide.url, 'IDE ');
-            }
           });
           return true;
         }
@@ -662,13 +658,8 @@ if (appui.ide === undefined) {
           file: a.file === undefined ? false : a.file,
           bcolor: a.bcolor,
           fcolor: a.fcolor,
-          def: a.def ? a.url + '/' + a.def : false,
-          callonce: function (m, n) {
-            if (n.def) {
-              this.callonce = false;
-              appui.ide.tabstrip.tabNav("activate", n.def);
-            }
-          },
+          def: a.def ? a.def : '',
+          default: a.default ? true : false,
           content: a.cfg === undefined ?
             '<div class="appui-full-height"></div>' :
             '<div class="code appui-full-height"></div>',
@@ -726,8 +717,14 @@ if (appui.ide === undefined) {
     },
 
     build: function (list, ele, url, title) {
+      var current = '',
+          baseURL = url + '/';
+      if ( appui.env.url.indexOf(baseURL) !== -1 ){
+        current = appui.env.url.split(baseURL)[1] || '';
+      }
+      //appui.fn.log("CURRENT", current, list);
       ele.tabNav({
-        baseURL: url + '/',
+        current: current,
         baseTitle: title,
         list: $.map(list, function (a) {
           return appui.ide.tabObj(a);
