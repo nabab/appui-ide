@@ -280,7 +280,7 @@ $(function(){
   // Set theme
   if (data.theme) {
     $("div.code", appui.ide.editor).each(function () {
-      $(this).codemirror("settheme", data.theme);
+      $(this).codemirror("setTheme", data.theme);
     });
   }
 
@@ -290,7 +290,7 @@ $(function(){
   }
   // Set font size
   if (data.font_size) {
-    $("div.CodeMirror", appui.ide.editor).css("font-size", data.font - size);
+    $("div.CodeMirror", appui.ide.editor).css("font-size", data.font_size);
   }
 
   appui.app.tabstrip.ele.tabNav("addCallback", function(){

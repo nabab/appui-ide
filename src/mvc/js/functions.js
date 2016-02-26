@@ -215,7 +215,7 @@ if (appui.ide === undefined) {
             }
           }
         });
-      appui.fn.alert('<div class="tree"></tree>', 'Choose directory', 250, 500, function (ele) {
+      appui.fn.alert('<div class="tree"></div>', 'Choose directory', 250, 500, function (ele) {
         $tree = $("div.tree", ele);
         $tree.kendoTreeView({
           dataTextField: "name",
@@ -344,7 +344,7 @@ if (appui.ide === undefined) {
           // Set theme
           if (data.theme) {
             $("div.code", appui.ide.editor).each(function () {
-              $(this).codemirror("settheme", data.theme);
+              $(this).codemirror("setTheme", data.theme);
             });
           }
           // Set font
