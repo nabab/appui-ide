@@ -268,18 +268,23 @@ if (appui.ide === undefined) {
       var src = appui.ide.currentSrc();
       appui.fn.log(dataItem, data, src);
       appui.fn.alert($("#ide_rename_template").html(), 'Rename element', 450, 100, function(ele){
-        $("input[name=name]", ele).val(dataItem.name).focus();
-        $("input[name=uid]", ele).val(dataItem.uid);
-        $("input[name=dir]", ele).val(src);
-        $("input[name=path]", ele).val(dataItem.path ? dataItem.path : './');
+        var obs = {
+          name: dataItem.name,
+          uid: dataItem.uid,
+          dir: src,
+          path: dataItem.path ? dataItem.path : './',
+          update_permissions: 1
+        };
         if ( data.dirs[src].is_mvc ) {
           var cb = '<div class="appui-form-label">Update permissions</div>' +
             '<div class="appui-form-field">' +
-            '<input type="checkbox" id="cb_upd_perms" class="k-checkbox" val="1">' +
+            '<input type="checkbox" id="cb_upd_perms" class="k-checkbox" val="1" name="update_permissions" data-bind="checked: update_permissions">' +
             '<label class="k-checkbox-label" for="cb_upd_perms"></label>' +
             '</div>';
           $('input.appui-form-field:last', 'form', ele).after($(cb));
+          obs.update_permissions = 1;
         }
+        kendo.bind(ele, obs);
         $("form", ele).attr("action", data.root + "actions/rename").data("script", function(d){
           if (d.success && d.new_file) {
             var uid = $("input[name=uid]", ele).val(),
