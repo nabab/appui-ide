@@ -1248,7 +1248,8 @@ if (appui.ide === undefined) {
           if (o.link || o.function) {
             st += '<a href="' +
               ( o.link ? o.link : 'javascript:;' ) +
-              '"' + ( o.function ? ' onclick="' + o.function + '"' : '' ) + '>';
+              '"' + ( o.function ? ' onclick="' + o.function + '"' : '' ) +
+              '>';
           }
           st += o.text;
           if (o.link || o.function) {

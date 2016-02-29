@@ -12,7 +12,7 @@ if ( isset($this->post['item'], $this->arguments[0]) ){
     case 'info':
       $this->set_title('Content of '.$this->post['item']);
       if ( $cache->has($this->post['item']) ){
-	      \bbn\tools::hdump($cache->get($this->post['item']));
+	      \bbn\x::hdump($cache->get($this->post['item']));
       }
       else{
         echo '<h3 style="color: red">The item '.$this->post['item'].' doesn\'t exist</h3>';

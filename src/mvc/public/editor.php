@@ -60,9 +60,9 @@ echo $this
     ->add_js('./functions', [
       'dirs' => $model['dirs'],
       'root' => $this->say_dir().'/',
-      'theme' => !empty($ide_cfg['theme']) ? $ide_cfg['theme'] : '',
-      'font' => !empty($ide_cfg['font']) ? $ide_cfg['font'] : '',
-      'font_size' => !empty($ide_cfg['font_size']) ? $ide_cfg['font_size'] : ''
+      'theme' => empty($ide_cfg['theme']) ? '' : $ide_cfg['theme'],
+      'font' => empty($ide_cfg['font']) ? '' : $ide_cfg['font'],
+      'font_size' => empty($ide_cfg['font_size']) ? '' : $ide_cfg['font_size']
     ])
     ->add_js([
       'menu' => $model['menu'],
@@ -70,7 +70,7 @@ echo $this
       'dirs' => $model['dirs'],
       'root' => $this->say_dir().'/',
       'url' => implode('/', $this->params),
-      'current_dir' => $current_dir ? $current_dir : $model['default_dir']
+      'current_dir' => $current_dir ?: $model['default_dir']
     ])
     ->get_view().$this->get_less();
 $this->obj->url = 'ide/editor';

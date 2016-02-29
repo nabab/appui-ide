@@ -20,7 +20,7 @@ if ( is_file($file) ){
       $reste = trim(substr($o, $php, $coma - $php));
       $time = mktime($d['hour'], $d['minute'], $d['second'], $d['month'], $d['day'], $d['year']);
       // Trace
-      if ( \bbn\str\text::is_integer(substr($reste, 0, 1)) ){
+      if ( \bbn\str::is_integer(substr($reste, 0, 1)) ){
         if ( isset($cur) ){
           $idx = intval(trim(substr($reste, 0, strpos($reste, '.'))));
           if ( $idx === 1 ){
@@ -55,7 +55,7 @@ if ( is_file($file) ){
               $before_line = strrpos($cur, ':');
               $after_line = strrpos($cur, ':') + 1;
             }
-            //\bbn\tools::log($reste);
+            //\bbn\x::log($reste);
             $res[$cur] = [
               'count' => 1,
               'last_date' => date('Y-m-d H:i:s', $time),

@@ -1,6 +1,6 @@
 <?php
 if ( isset($this->post['session']) ){
-  echo \bbn\tools::make_tree($this->inc->session->get()).'<p> </p><hr><p> </p>'.\bbn\tools::make_tree($_SERVER);
+  echo \bbn\x::make_tree($this->inc->session->get()).'<p> </p><hr><p> </p>'.\bbn\x::make_tree($_SERVER);
 }
 else{
   $this->set_title('Infos Session');

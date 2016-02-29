@@ -19,7 +19,7 @@ if ( isset($this->data['log']) ){
   }
   else{
     $file = escapeshellarg($res[$this->data['log']]); // for the security concious (should be everyone!)
-    $num_lines = isset($this->data['num_lines']) && \bbn\str\text::is_integer($this->data['num_lines']) && ($this->data['num_lines'] > 0) && ($this->data['num_lines'] <= 1000) ? $this->data['num_lines'] : 100;
+    $num_lines = isset($this->data['num_lines']) && \bbn\str::is_integer($this->data['num_lines']) && ($this->data['num_lines'] > 0) && ($this->data['num_lines'] <= 1000) ? $this->data['num_lines'] : 100;
     $line = "tail -n $num_lines $file";
     exec($line, $output);
     $res = [];

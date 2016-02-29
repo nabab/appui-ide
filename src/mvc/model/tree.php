@@ -2,11 +2,11 @@
 if ( isset($this->data['dir']) ){
   $dirs = new \bbn\ide\directories($this->inc->options);
   if ( $dir = $dirs->get_root_path($this->data['dir']) ){
-    $value = \bbn\str\text::parse_path($this->data['dir'].(empty($this->data['path']) ? '' : '/'.$this->data['path']));
+    $value = \bbn\str::parse_path($this->data['dir'].(empty($this->data['path']) ? '' : '/'.$this->data['path']));
     if ( !isset($this->data['path']) ){
       $this->data['path'] = './';
     }
-    if ( is_dir(\bbn\str\text::parse_path($dir.'/'.$this->data['path'])) ){
+    if ( is_dir(\bbn\str::parse_path($dir.'/'.$this->data['path'])) ){
       $file_check = [
         'viewables' => [
           'html',
@@ -77,7 +77,7 @@ if ( isset($this->data['dir']) ){
       */
 
       $old_path = getcwd();
-      $excluded = array('.svn', '_notes', '.git', '_ctrl.php');
+      $excluded = ['.svn', '_notes', '.git', '_ctrl.php'];
       $max_history = 50;
 
       chdir($dir);
@@ -121,7 +121,7 @@ if ( isset($this->data['dir']) ){
       if ( empty($this->data['onlydir']) ){
         $files = array_map(function ($a) use ($file_check, $ext_icons){
           $fs = \bbn\file\dir::get_files($a);
-          $ext = \bbn\str\text::file_ext($a);
+          $ext = \bbn\str::file_ext($a);
           $r = [
             'path' => $a,
             'name' => basename($a, ".php"),

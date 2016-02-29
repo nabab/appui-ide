@@ -72,6 +72,10 @@ $(function(){
     }, {
       type: "separator"
     }, {
+      template: '<button class="k-button" title="Test code!" onclick="appui.ide.test();"><i class="fa fa-magic"> </i></button>'
+    }, {
+      type: "separator"
+    }, {
       template: function () {
         var st = '<ul class="menu">';
         $.each(data.menu, function (i, v) {
@@ -83,7 +87,9 @@ $(function(){
     }]
   });
 
-  $("ul.menu", appui.ide.editor).kendoMenu({direction: "bottom right"}).find("a").on("mouseup", function () {
+  $("ul.menu", appui.ide.editor).kendoMenu({
+    direction: "bottom right"
+  }).find("a").on("mouseup", function () {
     $(this).closest("ul.menu").data("kendoMenu").close();
   });
 

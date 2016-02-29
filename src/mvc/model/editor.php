@@ -30,7 +30,7 @@ $res = [
         'function' => "appui.ide.tabstrip.tabNav('closeAll');"
       ]]
     ], [
-      'text' => 'Code',
+      'text' => 'Edit',
       'items' => [[
         'text' => 'Find <small>CTRL+F</small>',
         'function' => "appui.ide.search();"
@@ -46,18 +46,15 @@ $res = [
       ], [
         'text' => 'Replace All <small>SHIFT+CTRL+R</small>',
         'function' => "appui.ide.replaceAll();"
-      ], [
-        'text' => 'Test! <small>SHIFT+CTRL+T</small>',
-        'function' => "appui.ide.test();"
       ]]
     ], [
-      'text' => 'Documentation',
+      'text' => 'Doc.',
       'items' => [[
         'text' => 'Find',
       ], [
         'text' => 'Generate',
       ]]
-    ], [
+    ], /*[
       'text' => 'Current',
       'items' => [[
         'text' => 'Add View',
@@ -66,8 +63,8 @@ $res = [
       ], [
         'text' => 'Remove current',
       ]]
-    ], [
-      'text' => 'Preferences',
+    ], */[
+      'text' => 'Pref.',
       'items' => [[
         'text' => 'Manage directories',
         'function' => "appui.ide.cfgDirs();"
