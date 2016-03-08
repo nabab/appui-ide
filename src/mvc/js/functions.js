@@ -235,106 +235,6 @@ if (appui.ide === undefined) {
       });
     },
 
-    delete: function (dataItem, treeDS) {
-      var msg;
-      if (dataItem.icon === 'folder') {
-        msg = "Are you sure that you want to delete the folder " + dataItem.path + " and all its content?";
-      }
-      else {
-        msg = "Are you sure that you want to delete the file " + dataItem.path + "?";
-      }
-      if (confirm(msg)) {
-        appui.fn.post(data.root + "actions/delete", {
-          path: dataItem.path,
-          id: dataItem.id,
-          type: dataItem.type,
-          name: dataItem.name,
-          uid: dataItem.uid,
-          dir: appui.ide.currentSelection()
-        }, function (d) {
-          var files = d.sub_files.length ? d.sub_files : d.tab_url;
-          $.each(files, function (i, v) {
-            var idx = appui.ide.tabstrip.tabNav("search", v);
-            if (idx !== -1) {
-              appui.ide.tabstrip.tabNav("close", idx);
-            }
-          });
-          treeDS.remove(dataItem);
-        })
-      }
-    },
-
-    rename: function (dataItem) {
-      var src = appui.ide.currentSrc();
-      appui.fn.log(dataItem, data, src);
-      appui.fn.alert($("#ide_rename_template").html(), 'Rename element', 450, 100, function(ele){
-        var obs = {
-          name: dataItem.name,
-          uid: dataItem.uid,
-          dir: src,
-          path: dataItem.path ? dataItem.path : './',
-          update_permissions: 1
-        };
-        if ( data.dirs[src].is_mvc ) {
-          var cb = '<div class="appui-form-label">Update permissions</div>' +
-            '<div class="appui-form-field">' +
-            '<input type="checkbox" id="cb_upd_perms" class="k-checkbox" val="1" name="update_permissions" data-bind="checked: update_permissions">' +
-            '<label class="k-checkbox-label" for="cb_upd_perms"></label>' +
-            '</div>';
-          $('input.appui-form-field:last', 'form', ele).after($(cb));
-          obs.update_permissions = 1;
-        }
-        kendo.bind(ele, obs);
-        $("form", ele).attr("action", data.root + "actions/rename").data("script", function(d){
-          if (d.success && d.new_file) {
-            var uid = $("input[name=uid]", ele).val(),
-              tree = $('div.tree', appui.ide.editor).data('kendoTreeView'),
-              upd_perms = $("#cb_upd_perms:checked").val();
-            appui.fn.closeAlert();
-            if (uid) {
-              var item = tree.findByUid(uid),
-                dataItem = tree.dataItem(item),
-                dataParent = dataItem.parentNode();
-              if (dataParent === undefined) {
-                dataItem.loaded(false);
-                tree.one("dataBound", function (e) {
-                  e.sender.expandPath([d.new_file]);
-                });
-                tree.dataSource.read();
-              }
-              else {
-                var tmp = [dataParent, dataItem];
-                dataItem.loaded(false);
-                dataParent.loaded(false);
-                tree.one("dataBound", function (e) {
-                  e.sender.expandPath([dataParent.path, d.new_file]);
-                });
-                dataParent.load();
-              }
-            }
-            else {
-              tree.dataSource.read();
-            }
-            var url = $sel.value() + '/' + dataItem.path,
-              idx = appui.ide.tabstrip.tabNav("search", url),
-              tab;
-            if (idx !== -1) {
-              tab = appui.ide.tabstrip.tabNav("getObs", idx);
-              appui.ide.tabstrip.tabNav("setTitle", d.new_file.replace(/^.*[\\\/]/, ''), tab.url);
-              tab.url = $sel.value() + '/' + d.new_file + (d.new_file_ext ? '.' + d.new_file_ext : '.php');
-              if (appui.ide.tabstrip.tabNav("getSubTabNav", tab.url)) {
-                appui.ide.tabstrip.tabNav("getSubTabNav", tab.url).options.baseURL = data.root + "editor/" + tab.url + "/";
-              }
-              appui.ide.tabstrip.tabNav("activate", tab.url);
-            }
-            if (upd_perms) {
-              appui.ide.update_permissions();
-            }
-          }
-        });
-      });
-    },
-
     load: function(path, dir){
       appui.fn.post(data.root + 'load', {
         dir: dir,
@@ -434,14 +334,116 @@ if (appui.ide === undefined) {
       }
     },
 
+    delete: function(dataItem, treeDS){
+      var msg;
+      if ( dataItem.icon === 'folder' ){
+        msg = "Are you sure that you want to delete the folder " + dataItem.path + " and all its content?";
+      }
+      else {
+        msg = "Are you sure that you want to delete the file " + dataItem.path + "?";
+      }
+      if ( confirm(msg) ){
+        appui.fn.post(data.root + "actions/delete", {
+          path: dataItem.path,
+          id: dataItem.id,
+          type: dataItem.type,
+          name: dataItem.name,
+          uid: dataItem.uid,
+          dir: appui.ide.currentSelection()
+        }, function(d){
+          if ( d.data && d.data.files ){
+            $.each(d.data.files, function(i, v){
+              var idx = appui.ide.tabstrip.tabNav("search", v);
+              if (idx !== -1) {
+                appui.ide.tabstrip.tabNav("close", idx);
+              }
+            });
+            treeDS.remove(dataItem);
+          }
+        });
+      }
+    },
+
+    rename: function(dataItem){
+      var src = appui.ide.currentSrc();
+      appui.fn.alert($("#ide_rename_template").html(), 'Rename element', 450, 100, function(ele){
+        var obs = {
+          name: dataItem.name,
+          dir: src,
+          path: dataItem.path ? dataItem.path : './',
+          type: dataItem.type,
+          update_permissions: 1
+        };
+        if ( data.dirs[src].is_mvc ) {
+          var cb = '<div class="appui-form-label">Update permissions</div>' +
+            '<div class="appui-form-field">' +
+            '<input type="checkbox" id="cb_upd_perms" class="k-checkbox" val="1" name="update_permissions" data-bind="checked: update_permissions">' +
+            '<label class="k-checkbox-label" for="cb_upd_perms"></label>' +
+            '</div>';
+          $('input.appui-form-field:last', 'form', ele).after($(cb));
+          obs.update_permissions = 1;
+        }
+        kendo.bind(ele, obs);
+        $("form", ele).attr("action", data.root + "actions/rename").data("script", function(d){
+          if ( d.data &&
+            d.data.file_new &&
+            d.data.file_url &&
+            d.data.file_new_url &&
+            d.data.file_new_name
+          ){
+            var uid = dataItem.uid,
+              tree = $('div.tree', appui.ide.editor).data('kendoTreeView'),
+              upd_perms = $("#cb_upd_perms:checked").val();
+            appui.fn.closeAlert();
+            if ( uid ){
+              var dataParent = dataItem.parentNode();
+              dataItem.loaded(false);
+              if ( dataParent === undefined ) {
+                tree.one("dataBound", function(e){
+                  e.sender.expandPath([d.data.file_new]);
+                });
+                tree.dataSource.read();
+              }
+              else {
+                dataParent.loaded(false);
+                tree.one("dataBound", function (e) {
+                  e.sender.expandPath([dataParent.path, d.data.file_new]);
+                });
+                dataParent.load();
+              }
+            }
+            else {
+              tree.dataSource.read();
+            }
+            var idx = appui.ide.tabstrip.tabNav("search", d.data.file_url),
+              tab;
+            if (idx !== -1) {
+              tab = appui.ide.tabstrip.tabNav("getObs", idx);
+              appui.ide.tabstrip.tabNav("setTitle", d.data.file_new_name, tab.url);
+              appui.fn.log(tab);
+              tab.url = d.data.file_new_url;
+              if (appui.ide.tabstrip.tabNav("getSubTabNav", tab.url)) {
+                appui.ide.tabstrip.tabNav("getSubTabNav", tab.url).options.baseURL = data.root + "editor/" + tab.url + "/";
+              }
+              appui.ide.tabstrip.tabNav("activate", tab.url);
+            }
+            if (upd_perms) {
+              appui.ide.update_permissions();
+            }
+          }
+        });
+      });
+    },
+
+
     export: function (dataItem) {
-      appui.fn.post_out(data.root + 'actions', {
+      appui.fn.post_out(data.root + 'actions/export', {
         dir: appui.ide.currentSelection(),
         name: dataItem.name,
         path: dataItem.path,
         type: dataItem.type,
         act: 'export'
-      }, function (d) {
+      }, function(d){
         appui.app.notifs.wid.show("Exported!", "success");
       });
     },

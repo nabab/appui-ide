@@ -12,4 +12,3 @@ else{
   echo $this->add_js(['root' => $this->say_dir().'/'])
             ->get_view();
 }
-?>
