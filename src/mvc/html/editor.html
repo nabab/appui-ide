@@ -1,7 +1,7 @@
-<ul class="apst-ide-context"></ul>
-<div class="apst_ide_container appui-full-height">
+<ul class="bbn-ide-context"></ul>
+<div class="bbn_ide_container appui-full-height">
   <div class="pane-content appui_ide"></div>
-  <div class="pane-content apst_code_container">
+  <div class="pane-content bbn_code_container">
     <div class="pane-content tree"></div>
     <div class="pane-content" style="padding:0px">
       <div style="position: absolute; top: auto; left: auto; margin: 50%; text-align: center">
@@ -15,30 +15,30 @@
 
 <script type="text/html" id="ide_new_template">
   <form method="post" autocomplete="off">
-    <input type="hidden" name="act" value="insert">
     <input type="hidden" name="type">
     <input type="hidden" name="dir">
-    <input type="hidden" name="uid">
-    <input type="hidden" name="src">
-    <label for="ide_new_name" class="appui-form-label">Name</label>
+    <div class="appui-form-label">Name</div>
     <div class="appui-form-field">
-      <input type="text" name="name" class="k-textbox" id="ide_new_name" required="required">
-      <input type="hidden" name="ext">
+      <input type="text" name="name" class="k-textbox" required="required">
     </div>
-    <label class="appui-form-label">Path</label>
+    <div class="appui-form-label">Path</div>
     <div class="appui-form-field">
       <input type="text" name="path" class="k-textbox" readonly="readonly" required>
       <button class="k-button" onclick="appui.ide.selectDir(); return false;">Browse</button>
       <button class="k-button" onclick="$(this).prevAll('input').val('./'); return false;">Root</button>
     </div>
     <div class="appui-form-label"></div>
-    <div class="appui-form-field">
+    <div class="appui-form-field" style="text-align: right">
       <button class="k-button" type="submit">
-        <i class="fa fa-new"> </i> Save
+        <i class="fa fa-check"> </i> Save
+      </button>
+      <button class="k-button" type="button" onclick="appui.fn.closeAlert();">
+        <i class="fa fa-close"> </i> Cancel
       </button>
     </div>
   </form>
 </script>
+
 
 <script type="text/html" id="ide_rename_template">
   <form method="post">
@@ -48,9 +48,12 @@
     <label for="ide_new_name" class="appui-form-label">Name</label>
     <input type="text" name="name" class="appui-form-field k-textbox" id="ide_new_name" required="required" data-bind="value: name">
     <div class="appui-form-label"></div>
-    <div class="appui-form-field">
+    <div class="appui-form-field" style="text-align: right">
       <button class="k-button" type="submit">
-        <i class="fa fa-edit"> </i> Rename
+        <i class="fa fa-edit"></i> Rename
+      </button>
+      <button class="k-button" type="button" onclick="appui.fn.closeAlert();">
+        <i class="fa fa-close"></i> Cancel
       </button>
     </div>
   </form>

@@ -1,32 +1,37 @@
 <?php
 $dirs = new \bbn\ide\directories($this->inc->options);
+
 $res = [
-  'default_dir' => $this->inc->session->has('ide', 'dir') ? $this->inc->session->get('ide', 'dir') : 'main_mvc/php',
+  'default_dir' => $this->inc->session->has('ide', 'dir') ?
+    $this->inc->session->get('ide', 'dir') : 'BBN_APP_PATH/mvc/',
   'dirs' => $dirs->dirs(),
   'modes' => $dirs->modes(),
   'menu' => [
     [
-      'text' => 'New',
-      'items' => [[
-        'text' => 'Directory',
-        'function' => "appui.ide.newDir()"
-      ]]
-    ], [
       'text' => 'File',
       'items' => [[
-        'text' => 'Save',
+        'text' => '<i class="fa fa-plus"></i>New',
+        'items' => [[
+          'text' => '<i class="fa fa-file-o"></i>File',
+          'function' => "appui.ide.newFile()"
+        ], [
+          'text' => '<i class="fa fa-folder"></i>Directory',
+          'function' => "appui.ide.newDir()"
+        ]]
+      ], [
+        'text' => '<i class="fa fa-save"></i>Save',
         'function' => "appui.ide.save();"
       ], [
-        'text' => 'Delete',
+        'text' => '<i class="fa fa-trash-o"></i>Delete',
       ], [
-        'text' => 'Duplicate',
+        'text' => '<i class="fa fa-files-o"></i>Duplicate',
       ], [
-        'text' => 'Search',
+        'text' => '<i class="fa fa-search"></i>Search',
       ], [
-        'text' => 'Close',
+        'text' => '<i class="fa fa-times-circle"></i>Close',
         'function' => "appui.ide.tabstrip.tabNav('close');"
       ], [
-        'text' => 'Close all tabs',
+        'text' => '<i class="fa fa-times-circle-o"></i>Close all tabs',
         'function' => "appui.ide.tabstrip.tabNav('closeAll');"
       ]]
     ], [
@@ -75,11 +80,5 @@ $res = [
     ]
   ]
 ];
-foreach ( $res['dirs'] as $name => $d ){
-  array_push($res['menu'][0]['items'], [
-    'text' => $d['text'],
-    'function' => "appui.ide.newFile('$name')"
-  ]);
-}
 
 return $res;

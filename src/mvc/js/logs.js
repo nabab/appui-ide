@@ -1,5 +1,5 @@
 // Javascript Document
-var $ele = $("#apst_log_splitter");
+var $ele = $("#bbn_log_splitter");
 $ele.parent().redraw();
 $ele.kendoSplitter({
   orientation: "vertical",

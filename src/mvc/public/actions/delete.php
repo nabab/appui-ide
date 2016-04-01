@@ -10,7 +10,7 @@ if ( isset($dir) &&
     $this->obj->data->files = $files;
   }
   else {
-    $this->obj->error = 'Error.';
+    $this->obj->error = $dir->get_last_error();
   }
 }
 else {

@@ -39,7 +39,7 @@ $(function(){
       }
     });
 
-  $("div.apst_ide_container", appui.ide.editor).kendoSplitter({
+  $("div.bbn_ide_container", appui.ide.editor).kendoSplitter({
     orientation: "vertical",
     resize: function (e) {
       $(e.sender.element).redraw();
@@ -50,7 +50,7 @@ $(function(){
     ]
   });
 
-  $("div.apst_code_container", appui.ide.editor).kendoSplitter({
+  $("div.bbn_code_container", appui.ide.editor).kendoSplitter({
     orientation: "horizontal",
     resize: function (e) {
       $(e.sender.element).redraw();
@@ -98,16 +98,16 @@ $(function(){
     dragAndDrop: true,
     dataSource: treeDS,
     autoBind: false,
-    select: function (e) {
+    select: function(e){
       e.preventDefault();
       var r = this.dataItem(e.node);
       if (r.has_index) {
         window.open(appui.env.host + '/' + r.path);
       }
-      else if (r.is_viewable) {
-        var dir = $("input.ide-dir_select", appui.ide.editor).data("kendoDropDownList").dataItem();
-        appui.ide.load(r.path, dir.value);
+      else if ( r.is_viewable ){
+        appui.ide.load(r.path, appui.ide.currentSrc(), r.tab);
       }
+      this.select(e.node);
     },
     drag: function (e) {
       var dt = false;
@@ -139,25 +139,12 @@ $(function(){
         });
       }
     },
-    template: function (e) {
-      var sel = $("input.ide-dir_select").data("kendoDropDownList").dataItem(),
-        color = false;
-      if (e.item.icon) {
-        return '<span class="k-sprite ' + e.item.icon + '"></span>' + e.item.name;
-      }
-      else if (e.item.ext) {
-        if (sel.is_mvc && sel.tabs) {
-          color = appui.fn.get_field(sel.tabs, 'ext', e.item.ext, 'bcolor');
-        }
-        else {
-          color = sel.bcolor;
-        }
-        return '<span class="k-sprite ' + e.item.ext + '-icon" ' + (color ? 'style="color:' + color + '"' : '') + '></span>' + e.item.name;
-      }
+    template: function(e){
+      return '<span class="k-sprite ' + ( e.item.icon ? e.item.icon : e.item.ext + '-icon') + '" style="color: ' + e.item.bcolor + '"></span>' + e.item.name;
     }
   });
 
-  $("ul.apst-ide-context").kendoContextMenu({
+  $("ul.bbn-ide-context").kendoContextMenu({
     orientation: 'vertical',
     target: $tree,
     filter: "span.k-in",
@@ -166,40 +153,52 @@ $(function(){
       duration: 500
     },
     dataSource: [{
-      text: "Refresh",
-      cssClass: "apst-tree-refresh"
+      text: '<i class="fa fa-plus"></i>New',
+      cssClass: "bbn-tree-new-dir",
+      encoded: false,
+      items: [{
+        text: '<i class="fa fa-file-o"></i>File',
+        cssClass: "bbn-tree-new-file",
+        encoded: false
+      }, {
+        text: '<i class="fa fa-folder"></i>Directory',
+        cssClass: "bbn-tree-new-dir",
+        encoded: false
+      }]
     }, {
-      text: "New Directory",
-      cssClass: "apst-tree-new-dir"
+      text: '<i class="fa fa-files-o"></i>Duplicate',
+      cssClass: "bbn-tree-duplicate",
+      encoded: false
     }, {
-      text: "New File",
-      cssClass: "apst-tree-new-file"
+      text: '<i class="fa fa-file-archive-o"></i>Export',
+      cssClass: "bbn-tree-export",
+      encoded: false
     }, {
-      text: "Rename",
-      cssClass: "apst-tree-rename"
+      text: '<i class="fa fa-pencil"></i>Rename',
+      cssClass: "bbn-tree-rename",
+      encoded: false
     }, {
-      text: "Duplicate",
-      cssClass: "apst-tree-duplicate"
+      text: '<i class="fa fa-trash-o"></i>Delete',
+      cssClass: "bbn-tree-delete",
+      encoded: false
     }, {
-      text: "Export",
-      cssClass: "apst-tree-export"
-    }, {
-      text: "Delete",
-      cssClass: "apst-tree-delete"
+      text: '<i class="fa fa-refresh"></i>Refresh',
+      cssClass: "bbn-tree-refresh",
+      encoded: false
     }],
     select: function (e) {
       var msg,
         treeview = $tree.data("kendoTreeView"),
         item = $(e.target).closest("li"),
         dataItem = treeview.dataItem(item);
-      if ($(e.item).hasClass("apst-tree-refresh")) {
+      if ($(e.item).hasClass("bbn-tree-refresh")) {
         dataItem.loaded(false);
         treeview.one("dataBound", function (e) {
           e.sender.expandPath([dataItem.path]);
         });
         dataItem.load();
       }
-      else if ($(e.item).hasClass("apst-tree-new-dir")) {
+      else if ($(e.item).hasClass("bbn-tree-new-dir")) {
         if (dataItem.type === 'dir') {
           var parent = dataItem,
             path = dataItem.path;
@@ -214,23 +213,23 @@ $(function(){
         }
         appui.ide.newDir(path, parent.uid || '');
       }
-      else if ($(e.item).hasClass("apst-tree-new-file")) {
+      else if ($(e.item).hasClass("bbn-tree-new-file")) {
         var path = dataItem.type === 'dir' ? dataItem.path : dataItem.path.substr(0, dataItem.path.lastIndexOf('/'));
         if (!path) {
           path = './';
         }
-        appui.ide.newFile($("input.ide-dir_select", appui.ide.editor).data("kendoDropDownList").value(), path);
+        appui.ide.newFile(path);
       }
-      else if ($(e.item).hasClass("apst-tree-rename")) {
+      else if ($(e.item).hasClass("bbn-tree-rename")) {
         appui.ide.rename(dataItem);
       }
-      else if ($(e.item).hasClass("apst-tree-duplicate")) {
+      else if ($(e.item).hasClass("bbn-tree-duplicate")) {
         appui.ide.duplicate(dataItem);
       }
-      else if ($(e.item).hasClass("apst-tree-export")) {
+      else if ($(e.item).hasClass("bbn-tree-export")) {
         appui.ide.export(dataItem);
       }
-      else if ($(e.item).hasClass("apst-tree-delete")) {
+      else if ($(e.item).hasClass("bbn-tree-delete")) {
         appui.ide.delete(dataItem, treeDS);
       }
     }
@@ -240,12 +239,6 @@ $(function(){
     dataSource: [],
     dataTextField: "text",
     dataValueField: "value",
-    valueTemplate: function (v) {
-      if (v.group) {
-        return v.text + '<div style="background: #ccc none repeat scroll 0 0; border-bottom-left-radius: 5px; line-height: 1.8; padding: 0 0.5em; position: absolute; right: 23px; top: 0; text-transform: uppercase">' + v.group + '</div>';
-      }
-      return v.text;
-    },
     change: function (e) {
       var sel = e.sender.dataItem();
       if (sel && sel.bcolor) {

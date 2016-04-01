@@ -1,6 +1,5 @@
 <?php
 /** @var $this \bbn\mvc\controller */
-
 $model = $this->get_model();
 $list = [];
 $sess = [];
@@ -13,32 +12,23 @@ if ( !$this->inc->session->has('ide') ){
   ], 'ide');
 }
 
-if ( count($this->arguments) && isset($model['dirs'][$this->arguments[0]]) ){
-  $current_dir = $this->arguments[0];
-  if ( isset($model['dirs'][$this->arguments[0]]['tabs']) ){
-    $found = false;
-    $def = false;
-    foreach ( $model['dirs'][$this->arguments[0]]['tabs'] as $t ){
-      if ( !empty($t['default']) ){
-        $def = $t;
-      }
-      if ( isset($this->arguments[1]) && ($t['url'] === $this->arguments[1]) ){
-        $current_dir .= '/'.$t['url'];
-        $found = 1;
-        break;
-      }
-    }
-    if ( !$found && $def ){
-      $current_dir .= '/'.$def;
+$dirs = new \bbn\ide\directories($this->inc->options);
+
+// Routes
+foreach ( $model['dirs'] as $i => $dir ){
+  foreach ( $this->mvc->get_routes() as $k => $r ){
+    if ( strpos($dirs->decipher_path($i), $r) === 0 ){
+      $model['dirs'][$i]['route'] = $k;
     }
   }
 }
 
+// Restore files stored in session
 foreach ( $this->inc->session->get('ide', 'list') as $l ){
-  $dirfile = explode('/', $l);
+  $dirfile = $dirs->dir_from_url($l);
   if ( $tmp = $this->get_model('./load', [
-    'dir' => array_shift($dirfile),
-    'file' => implode('/', $dirfile)
+    'dir' => $dirfile,
+    'file' => substr($l, strlen($dirfile), strlen($l))
   ]) ){
     if ( !isset($tmp['error']) ){
       array_push($list, $tmp);
@@ -70,7 +60,7 @@ echo $this
       'dirs' => $model['dirs'],
       'root' => $this->say_dir().'/',
       'url' => implode('/', $this->params),
-      'current_dir' => $current_dir ?: $model['default_dir']
+      'current_dir' => $current_dir ? $current_dir : $model['default_dir']
     ])
     ->get_view().$this->get_less();
 $this->obj->url = 'ide/editor';

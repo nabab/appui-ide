@@ -6,11 +6,13 @@
 if ( isset($dir, $this->post['dir'], $this->post['path'], $this->post['name'], $this->post['type']) ){
   $res = $dir->create(
     $this->post['dir'],
+    $this->post['tab'],
     $this->post['path'],
-    $this->post['name'].(empty($this->post['ext']) ? '' : '.'.$this->post['ext']),
+    $this->post['name'] . ( empty($this->post['ext']) ? '' : '.' . $this->post['ext'] ),
     $this->post['type']);
-  if ( $res === 1 ){
+  if ( is_string($res) ){
     $this->obj->success = 1;
+    $this->obj->id = $res;
   }
   else{
     $this->obj->error = $dir->get_last_error();

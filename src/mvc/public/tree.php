@@ -5,11 +5,12 @@ if ( isset($this->post['dir']) ){
 }
 else if ( isset($this->post['mode']) ){
   $this->data['dir'] = $this->post['mode'];
-  $this->data['onlydir'] = empty($this->post['onlydir']) ? false : true;
+  $this->data['onlydir'] = $this->post['onlydir'];
 }
 if ( isset($this->data['dir']) ){
   if ( isset($this->post['path']) ){
     $this->data['path'] = $this->post['path'];
   }
   $this->obj->data = $this->get_model();
+  $this->inc->session->set($this->data['dir'], 'ide', 'dir');
 }

@@ -4,7 +4,7 @@
  * @var \bbn\ide\directories $dir
  */
 if ( isset($dir, $this->post['dir'], $this->post['url'], $this->post['editors']) ){
-  $dir->close($this->post['dir'], $this->post['editors'], $this->inc->pref);
+  $dir->set_preferences($this->post['dir'], $this->post['editors'], $this->inc->pref);
   $list = $this->inc->session->get('ide', 'list');
   $idx = array_search($this->post['url'], $list);
   if ( $idx !== false ){
