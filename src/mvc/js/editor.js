@@ -1,4 +1,7 @@
 $(function(){
+  if ( data && isFunction(data.toJSON()) ){
+    data = data.toJSON();
+  }
   appui.fn.log(data);
   appui.ide.tabstrip = $("#tabstrip_editor");
   appui.ide.editor = appui.app.tabstrip.ele.tabNav("getContainer", appui.ide.tabstrip);
@@ -101,7 +104,7 @@ $(function(){
     select: function(e){
       e.preventDefault();
       var r = this.dataItem(e.node);
-      if (r.has_index) {
+      if ( r.has_index ){
         window.open(appui.env.host + '/' + r.path);
       }
       else if ( r.is_viewable ){
@@ -109,30 +112,41 @@ $(function(){
       }
       this.select(e.node);
     },
-    drag: function (e) {
+    drag: function(e){
       var dt = false;
-      if (e.dropTarget !== undefined && ( dt = this.dataItem(e.dropTarget))) {
-        //appui.fn.log(dt);
-        if (!dt.parenthood) {
-          if (e.setStatusClass !== undefined) {
+      if ( (e.dropTarget !== undefined) &&
+        ( dt = this.dataItem(e.dropTarget))
+      ){
+        if ( !dt.parenthood ){
+          if ( e.setStatusClass !== undefined ){
             e.setStatusClass("k-denied");
           }
-          if (e.setValid !== undefined) {
+          if ( e.setValid !== undefined ){
             e.setValid(false);
           }
         }
       }
     },
-    drop: function (e) {
-      if (e.valid) {
+    drop: function(e){
+      appui.fn.log(e, e.valid);
+      if ( e.valid ){
         var dd = this.dataItem(e.destinationNode),
-          ds = this.dataItem(e.sourceNode),
-          dir = $("input.ide-dir_select").data("kendoDropDownList").value();
-        appui.fn.post(data.root + 'actions', {dpath: dd.path, spath: ds.path, dir: dir, act: 'move'}, function (d) {
-          if (d.success) {
+            ds = this.dataItem(e.sourceNode);
+        appui.fn.post(data.root + 'actions/move', {
+          dest: dd.path,
+          src: ds.path,
+          dir: appui.ide.currentSrc(),
+          type: ds.type
+        }, function(d){
+          if ( d.data &&
+            d.data.file_new &&
+            d.data.file_url &&
+            d.data.file_new_url
+          ){
+            appui.ide.closeOpen(ds, d.data);
             dd.loaded(false);
             dd.load();
-          }
+                      }
           else {
             e.setValid(false);
           }
