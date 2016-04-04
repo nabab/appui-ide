@@ -1,5 +1,5 @@
 $(function(){
-  if ( data && isFunction(data.toJSON()) ){
+  if ( data && $.isFunction(data.toJSON) ){
     data = data.toJSON();
   }
   appui.fn.log(data);
