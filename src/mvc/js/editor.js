@@ -128,7 +128,6 @@ $(function(){
       }
     },
     drop: function(e){
-      appui.fn.log(e, e.valid);
       if ( e.valid ){
         var dd = this.dataItem(e.destinationNode),
             ds = this.dataItem(e.sourceNode);
