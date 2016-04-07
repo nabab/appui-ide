@@ -519,19 +519,18 @@ if (appui.ide === undefined) {
               }
             });
             // Add a dropdownlist for tab selection
+            var $select = $('<select name="tab" required="required"/>');
             $("div.appui-form-label:first").before(
-              '<div class="appui-form-label mvc-ele">Type</div>' +
-              '<div class="appui-form-field  mvc-ele">' +
-              '<select name="tab" required></select>' +
-              '</div>'
+              '<div class="appui-form-label mvc-ele">Type</div>',
+              $('<div class="appui-form-field  mvc-ele"/>').append($select)
             );
             // Initialize the kendo dropdownlist
-            $("select[name=tab]", ele).kendoDropDownList({
+            $select.kendoDropDownList({
               dataSource: tabs,
               dataTextField: "text",
               dataValueField: "value",
               value: tabDef
-            }).data("kendoDropDownList").trigger('change');
+            }).data("kendoDropDownList").trigger('change')
             // Add checkbox to update the permissions
             $('div.appui-form-label:visible:last').before(
               '<div class="appui-form-label mvc-ele">Update permissions</div>' +
@@ -635,14 +634,13 @@ if (appui.ide === undefined) {
               }
             });
             // Add a dropdownlist for tab selection
+            var $select = $('<select name="tab" required="required"/>');
             $("div.appui-form-label:first").before(
-              '<div class="appui-form-label mvc-ele">Type</div>' +
-              '<div class="appui-form-field  mvc-ele">' +
-              '<select name="tab" required></select>' +
-              '</div>'
+              '<div class="appui-form-label mvc-ele">Type</div>',
+              $('<div class="appui-form-field  mvc-ele"/>').append($select)
             );
             // Initialize the kendo dropdownlist
-            $("select[name=tab]", ele).kendoDropDownList({
+            $select.kendoDropDownList({
               dataSource: tabs,
               dataTextField: "text",
               dataValueField: "value",
