@@ -9,7 +9,8 @@ if ( isset($dir, $this->post['dir'], $this->post['path'], $this->post['name'], $
     $this->post['tab'],
     $this->post['path'],
     $this->post['name'] . ( empty($this->post['ext']) ? '' : '.' . $this->post['ext'] ),
-    $this->post['type']);
+    $this->post['type']
+  );
   if ( is_string($res) ){
     if ( !empty($this->post['code']) ){
       // Add file to page permissions table

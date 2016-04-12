@@ -4,6 +4,7 @@
 if ( isset($this->post['dir']) ){
   $this->data = $this->post;
 }
+$this->data['routes'] = $this->mvc->get_routes();
 if ( $this->obj->data = $this->get_model() ){
   if ( !empty($this->obj->data['error']) ){
     $this->obj->error = $this->obj->data['error'];

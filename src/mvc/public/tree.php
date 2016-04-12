@@ -11,6 +11,7 @@ if ( isset($this->data['dir']) ){
   if ( isset($this->post['path']) ){
     $this->data['path'] = $this->post['path'];
   }
+  $this->data['routes'] = $this->mvc->get_routes();
   $this->obj->data = $this->get_model();
   $this->inc->session->set($this->data['dir'], 'ide', 'dir');
 }

@@ -1,7 +1,7 @@
 <?php
-if ( isset($this->data['dir']) ){
+if ( isset($this->data['dir'], $this->data['routes']) ){
   // Initialize the directories object
-  $dirs = new \bbn\ide\directories($this->inc->options);
+  $dirs = new \bbn\ide\directories($this->inc->options, $this->data['routes']);
   // Get the relative directory item
   if ( $dir = $dirs->dir($this->data['dir']) ){
     // Get the directory's root path
@@ -112,7 +112,8 @@ if ( isset($this->data['dir']) ){
                 }
               }
               else if ( empty($this->data['onlydir']) &&
-                !in_array(\bbn\str::file_ext($f), $excluded)
+                !in_array(\bbn\str::file_ext($f), $excluded) &&
+                (basename($f) !== '_ctrl.php')
               ){
                 // File extension
                 $ext = \bbn\str::file_ext($f);

@@ -1,5 +1,6 @@
 <?php
 /** @var $this \bbn\mvc\controller */
+$this->data['routes'] = $this->mvc->get_routes();
 $model = $this->get_model();
 $list = [];
 $sess = [];
@@ -12,7 +13,7 @@ if ( !$this->inc->session->has('ide') ){
   ], 'ide');
 }
 
-$dirs = new \bbn\ide\directories($this->inc->options);
+$dirs = new \bbn\ide\directories($this->inc->options, $this->data['routes']);
 
 // Routes
 foreach ( $model['dirs'] as $i => $dir ){
@@ -28,7 +29,8 @@ foreach ( $this->inc->session->get('ide', 'list') as $l ){
   $dirfile = $dirs->dir_from_url($l);
   if ( $tmp = $this->get_model('./load', [
     'dir' => $dirfile,
-    'file' => substr($l, strlen($dirfile), strlen($l))
+    'file' => substr($l, strlen($dirfile), strlen($l)),
+    'routes' => $this->data['routes']
   ]) ){
     if ( !isset($tmp['error']) ){
       array_push($list, $tmp);
