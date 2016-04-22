@@ -2,7 +2,7 @@ $(function(){
   if ( data && $.isFunction(data.toJSON) ){
     data = data.toJSON();
   }
-  appui.fn.log(data);
+  //appui.fn.log(data);
   appui.ide.tabstrip = $("#tabstrip_editor");
   appui.ide.editor = appui.app.tabstrip.ele.tabNav("getContainer", appui.ide.tabstrip);
   var panel,

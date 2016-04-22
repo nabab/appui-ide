@@ -5,7 +5,8 @@ if (appui.ide === undefined) {
     url: data.root + 'editor',
     title: 'IDE - ',
     selected: 0,
-    resize: function (ele) {
+
+    resize: function(ele){
       appui.ide.tabstrip.tabNav("resize");
       $(ele).redraw();
       $("div.code:visible", ele).find(".CodeMirror:first").parent().codemirror("refresh");
@@ -88,7 +89,7 @@ if (appui.ide === undefined) {
           dir = data.dirs[src] !== undefined ? data.dirs[src] : false;
       if ( dir && $c.length ){
         if ( dir.tabs ) {
-          appui.fn.log(path, dir);
+          //appui.fn.log(path, dir);
           appui.fn.link(( dir.route !== undefined ? dir.route + '/' : '' ) + path, 1);
           return 1;
         }
@@ -116,7 +117,7 @@ if (appui.ide === undefined) {
           }
         }
       }
-      appui.fn.log("SRC: " + src + " PATH: " + path + " URL: " + url);
+      //appui.fn.log("SRC: " + src + " PATH: " + path + " URL: " + url);
     },
 
     view: function (d) {
@@ -632,6 +633,19 @@ if (appui.ide === undefined) {
           if ( d.success ){
             appui.app.notifs.wid.show("File saved!", "success");
           }
+          else if ( d.deleted ){
+            appui.app.notifs.wid.show("File deleted!", "success");
+          }
+          if ( d.success || d.deleted ){
+            setTimeout(function(){
+              var n = appui.app.notifs.wid.getNotifications();
+              $.each(n, function(i, v){
+                if ( $(v).hasClass("k-notification-success") ){
+                  $(v).parent().remove();
+                }
+              });
+            }, 3000);
+          }
         });
         return 1;
       }
@@ -672,10 +686,10 @@ if (appui.ide === undefined) {
           }];
         }
         if (a.cfg !== undefined) {
-          b.callback = function (ele) {
-            appui.fn.log("RESIZE");
+          b.callback = function(ele){
+            $(ele).find("div.ui-codemirror").codemirror("refresh");
             setTimeout(function(){
-              appui.ide.resize();
+              appui.ide.resize(ele);
             }, 100);
           };
         }
@@ -691,7 +705,7 @@ if (appui.ide === undefined) {
         });
         // Add users' permissions to controller tab
         if ( a.url === 'php' ){
-          appui.fn.log(a, this);
+          //appui.fn.log(a, this);
           var $panel = $(panel),
               html = $panel.html(),
               obj = kendo.observable({
@@ -701,11 +715,11 @@ if (appui.ide === undefined) {
                 perm_help: a.perm_help ? a.perm_help : '',
                 perm_children: a.children ? a.children : [],
                 add: function(e){
-                  appui.fn.log(e);
+                  //appui.fn.log(e);
                   appui.ide.addPermission(e.target);
                 },
                 save: function(e){
-                  appui.fn.log(e);
+                  //appui.fn.log(e);
                   appui.ide.savePermission(e.target)
                 },
                 checkEnter: function(e){
@@ -719,7 +733,7 @@ if (appui.ide === undefined) {
                 },
                 removeChild: function(e){
                   appui.ide.removeChiPermission(e.target);
-                },
+                }
               });
 
           var $div = $('<div/>');
@@ -740,21 +754,17 @@ if (appui.ide === undefined) {
               size: "30%",
               resizable: false
             }],
-            collapse: function(){
-              $panel.resize();
-            },
-            expand: function(){
-              $panel.resize();
+            resize: function(){
+              setTimeout(function(){
+                appui.ide.resize(panel);
+              }, 10);
             }
           });
-          var ele = permsSplitter.children("div.perm_set");
-          ele.html($("#ide_permissions_form_template").html());
-          kendo.bind(ele, obj);
+          var elem = permsSplitter.children("div.perm_set");
+          elem.html($("#ide_permissions_form_template").html());
+          kendo.bind(elem, obj);
           setTimeout(function(){
             $panel.resize();
-            setTimeout(function() {
-              appui.ide.resize();
-            }, 10);
           }, 10);
 
         }
@@ -813,7 +823,6 @@ if (appui.ide === undefined) {
       }
       //appui.fn.log("CURRENT", current, list);
       ele.tabNav({
-        current: current,
         baseTitle: title,
         list: $.map(list, function (a) {
           return appui.ide.tabObj(a);
@@ -1376,7 +1385,7 @@ if (appui.ide === undefined) {
           file: file
         }, function(d){
           if ( d.data ){
-            appui.ide.tabstrip.tabNav("getSubTabNav", d.data.file_url).set('file', d.data.file, d.data.file_url);
+            appui.ide.tabstrip.tabNav("getSubTabNav", d.data.file_url).tabNav("set", 'file', d.data.file, d.data.file_url);
           }
         });
       }
@@ -1511,7 +1520,7 @@ if (appui.ide === undefined) {
 
   $(window).resize(function () {
     setTimeout(function () {
-      appui.ide.resize();
+      //appui.ide.resize();
     }, 1000);
   });
 }
