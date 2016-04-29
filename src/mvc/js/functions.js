@@ -89,7 +89,6 @@ if (appui.ide === undefined) {
           dir = data.dirs[src] !== undefined ? data.dirs[src] : false;
       if ( dir && $c.length ){
         if ( dir.tabs ) {
-          //appui.fn.log(path, dir);
           appui.fn.link(( dir.route !== undefined ? dir.route + '/' : '' ) + path, 1);
           return 1;
         }
@@ -98,7 +97,34 @@ if (appui.ide === undefined) {
         if ( typeof(m) === 'string' ){
           switch ( m ){
             case "php":
-              appui.fn.window(data.root + "test", {code: c}, "90%", "90%");
+              appui.fn.post(data.root + "test", {code: c}, function(d){
+                var idx = appui.ide.tabstrip.tabNav("getIndex", url),
+                    subtab = appui.ide.tabstrip.tabNav("getSubTabNav", idx),
+                    list = subtab.tabNav("getList"),
+                    len = list.length,
+                    num = 0,
+                    time = new Date();
+                if ( len > 1 ){
+                  while ( len ){
+                    if ( list[len-1].num !== undefined ){
+                      num = list[len-1].num + 1;
+                      break;
+                    }
+                    len--;
+                  }
+                }
+                subtab.tabNav("navigate", {
+                  content: d.content,
+                  title: time.getHours() + ':' + time.getMinutes() + ':' + time.getSeconds(),
+                  url: 'output' + num,
+                  num: num,
+                  bcolor: '#58be1d',
+                  fcolor: '#fdfdfd'
+                });
+                idx = subtab.tabNav("getIndex", 'output' + num);
+                //subtab.tabNav("setContent", d.content, idx);
+              });
+              //appui.fn.window(data.root + "test", {code: c}, "90%", "90%");
               break;
             case "js":
               eval(c);
@@ -117,7 +143,7 @@ if (appui.ide === undefined) {
           }
         }
       }
-      //appui.fn.log("SRC: " + src + " PATH: " + path + " URL: " + url);
+      appui.fn.log("SRC: " + src + " PATH: " + path + " URL: " + url);
     },
 
     view: function (d) {
@@ -208,33 +234,49 @@ if (appui.ide === undefined) {
     },
 
     load: function(path, dir, tab){
-      appui.fn.post(data.root + 'load', {
-        dir: dir,
-        file: path,
-        tab: tab
-      }, function (d) {
-        if (d.data) {
-          if (appui.ide.tabstrip.tabNav("search", d.data.url) === -1) {
-            appui.ide.add(d.data);
+      var force = false,
+          hasTabs = tab !== undefined,
+          dot = path.lastIndexOf('.'),
+          name;
+      if ( hasTabs && dot ){
+        name = dir + path.substr(0, dot) + '/' + tab;
+      }
+      else{
+        name = dir + path;
+      }
+      if (appui.ide.tabstrip.tabNav("search", name) !== -1) {
+        appui.ide.tabstrip.tabNav("activate", name);
+      }
+      else{
+        appui.fn.post(data.root + 'load', {
+          dir: dir,
+          file: path,
+          tab: tab
+        }, function (d) {
+          if ( d.data ){
+            if (appui.ide.tabstrip.tabNav("search", d.data.url) === -1) {
+              appui.ide.add(d.data);
+              force = true;
+            }
+            //appui.ide.tabstrip.tabNav("activate", d.data.url + (d.data.def ? '/' + d.data.def : ''), force);
+            //$tree.data("kendoTreeView").select(e.node);
+            // Set theme
+            if (data.theme) {
+              $("div.code", appui.ide.editor).each(function () {
+                $(this).codemirror("setTheme", data.theme);
+              });
+            }
+            // Set font
+            if (data.font) {
+              $("div.CodeMirror", appui.ide.editor).css("font-family", data.font);
+            }
+            // Set font size
+            if (data.font_size) {
+              $("div.CodeMirror", appui.ide.editor).css("font-size", data.font_size);
+            }
           }
-          appui.ide.tabstrip.tabNav("activate", data.root + 'editor/' + d.data.url + (d.data.def ? '/' + d.data.def : ''));
-          //$tree.data("kendoTreeView").select(e.node);
-          // Set theme
-          if (data.theme) {
-            $("div.code", appui.ide.editor).each(function () {
-              $(this).codemirror("setTheme", data.theme);
-            });
-          }
-          // Set font
-          if (data.font) {
-            $("div.CodeMirror", appui.ide.editor).css("font-family", data.font);
-          }
-          // Set font size
-          if (data.font_size) {
-            $("div.CodeMirror", appui.ide.editor).css("font-size", data.font_size);
-          }
-        }
-      });
+        });
+      }
     },
 
     duplicate: function(dataItem){
@@ -688,9 +730,7 @@ if (appui.ide === undefined) {
         if (a.cfg !== undefined) {
           b.callback = function(ele){
             $(ele).find("div.ui-codemirror").codemirror("refresh");
-            setTimeout(function(){
-              appui.ide.resize(ele);
-            }, 100);
+            appui.ide.resize(ele);
           };
         }
         return b;
@@ -699,13 +739,9 @@ if (appui.ide === undefined) {
 
     arrange: function (panel, a, url, title) {
       if (a.cfg !== undefined) {
-        $(panel).parents("div.k-content[role=tabpanel]").css({
-          overflow: "hidden",
-          padding: 0
-        });
         // Add users' permissions to controller tab
         if ( a.url === 'php' ){
-          //appui.fn.log(a, this);
+          appui.fn.log(a, this);
           var $panel = $(panel),
               html = $panel.html(),
               obj = kendo.observable({
@@ -715,11 +751,11 @@ if (appui.ide === undefined) {
                 perm_help: a.perm_help ? a.perm_help : '',
                 perm_children: a.children ? a.children : [],
                 add: function(e){
-                  //appui.fn.log(e);
+                  appui.fn.log(e);
                   appui.ide.addPermission(e.target);
                 },
                 save: function(e){
-                  //appui.fn.log(e);
+                  appui.fn.log(e);
                   appui.ide.savePermission(e.target)
                 },
                 checkEnter: function(e){
@@ -748,24 +784,21 @@ if (appui.ide === undefined) {
             panes: [{
               collapsible: false,
               size: "70%",
-              resizable: false
+              resizable: false,
+              scrollable: false
             }, {
               collapsible: true,
               size: "30%",
               resizable: false
             }],
             resize: function(){
-              setTimeout(function(){
-                appui.ide.resize(panel);
-              }, 10);
+              appui.ide.resize(panel);
             }
           });
           var elem = permsSplitter.children("div.perm_set");
           elem.html($("#ide_permissions_form_template").html());
           kendo.bind(elem, obj);
-          setTimeout(function(){
-            $panel.resize();
-          }, 10);
+          $panel.resize();
 
         }
         $("div.code", panel).each(function () {
@@ -823,6 +856,7 @@ if (appui.ide === undefined) {
       }
       //appui.fn.log("CURRENT", current, list);
       ele.tabNav({
+        current: current,
         baseTitle: title,
         list: $.map(list, function (a) {
           return appui.ide.tabObj(a);
@@ -841,7 +875,11 @@ if (appui.ide === undefined) {
         url = appui.ide.url;
         title = appui.ide.title;
       }
-      ele.tabNav("add", appui.ide.tabObj(obj));
+      var tn = ele.tabNav("add", appui.ide.tabObj(obj)),
+          idx = ele.tabNav("getList").length - 1,
+          tab = ele.tabNav("getTab", idx),
+          wid = ele.data("kendoTabStrip");
+      wid.activateTab(tab);
       appui.ide.arrange(ele.tabNav("getContainer", ele.tabNav("getLength") - 1), obj, url, title);
     },
 
@@ -863,6 +901,359 @@ if (appui.ide === undefined) {
 
     findPrev: function (v) {
       $("div.code:visible", appui.ide.tabstrip).codemirror("findPrev", v || '');
+    },
+
+    mkMenu: function (o) {
+      var st = '';
+      if (o.text) {
+        if (o.text) {
+          st += '<li>';
+          if (o.link || o.function) {
+            st += '<a href="' +
+              ( o.link ? o.link : 'javascript:;' ) +
+              '"' + ( o.function ? ' onclick="' + o.function + '"' : '' ) +
+              '>';
+          }
+          st += o.text;
+          if (o.link || o.function) {
+            st += '</a>';
+          }
+          if (o.items && o.items.length) {
+            st += '<ul>';
+            $.each(o.items, function (i, v) {
+              st += appui.ide.mkMenu(v);
+            });
+            st += '</ul>';
+          }
+          st += '</li>';
+        }
+      }
+      return st;
+    },
+    
+    getUrl: function(path, name){
+      var src = appui.ide.currentSrc(),
+          url = src + '/',
+          bits = path.split('/'),
+          // Filename with its extension
+          fn = bits.pop(),
+          // File's path
+          path = bits.join('/') + '/';
+
+      return url + path + (data.dirs[src]['tabs'] !== undefined ? name : fn);
+
+    },
+
+    switch: function(ext, file){
+      if ( (ext !== undefined ) &&
+        ext.length &&
+        (file !== undefined) &&
+        file.length
+      ){
+        appui.fn.post(data.root + "actions/switch", {
+          ext: ext,
+          file: file
+        }, function(d){
+          if ( d.data ){
+            appui.ide.tabstrip.tabNav("getSubTabNav", d.data.file_url).tabNav('set', 'file', d.data.file, d.data.file_url);
+          }
+        });
+      }
+    },
+
+    savePermission: function(bt){
+      var $bt = $(bt),
+          $cont = $bt.closest("div"),
+          ele = $cont.find("input"),
+          code = $(ele[0]).val(),
+          text = $(ele[1]).val(),
+          $id = $("input:hidden", $cont.closest("div.perm_set")),
+          help = $("textarea", $cont).val();
+
+      if ( code.length && text.length ){
+        appui.fn.post(data.root + 'permissions/save', {
+          id: $id.val(),
+          code: code,
+          text: text,
+          help: help
+        }, function(d){
+          if ( d.data && d.data.success ){
+            // Notify
+            $bt.after('<i class="fa fa-thumbs-up" style="margin-left: 5px; color: green"></i>');
+          }
+          else {
+            // Notify
+            $bt.after('<i class="fa fa-thumbs-down" style="margin-left: 5px; color: red"></i>');
+          }
+          // Remove notify
+          setTimeout(function(){
+            $("i.fa-thumbs-up, i.fa-thumbs-down", $cont).remove();
+          }, 3000);
+        });
+      }
+    },
+
+    saveChiPermission: function(bt){
+      var $cont = $(bt).closest("div"),
+        ele = $cont.find("input"),
+        code = $(ele[0]).val(),
+        text = $(ele[1]).val(),
+        $id = $("input:hidden", $cont.closest("div.perm_set"));
+
+      if ( code.length && text.length ){
+        appui.fn.post(data.root + 'permissions/save', {
+          id: $id.val(),
+          code: code,
+          text: text
+        }, function(d){
+          if ( d.data && d.data.success ){
+            // Notify
+            $cont.append('<i class="fa fa-thumbs-up" style="margin-left: 5px; color: green"></i>');
+          }
+          else {
+            // Notify
+            $cont.append('<i class="fa fa-thumbs-down" style="margin-left: 5px; color: red"></i>');
+          }
+          // Remove notify
+          setTimeout(function(){
+            $("i.fa-thumbs-up, i.fa-thumbs-down", $cont).remove();
+          }, 3000);
+        });
+      }
+    },
+
+    addPermission: function(bt){
+      var $bt = $(bt),
+          $cont = $bt.closest("div"),
+          ele = $cont.find('input'),
+          code = $(ele[0]).val(),
+          text = $(ele[1]).val(),
+          ul = $bt.parent().next(),
+          $id = $("input:hidden", $cont.closest("div.perm_set"));
+
+      if ( code.length && text.length ){
+        appui.fn.post(data.root + 'permissions/add', {
+          id: $id.val(),
+          code: code,
+          text: text
+        }, function(d){
+          if ( d.data && d.data.success ){
+            // Notify
+            $cont.append('<i class="fa fa-thumbs-up" style="margin-left: 5px; color: green"></i>');
+            // Insert the new item to list
+            ul.append(
+              '<div style="margin-bottom: 5px">' +
+                '<label>Code</label>' +
+                '<input class="k-textbox" readonly style="margin: 0 10px" value="' + code + '"  maxlength="255">' +
+                '<label>Title/Description</label>' +
+                '<input class="k-textbox" maxlength="255" style="width:400px; margin: 0 10px" value="' + text + '">' +
+                '<button class="k-button" onclick="appui.ide.saveChiPermission(this)" style="margin-right: 5px"><i class="fa fa-save"></i></button>' +
+                '<button class="k-button" onclick="appui.ide.removeChiPermission(this)"><i class="fa fa-trash"></i></button>' +
+              '</div>'
+            );
+            // Clear inserted fields
+            $(ele[0]).val('');
+            $(ele[1]).val('');
+          }
+          else {
+            // Notify
+            $cont.append('<i class="fa fa-thumbs-down" style="margin-left: 5px; color: red"></i>');
+          }
+          // Remove notify
+          setTimeout(function(){
+            $("i.fa-thumbs-up, i.fa-thumbs-down", $cont).remove();
+          }, 3000);
+        });
+      }
+    },
+
+    removeChiPermission: function(bt){
+      var $bt = $(bt),
+          $cont = $bt.closest("div"),
+          ele = $cont.find('input'),
+          code = $(ele[0]).val(),
+          $id = $("input:hidden", $cont.closest("div.perm_set"));
+
+      if ( confirm('Are you sure to remove this item?') ){
+        appui.fn.post(data.root + 'permissions/delete', {
+          code: code,
+          id: $id.val()
+        }, function(d){
+          if ( d.data && d.data.success ){
+            $bt.closest("div").remove();
+          }
+        });
+      }
+    },
+
+    history: function(){
+      var obj = appui.ide.tabstrip.tabNav("getObs"),
+          // tab config
+          hist = {
+            title: 'History',
+            url: 'history',
+            bcolor: '',
+            fcolor: '',
+            menu: [{
+              text: 'Switch to Diff mode',
+              fn: function(e){
+                var $code = $("div.bbn-ide-history-code", cont),
+                    tree = $("div.bbn-ide-history-tree", cont).data("kendoTreeView"),
+                    item = tree.select().length ? tree.dataItem(tree.select()) : false;
+                if ( item && item.tab !== undefined ){
+                  var c = subTab.tabNav('getContainer', subTab.tabNav('search', item.tab)),
+                    orig = $("div.code.ui-codemirror", c).codemirror("getValue");
+                }
+                $code.children().remove();
+                $code.removeClass("ui-codemirror");
+                $code.codemirror('mergeView', {
+                  value: orig ? orig : '',
+                  mode: item ? item.mode : '',
+                  origRight:  item ? item.code : '',
+                  allowEditingOriginals: false,
+                  showDifferences: true,
+                  readOnly: true
+                });
+                $code.children().addClass("appui-full-height");
+                $("div.CodeMirror-merge-pane", $code).not(".CodeMirror-merge-pane-rightmost").before(
+                  '<div style="border-bottom: 1px solid #ddd">' +
+                    '<div class="appui-c" style="width: 50%; display: inline-block"><strong>CURRENT CODE</strong></div>' +
+                    '<div class="appui-c" style="width: 50%; display: inline-block"><strong>BACKUP CODE</strong></div>' +
+                  '</div>'
+                );
+                $code.redraw();
+              }
+            }],
+            callonce: function(){
+              getData();
+            }
+          },
+          subTab = appui.ide.tabstrip.tabNav("getSubTabNav", obj.url),
+          idx = subTab.tabNav('search', hist.url),
+          treeDS = new kendo.data.HierarchicalDataSource({
+            data: []
+          }),
+          cont,
+          getData = function(){
+            appui.fn.post(data.root + 'history/load', { url: obj.url }, function(d){
+              if ( d.data.list !== undefined ){
+                // Set new data to datasource
+                treeDS.data(d.data.list);
+                // Resize splitter
+                $("div.bbn-ide-history-splitter", cont).data("kendoSplitter").resize();
+                // Reset CodeMirror
+                $("div.bbn-ide-history-code", cont).codemirror("setValue", '');
+              }
+            });
+          };
+
+      if ( idx === -1 ){
+        // Insert the new tab history
+        subTab.tabNav('add', hist);
+        // Get the tab's index
+        var idx = subTab.tabNav('getIndex', hist.url),
+        // Get container
+            cont = subTab.tabNav('getContainer', idx);
+
+        // Insert html template to container
+        $(cont).html($(ide_history_template).html());
+        // Splitter
+        $("div.bbn-ide-history-splitter", cont).kendoSplitter({
+          panes: [{
+            collapsible: true,
+            size: '150px'
+          }, {
+            collapsible: false
+          }]
+        }).data("kendoSplitter");
+        // Date tree
+        $("div.bbn-ide-history-tree", cont).kendoTreeView({
+          dataSource: treeDS,
+          select: function(e){
+            var item = e.sender.dataItem(e.node),
+                $cm = $("div.bbn-ide-history-code", cont);
+            if ( (item.code !== undefined) &&
+              (item.mode !== undefined)
+            ){
+              if( $cm.children().hasClass("CodeMirror-merge") ){
+                if ( item.tab !== undefined ){
+                  var c = subTab.tabNav('getContainer', subTab.tabNav('search', item.tab)),
+                      orig = $("div.code.ui-codemirror", c).codemirror("getValue");
+                }
+                $cm.children().remove();
+                $cm.codemirror('mergeView', {
+                  value: orig,
+                  mode: item.mode,
+                  origRight: item.code,
+                  allowEditingOriginals: false,
+                  showDifferences: true,
+                  readOnly: true
+                });
+                $cm.children().addClass("appui-full-height");
+                $("div.CodeMirror-merge-pane", $cm).not(".CodeMirror-merge-pane-rightmost").before(
+                  '<div style="border-bottom: 1px solid #ddd">' +
+                  '<div class="appui-c" style="width: 50%; display: inline-block"><strong>CURRENT CODE</strong></div>' +
+                  '<div class="appui-c" style="width: 50%; display: inline-block"><strong>BACKUP CODE</strong></div>' +
+                  '</div>'
+                );
+                $cm.redraw();
+              }
+              else {
+                $cm.codemirror("setOption", 'mode', item.mode);
+                $cm.codemirror("setValue", item.code);
+              }
+            }
+          }
+        });
+      }
+      else {
+        // Get container
+        cont = subTab.tabNav('getContainer', idx);
+        // Get data
+        getData();
+        // Set new data to tree
+        $("div.bbn-ide-history-tree", cont).data("kendoTreeView").setDataSource(treeDS);
+      }
+      // Activate history tab
+      subTab.tabNav('activate', idx);
+      // CodeMirror
+      $("div.bbn-ide-history-code", cont).codemirror({
+        readOnly: true
+      });
+    },
+
+    historyClear: function(){
+      appui.fn.post(data.root + 'history/clear', {
+        url: appui.ide.tabstrip.tabNav("getObs").url
+      }, function(d){
+        if ( d.data.success !== undefined ){
+          appui.app.notifs.wid.show("History cleared!", "success");
+          setTimeout(function(){
+            var n = appui.app.notifs.wid.getNotifications();
+            $.each(n, function(i, v){
+              if ( $(v).hasClass("k-notification-success") ){
+                $(v).parent().remove();
+              }
+            });
+          }, 3000);
+        }
+      });
+    },
+
+    historyClearAll: function(){
+      appui.fn.post(data.root + 'history/clear', {}, function(d){
+        if ( d.data.success !== undefined ){
+          appui.app.notifs.wid.show("History cleared!", "success");
+          setTimeout(function(){
+            var n = appui.app.notifs.wid.getNotifications();
+            $.each(n, function(i, v){
+              if ( $(v).hasClass("k-notification-success") ){
+                $(v).parent().remove();
+              }
+            });
+          }, 3000);
+        }
+      });
     },
 
     cfgDirs: function () {
@@ -1331,196 +1722,6 @@ if (appui.ide === undefined) {
           });
         });
       });
-    },
-
-    mkMenu: function (o) {
-      var st = '';
-      if (o.text) {
-        if (o.text) {
-          st += '<li>';
-          if (o.link || o.function) {
-            st += '<a href="' +
-              ( o.link ? o.link : 'javascript:;' ) +
-              '"' + ( o.function ? ' onclick="' + o.function + '"' : '' ) +
-              '>';
-          }
-          st += o.text;
-          if (o.link || o.function) {
-            st += '</a>';
-          }
-          if (o.items && o.items.length) {
-            st += '<ul>';
-            $.each(o.items, function (i, v) {
-              st += appui.ide.mkMenu(v);
-            });
-            st += '</ul>';
-          }
-          st += '</li>';
-        }
-      }
-      return st;
-    },
-    
-    getUrl: function(path, name){
-      var src = appui.ide.currentSrc(),
-          url = src + '/',
-          bits = path.split('/'),
-          // Filename with its extension
-          fn = bits.pop(),
-          // File's path
-          path = bits.join('/') + '/';
-
-      return url + path + (data.dirs[src]['tabs'] !== undefined ? name : fn);
-
-    },
-
-    switch: function(ext, file){
-      if ( (ext !== undefined ) &&
-        ext.length &&
-        (file !== undefined) &&
-        file.length
-      ){
-        appui.fn.post(data.root + "actions/switch", {
-          ext: ext,
-          file: file
-        }, function(d){
-          if ( d.data ){
-            appui.ide.tabstrip.tabNav("getSubTabNav", d.data.file_url).tabNav("set", 'file', d.data.file, d.data.file_url);
-          }
-        });
-      }
-    },
-
-    savePermission: function(bt){
-      var $bt = $(bt),
-          $cont = $bt.closest("div"),
-          ele = $cont.find("input"),
-          code = $(ele[0]).val(),
-          text = $(ele[1]).val(),
-          $id = $("input:hidden", $cont.closest("div.perm_set")),
-          help = $("textarea", $cont).val();
-
-      if ( code.length && text.length ){
-        appui.fn.post(data.root + 'permissions/save', {
-          id: $id.val(),
-          code: code,
-          text: text,
-          help: help
-        }, function(d){
-          if ( d.data && d.data.success ){
-            // Notify
-            $bt.after('<i class="fa fa-thumbs-up" style="margin-left: 5px; color: green"></i>');
-          }
-          else {
-            // Notify
-            $bt.after('<i class="fa fa-thumbs-down" style="margin-left: 5px; color: red"></i>');
-          }
-          // Remove notify
-          setTimeout(function(){
-            $("i.fa-thumbs-up, i.fa-thumbs-down", $cont).remove();
-          }, 3000);
-        });
-      }
-    },
-
-    saveChiPermission: function(bt){
-      var $cont = $(bt).closest("div"),
-        ele = $cont.find("input"),
-        code = $(ele[0]).val(),
-        text = $(ele[1]).val(),
-        $id = $("input:hidden", $cont.closest("div.perm_set"));
-
-      if ( code.length && text.length ){
-        appui.fn.post(data.root + 'permissions/save', {
-          id: $id.val(),
-          code: code,
-          text: text
-        }, function(d){
-          if ( d.data && d.data.success ){
-            // Notify
-            $cont.append('<i class="fa fa-thumbs-up" style="margin-left: 5px; color: green"></i>');
-          }
-          else {
-            // Notify
-            $cont.append('<i class="fa fa-thumbs-down" style="margin-left: 5px; color: red"></i>');
-          }
-          // Remove notify
-          setTimeout(function(){
-            $("i.fa-thumbs-up, i.fa-thumbs-down", $cont).remove();
-          }, 3000);
-        });
-      }
-    },
-
-    addPermission: function(bt){
-      var $bt = $(bt),
-          $cont = $bt.closest("div"),
-          ele = $cont.find('input'),
-          code = $(ele[0]).val(),
-          text = $(ele[1]).val(),
-          ul = $bt.parent().next(),
-          $id = $("input:hidden", $cont.closest("div.perm_set"));
-
-      if ( code.length && text.length ){
-        appui.fn.post(data.root + 'permissions/add', {
-          id: $id.val(),
-          code: code,
-          text: text
-        }, function(d){
-          if ( d.data && d.data.success ){
-            // Notify
-            $cont.append('<i class="fa fa-thumbs-up" style="margin-left: 5px; color: green"></i>');
-            // Insert the new item to list
-            ul.append(
-              '<div style="margin-bottom: 5px">' +
-                '<label>Code</label>' +
-                '<input class="k-textbox" readonly style="margin: 0 10px" value="' + code + '"  maxlength="255">' +
-                '<label>Title/Description</label>' +
-                '<input class="k-textbox" maxlength="255" style="width:400px; margin: 0 10px" value="' + text + '">' +
-                '<button class="k-button" onclick="appui.ide.saveChiPermission(this)" style="margin-right: 5px"><i class="fa fa-save"></i></button>' +
-                '<button class="k-button" onclick="appui.ide.removeChiPermission(this)"><i class="fa fa-trash"></i></button>' +
-              '</div>'
-            );
-            // Clear inserted fields
-            $(ele[0]).val('');
-            $(ele[1]).val('');
-          }
-          else {
-            // Notify
-            $cont.append('<i class="fa fa-thumbs-down" style="margin-left: 5px; color: red"></i>');
-          }
-          // Remove notify
-          setTimeout(function(){
-            $("i.fa-thumbs-up, i.fa-thumbs-down", $cont).remove();
-          }, 3000);
-        });
-      }
-    },
-
-    removeChiPermission: function(bt){
-      var $bt = $(bt),
-          $cont = $bt.closest("div"),
-          ele = $cont.find('input'),
-          code = $(ele[0]).val(),
-          $id = $("input:hidden", $cont.closest("div.perm_set"));
-
-      if ( confirm('Are you sure to remove this item?') ){
-        appui.fn.post(data.root + 'permissions/delete', {
-          code: code,
-          id: $id.val()
-        }, function(d){
-          if ( d.data && d.data.success ){
-            $bt.closest("div").remove();
-          }
-        });
-      }
     }
-
   };
-
-  $(window).resize(function () {
-    setTimeout(function () {
-      //appui.ide.resize();
-    }, 1000);
-  });
 }

@@ -55,6 +55,18 @@ if ( isset($this->data['routes']) ){
           'function' => "appui.ide.replaceAll();"
         ]]
       ], [
+        'text' => 'History',
+        'items' => [[
+          'text' => '<i class="fa fa-history"></i>Show',
+          'function' => 'appui.ide.history();'
+        ], [
+          'text' => '<i class="fa fa-trash-o"></i>Clear',
+          'function' => 'appui.ide.historyClear();'
+        ], [
+          'text' => '<i class="fa fa-trash-o"></i>Clear All',
+          'function' => 'appui.ide.historyClearAll();'
+        ]]
+      ], [
         'text' => 'Doc.',
         'items' => [[
           'text' => 'Find',

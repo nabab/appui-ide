@@ -2,7 +2,7 @@ $(function(){
   if ( data && $.isFunction(data.toJSON) ){
     data = data.toJSON();
   }
-  //appui.fn.log(data);
+  appui.fn.log(data);
   appui.ide.tabstrip = $("#tabstrip_editor");
   appui.ide.editor = appui.app.tabstrip.ele.tabNav("getContainer", appui.ide.tabstrip);
   var panel,
@@ -44,7 +44,7 @@ $(function(){
 
   $("div.bbn_ide_container", appui.ide.editor).kendoSplitter({
     orientation: "vertical",
-    resize: function (e) {
+    resize: function(e){
       $(e.sender.element).redraw();
     },
     panes: [
@@ -76,6 +76,8 @@ $(function(){
       type: "separator"
     }, {
       template: '<button class="k-button" title="Test code!" onclick="appui.ide.test();"><i class="fa fa-magic"> </i></button>'
+    }, {
+      template: '<button class="k-button" title="Show History" onclick="appui.ide.history();"><i class="fa fa-history"> </i></button>'
     }, {
       type: "separator"
     }, {
@@ -308,5 +310,11 @@ $(function(){
   appui.app.tabstrip.ele.tabNav("addCallback", function(){
     appui.ide.tabstrip.resize();
   }, appui.ide.tabstrip);
+
+  appui.app.tabstrip.ele.tabNav("addResize", function(){
+    setTimeout(function () {
+      appui.ide.resize();
+    }, 1000);
+  });
 
 });
