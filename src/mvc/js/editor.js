@@ -3,6 +3,11 @@ $(function(){
     data = data.toJSON();
   }
   appui.fn.log(data);
+  $(ele).css({
+    padding: 0,
+    margin: 0,
+    overflow: "hidden"
+  })
   appui.ide.tabstrip = $("#tabstrip_editor");
   appui.ide.editor = appui.app.tabstrip.ele.tabNav("getContainer", appui.ide.tabstrip);
   var panel,

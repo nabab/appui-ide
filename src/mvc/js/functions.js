@@ -705,7 +705,7 @@ if (appui.ide === undefined) {
           def: a.def ? a.def : '',
           default: a.default ? true : false,
           content: a.cfg === undefined ?
-            '<div class="appui-full-height"></div>' :
+            '<div></div>' :
             '<div class="code appui-full-height"></div>',
           close: function (a, b, c) {
             return appui.ide.close(a, b, c);
@@ -773,7 +773,10 @@ if (appui.ide === undefined) {
               });
 
           var $div = $('<div/>');
-          $panel.html(
+          $panel.css({
+            padding: 0,
+            overflow: "hidden"
+          }).html(
             '<div class="appui-full-height perms-splitter">' +
               '<div>' + html + '</div>' +
               '<div class="perm_set"> </div>' +

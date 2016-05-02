@@ -110,8 +110,16 @@ div.bbn_ide_container, div.appui-logger {
     }
   }
 }
-
+#tabstrip_editor{
+  div.k-content{
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+}
 div.bbn_ide_container {
+  div.k-treeview{
+    padding-left: 10px;
+  }
   overflow: hidden;
   div.appui_ide {
     overflow: visible;
@@ -120,9 +128,6 @@ div.bbn_ide_container {
   ul.menu {
     overflow: visible;
     z-index: 11
-  }
-  div.k-splitbar.k-splitbar-draggable-horizontal {
-    background-color: #CCC;
   }
   ul.k-tabstrip-items > li.k-item > span.k-link:after {
     content: " ";
@@ -147,4 +152,3 @@ div.bbn-ide-history {
     }
   }
 }
-
