@@ -2,12 +2,6 @@ $(function(){
   if ( data && $.isFunction(data.toJSON) ){
     data = data.toJSON();
   }
-  appui.fn.log(data);
-  $(ele).css({
-    padding: 0,
-    margin: 0,
-    overflow: "hidden"
-  })
   appui.ide.tabstrip = $("#tabstrip_editor");
   appui.ide.editor = appui.app.tabstrip.ele.tabNav("getContainer", appui.ide.tabstrip);
   var panel,
@@ -313,7 +307,7 @@ $(function(){
   }
 
   appui.app.tabstrip.ele.tabNav("addCallback", function(){
-    appui.ide.tabstrip.resize();
+    appui.ide.resize();
   }, appui.ide.tabstrip);
 
   appui.app.tabstrip.ele.tabNav("addResize", function(){
