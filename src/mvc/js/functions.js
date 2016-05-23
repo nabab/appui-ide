@@ -712,20 +712,23 @@ if (appui.ide === undefined) {
           }
         };
         if ( a.static &&
-          (a.file !== undefined) &&
           (a.url === 'html') &&
           (a.menu === undefined)
         ){
-          var ext = a.file.substring(a.file.lastIndexOf('.')+1, a.file.length);
-          b.menu = [{
-            text: 'Switch to ' + (ext.toLowerCase() === 'php' ? 'HTML' : 'PHP'),
-            fn: function(i, obj){
-              var ext = obj.file.substring(obj.file.lastIndexOf('.')+1, obj.file.length),
-                  new_ext = (ext.toLowerCase() === 'php' ? 'html' : 'php');
-              b.menu[0].text = 'Switch to ' + ext.toUpperCase();
-              appui.ide.switch(new_ext, obj.file);
-            }
-          }];
+          b.title = b.title + ' ' + a.cfg.mode.toUpperCase();
+          if ( a.file !== undefined ){
+            b.menu = [{
+              text: 'Switch to ' + (a.cfg.mode === 'php' ? 'HTML' : 'PHP'),
+              fn: function(i, obj){
+                var mode = $("div.ui-codemirror:visible", ele).codemirror('getMode'),
+                  newMode = mode.toLowerCase() === 'php' ? 'html' : 'php';
+                b.menu[0].text = 'Switch to ' + mode.toUpperCase();
+                if ( obj.file !== undefined ){
+                  appui.ide.switch(newMode, obj.file);
+                }
+              }
+            }];
+          }
         }
         if (a.cfg !== undefined) {
           b.callback = function(ele){
@@ -958,7 +961,10 @@ if (appui.ide === undefined) {
           file: file
         }, function(d){
           if ( d.data ){
-            appui.ide.tabstrip.tabNav("getSubTabNav", d.data.file_url).tabNav('set', 'file', d.data.file, d.data.file_url);
+            var tn = appui.ide.tabstrip.tabNav("getSubTabNav", d.data.file_url);
+            tn.tabNav('set', 'file', d.data.file, d.data.file_url);
+            tn.tabNav('setTitle', 'View ' + ext.toUpperCase(), d.data.file_url);
+            $("div.code.ui-codemirror:visible", tn).codemirror('setMode', ext);
           }
         });
       }
