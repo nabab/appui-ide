@@ -7,8 +7,9 @@ if (appui.ide === undefined) {
     selected: 0,
 
     resize: function(ele){
-      appui.ide.tabstrip.tabNav("resize");
+      //appui.ide.tabstrip.tabNav("resize");
       $(ele).redraw();
+      appui.fn.log("res", ele);
       $("div.code:visible", ele).find(".CodeMirror:first").parent().codemirror("refresh");
     },
 
