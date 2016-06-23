@@ -457,7 +457,7 @@ if (appui.ide === undefined) {
         type: dataItem.type,
         act: 'export'
       }, function(d){
-        appui.app.notifs.wid.show("Exported!", "success");
+        appui.app.notification.success("Exported!");
       });
     },
 
@@ -674,20 +674,10 @@ if (appui.ide === undefined) {
           code: state.value
         }, function(d){
           if ( d.success ){
-            appui.app.notifs.wid.show("File saved!", "success");
+            appui.app.notification.success("File saved!");
           }
           else if ( d.deleted ){
-            appui.app.notifs.wid.show("File deleted!", "success");
-          }
-          if ( d.success || d.deleted ){
-            setTimeout(function(){
-              var n = appui.app.notifs.wid.getNotifications();
-              $.each(n, function(i, v){
-                if ( $(v).hasClass("k-notification-success") ){
-                  $(v).parent().remove();
-                }
-              });
-            }, 3000);
+            appui.app.notification.success("File deleted!");
           }
         });
         return 1;
@@ -1237,15 +1227,7 @@ if (appui.ide === undefined) {
         url: appui.ide.tabstrip.tabNav("getObs").url
       }, function(d){
         if ( d.data.success !== undefined ){
-          appui.app.notifs.wid.show("History cleared!", "success");
-          setTimeout(function(){
-            var n = appui.app.notifs.wid.getNotifications();
-            $.each(n, function(i, v){
-              if ( $(v).hasClass("k-notification-success") ){
-                $(v).parent().remove();
-              }
-            });
-          }, 3000);
+          appui.app.notification.success("History cleared!");
         }
       });
     },
@@ -1253,15 +1235,7 @@ if (appui.ide === undefined) {
     historyClearAll: function(){
       appui.fn.post(data.root + 'history/clear', {}, function(d){
         if ( d.data.success !== undefined ){
-          appui.app.notifs.wid.show("History cleared!", "success");
-          setTimeout(function(){
-            var n = appui.app.notifs.wid.getNotifications();
-            $.each(n, function(i, v){
-              if ( $(v).hasClass("k-notification-success") ){
-                $(v).parent().remove();
-              }
-            });
-          }, 3000);
+          appui.app.notification.success("History cleared!");
         }
       });
     },

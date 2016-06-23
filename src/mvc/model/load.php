@@ -5,5 +5,5 @@ if ( !empty($this->data['file']) && !empty($this->data['dir']) && isset($this->d
     false), $this->inc->pref) ){
     return $res;
   }
-  return ['error' => $dir->get_last_error()];
+  return ['error' => $dirs->get_last_error()];
 }
