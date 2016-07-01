@@ -8,9 +8,10 @@ if (appui.ide === undefined) {
 
     resize: function(ele){
       //appui.ide.tabstrip.tabNav("resize");
-      $(ele).redraw();
-      appui.fn.log("res", ele);
-      $("div.code:visible", ele).find(".CodeMirror:first").parent().codemirror("refresh");
+      if ( ele ){
+        $(ele).redraw();
+        $("div.code:visible", ele).find(".CodeMirror:first").parent().codemirror("refresh");
+      }
     },
 
     setDir: function(dir){
@@ -1569,9 +1570,7 @@ if (appui.ide === undefined) {
               if ($(d.container).find(".k-grid-edit-row").length) {
                 ele.preventDefault();
                 ele.stopPropagation();
-                var not = jQuery.extend(true, {}, appui.app.notifs.wid);
-                not.options.appendTo = $(".k-grid", d.container).parent();
-                not.show("Save or cancel the row's setting.", "warning");
+                appui.app.notification.show("Save or cancel the row's setting.", "warning");
               }
             });
           }

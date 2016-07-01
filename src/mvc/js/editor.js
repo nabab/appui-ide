@@ -306,13 +306,13 @@ $(function(){
     $("div.CodeMirror", appui.ide.editor).css("font-size", data.font_size);
   }
 
-  appui.app.tabstrip.ele.tabNav("addCallback", function(){
-    appui.ide.resize();
+  appui.app.tabstrip.ele.tabNav("addCallback", function(cont){
+    appui.ide.resize(cont);
   }, appui.ide.tabstrip);
 
-  appui.app.tabstrip.ele.tabNav("addResize", function(){
+  appui.app.tabstrip.ele.tabNav("addResize", function(cont){
     setTimeout(function () {
-      appui.ide.resize();
+      appui.ide.resize(cont);
     }, 1000);
   });
 
