@@ -269,7 +269,7 @@ $(function(){
   $dirDropDown.trigger("change");
 
   $("input.ide-tree_search", appui.ide.editor).on('keyup', function () {
-    treeDS.filter([{field: "name", operator: "contains", value: $(this).val()}]);
+    appui.ide.filterTree(treeDS, $(this).val().toString().toLowerCase(), "name");
     //treeDS.read();
   });
 

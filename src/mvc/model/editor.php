@@ -26,10 +26,6 @@ if ( isset($this->data['routes']) ){
         ], [
           'text' => '<i class="fa fa-trash-o"></i>Delete',
         ], [
-          'text' => '<i class="fa fa-files-o"></i>Duplicate',
-        ], [
-          'text' => '<i class="fa fa-search"></i>Search',
-        ], [
           'text' => '<i class="fa fa-times-circle"></i>Close',
           'function' => "appui.ide.tabstrip.tabNav('close');"
         ], [
@@ -39,19 +35,19 @@ if ( isset($this->data['routes']) ){
       ], [
         'text' => 'Edit',
         'items' => [[
-          'text' => 'Find <small>CTRL+F</small>',
+          'text' => '<i class="fa fa-search"></i>Find <small>CTRL+F</small>',
           'function' => "appui.ide.search();"
         ], [
-          'text' => 'Find next <small>CTRL+G</small>',
+          'text' => '<i class="fa fa-search-plus"></i>Find next <small>CTRL+G</small>',
           'function' => "appui.ide.findNext();"
         ], [
-          'text' => 'Find previous <small>SHIFT+CTRL+G</small>',
+          'text' => '<i class="fa fa-search-minus"></i>Find previous <small>SHIFT+CTRL+G</small>',
           'function' => "appui.ide.findPrev();"
         ], [
-          'text' => 'Replace <small>SHIFT+CTRL+F</small>',
+          'text' => '<i class="fa fa-exchange"></i>Replace <small>SHIFT+CTRL+F</small>',
           'function' => "appui.ide.replace();"
         ], [
-          'text' => 'Replace All <small>SHIFT+CTRL+R</small>',
+          'text' => '<i class="fa fa-retweet"></i>Replace All <small>SHIFT+CTRL+R</small>',
           'function' => "appui.ide.replaceAll();"
         ]]
       ], [
@@ -63,15 +59,15 @@ if ( isset($this->data['routes']) ){
           'text' => '<i class="fa fa-trash-o"></i>Clear',
           'function' => 'appui.ide.historyClear();'
         ], [
-          'text' => '<i class="fa fa-trash-o"></i>Clear All',
+          'text' => '<i class="fa fa-trash"></i>Clear All',
           'function' => 'appui.ide.historyClearAll();'
         ]]
       ], [
         'text' => 'Doc.',
         'items' => [[
-          'text' => 'Find',
+          'text' => '<i class="fa fa-binoculars"></i>Find',
         ], [
-          'text' => 'Generate',
+          'text' => '<i class="fa fa-book"></i>Generate',
         ]]
       ], /*[
         'text' => 'Current',
@@ -85,10 +81,10 @@ if ( isset($this->data['routes']) ){
       ], */[
         'text' => 'Pref.',
         'items' => [[
-          'text' => 'Manage directories',
+          'text' => '<i class="fa fa-cog"></i>Manage directories',
           'function' => "appui.ide.cfgDirs();"
         ], [
-          'text' => 'IDE style',
+          'text' => '<i class="fa fa-language"></i>IDE style',
           'function' => "appui.ide.cfgStyle();"
         ]]
       ]

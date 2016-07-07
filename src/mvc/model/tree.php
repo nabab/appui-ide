@@ -206,7 +206,9 @@ if ( isset($this->data['dir'], $this->data['routes']) ){
       }
 
     }
-    if ( sort($folders) && sort($files) ){
+
+
+    if ( ksort($folders, SORT_STRING | SORT_FLAG_CASE) && ksort($files, SORT_STRING | SORT_FLAG_CASE) ){
       return empty($this->data['onlydir']) ?
         array_merge(array_values($folders), array_values($files)) :
         array_values($folders);

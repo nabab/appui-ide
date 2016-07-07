@@ -28,6 +28,32 @@ if (appui.ide === undefined) {
 
     },
 
+    filterTree: function(dataSource, query, field){
+      if ( !field ){
+        field = "text";
+      }
+      var hasVisibleChildren = false;
+      var data = dataSource instanceof kendo.data.HierarchicalDataSource && dataSource.data();
+      for (var i = 0; i < data.length; i++) {
+        var item = data[i];
+        if ( item[field] ){
+          var text = item[field].toLowerCase();
+          var itemVisible =
+              query === true // parent already matches
+              || query === "" // query is empty
+              || text.indexOf(query) >= 0; // item text matches query
+          var anyVisibleChildren = appui.ide.filterTree(item.children, itemVisible || query, field); // pass true if parent matches
+          hasVisibleChildren = hasVisibleChildren || anyVisibleChildren || itemVisible;
+          item.hidden = !itemVisible && !anyVisibleChildren;
+        }
+      }
+      if (data) {
+        // re-apply filter on children
+        dataSource.filter({ field: "hidden", operator: "neq", value: true });
+      }
+      return hasVisibleChildren;
+    },
+
     close: function (ele, cfg, idx) {
       var conf = false,
           editors = [];
@@ -104,8 +130,7 @@ if (appui.ide === undefined) {
                     subtab = appui.ide.tabstrip.tabNav("getSubTabNav", idx),
                     list = subtab.tabNav("getList"),
                     len = list.length,
-                    num = 0,
-                    time = new Date();
+                    num = 0;
                 if ( len > 1 ){
                   while ( len ){
                     if ( list[len-1].num !== undefined ){
@@ -117,7 +142,7 @@ if (appui.ide === undefined) {
                 }
                 subtab.tabNav("navigate", {
                   content: d.content,
-                  title: time.getHours() + ':' + time.getMinutes() + ':' + time.getSeconds(),
+                  title: moment().format('HH:mm:ss'),
                   url: 'output' + num,
                   num: num,
                   bcolor: '#58be1d',
@@ -861,7 +886,7 @@ if (appui.ide === undefined) {
         })
       });
       $.each(list, function (i, a) {
-        appui.ide.arrange(ele.tabNav("getContainer", i), a, url + '/' + a.url, title + a.title);
+        appui.ide.arrange(ele.tabNav("getContainer", i), a, url + '/' + a.url, title);
       });
     },
 

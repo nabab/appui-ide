@@ -5,6 +5,7 @@ $model = $this->get_model();
 $list = [];
 $sess = [];
 $current_dir = false;
+$dirs = new \bbn\ide\directories($this->inc->options, $this->data['routes']);
 
 // We define ide array in session
 if ( !$this->inc->session->has('ide') ){
@@ -12,8 +13,6 @@ if ( !$this->inc->session->has('ide') ){
     'list' => $list
   ], 'ide');
 }
-
-$dirs = new \bbn\ide\directories($this->inc->options, $this->data['routes']);
 
 // Routes
 foreach ( $model['dirs'] as $i => $dir ){
