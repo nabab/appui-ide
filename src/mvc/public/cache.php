@@ -4,28 +4,28 @@
  *
  **/
 
-/** @var $this \bbn\mvc\controller */
+/** @var $ctrl \bbn\mvc\controller */
 
 $cache = \bbn\cache::get_engine();
-if ( isset($this->post['item'], $this->arguments[0]) ){
-  switch ( $this->arguments[0] ){
+if ( isset($ctrl->post['item'], $ctrl->arguments[0]) ){
+  switch ( $ctrl->arguments[0] ){
     case 'info':
-      $this->set_title('Content of '.$this->post['item']);
-      if ( $cache->has($this->post['item']) ){
-	      \bbn\x::hdump($cache->get($this->post['item']));
+      $ctrl->set_title('Content of '.$ctrl->post['item']);
+      if ( $cache->has($ctrl->post['item']) ){
+	      \bbn\x::hdump($cache->get($ctrl->post['item']));
       }
       else{
-        echo '<h3 style="color: red">The item '.$this->post['item'].' doesn\'t exist</h3>';
+        echo '<h3 style="color: red">The item '.$ctrl->post['item'].' doesn\'t exist</h3>';
       }
       break;
     case 'delete':
-      $this->obj->success = $cache->delete($this->post['item']);
+      $ctrl->obj->success = $cache->delete($ctrl->post['item']);
       break;
   }
 }
 else{
-  $this->combo('Cache content ('.\bbn\cache::get_type().')', [
-    'root' => $this->say_dir().'/',
+  $ctrl->combo('Cache content ('.\bbn\cache::get_type().')', [
+    'root' => $ctrl->say_dir().'/',
     'items' => array_map(function($a){
       return ['name' => $a];
     }, $cache->items())

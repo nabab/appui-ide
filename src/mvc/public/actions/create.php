@@ -1,25 +1,25 @@
 <?php
 /**
- * @var \bbn\mvc\controller $this
- * @var \bbn\ide\directories $dir
+ * @var \bbn\mvc\controller $ctrl
+ * @var \bbn\ide\directories $ctrl->inc->dir
  */
-if ( isset($dir, $this->post['dir'], $this->post['path'], $this->post['name'], $this->post['type']) ){
-  $res = $dir->create(
-    $this->post['dir'],
-    $this->post['tab'],
-    $this->post['path'],
-    $this->post['name'] . ( empty($this->post['ext']) ? '' : '.' . $this->post['ext'] ),
-    $this->post['type']
+if ( isset($ctrl->inc->dir, $ctrl->post['dir'], $ctrl->post['path'], $ctrl->post['name'], $ctrl->post['type']) ){
+  $res = $ctrl->inc->dir->create(
+    $ctrl->post['dir'],
+    $ctrl->post['tab'],
+    $ctrl->post['path'],
+    $ctrl->post['name'] . ( empty($ctrl->post['ext']) ? '' : '.' . $ctrl->post['ext'] ),
+    $ctrl->post['type']
   );
   if ( is_string($res) ){
-    if ( !empty($this->post['code']) ){
+    if ( !empty($ctrl->post['code']) ){
       // Add file to page permissions table
       
     }
-    $this->obj->success = 1;
-    $this->obj->id = $res;
+    $ctrl->obj->success = 1;
+    $ctrl->obj->id = $res;
   }
   else{
-    $this->obj->error = $dir->get_last_error();
+    $ctrl->obj->error = $ctrl->inc->dir->get_last_error();
   }
 }

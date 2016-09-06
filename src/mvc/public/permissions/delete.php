@@ -1,10 +1,10 @@
 <?php
-if ( !empty($this->post['id']) && !empty($this->post['code']) ){
-  if ( $this->inc->options->remove($this->inc->options->from_code($this->post['code'], $this->post['id'])) ){
-    $this->obj->data->success = 1;
+if ( !empty($ctrl->post['id']) && !empty($ctrl->post['code']) ){
+  if ( $ctrl->inc->options->remove($ctrl->inc->options->from_code($ctrl->post['code'], $ctrl->post['id'])) ){
+    $ctrl->obj->data->success = 1;
   }
   else {
-    $this->obj->error = 'Error.';
+    $ctrl->obj->error = 'Error.';
   }
 }
 return false;

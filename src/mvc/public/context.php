@@ -1,4 +1,4 @@
 <?php
-/* @var $this \bbn\mvc */
+/* @var $ctrl \bbn\mvc */
 
-$this->obj = $this->get_model('menu');
+$ctrl->obj = $ctrl->get_model('menu');

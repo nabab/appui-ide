@@ -1,5 +1,5 @@
 <?php
-/* @var $this \bbn\mvc */
-$this->obj->title = "DevDocs";
-echo $this->get_view();
+/* @var $ctrl \bbn\mvc */
+$ctrl->obj->title = "DevDocs";
+echo $ctrl->get_view();
 ?>

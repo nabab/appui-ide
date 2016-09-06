@@ -1,4 +1,4 @@
 <?php
-/* @var $this \bbn\mvc */
-$mgr = new \bbn\manager($this->inc->user, $this->get_model('permissions'));
-$this->obj->data = $mgr->groups();
+/* @var $ctrl \bbn\mvc */
+$mgr = new \bbn\manager($ctrl->inc->user, $ctrl->get_model('permissions'));
+$ctrl->obj->data = $mgr->groups();

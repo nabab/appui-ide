@@ -1,25 +1,25 @@
 <?php
-/** @var $this \bbn\mvc\controller */
+/** @var $ctrl \bbn\mvc\controller */
 
-if ( isset($this->post['dir']) ){
-  $this->data = $this->post;
+if ( isset($ctrl->post['dir']) ){
+  $ctrl->data = $ctrl->post;
 }
-$this->data['routes'] = $this->mvc->get_routes();
-if ( $this->obj->data = $this->get_model() ){
-  if ( !empty($this->obj->data['error']) ){
-    $this->obj->error = $this->obj->data['error'];
+$ctrl->data['routes'] = $ctrl->get_routes();
+if ( $ctrl->obj->data = $ctrl->get_model() ){
+  if ( !empty($ctrl->obj->data['error']) ){
+    $ctrl->obj->error = $ctrl->obj->data['error'];
   }
   else{
-    if ( !empty($this->obj->data['def']) ){
-      $this->obj->url = $this->obj->data['url'].'/'.$this->obj->data['def'];
+    if ( !empty($ctrl->obj->data['def']) ){
+      $ctrl->obj->url = $ctrl->obj->data['url'].'/'.$ctrl->obj->data['def'];
     }
     else{
-      $this->obj->url = $this->obj->data['url'];
+      $ctrl->obj->url = $ctrl->obj->data['url'];
     }
-    $list = $this->inc->session->get('ide', 'list');
-    if ( !in_array($this->obj->data['url'], $list) ){
-      array_push($list, $this->obj->data['url']);
-      $this->inc->session->set($list, 'ide', 'list');
+    $list = $ctrl->inc->session->get('ide', 'list');
+    if ( !in_array($ctrl->obj->data['url'], $list) ){
+      array_push($list, $ctrl->obj->data['url']);
+      $ctrl->inc->session->set($list, 'ide', 'list');
     }
   }
 }

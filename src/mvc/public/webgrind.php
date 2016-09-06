@@ -1,5 +1,5 @@
 <?php
-/* @var $this \bbn\mvc */
-$this->obj->title = "WebGrind";
-echo $this->get_view();
+/* @var $ctrl \bbn\mvc */
+$ctrl->obj->title = "WebGrind";
+echo $ctrl->get_view();
 ?>

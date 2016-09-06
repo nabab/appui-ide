@@ -1,8 +1,8 @@
 <?php
-if ( !empty($this->data['file']) && !empty($this->data['dir']) && isset($this->data['routes']) ){
-  $dirs = new \bbn\ide\directories($this->inc->options, $this->data['routes']);
-  if ( $res = $dirs->load($this->data['file'], $this->data['dir'], (isset($this->data['tab']) ? $this->data['tab'] :
-    false), $this->inc->pref) ){
+if ( !empty($model->data['file']) && !empty($model->data['dir']) && isset($model->data['routes']) ){
+  $dirs = new \bbn\ide\directories($model->inc->options, $model->data['routes']);
+  if ( $res = $dirs->load($model->data['file'], $model->data['dir'], (isset($model->data['tab']) ? $model->data['tab'] :
+    false), $model->inc->pref) ){
     return $res;
   }
   return ['error' => $dirs->get_last_error()];

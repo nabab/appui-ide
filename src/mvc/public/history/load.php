@@ -1,16 +1,16 @@
 <?php
 
-/** @var $this \bbn\mvc\controller */
+/** @var $ctrl \bbn\mvc\controller */
 
-if ( !empty($dir) && !empty($this->post['url']) ){
-  $res = $dir->history($this->post['url']);
+if ( !empty($dir) && !empty($ctrl->post['url']) ){
+  $res = $dir->history($ctrl->post['url']);
   if ( !empty($res) ){
-    $this->obj->data = $res;
+    $ctrl->obj->data = $res;
   }
   else {
-    $this->obj->error = $dir->get_last_error();
+    $ctrl->obj->error = $dir->get_last_error();
   }
 }
 else {
-  $this->obj->error = 'Empty variable(s).';
+  $ctrl->obj->error = 'Empty variable(s).';
 }

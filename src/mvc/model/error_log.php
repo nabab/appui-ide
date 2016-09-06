@@ -1,5 +1,5 @@
 <?php
-/* @var $this \bbn\mvc */
+/** @var $model \bbn\mvc\model */
 $file = ini_get('error_log');
 if ( empty($file) && defined('BBN_LOG_PATH') ){
   $file = BBN_LOG_PATH.'error_log';

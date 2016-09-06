@@ -1,23 +1,23 @@
 <?php
-if ( !empty($this->post['id']) &&
-  !empty($this->post['code']) &&
-  !empty($this->post['text'])
+if ( !empty($ctrl->post['id']) &&
+  !empty($ctrl->post['code']) &&
+  !empty($ctrl->post['text'])
 ){
   $cfg = [
-    'code' => $this->post['code'],
-    'text' => $this->post['text']
+    'code' => $ctrl->post['code'],
+    'text' => $ctrl->post['text']
   ];
-  if ( isset($this->post['help']) ){
-    $cfg['help'] = $this->post['help'];
+  if ( isset($ctrl->post['help']) ){
+    $cfg['help'] = $ctrl->post['help'];
   }
   else {
-    $this->post['id'] = $this->inc->options->from_code($this->post['code'], $this->post['id']);
+    $ctrl->post['id'] = $ctrl->inc->options->from_code($ctrl->post['code'], $ctrl->post['id']);
   }
-  if ( $this->inc->options->set_prop($this->post['id'], $cfg) ){
-    $this->obj->data->success = 1;
+  if ( $ctrl->inc->options->set_prop($ctrl->post['id'], $cfg) ){
+    $ctrl->obj->data->success = 1;
   }
   else {
-    $this->obj->error = 'Error.';
+    $ctrl->obj->error = 'Error.';
   }
 }
 return false;

@@ -1,13 +1,13 @@
 <?php
-/** @var \bbn\mvc\controller $this */
-if ( isset($dir) ){
+/** @var \bbn\mvc\controller $ctrl */
+if ( isset($ctrl->inc->dir) ){
   $cfg = [];
-  if ( isset($this->post['selections']) ){
-    $cfg['selections'] = $this->post['selections'];
+  if ( isset($ctrl->post['selections']) ){
+    $cfg['selections'] = $ctrl->post['selections'];
   }
-  if ( isset($this->post['marks']) ){
-    $cfg['marks'] = $this->post['marks'];
+  if ( isset($ctrl->post['marks']) ){
+    $cfg['marks'] = $ctrl->post['marks'];
   }
-  $res = $dir->save($this->post['file'], $this->post['code'], $cfg, $this->inc->pref);
-  $this->obj = $res;
+  $res = $ctrl->inc->dir->save($ctrl->post['file'], $ctrl->post['code'], $cfg, $ctrl->inc->pref);
+  $ctrl->obj = $res;
 }

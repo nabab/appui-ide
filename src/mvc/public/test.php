@@ -1,9 +1,9 @@
 <?php
 //$old_path = getcwd();
 //chdir(BBN_ROOT_PATH);
-if ( BBN_IS_DEV || $this->inc->user->is_admin() ){
-  if ( isset($this->post['code']) && (strlen($this->post['code']) > 5) ){
-    $bbn_code = $this->post['code'];
+if ( BBN_IS_DEV || $ctrl->inc->user->is_admin() ){
+  if ( isset($ctrl->post['code']) && (strlen($ctrl->post['code']) > 5) ){
+    $bbn_code = $ctrl->post['code'];
     $_SESSION[BBN_SESS_NAME]['code'] = $bbn_code;
     $bbn_opening = strpos($bbn_code, '<?php');
     $bbn_closing = strrpos($bbn_code, '?>');
@@ -28,8 +28,8 @@ if ( BBN_IS_DEV || $this->inc->user->is_admin() ){
         }
       }
     }
-    if ( isset($this->post['dir']) && is_dir($this->post['dir']) ){
-      chdir($this->post['dir']);
+    if ( isset($ctrl->post['dir']) && is_dir($ctrl->post['dir']) ){
+      chdir($ctrl->post['dir']);
     }
     echo '<p>Current directory :'.getcwd().'</p>';
     echo '<p><a onclick="appui.fn.closeAlert(); setTimeout(function(){appui.ide.test()}, 2000);" href="javascript:;">Refresh</a></p>';
@@ -48,7 +48,7 @@ if ( BBN_IS_DEV || $this->inc->user->is_admin() ){
     ob_end_clean();
     echo '<p>Time for processing: '.$bbn_timer->result()['total'].' sec.</p>';
     echo $bbn_res;
-    $this->set_title("Testing code...");
+    $ctrl->set_title("Testing code...");
   }
   else{
     echo "Fichier incorrect !";

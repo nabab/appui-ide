@@ -1,18 +1,18 @@
 <?php
-if ( isset($dir) &&
-  !empty($this->post['dir']) &&
-  !empty($this->post['type']) &&
-  !empty($this->post['path']) &&
-  !empty($this->post['name'])
+if ( isset($ctrl->inc->dir) &&
+  !empty($ctrl->post['dir']) &&
+  !empty($ctrl->post['type']) &&
+  !empty($ctrl->post['path']) &&
+  !empty($ctrl->post['name'])
 ){
-  $file = $dir->export($this->post['dir'], $this->post['path'], $this->post['name'], $this->post['type']);
+  $file = $ctrl->inc->dir->export($ctrl->post['dir'], $ctrl->post['path'], $ctrl->post['name'], $ctrl->post['type']);
   if ( !empty($file) ){
-    $this->obj->file = $file;
+    $ctrl->obj->file = $file;
   }
   else {
-    $this->obj->error = 'Error.';
+    $ctrl->obj->error = 'Error.';
   }
 }
 else {
-  $this->obj->error = 'Empty variable(s).';
+  $ctrl->obj->error = 'Empty variable(s).';
 }

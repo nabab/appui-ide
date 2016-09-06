@@ -206,9 +206,7 @@ if ( isset($model->data['dir'], $model->data['routes']) ){
       }
 
     }
-
-
-    if ( ksort($folders, SORT_STRING | SORT_FLAG_CASE) && ksort($files, SORT_STRING | SORT_FLAG_CASE) ){
+    if ( sort($folders) && sort($files) ){
       return empty($model->data['onlydir']) ?
         array_merge(array_values($folders), array_values($files)) :
         array_values($folders);

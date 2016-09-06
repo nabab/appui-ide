@@ -1,14 +1,14 @@
 <?php
-/* @var $this \bbn\mvc */
-if ( isset($this->post['log']) ){
-  $this->data['log'] = $this->post['log'];
-  $this->data['clear'] = !empty($this->post['clear']);
-  $this->data['num_lines'] = isset($this->post['num_lines']) && \bbn\str::is_integer($this->post['num_lines']) ? $this->post['num_lines'] : 100;
-  $this->obj = $this->get_object_model();
+/* @var $ctrl \bbn\mvc */
+if ( isset($ctrl->post['log']) ){
+  $ctrl->data['log'] = $ctrl->post['log'];
+  $ctrl->data['clear'] = !empty($ctrl->post['clear']);
+  $ctrl->data['num_lines'] = isset($ctrl->post['num_lines']) && \bbn\str::is_integer($ctrl->post['num_lines']) ? $ctrl->post['num_lines'] : 100;
+  $ctrl->obj = $ctrl->get_object_model();
 }
 else{
-  $this->obj->title = "Log files";
-  $this->data = $this->get_model();
-  echo $this->add_js(['root' => $this->say_dir().'/'])
+  $ctrl->obj->title = "Log files";
+  $ctrl->data = $ctrl->get_model();
+  echo $ctrl->add_js(['root' => $ctrl->say_dir().'/'])
             ->get_view();
 }

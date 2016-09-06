@@ -1,5 +1,5 @@
 <?php
-/* @var $this \bbn\mvc */
+/** @var $model \bbn\mvc\model */
 //die(\bbn\file\dir::get_files(BBN_LOG_PATH));
 $log_files = array_filter(\bbn\file\dir::get_files(BBN_DATA_PATH.'logs'), function($a){
   return substr($a, -3) === 'log';
@@ -12,14 +12,14 @@ foreach ( $log_files as $lf ){
   $res[basename($lf)] = $lf;
 }
 ksort($res);
-if ( isset($this->data['log']) ){
+if ( isset($model->data['log']) ){
   $output = [];
-  if ( $this->data['clear'] ){
-    file_put_contents($res[$this->data['log']], '');
+  if ( $model->data['clear'] ){
+    file_put_contents($res[$model->data['log']], '');
   }
   else{
-    $file = escapeshellarg($res[$this->data['log']]); // for the security concious (should be everyone!)
-    $num_lines = isset($this->data['num_lines']) && \bbn\str::is_integer($this->data['num_lines']) && ($this->data['num_lines'] > 0) && ($this->data['num_lines'] <= 1000) ? $this->data['num_lines'] : 100;
+    $file = escapeshellarg($res[$model->data['log']]); // for the security concious (should be everyone!)
+    $num_lines = isset($model->data['num_lines']) && \bbn\str::is_integer($model->data['num_lines']) && ($model->data['num_lines'] > 0) && ($model->data['num_lines'] <= 1000) ? $model->data['num_lines'] : 100;
     $line = "tail -n $num_lines $file";
     exec($line, $output);
     $res = [];

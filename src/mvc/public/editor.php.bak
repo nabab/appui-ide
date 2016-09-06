@@ -1,11 +1,10 @@
 <?php
 /** @var $ctrl \bbn\mvc\controller */
-$routes = $ctrl->get_routes();
-$model = $ctrl->get_model(['routes' => $routes]);
+$ctrl->data['routes'] = $ctrl->mvc->get_routes();
+$model = $ctrl->get_model();
 $list = [];
 $sess = [];
 $current_dir = false;
-$dirs = new \bbn\ide\directories($ctrl->inc->options, $routes);
 
 // We define ide array in session
 if ( !$ctrl->inc->session->has('ide') ){
@@ -14,9 +13,11 @@ if ( !$ctrl->inc->session->has('ide') ){
   ], 'ide');
 }
 
+$dirs = new \bbn\ide\directories($ctrl->inc->options, $ctrl->data['routes']);
+
 // Routes
 foreach ( $model['dirs'] as $i => $dir ){
-  foreach ( $routes as $k => $r ){
+  foreach ( $ctrl->mvc->get_routes() as $k => $r ){
     if ( strpos($dirs->decipher_path($i), $r) === 0 ){
       $model['dirs'][$i]['route'] = $k;
     }
@@ -29,7 +30,7 @@ foreach ( $ctrl->inc->session->get('ide', 'list') as $l ){
   if ( $tmp = $ctrl->get_model('./load', [
     'dir' => $dirfile,
     'file' => substr($l, strlen($dirfile), strlen($l)),
-    'routes' => $routes
+    'routes' => $ctrl->data['routes']
   ]) ){
     if ( !isset($tmp['error']) ){
       array_push($list, $tmp);

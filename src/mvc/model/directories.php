@@ -1,25 +1,25 @@
 <?php
-/* @var $this \bbn\mvc */
+/** @var $model \bbn\mvc\model */
 
-$d = new \bbn\ide\directories($this->inc->options);
+$d = new \bbn\ide\directories($model->inc->options);
 
-if ( empty($this->data) ){
+if ( empty($model->data) ){
   $r = $d->get();
 }
 
 else{
-  if ( (count($this->data) === 1) && !empty($this->data['id']) ){
-    $r = $d->delete($this->data);
+  if ( (count($model->data) === 1) && !empty($model->data['id']) ){
+    $r = $d->delete($model->data);
   }
 
   else{
-    if ( (count($this->data) > 1) && empty($this->data['id']) ){
-      $r = $d->add($this->data);
+    if ( (count($model->data) > 1) && empty($model->data['id']) ){
+      $r = $d->add($model->data);
     }
 
     else{
-      if ( (count($this->data) > 1) && !empty($this->data['id']) ){
-        $r = $d->edit($this->data);
+      if ( (count($model->data) > 1) && !empty($model->data['id']) ){
+        $r = $d->edit($model->data);
       }
     }
   }

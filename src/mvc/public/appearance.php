@@ -1,12 +1,12 @@
 <?php
-/* @var $this \bbn\mvc */
-if ( isset($this->post['theme'], $this->post['font'], $this->post['font_size']) ){
-  $this->data = $this->post;
-  $this->inc->user->set_cfg(["ide" => ["theme" => $this->data['theme'], "font" => $this->data['font'], "font_size" => $this->data['font_size']]]);
-  $this->inc->user->save_cfg();
-  $this->obj->success = 1;
-  $this->obj->script = 'appui.fn.closeAlert();';
+/* @var $ctrl \bbn\mvc */
+if ( isset($ctrl->post['theme'], $ctrl->post['font'], $ctrl->post['font_size']) ){
+  $ctrl->data = $ctrl->post;
+  $ctrl->inc->user->set_cfg(["ide" => ["theme" => $ctrl->data['theme'], "font" => $ctrl->data['font'], "font_size" => $ctrl->data['font_size']]]);
+  $ctrl->inc->user->save_cfg();
+  $ctrl->obj->success = 1;
+  $ctrl->obj->script = 'appui.fn.closeAlert();';
 }
 else{
-  $this->error = "One or more values are missing";
+  $ctrl->error = "One or more values are missing";
 }

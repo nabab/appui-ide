@@ -1,18 +1,18 @@
 <?php
-if ( !empty($dir) &&
-  !empty($this->post['dir']) &&
-  !empty($this->post['path']) &&
-  !empty($this->post['type']) &&
-  !empty($this->post['name'])
+if ( !empty($ctrl->inc->dir) &&
+  !empty($ctrl->post['dir']) &&
+  !empty($ctrl->post['path']) &&
+  !empty($ctrl->post['type']) &&
+  !empty($ctrl->post['name'])
 ){
-  $res = $dir->rename($this->post['dir'], $this->post['path'], $this->post['name'], $this->post['type']);
+  $res = $ctrl->inc->dir->rename($ctrl->post['dir'], $ctrl->post['path'], $ctrl->post['name'], $ctrl->post['type']);
   if ( !empty($res) ){
-    $this->obj->data = $res;
+    $ctrl->obj->data = $res;
   }
   else {
-    $this->obj->error = $dir->get_last_error();
+    $ctrl->obj->error = $ctrl->inc->dir->get_last_error();
   }
 }
 else {
-  $this->obj->error = 'Empty variable(s).';
+  $ctrl->obj->error = 'Empty variable(s).';
 }

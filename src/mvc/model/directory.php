@@ -1,6 +1,6 @@
 <?php
-/** @var \bbn\mvc\model $this */
-if ( isset($this->data['path']) ){
-  $dirs = new \bbn\ide\directories($this->inc->options);
-  return $dirs->dir($this->data['path']);
+/** @var \bbn\mvc\model $model */
+if ( isset($model->data['path']) ){
+  $dirs = new \bbn\ide\directories($model->inc->options);
+  return $dirs->dir($model->data['path']);
 }

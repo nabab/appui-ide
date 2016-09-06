@@ -1,5 +1,5 @@
 <?php
-/* @var $this \bbn\mvc */
+/** @var $model \bbn\mvc\model */
 $file = BBN_DATA_PATH.'logs/_php_error.json';
 if ( is_file($file) ){
   // Cache name

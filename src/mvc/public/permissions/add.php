@@ -1,17 +1,17 @@
 <?php
-if ( !empty($this->post['id']) &&
-  !empty($this->post['code']) &&
-  !empty($this->post['text'])
+if ( !empty($ctrl->post['id']) &&
+  !empty($ctrl->post['code']) &&
+  !empty($ctrl->post['text'])
 ){
-  if ( $this->inc->options->add([
-    'id_parent' => $this->post['id'],
-    'code' => $this->post['code'],
-    'text' => $this->post['text']
+  if ( $ctrl->inc->options->add([
+    'id_parent' => $ctrl->post['id'],
+    'code' => $ctrl->post['code'],
+    'text' => $ctrl->post['text']
   ]) ){
-    $this->obj->data->success = 1;
+    $ctrl->obj->data->success = 1;
   }
   else {
-    $this->obj->error = 'Error.';
+    $ctrl->obj->error = 'Error.';
   }
 }
 return false;

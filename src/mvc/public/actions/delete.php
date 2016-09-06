@@ -1,18 +1,18 @@
 <?php
-if ( isset($dir) &&
-  !empty($this->post['dir']) &&
-  !empty($this->post['type']) &&
-  !empty($this->post['path']) &&
-  !empty($this->post['name'])
+if ( isset($ctrl->inc->dir) &&
+  !empty($ctrl->post['dir']) &&
+  !empty($ctrl->post['type']) &&
+  !empty($ctrl->post['path']) &&
+  !empty($ctrl->post['name'])
 ){
-  $files = $dir->delete($this->post['dir'], $this->post['path'], $this->post['name'], $this->post['type']);
+  $files = $ctrl->inc->dir->delete($ctrl->post['dir'], $ctrl->post['path'], $ctrl->post['name'], $ctrl->post['type']);
   if ( !empty($files) ){
-    $this->obj->data = $files;
+    $ctrl->obj->data = $files;
   }
   else {
-    $this->obj->error = $dir->get_last_error();
+    $ctrl->obj->error = $ctrl->inc->dir->get_last_error();
   }
 }
 else {
-  $this->obj->error = 'Empty variable(s).';
+  $ctrl->obj->error = 'Empty variable(s).';
 }

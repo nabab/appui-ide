@@ -1,17 +1,17 @@
 <?php
 // Non mandatory, thew path to explore
-if ( isset($this->post['dir']) ){
-  $this->data['dir'] = $this->post['dir'];
+if ( isset($ctrl->post['dir']) ){
+  $ctrl->data['dir'] = $ctrl->post['dir'];
 }
-else if ( isset($this->post['mode']) ){
-  $this->data['dir'] = $this->post['mode'];
-  $this->data['onlydir'] = $this->post['onlydir'];
+else if ( isset($ctrl->post['mode']) ){
+  $ctrl->data['dir'] = $ctrl->post['mode'];
+  $ctrl->data['onlydir'] = $ctrl->post['onlydir'];
 }
-if ( isset($this->data['dir']) ){
-  if ( isset($this->post['path']) ){
-    $this->data['path'] = $this->post['path'];
+if ( isset($ctrl->data['dir']) ){
+  if ( isset($ctrl->post['path']) ){
+    $ctrl->data['path'] = $ctrl->post['path'];
   }
-  $this->data['routes'] = $this->mvc->get_routes();
-  $this->obj->data = $this->get_model();
-  $this->inc->session->set($this->data['dir'], 'ide', 'dir');
+  $ctrl->data['routes'] = $ctrl->get_routes();
+  $ctrl->obj->data = $ctrl->get_model();
+  $ctrl->inc->session->set($ctrl->data['dir'], 'ide', 'dir');
 }

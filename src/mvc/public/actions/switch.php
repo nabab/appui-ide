@@ -1,16 +1,16 @@
 <?php
-if ( !empty($dir) &&
-  !empty($this->post['ext']) &&
-  !empty($this->post['file'])
+if ( !empty($ctrl->inc->dir) &&
+  !empty($ctrl->post['ext']) &&
+  !empty($ctrl->post['file'])
 ){
-  $res = $dir->change_ext($this->post['ext'], $this->post['file']);
+  $res = $ctrl->inc->dir->change_ext($ctrl->post['ext'], $ctrl->post['file']);
   if ( !empty($res) ){
-    $this->obj->data = $res;
+    $ctrl->obj->data = $res;
   }
   else {
-    $this->obj->error = $dir->get_last_error();
+    $ctrl->obj->error = $ctrl->inc->dir->get_last_error();
   }
 }
 else {
-  $this->obj->error = 'Empty variable(s).';
+  $ctrl->obj->error = 'Empty variable(s).';
 }
