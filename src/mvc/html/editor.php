@@ -10,7 +10,7 @@
       <div class="appui-full-height" id="tabstrip_editor"></div>
     </div>
     <div class="pane-content">
-      <iframe style="width: 100%" class="appui-full-height" src="https://doc.babna.com"></iframe>
+      <iframe style="width: 100%" class="appui-full-height" src="https://doc.mybbn.so"></iframe>
     </div>
   </div>
 </div>

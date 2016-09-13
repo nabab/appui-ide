@@ -51,6 +51,7 @@ echo $ctrl
     ->add_js('./functions', [
       'dirs' => $model['dirs'],
       'root' => $ctrl->say_dir().'/',
+      'baseURL' => $ctrl->say_path().'/',
       'theme' => empty($ide_cfg['theme']) ? '' : $ide_cfg['theme'],
       'font' => empty($ide_cfg['font']) ? '' : $ide_cfg['font'],
       'font_size' => empty($ide_cfg['font_size']) ? '' : $ide_cfg['font_size']
