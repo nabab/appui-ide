@@ -1593,7 +1593,7 @@ appui.ide = {
             if ($(d.container).find(".k-grid-edit-row").length) {
               ele.preventDefault();
               ele.stopPropagation();
-              appui.app.notification.show("Save or cancel the row's setting.", "warning");
+              appui.app.notification.warning("Save or cancel the row's setting.");
             }
           });
         }
