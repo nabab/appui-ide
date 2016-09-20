@@ -7,8 +7,5 @@ if ( isset($ctrl->post['log']) ){
   $ctrl->obj = $ctrl->get_object_model();
 }
 else{
-  $ctrl->obj->title = "Log files";
-  $ctrl->data = $ctrl->get_model();
-  echo $ctrl->add_js(['root' => $ctrl->say_dir().'/'])
-            ->get_view();
+  echo $ctrl->combo("Log files", ['root' => $ctrl->say_dir().'/']);
 }
