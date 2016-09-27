@@ -873,7 +873,7 @@ appui.ide = {
       current = appui.env.url.split(data.baseURL)[1] || '';
     }
     //appui.fn.log("CURRENT", current, list);
-    appui.fn.log("build", current, url, title);
+    appui.fn.log("build", current, url, title, data.baseURL);
     ele.tabNav({
       current: current,
       baseTitle: title,

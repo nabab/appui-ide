@@ -2,6 +2,10 @@
 if ( isset($model->data['dir'], $model->data['routes']) ){
   // Initialize the directories object
   $dirs = new \bbn\ide\directories($model->inc->options, $model->data['routes']);
+  $current = (empty($model->data['path']) ? '' : $model->data['path']);
+  if ( !empty($current) ){
+    $current .= '/';
+  }
   // Get the relative directory item
   if ( $dir = $dirs->dir($model->data['dir']) ){
     // Get the directory's root path
@@ -66,6 +70,7 @@ if ( isset($model->data['dir'], $model->data['routes']) ){
       foreach ( $dir['tabs'] as $i => $t ){
         if ( $i !== '_ctrl' ){
           // Set the real path
+
           $real = $path . $t['path'] . (empty($model->data['path']) ? '' : $model->data['path']);
           if ( file_exists($real) ){
             // Get files and folders
@@ -87,6 +92,7 @@ if ( isset($model->data['dir'], $model->data['routes']) ){
                     'is_viewable' => false,
                     'is_image' => false,
                     'default' => false,
+                    'dir' => $current,
                     'icon' => "folder-icon",
                     'bcolor' => $t['bcolor'],
                     'type' => "dir"
@@ -131,6 +137,7 @@ if ( isset($model->data['dir'], $model->data['routes']) ){
                     'is_viewable' => ( in_array($ext, $file_check['viewables']) && ($ext !== 'svg')) ? true : false,
                     'is_image' => in_array($ext, $file_check['images']),
                     'default' => false,
+                    'dir' => $current,
                     'ext' => in_array($ext, $ext_icons) ? $ext : 'default',
                     'bcolor' => $t['bcolor'],
                     'tab' => $t['url'],
@@ -160,6 +167,7 @@ if ( isset($model->data['dir'], $model->data['routes']) ){
             //'value' => $model->data['dir'] . '/' . (empty($model->data['path']) ? '' : $model->data['path']. '/') . $fn,
             'name' => $fn,
             'has_index' => \bbn\file\dir::has_file($f, 'index.php', 'index.html', 'index.htm') ? 1 : false,
+            'dir' => $current,
             'parenthood' => true,
             'is_svg' => false,
             'is_viewable' => false,
@@ -190,6 +198,7 @@ if ( isset($model->data['dir'], $model->data['routes']) ){
             'has_index' => false,
             'is_parent' => false,
             'parenthood' => false,
+            'dir' => $current,
             'is_svg' => ( $ext === 'svg' ),
             'is_viewable' => ( in_array($ext, $file_check['viewables']) && ($ext !== 'svg')) ? true : false,
             'is_image' => in_array($ext, $file_check['images']),
