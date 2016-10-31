@@ -1,5 +1,4 @@
 // Javascript Document
-$(ele).css("overflow", "hidden");
 var $ele = $("#bbn_log_splitter", ele);
 $ele.kendoSplitter({
   orientation: "vertical",
