@@ -152,10 +152,10 @@ appui.ide = {
           case "svg":
             var oDocument = new DOMParser().parseFromString(c, "text/xml");
             if (oDocument.documentElement.nodeName == "parsererror" || !oDocument.documentElement) {
-              alert("There is an XML error in this SVG");
+              appui.fn.alert("There is an XML error in this SVG");
             }
             else {
-              appui.fn.alert($("<div/>").append(document.importNode(oDocument.documentElement, true)).html(), "Problem with SVG");
+              appui.fn.popup($("<div/>").append(document.importNode(oDocument.documentElement, true)).html(), "Problem with SVG");
             }
             break;
           default:
@@ -233,7 +233,7 @@ appui.ide = {
           }
         });
 
-    appui.fn.alert('<div class="tree"></div>', 'Choose directory', 250, 500, function (ele) {
+    appui.fn.popup('<div class="tree"></div>', 'Choose directory', 250, 500, function (ele) {
       $tree = $("div.tree", ele);
       $tree.kendoTreeView({
         dataTextField: "name",
@@ -242,7 +242,7 @@ appui.ide = {
           var r = this.dataItem(e.node);
           $(".appui-logger:visible input[name=path]").val(r.path);
           $(".appui-logger:visible input[name=uid]").val(r.uid);
-          appui.fn.closeAlert();
+          appui.fn.closePopup();
         },
         template: function (e) {
           if (e.item.icon && e.item.type === 'dir') {
@@ -303,7 +303,7 @@ appui.ide = {
     var selectedValue = appui.ide.currentSrc(),
         cfg = data.dirs[selectedValue];
     if ( cfg ) {
-      appui.fn.alert($("#ide_new_template").html(), 'Duplicate', 550, false, function(ele){
+      appui.fn.popup($("#ide_new_template").html(), 'Duplicate', 550, false, function(ele){
         var path = dataItem.path.split("/");
         path.pop();
         path = path.join('/');
@@ -327,7 +327,7 @@ appui.ide = {
           if ( d.data.success ){
             var tree = $('div.tree', appui.ide.editor).data('kendoTreeView');
             // Close popup
-            appui.fn.closeAlert();
+            appui.fn.closePopup();
             // Refresh the treeview
             tree.dataSource.read().then(function(){
               if ( d.data.file !== undefined ){
@@ -372,7 +372,7 @@ appui.ide = {
     else {
       msg = "Are you sure that you want to delete the file " + dataItem.path + "?";
     }
-    if ( confirm(msg) ){
+    appui.fn.confirm(msg, function(){
       appui.fn.post(data.root + "actions/delete", {
         path: dataItem.path,
         type: dataItem.type,
@@ -389,12 +389,12 @@ appui.ide = {
           treeDS.remove(dataItem);
         }
       });
-    }
+    })
   },
 
   rename: function(dataItem){
     var src = appui.ide.currentSrc();
-    appui.fn.alert($("#ide_rename_template").html(), 'Rename element', 450, false, function(ele){
+    appui.fn.popup($("#ide_rename_template").html(), 'Rename element', 450, false, function(ele){
       var obs = {
         name: dataItem.name,
         dir: src,
@@ -414,7 +414,7 @@ appui.ide = {
         ){
           var tree = $('div.tree', appui.ide.editor).data('kendoTreeView');
           // Close popup
-          appui.fn.closeAlert();
+          appui.fn.closePopup();
 
           if ( dataItem.uid ){
             var dataParent = dataItem.parentNode();
@@ -485,7 +485,7 @@ appui.ide = {
         cfg = data.dirs[selectedValue];
 
     if ( cfg ){
-      appui.fn.alert($("#ide_new_template").html(), 'New directory', 540, false, function(ele){
+      appui.fn.popup($("#ide_new_template").html(), 'New directory', 540, false, function(ele){
         // Set type
         $("input[name=type]", ele).val('dir');
         // Set dir
@@ -534,7 +534,7 @@ appui.ide = {
                 tree = $('div.tree', appui.ide.editor).data('kendoTreeView');
 
             // Close popup
-            appui.fn.closeAlert();
+            appui.fn.closePopup();
             if ( formData.path && formData.dir ){
               // Refresh treeview
               tree.dataSource.read().then(function(){
@@ -563,7 +563,7 @@ appui.ide = {
         cfg = data.dirs[selectedValue];
 
     if ( cfg ){
-      appui.fn.alert($("#ide_new_template").html(), 'New File', 540, false, function(ele){
+      appui.fn.popup($("#ide_new_template").html(), 'New File', 540, false, function(ele){
         var showExt = function(d){
               var ext = $("select[name=ext]", ele).data("kendoDropDownList");
               // Remove ext select
@@ -646,7 +646,7 @@ appui.ide = {
                 tree = $('div.tree', appui.ide.editor).data('kendoTreeView');
 
             // Close popup
-            appui.fn.closeAlert();
+            appui.fn.closePopup();
             if ( formData.path && formData.dir ){
               tree.dataSource.read().then(function(){
                 // If the file is into root path select and open it
@@ -1098,7 +1098,7 @@ appui.ide = {
         code = $(ele[0]).val(),
         $id = $("input:hidden", $cont.closest("div.perm_set"));
 
-    if ( confirm('Are you sure to remove this item?') ){
+    appui.fn.confirm('Are you sure to remove this item?', function(){
       appui.fn.post(data.root + 'permissions/delete', {
         code: code,
         id: $id.val()
@@ -1107,7 +1107,7 @@ appui.ide = {
           $bt.closest("div").remove();
         }
       });
-    }
+    });
   },
 
   history: function(){
@@ -1265,7 +1265,7 @@ appui.ide = {
   },
 
   cfgDirs: function () {
-    appui.fn.alert($('#ide_manage_directories_template', appui.ide.editor).html(), 'Manage directories', 1000, 800, function (alert) {
+    appui.fn.popup($('#ide_manage_directories_template', appui.ide.editor).html(), 'Manage directories', 1000, 800, function (alert) {
       var grid = $("#ide_manage_dirs_grid").kendoGrid({
         dataSource: {
           transport: {
@@ -1656,7 +1656,7 @@ appui.ide = {
   },
 
   cfgStyle: function () {
-    appui.fn.alert($('#ide_appearance_template', appui.ide.editor).html(), 'Appearence Preferences', 800, 430, function (alert) {
+    appui.fn.popup($('#ide_appearance_template', appui.ide.editor).html(), 'Appearence Preferences', 800, 430, function (alert) {
       var code = $("#code", alert),
         cm = code.codemirror({"mode": "js"}),
         divCM = $("div.CodeMirror", alert),
@@ -1715,7 +1715,7 @@ appui.ide = {
         formdata.font_size = formdata.font_size + 'px';
         appui.fn.post(data.root + 'appearance', formdata, function (d) {
           if (d.success) {
-            appui.fn.closeAlert();
+            appui.fn.closePopup();
             data.theme = formdata.theme;
             data.font = formdata.font;
             data.font_size = formdata.font_size;

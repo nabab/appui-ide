@@ -32,7 +32,7 @@ if ( BBN_IS_DEV || $ctrl->inc->user->is_admin() ){
       chdir($ctrl->post['dir']);
     }
     echo '<p>Current directory :'.getcwd().'</p>';
-    echo '<p><a onclick="appui.fn.closeAlert(); setTimeout(function(){appui.ide.test()}, 2000);" href="javascript:;">Refresh</a></p>';
+    echo '<p><a onclick="appui.fn.closePopup(); setTimeout(function(){appui.ide.test()}, 2000);" href="javascript:;">Refresh</a></p>';
     $bbn_timer = new \bbn\util\timer();
     $bbn_timer->start();
     ob_start();
