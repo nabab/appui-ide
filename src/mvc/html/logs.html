@@ -1,26 +1,24 @@
 <!-- HTML Document -->
-<div id="bbn_log_splitter" class="appui-h-100">
-  <div class="appui-c" style="padding-top: 5px">
-    <select style="width: 200px">
-      {{#logs}}
-      <option value="{{text}}">{{text}}</option>
-      {{/logs}}
-    </select>
-    &nbsp;
-    <select style="width: 150px">
-      <option value="10">10 lignes</option>
-      <option value="50">50 lignes</option>
-      <option value="100" selected="selected">100 lignes</option>
-      <option value="250">250 lignes</option>
-      <option value="500">500 lignes</option>
-      <option value="1000">1000 lignes</option>
-    </select>
-    &nbsp;
-    <button class="k-button"><i class="fa fa-file-o"> </i> Clear file</button>
-    &nbsp;
-    <button class="k-button"><i class="fa fa-refresh"> </i> Refresh</button>
-  </div>
-  <div class="appui-full-height">
-    <div id="log_viewer" class="appui-full-height"> </div>
-  </div>
+<div class="appui-c appui-lg appui-padded">
+  <select style="width: 200px">
+    {{#logs}}
+    <option value="{{text}}">{{text}}</option>
+    {{/logs}}
+  </select>
+  &nbsp;
+  <select style="width: 150px">
+    <option value="10">10 lignes</option>
+    <option value="50">50 lignes</option>
+    <option value="100" selected="selected">100 lignes</option>
+    <option value="250">250 lignes</option>
+    <option value="500">500 lignes</option>
+    <option value="1000">1000 lignes</option>
+  </select>
+  &nbsp;
+  <button class="k-button"><i class="fa fa-file-o"> </i> Clear file</button>
+  &nbsp;
+  <button class="k-button"><i class="fa fa-refresh"> </i> Refresh</button>
+</div>
+<div class="appui-full-height">
+  <div id="log_viewer" class="appui-h-100"> </div>
 </div>
