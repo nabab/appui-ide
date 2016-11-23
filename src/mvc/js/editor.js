@@ -1,14 +1,11 @@
-if ( data && $.isFunction(data.toJSON) ){
-  data = data.toJSON();
-}
 // Tabstrip element for code
 appui.ide.tabstrip = $("#tabstrip_editor");
 
 // Tabstrip's container
-appui.ide.editor = appui.app.tabstrip.ele.tabNav("getContainer", appui.ide.tabstrip);
+appui.ide.editor = $(ele);
 
 // The tree element
-var $tree = $("div.tree", appui.ide.editor);
+var $tree = $("div.tree", ele);
 // The tree datasource
 var treeDS = new kendo.data.HierarchicalDataSource({
   filterable: true,
@@ -21,10 +18,10 @@ var treeDS = new kendo.data.HierarchicalDataSource({
       url: data.root + "tree",
       data: {
         dir: function () {
-          return $("input.ide-dir_select", appui.ide.editor).data("kendoDropDownList").value();
+          return $("input.ide-dir_select", ele).data("kendoDropDownList").value();
         },
         filter: function () {
-          return $("input.ide-tree_search", appui.ide.editor).val();
+          return $("input.ide-tree_search", ele).val();
         }
       }
     }
@@ -46,11 +43,8 @@ var treeDS = new kendo.data.HierarchicalDataSource({
 });
 
 // Splitter top/bottom for menu
-$("div.bbn_ide_container", appui.ide.editor).kendoSplitter({
+$("div.bbn_ide_container", ele).kendoSplitter({
   orientation: "vertical",
-  resize: function(e){
-    $(e.sender.element).redraw();
-  },
   panes: [
     {collapsible: false, resizable: false, size: 40},
     {collapsible: false, resizable: false, scrollable: false}
@@ -58,11 +52,8 @@ $("div.bbn_ide_container", appui.ide.editor).kendoSplitter({
 });
 
 // Splitter left/right for tree
-$("div.bbn_code_container", appui.ide.editor).kendoSplitter({
+$("div.bbn_code_container", ele).kendoSplitter({
   orientation: "horizontal",
-  resize: function (e) {
-    $(e.sender.element).redraw();
-  },
   panes: [
     {collapsible: true, resizable: true, size: 200},
     {collapsible: true, resizable: true, scrollable: false},
@@ -71,7 +62,7 @@ $("div.bbn_code_container", appui.ide.editor).kendoSplitter({
 });
 
 // Toolbar with buttons and menu
-$("div.appui_ide", appui.ide.editor).kendoToolBar({
+$("div.appui_ide", ele).kendoToolBar({
   items: [{
     template: '<input class="k-textbox ide-tree_search" type="text" placeholder="Search files in ">'
   }, {
@@ -99,18 +90,19 @@ $("div.appui_ide", appui.ide.editor).kendoToolBar({
 });
 
 // Menu inside toolbar
-$("ul.menu", appui.ide.editor).kendoMenu({
+$("ul.menu", ele).kendoMenu({
   direction: "bottom right"
 }).find("a").on("mouseup", function () {
   $(this).closest("ul.menu").data("kendoMenu").close();
 });
 
-// Tree widge4t
+// Tree widget
 $tree.kendoTreeView({
   dataTextField: "name",
   dragAndDrop: true,
   dataSource: treeDS,
   autoBind: false,
+  /*
   select: function(e){
     e.preventDefault();
     var d = this.dataItem(e.node),
@@ -134,6 +126,7 @@ $tree.kendoTreeView({
       appui.ide.load(r.path, appui.ide.currentSrc(), r.tab);
     }
   },
+  */
   drag: function(e){
     var dt = false;
     if ( (e.dropTarget !== undefined) &&
@@ -175,7 +168,21 @@ $tree.kendoTreeView({
     }
   },
   template: function(e){
-    return '<span class="k-sprite ' + ( e.item.icon ? e.item.icon : e.item.ext + '-icon') + '" style="color: ' + e.item.bcolor + '"></span>' + e.item.name;
+    if ( e.item.type === 'dir' ){
+      return '<span class="k-sprite ' +
+        ( e.item.icon ? e.item.icon : e.item.ext + '-icon') +
+        '" style="color: ' + e.item.bcolor + '"> </span>'
+        + e.item.name;
+    }
+    var dir = appui.ide.currentSrc(),
+        link = data.root + 'editor/code/' + dir + (e.item.dir ? e.item.dir : '') + e.item.name;
+    if ( e.item.tab ){
+      link += ('/' + e.item.tab);
+    }
+    return '<span class="k-sprite ' +
+      ( e.item.icon ? e.item.icon : e.item.ext + '-icon') +
+      '" style="color: ' + e.item.bcolor + '"> </span>' +
+      '<a href="' + link + '">' + e.item.name + '</a>';
   }
 });
 
@@ -272,7 +279,7 @@ $("ul.bbn-ide-context").kendoContextMenu({
 });
 
 // Dropdown for directories
-var $dirDropDown = $("input.ide-dir_select", appui.ide.editor).kendoDropDownList({
+var $dirDropDown = $("input.ide-dir_select", ele).kendoDropDownList({
   dataSource: [],
   dataTextField: "text",
   dataValueField: "value",
@@ -294,7 +301,7 @@ appui.ide.dirDropDownSource(data.dirs, data.current_dir);
 $dirDropDown.trigger("change");
 
 // Search field
-$("input.ide-tree_search", appui.ide.editor).on('keyup', function () {
+$("input.ide-tree_search", ele).on('keyup', function () {
   appui.ide.filterTree(treeDS, $(this).val().toString().toLowerCase(), "name");
   //treeDS.read();
 });
@@ -304,18 +311,18 @@ appui.ide.build(data.config, appui.ide.tabstrip, data.root + 'editor', 'IDE - ')
 
 // Set theme
 if (data.theme) {
-  $("div.code", appui.ide.editor).each(function () {
+  $("div.code", ele).each(function () {
     $(this).codemirror("setTheme", data.theme);
   });
 }
 
 // Set font family
 if (data.font) {
-  $("div.CodeMirror", appui.ide.editor).css("font-family", data.font);
+  $("div.CodeMirror", ele).css("font-family", data.font);
 }
 // Set font size
 if (data.font_size) {
-  $("div.CodeMirror", appui.ide.editor).css("font-size", data.font_size);
+  $("div.CodeMirror", ele).css("font-size", data.font_size);
 }
 
 
@@ -334,6 +341,7 @@ appui.app.tabstrip.ele.tabNav("set", "close", function (){
   return 1;
 }, data.root + 'editor');
 
+/*
 appui.app.tabstrip.ele.tabNav("addCallback", function(cont){
   appui.ide.resize(cont);
 }, appui.ide.tabstrip);
@@ -344,3 +352,4 @@ appui.app.tabstrip.ele.tabNav("addResize", function(cont){
   }, 1000);
 });
 
+*/

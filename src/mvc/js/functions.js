@@ -3,24 +3,38 @@ appui.ide = {
   url: data.root + 'editor',
   title: 'IDE - ',
   selected: 0,
-
+  dirs: data.dirs,
+  
+  /**
+   * Resizes the codemirror instance contained in ele
+   * @param ele
+   */
   resize: function(ele){
+    appui.fn.log("resize");
+    /*
     appui.ide.tabstrip.tabNav("resize");
     if ( ele ){
       $(ele).redraw().find("div.ui-codemirror:visible:first").codemirror("refresh");
     }
+    */
   },
-
-  setDir: function(dir){
-    $("input.ide-dir_select", appui.ide.editor).data("kendoDropDownList").select(function (dataItem) {
-      return dataItem.value === dir;
-    });
-  },
-
+  
+  /**
+   * Returns the current value of the source dropdown - which is the current tree source
+   *
+   * @returns string
+   */
   currentSrc: function(){
     return $("input.ide-dir_select", appui.ide.editor).data("kendoDropDownList").value();
   },
-
+  /**
+   * Applies a filter to the tree and returns true if some items are shown and false otherwise
+   *
+   * @param dataSource the tree's dataSource
+   * @param query the filter(s)
+   * @param field the field on which applying filters (text by default)
+   * @returns {boolean}
+   */
   filterTree: function(dataSource, query, field){
     if ( !field ){
       field = "text";
@@ -32,9 +46,12 @@ appui.ide = {
       if ( item[field] ){
         var text = item[field].toLowerCase();
         var itemVisible =
-            query === true // parent already matches
-            || query === "" // query is empty
-            || text.indexOf(query) >= 0; // item text matches query
+              // parent already matches
+              (query === true) ||
+              // query is empty
+              (query === "") ||
+              // item text matches query
+              (text.indexOf(query) >= 0);
         var anyVisibleChildren = appui.ide.filterTree(item.children, itemVisible || query, field); // pass true if parent matches
         hasVisibleChildren = hasVisibleChildren || anyVisibleChildren || itemVisible;
         item.hidden = !itemVisible && !anyVisibleChildren;
@@ -46,8 +63,15 @@ appui.ide = {
     }
     return hasVisibleChildren;
   },
-
-  close: function (ele, cfg, idx) {
+  
+  /**
+   * Closes a tab from the IDE and sends a request to the server to inform
+   *
+   * @param ele The DOM container
+   * @param cfg The tab config
+   * @returns {boolean}
+   */
+  close: function (ele, cfg) {
     var conf = false,
         editors = [];
     $(".ui-codemirror", ele).each(function (i) {
@@ -80,7 +104,13 @@ appui.ide = {
     }
     return false;
   },
-
+  
+  /**
+   * Sets the dataSource of the sources dropdown
+   *
+   * @param dirs
+   * @param value
+   */
   dirDropDownSource: function(dirs, value){
     var r = [],
       $sel = $("input.ide-dir_select", appui.ide.editor).data("kendoDropDownList");
@@ -94,6 +124,7 @@ appui.ide = {
     $sel.setDataSource({
       data: appui.fn.order(r, 'text', 'asc')
     });
+    /** @todo WTF * 2  (look until the end of this function!) */
     if (!value) {
       appui.fn.log("NO VAL");
     }
@@ -101,9 +132,13 @@ appui.ide = {
       return dataItem.value === value;
     });
   },
-
+  
+  /**
+   * Evaluates a code, in different ways depending on its nature
+   * @returns {number}
+   */
   test: function(){
-    var $c = $("div.k-content.k-state-active div.code:visible", appui.ide.tabstrip),
+    var $c = $("div.k-content.k-state-active div.appui-code:visible", appui.ide.tabstrip),
         url = appui.ide.tabstrip.tabNav("getURL"),
         path = appui.ide.tabstrip.tabNav("getObs").title,
         src = url.substr(0, url.indexOf(path)),
@@ -166,93 +201,6 @@ appui.ide = {
     appui.fn.log("SRC: " + src + " PATH: " + path + " URL: " + url);
   },
 
-  view: function (d) {
-    var mode = appui.ide.currentSrc();
-    var m;
-    if (d.code && d.file) {
-      if (d.ext === 'js') {
-        m = 'js';
-      }
-      else if (d.ext === 'php') {
-        m = 'php';
-      }
-      else if (d.ext === 'css') {
-        m = 'css';
-      }
-      else if (d.ext === 'less') {
-        m = 'css';
-      }
-      else if (d.ext === 'html') {
-        m = 'html';
-      }
-      else if (d.ext === 'sql' || d.ext === 'mysql') {
-        m = 'mysql';
-      }
-      else {
-        m = 'text/html';
-      }
-      $("div.k-content.k-state-active div.code:visible", appui.ide.tabstrip).codemirror({
-        value: d.code,
-        mode: m
-      }).scrollTop(0);
-    }
-    else if (d.st) {
-      $("div.k-content.k-state-active div.code:visible", appui.ide.tabstrip).html(d.st).scrollTop(0);
-    }
-  },
-
-  selectDir: function (input) {
-    var $tree,
-        dir = appui.ide.currentSrc(),
-        treeDS = new kendo.data.HierarchicalDataSource({
-          filterable: true,
-          transport: {
-            read: {
-              dataType: "json",
-              type: "POST",
-              url: data.root + "tree",
-              data: {
-                mode: dir,
-                onlydir: true
-              }
-            }
-          },
-          schema: {
-            data: "data",
-            model: {
-              id: "path",
-              hasChildren: "is_parent",
-              fields: {
-                type: {type: "string"},
-                name: {type: "string"},
-                path: {type: "string"},
-                has_index: {type: "bool"},
-                is_parent: {type: "bool"}
-              }
-            }
-          }
-        });
-
-    appui.fn.popup('<div class="tree"></div>', 'Choose directory', 250, 500, function (ele) {
-      $tree = $("div.tree", ele);
-      $tree.kendoTreeView({
-        dataTextField: "name",
-        dataSource: treeDS,
-        select: function (e) {
-          var r = this.dataItem(e.node);
-          $(".appui-logger:visible input[name=path]").val(r.path);
-          $(".appui-logger:visible input[name=uid]").val(r.uid);
-          appui.fn.closePopup();
-        },
-        template: function (e) {
-          if (e.item.icon && e.item.type === 'dir') {
-            return '<span class="k-sprite ' + e.item.icon + '"></span>' + e.item.name;
-          }
-        }
-      });
-    });
-  },
-
   load: function(path, dir, tab){
     var force = false,
         hasTabs = tab !== undefined,
@@ -282,23 +230,28 @@ appui.ide = {
           //$tree.data("kendoTreeView").select(e.node);
           // Set theme
           if (data.theme) {
-            $("div.code", appui.ide.editor).each(function () {
+            $("div.appui-code", appui.ide.editor).each(function () {
               $(this).codemirror("setTheme", data.theme);
             });
           }
           // Set font
           if (data.font) {
-            $("div.CodeMirror", appui.ide.editor).css("font-family", data.font);
+            $("div.appui-codeMirror", appui.ide.editor).css("font-family", data.font);
           }
           // Set font size
           if (data.font_size) {
-            $("div.CodeMirror", appui.ide.editor).css("font-size", data.font_size);
+            $("div.appui-codeMirror", appui.ide.editor).css("font-size", data.font_size);
           }
         }
       });
     }
   },
-
+  
+  /**
+   * Duplicates an item (file or folder) from the tree
+   *
+   * @param dataItem
+   */
   duplicate: function(dataItem){
     var selectedValue = appui.ide.currentSrc(),
         cfg = data.dirs[selectedValue];
@@ -363,7 +316,13 @@ appui.ide = {
       });
     }
   },
-
+  
+  /**
+   * Deletes a file or a folder
+   *
+   * @param dataItem
+   * @param treeDS
+   */
   delete: function(dataItem, treeDS){
     var msg;
     if ( dataItem.icon === 'folder' ){
@@ -391,7 +350,12 @@ appui.ide = {
       });
     })
   },
-
+  
+  /**
+   * Renames a file or folder
+   *
+   * @param dataItem
+   */
   rename: function(dataItem){
     var src = appui.ide.currentSrc();
     appui.fn.popup($("#ide_rename_template").html(), 'Rename element', 450, false, function(ele){
@@ -444,7 +408,13 @@ appui.ide = {
       });
     });
   },
-
+  
+  /**
+   * Reloads a node of the tree to refresh it
+   * @param dataItem The node
+   * @param res
+   * @param tree
+   */
   closeOpen: function(dataItem, res, tree){
     if ( dataItem.type === 'file' ){
       var idx = appui.ide.tabstrip.tabNav("search", res.file_url);
@@ -467,7 +437,12 @@ appui.ide = {
       });
     }
   },
-
+  
+  /**
+   * Exports the whole tree of a node into a ZIP file
+   *
+   * @param dataItem
+   */
   export: function (dataItem) {
     appui.fn.post_out(data.root + 'actions/export', {
       dir: appui.ide.currentSrc(),
@@ -479,7 +454,12 @@ appui.ide = {
       appui.app.notification.success("Exported!");
     });
   },
-
+  
+  /**
+   * Creates a new directory
+   *
+   * @param path
+   */
   newDir: function(path){
     var selectedValue = appui.ide.currentSrc(),
         cfg = data.dirs[selectedValue];
@@ -557,7 +537,12 @@ appui.ide = {
       });
     }
   },
-
+  
+  /**
+   * Creates a new file (or group fof files)
+   *
+   * @param path
+   */
   newFile: function(path){
     var selectedValue = appui.ide.currentSrc(),
         cfg = data.dirs[selectedValue];
@@ -680,9 +665,14 @@ appui.ide = {
       });
     }
   },
-
+  
+  /**
+   * Saves the currently visible codemirror instance
+   *
+   * @returns {number}
+   */
   save: function(){
-    var $c = $("div.code:visible", appui.ide.tabstrip);
+    var $c = $("div.appui-code:visible", appui.ide.tabstrip);
     if ( $c.length ){
       var state = $c.codemirror("getState");
       appui.fn.post(data.root + "actions/save", {
@@ -702,7 +692,12 @@ appui.ide = {
       return 1;
     }
   },
-
+  
+  /**
+   * Returns an object formatted for using as a new tab in the main tabNav
+   * @param a
+   * @returns {{title: string, url: string, static: boolean, file: boolean|string, bcolor: string, fcolor: string, def: string, default: boolean, content: string, close: function, load: boolean}}
+   */
   tabObj: function (a) {
     if (a.url) {
       var b = {
@@ -719,7 +714,8 @@ appui.ide = {
           '<div class="code appui-full-height"></div>',
         close: function (a, b, c) {
           return appui.ide.close(a, b, c);
-        }
+        },
+        load: true
       };
       if ( a.static &&
         (a.url === 'html') &&
@@ -734,7 +730,7 @@ appui.ide = {
                 newMode = mode.toLowerCase() === 'php' ? 'html' : 'php';
               b.menu[0].text = 'Switch to ' + mode.toUpperCase();
               if ( obj.file !== undefined ){
-                appui.ide.switch(newMode, obj.file);
+                appui.ide.switchMode(newMode, obj.file);
               }
             }
           }];
@@ -751,7 +747,14 @@ appui.ide = {
       return b;
     }
   },
-
+  
+  /**
+   *
+   * @param panel
+   * @param a
+   * @param url
+   * @param title
+   */
   arrange: function (panel, a, url, title) {
     if (a.cfg !== undefined) {
       // Add users' permissions to controller tab
@@ -788,14 +791,12 @@ appui.ide = {
             });
 
         var $div = $('<div/>');
-        $panel.css({
-          padding: 0,
-          overflow: "hidden"
-        }).html(
+        appui.fn.insertContent(
           '<div class="appui-full-height perms-splitter">' +
             '<div>' + html + '</div>' +
             '<div class="perm_set"> </div>' +
-          '</div>'
+          '</div>',
+          $panel
         );
         var permsSplitter = $("div.perms-splitter", $panel).kendoSplitter({
           orientation: "vertical",
@@ -814,14 +815,13 @@ appui.ide = {
           }
         });
         var elem = permsSplitter.children("div.perm_set");
-        elem.html($("#ide_permissions_form_template").html());
+        appui.fn.insertContent($("#ide_permissions_form_template").html(), elem);
         kendo.bind(elem, obj);
         $panel.resize();
-
       }
-      $("div.code", panel).each(function () {
+      $("div.appui-code", panel).each(function () {
         var $$ = $(this);
-        if (!$$.children("div.CodeMirror").length) {
+        if (!$$.children("div.appui-codeMirror").length) {
           $$.codemirror($.extend(a.cfg, {
             save: appui.ide.save,
             keydown: function (widget, e) {
@@ -903,27 +903,60 @@ appui.ide = {
     wid.activateTab(tab);
     appui.ide.arrange(ele.tabNav("getContainer", ele.tabNav("getLength") - 1), obj, url, title);
   },
-
-  search: function (v) {
-    $("div.code:visible", appui.ide.tabstrip).codemirror("search", v || '');
+  
+  /**
+   * Launches codemirror search function on current editor
+   *
+   * @param string value the search query
+   */
+  search: function (value) {
+    $("div.appui-code:visible", appui.ide.tabstrip).codemirror("search", value || '');
   },
-
+  
+  /**
+   * Launches codemirror's replace all function on current editor
+   *
+   * @param string value the search query
+   * @todo WTF? Noi replace string
+   */
   replaceAll: function (v) {
-    $("div.code:visible", appui.ide.tabstrip).codemirror("replaceAll", v || '');
+    $("div.appui-code:visible", appui.ide.tabstrip).codemirror("replaceAll", v || '');
   },
-
+  
+  /**
+   * Launches codemirror's replace function on current editor
+   *
+   * @param v value to search
+   * @todo WTF? Noi replace string
+   */
   replace: function (v) {
-    $("div.code:visible", appui.ide.tabstrip).codemirror("replace", v || '');
+    $("div.appui-code:visible", appui.ide.tabstrip).codemirror("replace", v || '');
   },
-
+  
+  /**
+   * Launches codemirror's replace function on current editor
+   *
+   * @param v value to search
+   */
   findNext: function (v) {
-    $("div.code:visible", appui.ide.tabstrip).codemirror("findNext", v || '');
+    $("div.appui-code:visible", appui.ide.tabstrip).codemirror("findNext", v || '');
   },
-
+  
+  /**
+   * Launches codemirror's replace function on current editor
+   *
+   * @param v value to search
+   */
   findPrev: function (v) {
-    $("div.code:visible", appui.ide.tabstrip).codemirror("findPrev", v || '');
+    $("div.appui-code:visible", appui.ide.tabstrip).codemirror("findPrev", v || '');
   },
-
+  
+  /**
+   * Adds a menu to a tab and submenus to sub
+   *
+   * @param o
+   * @returns {string}
+   */
   mkMenu: function (o) {
     var st = '';
     if (o.text) {
@@ -964,8 +997,14 @@ appui.ide = {
     return url + path + (data.dirs[src]['tabs'] !== undefined ? name : fn);
 
   },
-
-  switch: function(ext, file){
+  
+  /**
+   * Changes the mode of a codemirror instance
+   *
+   * @param ext
+   * @param file
+   */
+  switchMode: function(ext, file){
     if ( (ext !== undefined ) &&
       ext.length &&
       (file !== undefined) &&
@@ -979,12 +1018,25 @@ appui.ide = {
           var tn = appui.ide.tabstrip.tabNav("getSubTabNav", d.data.file_url);
           tn.tabNav('set', 'file', d.data.file, d.data.file_url);
           tn.tabNav('setTitle', 'View ' + ext.toUpperCase(), d.data.file_url);
-          $("div.code.ui-codemirror:visible", tn).codemirror('setMode', ext);
+          $("div.appui-code.ui-codemirror:visible", tn).codemirror('setMode', ext);
         }
       });
     }
   },
-
+  
+  findCfg: function(file){
+    for ( var n in appui.ide.dirs ){
+      if ( file.indexOf(n) === 0 ){
+        return appui.ide.dirs[n];
+      }
+    }
+    return false;
+  },
+  
+  /**
+   *
+   * @param bt
+   */
   savePermission: function(bt){
     var $bt = $(bt),
         $cont = $bt.closest("div"),
@@ -1126,7 +1178,7 @@ appui.ide = {
                   item = tree.select().length ? tree.dataItem(tree.select()) : false;
               if ( item && item.tab !== undefined ){
                 var c = subTab.tabNav('getContainer', subTab.tabNav('search', item.tab)),
-                  orig = $("div.code.ui-codemirror", c).codemirror("getValue");
+                  orig = $("div.appui-code.ui-codemirror", c).codemirror("getValue");
               }
               $code.children().remove();
               $code.removeClass("ui-codemirror");
@@ -1139,7 +1191,7 @@ appui.ide = {
                 readOnly: true
               });
               $code.children().addClass("appui-full-height");
-              $("div.CodeMirror-merge-pane", $code).not(".CodeMirror-merge-pane-rightmost").before(
+              $("div.appui-codeMirror-merge-pane", $code).not(".CodeMirror-merge-pane-rightmost").before(
                 '<div style="border-bottom: 1px solid #ddd">' +
                   '<div class="appui-c" style="width: 50%; display: inline-block"><strong>CURRENT CODE</strong></div>' +
                   '<div class="appui-c" style="width: 50%; display: inline-block"><strong>BACKUP CODE</strong></div>' +
@@ -1202,7 +1254,7 @@ appui.ide = {
             if( $cm.children().hasClass("CodeMirror-merge") ){
               if ( item.tab !== undefined ){
                 var c = subTab.tabNav('getContainer', subTab.tabNav('search', item.tab)),
-                    orig = $("div.code.ui-codemirror", c).codemirror("getValue");
+                    orig = $("div.appui-code.ui-codemirror", c).codemirror("getValue");
               }
               $cm.children().remove();
               $cm.codemirror('mergeView', {
@@ -1214,7 +1266,7 @@ appui.ide = {
                 readOnly: true
               });
               $cm.children().addClass("appui-full-height");
-              $("div.CodeMirror-merge-pane", $cm).not(".CodeMirror-merge-pane-rightmost").before(
+              $("div.appui-codeMirror-merge-pane", $cm).not(".CodeMirror-merge-pane-rightmost").before(
                 '<div style="border-bottom: 1px solid #ddd">' +
                 '<div class="appui-c" style="width: 50%; display: inline-block"><strong>CURRENT CODE</strong></div>' +
                 '<div class="appui-c" style="width: 50%; display: inline-block"><strong>BACKUP CODE</strong></div>' +
@@ -1659,8 +1711,8 @@ appui.ide = {
     appui.fn.popup($('#ide_appearance_template', appui.ide.editor).html(), 'Appearence Preferences', 800, 430, function (alert) {
       var code = $("#code", alert),
         cm = code.codemirror({"mode": "js"}),
-        divCM = $("div.CodeMirror", alert),
-        oldCM = $("div.CodeMirror", appui.ide.editor),
+        divCM = $("div.appui-codeMirror", alert),
+        oldCM = $("div.appui-codeMirror", appui.ide.editor),
         themes = [],
         fonts = [
           {"text": "Inconsolata", "value": "Inconsolata"},
@@ -1719,7 +1771,7 @@ appui.ide = {
             data.theme = formdata.theme;
             data.font = formdata.font;
             data.font_size = formdata.font_size;
-            $("div.code", appui.ide.editor).each(function () {
+            $("div.appui-code", appui.ide.editor).each(function () {
               $(this).codemirror("setTheme", data.theme);
             });
             oldCM.css("font-family", data.font);

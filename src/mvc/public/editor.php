@@ -1,6 +1,6 @@
 <?php
 /** @var $ctrl \bbn\mvc\controller */
-if ( empty($ctrl->post['appui_baseURL']) ){
+if ( empty($ctrl->baseURL) ){
   $routes = $ctrl->get_routes();
   $model = $ctrl->get_model(['routes' => $routes]);
   $list = [];
@@ -70,11 +70,38 @@ if ( empty($ctrl->post['appui_baseURL']) ){
   $ctrl->obj->url = 'ide/editor';
 }
 else{
-  $dirs = new \bbn\ide\directories($ctrl->inc->options, $ctrl->data['routes']);
+  $dirs = new \bbn\ide\directories($ctrl->inc->options, $ctrl->get_routes());
+  //$dir = array_shift($ctrl->arguments);
+  $tab = array_pop($ctrl->arguments);
+  $url = implode('/', $ctrl->arguments);
+  // Case where it's a new file and we need to provide the tabNav info
+  if ( strpos($url, $ctrl->baseURL) === false ){
+    if ( $dir = $dirs->dir_from_url($url) ){
+      $info = $dirs->dir($dir);
+      $ctrl->obj = $dirs->load($url, $dir, $tab, $ctrl->inc->pref);
+    }
+  }
+  // Case where the tabnav is already loaded and we just provide the data
+  else{
+    $res = $dirs->load($url, $dir, $tab, $ctrl->inc->pref);
+  }
+  /*
+  \bbn\x::hdump(
+    $res,
+    $ctrl->arguments,
+    $ctrl->baseURL,
+    $ctrl->say_path(),
+    $ctrl->say_dir(),
+    $ctrl->say_local_path(),
+    $ctrl->say_local_route(),
+    $ctrl->say_controller(),
+    $ctrl->say_all()
+  );
   if ( $res = $dirs->load($ctrl->post['file'], $ctrl->post['dir'], (empty($ctrl->post['tab']) ? false : $ctrl->post['tab']), $ctrl->inc->pref) ){
     $ctrl->obj = $res;
   }
   else{
     $ctrl->obj->data = ['error' => $dirs->get_last_error()];
   }
+  */
 }
