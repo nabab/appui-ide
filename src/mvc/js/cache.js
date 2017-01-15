@@ -19,7 +19,7 @@ grid.kendoGrid({
         click: function(e){
           var tr = $(e.target).closest("tr"),
             dataItem = this.dataItem(tr).toJSON();
-          appui.fn.window(data.root + "cache/info", {item: dataItem.name}, "80%", "40%");
+          bbn.fn.window(data.root + "cache/info", {item: dataItem.name}, "80%", "40%");
         }
       }, {
         text : "<i class='fa fa-times' title='Delete'> </i>",
@@ -27,12 +27,12 @@ grid.kendoGrid({
         click: function(e){
           var tr = $(e.target).closest("tr"),
             dataItem = this.dataItem(tr).toJSON();
-          appui.fn.post(data.root + "cache/delete", {item: dataItem.name}, function(d){
+          bbn.fn.post(data.root + "cache/delete", {item: dataItem.name}, function(d){
             if ( d.success ){
               grid.data('kendoGrid').removeRow(tr);
             }
             else{
-              appui.fn.alert("Impossible to remove the cache entry");
+              bbn.fn.alert("Impossible to remove the cache entry");
             }
           });
         }

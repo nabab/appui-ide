@@ -1,8 +1,8 @@
 // Tabstrip element for code
-appui.ide.tabstrip = $("#tabstrip_editor");
+bbn.ide.tabstrip = $("#tabstrip_editor");
 
 // Tabstrip's container
-appui.ide.editor = $(ele);
+bbn.ide.editor = $(ele);
 
 // The tree element
 var $tree = $("div.tree", ele);
@@ -72,16 +72,16 @@ $("div.appui_ide", ele).kendoToolBar({
   }, {
     type: "separator"
   }, {
-    template: '<button class="k-button" title="Test code!" onclick="appui.ide.test();"><i class="fa fa-magic"> </i></button>'
+    template: '<button class="k-button" title="Test code!" onclick="bbn.ide.test();"><i class="fa fa-magic"> </i></button>'
   }, {
-    template: '<button class="k-button" title="Show History" onclick="appui.ide.history();"><i class="fa fa-history"> </i></button>'
+    template: '<button class="k-button" title="Show History" onclick="bbn.ide.history();"><i class="fa fa-history"> </i></button>'
   }, {
     type: "separator"
   }, {
     template: function () {
       var st = '<ul class="menu">';
       $.each(data.menu, function (i, v) {
-        st += appui.ide.mkMenu(v);
+        st += bbn.ide.mkMenu(v);
       });
       st += '</ul>';
       return st;
@@ -106,24 +106,24 @@ $tree.kendoTreeView({
   select: function(e){
     e.preventDefault();
     var d = this.dataItem(e.node),
-        dir = appui.ide.currentSrc(),
+        dir = bbn.ide.currentSrc(),
         link = data.root + 'editor/' + dir + d.dir + d.name;
     if ( d.tab ){
       link += ('/' + d.tab);
     }
     this.select(e.node);
-    appui.ide.tabstrip.tabNav("link", link, {
+    bbn.ide.tabstrip.tabNav("link", link, {
       dir: dir,
       file: d.path,
       tab: d.tab ? d.tab : ''
     });
-    //appui.fn.log("X", d, appui.ide.currentSrc());
+    //bbn.fn.log("X", d, bbn.ide.currentSrc());
     return;
     if ( r.has_index ){
-      window.open(appui.env.host + '/' + r.path);
+      window.open(bbn.env.host + '/' + r.path);
     }
     else if ( r.is_viewable ){
-      appui.ide.load(r.path, appui.ide.currentSrc(), r.tab);
+      bbn.ide.load(r.path, bbn.ide.currentSrc(), r.tab);
     }
   },
   */
@@ -146,10 +146,10 @@ $tree.kendoTreeView({
     if ( e.valid ){
       var dd = this.dataItem(e.destinationNode),
           ds = this.dataItem(e.sourceNode);
-      appui.fn.post(data.root + 'actions/move', {
+      bbn.fn.post(data.root + 'actions/move', {
         dest: dd.path,
         src: ds.path,
-        dir: appui.ide.currentSrc(),
+        dir: bbn.ide.currentSrc(),
         type: ds.type
       }, function(d){
         if ( d.data &&
@@ -157,7 +157,7 @@ $tree.kendoTreeView({
           d.data.file_url &&
           d.data.file_new_url
         ){
-          appui.ide.closeOpen(ds, d.data);
+          bbn.ide.closeOpen(ds, d.data);
           dd.loaded(false);
           dd.load();
                     }
@@ -174,7 +174,7 @@ $tree.kendoTreeView({
         '" style="color: ' + e.item.bcolor + '"> </span>'
         + e.item.name;
     }
-    var dir = appui.ide.currentSrc(),
+    var dir = bbn.ide.currentSrc(),
         link = data.root + 'editor/code/' + dir + (e.item.dir ? e.item.dir : '') + e.item.name;
     if ( e.item.tab ){
       link += ('/' + e.item.tab);
@@ -254,26 +254,26 @@ $("ul.bbn-ide-context").kendoContextMenu({
         path = './';
         parent = {};
       }
-      appui.ide.newDir(path, parent.uid || '');
+      bbn.ide.newDir(path, parent.uid || '');
     }
     else if ($(e.item).hasClass("bbn-tree-new-file")) {
       var path = dataItem.type === 'dir' ? dataItem.path : dataItem.path.substr(0, dataItem.path.lastIndexOf('/'));
       if (!path) {
         path = './';
       }
-      appui.ide.newFile(path);
+      bbn.ide.newFile(path);
     }
     else if ($(e.item).hasClass("bbn-tree-rename")) {
-      appui.ide.rename(dataItem);
+      bbn.ide.rename(dataItem);
     }
     else if ($(e.item).hasClass("bbn-tree-duplicate")) {
-      appui.ide.duplicate(dataItem);
+      bbn.ide.duplicate(dataItem);
     }
     else if ($(e.item).hasClass("bbn-tree-export")) {
-      appui.ide.export(dataItem);
+      bbn.ide.export(dataItem);
     }
     else if ($(e.item).hasClass("bbn-tree-delete")) {
-      appui.ide.delete(dataItem, treeDS);
+      bbn.ide.delete(dataItem, treeDS);
     }
   }
 });
@@ -296,18 +296,18 @@ var $dirDropDown = $("input.ide-dir_select", ele).kendoDropDownList({
 }).data("kendoDropDownList");
 
 // Calling source for dropdown
-appui.ide.dirDropDownSource(data.dirs, data.current_dir);
+bbn.ide.dirDropDownSource(data.dirs, data.current_dir);
 // Select the dropdown
 $dirDropDown.trigger("change");
 
 // Search field
 $("input.ide-tree_search", ele).on('keyup', function () {
-  appui.ide.filterTree(treeDS, $(this).val().toString().toLowerCase(), "name");
+  bbn.ide.filterTree(treeDS, $(this).val().toString().toLowerCase(), "name");
   //treeDS.read();
 });
 
 // Tabstrip initialization
-appui.ide.build(data.config, appui.ide.tabstrip, data.root + 'editor', 'IDE - ');
+bbn.ide.build(data.config, bbn.ide.tabstrip, data.root + 'editor', 'IDE - ');
 
 // Set theme
 if (data.theme) {
@@ -328,7 +328,7 @@ if (data.font_size) {
 
 
 // Function triggered when closing tabs: confirm if unsaved
-appui.app.tabstrip.ele.tabNav("set", "close", function (){
+appui.tabnav.ele.tabNav("set", "close", function (){
   var conf = false;
   $(".ui-codemirror").each(function () {
     if ($(this).codemirror("isChanged")) {
@@ -342,13 +342,13 @@ appui.app.tabstrip.ele.tabNav("set", "close", function (){
 }, data.root + 'editor');
 
 /*
-appui.app.tabstrip.ele.tabNav("addCallback", function(cont){
-  appui.ide.resize(cont);
-}, appui.ide.tabstrip);
+bbn.app.tabstrip.ele.tabNav("addCallback", function(cont){
+  bbn.ide.resize(cont);
+}, bbn.ide.tabstrip);
 
-appui.app.tabstrip.ele.tabNav("addResize", function(cont){
+bbn.app.tabstrip.ele.tabNav("addResize", function(cont){
   setTimeout(function () {
-    appui.ide.resize(cont);
+    bbn.ide.resize(cont);
   }, 1000);
 });
 

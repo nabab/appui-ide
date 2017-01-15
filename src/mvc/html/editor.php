@@ -26,7 +26,7 @@
     <div class="appui-form-label">Path</div>
     <div class="appui-form-field">
       <input type="text" name="path" class="k-textbox" readonly="readonly" required>
-      <button class="k-button" onclick="appui.ide.selectDir(); return false;">Browse</button>
+      <button class="k-button" onclick="bbn.ide.selectDir(); return false;">Browse</button>
       <button class="k-button" onclick="$(this).prevAll('input').val('./'); return false;">Root</button>
     </div>
     <div class="appui-form-label"></div>
@@ -34,7 +34,7 @@
       <button class="k-button" type="submit">
         <i class="fa fa-check"> </i> Save
       </button>
-      <button class="k-button" type="button" onclick="appui.fn.closePopup();">
+      <button class="k-button" type="button" onclick="bbn.fn.closePopup();">
         <i class="fa fa-close"> </i> Cancel
       </button>
     </div>
@@ -54,7 +54,7 @@
       <button class="k-button" type="submit">
         <i class="fa fa-edit"></i> Rename
       </button>
-      <button class="k-button" type="button" onclick="appui.fn.closePopup();">
+      <button class="k-button" type="button" onclick="bbn.fn.closePopup();">
         <i class="fa fa-close"></i> Cancel
       </button>
     </div>
@@ -89,7 +89,7 @@ function findSequence(goal) {
 }</textarea>
       <br><br>
       <div align="right">
-        <button class="k-button" type="button" onclick="appui.fn.closePopup();"><i class="fa fa-close"></i> Annule
+        <button class="k-button" type="button" onclick="bbn.fn.closePopup();"><i class="fa fa-close"></i> Annule
         </button>
         <button class="k-button" type="button"><i class="fa fa-save"></i> Sauver</button>
       </div>

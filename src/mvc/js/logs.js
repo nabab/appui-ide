@@ -13,7 +13,7 @@ var log_file = $("select:first", ele).kendoDropDownList({
     var v = log_file.data("kendoDropDownList").value(),
         n = num_lines.data("kendoDropDownList").value();
     if (v) {
-      appui.fn.post(data.root + 'logs', {log: v, clear: clear ? 1 : "0", num_lines: n}, function (d) {
+      bbn.fn.post(data.root + 'logs', {log: v, clear: clear ? 1 : "0", num_lines: n}, function (d) {
         $("#log_viewer", ele).codemirror("setValue", d.content);
       });
     }

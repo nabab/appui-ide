@@ -49,7 +49,7 @@ $("#error_json_grid").kendoGrid({
     title: "Last",
     width: 100,
     template: function (e) {
-      return appui.fn.fdate(e.last_date);
+      return bbn.fn.fdate(e.last_date);
     }
   }, {
     field: "count",
@@ -71,11 +71,11 @@ $("#error_json_grid").kendoGrid({
     width: 100,
     hidden: true,
     template: function (e) {
-      return appui.fn.fdate(e.first_date);
+      return bbn.fn.fdate(e.first_date);
     }
   }],
   detailInit: function (e) {
-    appui.fn.log(e);
+    bbn.fn.log(e);
     var stable = $("<div/>");
     stable.appendTo(e.detailCell).kendoGrid({
       sortable: true,
