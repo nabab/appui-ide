@@ -1609,7 +1609,7 @@ bbn.ide = {
             height: "auto",
             width: 1000,
             "max-height": bbn.env.height - 100
-          }).restyle().data("kendoWindow").title(d.model.id ? "Edit directory" : "New directory").center();
+          }).data("kendoWindow").title(d.model.id ? "Edit directory" : "New directory").center();
           //Drag and drop to reorder rows
           subgrid.table.kendoDraggable({
             filter: "tbody > tr:not(.k-grid-edit-row)",
