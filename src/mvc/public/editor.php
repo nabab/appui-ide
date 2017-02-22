@@ -61,7 +61,6 @@ if ( empty($ctrl->baseURL) ){
         'font_size' => empty($ide_cfg['font_size']) ? '' : $ide_cfg['font_size']
       ])*/
       ->add_js([
-        'menu' => $model['menu'],
         'config' => $list,
         'repositories' => $model['dirs'],
         'root' => $ctrl->data['root'],
