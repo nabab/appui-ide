@@ -117,6 +117,16 @@ bbn.ide = new Vue({
       return false;
     },
 
+    /**
+     * Check if the current repository is a MVC
+     *
+     * @returns {boolean}
+     */
+    isMVC: function(){
+      var $$ = this;
+      return ($$.repositories[$$.currentRep] !== undefined ) && ($$.repositories[$$.currentRep].tabs !== undefined);
+    },
+
 
     /** ###### TREE ###### */
 
@@ -613,6 +623,115 @@ bbn.ide = new Vue({
       bbn.fn.log(a,b,c);
     },
 
+    newFile: function(path){
+      var $$ = this;
+      bbn.fn.popup($("#ide_new_template").html(), 'New File', 540, false, function(ele){
+        bbn.ide.new_file = new Vue({
+          el: $(ele).get(0),
+          data: $.extend({}, $$.$data, {
+            types: [],
+            selectedType: false,
+            selectedExt: false,
+            extensions: []
+          }),
+          methods: {
+            isMVC: $$.isMVC,
+            tabsTypes: function(){
+              var $$$ = this,
+                  def,
+                  tabs = [];
+              if ( $$.isMVC() ){
+                tabs = $.map($$.repositories[$$.currentRep].tabs, function(t){
+                  if ( t.fixed === undefined ){
+                    if ( t.default && ( t.url !== $$$.selectedType) ){
+                      def = t.url;
+                    }
+                    return {text: t.title, value: t.url};
+                  }
+                });
+              }
+              $$$.types = tabs;
+              setTimeout(function(){
+                $$$.selectedType = def || false;
+              }, 5);
+            },
+            selectDir: function(){
+              var $$$ = this;
+
+            },
+            setRoot: function(e){
+              var $$$ = this;
+              $("input[name=path]", $$$.$el).val('./');
+            },
+            close: function(){
+              bbn.fn.closePopup();
+            },
+            response: function(d){
+              var $$$ = this;
+            }
+          },
+          watch: {
+            selectedType: function(t, o){
+              var $$$ = this;
+              if ( t !== o ){
+                $$$.extensions = [];
+                if ( $$.repositories[$$.currentRep].tabs[t] && $$.repositories[$$.currentRep].tabs[t].extensions ){
+                  $$$.extensions = $.map($$.repositories[$$.currentRep].tabs[t].extensions, function(ex){
+                    if ( ex.ext ){
+                      return {text: '.' + ex.ext, value: ex.ext};
+                    }
+                  });
+                }
+                if ( $$$.extensions && $$$.extensions.length ){
+                  setTimeout(function(){
+                    $$$.selectedExt = $$$.extensions[0].value;
+                  }, 5);
+                }
+              }
+            }
+          },
+          mounted: function(){
+            var $$$ = this;
+            bbn.fn.analyzeContent($$$.$el);
+            bbn.fn.redraw($$$.$el, true);
+            // Set path
+            if ( path && path.length ){
+              $("input[name=path]", $$$.$el).val(path);
+            }
+            $$$.tabsTypes();
+
+
+
+            // Check if the selected dir is a mvc
+
+              /*// Add a dropdownlist for tab selection
+              var $select = $('<select name="tab" required="required"/>');
+              $("div.appui-form-label:first", ele).before(
+                '<div class="appui-form-label mvc-ele">Type</div>',
+                $('<div class="appui-form-field  mvc-ele"/>').append($select)
+              );
+              // Initialize the kendo dropdownlist
+              $select.kendoDropDownList({
+                dataSource: tabs,
+                dataTextField: "text",
+                dataValueField: "value",
+                value: tabDef,
+                change: function(c){
+                  // Show or not the extensions select
+                  showExt(cfg.tabs[c.sender.value()]);
+                }
+              }).data("kendoDropDownList").trigger('change');
+            }
+            else {
+              // Show or not the extensions select
+              showExt(cfg);
+            }*/
+          }
+        });
+
+      });
+    },
+
 
     /** ###### PERMISSIONS ###### */
 
@@ -983,6 +1102,7 @@ bbn.ide = new Vue({
     $("div.appui-ide", ele).kendoToolBar({
       items: [{
         template: '<input class="k-textbox ide-tree-search" type="text" placeholder="Search file">'
+        //template: '<bbn-input :value="searchFile">'
       }, {
         type: "separator"
       }, {
