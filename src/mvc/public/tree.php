@@ -1,4 +1,5 @@
 <?php
+/** @var $ctrl \bbn\mvc\controller */
 // Non mandatory, thew path to explore
 if ( isset($ctrl->post['dir']) ){
   $ctrl->data['dir'] = $ctrl->post['dir'];

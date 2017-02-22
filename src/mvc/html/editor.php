@@ -1,15 +1,15 @@
 <ul class="bbn-ide-context"></ul>
-<div class="bbn_ide_container appui-h-100">
-  <div class="pane-content appui_ide"></div>
-  <div class="pane-content bbn_code_container">
-    <div class="pane-content tree"></div>
-    <div class="pane-content" style="padding:0px">
+<div class="bbn-ide-container appui-h-100">
+  <div class="pane-content appui-ide"></div>
+  <div class="pane-content bbn-code-container appui-full-height">
+    <div class="pane-content tree appui-h-100"></div>
+    <div class="pane-content appui-h-100" style="padding:0px">
       <div style="position: absolute; top: auto; left: auto; margin: 50%; text-align: center">
-        Tool's description comes here
+        <i class="fa fa-code"></i>
       </div>
-      <div class="appui-full-height" id="tabstrip_editor"></div>
+      <div class="appui-full-height" id="tabstrip_editor" ref="tabstrip"></div>
     </div>
-    <div class="pane-content">
+    <div class="pane-content appui-h-100">
       <iframe style="width: 100%" class="appui-full-height" src="https://doc.mybbn.so"></iframe>
     </div>
   </div>
@@ -100,38 +100,38 @@ function findSequence(goal) {
 <script type="text/x-kendo-template" id="ide_permissions_form_template">
   <div class="k-block" style="height: 100%">
     <div class="k-header appui-c">Permissions setting</div>
-      <div class="perm_set" style="padding: 10px">
-        <input type="hidden" data-bind="value: perm_id">
-        <div>
-          <label>Code</label>
-          <input class="k-textbox" readonly style="margin: 0 10px" data-bind="value: perm_code">
-          <label>Title/Description</label>
-          <input class="k-textbox" maxlength="255" style="width:400px; margin: 0 10px" data-bind="value: perm_text, events: {keydown: checkEnter}">
-          <button class="k-button" data-bind="click: save">
-            <i class="fa fa-save"> </i>
-          </button><br>
+    <div class="perm_set" style="padding: 10px">
+      <input type="hidden" data-bind="value: id">
+      <div>
+        <label>Code</label>
+        <input class="k-textbox" readonly style="margin: 0 10px" data-bind="value: code">
+        <label>Title/Description</label>
+        <input class="k-textbox" maxlength="255" style="width:400px; margin: 0 10px" data-bind="value: text, events: {keydown: checkEnter}">
+        <button class="k-button" data-bind="click: save">
+          <i class="fa fa-save"> </i>
+        </button><br>
 
-          <label style="margin-top: 5px">Help</label>
-          <textarea class="k-textbox" style="margin: 5px 10px 0 10px; width: 90%" data-bind="value: perm_help"></textarea>
-        </div>
+        <label style="margin-top: 5px">Help</label>
+        <textarea class="k-textbox" style="margin: 5px 10px 0 10px; width: 90%" data-bind="value: help"></textarea>
+      </div>
 
-        <div class="k-block" style="margin-top: 10px">
-          <div class="k-header appui-c">Children permissions</div>
-          <div style="padding: 10px">
-            <div>
-              <label>Code</label>
-              <input class="k-textbox" style="margin: 0 10px" maxlength="255">
-              <label>Title/Description</label>
-              <input class="k-textbox" maxlength="255" style="width:400px; margin: 0 10px" data-bind="events: {keydown: checkEnter}">
-              <button class="k-button" data-bind="click: add">
-                <i class="fa fa-plus"> </i>
-              </button>
-            </div>
-            <ul style="list-style: none; padding: 0" data-template="ide_child_permissions_form_template" data-bind="source: perm_children"></ul>
+      <div class="k-block" style="margin-top: 10px">
+        <div class="k-header appui-c">Children permissions</div>
+        <div style="padding: 10px">
+          <div>
+            <label>Code</label>
+            <input class="k-textbox" style="margin: 0 10px" maxlength="255">
+            <label>Title/Description</label>
+            <input class="k-textbox" maxlength="255" style="width:400px; margin: 0 10px" data-bind="events: {keydown: checkEnter}">
+            <button class="k-button" data-bind="click: add">
+              <i class="fa fa-plus"> </i>
+            </button>
           </div>
+          <ul style="list-style: none; padding: 0" data-template="ide_child_permissions_form_template" data-bind="source: children"></ul>
         </div>
       </div>
     </div>
+  </div>
   </div>
 </script>
 
@@ -139,9 +139,9 @@ function findSequence(goal) {
   <li>
     <div style="margin-bottom: 5px">
       <label>Code</label>
-      <input class="k-textbox" readonly style="margin: 0 10px" data-bind="value: perm_code, events: {keydown: checkEnter}"  maxlength="255">
+      <input class="k-textbox" readonly style="margin: 0 10px" data-bind="value: code, events: {keydown: checkEnter}"  maxlength="255">
       <label>Title/Description</label>
-      <input class="k-textbox" maxlength="255" style="width:400px; margin: 0 10px" data-bind="value: perm_text, events: {keydown: checkEnter}">
+      <input class="k-textbox" maxlength="255" style="width:400px; margin: 0 10px" data-bind="value: text, events: {keydown: checkEnter}">
       <button class="k-button" data-bind="click: saveChild" style="margin-right: 5px">
         <i class="fa fa-save"> </i>
       </button>

@@ -1,15 +1,14 @@
 <?php
 if ( isset($model->data['dir'], $model->data['routes']) ){
   // Initialize the directories object
-  $dirs = new \bbn\ide\directories($model->inc->options, $model->data['routes']);
   $current = (empty($model->data['path']) ? '' : $model->data['path']);
   if ( !empty($current) ){
     $current .= '/';
   }
   // Get the relative directory item
-  if ( $dir = $dirs->dir($model->data['dir']) ){
+  if ( $dir = $model->inc->ide->dir($model->data['dir']) ){
     // Get the directory's root path
-    $path = $dirs->get_root_path($model->data['dir']);
+    $path = $model->inc->ide->get_root_path($model->data['dir']);
     //
     $file_check = [
       'viewables' => [
@@ -70,7 +69,6 @@ if ( isset($model->data['dir'], $model->data['routes']) ){
       foreach ( $dir['tabs'] as $i => $t ){
         if ( $i !== '_ctrl' ){
           // Set the real path
-
           $real = $path . $t['path'] . (empty($model->data['path']) ? '' : $model->data['path']);
           if ( file_exists($real) ){
             // Get files and folders
@@ -85,7 +83,7 @@ if ( isset($model->data['dir'], $model->data['routes']) ){
                   $folders[$fn] = [
                     'path' => (empty($model->data['path']) ? '' : $model->data['path']. '/') . $fn,
                     //'value' => $model->data['dir'] . '/' . (empty($model->data['path']) ? '' : $model->data['path']. '/') . $fn,
-                    'name' => $fn,
+                    'title' => $fn,
                     'has_index' => \bbn\file\dir::has_file($f, 'index.php', 'index.html', 'index.htm') ? 1 : false,
                     'parenthood' => true,
                     'is_svg' => false,
@@ -95,7 +93,8 @@ if ( isset($model->data['dir'], $model->data['routes']) ){
                     'dir' => $current,
                     'icon' => "folder-icon",
                     'bcolor' => $t['bcolor'],
-                    'type' => "dir"
+                    'folder' => true,
+                    'lazy' => (bool)\bbn\file\dir::has_file($f)
                   ];
                   if ( empty($model->data['onlydir']) ){
                     $folders[$fn]['is_parent'] = count(\bbn\file\dir::get_files($f, 1)) > 0;
@@ -129,6 +128,7 @@ if ( isset($model->data['dir'], $model->data['routes']) ){
                 if ( !array_key_exists($fn, $files) ){
                   $files[$fn] = [
                     'path' => (empty($model->data['path']) ? '' : $model->data['path']. '/') . basename($f),
+                    'title' => $fn,
                     'name' => $fn,
                     'has_index' => false,
                     'is_parent' => false,
@@ -139,6 +139,7 @@ if ( isset($model->data['dir'], $model->data['routes']) ){
                     'default' => false,
                     'dir' => $current,
                     'ext' => in_array($ext, $ext_icons) ? $ext : 'default',
+                    'icon' => "$ext-icon",
                     'bcolor' => $t['bcolor'],
                     'tab' => $t['url'],
                     'type' => 'file'
@@ -165,7 +166,7 @@ if ( isset($model->data['dir'], $model->data['routes']) ){
           $folders[$fn] = [
             'path' => (empty($model->data['path']) ? '' : $model->data['path']. '/') . $fn,
             //'value' => $model->data['dir'] . '/' . (empty($model->data['path']) ? '' : $model->data['path']. '/') . $fn,
-            'name' => $fn,
+            'title' => $fn,
             'has_index' => \bbn\file\dir::has_file($f, 'index.php', 'index.html', 'index.htm') ? 1 : false,
             'dir' => $current,
             'parenthood' => true,
@@ -175,7 +176,8 @@ if ( isset($model->data['dir'], $model->data['routes']) ){
             'default' => false,
             'icon' => "folder-icon",
             'bcolor' => $dir['bcolor'],
-            'type' => "dir"
+            'folder' => true,
+            'lazy' => (bool)\bbn\file\dir::has_file($f)
           ];
           if ( empty($model->data['onlydir']) ){
             $folders[$fn]['is_parent'] = count(\bbn\file\dir::get_files($f, 1)) > 0;
@@ -194,6 +196,8 @@ if ( isset($model->data['dir'], $model->data['routes']) ){
           // Add file
           $files[$f] = [
             'path' => (empty($model->data['path']) ? '' : $model->data['path']. '/') . basename($f),
+            'title' => $fn,
+            'file' => $fn,
             'name' => $fn,
             'has_index' => false,
             'is_parent' => false,
@@ -204,6 +208,7 @@ if ( isset($model->data['dir'], $model->data['routes']) ){
             'is_image' => in_array($ext, $file_check['images']),
             'default' => false,
             'ext' => in_array($ext, $ext_icons) ? $ext : 'default',
+            'icon' => "$ext-icon",
             'bcolor' => $dir['bcolor'],
             'type' => "file"
           ];
@@ -215,7 +220,6 @@ if ( isset($model->data['dir'], $model->data['routes']) ){
       }
 
     }
-
 
     if ( ksort($folders, SORT_STRING | SORT_FLAG_CASE) && ksort($files, SORT_STRING | SORT_FLAG_CASE) ){
       return empty($model->data['onlydir']) ?

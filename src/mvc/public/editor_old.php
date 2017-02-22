@@ -4,7 +4,8 @@ if ( empty($ctrl->baseURL) ){
   $model = $ctrl->get_model();
   $list = [];
   $sess = [];
-  $current_rep = false;
+  $current_dir = false;
+  $dirs = new \bbn\ide\directories($ctrl->inc->options, $ctrl->data['routes']);
 
   // We define ide array in session
   if ( !$ctrl->inc->session->has('ide') ){
@@ -16,7 +17,7 @@ if ( empty($ctrl->baseURL) ){
   // Routes
   foreach ( $model['dirs'] as $i => $dir ){
     foreach ( $ctrl->data['routes'] as $k => $r ){
-      if ( strpos($ctrl->inc->ide->decipher_path($i), $r) === 0 ){
+      if ( strpos($dirs->decipher_path($i), $r) === 0 ){
         $model['dirs'][$i]['route'] = $k;
       }
     }
@@ -42,38 +43,32 @@ if ( empty($ctrl->baseURL) ){
 
   $ctrl->inc->session->set($sess, 'ide', 'list');
 
-  if ( !$current_rep && $ctrl->inc->session->has('ide', 'dir') ){
-    $current_rep = $ctrl->inc->session->get('ide', 'dir');
+  if ( !$current_dir && $ctrl->inc->session->has('ide', 'dir') ){
+    $current_dir = $ctrl->inc->session->get('ide', 'dir');
   }
 
   $ide_cfg = $ctrl->inc->user->get_cfg('ide');
 
-  $ctrl->data['shared_path'] = BBN_SHARED_PATH;
-
   echo $ctrl
       ->set_title("IDE")
-      /*->add_js('./functions', [
+      ->add_js('./functions', [
         'dirs' => $model['dirs'],
         'root' => $ctrl->data['root'],
         'baseURL' => $ctrl->say_path().'/',
         'theme' => empty($ide_cfg['theme']) ? '' : $ide_cfg['theme'],
         'font' => empty($ide_cfg['font']) ? '' : $ide_cfg['font'],
         'font_size' => empty($ide_cfg['font_size']) ? '' : $ide_cfg['font_size']
-      ])*/
+      ])
       ->add_js([
         'menu' => $model['menu'],
         'config' => $list,
-        'repositories' => $model['dirs'],
+        'dirs' => $model['dirs'],
         'root' => $ctrl->data['root'],
         'url' => implode('/', $ctrl->params),
-        'baseURL' => $ctrl->say_path().'/',
-        'currentRep' => $current_rep ? $current_rep : $model['default_dir'],
-        'theme' => empty($ide_cfg['theme']) ? '' : $ide_cfg['theme'],
-        'font' => empty($ide_cfg['font']) ? '' : $ide_cfg['font'],
-        'font_size' => empty($ide_cfg['font_size']) ? '' : $ide_cfg['font_size']
+        'current_dir' => $current_dir ? $current_dir : $model['default_dir']
       ])
       ->get_view().$ctrl->get_less();
-  $ctrl->obj->url = $ctrl->data['root'].'editor';
+  //$ctrl->obj->url = $ctrl->say_path();
 }
 else{
   /*

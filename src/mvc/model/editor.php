@@ -1,13 +1,11 @@
 <?php
-if ( isset($model->data['routes']) ){
-
-  $dirs = new \bbn\ide\directories($model->inc->options, $model->data['routes']);
+/** @var $model \bbn\mvc\model */
+if ( isset($model->data['routes'], $model->inc->ide) ){
 
   $res = [
     'default_dir' => $model->inc->session->has('ide', 'dir') ?
       $model->inc->session->get('ide', 'dir') : 'BBN_APP_PATH/mvc/',
-    'dirs' => $dirs->dirs(),
-    'modes' => $dirs->modes(),
+    'dirs' => $model->inc->ide->dirs(),
     'menu' => [
       [
         'text' => 'File',
