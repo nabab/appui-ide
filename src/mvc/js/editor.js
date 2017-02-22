@@ -5,7 +5,86 @@ bbn.ide = new Vue({
     url: data.root + 'editor',
     editor: $(ele),
     //tabstrip: $("#tabstrip_editor", $(ele)),
-    searchFile: ''
+    searchFile: '',
+    menu: [{
+      text: 'File',
+      items: [{
+        text: '<i class="fa fa-plus"></i>New',
+        items: [{
+          text: '<i class="fa fa-file-o"></i>File',
+          function: "bbn.ide.newFile();"
+        }, {
+          text: '<i class="fa fa-folder"></i>Directory',
+          function: "bbn.ide.newDir();"
+        }]
+      }, {
+        text: '<i class="fa fa-save"></i>Save',
+        function: "bbn.ide.save();"
+      }, {
+        text: '<i class="fa fa-trash-o"></i>Delete'
+      }, {
+        text: '<i class="fa fa-times-circle"></i>Close',
+        function: "bbn.ide.tabstrip.tabNav('close');"
+      }, {
+        text: '<i class="fa fa-times-circle-o"></i>Close all tabs',
+        function: "bbn.ide.tabstrip.tabNav('closeAll');"
+      }]
+    }, {
+      text: 'Edit',
+      items: [{
+        text: '<i class="fa fa-search"></i>Find <small>CTRL+F</small>',
+        function: "bbn.ide.search();"
+      }, {
+        text: '<i class="fa fa-search-plus"></i>Find next <small>CTRL+G</small>',
+        function: "bbn.ide.findNext();"
+      }, {
+        text: '<i class="fa fa-search-minus"></i>Find previous <small>SHIFT+CTRL+G</small>',
+        function: "bbn.ide.findPrev();"
+      }, {
+        text: '<i class="fa fa-exchange"></i>Replace <small>SHIFT+CTRL+F</small>',
+        function: "bbn.ide.replace();"
+      }, {
+        text: '<i class="fa fa-retweet"></i>Replace All <small>SHIFT+CTRL+R</small>',
+        function: "bbn.ide.replaceAll();"
+      }]
+    }, {
+      text: 'History',
+      items: [{
+        text: '<i class="fa fa-history"></i>Show',
+        function: 'bbn.ide.history();'
+      }, {
+        text: '<i class="fa fa-trash-o"></i>Clear',
+        function: 'bbn.ide.historyClear();'
+      }, {
+        text: '<i class="fa fa-trash"></i>Clear All',
+        function: 'bbn.ide.historyClearAll();'
+      }]
+    }, {
+      text: 'Doc.',
+      items: [{
+        text: '<i class="fa fa-binoculars"></i>Find'
+      }, {
+        text: '<i class="fa fa-book"></i>Generate'
+      }]
+    }/*, {
+     text: 'Current',
+     items: [{
+     text: 'Add View'
+     }, {
+     text: 'Add Model'
+     }, {
+     text: 'Remove current'
+     }]
+     }*/, {
+      text: 'Pref.',
+      items: [{
+        text: '<i class="fa fa-cog"></i>Manage directories',
+        function: "bbn.ide.cfgDirs();"
+      }, {
+        text: '<i class="fa fa-language"></i>IDE style',
+        function: "bbn.ide.cfgStyle();"
+      }]
+    }]
   }),
   methods: {
     /** ###### REPOSITORY ###### */
@@ -623,113 +702,96 @@ bbn.ide = new Vue({
       bbn.fn.log(a,b,c);
     },
 
-    newFile: function(path){
+    new: function(title, isFile, path){
       var $$ = this;
-      bbn.fn.popup($("#ide_new_template").html(), 'New File', 540, false, function(ele){
-        bbn.ide.new_file = new Vue({
-          el: $(ele).get(0),
-          data: $.extend({}, $$.$data, {
-            types: [],
-            selectedType: false,
-            selectedExt: false,
-            extensions: []
-          }),
-          methods: {
-            isMVC: $$.isMVC,
-            tabsTypes: function(){
-              var $$$ = this,
-                  def,
-                  tabs = [];
-              if ( $$.isMVC() ){
-                tabs = $.map($$.repositories[$$.currentRep].tabs, function(t){
-                  if ( t.fixed === undefined ){
-                    if ( t.default && ( t.url !== $$$.selectedType) ){
-                      def = t.url;
-                    }
-                    return {text: t.title, value: t.url};
-                  }
-                });
-              }
-              $$$.types = tabs;
-              setTimeout(function(){
-                $$$.selectedType = def || false;
-              }, 5);
-            },
-            selectDir: function(){
-              var $$$ = this;
-
-            },
-            setRoot: function(e){
-              var $$$ = this;
-              $("input[name=path]", $$$.$el).val('./');
-            },
-            close: function(){
-              bbn.fn.closePopup();
-            },
-            response: function(d){
-              var $$$ = this;
-            }
-          },
-          watch: {
-            selectedType: function(t, o){
-              var $$$ = this;
-              if ( t !== o ){
-                $$$.extensions = [];
-                if ( $$.repositories[$$.currentRep].tabs[t] && $$.repositories[$$.currentRep].tabs[t].extensions ){
-                  $$$.extensions = $.map($$.repositories[$$.currentRep].tabs[t].extensions, function(ex){
-                    if ( ex.ext ){
-                      return {text: '.' + ex.ext, value: ex.ext};
+      bbn.fn.popup($("#ide_new_template").html(), title, 540, false, function(ele){
+          new Vue({
+            el: $(ele).get(0),
+            data: $.extend({}, $$.$data, {
+              title: title,
+              isFile: isFile,
+              path: path,
+              types: [],
+              selectedType: false,
+              selectedExt: false,
+              extensions: []
+            }),
+            methods: {
+              isMVC: $$.isMVC,
+              tabsTypes: function(){
+                var $$$ = this,
+                    def,
+                    tabs = [];
+                if ( $$.isMVC() ){
+                  tabs = $.map($$.repositories[$$.currentRep].tabs, function(t){
+                    if ( t.fixed === undefined ){
+                      if ( t.default && ( t.url !== $$$.selectedType) ){
+                        def = t.url;
+                      }
+                      return {text: t.title, value: t.url};
                     }
                   });
                 }
-                if ( $$$.extensions && $$$.extensions.length ){
-                  setTimeout(function(){
-                    $$$.selectedExt = $$$.extensions[0].value;
-                  }, 5);
+                $$$.types = tabs;
+                setTimeout(function(){
+                  $$$.selectedType = def || false;
+                }, 5);
+              },
+              selectDir: function(){
+                var $$$ = this;
+
+              },
+              setRoot: function(){
+                var $$$ = this;
+                $("input[name=path]", $$$.$el).val('./');
+              },
+              close: function(){
+                bbn.fn.closePopup();
+              },
+              response: function(d){
+                var $$$ = this;
+              }
+            },
+            watch: {
+              selectedType: function(t, o){
+                var $$$ = this;
+                if ( $$$.isFile && (t !== o) ){
+                  $$$.extensions = [];
+                  if ( $$.repositories[$$.currentRep].tabs[t] && $$.repositories[$$.currentRep].tabs[t].extensions ){
+                    $$$.extensions = $.map($$.repositories[$$.currentRep].tabs[t].extensions, function(ex){
+                      if ( ex.ext ){
+                        return {text: '.' + ex.ext, value: ex.ext};
+                      }
+                    });
+                  }
+                  if ( $$$.extensions && $$$.extensions.length ){
+                    setTimeout(function(){
+                      $$$.selectedExt = $$$.extensions[0].value;
+                    }, 5);
+                  }
                 }
               }
+            },
+            mounted: function(){
+              var $$$ = this;
+              bbn.fn.analyzeContent($$$.$el);
+              bbn.fn.redraw($$$.$el, true);
+              // Set path
+              if ( $$$.path && $$$.path.length ){
+                $("input[name=path]", $$$.$el).val($$$.path);
+              }
+              $$$.tabsTypes();
             }
-          },
-          mounted: function(){
-            var $$$ = this;
-            bbn.fn.analyzeContent($$$.$el);
-            bbn.fn.redraw($$$.$el, true);
-            // Set path
-            if ( path && path.length ){
-              $("input[name=path]", $$$.$el).val(path);
-            }
-            $$$.tabsTypes();
-
-
-
-            // Check if the selected dir is a mvc
-
-              /*// Add a dropdownlist for tab selection
-              var $select = $('<select name="tab" required="required"/>');
-              $("div.appui-form-label:first", ele).before(
-                '<div class="appui-form-label mvc-ele">Type</div>',
-                $('<div class="appui-form-field  mvc-ele"/>').append($select)
-              );
-              // Initialize the kendo dropdownlist
-              $select.kendoDropDownList({
-                dataSource: tabs,
-                dataTextField: "text",
-                dataValueField: "value",
-                value: tabDef,
-                change: function(c){
-                  // Show or not the extensions select
-                  showExt(cfg.tabs[c.sender.value()]);
-                }
-              }).data("kendoDropDownList").trigger('change');
-            }
-            else {
-              // Show or not the extensions select
-              showExt(cfg);
-            }*/
-          }
-        });
-
+          });
       });
+    },
+
+    newFile: function(path){
+      this.new('New File', true, path);
+    },
+
+    newDir: function(path){
+      this.new('New Directory', false, path);
     },
 
 

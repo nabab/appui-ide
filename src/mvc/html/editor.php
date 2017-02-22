@@ -26,7 +26,7 @@
     <div class="appui-form-label">Name</div>
     <div class="appui-form-field">
       <bbn-input type="text" name="name" class="appui-full-width" required="required"></bbn-input>
-      <bbn-dropdown ref="ext" :source="extensions" v-model="selectedExt" name="ext" required="required" style="width: 100px"></bbn-dropdown>
+      <bbn-dropdown ref="ext" :source="extensions" v-model="selectedExt" name="ext" required="required" style="width: 100px" v-if="isFile"></bbn-dropdown>
     </div>
     <div class="appui-form-label">Path</div>
     <div class="appui-form-field">
@@ -39,7 +39,7 @@
     <div class="appui-form-label"></div>
     <div class="appui-form-field" style="text-align: right">
       <bbn-button type="submit" icon="fa fa-check"> Save</bbn-button>
-      <bbn-button type="button" @click="close" icon="fa fa-close"> Cancel</bbn-button>
+      <bbn-button @click="close" icon="fa fa-close"> Cancel</bbn-button>
     </div>
   </bbn-form>
 </script>
