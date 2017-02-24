@@ -153,18 +153,20 @@ bbn.ide = new Vue({
     /**
      * Gets the path property from the current repository's tab
      *
-     * @param tab The tab's url
+     * @param string tab The tab's url
+     * @param string rep The repository's name
      * @returns string|boolean
      */
-    getTabPath: function(tab){
+    getTabPath: function(tab, rep){
       var $$ = this;
-      if ( tab && $$.repositories[$$.currentRep] && $$.repositories[$$.currentRep].tabs ){
+      rep = rep || $$.currentRep;
+      if ( tab && $$.repositories[rep] && $$.repositories[rep].tabs ){
         // Super controller
         if ( tab.indexOf('_ctrl') > -1 ){
           tab = '_ctrl';
         }
-        if ( $$.repositories[$$.currentRep].tabs[tab] && $$.repositories[$$.currentRep].tabs[tab].path ){
-          return $$.repositories[$$.currentRep].tabs[tab].path;
+        if ( $$.repositories[rep].tabs[tab] && $$.repositories[rep].tabs[tab].path ){
+          return $$.repositories[rep].tabs[tab].path;
         }
       }
       return false;
@@ -176,7 +178,34 @@ bbn.ide = new Vue({
      * @param tab The tab's url
      * @returns array|boolean
      */
-    getExt: function(tab){
+    getExt: function(rep, tab){
+      var $$ = this;
+      if ( $$.repositories[rep] ){
+        // MVC
+        if ( tab && $$.repositories[rep].tabs ){
+          // Super controller
+          if ( tab.indexOf('_ctrl') > -1 ){
+            tab = '_ctrl';
+          }
+          if ( $$.repositories[rep].tabs[tab] && $$.repositories[rep].tabs[tab].extensions ){
+            return $$.repositories[rep].tabs[tab].extensions;
+          }
+        }
+        else if ( $$.repositories[rep].extensions ){
+          return $$.repositories[rep].extensions;
+        }
+      }
+      return false;
+    },
+
+    /**
+     * Gets the default text of a file by the extension
+     *
+     * @param string ext The extension
+     * @param string tab The MVC tab's name (if the file's a MVC)
+     * @returns {*}
+     */
+    getDefaultText: function(ext, tab){
       var $$ = this;
       if ( $$.repositories[$$.currentRep] ){
         // MVC
@@ -186,11 +215,11 @@ bbn.ide = new Vue({
             tab = '_ctrl';
           }
           if ( $$.repositories[$$.currentRep].tabs[tab] && $$.repositories[$$.currentRep].tabs[tab].extensions ){
-            return $$.repositories[$$.currentRep].tabs[tab].extensions;
+            return bbn.fn.get_field($$.repositories[$$.currentRep].tabs[tab].extensions, 'ext', ext, 'default');
           }
         }
         else if ( $$.repositories[$$.currentRep].extensions ){
-          return $$.repositories[$$.currentRep].extensions;
+          return bbn.fn.get_field($$.repositories[$$.currentRep].extensions, 'ext', ext, 'default');
         }
       }
       return false;
@@ -206,6 +235,33 @@ bbn.ide = new Vue({
       return ($$.repositories[$$.currentRep] !== undefined ) && ($$.repositories[$$.currentRep].tabs !== undefined);
     },
 
+    /**
+     * Makes a data object necessary on file actions
+     *
+     * @param string rep The repository's name
+     * @param string tab The tab's name (MVC)
+     * @returns {*}
+     */
+    makeActionData: function(rep, tab){
+      var $$ = this;
+      if ( rep &&
+        $$.repositories &&
+        $$.repositories[rep] &&
+        $$.repositories[rep].bbn_path &&
+        $$.repositories[rep].path
+      ){
+        return {
+          repository: rep,
+          bbn_path: $$.repositories[rep].bbn_path,
+          rep_path: $$.repositories[rep].path,
+          tab_path: tab ? $$.getTabPath(tab, rep) : false,
+          tab: tab || false,
+          extensions: $$.getExt(rep, tab)
+        }
+      }
+      return false;
+    },
+
 
     /** ###### TREE ###### */
 
@@ -215,12 +271,16 @@ bbn.ide = new Vue({
      * @param n The tree node
      * @returns {*}
      */
-    treeLoad: function(n){
+    treeLoad: function(n, onlyDirs, tab){
       var $$ = this;
       return bbn.fn.post($$.root + "tree/", {
-        dir: $$.currentRep,
+        repository: $$.currentRep,
+        repository_cfg: $$.repositories[$$.currentRep],
+        is_mvc: $$.isMVC(),
         filter: $$.searchFile,
-        path: n.node.data.path || false
+        path: n.node.data.path || '',
+        onlydirs: onlyDirs || false,
+        tab: tab || false
       }).promise().then(function(pd){
         return pd.data;
       });
@@ -456,7 +516,7 @@ bbn.ide = new Vue({
             bbn_path: $$.getBbnPath(),
             rep_path: $$.getRepPath(),
             tab_path: $$.getTabPath(url),
-            extensions: $$.getExt(url),
+            extensions: $$.getExt($$.currentRep, url),
             file: {
               full_path: file
             },
@@ -673,18 +733,13 @@ bbn.ide = new Vue({
         ($$.repositories[$$.currentRep] !== undefined)
       ){
         state = $cm.codemirror("getState");
-        bbn.fn.post(data.root + "actions/save", {
-          repository: tabData.repository,
-          bbn_path: tabData.bbn_path,
-          rep_path: tabData.rep_path,
-          tab_path: $$.getTabPath(tabData.tab),
+        bbn.fn.post(data.root + "actions/save",
+          $.extend({}, $$.makeActionData(tabData.repository, tabData.tab !== 'code' ? tabData.tab : false), {
           file: tabData.file,
-          extensions: $$.getExt(tabData.tab),
-          tab: tabData.tab !== 'code' ? tabData.tab : false,
           selections: state.selections,
           marks: state.marks,
           code: state.value
-        }, function(d){
+        }), function(d){
           if ( d.success ){
             appui.notification.success("File saved!");
           }
@@ -696,54 +751,82 @@ bbn.ide = new Vue({
       }
     },
 
+    /**
+     * Callback function triggered on tab close
+     *
+     * @param a
+     * @param b
+     * @param c
+     */
     close: function(a, b, c){
       var $$ = this;
       bbn.fn.log('close', $($$.$refs.tabstrip).tabNav('getList'));
       bbn.fn.log(a,b,c);
     },
 
+    /**
+     * New file|directory dialog
+     *
+     * @param string title The dialog's title
+     * @param bool isFile A boolean value to identify if you want create a file or a folder
+     * @param string path The current path
+     */
     new: function(title, isFile, path){
       var $$ = this;
-      bbn.fn.popup($("#ide_new_template").html(), title, 540, false, function(ele){
+      bbn.fn.popup($("#ide_new_template").html(), title, 540, false, {modal: true}, function(cont){
           new Vue({
-            el: $(ele).get(0),
+            el: $(cont).get(0),
             data: $.extend({}, $$.$data, {
               title: title,
               isFile: isFile,
-              path: path,
+              path: path || './',
               types: [],
               selectedType: false,
               selectedExt: false,
-              extensions: []
+              extensions: [],
+              name: ''
             }),
             methods: {
               isMVC: $$.isMVC,
-              tabsTypes: function(){
-                var $$$ = this,
-                    def,
-                    tabs = [];
-                if ( $$.isMVC() ){
-                  tabs = $.map($$.repositories[$$.currentRep].tabs, function(t){
-                    if ( t.fixed === undefined ){
-                      if ( t.default && ( t.url !== $$$.selectedType) ){
-                        def = t.url;
-                      }
-                      return {text: t.title, value: t.url};
-                    }
-                  });
+              setExtensions: function(extensions){
+                var $$$ = this;
+                $$$.extensions = $.map(extensions, function(ex){
+                  if ( ex.ext ){
+                    return {text: '.' + ex.ext, value: ex.ext};
+                  }
+                });
+                if ( $$$.extensions && $$$.extensions.length ){
+                  setTimeout(function(){
+                    $$$.selectedExt = $$$.extensions[0].value;
+                  }, 5);
                 }
-                $$$.types = tabs;
-                setTimeout(function(){
-                  $$$.selectedType = def || false;
-                }, 5);
               },
               selectDir: function(){
                 var $$$ = this;
+                bbn.fn.popup('<div class="tree appui-h-100" />', 'Select directory', 300, 500, function(w){
+                  w.addClass("bbn-ide-selectdir");
+                  $("div:first", w).fancytree({
+                    source: function(e, d){
+                      return $$.treeLoad(d, true, $$$.selectedType);
+                    },
+                    lazyLoad: function(e, d){
+                      d.result = $$.treeLoad(d, true, $$$.selectedType);
+                    },
+                    renderNode: function(e, d){
+                      if ( d.node.data.bcolor ){
+                        $("span.fancytree-custom-icon", d.node.span).css("color", d.node.data.bcolor);
+                      }
+                    },
+                    activate: function(e, d){
+                      $$$.path = d.node.data.path + '/';
+                      $$$.close();
+                    }
+                  });
+                });
 
               },
               setRoot: function(){
-                var $$$ = this;
-                $("input[name=path]", $$$.$el).val('./');
+                this.path = './'
               },
               close: function(){
                 bbn.fn.closePopup();
@@ -758,38 +841,80 @@ bbn.ide = new Vue({
                 if ( $$$.isFile && (t !== o) ){
                   $$$.extensions = [];
                   if ( $$.repositories[$$.currentRep].tabs[t] && $$.repositories[$$.currentRep].tabs[t].extensions ){
-                    $$$.extensions = $.map($$.repositories[$$.currentRep].tabs[t].extensions, function(ex){
-                      if ( ex.ext ){
-                        return {text: '.' + ex.ext, value: ex.ext};
-                      }
-                    });
-                  }
-                  if ( $$$.extensions && $$$.extensions.length ){
-                    setTimeout(function(){
-                      $$$.selectedExt = $$$.extensions[0].value;
-                    }, 5);
+                    $$$.setExtensions($$.repositories[$$.currentRep].tabs[t].extensions);
                   }
                 }
               }
             },
             mounted: function(){
-              var $$$ = this;
-              bbn.fn.analyzeContent($$$.$el);
-              bbn.fn.redraw($$$.$el, true);
-              // Set path
-              if ( $$$.path && $$$.path.length ){
-                $("input[name=path]", $$$.$el).val($$$.path);
+              var $$$ = this,
+                  def,
+                  tabs = [];
+              if ( $$.currentRep && $$.repositories && $$.repositories[$$.currentRep] ){
+                bbn.fn.analyzeContent($$$.$el);
+                bbn.fn.redraw($$$.$el, true);
+                if ( $$.isMVC() ){
+                  tabs = $.map($$.repositories[$$.currentRep].tabs, function(t){
+                    if ( t.fixed === undefined ){
+                      if ( t.default && ( t.url !== $$$.selectedType) ){
+                        def = t.url;
+                      }
+                      return {text: t.title, value: t.url};
+                    }
+                  });
+                  $$$.types = tabs;
+                  setTimeout(function(){
+                    $$$.selectedType = def || false;
+                  }, 5);
+                }
+                else if ( $$.repositories[$$.currentRep].extensions ){
+                  $$$.setExtensions($$.repositories[$$.currentRep].extensions);
+                }
+                $($$$.$refs.new_form.$el).on('submit', function(e){
+                  e.preventDefault();
+                  e.stopImmediatePropagation();
+                  if ( $$.currentRep &&
+                    $$.repositories &&
+                    $$.repositories[$$.currentRep] &&
+                    $$.repositories[$$.currentRep].bbn_path &&
+                    $$.repositories[$$.currentRep].path &&
+                    $$$.name &&
+                    $$$.path
+                  ){
+                    bbn.fn.post($$.root + 'actions/create',
+                      $.extend({}, $$.makeActionData($$.currentRep, $$$.selectedType), {
+                      extension: $$$.selectedExt,
+                      name: $$$.name,
+                      path: $$$.path,
+                      default_text: $$.getDefaultText($$$.selectedExt, $$$.selectedType),
+                      is_file: $$$.isFile
+                    }), function(d){
+                      if ( d.success ){
+                        $$$.close();
+                      }
+                    });
+                  }
+                });
               }
-              $$$.tabsTypes();
             }
           });
       });
     },
 
+    /**
+     * Opens a dialog for create a new file
+     *
+     * @param string path The current path
+     */
     newFile: function(path){
       this.new('New File', true, path);
     },
 
+    /**
+     * Opens a dialog for create a new directory
+     *
+     * @param string path The current path
+     */
     newDir: function(path){
       this.new('New Directory', false, path);
     },
@@ -984,7 +1109,7 @@ bbn.ide = new Vue({
     },
 
     /** ###### HISTORY ###### */
-    history: function(){
+    /*history: function(){
       var obj = bbn.ide.tabstrip.tabNav("getObs"),
         // tab config
         hist = {
@@ -1136,7 +1261,7 @@ bbn.ide = new Vue({
           appui.notification.success("History cleared!");
         }
       });
-    },
+    },*/
 
   },
   mounted: function(){
@@ -1218,7 +1343,6 @@ bbn.ide = new Vue({
       },
       activate: function(e, d){
         if ( !d.node.folder ){
-          bbn.fn.log(d.node.data);
           $$.addFileTab($$.$refs.tabstrip, d.node.data);
         }
       }

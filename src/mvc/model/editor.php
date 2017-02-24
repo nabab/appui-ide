@@ -3,9 +3,9 @@
 if ( isset($model->data['routes'], $model->inc->ide) ){
 
   $res = [
-    'default_dir' => $model->inc->session->has('ide', 'dir') ?
-      $model->inc->session->get('ide', 'dir') : 'BBN_APP_PATH/mvc/',
-    'dirs' => $model->inc->ide->dirs()
+    'default_repository' => $model->inc->session->has('ide', 'repository') ?
+      $model->inc->session->get('ide', 'repository') : 'BBN_APP_PATH/mvc/',
+    'repositories' => $model->inc->ide->repositories()
   ];
 
   return $res;
