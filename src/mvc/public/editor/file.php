@@ -12,7 +12,7 @@ if ( isset($ctrl->inc->ide) && isset($ctrl->post['tab']) ){
   echo $ctrl
     ->add_js($ctrl->inc->ide->load($ctrl->post))
     ->get_view();
-  $ctrl->obj->url = $ctrl->post['tab'];
+  $ctrl->obj->url = $ctrl->post['tab'] ?: 'code';
 }
 
 

@@ -266,12 +266,14 @@ bbn.ide = new Vue({
     /** ###### TREE ###### */
 
     /**
-     * Loads tree data
+     * Loads files|folders tree data
      *
-     * @param n The tree node
+     * @param object n The tree node
+     * @param bool onlyDirs Set true if you want to get only folders
+     * @param string tab The tab's name (MVC)
      * @returns {*}
      */
-    treeLoad: function(n, onlyDirs, tab){
+    treeLoad: function(e, n, onlyDirs, tab){
       var $$ = this;
       return bbn.fn.post($$.root + "tree/", {
         repository: $$.currentRep,
@@ -325,6 +327,42 @@ bbn.ide = new Vue({
       return hasVisibleChildren;
     },
 
+    /**
+     * Callback function triggered when an files|folders tree item is rendered
+     * @param e
+     * @param d
+     */
+    treeRenderNode: function(e, d){
+      if ( d.node.data.bcolor ){
+        $("span.fancytree-custom-icon", d.node.span).css("color", d.node.data.bcolor);
+      }
+    },
+
+    /**
+     * Callback function triggered when you click on an item on the files|folders tree
+     *
+     * @param id
+     * @param d The node data
+     * @param n The node
+     */
+    treeNodeActivate: function(id, d, n){
+      var $$ = this;
+      if ( !n.folder ){
+        $$.addFileTab($$.$refs.tabstrip, d);
+      }
+    },
+
+    /**
+     * Callback function triggered when you expand a files|folders tree node
+     *
+     * @param e
+     * @param d
+     */
+    treeLazyLoad: function(e, d){
+      var $$ = this;
+      d.result = $$.treeLoad(e, d);
+    },
+
 
     /** ###### TAB ###### */
 
@@ -357,7 +395,6 @@ bbn.ide = new Vue({
     addFileTab: function(tabnav, file){
       var $$ = this,
           url = 'file/' + $$.currentRep + (file.dir || '') + file.name;
-      bbn.fn.log('url',url);
       $(tabnav).tabNav("navigate", {
         title: '<span title="' + (file.dir || '') + file.name + '">' + file.name + '</span>',
         content: '<div class="appui-full-height"></div>',
@@ -807,10 +844,10 @@ bbn.ide = new Vue({
                   w.addClass("bbn-ide-selectdir");
                   $("div:first", w).fancytree({
                     source: function(e, d){
-                      return $$.treeLoad(d, true, $$$.selectedType);
+                      return $$.treeLoad(e, d, true, $$$.selectedType);
                     },
                     lazyLoad: function(e, d){
-                      d.result = $$.treeLoad(d, true, $$$.selectedType);
+                      d.result = $$.treeLoad(e, d, true, $$$.selectedType);
                     },
                     renderNode: function(e, d){
                       if ( d.node.data.bcolor ){
@@ -1267,7 +1304,7 @@ bbn.ide = new Vue({
   mounted: function(){
     var $$ = this;
     // Splitter top/bottom for menu
-    $("div.bbn-ide-container", ele).kendoSplitter({
+    $("div.bbn-ide-container", $($$.$el)).kendoSplitter({
       orientation: "vertical",
       panes: [
         {collapsible: false, resizable: false, size: 40},
@@ -1276,7 +1313,7 @@ bbn.ide = new Vue({
     });
 
     // Splitter left/right for tree
-    $("div.bbn-code-container", ele).kendoSplitter({
+    $("div.bbn-code-container", $($$.$el)).kendoSplitter({
       orientation: "horizontal",
       panes: [
         {collapsible: true, resizable: true, size: 200},
@@ -1286,14 +1323,13 @@ bbn.ide = new Vue({
     });
 
     // Toolbar with buttons and menu
-    $("div.appui-ide", ele).kendoToolBar({
+    $("div.appui-ide", $($$.$el)).kendoToolBar({
       items: [{
         template: '<input class="k-textbox ide-tree-search" type="text" placeholder="Search file">'
-        //template: '<bbn-input :value="searchFile">'
       }, {
         type: "separator"
       }, {
-        template: '<input class="ide-rep-select" style="width: 300px">'
+        template: '<input class="ide-rep-select">'
       }, {
         type: "separator"
       }, {
@@ -1316,41 +1352,20 @@ bbn.ide = new Vue({
     });
 
     // Menu inside toolbar
-    $("ul.menu", ele).kendoMenu({
+    $("ul.menu", $($$.$el)).kendoMenu({
       direction: "bottom right"
     }).find("a").on("mouseup", function(){
       $(this).closest("ul.menu").data("kendoMenu").close();
     });
 
     // Search field
-    $("input.ide-tree-search", ele).on('keyup', function(){
+    $("input.ide-tree-search", $($$.$el)).on('keyup', function(){
       $$.searchFile = $(this).val();
       $$.filterTree(treeDS, $(this).val().toString().toLowerCase(), "name");
     });
 
-    // TreeView
-    $$.tree = $("div.tree", ele).fancytree({
-      source: function(e, d){
-        return $$.treeLoad(d);
-      },
-      lazyLoad: function(e, d){
-        d.result = $$.treeLoad(d);
-      },
-      renderNode: function(e, d){
-        if ( d.node.data.bcolor ){
-          $("span.fancytree-custom-icon", d.node.span).css("color", d.node.data.bcolor);
-        }
-      },
-      activate: function(e, d){
-        if ( !d.node.folder ){
-          $$.addFileTab($$.$refs.tabstrip, d.node.data);
-        }
-      }
-    });
-    $$.treeFT = $$.tree.fancytree('getTree');
-
     // Repositories dropDownList
-    $$.repSelect = $("input.ide-rep-select", ele).kendoDropDownList({
+    $$.repSelect = $("input.ide-rep-select", $($$.$el)).kendoDropDownList({
       dataSource: [],
       dataTextField: "text",
       dataValueField: "value",
@@ -1364,7 +1379,7 @@ bbn.ide = new Vue({
         }
         if ( $$.currentRep !== e.sender.value() ){
           $$.currentRep = e.sender.value();
-          $$.treeFT.reload();
+          $$.$refs.filesList.widget.reload();
         }
       }
     }).data("kendoDropDownList");
@@ -1473,9 +1488,8 @@ bbn.ide = new Vue({
     // tabNav initialization
     $$.mkTabNav($($$.$refs.tabstrip), $$.root + 'editor/', 'IDE - ');
 
-    /*
     // Function triggered when closing tabs: confirm if unsaved
-    appui.tabnav.ele.tabNav("set", "close", function(){
+    /*$($$.$refs.tabstrip).tabNav("set", "close", function(){
       var conf = false;
       $(".ui-codemirror").each(function(){
         if ( $(this).codemirror("isChanged") ){
@@ -1486,7 +1500,6 @@ bbn.ide = new Vue({
         return confirm($.ui.codemirror.confirmation);
       }
       return 1;
-    }, $$.root + 'editor');
-*/
-  },
+    }, $$.root + 'editor');*/
+  }
 });

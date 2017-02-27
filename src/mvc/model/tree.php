@@ -52,7 +52,7 @@ if ( !empty($model->data['repository']) &&
   // List of files
   $files = [];
 
-  $get = function($real, $color) use(&$folders, &$files, $onlydirs, $cur_path, $file_check, $excluded){
+  $get = function($real, $color, $tab = 'code') use(&$folders, &$files, $onlydirs, $cur_path, $file_check, $excluded){
     if ( !empty($real) && file_exists($real) ){
       $todo = !empty($onlydirs) ? \bbn\file\dir::get_dirs($real) : \bbn\file\dir::get_files($real, true);
       foreach ( $todo as $t ){
@@ -80,7 +80,8 @@ if ( !empty($model->data['repository']) &&
           'icon' => $is_file ? "$ext-icon" : "folder-icon",
           'bcolor' => $color,
           'folder' => empty($is_file),
-          'lazy' => empty($is_file) && ( (empty($onlydirs) && !empty(\bbn\file\dir::get_files($t, true))) || (!empty($onlydirs) && !empty(\bbn\file\dir::get_dirs($t))))
+          'lazy' => empty($is_file) && ( (empty($onlydirs) && !empty(\bbn\file\dir::get_files($t, true))) || (!empty($onlydirs) && !empty(\bbn\file\dir::get_dirs($t)))),
+          'tab' => $tab
         ];
         if ( $is_file && !array_key_exists($name, $files) ){
           $files[$name] = $cfg;
@@ -99,7 +100,7 @@ if ( !empty($model->data['repository']) &&
       if ( ($i !== '_ctrl') && !empty($t['path']) &&
         ( empty($model->data['tab']) || (!empty($model->data['tab']) && ($model->data['tab'] === $i)) )
       ){
-        $get($path . $t['path'] . $cur_path, $t['bcolor']);
+        $get($path . $t['path'] . $cur_path, $t['bcolor'], $t['url']);
       }
     }
   }
