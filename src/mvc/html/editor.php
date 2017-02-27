@@ -2,7 +2,7 @@
 <div class="bbn-ide-container appui-h-100">
   <div class="pane-content appui-ide"></div>
   <div class="pane-content bbn-code-container appui-full-height">
-    <div class="pane-content tree appui-h-100"></div>
+    <bbn-tree class="pane-content tree appui-h-100" :source="treeLoad" :select="treeNodeActivate" :cfg="{renderNode: treeRenderNode, lazyLoad: treeLazyLoad}" ref="filesList"></bbn-tree>
     <div class="pane-content appui-h-100" style="padding:0px">
       <div style="position: absolute; top: auto; left: auto; margin: 50%; text-align: center">
         <i class="fa fa-code"></i>
