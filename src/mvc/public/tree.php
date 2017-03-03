@@ -1,18 +1,10 @@
 <?php
 /** @var $ctrl \bbn\mvc\controller */
-// Non mandatory, thew path to explore
-if ( isset($ctrl->post['dir']) ){
-  $ctrl->data['dir'] = $ctrl->post['dir'];
-}
-else if ( isset($ctrl->post['mode']) ){
-  $ctrl->data['dir'] = $ctrl->post['mode'];
-  $ctrl->data['onlydir'] = $ctrl->post['onlydir'];
-}
-if ( isset($ctrl->data['dir']) ){
-  if ( isset($ctrl->post['path']) ){
-    $ctrl->data['path'] = $ctrl->post['path'];
-  }
-  $ctrl->data['routes'] = $ctrl->get_routes();
+if ( !empty($ctrl->post['repository']) &&
+  !empty($ctrl->post['repository_cfg']) &&
+  isset($ctrl->post['onlydirs'], $ctrl->post['tab'])
+){
+  $ctrl->data = \bbn\x::merge_arrays($ctrl->data, $ctrl->post);
   $ctrl->obj->data = $ctrl->get_model();
-  $ctrl->inc->session->set($ctrl->data['dir'], 'ide', 'dir');
+  $ctrl->inc->session->set($ctrl->data['repository'], 'ide', 'repository');
 }

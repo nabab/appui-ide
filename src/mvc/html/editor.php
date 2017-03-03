@@ -2,7 +2,7 @@
 <div class="bbn-ide-container appui-h-100">
   <div class="pane-content appui-ide"></div>
   <div class="pane-content bbn-code-container appui-full-height">
-    <div class="pane-content tree appui-h-100"></div>
+    <bbn-tree class="pane-content tree appui-h-100" :source="treeLoad" :select="treeNodeActivate" :cfg="{renderNode: treeRenderNode, lazyLoad: treeLazyLoad}" ref="filesList"></bbn-tree>
     <div class="pane-content appui-h-100" style="padding:0px">
       <div style="position: absolute; top: auto; left: auto; margin: 50%; text-align: center">
         <i class="fa fa-code"></i>
@@ -15,32 +15,32 @@
   </div>
 </div>
 
-<script type="text/x-kendo-template" id="ide_new_template">
-  <form method="post" autocomplete="off">
-    <input type="hidden" name="type">
-    <input type="hidden" name="dir">
+<script type="text/x-template" id="ide_new_template">
+  <bbn-form ref="new_form">
+    <div class="appui-form-label mvc-ele" v-if="isMVC()">Type</div>
+    <div class="appui-form-field mvc-ele" v-if="isMVC()">
+      <bbn-dropdown class="appui-full-width" ref="types" :source="types" v-model="selectedType" name="tab" required="required"></bbn-dropdown>
+    </div>
     <div class="appui-form-label">Name</div>
     <div class="appui-form-field">
-      <input type="text" name="name" class="k-textbox" required="required">
+      <bbn-input type="text" name="name" v-model="name" class="appui-full-width" required="required"></bbn-input>
+      <bbn-dropdown ref="ext" :source="extensions" v-model="selectedExt" name="ext" required="required" style="width: 100px" v-if="isFile"></bbn-dropdown>
     </div>
     <div class="appui-form-label">Path</div>
     <div class="appui-form-field">
-      <input type="text" name="path" class="k-textbox" readonly="readonly" required>
-      <button class="k-button" onclick="bbn.ide.selectDir(); return false;">Browse</button>
-      <button class="k-button" onclick="$(this).prevAll('input').val('./'); return false;">Root</button>
+      <bbn-input class="appui-full-width" type="text" name="path" v-model="path" readonly="readonly" required="required"></bbn-input>
+      <div style="float: left">
+        <bbn-button @click="selectDir">Browse</bbn-button>
+        <bbn-button @click="setRoot">Root</bbn-button>
+      </div>
     </div>
     <div class="appui-form-label"></div>
     <div class="appui-form-field" style="text-align: right">
-      <button class="k-button" type="submit">
-        <i class="fa fa-check"> </i> Save
-      </button>
-      <button class="k-button" type="button" onclick="bbn.fn.closePopup();">
-        <i class="fa fa-close"> </i> Cancel
-      </button>
+      <bbn-button type="submit" icon="fa fa-check"> Save</bbn-button>
+      <bbn-button @click="close" icon="fa fa-close"> Cancel</bbn-button>
     </div>
-  </form>
+  </bbn-form>
 </script>
-
 
 <script type="text/x-kendo-template" id="ide_rename_template">
   <form method="post">

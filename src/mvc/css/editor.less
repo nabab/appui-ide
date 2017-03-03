@@ -3,6 +3,8 @@
 div.CodeMirror {
   font-size: small;
   font-family: Inconsolata;
+  border: none;
+  padding: 0;
   .cm-js, .cm-php, .cm-html {
     color: #0ca;
   }
@@ -18,12 +20,34 @@ div.CodeMirror {
 }
 
 div.bbn-ide-container {
+  overflow: hidden;
+  height: 100%;
   div.k-splitbar-vertical {
     border: 0;
   }
+  div.k-treeview{
+    padding-left: 10px;
+  }
+  div.appui-ide {
+    overflow: visible;
+    z-index: 11
+  }
+  ul.menu {
+    overflow: visible;
+    z-index: 11
+  }
+  ul.k-tabstrip-items > li.k-item > span.k-link:after {
+    content: " ";
+  }
+  ul.k-tabstrip-items > li.k-item.changed > span.k-link:after {
+    content: "*";
+  }
+  .ide-rep-select {
+    width: 300px;
+  }
 }
 
-div.bbn-ide-container, div.appui-logger {
+div.bbn-ide-container, div.appui-logger, bbn-ide-selectdir {
   .treeInlineEdit > input {
     font-size: 1.5em;
     min-width: 10em;
@@ -70,7 +94,7 @@ div.bbn-ide-container, div.appui-logger {
     }
     .html-icon:before {
       .fa;
-      content: "\f12b";
+      content: "\f13b";
     }
     .js-icon:before {
       .mf;
@@ -120,27 +144,6 @@ div.bbn-ide-container, div.appui-logger {
   div.k-content{
     margin: 0 !important;
     padding: 0 !important;
-  }
-}
-div.bbn-ide-container {
-  overflow: hidden;
-  height: 100%;
-  div.k-treeview{
-    padding-left: 10px;
-  }
-  div.appui-ide {
-    overflow: visible;
-    z-index: 11
-  }
-  ul.menu {
-    overflow: visible;
-    z-index: 11
-  }
-  ul.k-tabstrip-items > li.k-item > span.k-link:after {
-    content: " ";
-  }
-  ul.k-tabstrip-items > li.k-item.changed > span.k-link:after {
-    content: "*";
   }
 }
 

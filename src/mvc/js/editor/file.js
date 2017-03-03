@@ -10,12 +10,6 @@ if ( (bbn.ide !== undefined) &&
   (data.mode !== undefined) &&
   (data.value !== undefined)
 ){
-  /*var subTab = $(bbn.ide.$refs.tabstrip).tabNav('getSubTabNav', 'file/' + data.repository + data.file.path + data.file.name);
-  if ( subTab.length ){
-    $(subTab).tabNav('addData', {
-      file: data.file,
-      mode: data.mode
-    }, (data.tab || 'code'));
-  }*/
+  bbn.fn.log(data.value, data.mode);
   bbn.ide.mkCodeMirror(ele, data);
 }

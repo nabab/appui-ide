@@ -37,7 +37,7 @@ class ide {
     $options,
     /** @var null|string The last error recorded by the class */
     $last_error,
-    /** @var array MVC routes for linking with dirs */
+    /** @var array MVC routes for linking with repositories */
     $routes = [],
     /** @var \bbn\user\preferences $pref */
     $pref;
@@ -163,11 +163,11 @@ class ide {
     }
     if ( empty($bbn_path) && !empty($file) ){
       $url = self::real_to_url($file);
-      $dir = self::dir(self::dir_from_url($url));
-      if ( !empty($dir) &&
-        defined($dir['bbn_path'])
+      $repository = self::repository(self::repository_from_url($url));
+      if ( !empty($repository) &&
+        defined($repository['bbn_path'])
       ){
-        $bbn_path = $dir['bbn_path'];
+        $bbn_path = $repository['bbn_path'];
       }
     }
     if ( !empty($file) &&
@@ -259,12 +259,12 @@ class ide {
   }
 
   /**
-   * Make dirs' configurations
+   * Make repositories' configurations
    *
-   * @param string|bool $code The dir's name (code)
+   * @param string|bool $code The repository's name (code)
    * @return array|bool
    */
-  public function dirs($code=false){
+  public function repositories($code=false){
     $all = $this->options->full_soptions(self::_dev_path());
     $cats = [];
     $r = [];
@@ -296,32 +296,32 @@ class ide {
   }
 
   /**
-   * Gets a dir's configuration
+   * Gets a repository's configuration
    *
-   * @param string $code The dir's name (code)
+   * @param string $code The repository's name (code)
    * @return array|bool
    */
-  public function dir($code){
-    return $this->dirs($code);
+  public function repository($code){
+    return $this->repositories($code);
   }
 
   /**
-   * Returns the dir's name from an URL
+   * Returns the repository's name from an URL
    *
    * @param string $url
    * @return bool|int|string
    */
-  public function dir_from_url($url){
-    $dir = false;
-    foreach ( $this->dirs() as $i => $d ){
+  public function repository_from_url($url){
+    $repository = false;
+    foreach ( $this->repositories() as $i => $d ){
       if ( (strpos($url, $i) === 0) &&
-        (strlen($i) > strlen($dir) )
+        (strlen($i) > strlen($repository) )
       ){
-        $dir = $i;
+        $repository = $i;
         break;
       }
     }
-    return $dir;
+    return $repository;
   }
 
   /**
@@ -346,18 +346,18 @@ class ide {
   }
 
   /**
-   * Gets the real root path from a directory's id as recorded in the options.
+   * Gets the real root path from a repository's id as recorded in the options.
    *
-   * @param string|array $dir The dir's name (code) or the dir's configuration
+   * @param string|array $repository The repository's name (code) or the repository's configuration
    * @return bool|string
    */
-  public function get_root_path($dir){
-    if ( is_string($dir) ){
-      $dir = $this->dir($dir);
+  public function get_root_path($repository){
+    if ( is_string($repository) ){
+      $repository = $this->repository($repository);
     }
-    if ( !empty($dir) && !empty($dir['bbn_path']) ){
-      $dir_path = !empty($dir['path']) ? '/' . $dir['path'] : '';
-      $path = $this->decipher_path(bbn\str::parse_path($dir['bbn_path'] . $dir_path)) . '/';
+    if ( !empty($repository) && !empty($repository['bbn_path']) ){
+      $repository_path = !empty($repository['path']) ? '/' . $repository['path'] : '';
+      $path = $this->decipher_path(bbn\str::parse_path($repository['bbn_path'] . $repository_path)) . '/';
       return bbn\str::parse_path($path);
     }
     return false;
@@ -416,6 +416,34 @@ class ide {
       return $f;
     }
     self::reset_current();
+    return false;
+  }
+
+  public function get_directory_cfg($dir){
+    if ( !empty($dir['repository']) &&
+      !empty($dir['bbn_path']) &&
+      !empty($dir['rep_path'])
+    ){
+      $path = $this->decipher_path($dir['bbn_path'] . '/' . $dir['rep_path']);
+      if ( !empty($dir['tab_path']) ){
+        $path .= $dir['tab_path'];
+      }
+      if ( !empty($dir['path']) ){
+        $path .= $dir['path'];
+      }
+      return [
+        'repository' => $dir['repository'],
+        'bbn_path' => $dir['bbn_path'],
+        'rep_path' => $dir['rep_path'],
+        'directory' => [
+          'path' => $dir['path'] ?: '',
+          'name' => $dir['name'] ?: '',
+          'full_path' => $path
+        ],
+        'tab' => $dir['tab'] ?: false,
+        'tab_path' => $dir['tab_path'] ?: ''
+      ];
+    }
     return false;
   }
 
@@ -479,6 +507,9 @@ class ide {
       else if ( !is_dir(dirname(self::$current_file)) ){
         bbn\file\dir::create_path(dirname(self::$current_file));
       }
+      if ( ($file['tab'] === 'php') && !is_file(self::$current_file) ){
+        /** @todo create permission */
+      }
       file_put_contents(self::$current_file, $file['code']);
       if ( $this->pref ){
         $this->set_file_preferences(md5($file['code']), $file);
@@ -486,6 +517,66 @@ class ide {
       return ['success' => true];
     }
     return $this->error('Error: Save');
+  }
+
+  /**
+   * Creates a new file|directory
+   *
+   * @param array $cfg
+   * @return bool
+   */
+  public function create(array $cfg){
+    if ( !empty($cfg['repository']) &&
+      !empty($cfg['bbn_path']) &&
+      !empty($cfg['rep_path']) &&
+      !empty($cfg['name']) &&
+      !empty($cfg['path']) &&
+      isset($cfg['is_file'], $cfg['extension'], $cfg['default_text'])
+    ){
+      $path = $this->decipher_path($cfg['bbn_path'] . '/' . $cfg['rep_path']);
+      if ( !empty($cfg['tab_path']) ){
+        $path .= $cfg['tab_path'];
+      }
+      if ( $cfg['path'] !== './' ){
+        $path .= $cfg['path'];
+      }
+      if ( empty($cfg['is_file']) ){
+        if ( is_dir($path.$cfg['name']) ){
+          $this->error("Directory exists");
+          return false;
+        }
+        if ( !\bbn\file\dir::create_path($path.$cfg['name']) ){
+          $this->error("Impossible to create the directory");
+          return false;
+        }
+      }
+      else if ( !empty($cfg['is_file']) && !empty($cfg['extension']) && !empty($cfg['default_text']) ){
+        $file = $path . $cfg['name'] . '.' . $cfg['extension'];
+        if ( !is_dir($path) && !\bbn\file\dir::create_path($path) ){
+          $this->error("Impossible to create the container directory");
+          return false;
+        }
+        if ( is_dir($path) ){
+          if ( is_file($file) ){
+            $this->error("File exists");
+            return false;
+          }
+          if ( !file_put_contents($file, $cfg['default_text']) ){
+            $this->error("Impossibile to create the file");
+            return false;
+          }
+        }
+        /** @todo create permission */
+        // Add item to options table for permissions
+        /*if ( !empty($cfg['tab']) && ($cfg['tab'] === 'php') ){
+          if ( !$this->create_perm_by_real($file) ){
+            return $this->error("Impossible to create the option");
+          }
+        }*/
+      }
+      return true;
+    }
+    return false;
   }
 
   /**
@@ -664,8 +755,8 @@ class ide {
    * @return bool|string
    */
   public function real_to_url(string $file){
-    foreach ( $this->dirs() as $i => $d ){
-      // Dir's root path (directories)
+    foreach ( $this->repositories() as $i => $d ){
+      // Repository's root path
       $root = $this->get_root_path($d);
       if ( strpos($file, $root) === 0 ){
         $res = $i . '/';
