@@ -451,7 +451,7 @@ bbn.ide = {
       type: dataItem.type,
       act: 'export'
     }, function(d){
-      appui.notification.success("Exported!");
+      appui.success("Exported!");
     });
   },
   
@@ -683,10 +683,10 @@ bbn.ide = {
         code: state.value
       }, function(d){
         if ( d.success ){
-          appui.notification.success("File saved!");
+          appui.success("File saved!");
         }
         else if ( d.deleted ){
-          appui.notification.success("File deleted!");
+          appui.success("File deleted!");
         }
       });
       return 1;
@@ -1303,7 +1303,7 @@ bbn.ide = {
       url: bbn.ide.tabstrip.tabNav("getObs").url
     }, function(d){
       if ( d.data.success !== undefined ){
-        appui.notification.success("History cleared!");
+        appui.success("History cleared!");
       }
     });
   },
@@ -1311,7 +1311,7 @@ bbn.ide = {
   historyClearAll: function(){
     bbn.fn.post(data.root + 'history/clear', {}, function(d){
       if ( d.data.success !== undefined ){
-        appui.notification.success("History cleared!");
+        appui.success("History cleared!");
       }
     });
   },
@@ -1645,7 +1645,7 @@ bbn.ide = {
             if ($(d.container).find(".k-grid-edit-row").length) {
               ele.preventDefault();
               ele.stopPropagation();
-              appui.notification.warning("Save or cancel the row's setting.");
+              appui.warning("Save or cancel the row's setting.");
             }
           });
         }

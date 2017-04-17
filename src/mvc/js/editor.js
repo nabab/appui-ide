@@ -778,10 +778,10 @@ bbn.ide = new Vue({
           code: state.value
         }), function(d){
           if ( d.success ){
-            appui.notification.success("File saved!");
+            appui.success("File saved!");
           }
           else if ( d.deleted ){
-            appui.notification.success("File deleted!");
+            appui.success("File deleted!");
           }
         });
         return 1;
@@ -1287,7 +1287,7 @@ bbn.ide = new Vue({
         url: bbn.ide.tabstrip.tabNav("getObs").url
       }, function(d){
         if ( d.data.success !== undefined ){
-          appui.notification.success("History cleared!");
+          appui.success("History cleared!");
         }
       });
     },
@@ -1295,7 +1295,7 @@ bbn.ide = new Vue({
     historyClearAll: function(){
       bbn.fn.post(data.root + 'history/clear', {}, function(d){
         if ( d.data.success !== undefined ){
-          appui.notification.success("History cleared!");
+          appui.success("History cleared!");
         }
       });
     },*/

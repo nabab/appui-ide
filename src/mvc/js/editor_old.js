@@ -342,11 +342,11 @@ appui.tabnav.ele.tabNav("set", "close", function (){
 }, data.root + 'editor');
 
 /*
-bbn.app.tabstrip.ele.tabNav("addCallback", function(cont){
+appui.tabstrip.ele.tabNav("addCallback", function(cont){
   bbn.ide.resize(cont);
 }, bbn.ide.tabstrip);
 
-bbn.app.tabstrip.ele.tabNav("addResize", function(cont){
+appui.tabstrip.ele.tabNav("addResize", function(cont){
   setTimeout(function () {
     bbn.ide.resize(cont);
   }, 1000);
