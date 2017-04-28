@@ -1,124 +1,124 @@
+bbn.vue.setComponentRule(data.root + 'components/', 'bbn');
+bbn.vue.addComponent('editor/child_permissions');
+bbn.vue.addComponent('editor/history');
+bbn.vue.addComponent('editor/new');
+bbn.vue.addComponent('editor/permissions');
+bbn.vue.addComponent('editor/rename');
+
+if ( data.repositories ){
+  $.each(data.repositories, function (i, a){
+    a.value = i;
+  });
+}
 bbn.ide = new Vue({
-  el: '.bbn-ide-container',
+  el: $('.bbn-ide-container', ele)[0],
   data: $.extend({}, data, {
     selected: 0,
     url: data.root + 'editor',
-    editor: $(ele),
-    //tabstrip: $("#tabstrip_editor", $(ele)),
     searchFile: '',
-    menu: [{
-      text: 'File',
-      items: [{
-        text: '<i class="fa fa-plus"></i>New',
+    menu: [
+      {
+        text: 'File',
         items: [{
-          text: '<i class="fa fa-file-o"></i>File',
-          function: "bbn.ide.newFile();"
+          text: '<i class="fa fa-plus"></i>New',
+          items: [{
+            text: '<i class="fa fa-file-o"></i>File',
+            select: "bbn.ide.newFile();"
+          }, {
+            text: '<i class="fa fa-folder"></i>Directory',
+            select: "bbn.ide.newDir();"
+          }]
         }, {
-          text: '<i class="fa fa-folder"></i>Directory',
-          function: "bbn.ide.newDir();"
+          text: '<i class="fa fa-save"></i>Save',
+          select: "bbn.ide.save();"
+        }, {
+          text: '<i class="fa fa-trash-o"></i>Delete'
+        }, {
+          text: '<i class="fa fa-times-circle"></i>Close',
+          select: "bbn.ide.tabstrip.tabNav('close');"
+        }, {
+          text: '<i class="fa fa-times-circle-o"></i>Close all tabs',
+          select: "bbn.ide.tabstrip.tabNav('closeAll');"
         }]
       }, {
-        text: '<i class="fa fa-save"></i>Save',
-        function: "bbn.ide.save();"
+        text: 'Edit',
+        items: [{
+          text: '<i class="fa fa-search"></i>Find <small>CTRL+F</small>',
+          select: "bbn.ide.search();"
+        }, {
+          text: '<i class="fa fa-search-plus"></i>Find next <small>CTRL+G</small>',
+          select: "bbn.ide.findNext();"
+        }, {
+          text: '<i class="fa fa-search-minus"></i>Find previous <small>SHIFT+CTRL+G</small>',
+          select: "bbn.ide.findPrev();"
+        }, {
+          text: '<i class="fa fa-exchange"></i>Replace <small>SHIFT+CTRL+F</small>',
+          select: "bbn.ide.replace();"
+        }, {
+          text: '<i class="fa fa-retweet"></i>Replace All <small>SHIFT+CTRL+R</small>',
+          select: "bbn.ide.replaceAll();"
+        }]
       }, {
-        text: '<i class="fa fa-trash-o"></i>Delete'
+        text: 'History',
+        items: [{
+          text: '<i class="fa fa-history"></i>Show',
+          select: 'bbn.ide.history();'
+        }, {
+          text: '<i class="fa fa-trash-o"></i>Clear',
+          select: 'bbn.ide.historyClear();'
+        }, {
+          text: '<i class="fa fa-trash"></i>Clear All',
+          select: 'bbn.ide.historyClearAll();'
+        }]
       }, {
-        text: '<i class="fa fa-times-circle"></i>Close',
-        function: "bbn.ide.tabstrip.tabNav('close');"
-      }, {
-        text: '<i class="fa fa-times-circle-o"></i>Close all tabs',
-        function: "bbn.ide.tabstrip.tabNav('closeAll');"
-      }]
-    }, {
-      text: 'Edit',
-      items: [{
-        text: '<i class="fa fa-search"></i>Find <small>CTRL+F</small>',
-        function: "bbn.ide.search();"
-      }, {
-        text: '<i class="fa fa-search-plus"></i>Find next <small>CTRL+G</small>',
-        function: "bbn.ide.findNext();"
-      }, {
-        text: '<i class="fa fa-search-minus"></i>Find previous <small>SHIFT+CTRL+G</small>',
-        function: "bbn.ide.findPrev();"
-      }, {
-        text: '<i class="fa fa-exchange"></i>Replace <small>SHIFT+CTRL+F</small>',
-        function: "bbn.ide.replace();"
-      }, {
-        text: '<i class="fa fa-retweet"></i>Replace All <small>SHIFT+CTRL+R</small>',
-        function: "bbn.ide.replaceAll();"
-      }]
-    }, {
-      text: 'History',
-      items: [{
-        text: '<i class="fa fa-history"></i>Show',
-        function: 'bbn.ide.history();'
-      }, {
-        text: '<i class="fa fa-trash-o"></i>Clear',
-        function: 'bbn.ide.historyClear();'
-      }, {
-        text: '<i class="fa fa-trash"></i>Clear All',
-        function: 'bbn.ide.historyClearAll();'
-      }]
-    }, {
-      text: 'Doc.',
-      items: [{
-        text: '<i class="fa fa-binoculars"></i>Find'
-      }, {
-        text: '<i class="fa fa-book"></i>Generate'
-      }]
-    }/*, {
-     text: 'Current',
-     items: [{
-     text: 'Add View'
-     }, {
-     text: 'Add Model'
-     }, {
-     text: 'Remove current'
-     }]
-     }*/, {
-      text: 'Pref.',
-      items: [{
-        text: '<i class="fa fa-cog"></i>Manage directories',
-        function: "bbn.ide.cfgDirs();"
-      }, {
-        text: '<i class="fa fa-language"></i>IDE style',
-        function: "bbn.ide.cfgStyle();"
-      }]
-    }]
+        text: 'Doc.',
+        items: [{
+          text: '<i class="fa fa-binoculars"></i>Find'
+        }, {
+          text: '<i class="fa fa-book"></i>Generate'
+        }]
+      }/*, {
+       text: 'Current',
+       items: [{
+       text: 'Add View'
+       }, {
+       text: 'Add Model'
+       }, {
+       text: 'Remove current'
+       }]
+       }*/, {
+        text: 'Pref.',
+        items: [{
+          text: '<i class="fa fa-cog"></i>Manage directories',
+          select: "bbn.ide.cfgDirs();"
+        }, {
+          text: '<i class="fa fa-language"></i>IDE style',
+          select: "bbn.ide.cfgStyle();"
+        }]
+      }
+    ]
   }),
+  computed: {
+    ddrep: function(){
+      var r = [];
+      $.each(this.repositories, function(i, a){
+        r.push({
+          value: i,
+          text: a.text
+        });
+      });
+      return bbn.fn.order(r, "text");
+    }
+  },
   methods: {
-    /** ###### REPOSITORY ###### */
-
-    /**
-     * Sets the dataSource of the sources dropdown
-     *
-     * @param dirs
-     */
-    repDropDownSource: function(repositories){
-      var $$ = this,
-        r = [];
-      if ( !repositories ){
-        repositories = $$.repositories;
+    tplrep: function(e){
+      bbn.fn.log("tplredp", e);
+      if ( e.value && this.repositories[e.value] ){
+        var cfg = this.repositories[e.value];
+        return '<div style="clear: none; background-color: ' + cfg.bcolor +'; color: ' + cfg.fcolor + '" class="appui-100">' + e.text + '</div>';
       }
-      if ( (repositories.toJSON !== undefined) && $.isFunction(repositories.toJSON) ){
-        repositories = repositories.toJSON();
-      }
-      $.each(repositories, function (i, a) {
-        a.value = i;
-        r.push(a);
-      });
-      $$.repSelect.setDataSource({
-        data: bbn.fn.order(r, 'text', 'asc')
-      });
-      /** @todo WTF * 2  (look until the end of this function!) */
-      if ( !$$.currentRep ){
-        bbn.fn.log("NO VAL");
-      }
-      $$.repSelect.select(function(dataItem){
-        return dataItem.value === $$.currentRep;
-      });
-      $$.repSelect.trigger('change');
     },
+    /** ###### REPOSITORY ###### */
 
     /**
      * Gets the bbn_path property from the current repository
@@ -126,11 +126,11 @@ bbn.ide = new Vue({
      * @returns string|boolean
      */
     getBbnPath: function(){
-      var $$ = this;
-      if ( $$.repositories[$$.currentRep] &&
-        $$.repositories[$$.currentRep].bbn_path
+      var vm = this;
+      if ( vm.repositories[vm.currentRep] &&
+        vm.repositories[vm.currentRep].bbn_path
       ){
-        return $$.repositories[$$.currentRep].bbn_path;
+        return vm.repositories[vm.currentRep].bbn_path;
       }
       return false;
     },
@@ -141,11 +141,11 @@ bbn.ide = new Vue({
      * @returns string|boolean
      */
     getRepPath: function(){
-      var $$ = this;
-      if ( $$.repositories[$$.currentRep] &&
-        $$.repositories[$$.currentRep].path
+      var vm = this;
+      if ( vm.repositories[vm.currentRep] &&
+        vm.repositories[vm.currentRep].path
       ){
-        return $$.repositories[$$.currentRep].path;
+        return vm.repositories[vm.currentRep].path;
       }
       return false;
     },
@@ -158,15 +158,15 @@ bbn.ide = new Vue({
      * @returns string|boolean
      */
     getTabPath: function(tab, rep){
-      var $$ = this;
-      rep = rep || $$.currentRep;
-      if ( tab && $$.repositories[rep] && $$.repositories[rep].tabs ){
+      var vm = this;
+      rep = rep || vm.currentRep;
+      if ( tab && vm.repositories[rep] && vm.repositories[rep].tabs ){
         // Super controller
         if ( tab.indexOf('_ctrl') > -1 ){
           tab = '_ctrl';
         }
-        if ( $$.repositories[rep].tabs[tab] && $$.repositories[rep].tabs[tab].path ){
-          return $$.repositories[rep].tabs[tab].path;
+        if ( vm.repositories[rep].tabs[tab] && vm.repositories[rep].tabs[tab].path ){
+          return vm.repositories[rep].tabs[tab].path;
         }
       }
       return false;
@@ -179,20 +179,20 @@ bbn.ide = new Vue({
      * @returns array|boolean
      */
     getExt: function(rep, tab){
-      var $$ = this;
-      if ( $$.repositories[rep] ){
+      var vm = this;
+      if ( vm.repositories[rep] ){
         // MVC
-        if ( tab && $$.repositories[rep].tabs ){
+        if ( tab && vm.repositories[rep].tabs ){
           // Super controller
           if ( tab.indexOf('_ctrl') > -1 ){
             tab = '_ctrl';
           }
-          if ( $$.repositories[rep].tabs[tab] && $$.repositories[rep].tabs[tab].extensions ){
-            return $$.repositories[rep].tabs[tab].extensions;
+          if ( vm.repositories[rep].tabs[tab] && vm.repositories[rep].tabs[tab].extensions ){
+            return vm.repositories[rep].tabs[tab].extensions;
           }
         }
-        else if ( $$.repositories[rep].extensions ){
-          return $$.repositories[rep].extensions;
+        else if ( vm.repositories[rep].extensions ){
+          return vm.repositories[rep].extensions;
         }
       }
       return false;
@@ -206,20 +206,20 @@ bbn.ide = new Vue({
      * @returns {*}
      */
     getDefaultText: function(ext, tab){
-      var $$ = this;
-      if ( $$.repositories[$$.currentRep] ){
+      var vm = this;
+      if ( vm.repositories[vm.currentRep] ){
         // MVC
-        if ( tab && $$.repositories[$$.currentRep].tabs ){
+        if ( tab && vm.repositories[vm.currentRep].tabs ){
           // Super controller
           if ( tab.indexOf('_ctrl') > -1 ){
             tab = '_ctrl';
           }
-          if ( $$.repositories[$$.currentRep].tabs[tab] && $$.repositories[$$.currentRep].tabs[tab].extensions ){
-            return bbn.fn.get_field($$.repositories[$$.currentRep].tabs[tab].extensions, 'ext', ext, 'default');
+          if ( vm.repositories[vm.currentRep].tabs[tab] && vm.repositories[vm.currentRep].tabs[tab].extensions ){
+            return bbn.fn.get_field(vm.repositories[vm.currentRep].tabs[tab].extensions, 'ext', ext, 'default');
           }
         }
-        else if ( $$.repositories[$$.currentRep].extensions ){
-          return bbn.fn.get_field($$.repositories[$$.currentRep].extensions, 'ext', ext, 'default');
+        else if ( vm.repositories[vm.currentRep].extensions ){
+          return bbn.fn.get_field(vm.repositories[vm.currentRep].extensions, 'ext', ext, 'default');
         }
       }
       return false;
@@ -231,8 +231,8 @@ bbn.ide = new Vue({
      * @returns {boolean}
      */
     isMVC: function(){
-      var $$ = this;
-      return ($$.repositories[$$.currentRep] !== undefined ) && ($$.repositories[$$.currentRep].tabs !== undefined);
+      var vm = this;
+      return (vm.repositories[vm.currentRep] !== undefined ) && (vm.repositories[vm.currentRep].tabs !== undefined);
     },
 
     /**
@@ -243,20 +243,20 @@ bbn.ide = new Vue({
      * @returns {*}
      */
     makeActionData: function(rep, tab){
-      var $$ = this;
+      var vm = this;
       if ( rep &&
-        $$.repositories &&
-        $$.repositories[rep] &&
-        $$.repositories[rep].bbn_path &&
-        $$.repositories[rep].path
+        vm.repositories &&
+        vm.repositories[rep] &&
+        vm.repositories[rep].bbn_path &&
+        vm.repositories[rep].path
       ){
         return {
           repository: rep,
-          bbn_path: $$.repositories[rep].bbn_path,
-          rep_path: $$.repositories[rep].path,
-          tab_path: tab ? $$.getTabPath(tab, rep) : false,
+          bbn_path: vm.repositories[rep].bbn_path,
+          rep_path: vm.repositories[rep].path,
+          tab_path: tab ? vm.getTabPath(tab, rep) : false,
           tab: tab || false,
-          extensions: $$.getExt(rep, tab)
+          extensions: vm.getExt(rep, tab)
         }
       }
       return false;
@@ -274,12 +274,12 @@ bbn.ide = new Vue({
      * @returns {*}
      */
     treeLoad: function(e, n, onlyDirs, tab){
-      var $$ = this;
-      return bbn.fn.post($$.root + "tree/", {
-        repository: $$.currentRep,
-        repository_cfg: $$.repositories[$$.currentRep],
-        is_mvc: $$.isMVC(),
-        filter: $$.searchFile,
+      var vm = this;
+      return bbn.fn.post(vm.root + "tree/", {
+        repository: vm.currentRep,
+        repository_cfg: vm.repositories[vm.currentRep],
+        is_mvc: vm.isMVC(),
+        filter: vm.searchFile,
         path: n.node.data.path || '',
         onlydirs: onlyDirs || false,
         tab: tab || false
@@ -297,7 +297,7 @@ bbn.ide = new Vue({
      * @returns {boolean}
      */
     filterTree: function(dataSource, query, field){
-      var $$ = this,
+      var vm = this,
         hasVisibleChildren = false,
         d = dataSource instanceof kendo.data.HierarchicalDataSource && dataSource.data();
       if ( !field ){
@@ -314,7 +314,7 @@ bbn.ide = new Vue({
             (query === "") ||
             // item text matches query
             (text.indexOf(query) >= 0);
-          var anyVisibleChildren = $$.filterTree(item.children, itemVisible || query, field); // pass true if parent
+          var anyVisibleChildren = vm.filterTree(item.children, itemVisible || query, field); // pass true if parent
           // matches
           hasVisibleChildren = hasVisibleChildren || anyVisibleChildren || itemVisible;
           item.hidden = !itemVisible && !anyVisibleChildren;
@@ -346,9 +346,9 @@ bbn.ide = new Vue({
      * @param n The node
      */
     treeNodeActivate: function(id, d, n){
-      var $$ = this;
+      var vm = this;
       if ( !n.folder ){
-        $$.addFileTab($$.$refs.tabstrip, d);
+        vm.addFileTab(vm.$refs.tabstrip, d);
       }
     },
 
@@ -359,8 +359,8 @@ bbn.ide = new Vue({
      * @param d
      */
     treeLazyLoad: function(e, d){
-      var $$ = this;
-      d.result = $$.treeLoad(e, d);
+      var vm = this;
+      d.result = vm.treeLoad(e, d);
     },
 
 
@@ -393,25 +393,25 @@ bbn.ide = new Vue({
      * @param file
      */
     addFileTab: function(tabnav, file){
-      var $$ = this,
-          url = 'file/' + $$.currentRep + (file.dir || '') + file.name;
+      var vm = this,
+          url = 'file/' + vm.currentRep + (file.dir || '') + file.name;
       $(tabnav).tabNav("navigate", {
         title: '<span title="' + (file.dir || '') + file.name + '">' + file.name + '</span>',
         content: '<div class="appui-full-height"></div>',
         url: url,
         static: false,
         load: false,
-        bcolor: $$.repositories[$$.currentRep].bcolor || false,
-        fcolor: $$.repositories[$$.currentRep].fcolor || false,
+        bcolor: vm.repositories[vm.currentRep].bcolor || false,
+        fcolor: vm.repositories[vm.currentRep].fcolor || false,
         close: function (a, b, c) {
           return bbn.ide.close(a, b, c);
         },
         callonce: function(cont){
-          $$.mkTabNav(
+          vm.mkTabNav(
             $(cont).children(),
             url,
             file.name,
-            $$.mkTabs(file)
+            vm.mkTabs(file)
           );
         }
       });
@@ -424,18 +424,18 @@ bbn.ide = new Vue({
      * @returns {Array}
      */
     mkTabs: function(file){
-      var $$ = this,
+      var vm = this,
         list = [];
       if ( (file !== undefined) && (file.path !== undefined) ){
-        if ( $$.currentRep && $$.repositories[$$.currentRep] ){
-          if ( $$.repositories[$$.currentRep].tabs ){
+        if ( vm.currentRep && vm.repositories[vm.currentRep] ){
+          if ( vm.repositories[vm.currentRep].tabs ){
             // Add all MVC tabs
-            $.each($$.repositories[$$.currentRep].tabs, function(i, tab){
+            $.each(vm.repositories[vm.currentRep].tabs, function(i, tab){
               if ( tab.fixed && (i === '_ctrl') ){
-                list = $$.addCTRL(list, tab, file.tab || false, file.path);
+                list = vm.addCTRL(list, tab, file.tab || false, file.path);
               }
               else {
-                list = $$.addTab(
+                list = vm.addTab(
                   list,
                   tab.title,
                   tab.url,
@@ -449,14 +449,14 @@ bbn.ide = new Vue({
           }
           // Normal file
           else {
-            list = $$.addTab(
+            list = vm.addTab(
               list,
               'Code',
               'code',
               file.path,
               'code',
-              $$.repositories[$$.currentRep].fcolor|| false,
-              $$.repositories[$$.currentRep].bcolor || false
+              vm.repositories[vm.currentRep].fcolor|| false,
+              vm.repositories[vm.currentRep].bcolor || false
             );
           }
         }
@@ -473,7 +473,7 @@ bbn.ide = new Vue({
      * @returns {Array.<T>|*}
      */
     addCTRL: function(list, tab, def, path){
-      var $$ = this;
+      var vm = this;
       if ( (list !== undefined) &&
         $.isArray(list) &&
         (tab !== undefined) &&
@@ -493,7 +493,7 @@ bbn.ide = new Vue({
             }
             ur += tab.url;
             pa += tab.fixed;
-            list = $$.addTab(
+            list = vm.addTab(
               list,
               tab.title + (k === 0 ? '' : ' ' + (k+1)),
               ur,
@@ -506,7 +506,7 @@ bbn.ide = new Vue({
           });
         }
         var pa = path.join('/');
-        list = $$.addTab(
+        list = vm.addTab(
           list,
           tab.title,
           tab.url,
@@ -532,7 +532,7 @@ bbn.ide = new Vue({
      * @returns {*}
      */
     addTab: function(list, title, url, file, def, fcolor, bcolor){
-      var $$ = this;
+      var vm = this;
       if ( (list !== undefined) &&
         $.isArray(list) &&
         (title !== undefined) &&
@@ -549,11 +549,11 @@ bbn.ide = new Vue({
           fcolor: fcolor || false,
           bcolor: bcolor || false,
           data: {
-            repository: $$.currentRep,
-            bbn_path: $$.getBbnPath(),
-            rep_path: $$.getRepPath(),
-            tab_path: $$.getTabPath(url),
-            extensions: $$.getExt($$.currentRep, url),
+            repository: vm.currentRep,
+            bbn_path: vm.getBbnPath(),
+            rep_path: vm.getRepPath(),
+            tab_path: vm.getTabPath(url),
+            extensions: vm.getExt(vm.currentRep, url),
             file: {
               full_path: file
             },
@@ -572,7 +572,7 @@ bbn.ide = new Vue({
      */
     mkMenu: function(o){
       var st = '',
-        $$ = this;
+        vm = this;
       if (o.text) {
         if (o.text) {
           st += '<li>';
@@ -589,7 +589,7 @@ bbn.ide = new Vue({
           if (o.items && o.items.length) {
             st += '<ul>';
             $.each(o.items, function (i, v) {
-              st += $$.mkMenu(v);
+              st += vm.mkMenu(v);
             });
             st += '</ul>';
           }
@@ -609,21 +609,21 @@ bbn.ide = new Vue({
      * @param d The tab page's data
      */
     mkCodeMirror: function(c, d){
-      var $$ = this,
+      var vm = this,
           $cm;
       if ( d.tab && (d.tab === 'php') ){
-        $$.permissionsPanel(c, d);
+        vm.permissionsPanel(c, d);
       }
       $cm = $("div.code", c).codemirror({
         mode: d.mode,
         value: d.value,
         selections: d.selections,
         marks: d.marks,
-        save: $$.save,
+        save: vm.save,
         keydown: function(widget, e){
           if ( e.ctrlKey && e.shiftKey && (e.key.toLowerCase() === 't') ){
             e.preventDefault();
-            $$.test();
+            vm.test();
           }
         },
         changeFromOriginal: function(wid){
@@ -632,7 +632,7 @@ bbn.ide = new Vue({
           if ( wid.changed ){
             //$elem.closest("div[data-role=tabstrip]").find("> ul > li").eq(idx).addClass("changed");
             $elem.closest("div[data-role=reorderabletabstrip]").find("> ul > li").eq(idx).addClass("changed");
-            $($($$.$refs.tabstrip).tabNav('getTab', $($$.$refs.tabstrip).tabNav('getActiveTab'))).addClass("changed");
+            $($(vm.$refs.tabstrip).tabNav('getTab', $(vm.$refs.tabstrip).tabNav('getActiveTab'))).addClass("changed");
           }
           else {
             var ok = true;
@@ -645,7 +645,7 @@ bbn.ide = new Vue({
               }
             });
             if ( ok ){
-              $($($$.$refs.tabstrip).tabNav('getTab', $($$.$refs.tabstrip).tabNav('getActiveTab'))).removeClass("changed");
+              $($(vm.$refs.tabstrip).tabNav('getTab', $(vm.$refs.tabstrip).tabNav('getActiveTab'))).removeClass("changed");
             }
           }
         }
@@ -685,11 +685,11 @@ bbn.ide = new Vue({
      * @returns {number}
      */
     test: function(){
-      var $$ = this,
-          $cm = $("div.k-content.k-state-active div.code:visible", $($$.$refs.tabstrip)),
-          url = $($$.$refs.tabstrip).tabNav("getURL"),
-          tabData = $($($$.$refs.tabstrip).tabNav('getSubTabNav')).tabNav('getData'),
-          rep = $$.repositories[tabData.repository] ? $$.repositories[tabData.repository] : false,
+      var vm = this,
+          $cm = $("div.k-content.k-state-active div.code:visible", $(vm.$refs.tabstrip)),
+          url = $(vm.$refs.tabstrip).tabNav("getURL"),
+          tabData = $($(vm.$refs.tabstrip).tabNav('getSubTabNav')).tabNav('getData'),
+          rep = vm.repositories[tabData.repository] ? vm.repositories[tabData.repository] : false,
           code,
           mode;
       if ( rep && $cm.length ){
@@ -707,8 +707,8 @@ bbn.ide = new Vue({
           switch ( mode ){
             case "php":
               bbn.fn.post(data.root + "test", {code: code}, function(d){
-                var idx = $($$.$refs.tabstrip).tabNav("getIndex", url),
-                  subtab = $($$.$refs.tabstrip).tabNav("getSubTabNav", idx),
+                var idx = $(vm.$refs.tabstrip).tabNav("getIndex", url),
+                  subtab = $(vm.$refs.tabstrip).tabNav("getSubTabNav", idx),
                   list = subtab.tabNav("getList"),
                   len = list.length,
                   num = 0;
@@ -756,9 +756,9 @@ bbn.ide = new Vue({
      * @returns {number}
      */
     save: function(){
-      var $$ = this,
-          $cm = $("div.k-content.k-state-active div.code:visible", $($$.$refs.tabstrip)),
-          tabData = $($($$.$refs.tabstrip).tabNav('getSubTabNav')).tabNav('getData'),
+      var vm = this,
+          $cm = $("div.k-content.k-state-active div.code:visible", $(vm.$refs.tabstrip)),
+          tabData = $($(vm.$refs.tabstrip).tabNav('getSubTabNav')).tabNav('getData'),
           tab_path = false,
           extensions,
           state;
@@ -767,11 +767,11 @@ bbn.ide = new Vue({
         (tabData.bbn_path !== undefined) &&
         (tabData.rep_path !== undefined) &&
         (tabData.file !== undefined) &&
-        ($$.repositories[$$.currentRep] !== undefined)
+        (vm.repositories[vm.currentRep] !== undefined)
       ){
         state = $cm.codemirror("getState");
         bbn.fn.post(data.root + "actions/save",
-          $.extend({}, $$.makeActionData(tabData.repository, tabData.tab !== 'code' ? tabData.tab : false), {
+          $.extend({}, vm.makeActionData(tabData.repository, tabData.tab !== 'code' ? tabData.tab : false), {
           file: tabData.file,
           selections: state.selections,
           marks: state.marks,
@@ -796,8 +796,8 @@ bbn.ide = new Vue({
      * @param c
      */
     close: function(a, b, c){
-      var $$ = this;
-      bbn.fn.log('close', $($$.$refs.tabstrip).tabNav('getList'));
+      var vm = this;
+      bbn.fn.log('close', $(vm.$refs.tabstrip).tabNav('getList'));
       bbn.fn.log(a,b,c);
     },
 
@@ -809,11 +809,11 @@ bbn.ide = new Vue({
      * @param string path The current path
      */
     new: function(title, isFile, path){
-      var $$ = this;
+      var vm = this;
       bbn.fn.popup($("#ide_new_template").html(), title, 540, false, {modal: true}, function(cont){
           new Vue({
             el: $(cont).get(0),
-            data: $.extend({}, $$.$data, {
+            data: $.extend({}, vm.$data, {
               title: title,
               isFile: isFile,
               path: path || './',
@@ -824,30 +824,30 @@ bbn.ide = new Vue({
               name: ''
             }),
             methods: {
-              isMVC: $$.isMVC,
+              isMVC: vm.isMVC,
               setExtensions: function(extensions){
-                var $$$ = this;
-                $$$.extensions = $.map(extensions, function(ex){
+                var vm$ = this;
+                vm$.extensions = $.map(extensions, function(ex){
                   if ( ex.ext ){
                     return {text: '.' + ex.ext, value: ex.ext};
                   }
                 });
-                if ( $$$.extensions && $$$.extensions.length ){
+                if ( vm$.extensions && vm$.extensions.length ){
                   setTimeout(function(){
-                    $$$.selectedExt = $$$.extensions[0].value;
+                    vm$.selectedExt = vm$.extensions[0].value;
                   }, 5);
                 }
               },
               selectDir: function(){
-                var $$$ = this;
+                var vm$ = this;
                 bbn.fn.popup('<div class="tree appui-h-100" />', 'Select directory', 300, 500, function(w){
                   w.addClass("bbn-ide-selectdir");
                   $("div:first", w).fancytree({
                     source: function(e, d){
-                      return $$.treeLoad(e, d, true, $$$.selectedType);
+                      return vm.treeLoad(e, d, true, vm$.selectedType);
                     },
                     lazyLoad: function(e, d){
-                      d.result = $$.treeLoad(e, d, true, $$$.selectedType);
+                      d.result = vm.treeLoad(e, d, true, vm$.selectedType);
                     },
                     renderNode: function(e, d){
                       if ( d.node.data.bcolor ){
@@ -855,8 +855,8 @@ bbn.ide = new Vue({
                       }
                     },
                     activate: function(e, d){
-                      $$$.path = d.node.data.path + '/';
-                      $$$.close();
+                      vm$.path = d.node.data.path + '/';
+                      vm$.close();
                     }
                   });
                 });
@@ -869,65 +869,65 @@ bbn.ide = new Vue({
                 bbn.fn.closePopup();
               },
               response: function(d){
-                var $$$ = this;
+                var vm$ = this;
               }
             },
             watch: {
               selectedType: function(t, o){
-                var $$$ = this;
-                if ( $$$.isFile && (t !== o) ){
-                  $$$.extensions = [];
-                  if ( $$.repositories[$$.currentRep].tabs[t] && $$.repositories[$$.currentRep].tabs[t].extensions ){
-                    $$$.setExtensions($$.repositories[$$.currentRep].tabs[t].extensions);
+                var vm$ = this;
+                if ( vm$.isFile && (t !== o) ){
+                  vm$.extensions = [];
+                  if ( vm.repositories[vm.currentRep].tabs[t] && vm.repositories[vm.currentRep].tabs[t].extensions ){
+                    vm$.setExtensions(vm.repositories[vm.currentRep].tabs[t].extensions);
                   }
                 }
               }
             },
             mounted: function(){
-              var $$$ = this,
+              var vm$ = this,
                   def,
                   tabs = [];
-              if ( $$.currentRep && $$.repositories && $$.repositories[$$.currentRep] ){
-                bbn.fn.analyzeContent($$$.$el);
-                bbn.fn.redraw($$$.$el, true);
-                if ( $$.isMVC() ){
-                  tabs = $.map($$.repositories[$$.currentRep].tabs, function(t){
+              if ( vm.currentRep && vm.repositories && vm.repositories[vm.currentRep] ){
+                bbn.fn.analyzeContent(vm$.$el);
+                bbn.fn.redraw(vm$.$el, true);
+                if ( vm.isMVC() ){
+                  tabs = $.map(vm.repositories[vm.currentRep].tabs, function(t){
                     if ( t.fixed === undefined ){
-                      if ( t.default && ( t.url !== $$$.selectedType) ){
+                      if ( t.default && ( t.url !== vm$.selectedType) ){
                         def = t.url;
                       }
                       return {text: t.title, value: t.url};
                     }
                   });
-                  $$$.types = tabs;
+                  vm$.types = tabs;
                   setTimeout(function(){
-                    $$$.selectedType = def || false;
+                    vm$.selectedType = def || false;
                   }, 5);
                 }
-                else if ( $$.repositories[$$.currentRep].extensions ){
-                  $$$.setExtensions($$.repositories[$$.currentRep].extensions);
+                else if ( vm.repositories[vm.currentRep].extensions ){
+                  vm$.setExtensions(vm.repositories[vm.currentRep].extensions);
                 }
-                $($$$.$refs.new_form.$el).on('submit', function(e){
+                $(vm$.$refs.new_form.$el).on('submit', function(e){
                   e.preventDefault();
                   e.stopImmediatePropagation();
-                  if ( $$.currentRep &&
-                    $$.repositories &&
-                    $$.repositories[$$.currentRep] &&
-                    $$.repositories[$$.currentRep].bbn_path &&
-                    $$.repositories[$$.currentRep].path &&
-                    $$$.name &&
-                    $$$.path
+                  if ( vm.currentRep &&
+                    vm.repositories &&
+                    vm.repositories[vm.currentRep] &&
+                    vm.repositories[vm.currentRep].bbn_path &&
+                    vm.repositories[vm.currentRep].path &&
+                    vm$.name &&
+                    vm$.path
                   ){
-                    bbn.fn.post($$.root + 'actions/create',
-                      $.extend({}, $$.makeActionData($$.currentRep, $$$.selectedType), {
-                      extension: $$$.selectedExt,
-                      name: $$$.name,
-                      path: $$$.path,
-                      default_text: $$.getDefaultText($$$.selectedExt, $$$.selectedType),
-                      is_file: $$$.isFile
+                    bbn.fn.post(vm.root + 'actions/create',
+                      $.extend({}, vm.makeActionData(vm.currentRep, vm$.selectedType), {
+                      extension: vm$.selectedExt,
+                      name: vm$.name,
+                      path: vm$.path,
+                      default_text: vm.getDefaultText(vm$.selectedExt, vm$.selectedType),
+                      is_file: vm$.isFile
                     }), function(d){
                       if ( d.success ){
-                        $$$.close();
+                        vm$.close();
                       }
                     });
                   }
@@ -960,7 +960,7 @@ bbn.ide = new Vue({
     /** ###### PERMISSIONS ###### */
 
     permissionsPanel: function(c, d){
-      var $$ = this,
+      var vm = this,
         $panel = $(c),
         html = $panel.html(),
         obj = kendo.observable({
@@ -970,10 +970,10 @@ bbn.ide = new Vue({
           help: d.permissions && d.permissions.help ? d.permissions.help : '',
           children: d.permissions && d.permissions.children ? d.permissions.children : [],
           add: function(e){
-            $$.addPermission(e.target);
+            vm.addPermission(e.target);
           },
           save: function(e){
-            $$.savePermission(e.target)
+            vm.savePermission(e.target)
           },
           checkEnter: function(e){
             if ( e.key.toLowerCase() === 'enter' ){
@@ -982,10 +982,10 @@ bbn.ide = new Vue({
             }
           },
           saveChild: function(e){
-            $$.saveChiPermission(e.target);
+            vm.saveChiPermission(e.target);
           },
           removeChild: function(e){
-            $$.removeChiPermission(e.target);
+            vm.removeChiPermission(e.target);
           }
         });
 
@@ -1080,7 +1080,7 @@ bbn.ide = new Vue({
     },
 
     addPermission: function(bt){
-      var $$ = this,
+      var vm = this,
         $bt = $(bt),
         $cont = $bt.closest("div"),
         ele = $cont.find('input'),
@@ -1105,8 +1105,8 @@ bbn.ide = new Vue({
               '<input class="k-textbox" readonly style="margin: 0 10px" value="' + code + '"  maxlength="255">' +
               '<label>Title/Description</label>' +
               '<input class="k-textbox" maxlength="255" style="width:400px; margin: 0 10px" value="' + text + '">' +
-              '<button class="k-button" onclick="$$.saveChiPermission(this)" style="margin-right: 5px"><i class="fa fa-save"></i></button>' +
-              '<button class="k-button" onclick="$$.ide.removeChiPermission(this)"><i class="fa' +
+              '<button class="k-button" onclick="vm.saveChiPermission(this)" style="margin-right: 5px"><i class="fa fa-save"></i></button>' +
+              '<button class="k-button" onclick="vm.ide.removeChiPermission(this)"><i class="fa' +
               ' fa-trash"></i></button>' +
               '</div>'
             );
@@ -1146,8 +1146,8 @@ bbn.ide = new Vue({
     },
 
     /** ###### HISTORY ###### */
-    /*history: function(){
-      var obj = bbn.ide.tabstrip.tabNav("getObs"),
+    history: function(){
+      /*var obj = bbn.ide.tabstrip.tabNav("getObs"),
         // tab config
         hist = {
           title: 'History',
@@ -1297,33 +1297,21 @@ bbn.ide = new Vue({
         if ( d.data.success !== undefined ){
           appui.success("History cleared!");
         }
-      });
-    },*/
+      });*/
+    },
 
   },
+  watch: {
+    currentRep: function(newVal){
+      this.$refs.filesList.widget.reload();
+    }
+  },
   mounted: function(){
-    var $$ = this;
-    // Splitter top/bottom for menu
-    $("div.bbn-ide-container", $($$.$el)).kendoSplitter({
-      orientation: "vertical",
-      panes: [
-        {collapsible: false, resizable: false, size: 40},
-        {collapsible: false, resizable: false, scrollable: false}
-      ]
-    });
 
-    // Splitter left/right for tree
-    $("div.bbn-code-container", $($$.$el)).kendoSplitter({
-      orientation: "horizontal",
-      panes: [
-        {collapsible: true, resizable: true, size: 200},
-        {collapsible: true, resizable: true, scrollable: false},
-        {collapsible: true, resizable: true, size: 200, collapsed: true}
-      ]
-    });
+    var vm = this;
 
     // Toolbar with buttons and menu
-    $("div.appui-ide", $($$.$el)).kendoToolBar({
+    /*$("div.appui-ide", $(vm.$el)).kendoToolBar({
       items: [{
         template: '<input class="k-textbox ide-tree-search" type="text" placeholder="Search file">'
       }, {
@@ -1342,30 +1330,31 @@ bbn.ide = new Vue({
       }, {
         template: function () {
           var st = '<ul class="menu">';
-          $.each($$.menu, function (i, v) {
-            st += $$.mkMenu(v);
+          $.each(vm.menu, function (i, v) {
+            st += vm.mkMenu(v);
           });
           st += '</ul>';
           return st;
         }
       }]
-    });
+    });*/
+/*
 
     // Menu inside toolbar
-    $("ul.menu", $($$.$el)).kendoMenu({
+    $("ul.menu", $(vm.$el)).kendoMenu({
       direction: "bottom right"
     }).find("a").on("mouseup", function(){
       $(this).closest("ul.menu").data("kendoMenu").close();
     });
 
     // Search field
-    $("input.ide-tree-search", $($$.$el)).on('keyup', function(){
-      $$.searchFile = $(this).val();
-      $$.filterTree(treeDS, $(this).val().toString().toLowerCase(), "name");
+    $("input.ide-tree-search", $(vm.$el)).on('keyup', function(){
+      vm.searchFile = $(this).val();
+      vm.filterTree(treeDS, $(this).val().toString().toLowerCase(), "name");
     });
 
     // Repositories dropDownList
-    $$.repSelect = $("input.ide-rep-select", $($$.$el)).kendoDropDownList({
+    vm.repSelect = $("input.ide-rep-select", $(vm.$el)).kendoDropDownList({
       dataSource: [],
       dataTextField: "text",
       dataValueField: "value",
@@ -1377,20 +1366,19 @@ bbn.ide = new Vue({
         if ( sel && sel.fcolor ){
           e.sender.wrapper.find(".k-input").css({color: sel.fcolor});
         }
-        if ( $$.currentRep !== e.sender.value() ){
-          $$.currentRep = e.sender.value();
-          $$.$refs.filesList.widget.reload();
+        if ( vm.currentRep !== e.sender.value() ){
+          vm.currentRep = e.sender.value();
         }
       }
     }).data("kendoDropDownList");
 
     // Calling source for dropdown
-    $$.repDropDownSource();
+    vm.repDropDownSource();
 
     // Menu on tree's items
     $("ul.bbn-ide-context").kendoContextMenu({
       orientation: 'vertical',
-      target: $$.tree,
+      target: vm.tree,
       filter: "span.k-in",
       animation: {
         open: {effects: "fadeIn"},
@@ -1432,7 +1420,7 @@ bbn.ide = new Vue({
       }],
       select: function (e) {
         var msg,
-            treeview = $$.tree.data("kendoTreeView"),
+            treeview = vm.tree.data("kendoTreeView"),
             item = $(e.target).closest("li"),
             dataItem = treeview.dataItem(item);
         if ($(e.item).hasClass("bbn-tree-refresh")) {
@@ -1455,41 +1443,42 @@ bbn.ide = new Vue({
             path = './';
             parent = {};
           }
-          $$.newDir(path, parent.uid || '');
+          vm.newDir(path, parent.uid || '');
         }
         else if ($(e.item).hasClass("bbn-tree-new-file")) {
           var path = dataItem.type === 'dir' ? dataItem.path : dataItem.path.substr(0, dataItem.path.lastIndexOf('/'));
           if (!path) {
             path = './';
           }
-          $$.newFile(path);
+          vm.newFile(path);
         }
         else if ($(e.item).hasClass("bbn-tree-rename")) {
-          $$.rename(dataItem);
+          vm.rename(dataItem);
         }
         else if ($(e.item).hasClass("bbn-tree-duplicate")) {
-          $$.duplicate(dataItem);
+          vm.duplicate(dataItem);
         }
         else if ($(e.item).hasClass("bbn-tree-export")) {
-          $$.export(dataItem);
+          vm.export(dataItem);
         }
         else if ($(e.item).hasClass("bbn-tree-delete")) {
-          $$.delete(dataItem, treeDS);
+          vm.delete(dataItem, treeDS);
         }
       }
     });
+*/
 
     // Set the theme
-    $$.setTheme();
+    vm.setTheme();
 
     // Set the font
-    $$.setFont();
+    vm.setFont();
 
     // tabNav initialization
-    $$.mkTabNav($($$.$refs.tabstrip), $$.root + 'editor/', 'IDE - ');
+    vm.mkTabNav($(vm.$refs.tabstrip), vm.root + 'editor/', 'IDE - ');
 
     // Function triggered when closing tabs: confirm if unsaved
-    /*$($$.$refs.tabstrip).tabNav("set", "close", function(){
+    /*$(vm.$refs.tabstrip).tabNav("set", "close", function(){
       var conf = false;
       $(".ui-codemirror").each(function(){
         if ( $(this).codemirror("isChanged") ){
@@ -1500,6 +1489,6 @@ bbn.ide = new Vue({
         return confirm($.ui.codemirror.confirmation);
       }
       return 1;
-    }, $$.root + 'editor');*/
+    }, vm.root + 'editor');*/
   }
 });

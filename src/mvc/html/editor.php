@@ -1,19 +1,48 @@
-<ul class="bbn-ide-context"></ul>
-<div class="bbn-ide-container appui-h-100">
-  <div class="pane-content appui-ide"></div>
-  <div class="pane-content bbn-code-container appui-full-height">
-    <bbn-tree class="pane-content tree appui-h-100" :source="treeLoad" :select="treeNodeActivate" :cfg="{renderNode: treeRenderNode, lazyLoad: treeLazyLoad}" ref="filesList"></bbn-tree>
-    <div class="pane-content appui-h-100" style="padding:0px">
-      <div style="position: absolute; top: auto; left: auto; margin: 50%; text-align: center">
-        <i class="fa fa-code"></i>
+<!--ul class="bbn-ide-context"></ul-->
+<bbn-splitter class="bbn-ide-container" orientation="vertical">
+  <div style="height: 40px; overflow: visible" :scrollable="false">
+    <bbn-toolbar class="appui-ide">
+      <div>
+        <bbn-input class="ide-tree-search" placeholder="Search file"></bbn-input>
       </div>
-      <div class="appui-full-height" id="tabstrip_editor" ref="tabstrip"></div>
-    </div>
-    <div class="pane-content appui-h-100">
-      <iframe style="width: 100%" class="appui-full-height" src="https://doc.mybbn.so"></iframe>
-    </div>
+      <div></div>
+      <div>
+        <bbn-dropdown class="ide-rep-select" :source="ddrep" v-model="currentRep" :value-template="tplrep"></bbn-dropdown>
+      </div>
+      <div></div>
+      <div>
+        <bbn-button title="Test code!"
+                    @click="test"
+                    icon="fa fa-magic"></bbn-button>
+      </div>
+      <div>
+        <bbn-button title="Show History"
+                    @click="history"
+                    icon="fa fa-history"></bbn-button>
+      </div>
+      <div></div>
+      <div>
+        <bbn-menu :source="menu"></bbn-menu>
+      </div>
+    </bbn-toolbar>
   </div>
-</div>
+  <div class="appui-w-100">
+    <bbn-splitter class="bbn-code-container" orientation="horizontal">
+      <div style="width: 200px; overflow: auto" :collapsible="true" :resizable="true">
+        <bbn-tree class="tree" :source="treeLoad" :select="treeNodeActivate" :cfg="{renderNode: treeRenderNode, lazyLoad: treeLazyLoad}" ref="filesList"></bbn-tree>
+      </div>
+      <div style="padding:0px" :collapsible="true" :resizable="true" :scrollable="false">
+        <div style="position: absolute; top: auto; left: auto; margin: 50%; text-align: center">
+          <i class="fa fa-code"></i>
+        </div>
+        <div class="appui-full-height" id="tabstrip_editor" ref="tabstrip"></div>
+      </div>
+      <div style="width: 200px" :collapsible="true" :resizable="true" :collapsed="true">
+        <iframe style="width: 100%" class="appui-full-height" src="https://doc.mybbn.so"></iframe>
+      </div>
+    </bbn-splitter>
+  </div>
+</bbn-splitter>
 
 <script type="text/x-template" id="ide_new_template">
   <bbn-form ref="new_form">
@@ -131,7 +160,6 @@ function findSequence(goal) {
         </div>
       </div>
     </div>
-  </div>
   </div>
 </script>
 
