@@ -37,6 +37,6 @@ else{
       }
     }
   }
-  echo '<div class="appui-editor"></div>';
+  echo '<div class="bbn-editor"></div>';
 }
 */

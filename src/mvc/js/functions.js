@@ -138,7 +138,7 @@ bbn.ide = {
    * @returns {number}
    */
   test: function(){
-    var $c = $("div.k-content.k-state-active div.appui-code:visible", bbn.ide.tabstrip),
+    var $c = $("div.k-content.k-state-active div.bbn-code:visible", bbn.ide.tabstrip),
         url = bbn.ide.tabstrip.tabNav("getURL"),
         path = bbn.ide.tabstrip.tabNav("getObs").title,
         src = url.substr(0, url.indexOf(path)),
@@ -230,17 +230,17 @@ bbn.ide = {
           //$tree.data("kendoTreeView").select(e.node);
           // Set theme
           if (data.theme) {
-            $("div.appui-code", bbn.ide.editor).each(function () {
+            $("div.bbn-code", bbn.ide.editor).each(function () {
               $(this).codemirror("setTheme", data.theme);
             });
           }
           // Set font
           if (data.font) {
-            $("div.appui-codeMirror", bbn.ide.editor).css("font-family", data.font);
+            $("div.bbn-codeMirror", bbn.ide.editor).css("font-family", data.font);
           }
           // Set font size
           if (data.font_size) {
-            $("div.appui-codeMirror", bbn.ide.editor).css("font-size", data.font_size);
+            $("div.bbn-codeMirror", bbn.ide.editor).css("font-size", data.font_size);
           }
         }
       });
@@ -487,9 +487,9 @@ bbn.ide = {
           });
           // Add a dropdownlist for tab selection
           var $select = $('<select name="tab" required="required"/>');
-          $("div.appui-form-label:first").before(
-            '<div class="appui-form-label mvc-ele">Type</div>',
-            $('<div class="appui-form-field  mvc-ele"/>').append($select)
+          $("div.bbn-form-label:first").before(
+            '<div class="bbn-form-label mvc-ele">Type</div>',
+            $('<div class="bbn-form-field  mvc-ele"/>').append($select)
           );
           // Initialize the kendo dropdownlist
           $select.kendoDropDownList({
@@ -595,9 +595,9 @@ bbn.ide = {
           });
           // Add a dropdownlist for tab selection
           var $select = $('<select name="tab" required="required"/>');
-          $("div.appui-form-label:first", ele).before(
-            '<div class="appui-form-label mvc-ele">Type</div>',
-            $('<div class="appui-form-field  mvc-ele"/>').append($select)
+          $("div.bbn-form-label:first", ele).before(
+            '<div class="bbn-form-label mvc-ele">Type</div>',
+            $('<div class="bbn-form-field  mvc-ele"/>').append($select)
           );
           // Initialize the kendo dropdownlist
           $select.kendoDropDownList({
@@ -672,7 +672,7 @@ bbn.ide = {
    * @returns {number}
    */
   save: function(){
-    var $c = $("div.appui-code:visible", bbn.ide.tabstrip);
+    var $c = $("div.bbn-code:visible", bbn.ide.tabstrip);
     if ( $c.length ){
       var state = $c.codemirror("getState");
       bbn.fn.post(data.root + "actions/save", {
@@ -711,7 +711,7 @@ bbn.ide = {
         default: a.default ? true : false,
         content: a.cfg === undefined ?
           '<div></div>' :
-          '<div class="code appui-full-height"></div>',
+          '<div class="code bbn-full-height"></div>',
         close: function (a, b, c) {
           return bbn.ide.close(a, b, c);
         },
@@ -792,7 +792,7 @@ bbn.ide = {
 
         var $div = $('<div/>');
         bbn.fn.insertContent(
-          '<div class="appui-full-height perms-splitter">' +
+          '<div class="bbn-full-height perms-splitter">' +
             '<div>' + html + '</div>' +
             '<div class="perm_set"> </div>' +
           '</div>',
@@ -819,9 +819,9 @@ bbn.ide = {
         kendo.bind(elem, obj);
         $panel.resize();
       }
-      $("div.appui-code", panel).each(function () {
+      $("div.bbn-code", panel).each(function () {
         var $$ = $(this);
-        if (!$$.children("div.appui-codeMirror").length) {
+        if (!$$.children("div.bbn-codeMirror").length) {
           $$.codemirror($.extend(a.cfg, {
             save: bbn.ide.save,
             keydown: function (widget, e) {
@@ -910,7 +910,7 @@ bbn.ide = {
    * @param string value the search query
    */
   search: function (value) {
-    $("div.appui-code:visible", bbn.ide.tabstrip).codemirror("search", value || '');
+    $("div.bbn-code:visible", bbn.ide.tabstrip).codemirror("search", value || '');
   },
   
   /**
@@ -920,7 +920,7 @@ bbn.ide = {
    * @todo WTF? Noi replace string
    */
   replaceAll: function (v) {
-    $("div.appui-code:visible", bbn.ide.tabstrip).codemirror("replaceAll", v || '');
+    $("div.bbn-code:visible", bbn.ide.tabstrip).codemirror("replaceAll", v || '');
   },
   
   /**
@@ -930,7 +930,7 @@ bbn.ide = {
    * @todo WTF? Noi replace string
    */
   replace: function (v) {
-    $("div.appui-code:visible", bbn.ide.tabstrip).codemirror("replace", v || '');
+    $("div.bbn-code:visible", bbn.ide.tabstrip).codemirror("replace", v || '');
   },
   
   /**
@@ -939,7 +939,7 @@ bbn.ide = {
    * @param v value to search
    */
   findNext: function (v) {
-    $("div.appui-code:visible", bbn.ide.tabstrip).codemirror("findNext", v || '');
+    $("div.bbn-code:visible", bbn.ide.tabstrip).codemirror("findNext", v || '');
   },
   
   /**
@@ -948,7 +948,7 @@ bbn.ide = {
    * @param v value to search
    */
   findPrev: function (v) {
-    $("div.appui-code:visible", bbn.ide.tabstrip).codemirror("findPrev", v || '');
+    $("div.bbn-code:visible", bbn.ide.tabstrip).codemirror("findPrev", v || '');
   },
   
   /**
@@ -1018,7 +1018,7 @@ bbn.ide = {
           var tn = bbn.ide.tabstrip.tabNav("getSubTabNav", d.data.file_url);
           tn.tabNav('set', 'file', d.data.file, d.data.file_url);
           tn.tabNav('setTitle', 'View ' + ext.toUpperCase(), d.data.file_url);
-          $("div.appui-code.ui-codemirror:visible", tn).codemirror('setMode', ext);
+          $("div.bbn-code.ui-codemirror:visible", tn).codemirror('setMode', ext);
         }
       });
     }
@@ -1178,7 +1178,7 @@ bbn.ide = {
                   item = tree.select().length ? tree.dataItem(tree.select()) : false;
               if ( item && item.tab !== undefined ){
                 var c = subTab.tabNav('getContainer', subTab.tabNav('search', item.tab)),
-                  orig = $("div.appui-code.ui-codemirror", c).codemirror("getValue");
+                  orig = $("div.bbn-code.ui-codemirror", c).codemirror("getValue");
               }
               $code.children().remove();
               $code.removeClass("ui-codemirror");
@@ -1190,11 +1190,11 @@ bbn.ide = {
                 showDifferences: true,
                 readOnly: true
               });
-              $code.children().addClass("appui-full-height");
-              $("div.appui-codeMirror-merge-pane", $code).not(".CodeMirror-merge-pane-rightmost").before(
+              $code.children().addClass("bbn-full-height");
+              $("div.bbn-codeMirror-merge-pane", $code).not(".CodeMirror-merge-pane-rightmost").before(
                 '<div style="border-bottom: 1px solid #ddd">' +
-                  '<div class="appui-c" style="width: 50%; display: inline-block"><strong>CURRENT CODE</strong></div>' +
-                  '<div class="appui-c" style="width: 50%; display: inline-block"><strong>BACKUP CODE</strong></div>' +
+                  '<div class="bbn-c" style="width: 50%; display: inline-block"><strong>CURRENT CODE</strong></div>' +
+                  '<div class="bbn-c" style="width: 50%; display: inline-block"><strong>BACKUP CODE</strong></div>' +
                 '</div>'
               );
               $code.redraw();
@@ -1254,7 +1254,7 @@ bbn.ide = {
             if( $cm.children().hasClass("CodeMirror-merge") ){
               if ( item.tab !== undefined ){
                 var c = subTab.tabNav('getContainer', subTab.tabNav('search', item.tab)),
-                    orig = $("div.appui-code.ui-codemirror", c).codemirror("getValue");
+                    orig = $("div.bbn-code.ui-codemirror", c).codemirror("getValue");
               }
               $cm.children().remove();
               $cm.codemirror('mergeView', {
@@ -1265,11 +1265,11 @@ bbn.ide = {
                 showDifferences: true,
                 readOnly: true
               });
-              $cm.children().addClass("appui-full-height");
-              $("div.appui-codeMirror-merge-pane", $cm).not(".CodeMirror-merge-pane-rightmost").before(
+              $cm.children().addClass("bbn-full-height");
+              $("div.bbn-codeMirror-merge-pane", $cm).not(".CodeMirror-merge-pane-rightmost").before(
                 '<div style="border-bottom: 1px solid #ddd">' +
-                '<div class="appui-c" style="width: 50%; display: inline-block"><strong>CURRENT CODE</strong></div>' +
-                '<div class="appui-c" style="width: 50%; display: inline-block"><strong>BACKUP CODE</strong></div>' +
+                '<div class="bbn-c" style="width: 50%; display: inline-block"><strong>CURRENT CODE</strong></div>' +
+                '<div class="bbn-c" style="width: 50%; display: inline-block"><strong>BACKUP CODE</strong></div>' +
                 '</div>'
               );
               $cm.redraw();
@@ -1711,8 +1711,8 @@ bbn.ide = {
     bbn.fn.popup($('#ide_appearance_template', bbn.ide.editor).html(), 'Appearence Preferences', 800, 430, function (alert) {
       var code = $("#code", alert),
         cm = code.codemirror({"mode": "js"}),
-        divCM = $("div.appui-codeMirror", alert),
-        oldCM = $("div.appui-codeMirror", bbn.ide.editor),
+        divCM = $("div.bbn-codeMirror", alert),
+        oldCM = $("div.bbn-codeMirror", bbn.ide.editor),
         themes = [],
         fonts = [
           {"text": "Inconsolata", "value": "Inconsolata"},
@@ -1771,7 +1771,7 @@ bbn.ide = {
             data.theme = formdata.theme;
             data.font = formdata.font;
             data.font_size = formdata.font_size;
-            $("div.appui-code", bbn.ide.editor).each(function () {
+            $("div.bbn-code", bbn.ide.editor).each(function () {
               $(this).codemirror("setTheme", data.theme);
             });
             oldCM.css("font-family", data.font);

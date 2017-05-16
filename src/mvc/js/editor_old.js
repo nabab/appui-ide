@@ -62,7 +62,7 @@ $("div.bbn-code-container", ele).kendoSplitter({
 });
 
 // Toolbar with buttons and menu
-$("div.appui-ide", ele).kendoToolBar({
+$("div.bbn-ide", ele).kendoToolBar({
   items: [{
     template: '<input class="k-textbox ide-tree_search" type="text" placeholder="Search files in ">'
   }, {

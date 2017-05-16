@@ -1,5 +1,5 @@
 <div class="k-block" style="height: 100%">
-  <div class="k-header appui-c">Permissions setting</div>
+  <div class="k-header bbn-c">Permissions setting</div>
   <div class="perm_set" style="padding: 10px">
     <input type="hidden" data-bind="value: id">
     <div>
@@ -16,7 +16,7 @@
     </div>
 
     <div class="k-block" style="margin-top: 10px">
-      <div class="k-header appui-c">Children permissions</div>
+      <div class="k-header bbn-c">Children permissions</div>
       <div style="padding: 10px">
         <div>
           <label>Code</label>

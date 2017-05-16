@@ -10,8 +10,8 @@ onclick="bbn.fn.post(\''.$ctrl->say_dir().'/session\',
 {session:1},
 $(\'#info_session_container\'));"><i class="fa fa-refresh"> </i></button> &nbsp; &nbsp; &nbsp; Infos de session</h2>'.
     '<div
-class="appui-line-break">'.
+class="bbn-line-break">'.
     '</div>'.
-    '<div id="info_session_container" class="appui-nl"> </div>';
+    '<div id="info_session_container" class="bbn-nl"> </div>';
   $ctrl->add_script("bbn.fn.post('".$ctrl->say_dir()."/session', {session:1}, \$('#info_session_container'));");
 }
