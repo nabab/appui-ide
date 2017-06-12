@@ -62,7 +62,7 @@ $("div.bbn-code-container", ele).kendoSplitter({
 });
 
 // Toolbar with buttons and menu
-$("div.appui-ide", ele).kendoToolBar({
+$("div.bbn-ide", ele).kendoToolBar({
   items: [{
     template: '<input class="k-textbox ide-tree_search" type="text" placeholder="Search files in ">'
   }, {
@@ -342,11 +342,11 @@ appui.tabnav.ele.tabNav("set", "close", function (){
 }, data.root + 'editor');
 
 /*
-bbn.app.tabstrip.ele.tabNav("addCallback", function(cont){
+appui.tabstrip.ele.tabNav("addCallback", function(cont){
   bbn.ide.resize(cont);
 }, bbn.ide.tabstrip);
 
-bbn.app.tabstrip.ele.tabNav("addResize", function(cont){
+appui.tabstrip.ele.tabNav("addResize", function(cont){
   setTimeout(function () {
     bbn.ide.resize(cont);
   }, 1000);

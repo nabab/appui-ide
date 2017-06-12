@@ -1,41 +1,71 @@
-<ul class="bbn-ide-context"></ul>
-<div class="bbn-ide-container appui-h-100">
-  <div class="pane-content appui-ide"></div>
-  <div class="pane-content bbn-code-container appui-full-height">
-    <bbn-tree class="pane-content tree appui-h-100" :source="treeLoad" :select="treeNodeActivate" :cfg="{renderNode: treeRenderNode, lazyLoad: treeLazyLoad}" ref="filesList"></bbn-tree>
-    <div class="pane-content appui-h-100" style="padding:0px">
-      <div style="position: absolute; top: auto; left: auto; margin: 50%; text-align: center">
-        <i class="fa fa-code"></i>
+<!--ul class="bbn-ide-context"></ul-->
+<bbn-splitter class="bbn-ide-container" orientation="vertical">
+  <div style="height: 40px; overflow: visible" :scrollable="false">
+    <bbn-toolbar class="bbn-ide">
+      <div>
+        <bbn-input class="ide-tree-search" placeholder="Search file"></bbn-input>
       </div>
-      <div class="appui-full-height" id="tabstrip_editor" ref="tabstrip"></div>
-    </div>
-    <div class="pane-content appui-h-100">
-      <iframe style="width: 100%" class="appui-full-height" src="https://doc.mybbn.so"></iframe>
-    </div>
+      <div></div>
+      <div>
+        <bbn-dropdown class="ide-rep-select" :source="ddrep" v-model="currentRep" :value-template="tplrep"></bbn-dropdown>
+      </div>
+      <div></div>
+      <div>
+        <bbn-button title="Test code!"
+                    @click="test"
+                    icon="fa fa-magic"></bbn-button>
+      </div>
+      <div>
+        <bbn-button title="Show History"
+                    @click="history"
+                    icon="fa fa-history"></bbn-button>
+      </div>
+      <div></div>
+      <div>
+        <bbn-menu :source="menu"></bbn-menu>
+      </div>
+    </bbn-toolbar>
   </div>
-</div>
+  <div class="bbn-full-height bbn-w-100">
+    <bbn-splitter class="bbn-code-container" orientation="horizontal">
+      <div style="width: 200px; overflow: auto" :collapsible="true" :resizable="true">
+        <bbn-tree class="tree" :source="treeLoad" :select="treeNodeActivate" :cfg="{renderNode: treeRenderNode, lazyLoad: treeLazyLoad}" ref="filesList"></bbn-tree>
+      </div>
+      <div style="padding:0px" :collapsible="true" :resizable="true" :scrollable="false">
+        <div style="position: absolute; top: auto; left: auto; margin: 50%; text-align: center">
+          <i class="fa fa-code"></i>
+        </div>
+        <!--<div class="bbn-full-height" id="tabstrip_editor" ref="tabstrip"></div>-->
+        <bbn-tabnav id="tabstrip_editor" ref="tabstrip" :autoload="true"></bbn-tabnav>
+      </div>
+      <div style="width: 200px" :collapsible="true" :resizable="true" :collapsed="true">
+        <iframe style="width: 100%" class="bbn-full-height" src="https://doc.mybbn.so"></iframe>
+      </div>
+    </bbn-splitter>
+  </div>
+</bbn-splitter>
 
 <script type="text/x-template" id="ide_new_template">
   <bbn-form ref="new_form">
-    <div class="appui-form-label mvc-ele" v-if="isMVC()">Type</div>
-    <div class="appui-form-field mvc-ele" v-if="isMVC()">
-      <bbn-dropdown class="appui-full-width" ref="types" :source="types" v-model="selectedType" name="tab" required="required"></bbn-dropdown>
+    <div class="bbn-form-label mvc-ele" v-if="isMVC()">Type</div>
+    <div class="bbn-form-field mvc-ele" v-if="isMVC()">
+      <bbn-dropdown class="bbn-full-width" ref="types" :source="types" v-model="selectedType" name="tab" required="required"></bbn-dropdown>
     </div>
-    <div class="appui-form-label">Name</div>
-    <div class="appui-form-field">
-      <bbn-input type="text" name="name" v-model="name" class="appui-full-width" required="required"></bbn-input>
+    <div class="bbn-form-label">Name</div>
+    <div class="bbn-form-field">
+      <bbn-input type="text" name="name" v-model="name" class="bbn-full-width" required="required"></bbn-input>
       <bbn-dropdown ref="ext" :source="extensions" v-model="selectedExt" name="ext" required="required" style="width: 100px" v-if="isFile"></bbn-dropdown>
     </div>
-    <div class="appui-form-label">Path</div>
-    <div class="appui-form-field">
-      <bbn-input class="appui-full-width" type="text" name="path" v-model="path" readonly="readonly" required="required"></bbn-input>
+    <div class="bbn-form-label">Path</div>
+    <div class="bbn-form-field">
+      <bbn-input class="bbn-full-width" type="text" name="path" v-model="path" readonly="readonly" required="required"></bbn-input>
       <div style="float: left">
         <bbn-button @click="selectDir">Browse</bbn-button>
         <bbn-button @click="setRoot">Root</bbn-button>
       </div>
     </div>
-    <div class="appui-form-label"></div>
-    <div class="appui-form-field" style="text-align: right">
+    <div class="bbn-form-label"></div>
+    <div class="bbn-form-field" style="text-align: right">
       <bbn-button type="submit" icon="fa fa-check"> Save</bbn-button>
       <bbn-button @click="close" icon="fa fa-close"> Cancel</bbn-button>
     </div>
@@ -47,10 +77,10 @@
     <input type="hidden" name="type" data-bind="value: type">
     <input type="hidden" name="dir" data-bind="value: dir">
     <input type="hidden" name="path" data-bind="value: path">
-    <label for="ide_new_name" class="appui-form-label">Name</label>
-    <input type="text" name="name" class="appui-form-field k-textbox" id="ide_new_name" required="required" data-bind="value: name">
-    <div class="appui-form-label"></div>
-    <div class="appui-form-field" style="text-align: right">
+    <label for="ide_new_name" class="bbn-form-label">Name</label>
+    <input type="text" name="name" class="bbn-form-field k-textbox" id="ide_new_name" required="required" data-bind="value: name">
+    <div class="bbn-form-label"></div>
+    <div class="bbn-form-field" style="text-align: right">
       <button class="k-button" type="submit">
         <i class="fa fa-edit"></i> Rename
       </button>
@@ -62,13 +92,13 @@
 </script>
 
 <script type="text/x-kendo-template" id="ide_manage_directories_template">
-  <div id="ide_manage_dirs" class="appui-full-height">
-    <div id="ide_manage_dirs_grid" class="appui-full-height"></div>
+  <div id="ide_manage_dirs" class="bbn-full-height">
+    <div id="ide_manage_dirs_grid" class="bbn-full-height"></div>
   </div>
 </script>
 
 <script type="text/x-kendo-template" id="ide_appearance_template">
-  <div class="appui-full-height" style="padding-top: 10px">
+  <div class="bbn-full-height" style="padding-top: 10px">
     <form>
       Theme: <input id="ide_theme_sel" name="theme">
       Font: <input id="ide_font_sel" name="font">
@@ -99,7 +129,7 @@ function findSequence(goal) {
 
 <script type="text/x-kendo-template" id="ide_permissions_form_template">
   <div class="k-block" style="height: 100%">
-    <div class="k-header appui-c">Permissions setting</div>
+    <div class="k-header bbn-c">Permissions setting</div>
     <div class="perm_set" style="padding: 10px">
       <input type="hidden" data-bind="value: id">
       <div>
@@ -116,7 +146,7 @@ function findSequence(goal) {
       </div>
 
       <div class="k-block" style="margin-top: 10px">
-        <div class="k-header appui-c">Children permissions</div>
+        <div class="k-header bbn-c">Children permissions</div>
         <div style="padding: 10px">
           <div>
             <label>Code</label>
@@ -131,7 +161,6 @@ function findSequence(goal) {
         </div>
       </div>
     </div>
-  </div>
   </div>
 </script>
 
@@ -153,13 +182,13 @@ function findSequence(goal) {
 </script>
 
 <script type="text/x-kendo-template" id="ide_history_template">
-  <div class="appui-full-height bbn-ide-history">
-    <div class="appui-full-height bbn-ide-history-splitter">
-      <div class="appui-full-height">
-        <div class="appui-full-height bbn-ide-history-tree"></div>
+  <div class="bbn-full-height bbn-ide-history">
+    <div class="bbn-full-height bbn-ide-history-splitter">
+      <div class="bbn-full-height">
+        <div class="bbn-full-height bbn-ide-history-tree"></div>
       </div>
-      <div class="appui-full-height">
-        <div class="appui-full-height bbn-ide-history-code"></div>
+      <div class="bbn-full-height">
+        <div class="bbn-full-height bbn-ide-history-code"></div>
       </div>
     </div>
   </div>
