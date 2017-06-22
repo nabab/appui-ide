@@ -26,7 +26,7 @@
       </div>
     </bbn-toolbar>
   </div>
-  <div class="bbn-w-100">
+  <div class="bbn-full-height bbn-w-100">
     <bbn-splitter class="bbn-code-container" orientation="horizontal">
       <div style="width: 200px; overflow: auto" :collapsible="true" :resizable="true">
         <bbn-tree class="tree" :source="treeLoad" :select="treeNodeActivate" :cfg="{renderNode: treeRenderNode, lazyLoad: treeLazyLoad}" ref="filesList"></bbn-tree>
@@ -35,7 +35,8 @@
         <div style="position: absolute; top: auto; left: auto; margin: 50%; text-align: center">
           <i class="fa fa-code"></i>
         </div>
-        <div class="bbn-full-height" id="tabstrip_editor" ref="tabstrip"></div>
+        <!--<div class="bbn-full-height" id="tabstrip_editor" ref="tabstrip"></div>-->
+        <bbn-tabnav id="tabstrip_editor" ref="tabstrip" :autoload="true"></bbn-tabnav>
       </div>
       <div style="width: 200px" :collapsible="true" :resizable="true" :collapsed="true">
         <iframe style="width: 100%" class="bbn-full-height" src="https://doc.mybbn.so"></iframe>

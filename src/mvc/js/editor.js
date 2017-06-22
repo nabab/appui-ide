@@ -1,12 +1,14 @@
 (function(){
   return {
     beforeMount: function(){
-      bbn.vue.setComponentRule(this.source.root + 'components/', 'bbn');
-      bbn.vue.addComponent('editor/child_permissions');
-      bbn.vue.addComponent('editor/history');
-      bbn.vue.addComponent('editor/new');
-      bbn.vue.addComponent('editor/permissions');
-      bbn.vue.addComponent('editor/rename');
+      bbn.vue.setComponentRule(this.source.root + 'components/', 'appui');
+      bbn.vue.addComponent('ide/file');
+      bbn.vue.addComponent('ide/child_permissions');
+      bbn.vue.addComponent('ide/history');
+      bbn.vue.addComponent('ide/new');
+      bbn.vue.addComponent('ide/permissions');
+      bbn.vue.addComponent('ide/rename');
+      bbn.vue.unsetComponentRule();
     },
     props: ['source'],
     data: function(){
@@ -117,7 +119,6 @@
     },
     methods: {
       tplrep: function(e){
-        bbn.fn.log("tplredp", e);
         if ( e.value && this.repositories[e.value] ){
           var cfg = this.repositories[e.value];
           return '<div style="clear: none; background-color: ' + cfg.bcolor +'; color: ' + cfg.fcolor + '" class="bbn-100">' + e.text + '</div>';
@@ -399,7 +400,36 @@
        */
       addFileTab: function(tabnav, file){
         var vm = this,
-            url = 'file/' + vm.currentRep + (file.dir || '') + file.name;
+            url = vm.currentRep + (file.dir || '') + file.name;
+
+        bbn.fn.link(vm.baseURL+url);
+
+        /*vm.$refs.tabstrip.tabs.push({
+          title: '<span title="' + (file.dir || '') + file.name + '">' + file.name + '</span>',
+          url: url,
+          static: false,
+          component: vm.isMVC() ? 'appui-ide-file-mvc' : 'appui-ide-file',
+          load: false,
+          source: {
+            repository: vm.currentRep,
+            url: url
+          },
+          bcolor: vm.repositories[vm.currentRep].bcolor || false,
+          fcolor: vm.repositories[vm.currentRep].fcolor || false,*/
+          /*close: function (a, b, c) {
+            return bbn.ide.close(a, b, c);
+          },
+          callonce: function(cont){
+            vm.mkTabNav(
+              $(cont).children(),
+              url,
+              file.name,
+              vm.mkTabs(file)
+            );
+          }*/
+        //});
+
+/*
         $(tabnav).tabNav("navigate", {
           title: '<span title="' + (file.dir || '') + file.name + '">' + file.name + '</span>',
           content: '<div class="bbn-full-height"></div>',
@@ -419,7 +449,7 @@
               vm.mkTabs(file)
             );
           }
-        });
+        });*/
       },
 
       /**

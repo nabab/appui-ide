@@ -309,11 +309,13 @@ class ide {
    * Returns the repository's name from an URL
    *
    * @param string $url
+   * @param bool $obj
    * @return bool|int|string
    */
-  public function repository_from_url($url){
+  public function repository_from_url(string $url, bool $obj = false){
     $repository = false;
-    foreach ( $this->repositories() as $i => $d ){
+    $repositories = $this->repositories();
+    foreach ( $repositories as $i => $d ){
       if ( (strpos($url, $i) === 0) &&
         (strlen($i) > strlen($repository) )
       ){
@@ -321,7 +323,7 @@ class ide {
         break;
       }
     }
-    return $repository;
+    return empty($obj) ? $repository : $repositories[$repository];
   }
 
   /**
