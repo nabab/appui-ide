@@ -4,8 +4,8 @@
  * Date: 05/06/2017
  * Time: 14:40
  */
-Vue.component('appui-ide-file', {
-  template: '#bbn-tpl-component-appui-ide-file',
+Vue.component('appui-ide-mvc', {
+  template: '#bbn-tpl-component-appui-ide-mvc',
   props: ['source'],
   beforeMount(){
     bbn.vue.setComponentRule(this.source.root + 'components/', 'appui');
@@ -27,6 +27,15 @@ Vue.component('appui-ide-file', {
       path: path.join('/'),
       filename: filename
     });
+  },
+  computed: {
+    sctrl(){
+      const vm = this;
+      if ( vm.path.length ){
+        return vm.path.split('/');
+      }
+      return [];
+    }
   },
   mounted(){
     const vm = this;

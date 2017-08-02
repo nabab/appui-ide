@@ -56,38 +56,40 @@ if ( !empty($model->data['repository']) &&
     if ( !empty($real) && file_exists($real) ){
       $todo = !empty($onlydirs) ? \bbn\file\dir::get_dirs($real) : \bbn\file\dir::get_files($real, true);
       foreach ( $todo as $t ){
-        $is_file = is_file($t);
         $name = basename($t);
-        if ( $is_file ){
-          // File extension
-          $ext = \bbn\str::file_ext($t);
-          $name = \bbn\str::file_ext($t, 1)[0];
-          if ( in_array($ext, $excluded) ){
-            break;
+        if ( $name !== '_ctrl.php' ){
+          $is_file = is_file($t);
+          if ( $is_file ){
+            // File extension
+            $ext = \bbn\str::file_ext($t);
+            $name = \bbn\str::file_ext($t, 1)[0];
+            if ( in_array($ext, $excluded) ){
+              break;
+            }
           }
-        }
-        $cfg = [
-          'title' => $name,
-          'name' => $name,
-          'path' => $cur_path . $name,
-          'has_index' => empty($is_file) && \bbn\file\dir::has_file($t, 'index.php', 'index.html', 'index.htm'),
-          //'parenthood' => true,
-          'is_svg' => $is_file && ($ext === 'svg'),
-          'is_viewable' => $is_file && in_array($ext, $file_check['viewables']) && ($ext !== 'svg'),
-          'is_image' => $is_file && in_array($ext, $file_check['images']),
-          //'default' => false,
-          'dir' => $cur_path,
-          'icon' => $is_file ? "$ext-icon" : "folder-icon",
-          'bcolor' => $color,
-          'folder' => empty($is_file),
-          'lazy' => empty($is_file) && ( (empty($onlydirs) && !empty(\bbn\file\dir::get_files($t, true))) || (!empty($onlydirs) && !empty(\bbn\file\dir::get_dirs($t)))),
-          'tab' => $tab
-        ];
-        if ( $is_file && !array_key_exists($name, $files) ){
-          $files[$name] = $cfg;
-        }
-        else if ( empty($is_file) && !array_key_exists($name, $folders) ){
-          $folders[$name] = $cfg;
+          $cfg = [
+            'title' => $name,
+            'name' => $name,
+            'path' => $cur_path . $name,
+            'has_index' => empty($is_file) && \bbn\file\dir::has_file($t, 'index.php', 'index.html', 'index.htm'),
+            //'parenthood' => true,
+            'is_svg' => $is_file && ($ext === 'svg'),
+            'is_viewable' => $is_file && in_array($ext, $file_check['viewables']) && ($ext !== 'svg'),
+            'is_image' => $is_file && in_array($ext, $file_check['images']),
+            //'default' => false,
+            'dir' => $cur_path,
+            'icon' => $is_file ? "$ext-icon" : "folder-icon",
+            'bcolor' => $color,
+            'folder' => empty($is_file),
+            'lazy' => empty($is_file) && ( (empty($onlydirs) && !empty(\bbn\file\dir::get_files($t, true))) || (!empty($onlydirs) && !empty(\bbn\file\dir::get_dirs($t)))),
+            'tab' => $tab
+          ];
+          if ( $is_file && !array_key_exists($name, $files) ){
+            $files[$name] = $cfg;
+          }
+          else if ( empty($is_file) && !array_key_exists($name, $folders) ){
+            $folders[$name] = $cfg;
+          }
         }
       }
     }

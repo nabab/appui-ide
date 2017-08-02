@@ -8,11 +8,18 @@
  * @var $ctrl \bbn\mvc\controller
  */
 
-if ( isset($ctrl->inc->ide) && isset($ctrl->post['tab']) ){
-  echo $ctrl
-    ->add_js($ctrl->inc->ide->load($ctrl->post))
-    ->get_view();
-  $ctrl->obj->url = $ctrl->post['tab'] ?: 'code';
+if ( !empty($ctrl->arguments) ){
+  if ( $ctrl->baseURL === APPUI_IDE_ROOT.'editor/' ){
+    $ctrl->data['url'] = implode('/', $ctrl->arguments);
+    $ctrl->obj->data = $ctrl->get_model();
+    $ctrl->obj->data['root'] = APPUI_IDE_ROOT;
+    $ctrl->obj->url = $ctrl->baseURL.'file/'.$ctrl->obj->data['url'];
+    echo $ctrl
+      ->set_title($ctrl->obj->data['title'])
+      ->add_js()
+      ->get_view();
+  }
+  else if ( !empty($ctrl->arguments) ){
+    $ctrl->reroute(APPUI_IDE_ROOT.'editor/code', $ctrl->post, $ctrl->arguments);
+  }
 }
-
-

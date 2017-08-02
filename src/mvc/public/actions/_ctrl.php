@@ -7,7 +7,7 @@
  *
  * @var $ctrl \bbn\mvc\controller
  */
-
+return true;
 if ( !empty($ctrl->post['repository']) &&
   !empty($ctrl->post['bbn_path']) &&
   !empty($ctrl->post['rep_path']) &&

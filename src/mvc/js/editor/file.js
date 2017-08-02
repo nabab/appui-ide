@@ -5,28 +5,20 @@
  * Time: 11:44
  */
 
-(function(){
-  bbn.vue.addComponent('file');
-
-  var methods = $.extend({}, bbn.fn, bbn.ide.$options.methods);
+(() =>{
   return {
-    methods: methods,
-    data: function(){
-      return {
-        options: bbn.opt
-      };
+    beforeMount(){
+      bbn.vue.setComponentRule(this.source.root + 'components/', 'appui');
+      if ( this.source.isMVC ){
+        bbn.vue.addComponent('ide/mvc');
+      }
+      else {
+        bbn.vue.addComponent('ide/file');
+      }
+      bbn.vue.unsetComponentRule();
+    },
+    data(){
+      return this.source;
     }
-  };
+  }
 })();
-
-
-
-bbn.fn.log('data', data);
-if ( (bbn.ide !== undefined) &&
-  (data.file !== undefined) &&
-  (data.mode !== undefined) &&
-  (data.value !== undefined)
-){
-  bbn.fn.log(data.value, data.mode);
-  bbn.ide.mkCodeMirror(ele, data);
-}

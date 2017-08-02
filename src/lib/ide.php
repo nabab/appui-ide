@@ -141,43 +141,38 @@ class ide {
    * @param string $file
    * @return string|false
    */
-  private static function set_current_file(string $file = null){
+  private function set_current_file(string $file = null){
     if ( empty($file) ){
       self::$current_file = false;
       return false;
     }
     self::$current_file = $file;
+    $this->set_current_id();
     return self::$current_file;
   }
 
   /**
    * Sets the current file's ID
    *
-   * @param string $bbn_path
    * @param string $file
+   * @param string $bbn_path
    * @return string
    */
-  private static function set_current_id(string $bbn_path = null, string $file = null){
+  private function set_current_id(string $file = null, string $bbn_path = null){
+    self::$current_id = false;
     if ( empty($file) ){
       $file = self::$current_file;
     }
-    if ( empty($bbn_path) && !empty($file) ){
-      $url = self::real_to_url($file);
-      $repository = self::repository(self::repository_from_url($url));
-      if ( !empty($repository) &&
-        defined($repository['bbn_path'])
-      ){
-        $bbn_path = $repository['bbn_path'];
+    if ( !empty($file) ){
+      if ( empty($bbn_path) && ($url = $this->real_to_url($file)) ){
+        $repository = self::repository_from_url($url, true);
+        if ( !empty($repository) && defined($repository['bbn_path']) ){
+          $bbn_path = $repository['bbn_path'];
+        }
       }
-    }
-    if ( !empty($file) &&
-      defined($bbn_path) &&
-      (strpos($file, constant($bbn_path)) === 0)
-    ){
-      self::$current_id = str_replace(constant($bbn_path), $bbn_path.'/', $file);
-    }
-    else {
-      self::$current_id = false;
+      if ( !empty($bbn_path) && defined($bbn_path) && (strpos($file, constant($bbn_path)) === 0) ){
+        self::$current_id = str_replace(constant($bbn_path), $bbn_path.'/', $file);
+      }
     }
     return self::$current_id;
   }
@@ -185,9 +180,8 @@ class ide {
   /**
    * Resets the current file's info
    */
-  private static function reset_current(){
-    self::set_current_file();
-    self::set_current_id();
+  private function reset_current(){
+    $this->set_current_file();
   }
 
   /**
@@ -313,17 +307,68 @@ class ide {
    * @return bool|int|string
    */
   public function repository_from_url(string $url, bool $obj = false){
-    $repository = false;
+    $repository = '';
     $repositories = $this->repositories();
     foreach ( $repositories as $i => $d ){
       if ( (strpos($url, $i) === 0) &&
         (strlen($i) > strlen($repository) )
       ){
         $repository = $i;
-        break;
       }
     }
     return empty($obj) ? $repository : $repositories[$repository];
+  }
+
+  /***
+   * Returns the filename and relative path from an URL
+   *
+   * @param string $url
+   * @return bool|string
+   */
+  public function file_from_url(string $url){
+    $rep = $this->repository_from_url($url);
+    if ( $this->is_MVC($rep) ){
+      $last = basename($url);
+      if ( $repo = $this->repository($rep) ){
+        $path = $this->get_root_path($rep).substr($url, strlen($rep));
+        $tabs = $repo['tabs'];
+        foreach ( $tabs as $key => $r ){
+          if ( $key === $last ){
+            foreach ( $tabs as $key2 => $r2 ){
+              foreach ( $r2['extensions'] as $ext ){
+                if ( is_file($path.'.'.$ext['ext']) ){
+                  goto endFunc;
+                }
+              }
+            }
+            $url = dirname($url);
+            break;
+          }
+        }
+      }
+    }
+    endFunc:
+    return substr($url, strlen($rep));
+  }
+
+  /**
+   * Checks if a repository is a MVC
+   *
+   * @param string $rep
+   * @return bool
+   */
+  public function is_MVC(string $rep){
+    return isset($this->repository($rep)['tabs']);
+  }
+
+  /**
+   * Checks if a repository is a MVC from URL
+   *
+   * @param string $url
+   * @return bool
+   */
+  public function is_MVC_from_url(string $url){
+    return $this->is_MVC($this->repository_from_url($url));
   }
 
   /**
@@ -366,110 +411,47 @@ class ide {
   }
 
   /**
-   * Returns an array with all file's variables
-   *
-   * @param array $file
-   * @return array|bool
-   */
-  public function get_file_cfg($file){
-    if ( !empty($file['repository']) &&
-      !empty($file['bbn_path']) &&
-      !empty($file['rep_path']) &&
-      !empty($file['file']['full_path']) &&
-      !empty($file['extensions']) &&
-      is_array($file['extensions'])
-    ){
-      $f = [
-        'repository' => $file['repository'],
-        'bbn_path' => $file['bbn_path'],
-        'rep_path' => $file['rep_path'],
-        'file' => [
-          'path' => dirname($file['file']['full_path']) !== '.' ? dirname($file['file']['full_path']) . '/' : '',
-          'name' => \bbn\str::file_ext($file['file']['full_path'], 1)[0],
-          'full_path' => $file['file']['full_path']
-        ],
-        'tab' => $file['tab'] ?: false,
-        'tab_path' => !empty($file['tab_path']) ? $file['tab_path'] : ''
-      ];
-      $path = $this->decipher_path($file['bbn_path'] . '/' . $file['rep_path']);
-      if ( !empty($file['tab_path']) ){
-        $path .= $file['tab_path'];
-      }
-      if ( !empty($f['file']['name']) ){
-        foreach ( $file['extensions'] as $ext ){
-          if ( !empty($ext['ext']) &&
-            !empty($ext['mode']) &&
-            is_file($path . $f['file']['path'] . $f['file']['name'] . '.' . $ext['ext'])
-          ){
-            self::set_current_file($path . $f['file']['path'] . $f['file']['name'] . '.' . $ext['ext']);
-            self::set_current_id($file['bbn_path']);
-            $f['file']['ext'] = $ext['ext'];
-            $f['mode'] = $ext['mode'];
-            break;
-          }
-        }
-        if ( empty($f['file']['ext']) ){
-          $f['file']['ext'] = $file['extensions'][0]['ext'];
-          $f['mode'] = $file['extensions'][0]['mode'];
-          self::set_current_file($path . $f['file']['path'] . $f['file']['name'] . '.' . $f['file']['ext']);
-          self::set_current_id($file['bbn_path']);
-        }
-      }
-      return $f;
-    }
-    self::reset_current();
-    return false;
-  }
-
-  public function get_directory_cfg($dir){
-    if ( !empty($dir['repository']) &&
-      !empty($dir['bbn_path']) &&
-      !empty($dir['rep_path'])
-    ){
-      $path = $this->decipher_path($dir['bbn_path'] . '/' . $dir['rep_path']);
-      if ( !empty($dir['tab_path']) ){
-        $path .= $dir['tab_path'];
-      }
-      if ( !empty($dir['path']) ){
-        $path .= $dir['path'];
-      }
-      return [
-        'repository' => $dir['repository'],
-        'bbn_path' => $dir['bbn_path'],
-        'rep_path' => $dir['rep_path'],
-        'directory' => [
-          'path' => $dir['path'] ?: '',
-          'name' => $dir['name'] ?: '',
-          'full_path' => $path
-        ],
-        'tab' => $dir['tab'] ?: false,
-        'tab_path' => $dir['tab_path'] ?: ''
-      ];
-    }
-    return false;
-  }
-
-  /**
    * Loads a file.
    *
-   * @param array $file
+   * @param string $url File's URL
    * @return array|bool
    */
-  public function load(array $file){
-    if ( ($f = $this->get_file_cfg($file)) && !empty(self::$current_file) ){
+  public function load(string $url){
+    if ( ($real = $this->url_to_real($url, true)) &&
+      !empty($real['file']) &&
+      !empty($real['mode']) &&
+      !empty($real['repository'])
+    ){
+      $this->set_current_file($real['file']);
+      $f = [
+        'mode' => $real['mode'],
+        'tab' => $real['tab'],
+        'extension' => \bbn\str::file_ext(self::$current_file),
+        'permissions' => false,
+        'selections' => false,
+        'marks' => false,
+      ];
       if ( is_file(self::$current_file) ){
         $f['value'] = file_get_contents(self::$current_file);
         if ( $permissions = $this->get_file_permissions() ){
-          $f = \bbn\x::merge_arrays($f, $permissions);
+          $f = array_merge($f, $permissions);
         }
         if ( $preferences = $this->get_file_preferences() ){
-          $f = \bbn\x::merge_arrays($f, $preferences);
+          $f = array_merge($f, $preferences);
         }
       }
-      else {
-        $f['value'] = $file['extensions'][0]['default'];
+      else if ( !empty($real['tab']) &&
+        !empty($real['repository']['tabs'][$real['tab']]['extensions'][0]['default'])
+      ){
+        $f['value'] = $real['repository']['tabs'][$real['tab']]['extensions'][0]['default'];
       }
-      $f['file']['id'] = self::$current_id;
+      else if (!empty($real['repository']['extensions'][0]['default'])){
+        $f['value'] = $real['repository']['extensions'][0]['default'];
+      }
+      else {
+        $f['value'] = '';
+      }
+      $f['id'] = self::$current_id;
       return $f;
     }
     return false;
@@ -481,8 +463,9 @@ class ide {
    * @param array $file
    * @return array|string
    */
-  public function save($file){
-    if ( $f = $this->get_file_cfg($file) && !empty(self::$current_file) ){
+  public function save(array $file){
+    if ( $this->set_current_file($this->decipher_path($file['full_path'])) ){
+
       // Delete the file if code is empty and if it isn't a super controller
       if ( empty($file['code']) && ($file['tab'] !== '_ctrl') ){
         if ( @unlink(self::$current_file) ){
@@ -492,17 +475,17 @@ class ide {
           if ( $this->pref ){
             $this->delete_file_preferences();
           }
-          if ( !empty(self::$current_id) && defined('BBN_USER_PATH') ){
+          if ( !empty(self::$current_id) && defined('BBN_USER_PATH') && !empty($file['extension']) ){
             // Remove file's preferences
             $this->options->remove($this->options->from_code(self::$current_id, $this->_files_pref()));
             // Remove ide backups
-            bbn\file\dir::delete(dirname(BBN_USER_PATH . 'ide/backup/' . self::$current_id) . '/' . $f['file']['ext'] . '/', 1);
+            bbn\file\dir::delete(dirname(BBN_USER_PATH . 'ide/backup/' . self::$current_id) . '/' . ($file['tab'] ?: $file['extension']) . '/', 1);
           }
           return ['deleted' => true];
         }
       }
       if ( is_file(self::$current_file) && !empty(self::$current_id) && defined('BBN_USER_PATH') ){
-        $backup = dirname(BBN_USER_PATH . 'ide/backup/' . self::$current_id) . '/' . ($f['tab'] ?: $f['file']['ext']) . '/' . date('Y-m-d His') . '.' . $f['file']['ext'];
+        $backup = dirname(BBN_USER_PATH . 'ide/backup/' . self::$current_id) . '/' . ($file['tab'] ?: $file['extension']) . '/' . date('Y-m-d His') . '.' . $file['extension'];
         bbn\file\dir::create_path(dirname($backup));
         rename(self::$current_file, $backup);
       }
@@ -510,7 +493,7 @@ class ide {
         bbn\file\dir::create_path(dirname(self::$current_file));
       }
       if ( ($file['tab'] === 'php') && !is_file(self::$current_file) ){
-        /** @todo create permission */
+        // @todo create permission
       }
       file_put_contents(self::$current_file, $file['code']);
       if ( $this->pref ){
@@ -642,10 +625,7 @@ class ide {
    */
   public function get_file_preferences(string $file = null){
     if ( !empty($file) && ($file !== self::$current_file) ){
-      self::set_current_file($file);
-    }
-    if ( !empty($file) ){
-      self::set_current_id();
+      $this->set_current_file($file);
     }
     if ( !empty(self::$current_id) &&
       ($id_option = $this->options->from_code(self::$current_id, $this->_files_pref()))
@@ -787,6 +767,123 @@ class ide {
       }
     }
     return false;
+  }
+
+  /**
+   * Gets the real file's path from an URL
+   *
+   * @param string $url The file's URL
+   * @param bool $obj
+   * @return bool|string|array
+   */
+  public function url_to_real(string $url, bool $obj = false){
+    if ( ($rep = $this->repository_from_url($url, true)) &&
+      ($res = $this->get_root_path($rep))
+    ){
+      $bits = explode('/', substr($url, strlen($rep['bbn_path'].$rep['path'])+1));
+      $o = [
+        'mode' => false,
+        'repository' => $rep,
+        'tab' => false
+      ];
+      if ( !empty($bits) ){
+        if ( !empty($rep['tabs']) && (end($bits) !== 'code') ){
+          // Tab's nane
+          $tab = array_pop($bits);
+          // File's name
+          $fn = array_pop($bits);
+          // File's path
+          $fp = implode('/', $bits);
+          // Check if the file is a superior super-controller
+          $ssc = $this->superior_sctrl($tab, $fp);
+          $tab = $ssc['tab'];
+          $o['tab'] = $tab;
+          $fp = $ssc['path'].'/';
+          if ( !empty($rep['tabs'][$tab]) ){
+            $tab = $rep['tabs'][$tab];
+            $res .= $tab['path'];
+            if ( !empty($tab['fixed']) ){
+              $res .= $fp . $tab['fixed'];
+              $o['mode'] = $tab['extensions'][0]['mode'];
+            }
+            else {
+              $res .= $fp . $fn;
+              $ext_ok = false;
+              foreach ( $tab['extensions'] as $e ){
+                if ( is_file("$res.$e[ext]") ){
+                  $res .= ".$e[ext]";
+                  $ext_ok = true;
+                  $o['mode'] = $e['mode'];
+                  break;
+                }
+              }
+              if ( empty($ext_ok) ){
+                $res .= '.' . $tab['extensions'][0]['ext'];
+                $o['mode'] = $tab['extensions'][0]['mode'];
+              }
+            }
+          }
+          else {
+            return false;
+          }
+        }
+        else {
+          array_pop($bits);
+          $res .= implode('/', $bits);
+          foreach ( $rep['extensions'] as $ext ){
+            if ( is_file("$res.$ext[ext]") ){
+              $res .= ".$ext[ext]";
+              $o['mode'] = $ext['mode'];
+            }
+          }
+          if ( empty($o['mode']) ){
+            $res .= '.' . $rep['extensions'][0]['ext'];
+            $o['mode'] = $rep['extensions'][0]['mode'];
+          }
+        }
+        $res = bbn\str::parse_path($res);
+        if ( $obj ){
+          $o['file'] = $res;
+          return $o;
+        }
+        return $res;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Checks if the file is a superior super-controller and returns the corrected name and path
+   *
+   * @param string $tab The tab'name from file's URL
+   * @param string $path The file's path from file's URL
+   * @return array
+   */
+  private function superior_sctrl(string $tab, string $path = ''){
+    if ( ($pos = strpos($tab, '_ctrl')) > -1 ){
+      if ( ($pos === 0) ){
+        $path = '';
+      }
+      else {
+        // Fix the right path
+        $bits = explode('/', $path);
+        $count = strlen(substr($tab, 0, $pos));
+        if ( !empty($bits) ){
+          foreach ( $bits as $i => $b ){
+            if ( ($i + 1) > $count ){
+              unset($bits[$i]);
+            }
+          }
+          $path = implode('/', $bits). '/';
+        }
+      }
+      // Fix the tab's name
+      $tab = '_ctrl';
+    }
+    return [
+      'tab' => $tab,
+      'path' => $path
+    ];
   }
 
 

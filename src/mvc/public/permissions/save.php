@@ -1,4 +1,6 @@
 <?php
+/** @var $ctrl \bbn\mvc\controller */
+
 if ( !empty($ctrl->post['id']) &&
   !empty($ctrl->post['code']) &&
   !empty($ctrl->post['text'])

@@ -1,18 +1,15 @@
-(function(){
+(() => {
   return {
-    beforeMount: function(){
+    beforeMount(){
       bbn.vue.setComponentRule(this.source.root + 'components/', 'appui');
-      bbn.vue.addComponent('ide/file');
-      bbn.vue.addComponent('ide/child_permissions');
       bbn.vue.addComponent('ide/history');
-      bbn.vue.addComponent('ide/new');
-      bbn.vue.addComponent('ide/permissions');
-      bbn.vue.addComponent('ide/rename');
+      bbn.vue.addComponent('ide/popup/new');
+      bbn.vue.addComponent('ide/popup/rename');
       bbn.vue.unsetComponentRule();
     },
     props: ['source'],
-    data: function(){
-      var vm = this;
+    data(){
+      const vm = this;
       if ( vm.source.repositories ){
         $.each(vm.source.repositories, function (i, a){
           a.value = i;
@@ -29,14 +26,20 @@
               text: '<i class="fa fa-plus"></i>New',
               items: [{
                 text: '<i class="fa fa-file-o"></i>File',
-                select: "bbn.ide.newFile();"
+                select(){
+                  vm.newFile();
+                }
               }, {
                 text: '<i class="fa fa-folder"></i>Directory',
-                select: "bbn.ide.newDir();"
+                select(){
+                  vm.newDir();
+                }
               }]
             }, {
               text: '<i class="fa fa-save"></i>Save',
-              select: "bbn.ide.save();"
+              select(){
+                vm.save();
+              }
             }, {
               text: '<i class="fa fa-trash-o"></i>Delete'
             }, {
@@ -106,8 +109,8 @@
       })
     },
     computed: {
-      ddrep: function(){
-        var r = [];
+      ddRepData(){
+        const r = [];
         $.each(this.repositories, function(i, a){
           r.push({
             value: i,
@@ -118,21 +121,28 @@
       }
     },
     methods: {
-      tplrep: function(e){
+      /** ###### REPOSITORY ###### */
+
+      /**
+       * Returns the items' template for the repositories dropdownlist
+       *
+       * @param e
+       * @returns {string}
+       */
+      tplRep(e){
         if ( e.value && this.repositories[e.value] ){
-          var cfg = this.repositories[e.value];
+          const cfg = this.repositories[e.value];
           return '<div style="clear: none; background-color: ' + cfg.bcolor +'; color: ' + cfg.fcolor + '" class="bbn-100">' + e.text + '</div>';
         }
       },
-      /** ###### REPOSITORY ###### */
 
       /**
        * Gets the bbn_path property from the current repository
        *
        * @returns string|boolean
        */
-      getBbnPath: function(){
-        var vm = this;
+      getBbnPath(){
+        const vm = this;
         if ( vm.repositories[vm.currentRep] &&
           vm.repositories[vm.currentRep].bbn_path
         ){
@@ -146,8 +156,8 @@
        *
        * @returns string|boolean
        */
-      getRepPath: function(){
-        var vm = this;
+      getRepPath(){
+        const vm = this;
         if ( vm.repositories[vm.currentRep] &&
           vm.repositories[vm.currentRep].path
         ){
@@ -159,12 +169,12 @@
       /**
        * Gets the path property from the current repository's tab
        *
-       * @param string tab The tab's url
-       * @param string rep The repository's name
+       * @param tab The tab's url
+       * @param rep The repository's name
        * @returns string|boolean
        */
-      getTabPath: function(tab, rep){
-        var vm = this;
+      getTabPath(tab, rep){
+        const vm = this;
         rep = rep || vm.currentRep;
         if ( tab && vm.repositories[rep] && vm.repositories[rep].tabs ){
           // Super controller
@@ -181,11 +191,12 @@
       /**
        * Gets the tab's extensions
        *
+       * @param rep The repository's name
        * @param tab The tab's url
        * @returns array|boolean
        */
-      getExt: function(rep, tab){
-        var vm = this;
+      getExt(rep, tab){
+        const vm = this;
         if ( vm.repositories[rep] ){
           // MVC
           if ( tab && vm.repositories[rep].tabs ){
@@ -207,18 +218,20 @@
       /**
        * Gets the default text of a file by the extension
        *
-       * @param string ext The extension
-       * @param string tab The MVC tab's name (if the file's a MVC)
+       * @param ext The extension
+       * @param tab The MVC tab's name (if the file's a MVC)
        * @returns {*}
        */
-      getDefaultText: function(ext, tab){
-        var vm = this;
+      getDefaultText(ext, tab){
+        const vm = this;
         if ( vm.repositories[vm.currentRep] ){
           // MVC
           if ( tab && vm.repositories[vm.currentRep].tabs ){
             // Super controller
             if ( tab.indexOf('_ctrl') > -1 ){
               tab = '_ctrl';
+
+
             }
             if ( vm.repositories[vm.currentRep].tabs[tab] && vm.repositories[vm.currentRep].tabs[tab].extensions ){
               return bbn.fn.get_field(vm.repositories[vm.currentRep].tabs[tab].extensions, 'ext', ext, 'default');
@@ -236,20 +249,20 @@
        *
        * @returns {boolean}
        */
-      isMVC: function(){
-        var vm = this;
+      isMVC(){
+        const vm = this;
         return (vm.repositories[vm.currentRep] !== undefined ) && (vm.repositories[vm.currentRep].tabs !== undefined);
       },
 
       /**
        * Makes a data object necessary on file actions
        *
-       * @param string rep The repository's name
-       * @param string tab The tab's name (MVC)
+       * @param rep The repository's name
+       * @param tab The tab's name (MVC)
        * @returns {*}
        */
-      makeActionData: function(rep, tab){
-        var vm = this;
+      makeActionData(rep, tab){
+        const vm = this;
         if ( rep &&
           vm.repositories &&
           vm.repositories[rep] &&
@@ -274,13 +287,13 @@
       /**
        * Loads files|folders tree data
        *
-       * @param object n The tree node
-       * @param bool onlyDirs Set true if you want to get only folders
-       * @param string tab The tab's name (MVC)
+       * @param n The tree node
+       * @param onlyDirs Set true if you want to get only folders
+       * @param tab The tab's name (MVC)
        * @returns {*}
        */
-      treeLoad: function(e, n, onlyDirs, tab){
-        var vm = this;
+      treeLoad(e, n, onlyDirs, tab){
+        const vm = this;
         return bbn.fn.post(vm.root + "tree/", {
           repository: vm.currentRep,
           repository_cfg: vm.repositories[vm.currentRep],
@@ -289,7 +302,7 @@
           path: n.node.data.path || '',
           onlydirs: onlyDirs || false,
           tab: tab || false
-        }).promise().then(function(pd){
+        }).promise().then((pd) => {
           return pd.data;
         });
       },
@@ -302,7 +315,7 @@
        * @param field the field on which applying filters (text by default)
        * @returns {boolean}
        */
-      filterTree: function(dataSource, query, field){
+      filterTree(dataSource, query, field){
         var vm = this,
             hasVisibleChildren = false,
             d = dataSource instanceof kendo.data.HierarchicalDataSource && dataSource.data();
@@ -338,7 +351,7 @@
        * @param e
        * @param d
        */
-      treeRenderNode: function(e, d){
+      treeRenderNode(e, d){
         if ( d.node.data.bcolor ){
           $("span.fancytree-custom-icon", d.node.span).css("color", d.node.data.bcolor);
         }
@@ -351,10 +364,10 @@
        * @param d The node data
        * @param n The node
        */
-      treeNodeActivate: function(id, d, n){
-        var vm = this;
+      treeNodeActivate(id, d, n){
+        const vm = this;
         if ( !n.folder ){
-          vm.addFileTab(vm.$refs.tabstrip, d);
+          vm.openFile(d);
         }
       },
 
@@ -364,8 +377,8 @@
        * @param e
        * @param d
        */
-      treeLazyLoad: function(e, d){
-        var vm = this;
+      treeLazyLoad(e, d){
+        const vm = this;
         d.result = vm.treeLoad(e, d);
       },
 
@@ -373,231 +386,49 @@
       /** ###### TAB ###### */
 
       /**
-       * Makes a tabNav
-       *
-       * @param elem
-       * @param baseURL
-       * @param title
-       * @param list
-       * @returns {*}
-       */
-      mkTabNav: function (elem, baseURL, title, list){
-        $(elem).tabNav({
-          //current: current,
-          baseTitle: title,
-          baseURL: baseURL,
-          autoload: true,
-          list: list || []
-        });
-        return elem;
-      },
-
-      /**
        * Adds a file (tab) to the tabNav
        *
        * @param tabnav
        * @param file
        */
-      addFileTab: function(tabnav, file){
-        var vm = this,
-            url = vm.currentRep + (file.dir || '') + file.name;
-
-        bbn.fn.link(vm.baseURL+url);
-
-        /*vm.$refs.tabstrip.tabs.push({
-          title: '<span title="' + (file.dir || '') + file.name + '">' + file.name + '</span>',
-          url: url,
-          static: false,
-          component: vm.isMVC() ? 'appui-ide-file-mvc' : 'appui-ide-file',
-          load: false,
-          source: {
-            repository: vm.currentRep,
-            url: url
-          },
-          bcolor: vm.repositories[vm.currentRep].bcolor || false,
-          fcolor: vm.repositories[vm.currentRep].fcolor || false,*/
-          /*close: function (a, b, c) {
-            return bbn.ide.close(a, b, c);
-          },
-          callonce: function(cont){
-            vm.mkTabNav(
-              $(cont).children(),
-              url,
-              file.name,
-              vm.mkTabs(file)
-            );
-          }*/
-        //});
-
-/*
-        $(tabnav).tabNav("navigate", {
-          title: '<span title="' + (file.dir || '') + file.name + '">' + file.name + '</span>',
-          content: '<div class="bbn-full-height"></div>',
-          url: url,
-          static: false,
-          load: false,
-          bcolor: vm.repositories[vm.currentRep].bcolor || false,
-          fcolor: vm.repositories[vm.currentRep].fcolor || false,
-          close: function (a, b, c) {
-            return bbn.ide.close(a, b, c);
-          },
-          callonce: function(cont){
-            vm.mkTabNav(
-              $(cont).children(),
-              url,
-              file.name,
-              vm.mkTabs(file)
-            );
-          }
-        });*/
+      openFile(file){
+        const vm = this;
+        bbn.fn.log(file,
+          vm.root +
+          'editor/file/' +
+          vm.currentRep +
+          (file.dir || '') +
+          file.name +
+          '/_end_' +
+          (file.tab ? '/' + file.tab : '')
+        );
+        bbn.fn.link(
+          vm.root +
+          'editor/file/' +
+          vm.currentRep +
+          (file.dir || '') +
+          file.name +
+          '/_end_' +
+          (file.tab ? '/' + file.tab : '')
+        );
       },
 
-      /**
-       * Makes the file's tabs structure
-       *
-       * @param file
-       * @returns {Array}
-       */
-      mkTabs: function(file){
-        var vm = this,
-            list = [];
-        if ( (file !== undefined) && (file.path !== undefined) ){
-          if ( vm.currentRep && vm.repositories[vm.currentRep] ){
-            if ( vm.repositories[vm.currentRep].tabs ){
-              // Add all MVC tabs
-              $.each(vm.repositories[vm.currentRep].tabs, function(i, tab){
-                if ( tab.fixed && (i === '_ctrl') ){
-                  list = vm.addCTRL(list, tab, file.tab || false, file.path);
-                }
-                else {
-                  list = vm.addTab(
-                    list,
-                    tab.title,
-                    tab.url,
-                    file.path,
-                    file.tab || false,
-                    tab.fcolor || false,
-                    tab.bcolor || false
-                  );
-                }
-              });
-            }
-            // Normal file
-            else {
-              list = vm.addTab(
-                list,
-                'Code',
-                'code',
-                file.path,
-                'code',
-                vm.repositories[vm.currentRep].fcolor|| false,
-                vm.repositories[vm.currentRep].bcolor || false
-              );
+      getActive(){
+        const vm = this;
+        let tn = vm.$refs.tabstrip,
+            code;
+        if ( tn && tn.currentURL ){
+          tn = tn.getSubTabNav(tn.getIndex(tn.currentURL));
+          if ( tn && tn.currentURL ){
+            code = tn.getContainer(tn.getIndex(tn.currentURL));
+            if ( code.$children[0] ){
+              return code.$children[0];
             }
           }
         }
-        return list;
+        return false;
       },
 
-      /**
-       * Adds a _CTRL tab
-       *
-       * @param list
-       * @param tab
-       * @param path
-       * @returns {Array.<T>|*}
-       */
-      addCTRL: function(list, tab, def, path){
-        var vm = this;
-        if ( (list !== undefined) &&
-          $.isArray(list) &&
-          (tab !== undefined) &&
-          (tab.title !== undefined) &&
-          (tab.url !== undefined) &&
-          ($.type(path) === 'string') &&
-          path.length
-        ){
-          path = path.split('/');
-          path.pop();
-          if ( path.length ){
-            $.each(path, function(i, p){
-              var pa = path.join('/') + '/',
-                  ur = '';
-              for ( var k = 0; k < path.length; k++ ){
-                ur += '_';
-              }
-              ur += tab.url;
-              pa += tab.fixed;
-              list = vm.addTab(
-                list,
-                tab.title + (k === 0 ? '' : ' ' + (k+1)),
-                ur,
-                pa,
-                def,
-                tab.fcolor || false,
-                tab.bcolor || false
-              );
-              path.pop();
-            });
-          }
-          var pa = path.join('/');
-          list = vm.addTab(
-            list,
-            tab.title,
-            tab.url,
-            (pa.length ? pa + '/' : '') + tab.fixed,
-            def,
-            tab.fcolor || false,
-            tab.bcolor || false
-          );
-          return list.reverse();
-        }
-      },
-
-      /**
-       * Adds a tab
-       *
-       * @param list
-       * @param title
-       * @param url
-       * @param path
-       * @param def
-       * @param fcolor
-       * @param bcolor
-       * @returns {*}
-       */
-      addTab: function(list, title, url, file, def, fcolor, bcolor){
-        var vm = this;
-        if ( (list !== undefined) &&
-          $.isArray(list) &&
-          (title !== undefined) &&
-          (url !== undefined) &&
-          (file !== undefined)
-        ){
-          list.push({
-            title: title,
-            content: '<div class="bbn-full-height"></div>',
-            url: url,
-            static: true,
-            load: true,
-            default: def === url,
-            fcolor: fcolor || false,
-            bcolor: bcolor || false,
-            data: {
-              repository: vm.currentRep,
-              bbn_path: vm.getBbnPath(),
-              rep_path: vm.getRepPath(),
-              tab_path: vm.getTabPath(url),
-              extensions: vm.getExt(vm.currentRep, url),
-              file: {
-                full_path: file
-              },
-              tab: url !== 'code' ? url : false
-            }
-          });
-          return list;
-        }
-      },
 
       /**
        * Adds menu to a tab and submenus to sub
@@ -605,9 +436,10 @@
        * @param o
        * @returns {string}
        */
-      mkMenu: function(o){
-        var st = '',
-            vm = this;
+      mkMenu(o){
+        const vm = this;
+        let st = '';
+
         if (o.text) {
           if (o.text) {
             st += '<li>';
@@ -623,7 +455,7 @@
             }
             if (o.items && o.items.length) {
               st += '<ul>';
-              $.each(o.items, function (i, v) {
+              $.each(o.items, (i, v) => {
                 st += vm.mkMenu(v);
               });
               st += '</ul>';
@@ -643,9 +475,9 @@
        * @param c The tab page's container
        * @param d The tab page's data
        */
-      mkCodeMirror: function(c, d){
-        var vm = this,
-            $cm;
+      mkCodeMirror(c, d){
+        const vm = this;
+        let $cm;
         if ( d.tab && (d.tab === 'php') ){
           vm.permissionsPanel(c, d);
         }
@@ -655,14 +487,14 @@
           selections: d.selections,
           marks: d.marks,
           save: vm.save,
-          keydown: function(widget, e){
+          keydown(widget, e){
             if ( e.ctrlKey && e.shiftKey && (e.key.toLowerCase() === 't') ){
               e.preventDefault();
               vm.test();
             }
           },
-          changeFromOriginal: function(wid){
-            var $elem = wid.element,
+          changeFromOriginal(wid){
+            const $elem = wid.element,
                 idx = $elem.closest("div[role=tabpanel]").index() - 1;
             if ( wid.changed ){
               //$elem.closest("div[data-role=tabstrip]").find("> ul > li").eq(idx).addClass("changed");
@@ -670,11 +502,11 @@
               $($(vm.$refs.tabstrip).tabNav('getTab', $(vm.$refs.tabstrip).tabNav('getActiveTab'))).addClass("changed");
             }
             else {
-              var ok = true;
+              let ok = true;
               //$elem.closest("div[data-role=tabstrip]").find("> ul > li").eq(idx).removeClass("changed");
               $elem.closest("div[data-role=reorderabletabstrip]").find("> ul > li").eq(idx).removeClass("changed");
               //$elem.closest("div[data-role=tabstrip]").find("> ul > li").each(function(i, e){
-              $elem.closest("div[data-role=reorderabletabstrip]").find("> ul > li").each(function(i, e){
+              $elem.closest("div[data-role=reorderabletabstrip]").find("> ul > li").each((i, e) => {
                 if ( $(e).hasClass("changed") ){
                   ok = false;
                 }
@@ -686,7 +518,7 @@
           }
         });
         if ( d.file.id ) {
-          var $link = $("div.ui-codemirror[data-id='" + d.file.id + "']").first();
+          const $link = $("div.ui-codemirror[data-id='" + d.file.id + "']").first();
           if ( $link.length ){
             $cm.codemirror("link", $link);
           }
@@ -696,20 +528,21 @@
 
       /**
        * Sets the theme to editors
-       * @param string theme
+       * @param theme
        */
-      setTheme: function(theme){
-        $("div.code", ele).each(function () {
-          $(this).codemirror("setTheme", theme ? theme : this.theme);
+      setTheme(theme){
+        const vm = this;
+        $("div.code", ele).each(() => {
+          $(this).codemirror("setTheme", theme ? theme : vm.theme);
         });
       },
 
       /**
        * Sets the font to editors
-       * @param string font
-       * @param string font_size
+       * @param font
+       * @param font_size
        */
-      setFont: function(font, font_size){
+      setFont(font, font_size){
         $("div.CodeMirror", ele).css("font-family", font ? font : this.font);
         $("div.CodeMirror", ele).css("font-size", font_size ? font_size : this.font_size);
       },
@@ -719,69 +552,12 @@
        *
        * @returns {number}
        */
-      test: function(){
-        var vm = this,
-            $cm = $("div.k-content.k-state-active div.code:visible", $(vm.$refs.tabstrip)),
-            url = $(vm.$refs.tabstrip).tabNav("getURL"),
-            tabData = $($(vm.$refs.tabstrip).tabNav('getSubTabNav')).tabNav('getData'),
-            rep = vm.repositories[tabData.repository] ? vm.repositories[tabData.repository] : false,
-            code,
-            mode;
-        if ( rep && $cm.length ){
-          if ( rep.tabs &&
-            (tabData.file !== undefined) &&
-            (tabData.file.path !== undefined) &&
-            (tabData.file.name !== undefined)
-          ) {
-            bbn.fn.link(tabData.file.path + tabData.file.name, 1);
-            return 1;
-          }
-          code = $cm.codemirror("getValue");
-          mode = $cm.codemirror("getMode");
-          if ( typeof(mode) === 'string' ){
-            switch ( mode ){
-              case "php":
-                bbn.fn.post(data.root + "test", {code: code}, function(d){
-                  var idx = $(vm.$refs.tabstrip).tabNav("getIndex", url),
-                      subtab = $(vm.$refs.tabstrip).tabNav("getSubTabNav", idx),
-                      list = subtab.tabNav("getList"),
-                      len = list.length,
-                      num = 0;
-                  if ( len > 1 ){
-                    while ( len ){
-                      if ( list[len-1].num !== undefined ){
-                        num = list[len-1].num + 1;
-                        break;
-                      }
-                      len--;
-                    }
-                  }
-                  subtab.tabNav("navigate", {
-                    content: d.content,
-                    title: moment().format('HH:mm:ss'),
-                    url: 'output' + num,
-                    num: num,
-                    bcolor: '#58be1d',
-                    fcolor: '#fdfdfd'
-                  });
-                });
-                break;
-              case "js":
-                eval(code);
-                break;
-              case "svg":
-                var oDocument = new DOMParser().parseFromString(code, "text/xml");
-                if (oDocument.documentElement.nodeName == "parsererror" || !oDocument.documentElement) {
-                  bbn.fn.alert("There is an XML error in this SVG");
-                }
-                else {
-                  bbn.fn.popup($("<div/>").append(document.importNode(oDocument.documentElement, true)).html(), "Problem with SVG");
-                }
-                break;
-              default:
-                bbn.fn.alert(code, "Test: " + mode);
-            }
-          }
+      test(){
+        const vm = this,
+              active = vm.getActive();
+
+        if ( active && $.isFunction(active.test) ){
+          active.test();
         }
       },
 
@@ -791,35 +567,11 @@
        * @returns {number}
        */
       save: function(){
-        var vm = this,
-            $cm = $("div.k-content.k-state-active div.code:visible", $(vm.$refs.tabstrip)),
-            tabData = $($(vm.$refs.tabstrip).tabNav('getSubTabNav')).tabNav('getData'),
-            tab_path = false,
-            extensions,
-            state;
-        if ( $cm.length &&
-          (tabData.repository !== undefined) &&
-          (tabData.bbn_path !== undefined) &&
-          (tabData.rep_path !== undefined) &&
-          (tabData.file !== undefined) &&
-          (vm.repositories[vm.currentRep] !== undefined)
-        ){
-          state = $cm.codemirror("getState");
-          bbn.fn.post(data.root + "actions/save",
-            $.extend({}, vm.makeActionData(tabData.repository, tabData.tab !== 'code' ? tabData.tab : false), {
-              file: tabData.file,
-              selections: state.selections,
-              marks: state.marks,
-              code: state.value
-            }), function(d){
-              if ( d.success ){
-                appui.success("File saved!");
-              }
-              else if ( d.deleted ){
-                appui.success("File deleted!");
-              }
-            });
-          return 1;
+        const vm = this,
+              active = vm.getActive();
+
+        if ( active && $.isFunction(active.save) ){
+          active.save();
         }
       },
 
@@ -843,134 +595,18 @@
        * @param bool isFile A boolean value to identify if you want create a file or a folder
        * @param string path The current path
        */
-      new: function(title, isFile, path){
-        var vm = this;
-        bbn.fn.popup($("#ide_new_template").html(), title, 540, false, {modal: true}, function(cont){
-          new Vue({
-            el: $(cont).get(0),
-            data: $.extend({}, vm.$data, {
-              title: title,
-              isFile: isFile,
-              path: path || './',
-              types: [],
-              selectedType: false,
-              selectedExt: false,
-              extensions: [],
-              name: ''
-            }),
-            methods: {
-              isMVC: vm.isMVC,
-              setExtensions: function(extensions){
-                var vm$ = this;
-                vm$.extensions = $.map(extensions, function(ex){
-                  if ( ex.ext ){
-                    return {text: '.' + ex.ext, value: ex.ext};
-                  }
-                });
-                if ( vm$.extensions && vm$.extensions.length ){
-                  setTimeout(function(){
-                    vm$.selectedExt = vm$.extensions[0].value;
-                  }, 5);
-                }
-              },
-              selectDir: function(){
-                var vm$ = this;
-                bbn.fn.popup('<div class="tree bbn-h-100" />', 'Select directory', 300, 500, function(w){
-                  w.addClass("bbn-ide-selectdir");
-                  $("div:first", w).fancytree({
-                    source: function(e, d){
-                      return vm.treeLoad(e, d, true, vm$.selectedType);
-                    },
-                    lazyLoad: function(e, d){
-                      d.result = vm.treeLoad(e, d, true, vm$.selectedType);
-                    },
-                    renderNode: function(e, d){
-                      if ( d.node.data.bcolor ){
-                        $("span.fancytree-custom-icon", d.node.span).css("color", d.node.data.bcolor);
-                      }
-                    },
-                    activate: function(e, d){
-                      vm$.path = d.node.data.path + '/';
-                      vm$.close();
-                    }
-                  });
-                });
-
-              },
-              setRoot: function(){
-                this.path = './'
-              },
-              close: function(){
-                bbn.fn.closePopup();
-              },
-              response: function(d){
-                var vm$ = this;
-              }
-            },
-            watch: {
-              selectedType: function(t, o){
-                var vm$ = this;
-                if ( vm$.isFile && (t !== o) ){
-                  vm$.extensions = [];
-                  if ( vm.repositories[vm.currentRep].tabs[t] && vm.repositories[vm.currentRep].tabs[t].extensions ){
-                    vm$.setExtensions(vm.repositories[vm.currentRep].tabs[t].extensions);
-                  }
-                }
-              }
-            },
-            mounted: function(){
-              var vm$ = this,
-                  def,
-                  tabs = [];
-              if ( vm.currentRep && vm.repositories && vm.repositories[vm.currentRep] ){
-                bbn.fn.analyzeContent(vm$.$el);
-                bbn.fn.redraw(vm$.$el, true);
-                if ( vm.isMVC() ){
-                  tabs = $.map(vm.repositories[vm.currentRep].tabs, function(t){
-                    if ( t.fixed === undefined ){
-                      if ( t.default && ( t.url !== vm$.selectedType) ){
-                        def = t.url;
-                      }
-                      return {text: t.title, value: t.url};
-                    }
-                  });
-                  vm$.types = tabs;
-                  setTimeout(function(){
-                    vm$.selectedType = def || false;
-                  }, 5);
-                }
-                else if ( vm.repositories[vm.currentRep].extensions ){
-                  vm$.setExtensions(vm.repositories[vm.currentRep].extensions);
-                }
-                $(vm$.$refs.new_form.$el).on('submit', function(e){
-                  e.preventDefault();
-                  e.stopImmediatePropagation();
-                  if ( vm.currentRep &&
-                    vm.repositories &&
-                    vm.repositories[vm.currentRep] &&
-                    vm.repositories[vm.currentRep].bbn_path &&
-                    vm.repositories[vm.currentRep].path &&
-                    vm$.name &&
-                    vm$.path
-                  ){
-                    bbn.fn.post(vm.root + 'actions/create',
-                      $.extend({}, vm.makeActionData(vm.currentRep, vm$.selectedType), {
-                        extension: vm$.selectedExt,
-                        name: vm$.name,
-                        path: vm$.path,
-                        default_text: vm.getDefaultText(vm$.selectedExt, vm$.selectedType),
-                        is_file: vm$.isFile
-                      }), function(d){
-                        if ( d.success ){
-                          vm$.close();
-                        }
-                      });
-                  }
-                });
-              }
-            }
-          });
+      new(title, isFile, path){
+        const vm = this;
+        appui.popup({
+          width: 850,
+          height: 600,
+          title: title,
+          component: 'appui-ide-popup-new',
+          source: vm.$data
         });
+
+
+
       },
 
       /**
@@ -978,8 +614,8 @@
        *
        * @param string path The current path
        */
-      newFile: function(path){
-        this.new('New File', true, path);
+      newFile(path){
+        this.new(bbn._('New File'), true, path);
       },
 
       /**
@@ -987,198 +623,11 @@
        *
        * @param string path The current path
        */
-      newDir: function(path){
-        this.new('New Directory', false, path);
+      newDir(path){
+        this.new(bbn._('New Directory'), false, path);
       },
 
 
-      /** ###### PERMISSIONS ###### */
-
-      permissionsPanel: function(c, d){
-        var vm = this,
-            $panel = $(c),
-            html = $panel.html(),
-            obj = kendo.observable({
-              id: d.permissions && d.permissions.id ? d.permissions.id : '',
-              code: d.permissions && d.permissions.code ? d.permissions.code : '',
-              text: d.permissions && d.permissions.text ? d.permissions.text : '',
-              help: d.permissions && d.permissions.help ? d.permissions.help : '',
-              children: d.permissions && d.permissions.children ? d.permissions.children : [],
-              add: function(e){
-                vm.addPermission(e.target);
-              },
-              save: function(e){
-                vm.savePermission(e.target)
-              },
-              checkEnter: function(e){
-                if ( e.key.toLowerCase() === 'enter' ){
-                  e.preventDefault();
-                  $(e.target).nextAll("button:first").click();
-                }
-              },
-              saveChild: function(e){
-                vm.saveChiPermission(e.target);
-              },
-              removeChild: function(e){
-                vm.removeChiPermission(e.target);
-              }
-            });
-
-        bbn.fn.insertContent(
-          '<div class="bbn-full-height perms-splitter">' +
-          '<div>' + html + '</div>' +
-          '<div class="perm_set"> </div>' +
-          '</div>',
-          $panel
-        );
-        var permsSplitter = $("div.perms-splitter", $panel).kendoSplitter({
-          orientation: "vertical",
-          panes: [{
-            collapsible: false,
-            size: "70%",
-            resizable: false,
-            scrollable: false
-          }, {
-            collapsible: true,
-            size: "30%",
-            resizable: false
-          }],
-          /*resize: function(){
-           bbn.ide.resize(panel);
-           }*/
-        });
-        var elem = permsSplitter.children("div.perm_set");
-        bbn.fn.insertContent($("#ide_permissions_form_template").html(), elem);
-        kendo.bind(elem, obj);
-        //$panel.resize();
-      },
-
-      savePermission: function(bt){
-        var $bt = $(bt),
-            $cont = $bt.closest("div"),
-            ele = $cont.find("input"),
-            code = $(ele[0]).val(),
-            text = $(ele[1]).val(),
-            $id = $("input:hidden", $cont.closest("div.perm_set")),
-            help = $("textarea", $cont).val();
-
-        if ( code.length && text.length ){
-          bbn.fn.post(data.root + 'permissions/save', {
-            id: $id.val(),
-            code: code,
-            text: text,
-            help: help
-          }, function(d){
-            if ( d.data && d.data.success ){
-              // Notify
-              $bt.after('<i class="fa fa-thumbs-up" style="margin-left: 5px; color: green"></i>');
-            }
-            else {
-              // Notify
-              $bt.after('<i class="fa fa-thumbs-down" style="margin-left: 5px; color: red"></i>');
-            }
-            // Remove notify
-            setTimeout(function(){
-              $("i.fa-thumbs-up, i.fa-thumbs-down", $cont).remove();
-            }, 3000);
-          });
-        }
-      },
-
-      saveChiPermission: function(bt){
-        var $cont = $(bt).closest("div"),
-            ele = $cont.find("input"),
-            code = $(ele[0]).val(),
-            text = $(ele[1]).val(),
-            $id = $("input:hidden", $cont.closest("div.perm_set"));
-
-        if ( code.length && text.length ){
-          bbn.fn.post(data.root + 'permissions/save', {
-            id: $id.val(),
-            code: code,
-            text: text
-          }, function(d){
-            if ( d.data && d.data.success ){
-              // Notify
-              $cont.append('<i class="fa fa-thumbs-up" style="margin-left: 5px; color: green"></i>');
-            }
-            else {
-              // Notify
-              $cont.append('<i class="fa fa-thumbs-down" style="margin-left: 5px; color: red"></i>');
-            }
-            // Remove notify
-            setTimeout(function(){
-              $("i.fa-thumbs-up, i.fa-thumbs-down", $cont).remove();
-            }, 3000);
-          });
-        }
-      },
-
-      addPermission: function(bt){
-        var vm = this,
-            $bt = $(bt),
-            $cont = $bt.closest("div"),
-            ele = $cont.find('input'),
-            code = $(ele[0]).val(),
-            text = $(ele[1]).val(),
-            ul = $bt.parent().next(),
-            $id = $("input:hidden", $cont.closest("div.perm_set"));
-
-        if ( code.length && text.length ){
-          bbn.fn.post(data.root + 'permissions/add', {
-            id: $id.val(),
-            code: code,
-            text: text
-          }, function(d){
-            if ( d.data && d.data.success ){
-              // Notify
-              $cont.append('<i class="fa fa-thumbs-up" style="margin-left: 5px; color: green"></i>');
-              // Insert the new item to list
-              ul.append(
-                '<div style="margin-bottom: 5px">' +
-                '<label>Code</label>' +
-                '<input class="k-textbox" readonly style="margin: 0 10px" value="' + code + '"  maxlength="255">' +
-                '<label>Title/Description</label>' +
-                '<input class="k-textbox" maxlength="255" style="width:400px; margin: 0 10px" value="' + text + '">' +
-                '<button class="k-button" onclick="vm.saveChiPermission(this)" style="margin-right: 5px"><i class="fa fa-save"></i></button>' +
-                '<button class="k-button" onclick="vm.ide.removeChiPermission(this)"><i class="fa' +
-                ' fa-trash"></i></button>' +
-                '</div>'
-              );
-              // Clear inserted fields
-              $(ele[0]).val('');
-              $(ele[1]).val('');
-            }
-            else {
-              // Notify
-              $cont.append('<i class="fa fa-thumbs-down" style="margin-left: 5px; color: red"></i>');
-            }
-            // Remove notify
-            setTimeout(function(){
-              $("i.fa-thumbs-up, i.fa-thumbs-down", $cont).remove();
-            }, 3000);
-          });
-        }
-      },
-
-      removeChiPermission: function(bt){
-        var $bt = $(bt),
-            $cont = $bt.closest("div"),
-            ele = $cont.find('input'),
-            code = $(ele[0]).val(),
-            $id = $("input:hidden", $cont.closest("div.perm_set"));
-
-        bbn.fn.confirm('Are you sure to remove this item?', function(){
-          bbn.fn.post(data.root + 'permissions/delete', {
-            code: code,
-            id: $id.val()
-          }, function(d){
-            if ( d.data && d.data.success ){
-              $bt.closest("div").remove();
-            }
-          });
-        });
-      },
 
       /** ###### HISTORY ###### */
       history: function(){
@@ -1342,8 +791,10 @@
       }
     },
     mounted: function(){
-
-      var vm = this;
+      const vm = this;
+      vm.$nextTick(() => {
+        $(vm.el).bbn('analyzeContent', true);
+      });
 
       // Toolbar with buttons and menu
       /*$("div.bbn-ide", $(vm.$el)).kendoToolBar({
