@@ -22,7 +22,7 @@ Vue.component('appui-ide-popup-new', {
     },
     selectDir(){
       const vm = this;
-      bbn.vue.closest(this, ".bbn-tab").popup({
+      appui.popup({
         width: 300,
         height: 400,
         title: bbn._('Path'),
@@ -75,49 +75,50 @@ Vue.component('appui-ide-popup-new', {
       }
     },
     close(){
-      const vm = this,
-            popup = bbn.vue.closest(vm, ".bbn-popup");
-      popup.close(popup.num - 1);
+      const vm = this;
+      $(vm.$el).parent().data("kendoWindow").close();
     },
     submit(){
-      if ( this.currentRep &&
-        this.repositories[this.currentRep] &&
-        this.name.length &&
-        this.path.length &&
-        ( !this.isFile || (this.isFile && this.selectedExt.length) ) &&
-        ( !this.isMVC() || (this.isMVC() && this.selectedType.length && this.repositories[this.currentRep].tabs[this.selectedType]) )
+      const vm = this;
+      if ( vm.currentRep &&
+        vm.repositories[vm.currentRep] &&
+        vm.name.length &&
+        vm.path.length &&
+        ( !vm.isFile || (vm.isFile && vm.selectedExt.length) ) &&
+        ( !vm.isMVC() || (vm.isMVC() && vm.selectedType.length && vm.repositories[vm.currentRep].tabs[vm.selectedType]) )
       ){
-        const rep = this.repositories[this.currentRep],
-              ext = this.isMVC() ? rep.tabs[this.selectedType].extensions : rep.extensions,
-              path = this.path.endsWith('/') ? this.path : this.path + '/';
-        bbn.fn.post(this.root + 'actions/create', {
-          is_file: this.isFile,
-          repository: rep,
+        const rep = vm.repositories[vm.currentRep],
+              ext = vm.isMVC() ? rep.tabs[vm.selectedType].extensions : rep.extensions,
+              path = vm.path.endsWith('/') ? vm.path : vm.path + '/';
+        bbn.fn.post(vm.root + 'actions/create', {
+          is_file: vm.isFile,
+          repository: vm.currentRep,
+          bbn_path: rep.bbn_path,
+          rep_path: rep.path,
           path: path,
-          name: this.name,
-          extension: this.selectedExt,
-          tab: this.selectedType,
-          tab_path: this.isMVC() && rep.tabs[this.selectedType] ? rep.tabs[this.selectedType].path : '',
-          default_text: bbn.fn.get_field(ext, 'ext', this.selectedExt, 'default') || ''
-        }, d => {
+          name: vm.name,
+          extension: vm.selectedExt,
+          tab: vm.selectedType,
+          tab_path: vm.isMVC() && rep.tabs[vm.selectedType] ? rep.tabs[vm.selectedType].path : '',
+          default_text: bbn.fn.get_field(ext, 'ext', vm.selectedExt, 'default') || ''
+        }, (d) => {
           if ( d.success ){
-            if ( this.isFile ){
+            if ( vm.isFile ){
               appui.success(bbn._("File created!"));
               bbn.fn.link(
-                this.root +
+                vm.root +
                 'editor/file/' +
-                this.currentRep +
+                vm.currentRep +
                 (path.startsWith('./') ? path.slice(2) : path) +
-                this.name +
+                vm.name +
                 '/_end_' +
-                (this.selectedType.length ? '/' + this.selectedType : '')
+                (vm.selectedType.length ? '/' + vm.selectedType : '')
               );
             }
             else {
               appui.success(bbn._("Directory created!"));
             }
-            /** @todo Refresh the files list */
-            this.close();
+            vm.close();
           }
           else {
             appui.error(bbn._("Error!"));

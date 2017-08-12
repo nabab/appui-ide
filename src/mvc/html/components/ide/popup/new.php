@@ -1,24 +1,42 @@
-<bbn-form ref="new_form">
-  <div class="bbn-form-label mvc-ele" v-if="isMVC()">Type</div>
-  <div class="bbn-form-field mvc-ele" v-if="isMVC()">
-    <bbn-dropdown class="bbn-full-width" ref="types" :source="types" v-model="selectedType" name="tab" required="required"></bbn-dropdown>
-  </div>
-  <div class="bbn-form-label">Name</div>
-  <div class="bbn-form-field">
-    <bbn-input type="text" name="name" v-model="name" class="bbn-full-width" required="required"></bbn-input>
-    <bbn-dropdown ref="ext" :source="extensions" v-model="selectedExt" name="ext" required="required" style="width: 100px" v-if="isFile"></bbn-dropdown>
-  </div>
-  <div class="bbn-form-label">Path</div>
-  <div class="bbn-form-field">
-    <bbn-input class="bbn-full-width" type="text" name="path" v-model="path" readonly="readonly" required="required"></bbn-input>
-    <div style="float: left">
-      <bbn-button @click="selectDir">Browse</bbn-button>
-      <bbn-button @click="setRoot">Root</bbn-button>
+<bbn-form class="bbn-full-screen">
+  <div class="bbn-full-height bbn-w-100">
+    <div class="bbn-form-label" v-if="isMVC()"><?=_("Type")?></div>
+    <div class="bbn-form-field" v-if="isMVC()">
+      <bbn-dropdown :source="types"
+                    v-model="selectedType"
+                    required="required"
+                    class="bbn-w-100"
+      ></bbn-dropdown>
+    </div>
+    <div class="bbn-form-label"><?=_("Name")?></div>
+    <div class="bbn-form-field">
+      <bbn-input class="bbn-full-width"
+                 v-model="name"
+                 required="required"
+      ></bbn-input>
+      <bbn-dropdown class="bbn-block"
+                    :source="extensions"
+                    v-model="selectedExt"
+                    required="required"
+                    style="width: 100px"
+                    v-if="isFile"
+      ></bbn-dropdown>
+    </div>
+    <div class="bbn-form-label"><?=_("Path")?></div>
+    <div class="bbn-form-field">
+      <bbn-input class="bbn-full-width"
+                 v-model="path"
+                 readonly="readonly"
+                 required="required"
+      ></bbn-input>
+      <div class="bbn-block" style="margin-left: 5px">
+        <bbn-button type="button" @click="selectDir"><?=_("Browse")?></bbn-button>
+        <bbn-button type="button" @click="setRoot"><?=_("Root")?></bbn-button>
+      </div>
     </div>
   </div>
-  <div class="bbn-form-label"></div>
-  <div class="bbn-form-field" style="text-align: right">
-    <bbn-button type="submit" icon="fa fa-check"> Save</bbn-button>
-    <bbn-button @click="close" icon="fa fa-close"> Cancel</bbn-button>
+  <div class="bbn-block bbn-w-100 k-edit-buttons k-state-default" align="right" style="bottom: 0">
+    <bbn-button type="button" @click="submit" icon="fa fa-check"><?=_("Save")?></bbn-button>
+    <bbn-button type="button" @click="close" icon="fa fa-close"><?=_("Cancel")?></bbn-button>
   </div>
 </bbn-form>

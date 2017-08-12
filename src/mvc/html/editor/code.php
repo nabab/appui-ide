@@ -27,9 +27,8 @@
       <div class="k-header bbn-c"><?=('Permissions setting')?></div>
       <div style="padding: 10px">
         <div>
-          <bbn-button icon="fa fa-save" @click="save"></bbn-button>
           <label><?=_('Code')?></label>
-          <bbn-input :readonly="true"
+          <bbn-input readonly="readonly"
                      style="margin: 0 10px"
                      :value="permissions.code"
           ></bbn-input>

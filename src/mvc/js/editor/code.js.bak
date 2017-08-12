@@ -85,12 +85,9 @@
       },
       test(){
         const vm = this;
+
         if ( vm.isMVC ){
-          bbn.fn.link(
-            (vm.ide.route ? vm.ide.route + '/' : '') +
-            (vm.ide.path ? vm.ide.path + '/' : '') +
-            vm.ide.filename
-          );
+          bbn.fn.link((vm.ide.path ? vm.ide.path + '/' : '') + vm.ide.filename );
           return true;
         }
         if ( typeof(vm.mode) === 'string' ){
@@ -118,7 +115,7 @@
                 bbn.fn.alert("There is an XML error in this SVG");
               }
               else {
-                bbn.vue.closest(this, ".bbn-tab").popup($("<div/>").append(document.importNode(oDocument.documentElement, true)).html(), "Problem with SVG");
+                bbn.fn.popup($("<div/>").append(document.importNode(oDocument.documentElement, true)).html(), "Problem with SVG");
               }
               break;
             default:
@@ -159,21 +156,28 @@
         }
       },
       savePermission(){
-        const obj = {
-                id: this.permissions.id,
-                code: this.permissions.code,
-                text: this.permissions.text,
-                help: this.permissions.help || ''
+        const vm = this,
+              obj = {
+                id: vm.permissions.id,
+                code: vm.permissions.code,
+                text: vm.permissions.text,
+                help: vm.permissions.help || ''
               };
 
         if ( obj.id && obj.code.length && obj.text.length ){
-          bbn.fn.post(this.ide.root + 'permissions/save', obj, d => {
-            if ( d.data && d.data.success ){
-              appui.success(bbn._("Permission saved!"));
+          bbn.fn.post(vm.ide.root + 'permissions/save', obj, (d) => {
+            /*if ( d.data && d.data.success ){
+              // Notify
+              $bt.after('<i class="fa fa-thumbs-up" style="margin-left: 5px; color: green"></i>');
             }
             else {
-              appui.error(bbn._("Error!"));
+              // Notify
+              $bt.after('<i class="fa fa-thumbs-down" style="margin-left: 5px; color: red"></i>');
             }
+            // Remove notify
+            setTimeout(function(){
+              $("i.fa-thumbs-up, i.fa-thumbs-down", $cont).remove();
+            }, 3000);*/
           });
         }
       },
@@ -220,6 +224,7 @@
           });
         }
       }
+
     },
     mounted(){
       const vm = this;

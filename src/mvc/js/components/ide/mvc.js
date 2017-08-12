@@ -14,11 +14,10 @@ Vue.component('appui-ide-mvc', {
   },
   data(){
     const vm = this,
-          ide = bbn.vue.closest(bbn.vue.closest(vm, '.bbn-tabnav'), '.bbn-tab').$children[0].$data;
-    let path = vm.source.url.substr(vm.source.repository.length).replace('/_bbn_', '').split('/'),
+          ide = bbn.vue.closest(bbn.vue.closest(vm, '.bbn-tabnav'), '.bbn-tab').getComponent().$data;
+    let path = vm.source.url.substr(vm.source.repository.length).replace('/_end_', '').split('/'),
         filename = path.pop();
-
-    return $.extend(vm.source, {
+    return $.extend({}, vm.source, {
       repositories: ide.repositories,
       font: ide.font,
       font_size: ide.font_size,

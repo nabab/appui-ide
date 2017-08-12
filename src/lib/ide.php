@@ -14,7 +14,8 @@ class ide {
         IDE_PATH = 'ide',
         DEV_PATH = 'PATHS',
         PATH_TYPE = 'PTYPES',
-        FILES_PREF = 'files';
+        FILES_PREF = 'files',
+        BACKUP_PATH = BBN_DATA_PATH . 'ide/backup/';
 
   private static
     /** @var bool|int $appui_path */
@@ -111,7 +112,6 @@ class ide {
     self::$permissions = $id;
   }
 
-
   /**
    * Gets the ID of the paths' types option
    *
@@ -205,6 +205,275 @@ class ide {
       }
       return $id;
     }
+    return false;
+  }
+
+  /**
+   * Checks if the file is a superior super-controller and returns the corrected name and path
+   *
+   * @param string $tab The tab'name from file's URL
+   * @param string $path The file's path from file's URL
+   * @return array
+   */
+  private function superior_sctrl(string $tab, string $path = ''){
+    if ( ($pos = strpos($tab, '_ctrl')) > -1 ){
+      if ( ($pos === 0) ){
+        $path = '';
+      }
+      else {
+        // Fix the right path
+        $bits = explode('/', $path);
+        $count = strlen(substr($tab, 0, $pos));
+        if ( !empty($bits) ){
+          foreach ( $bits as $i => $b ){
+            if ( ($i + 1) > $count ){
+              unset($bits[$i]);
+            }
+          }
+          $path = implode('/', $bits). '/';
+        }
+      }
+      // Fix the tab's name
+      $tab = '_ctrl';
+    }
+    return [
+      'tab' => $tab,
+      'path' => $path,
+      'ssctrl' => $count ?? 0
+    ];
+  }
+
+  /**
+   * Deletes all files' options of a folder and returns an array of these files.
+   *
+   * @param string $d The folder's path
+   * @return array
+   */
+  private function rem_dir_opt(string $d){
+    $sub_files = \bbn\file\dir::scan($d);
+    $files = [];
+    foreach ( $sub_files as $sub ){
+      if ( is_file($sub) ){
+        // Add it to files to be closed
+        array_push($files, $this->real_to_url($sub));
+        // Remove file's options
+        $this->options->remove($this->options->from_code($this->real_to_id($sub), $this->_files_pref()));
+      }
+      else {
+        $f = $this->rem_dir_opt($sub);
+        if ( !empty($f) ){
+          $files = array_merge($files, $f);
+        }
+      }
+    }
+    return $files;
+  }
+
+  private function check_normal(array $cfg, array $rep, string $path){
+    if ( !empty($cfg) && !empty($path) && !empty($cfg['name']) ){
+      $old = $new = $path;
+      if ( !empty($cfg['path']) && ($cfg['path'] !== './') ){
+        $old .= $cfg['path'] . (substr($cfg['path'], -1) !== '/' ? '/' : '');
+      }
+      if ( !empty($cfg['new_path']) && ($cfg['new_path'] !== './') ){
+        $new .= $cfg['new_path'] . (substr($cfg['new_path'], -1) !== '/' ? '/' : '');
+      }
+      if ( !empty($cfg['is_file']) &&
+        ( ( !empty($cfg['ext']) && (\bbn\x::find($rep['extensions'], ['ext' => $cfg['ext']]) === false) ) ||
+          ( !empty($cfg['new_ext']) && (\bbn\x::find($rep['extensions'], ['ext' => $cfg['new_ext']]) === false) )
+        )
+      ){
+        return false;
+      }
+      $old .= $cfg['name'] . (!empty($cfg['is_file']) ? '.' . $cfg['ext'] : '');
+      $new .= ($cfg['new_name'] ?? '') .
+        (!empty($cfg['is_file']) && !empty($cfg['new_ext']) ? '.' . $cfg['new_ext'] : '');
+      if ( ($path !== $new) && file_exists($new) ){
+        $this->error("The new file|folder exists: $new");
+        return false;
+      }
+      if ( file_exists($old) ){
+        return [
+          'old' => $old,
+          'new' => ($path === $new) ? false : $new
+        ];
+      }
+    }
+    return false;
+  }
+
+  private function check_mvc(array $cfg, array $rep, string $path){
+    $todo = [];
+    if ( !empty($cfg) &&
+      !empty($rep) &&
+      !empty($rep['tabs']) &&
+      !empty($cfg['name']) &&
+      isset($cfg['is_file'], $path)
+    ){
+      foreach ( $rep['tabs'] as $i => $tab ){
+        $tmp = $path;
+        if ( !empty($tab['path']) ){
+          $tmp .= $tab['path'];
+        }
+        $old = $new = $tmp;
+        if ( !empty($cfg['path']) &&  ($cfg['path'] !== './') ){
+          $old .= $cfg['path'] . (substr($cfg['path'], -1) !== '/' ? '/' : '');
+        }
+        if ( !empty($cfg['new_path']) && ($cfg['new_path'] !== './') ){
+          $new .= $cfg['new_path'] . (substr($cfg['new_path'], -1) !== '/' ? '/' : '');
+        }
+        if ( ($i !== '_ctrl') && !empty($tab['extensions']) ){
+          $old .= $cfg['name'];
+          $new .= $cfg['new_name'] ?? '';
+          $ext_ok = false;
+          if ( !empty($cfg['is_file']) ){
+            foreach ( $tab['extensions'] as $k => $ext ){
+              if ( $k === 0 ){
+                if ( is_file($new.'.'.$ext['ext']) ){
+                  $this->error("The new file exists: $new.$ext[ext]");
+                  return false;
+                }
+              }
+              if ( is_file($old.'.'.$ext['ext']) ){
+                $ext_ok = $ext['ext'];
+              }
+            }
+          }
+          if ( !empty($cfg['is_file']) && empty($ext_ok) ){
+            continue;
+          }
+          $old .= !empty($cfg['is_file'])  ? '.' . $ext_ok : '';
+          $new .= !empty($cfg['is_file']) ? '.' . $tab['extensions'][0]['ext'] : '';
+          if ( ($new !== $tmp) && file_exists($new) ){
+            $this->error("The new file|folder exists.");
+            return false;
+          }
+          if ( file_exists($old) ){
+            array_push($todo, [
+              'old' => $old,
+              'new' => ($new === $tmp) ? false : $new,
+              'perms' => !empty($cfg['is_file']) && ($i === 'php')
+            ]);
+          }
+        }
+      }
+    }
+    return $todo;
+  }
+
+  /**
+   * Renames|copies a file or a folder.
+   *
+   * @param array $cfg The file|folder info
+   * @param string $ope The operation type (rename, copy)
+   * @return bool
+   */
+  private function operations(array $cfg, string $ope){
+    if ( is_string($ope) &&
+      !empty($cfg['repository']) &&
+      !empty($cfg['name']) &&
+      isset($cfg['is_mvc'], $cfg['is_file'], $cfg['path']) &&
+      ( ( $ope === 'delete' ) ||
+        ( ( $ope !== 'delete' ) &&
+          ( ( isset($cfg['new_name']) &&
+              ($cfg['name'] !== $cfg['new_name'])
+            ) ||
+            ( isset($cfg['new_path']) &&
+              ($cfg['path'] !== $cfg['new_path'])
+            ) ||
+            ( !empty($cfg['is_file']) &&
+              isset($cfg['ext'], $cfg['new_ext']) &&
+              ($cfg['ext'] !== $cfg['new_ext'])
+            )
+          )
+        )
+      )
+    ){
+      $rep = $cfg['repository'];
+      $path = $this->decipher_path($rep['bbn_path'] . '/' . $rep['path']);
+      if ( $ope === 'rename' ){
+        $cfg['new_path'] = $cfg['path'];
+      }
+      // Normal file|folder
+      if ( empty($cfg['is_mvc']) &&
+        ( empty($cfg['is_file']) ||
+          ( !empty($cfg['is_file']) &&
+            !empty($rep['extensions'])
+          )
+        ) &&
+        ($f = $this->check_normal($cfg, $rep, $path)) &&
+          ( ( ($ope === 'copy') &&
+              \bbn\str::check_filename($f['new']) &&
+              \bbn\file\dir::copy($f['old'], $f['new'])
+            ) ||
+            ( ($ope === 'rename') &&
+              \bbn\str::check_filename($f['new']) &&
+              \bbn\file\dir::move($f['old'], $f['new'])
+            ) ||
+            ( ($ope === 'delete') &&
+              \bbn\file\dir::delete($f['old'])
+            )
+          )
+      ){
+        return true;
+      }
+      // MVC
+      else if ( !empty($rep['tabs']) ){
+        if ( $todo = $this->check_mvc($cfg, $rep, $path) ){
+          foreach ( $todo as $t ){
+            // Rename
+            if ( $ope === 'rename' ){
+              if ( !\bbn\file\dir::move($t['old'], $t['new']) ){
+                $this->error("Error during the file|folder move: old -> $t[old] , new -> $t[new]");
+                return false;
+              }
+              if ( !empty($cfg['is_file']) ){
+                // Remove file's options
+                $this->options->remove(
+                  $this->options->from_code(
+                    $this->real_to_id($t['old']),
+                    $this->_files_pref()
+                  )
+                );
+              }
+              else {
+                // Remove folder's options
+                $this->rem_dir_opt($t['old']);
+              }
+              // Change permissions
+              if ( !empty($t['perms']) && !$this->change_perm_by_real($t['old'], $t['new'], empty($cfg['is_file']) ? 'dir' : 'file') ){
+                $this->error("Error during the file|folder permissions change: old -> $t[old] , new -> $t[new]");
+                return false;
+              }
+            }
+            // Copy
+            else if ( $ope === 'copy' ){
+              if ( !\bbn\file\dir::copy($t['old'], $t['new']) ){
+                $this->error("Error during the file|folder copy: old -> $t[old] , new -> $t[new]");
+                return false;
+              }
+              // Create permissions
+              if ( !empty($t['perms']) && !$this->create_perm_by_real($t['new'], empty($cfg['is_file']) ? 'dir' : 'file') ){
+                $this->error("Error during the file|folder permissions create: $t[new]");
+                return false;
+              }
+            }
+            else if ( $ope === 'delete' ){
+              if ( !\bbn\file\dir::delete($t['old']) ){
+                $this->error("Error during the file|folder delete: $t[old]");
+                return false;
+              }
+              // Delete permissions
+              if ( !empty($t['perms']) ){
+                $this->delete_perm($t['old']);
+              }
+            }
+          }
+          return true;
+        }
+      }
+    }
+    $this->error("Impossible to $ope the file|folder.");
     return false;
   }
 
@@ -316,7 +585,10 @@ class ide {
         $repository = $i;
       }
     }
-    return empty($obj) ? $repository : $repositories[$repository];
+    if ( !empty($repository) ){
+      return empty($obj) ? $repository : $repositories[$repository];
+    }
+    return false;
   }
 
   /***
@@ -325,13 +597,14 @@ class ide {
    * @param string $url
    * @return bool|string
    */
-  public function file_from_url(string $url){
+  /*public function file_from_url(string $url){
     $rep = $this->repository_from_url($url);
     if ( $this->is_MVC($rep) ){
       $last = basename($url);
       if ( $repo = $this->repository($rep) ){
         $path = $this->get_root_path($rep).substr($url, strlen($rep));
         $tabs = $repo['tabs'];
+
         foreach ( $tabs as $key => $r ){
           if ( $key === $last ){
             foreach ( $tabs as $key2 => $r2 ){
@@ -349,7 +622,7 @@ class ide {
     }
     endFunc:
     return substr($url, strlen($rep));
-  }
+  }*/
 
   /**
    * Checks if a repository is a MVC
@@ -426,6 +699,7 @@ class ide {
       $f = [
         'mode' => $real['mode'],
         'tab' => $real['tab'],
+        'ssctrl' => $real['ssctrl'] ?? 0,
         'extension' => \bbn\str::file_ext(self::$current_file),
         'permissions' => false,
         'selections' => false,
@@ -465,7 +739,7 @@ class ide {
    */
   public function save(array $file){
     if ( $this->set_current_file($this->decipher_path($file['full_path'])) ){
-
+      $backup_path = self::BACKUP_PATH . $file['repository'] . $file['path'] . '/' . $file['filename'] . '/__end__/' . ($file['tab'] ?: $file['extension']) . '/';
       // Delete the file if code is empty and if it isn't a super controller
       if ( empty($file['code']) && ($file['tab'] !== '_ctrl') ){
         if ( @unlink(self::$current_file) ){
@@ -475,25 +749,27 @@ class ide {
           if ( $this->pref ){
             $this->delete_file_preferences();
           }
-          if ( !empty(self::$current_id) && defined('BBN_USER_PATH') && !empty($file['extension']) ){
+          if ( !empty(self::$current_id) ){
             // Remove file's preferences
             $this->options->remove($this->options->from_code(self::$current_id, $this->_files_pref()));
             // Remove ide backups
-            bbn\file\dir::delete(dirname(BBN_USER_PATH . 'ide/backup/' . self::$current_id) . '/' . ($file['tab'] ?: $file['extension']) . '/', 1);
+            bbn\file\dir::delete($backup_path, 1);
           }
           return ['deleted' => true];
         }
       }
-      if ( is_file(self::$current_file) && !empty(self::$current_id) && defined('BBN_USER_PATH') ){
-        $backup = dirname(BBN_USER_PATH . 'ide/backup/' . self::$current_id) . '/' . ($file['tab'] ?: $file['extension']) . '/' . date('Y-m-d His') . '.' . $file['extension'];
+      if ( is_file(self::$current_file)  ){
+        $backup = $backup_path . date('Y-m-d_His') . '.' . $file['extension'];
         bbn\file\dir::create_path(dirname($backup));
-        rename(self::$current_file, $backup);
+        bbn\file\dir::copy(self::$current_file, $backup);
       }
       else if ( !is_dir(dirname(self::$current_file)) ){
         bbn\file\dir::create_path(dirname(self::$current_file));
       }
-      if ( ($file['tab'] === 'php') && !is_file(self::$current_file) ){
-        // @todo create permission
+      if ( !empty($file['tab']) && ($file['tab'] === 'php') && !is_file(self::$current_file) ){
+        if ( !$this->create_perm_by_real($file['full_path']) ){
+          return $this->error("Impossible to create the option");
+        }
       }
       file_put_contents(self::$current_file, $file['code']);
       if ( $this->pref ){
@@ -512,19 +788,21 @@ class ide {
    */
   public function create(array $cfg){
     if ( !empty($cfg['repository']) &&
-      !empty($cfg['bbn_path']) &&
-      !empty($cfg['rep_path']) &&
+      !empty($cfg['repository']['bbn_path']) &&
+      !empty($cfg['repository']['path']) &&
       !empty($cfg['name']) &&
       !empty($cfg['path']) &&
-      isset($cfg['is_file'], $cfg['extension'], $cfg['default_text'])
+      isset($cfg['is_file'], $cfg['extension'], $cfg['tab'], $cfg['tab_path'], $cfg['default_text'])
     ){
-      $path = $this->decipher_path($cfg['bbn_path'] . '/' . $cfg['rep_path']);
+      $rep = $cfg['repository'];
+      $path = $this->decipher_path($rep['bbn_path'] . '/' . $rep['path']);
       if ( !empty($cfg['tab_path']) ){
         $path .= $cfg['tab_path'];
       }
       if ( $cfg['path'] !== './' ){
         $path .= $cfg['path'];
       }
+      // New folder
       if ( empty($cfg['is_file']) ){
         if ( is_dir($path.$cfg['name']) ){
           $this->error("Directory exists");
@@ -535,7 +813,8 @@ class ide {
           return false;
         }
       }
-      else if ( !empty($cfg['is_file']) && !empty($cfg['extension']) && !empty($cfg['default_text']) ){
+      // New file
+      else if ( !empty($cfg['is_file']) && !empty($cfg['extension']) ){
         $file = $path . $cfg['name'] . '.' . $cfg['extension'];
         if ( !is_dir($path) && !\bbn\file\dir::create_path($path) ){
           $this->error("Impossible to create the container directory");
@@ -547,21 +826,50 @@ class ide {
             return false;
           }
           if ( !file_put_contents($file, $cfg['default_text']) ){
-            $this->error("Impossibile to create the file");
+            $this->error("Impossible to create the file");
             return false;
           }
         }
-        /** @todo create permission */
         // Add item to options table for permissions
-        /*if ( !empty($cfg['tab']) && ($cfg['tab'] === 'php') ){
+        if ( !empty($cfg['tab']) && ($cfg['tab'] === 'php') && !empty($file) ){
           if ( !$this->create_perm_by_real($file) ){
             return $this->error("Impossible to create the option");
           }
-        }*/
+        }
       }
       return true;
     }
     return false;
+  }
+
+  /**
+   * Copies a file or a folder.
+   *
+   * @param $cfg
+   * @return bool
+   */
+  public function copy(array $cfg){
+    return $this->operations($cfg, 'copy');
+  }
+
+  /**
+   * Renames a file or a folder.
+   *
+   * @param $cfg
+   * @return bool
+   */
+  public function rename(array $cfg){
+    return $this->operations($cfg, 'rename');
+  }
+
+  /**
+   * Renames a file or a folder.
+   *
+   * @param $cfg
+   * @return bool
+   */
+  public function delete(array $cfg){
+    return $this->operations($cfg, 'delete');
   }
 
   /**
@@ -597,6 +905,99 @@ class ide {
         ]);
       }
       return $ret;
+    }
+    return false;
+  }
+
+  /**
+   * Changes permissions to a file/dir from the old and new real file/dir's path
+   *
+   * @param string $old The old file/dir's path
+   * @param string $new The new file/dir's path
+   * @param string $type The type (file/dir)
+   * @return bool
+   */
+  public function change_perm_by_real(string $old, string $new, string $type = 'file'){
+    $type = strtolower($type);
+    if ( !empty($old) &&
+      !empty($new) &&
+      file_exists($new) &&
+      ($id_opt = $this->real_to_perm($old, $type)) &&
+      !$this->real_to_perm($new, $type)
+    ){
+
+      $is_file = $type === 'file';
+      $code = $is_file ? bbn\str::file_ext(basename($new), 1)[0] : basename($new).'/';
+      if ( $id_parent = $this->create_perm_by_real(dirname($new).'/', 'dir') ){
+        $this->options->set_code($id_opt, $code);
+        $this->options->move($id_opt, $id_parent);
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Creates a permission option from a real file/dir's path
+   *
+   * @param string $file The real file/dir's path
+   * @param string $type The type of real (file/dir)
+   * @return bool
+   */
+  public function create_perm_by_real(string $file, string $type = 'file'){
+    if ( !empty($file) &&
+      defined('BBN_APP_PATH') &&
+      file_exists($file) &&
+      // It must be a controller
+      (strpos($file, '/mvc/public/') !== false)
+    ){
+      $is_file = $type === 'file';
+      // Check if it's an external route
+      foreach ( $this->routes as $i => $r ){
+        if ( strpos($file, $r) === 0 ){
+          // Remove route
+          $f = substr($file, strlen($r), strlen($file));
+          // Remove /mvc/public
+          $f = substr($f, strlen('/mvc/public'), strlen($f));
+          // Add the route's name to path
+          $f = $i . '/' . $f;
+        }
+      }
+      // Internal route
+      if ( empty($f) ){
+        $root_path = BBN_APP_PATH.'mvc/public/';
+        if ( strpos($file, $root_path) === 0 ){
+          // Remove root path
+          $f = substr($file, strlen($root_path), strlen($file));
+        }
+      }
+      if ( !empty($f) ){
+        $bits = \bbn\x::remove_empty(explode('/', $f));
+        $code = $is_file ? \bbn\str::file_ext(array_pop($bits), 1)[0] : array_pop($bits).'/';
+        $id_parent = $this->options->from_code(self::BBN_PAGE, self::BBN_PERMISSIONS, self::BBN_APPUI);
+        foreach ( $bits as $b ){
+          if ( !$this->options->from_code($b.'/', $id_parent) ){
+            $this->options->add([
+              'id_parent' => $id_parent,
+              'code' => $b.'/',
+              'text' => $b
+            ]);
+          }
+          $id_parent = $this->options->from_code($b.'/', $id_parent);
+        }
+        if ( !$this->options->from_code($code, $id_parent) ){
+          $this->options->add([
+            'id_parent' => $id_parent,
+            'code' => $code,
+            'text' => $code
+          ]);
+        }
+        return $this->options->from_code($code, $id_parent);
+      }
+      else if ( !$is_file ){
+        return $this->options->from_code(self::BBN_PAGE, self::BBN_PERMISSIONS, self::BBN_APPUI);
+      }
+      return true;
     }
     return false;
   }
@@ -685,9 +1086,10 @@ class ide {
    * Returns the permission's id from a real file/dir's path
    *
    * @param string $file The real file/dir's path
+   * @param string $type The path type (file or dir)
    * @return bool|int
    */
-  public function real_to_perm(string $file){
+  public function real_to_perm(string $file, $type = 'file'){
     if ( empty($file) ){
       $file = self::$current_file;
     }
@@ -696,6 +1098,7 @@ class ide {
       // It must be a controller
       (strpos($file, '/mvc/public/') !== false)
     ){
+      $is_file = $type === 'file';
       // Check if it's an external route
       foreach ( $this->routes as $i => $r ){
         if ( strpos($file, $r) === 0 ){
@@ -704,7 +1107,7 @@ class ide {
           // Remove /mvc/public
           $f = substr($f, strlen('/mvc/public'), strlen($f));
           // Add the route's name to path
-          $f = $i . $f;
+          $f = $i . '/' . $f;
           break;
         }
       }
@@ -718,11 +1121,11 @@ class ide {
       }
       if ( !empty($f) ){
         $bits = bbn\x::remove_empty(explode('/', $f));
-        $file_code = bbn\str::file_ext(array_pop($bits), 1)[0];
+        $code = $is_file ? bbn\str::file_ext(array_pop($bits), 1)[0] : array_pop($bits).'/';
         $bits = array_map(function($b){
           return $b.'/';
         }, array_reverse($bits));
-        array_unshift($bits, $file_code);
+        array_unshift($bits, $code);
         array_push($bits, $this->_permissions());
         return $this->options->from_code($bits);
       }
@@ -770,6 +1173,23 @@ class ide {
   }
 
   /**
+   * Returns the file's ID from the real file's path.
+   *
+   * @param string $file The real file's path
+   * @return bool|string
+   */
+  public function real_to_id($file){
+    if ( ($rep = $this->repository_from_url($this->real_to_url($file), true)) && defined($rep['bbn_path']) ){
+      $bbn_p = constant($rep['bbn_path']);
+      if ( strpos($file, $bbn_p) === 0 ){
+        $f = substr($file, strlen($bbn_p));
+        return \bbn\str::parse_path($rep['bbn_path'].'/'.$f);
+      }
+    }
+    return false;
+  }
+
+  /**
    * Gets the real file's path from an URL
    *
    * @param string $url The file's URL
@@ -805,6 +1225,7 @@ class ide {
             if ( !empty($tab['fixed']) ){
               $res .= $fp . $tab['fixed'];
               $o['mode'] = $tab['extensions'][0]['mode'];
+              $o['ssctrl'] = $ssc['ssctrl'];
             }
             else {
               $res .= $fp . $fn;
@@ -853,37 +1274,55 @@ class ide {
   }
 
   /**
-   * Checks if the file is a superior super-controller and returns the corrected name and path
+   * Returns all backups of a file.
    *
-   * @param string $tab The tab'name from file's URL
-   * @param string $path The file's path from file's URL
-   * @return array
+   * @param string $url The file's URL
+   * @return array|bool
    */
-  private function superior_sctrl(string $tab, string $path = ''){
-    if ( ($pos = strpos($tab, '_ctrl')) > -1 ){
-      if ( ($pos === 0) ){
-        $path = '';
-      }
-      else {
-        // Fix the right path
-        $bits = explode('/', $path);
-        $count = strlen(substr($tab, 0, $pos));
-        if ( !empty($bits) ){
-          foreach ( $bits as $i => $b ){
-            if ( ($i + 1) > $count ){
-              unset($bits[$i]);
+  public function history(string $url){
+    if ( !empty($url) && !empty(self::BACKUP_PATH) ){
+      $backups = [];
+      // File's backup path
+      $path = self::BACKUP_PATH . $url . '/__end__/';
+      if ( is_dir($path) && ($dirs = \bbn\file\dir::get_dirs($path)) ){
+        foreach ( $dirs as $dir ){
+          if ( $files = \bbn\file\dir::get_files($dir) ){
+            $d = basename($dir);
+            foreach ( $files as $file ){
+              $filename = \bbn\str::file_ext($file, true)[0];
+              $moment = strtotime(str_replace('_', ' ', $filename));
+              $date = date('d/m/Y', $moment);
+              $time = date('H:i:s', $moment);
+              if ( ($i = \bbn\x::find($backups, ['title' => $date])) === false ){
+                array_push($backups, [
+                  'title' => $date,
+                  'folder' => true,
+                  'children' => [],
+                  'icon' => 'folder-icon'
+                ]);
+                $i = count($backups) - 1;
+              }
+              if ( ($idx = \bbn\x::find($backups[$i]['children'], ['title' => $d])) === false ){
+                array_push($backups[$i]['children'], [
+                  'title' => $d,
+                  'folder' => true,
+                  'children' => [],
+                  'icon' => 'folder-icon'
+                ]);
+                $idx = count($backups[$i]['children']) - 1;
+              }
+              array_push($backups[$i]['children'][$idx]['children'], [
+                'title' => $time,
+                'mode' => $d,
+                'code' => file_get_contents($file),
+                'folder' => false
+              ]);
             }
           }
-          $path = implode('/', $bits). '/';
         }
       }
-      // Fix the tab's name
-      $tab = '_ctrl';
+      return $backups;
     }
-    return [
-      'tab' => $tab,
-      'path' => $path
-    ];
   }
 
 

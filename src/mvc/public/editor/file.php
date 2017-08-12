@@ -19,7 +19,7 @@ if ( !empty($ctrl->arguments) ){
       ->add_js()
       ->get_view();
   }
-  else if ( !empty($ctrl->arguments) ){
+  else {
     $ctrl->reroute(APPUI_IDE_ROOT.'editor/code', $ctrl->post, $ctrl->arguments);
   }
 }

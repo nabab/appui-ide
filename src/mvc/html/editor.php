@@ -7,7 +7,17 @@
       </div>
       <div></div>
       <div>
-        <bbn-dropdown class="ide-rep-select" :source="ddRepData" v-model="currentRep" :value-template="tplRep"></bbn-dropdown>
+        <bbn-dropdown class="ide-rep-select"
+                      :source="ddRepData"
+                      v-model="currentRep"
+                      style="width: 250px"
+        ></bbn-dropdown>
+      </div>
+      <div>
+        <bbn-button title="<?=_('Refresh files list')?>"
+                    @click="treeReload"
+                    icon="fa fa-refresh"
+        ></bbn-button>
       </div>
       <div></div>
       <div>
@@ -37,7 +47,8 @@
         <bbn-tree class="tree"
                   :source="treeLoad"
                   :select="treeNodeActivate"
-                  :cfg="{renderNode: treeRenderNode, lazyLoad: treeLazyLoad}"
+                  :cfg="{lazyLoad: treeLazyLoad}"
+                  :context-menu="contextMenu"
                   ref="filesList"
         ></bbn-tree>
       </div>
