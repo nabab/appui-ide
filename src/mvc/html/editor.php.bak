@@ -51,7 +51,7 @@
                       :select="treeNodeActivate"
                       :cfg="{lazyLoad: treeLazyLoad}"
                       :context-menu="contextMenu"
-                      @load="$nextTick(() => {$refs.treeScroll.onResize();})"
+                      @load="$nextTick(() => {$refs.treeScroll.$forceUpdate(); $refs.treeScroll.calculateSize();})"
                       ref="filesList"
                       ></bbn-tree>
           </div>

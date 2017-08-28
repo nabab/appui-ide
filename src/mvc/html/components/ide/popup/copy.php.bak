@@ -1,5 +1,5 @@
 <bbn-form class="bbn-full-screen">
-  <div class="bbn-w-100" v-bbn-fill-height>
+  <div class=v-bbn-fill-height "bbn-w-100">
     <div class="bbn-form-label"><?=_("Name")?></div>
     <div class="bbn-form-field">
       <bbn-input v-model="newName" v-bbn-fill-width></bbn-input>

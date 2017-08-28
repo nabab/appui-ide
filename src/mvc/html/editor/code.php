@@ -9,7 +9,7 @@
           }"
           ref="editor"
 ></bbn-code>
-<bbn-splitter v-else class="bbn-full-height perms-splitter" orientation="vertical">
+<bbn-splitter v-else class="perms-splitter" orientation="vertical">
   <div :collapsible="false" :resizable="false" :scrollable="false" style="height: 70%">
     <bbn-code v-model="value"
               :mode="mode"

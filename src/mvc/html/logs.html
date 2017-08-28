@@ -1,24 +1,26 @@
 <!-- HTML Document -->
-<div class="bbn-c bbn-lg bbn-padded">
-  <select style="width: 200px">
-    {{#logs}}
-    <option value="{{text}}">{{text}}</option>
-    {{/logs}}
-  </select>
-  &nbsp;
-  <select style="width: 150px">
-    <option value="10">10 lignes</option>
-    <option value="50">50 lignes</option>
-    <option value="100" selected="selected">100 lignes</option>
-    <option value="250">250 lignes</option>
-    <option value="500">500 lignes</option>
-    <option value="1000">1000 lignes</option>
-  </select>
-  &nbsp;
-  <button class="k-button"><i class="fa fa-file-o"> </i> Clear file</button>
-  &nbsp;
-  <button class="k-button"><i class="fa fa-refresh"> </i> Refresh</button>
-</div>
-<div class="bbn-full-height">
-  <div id="log_viewer" class="bbn-h-100"> </div>
+<div class="bbn-full-screen">
+  <div class="bbn-c bbn-lg bbn-padded">
+    <select style="width: 200px">
+      {{#logs}}
+      <option value="{{text}}">{{text}}</option>
+      {{/logs}}
+    </select>
+    &nbsp;
+    <select style="width: 150px">
+      <option value="10">10 lignes</option>
+      <option value="50">50 lignes</option>
+      <option value="100" selected="selected">100 lignes</option>
+      <option value="250">250 lignes</option>
+      <option value="500">500 lignes</option>
+      <option value="1000">1000 lignes</option>
+    </select>
+    &nbsp;
+    <button class="k-button"><i class="fa fa-file-o"> </i> Clear file</button>
+    &nbsp;
+    <button class="k-button"><i class="fa fa-refresh"> </i> Refresh</button>
+  </div>
+  <div v-bbn-fill-height>
+    <div id="log_viewer" class="bbn-h-100"> </div>
+  </div>
 </div>

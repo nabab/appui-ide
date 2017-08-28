@@ -7,7 +7,6 @@
       <bbn-tree class="bbn-ide-history-tree tree bbn-100"
                 :source="treeLoad"
                 :select="treeNodeActivate"
-                :cfg="{lazyLoad: treeLazyLoad}"
       ></bbn-tree>
     </div>
     <div class="bbn-h-100"

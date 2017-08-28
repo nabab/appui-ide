@@ -7,10 +7,10 @@
       <div style="position: absolute; top: auto; left: auto; margin: 50%; text-align: center">
         Tool's description comes here
       </div>
-      <div class="bbn-full-height" id="tabstrip_editor"></div>
+      <div id="tabstrip_editor" v-bbn-fill-height></div>
     </div>
     <div class="pane-content">
-      <iframe style="width: 100%" class="bbn-full-height" src="https://doc.mybbn.so"></iframe>
+      <iframe class="bbn-full-screen" src="https://doc.mybbn.so"></iframe>
     </div>
   </div>
 </div>
@@ -153,13 +153,13 @@ function findSequence(goal) {
 </script>
 
 <script type="text/x-kendo-template" id="ide_history_template">
-  <div class="bbn-full-height bbn-ide-history">
-    <div class="bbn-full-height bbn-ide-history-splitter">
+  <div class="bbn-ide-history" v-bbn-fill-height>
+    <div class="bbn-ide-history-splitter" v-bbn-fill-height>
       <div class="bbn-full-height">
-        <div class="bbn-full-height bbn-ide-history-tree"></div>
+        <div class="bbn-ide-history-tree" v-bbn-fill-height></div>
       </div>
       <div class="bbn-full-height">
-        <div class="bbn-full-height bbn-ide-history-code"></div>
+        <div class="bbn-ide-history-code" v-bbn-fill-height></div>
       </div>
     </div>
   </div>

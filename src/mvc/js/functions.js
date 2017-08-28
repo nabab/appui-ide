@@ -711,7 +711,7 @@ bbn.ide = {
         default: a.default ? true : false,
         content: a.cfg === undefined ?
           '<div></div>' :
-          '<div class="code bbn-full-height"></div>',
+          '<div class="code" v-bbn-fill-height></div>',
         close: function (a, b, c) {
           return bbn.ide.close(a, b, c);
         },
@@ -792,7 +792,7 @@ bbn.ide = {
 
         var $div = $('<div/>');
         bbn.fn.insertContent(
-          '<div class="bbn-full-height perms-splitter">' +
+          '<div class="perms-splitter" >' +
             '<div>' + html + '</div>' +
             '<div class="perm_set"> </div>' +
           '</div>',

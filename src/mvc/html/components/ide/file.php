@@ -1,4 +1,4 @@
-<div class="bbn-full-height bbn-w-100">
+<div class="bbn-full-screen">
   <div class="bbn-h-100 code">
     <bbn-tabnav :autoload="false" :scrollable="false">
       <bbn-tab :static="true"

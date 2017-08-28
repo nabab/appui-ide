@@ -454,9 +454,9 @@
             return tn;
           }
           if ( tn && tn.tabs[tn.selected]  ){
-            code = tn.getContainer(tn.selected);
+            code = tn.getVue(tn.selected);
             bbn.fn.log('aaaa', code);
-            if ( code.$children[1] ){
+            if ( code.$children && code.$children[1] ){
               return code.$children[1];
             }
           }

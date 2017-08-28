@@ -361,11 +361,6 @@ class ide {
     return $todo;
   }
 
-  private function delete_backup(){
-
-
-  }
-
   /**
    * Renames|copies a file or a folder.
    *
@@ -407,21 +402,16 @@ class ide {
           )
         ) &&
         ($f = $this->check_normal($cfg, $rep, $path)) &&
-            // Copy
           ( ( ($ope === 'copy') &&
               \bbn\str::check_filename($f['new']) &&
               \bbn\file\dir::copy($f['old'], $f['new'])
             ) ||
-            // Rename
             ( ($ope === 'rename') &&
               \bbn\str::check_filename($f['new']) &&
               \bbn\file\dir::move($f['old'], $f['new'])
-              /** @todo Rename backups */
             ) ||
-            // Delete
             ( ($ope === 'delete') &&
               \bbn\file\dir::delete($f['old'])
-              /** @todo Remove backups */
             )
           )
       ){
@@ -455,7 +445,6 @@ class ide {
                 $this->error("Error during the file|folder permissions change: old -> $t[old] , new -> $t[new]");
                 return false;
               }
-              /** @todo Rename backups */
             }
             // Copy
             else if ( $ope === 'copy' ){
@@ -469,7 +458,6 @@ class ide {
                 return false;
               }
             }
-            // Delete
             else if ( $ope === 'delete' ){
               if ( !\bbn\file\dir::delete($t['old']) ){
                 $this->error("Error during the file|folder delete: $t[old]");
@@ -479,7 +467,6 @@ class ide {
               if ( !empty($t['perms']) ){
                 $this->delete_perm($t['old']);
               }
-              /** @todo Remove backups */
             }
           }
           return true;
@@ -1296,7 +1283,7 @@ class ide {
     if ( !empty($url) && !empty(self::BACKUP_PATH) ){
       $backups = [];
       // File's backup path
-      $path = self::BACKUP_PATH . $url;
+      $path = self::BACKUP_PATH . $url . '/__end__/';
       if ( is_dir($path) && ($dirs = \bbn\file\dir::get_dirs($path)) ){
         foreach ( $dirs as $dir ){
           if ( $files = \bbn\file\dir::get_files($dir) ){
@@ -1310,7 +1297,6 @@ class ide {
                 array_push($backups, [
                   'title' => $date,
                   'folder' => true,
-                  'lazy' => true,
                   'children' => [],
                   'icon' => 'folder-icon'
                 ]);
@@ -1320,7 +1306,6 @@ class ide {
                 array_push($backups[$i]['children'], [
                   'title' => $d,
                   'folder' => true,
-                  'lazy' => true,
                   'children' => [],
                   'icon' => 'folder-icon'
                 ]);
@@ -1339,53 +1324,6 @@ class ide {
       return $backups;
     }
   }
-  /*public function history(string $url){
-    if ( !empty($url) && !empty(self::BACKUP_PATH) ){
-      $backups = [];
-      // File's backup path
-      $path = self::BACKUP_PATH . $url;
-      if ( is_dir($path) && ($dirs = \bbn\file\dir::get_dirs($path)) ){
-        foreach ( $dirs as $dir ){
-          if ( $files = \bbn\file\dir::get_files($dir) ){
-            $d = basename($dir);
-            foreach ( $files as $file ){
-              $filename = \bbn\str::file_ext($file, true)[0];
-              $moment = strtotime(str_replace('_', ' ', $filename));
-              $date = date('d/m/Y', $moment);
-              $time = date('H:i:s', $moment);
-              if ( ($i = \bbn\x::find($backups, ['title' => $date])) === false ){
-                array_push($backups, [
-                  'title' => $date,
-                  'folder' => true,
-                  'lazy' => true,
-                  'children' => [],
-                  'icon' => 'folder-icon'
-                ]);
-                $i = count($backups) - 1;
-              }
-              if ( ($idx = \bbn\x::find($backups[$i]['children'], ['title' => $d])) === false ){
-                array_push($backups[$i]['children'], [
-                  'title' => $d,
-                  'folder' => true,
-                  'lazy' => true,
-                  'children' => [],
-                  'icon' => 'folder-icon'
-                ]);
-                $idx = count($backups[$i]['children']) - 1;
-              }
-              array_push($backups[$i]['children'][$idx]['children'], [
-                'title' => $time,
-                'mode' => $d,
-                'code' => file_get_contents($file),
-                'folder' => false
-              ]);
-            }
-          }
-        }
-      }
-      return $backups;
-    }
-  }*/
 
 
 }

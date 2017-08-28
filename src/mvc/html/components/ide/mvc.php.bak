@@ -1,4 +1,4 @@
-<div class="bbn-100">
+<div class=v-bbn-fill-height "bbn-w-100">
   <div class="bbn-h-100 code">
     <bbn-tabnav :autoload="false" :scrollable="false">
       <bbn-tab :static="true"
