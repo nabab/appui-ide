@@ -12,53 +12,25 @@ Vue.component('appui-ide-popup-new', {
       selectedType: '',
       name: '',
       selectedExt: '',
-      extensions: []
+      extensions: [],
+      path: this.source.node && this.source.node.data && this.source.node.data.path ? this.source.node.data.path : ''
     }, this.source);
   },
   methods: {
-    isMVC(){
-      const vm = this;
-      return (vm.repositories[vm.currentRep] !== undefined ) && (vm.repositories[vm.currentRep].tabs !== undefined);
-    },
     selectDir(){
-      const vm = this;
-      bbn.vue.closest(this, ".bbn-tab").popup({
+      bbn.vue.closest(this, ".bbn-tab").$refs.popup[0].open({
         width: 300,
         height: 400,
         title: bbn._('Path'),
         component: 'appui-ide-popup-path',
-        source: vm.$data
+        source: this.$data
       });
-      /*bbn.fn.popup('<div class="tree bbn-h-100" />', bbn.fn._('Select directory'), 300, 500, function(w){
-        w.addClass("bbn-ide-selectdir");
-        $("div:first", w).fancytree({
-          source: function(e, d){
-            return vm.treeLoad(e, d, true, vm.selectedType);
-          },
-          lazyLoad: function(e, d){
-            d.result = vm.treeLoad(e, d, true, vm.selectedType);
-          },
-          renderNode: function(e, d){
-            if ( d.node.data.bcolor ){
-              $("span.fancytree-custom-icon", d.node.span).css("color", d.node.data.bcolor);
-            }
-          },
-          activate: function(e, d){
-            vm.path = d.node.data.path + '/';
-            vm.close();
-          }
-        });
-      });*/
-    },
-    setRoot(){
-      this.path = './';
     },
     setExtensions(){
-      const vm = this;
       let res = [],
-          ext = ( vm.isMVC() && vm.selectedType.length ) ?
-            vm.repositories[vm.currentRep].tabs[vm.selectedType].extensions :
-            vm.repositories[vm.currentRep].extensions;
+          ext = ( this.isMVC && this.selectedType.length ) ?
+            this.repositories[this.currentRep].tabs[this.selectedType].extensions :
+            this.repositories[this.currentRep].extensions;
       if ( ext.length ){
         $.each(ext, (i, v) => {
           res.push({
@@ -67,16 +39,15 @@ Vue.component('appui-ide-popup-new', {
           });
         });
       }
-      vm.extensions = res;
-      if ( vm.extensions.length ){
+      this.extensions = res;
+      if ( this.extensions.length ){
         setTimeout(() => {
-          vm.selectedExt = vm.extensions[0].value;
+          this.selectedExt = this.extensions[0].value;
         }, 100);
       }
     },
     close(){
-      const vm = this,
-            popup = bbn.vue.closest(vm, ".bbn-popup");
+      const popup = bbn.vue.closest(this, ".bbn-popup");
       popup.close(popup.num - 1);
     },
     submit(){
@@ -85,10 +56,10 @@ Vue.component('appui-ide-popup-new', {
         this.name.length &&
         this.path.length &&
         ( !this.isFile || (this.isFile && this.selectedExt.length) ) &&
-        ( !this.isMVC() || (this.isMVC() && this.selectedType.length && this.repositories[this.currentRep].tabs[this.selectedType]) )
+        ( !this.isMVC || (this.isMVC && this.selectedType.length && this.repositories[this.currentRep].tabs[this.selectedType]) )
       ){
         const rep = this.repositories[this.currentRep],
-              ext = this.isMVC() ? rep.tabs[this.selectedType].extensions : rep.extensions,
+              ext = this.isMVC ? rep.tabs[this.selectedType].extensions : rep.extensions,
               path = this.path.endsWith('/') ? this.path : this.path + '/';
         bbn.fn.post(this.root + 'actions/create', {
           is_file: this.isFile,
@@ -97,7 +68,7 @@ Vue.component('appui-ide-popup-new', {
           name: this.name,
           extension: this.selectedExt,
           tab: this.selectedType,
-          tab_path: this.isMVC() && rep.tabs[this.selectedType] ? rep.tabs[this.selectedType].path : '',
+          tab_path: this.isMVC && rep.tabs[this.selectedType] ? rep.tabs[this.selectedType].path : '',
           default_text: bbn.fn.get_field(ext, 'ext', this.selectedExt, 'default') || ''
         }, d => {
           if ( d.success ){
@@ -117,7 +88,14 @@ Vue.component('appui-ide-popup-new', {
               appui.success(bbn._("Directory created!"));
             }
             /** @todo Refresh the files list */
+            if ( this.source.node ){
+
+            }
+            else {
+
+            }
             this.close();
+            //this.$refs.filesList.reload();
           }
           else {
             appui.error(bbn._("Error!"));
@@ -128,10 +106,9 @@ Vue.component('appui-ide-popup-new', {
   },
   computed: {
     types(){
-      const vm = this;
       let res = [];
-      if ( vm.isMVC() ){
-        $.each(vm.repositories[vm.currentRep].tabs, (i, v) => {
+      if ( this.isMVC ){
+        $.each(this.repositories[this.currentRep].tabs, (i, v) => {
           if ( !v.fixed ){
             res.push({
               text: v.title,
@@ -141,24 +118,25 @@ Vue.component('appui-ide-popup-new', {
         });
       }
       return res;
-    }
+    },
+    isMVC(){
+      return (this.repositories[this.currentRep] !== undefined ) && (this.repositories[this.currentRep].tabs !== undefined);
+    },
   },
   watch: {
     selectedType(){
-      const vm = this;
-      if ( vm.isFile ){
-        vm.setExtensions();
+     if ( this.isFile ){
+        this.setExtensions();
       }
     }
   },
   mounted(){
-    const vm = this;
-    if ( !vm.isMVC() && vm.isFile ){
-      vm.setExtensions();
+    if ( !this.isMVC && this.isFile ){
+      this.setExtensions();
     }
-    vm.$nextTick(() => {
+    this.$nextTick(() => {
       setTimeout(() => {
-        $(vm.$el).bbn('analyzeContent', true);
+        $(this.$el).bbn('analyzeContent', true);
       }, 100);
     });
   }

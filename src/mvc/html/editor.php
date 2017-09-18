@@ -15,7 +15,7 @@
       </div>
       <div>
         <bbn-button title="<?=_('Refresh files list')?>"
-                    @click="treeReload"
+                    @click="treeReload()"
                     icon="fa fa-refresh"
         ></bbn-button>
       </div>
@@ -40,27 +40,29 @@
   </div>
   <div>
     <bbn-splitter class="bbn-code-container"
-                  orientation="horizontal">
+                  orientation="horizontal"
+    >
       <div style="width: 200px; overflow: hidden"
            :collapsible="true"
-           :resizable="true">
-        <bbn-scroll ref="treeScroll">
-          <div class="bbn-100">
-            <bbn-tree class="tree"
-                      :source="treeLoad"
-                      :select="treeNodeActivate"
-                      :cfg="{lazyLoad: treeLazyLoad}"
-                      :context-menu="contextMenu"
-                      @load="$nextTick(() => {$refs.treeScroll.onResize();})"
-                      ref="filesList"
-                      ></bbn-tree>
-          </div>
-        </bbn-scroll>
+           :resizable="true"
+      >
+        <div class="bbn-100">
+          <bbn-tree class="tree"
+                    :source="root + 'tree'"
+                    @select="treeNodeActivate"
+                    :menu="treeContextMenu"
+                    :data="treeInitialData"
+                    ref="filesList"
+                    :map="treeMapper"
+                    :icon-color="color"
+          ></bbn-tree>
+        </div>
       </div>
-      <div style="padding:0px"
+      <div class="bbn-no-padding"
            :collapsible="true"
            :resizable="true"
-           :scrollable="false">
+           :scrollable="false"
+      >
         <div style="position: absolute; top: auto; left: auto; margin: 50%; text-align: center">
           <i class="fa fa-code"></i>
         </div>
@@ -79,7 +81,7 @@
            :resizable="true"
            :collapsed="true">
         <iframe class="bbn-100"
-                src="https://doc.mybbn.so"
+                src="#"
         ></iframe>
       </div>
     </bbn-splitter>

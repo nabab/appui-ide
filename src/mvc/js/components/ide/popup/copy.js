@@ -9,19 +9,17 @@ Vue.component('appui-ide-popup-copy', {
   props: ['source'],
   data(){
     return $.extend({
-      newName: this.source.fData.name,
-      newPath: this.source.fData.dir || './',
+      path: '',
+      newName: this.source.fData.data.name,
+      path: this.source.fData.data.dir || './',
       newExt: ''
     }, this.source);
   },
   methods: {
-    isMVC(){
-      return (this.repositories[this.currentRep] !== undefined ) && (this.repositories[this.currentRep].tabs !== undefined);
-    },
     extensions(){
       let res = [];
-      if ( !this.isMVC() ){
-        $.each(this.repositories[this.currentRep].extensions, (i, v) => {
+      if ( this.isMVC ){
+        $.each(this.repositories[this.currentRep].extensions, (i, v) =>{
           res.push({
             text: '.' + v.ext,
             value: v.ext
@@ -31,7 +29,7 @@ Vue.component('appui-ide-popup-copy', {
       return res;
     },
     selectDir(){
-      bbn.vue.closest(this, ".bbn-tab").popup({
+      bbn.vue.closest(this, ".bbn-tab").$refs.popup[0].open({
         width: 300,
         height: 400,
         title: bbn._('Path'),
@@ -44,25 +42,30 @@ Vue.component('appui-ide-popup-copy', {
     },
     close(){
       const popup = bbn.vue.closest(this, ".bbn-popup");
-      popup.close(popup.num - 1);
+      popup.close();
     },
     submit(){
-      if ( (this.fData.name !== this.newName) ||
-        (this.fData.dir !== this.newPath) ||
-        (this.isFile && (this.newExt !== this.fData.ext))
+      console.log("dss", this);
+     if ( (this.fData.data.name !== this.newName) ||
+        (this.fData.data.dir !== this.path) ||
+        (this.isFile && (this.newExt !== this.fData.data.ext))
       ){
-        bbn.fn.post(this.root + 'actions/copy', {
-          repository: this.repositories[this.currentRep],
-          path: this.fData.dir,
-          new_path: this.newPath,
-          name: this.fData.name,
-          new_name: this.newName,
-          ext: this.fData.ext,
-          new_ext: this.newExt,
-          is_mvc: this.isMVC(),
-          is_file: this.isFile
-        }, d => {
+         let obj =  {
+           repository: this.repositories[this.currentRep],
+           path: this.fData.data.dir,
+           new_path: this.path,
+           name: this.fData.data.name,
+           new_name: this.newName,
+           ext: this.fData.data.ext,
+           new_ext: this.newExt,
+           is_mvc: this.isMVC,
+           is_file: this.isFile
+         };
+        console.log("copry", obj);
+
+        bbn.fn.post(this.root + 'actions/copy', obj, ( d ) => {
           if ( d.success ){
+            alert("success copy");
             const tab = bbn.vue.closest(this, ".bbn-tab");
             $.each(tab.$children, (i, v) => {
               if ( v.$refs.filesList &&
@@ -84,7 +87,7 @@ Vue.component('appui-ide-popup-copy', {
               }
             });
             this.close();
-            appui.success(bbn._("Renamed!"));
+            appui.success(bbn._("Copy succesfully!"));
           }
           else {
             appui.error(bbn._("Error!"));
@@ -94,8 +97,16 @@ Vue.component('appui-ide-popup-copy', {
     }
   },
   computed: {
+    isMVC(){
+     return (this.repositories[this.currentRep] !== undefined ) && (this.repositories[this.currentRep].tabs !== undefined);
+    },
     isFile(){
-      return !this.fData.is_folder;
+      if ( this.fData.data.folder ){
+        return false
+      }
+      else{
+        return true;
+      }
     }
   },
   mounted(){

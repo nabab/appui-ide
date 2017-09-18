@@ -13,12 +13,11 @@ Vue.component('appui-ide-file', {
     bbn.vue.unsetComponentRule();
   },
   data(){
-    const vm = this,
-          ide = bbn.vue.closest(bbn.vue.closest(vm, '.bbn-tabnav'), '.bbn-tab').getComponent().$data;
-    let path = vm.source.url.substr(vm.source.repository.length).replace('/_end_', '').split('/'),
+    alert();
+    const ide = bbn.vue.closest(bbn.vue.closest(vm, '.bbn-tabnav'), '.bbn-tab').getComponent().$data;
+    let path = this.source.url.substr(this.source.repository.length).replace('/_end_', '').split('/'),
         filename = path.pop();
-
-    return $.extend(vm.source, {
+    return $.extend(this.source, {
       repositories: ide.repositories,
       font: ide.font,
       font_size: ide.font_size,

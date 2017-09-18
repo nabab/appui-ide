@@ -9,7 +9,7 @@
     <button class="k-button" type="submit">
       <i class="fa fa-edit"></i> Rename
     </button>
-    <button class="k-button" type="button" onclick="bbn.fn.closePopup();">
+    <button class="k-button" type="button" onclick="bbn.fn.closePopup()">
       <i class="fa fa-close"></i> Cancel
     </button>
   </div>
