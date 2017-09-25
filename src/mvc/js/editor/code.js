@@ -17,7 +17,8 @@
         return !!this.tab
       },
       isChanged(){
-        return this.originalValue !== this.value;
+        let ctrl = this.originalValue !== this.value;
+        return ctrl
       },
       path(){
         const rep = this.ide.repositories[this.ide.repository];

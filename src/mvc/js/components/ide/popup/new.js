@@ -51,6 +51,9 @@ Vue.component('appui-ide-popup-new', {
       popup.close(popup.num - 1);
     },
     submit(){
+
+      bbn.fn.log("currentrep", this);
+
       if ( this.currentRep &&
         this.repositories[this.currentRep] &&
         this.name.length &&
@@ -58,6 +61,7 @@ Vue.component('appui-ide-popup-new', {
         ( !this.isFile || (this.isFile && this.selectedExt.length) ) &&
         ( !this.isMVC || (this.isMVC && this.selectedType.length && this.repositories[this.currentRep].tabs[this.selectedType]) )
       ){
+
         const rep = this.repositories[this.currentRep],
               ext = this.isMVC ? rep.tabs[this.selectedType].extensions : rep.extensions,
               path = this.path.endsWith('/') ? this.path : this.path + '/';
@@ -83,19 +87,24 @@ Vue.component('appui-ide-popup-new', {
                 '/_end_' +
                 (this.selectedType.length ? '/' + this.selectedType : '')
               );
+
+              //var treeNode = bbn.vue.closest(bbn.vue.closest(bbn.vue.closest(this, '.bbn-tab'), '.bbn-tabnav'), '.bbn-splitter').getComponent();
+            //    console.log("TREE", treeNode);
+
             }
             else {
               appui.success(bbn._("Directory created!"));
             }
             /** @todo Refresh the files list */
-            if ( this.source.node ){
+            /*if ( this.source.node ){
 
             }
             else {
 
-            }
-            this.close();
-            //this.$refs.filesList.reload();
+            }*/
+            bbn.vue.closest(this, ".bbn-popup").close();
+            const tab = bbn.vue.closest(this, ".bbn-tab");
+            tab.$children[0].$refs.filesList.reload();
           }
           else {
             appui.error(bbn._("Error!"));

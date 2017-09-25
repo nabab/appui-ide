@@ -459,6 +459,10 @@ class ide {
             }
             // Copy
             else if ( $ope === 'copy' ){
+              if ( !is_dir(dirname($t['new'])) && !\bbn\file\dir::create_path(dirname($t['new'])) ){
+                $this->error("Error during the folder creation: $t[new]");
+                return false;
+              }
               if ( !\bbn\file\dir::copy($t['old'], $t['new']) ){
                 $this->error("Error during the file|folder copy: old -> $t[old] , new -> $t[new]");
                 return false;

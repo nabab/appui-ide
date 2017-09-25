@@ -57,7 +57,7 @@ Vue.component('appui-ide-popup-copy', {
            name: this.fData.data.name,
            new_name: this.newName,
            ext: this.fData.data.ext,
-           new_ext: this.newExt,
+           new_ext:  this.newExt === undefined ? '' : this.newExt,
            is_mvc: this.isMVC,
            is_file: this.isFile
          };
@@ -65,7 +65,7 @@ Vue.component('appui-ide-popup-copy', {
 
         bbn.fn.post(this.root + 'actions/copy', obj, ( d ) => {
           if ( d.success ){
-            alert("success copy");
+
             const tab = bbn.vue.closest(this, ".bbn-tab");
             $.each(tab.$children, (i, v) => {
               if ( v.$refs.filesList &&
@@ -85,9 +85,11 @@ Vue.component('appui-ide-popup-copy', {
                 node.render(true);
 
               }
+              v.$refs.filesList.reload();
+              bbn.vue.closest(this, ".bbn-popup").close();
+              appui.success(bbn._("Copy succesfully!"));
             });
-            this.close();
-            appui.success(bbn._("Copy succesfully!"));
+
           }
           else {
             appui.error(bbn._("Error!"));

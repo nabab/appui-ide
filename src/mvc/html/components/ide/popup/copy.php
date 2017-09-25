@@ -67,7 +67,7 @@
       ></bbn-input>
       <div style="float:left">
         <bbn-button type="button" @click="selectDir"><?=_("Browse")?></bbn-button>
-        <bbn-button type="button" @click="setRoot"><?=_("Root")?></bbn-button>
+        <bbn-button @click="() => {path = './'}"><?=_("Root")?></bbn-button>
       </div>
     </div>
   </div>

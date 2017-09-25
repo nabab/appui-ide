@@ -45,11 +45,17 @@
           bbn.fn.post(this.root + 'actions/rename', obj , (d) =>{
             if ( d.success ){
               const tab = bbn.vue.closest(this, ".bbn-tab");
+              console.log("dsd", tab);
+              alert("dsds");
               $.each(tab.$children, (i, v) =>{
+                if (v.$refs.tabstrip){
+                  console.log("dddd", v.getTab())
+                  alert("dsdsds")
+                }
                 if ( v.$refs.filesList && $.isFunction(v.$refs.filesList.reload) ){
                  // var path = this.fData.path.split('/');
                   if ( this.isFile ){
-                    v.$refs.filesList.reload(this.allData.$parent);
+                    v.$refs.filesList.reload();
                     this.fdata = obj;
                     this.fdata.ext = this.newExt;
                     this.close();

@@ -13,7 +13,6 @@ Vue.component('appui-ide-file', {
     bbn.vue.unsetComponentRule();
   },
   data(){
-    alert();
     const ide = bbn.vue.closest(bbn.vue.closest(vm, '.bbn-tabnav'), '.bbn-tab').getComponent().$data;
     let path = this.source.url.substr(this.source.repository.length).replace('/_end_', '').split('/'),
         filename = path.pop();
@@ -32,5 +31,12 @@ Vue.component('appui-ide-file', {
     vm.$nextTick(() => {
       $(vm.$el).bbn('analyzeContent', true);
     });
+  },
+  computed: {
+    /*isChangedCode(){
+
+     //let ctrl = this.originalValue !== this.value;
+      return "SASA"
+    }*/
   }
 });

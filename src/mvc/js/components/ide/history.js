@@ -15,8 +15,7 @@ Vue.component('appui-ide-history', {
     }, this.source);
   },
   methods: {
-    treeLoad(e, d){
-      bbn.fn.log('AAAAAAAAAAAAAAAAAAAAA', e, d);
+    /*treeLoad( ){
       if ( this.repository &&
         this.repositories[this.repository] &&
         this.repositories[this.repository].bbn_path &&
@@ -24,12 +23,13 @@ Vue.component('appui-ide-history', {
         (this.path !== undefined) &&
         this.filename
       ){
+        bbn.fn.log('AAAAAAAAAAAAAAAAAAdsdsdAAA');
         const url = this.repositories[this.repository].bbn_path + '/' +
           this.repositories[this.repository].path +
           (this.path ? this.path + '/' : '') +
           this.filename +
           '/__end__';
-        return bbn.fn.post(this.root + 'history/tree', {
+       /* return bbn.fn.post(this.root + 'history/tree', {
           url: url,
           is_mvc: this.isMVC,
           ext: !this.isMVC && this.ext ? this.ext : false
@@ -37,7 +37,7 @@ Vue.component('appui-ide-history', {
           return pd.data;
         });
       }
-    },
+    },*/
     treeLazyLoad(e, d){
       d.result = this.treeLoad(e, d);
     },
@@ -50,7 +50,39 @@ Vue.component('appui-ide-history', {
       }
     }
   },
+  computed:{
+    treeLoad(){
+      if ( this.repository &&
+        this.repositories[this.repository] &&
+        this.repositories[this.repository].bbn_path &&
+        this.repositories[this.repository].path &&
+        (this.path !== undefined) &&
+        this.filename
+      ){
+
+
+        const url = this.repositories[this.repository].bbn_path + '/' +
+          this.repositories[this.repository].path +
+          (this.path ? this.path + '/' : '') +
+          this.filename +
+          '/__end__';
+        bbn.fn.log(this.repositories[this.repository].bbn_path);
+        bbn.fn.log(this.repositories[this.repository].path);
+        bbn.fn.log(this.path);
+        bbn.fn.log(this.filename + '/__end__');
+        bbn.fn.log(url);
+        bbn.fn.log('AAAAAAAAAAAAAAAAAAdsdsdAAA');
+        return  {
+          url: url,
+          is_mvc: this.isMVC,
+          ext: !this.isMVC && this.ext ? this.ext : false
+        };
+        return objSend
+      }
+    }
+  },
   mounted(){
+
     this.$nextTick(() => {
       $(this.$el).bbn('analyzeContent', true);
     });

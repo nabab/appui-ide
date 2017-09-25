@@ -14,9 +14,9 @@
               orientation="vertical"
 >
   <div :collapsible="false"
-       :resizable="false"
+       :resizable="true"
        :scrollable="false"
-       style="height: 70%"
+       style="height: 300px"
   >
     <bbn-code v-model="value"
               :mode="mode"
@@ -30,13 +30,13 @@
     ></bbn-code>
   </div>
   <div :collapsible="false"
-       :resizable="false"
+       :resizable="true"
        :scrollable="false"
        style="height: 30%"
   >
     <div class="k-block bbn-block bbn-100">
       <div class="k-header bbn-c"><?=('Permissions setting')?></div>
-      <div class="bbn-block bbn-hspadded bbn-100">
+        <div class="bbn-block bbn-hspadded bbn-100">
         <bbn-scroll>
           <div class="bbn-block bbn-w-100">
             <span><?=_('Code')?></span>
@@ -49,17 +49,20 @@
                        style="width:400px; margin: 0 10px"
                        v-model="permissions.text"
                        @keydown.enter.prevent="savePermission"
-                       v-bbn-fill-width
             ></bbn-input>
             <bbn-button icon="fa fa-save"
                         @click="savePermission"
             ></bbn-button>
             <br>
             <span style="margin-top: 5px"><?=_('Help')?></span>
-            <bbn-textarea style="margin: 5px 10px 0 10px"
+            <bbn-markdown class="bbn-iblock"
+                     style="margin: 5px 10px 0 10px; width: 95%; vertical-align: top"
+                     v-model="permissions.help"
+            ></bbn-markdown>
+            <!--<bbn-textarea style="margin: 5px 10px 0 10px"
                           v-model="permissions.help"
                           v-bbn-fill-width
-            ></bbn-textarea>
+            ></bbn-textarea>-->
           </div>
           <div class="k-block bbn-block bbn-w-100" style="margin-top: 10px">
             <div class="k-header bbn-c"><?=_('Children permissions')?></div>
@@ -113,7 +116,7 @@
             </div>
           </div>
         </bbn-scroll>
-      </div>
+        </div>
     </div>
   </div>
 </bbn-splitter>
