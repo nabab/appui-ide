@@ -327,8 +327,11 @@ class ide {
           $new .= $cfg['new_name'] ?? '';
           $ext_ok = false;
           if ( !empty($cfg['is_file']) ){
+
+
             foreach ( $tab['extensions'] as $k => $ext ){
               if ( $k === 0 ){
+
                 if ( is_file($new.'.'.$ext['ext']) ){
                   $this->error("The new file exists: $new.$ext[ext]");
                   return false;
@@ -394,6 +397,7 @@ class ide {
         )
       )
     ){
+
       $rep = $cfg['repository'];
       $path = $this->decipher_path($rep['bbn_path'] . '/' . $rep['path']);
       if ( $ope === 'rename' ){
@@ -429,7 +433,9 @@ class ide {
       }
       // MVC
       else if ( !empty($rep['tabs']) ){
+
         if ( $todo = $this->check_mvc($cfg, $rep, $path) ){
+
           foreach ( $todo as $t ){
             // Rename
             if ( $ope === 'rename' ){
@@ -459,6 +465,7 @@ class ide {
             }
             // Copy
             else if ( $ope === 'copy' ){
+
               if ( !is_dir(dirname($t['new'])) && !\bbn\file\dir::create_path(dirname($t['new'])) ){
                 $this->error("Error during the folder creation: $t[new]");
                 return false;
@@ -1301,7 +1308,9 @@ class ide {
       $backups = [];
       // File's backup path
       $path = self::BACKUP_PATH . $url;
+
       if ( is_dir($path) && ($dirs = \bbn\file\dir::get_dirs($path)) ){
+
         foreach ( $dirs as $dir ){
           if ( $files = \bbn\file\dir::get_files($dir) ){
             $d = basename($dir);

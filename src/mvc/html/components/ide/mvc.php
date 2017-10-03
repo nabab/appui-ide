@@ -1,6 +1,6 @@
 <div class="bbn-100">
   <div class="bbn-h-100 code">
-    <bbn-tabnav :autoload="false" :scrollable="false">
+    <bbn-tabnav :autoload="false" :scrollable="false" ref="tabstrip">
       <bbn-tab :static="true"
                :load="true"
                :url="repositories[repository].tabs['_ctrl'].url"

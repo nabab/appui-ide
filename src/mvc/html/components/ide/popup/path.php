@@ -1,6 +1,5 @@
-<div class="tree bbn-ide-selectdir bbn-100 bbn-padded">
-  <bbn-tree ref="tree_form"
-            class="tree"
+<div class="tree bbn-ide-selectdir bbn-padded">
+  <bbn-tree class="bbn-full-screen tree"
             :source="root + 'tree'"
             :map="treeMapper"
             @select="treeNodeActivate"

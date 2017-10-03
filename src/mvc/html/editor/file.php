@@ -1,2 +1,2 @@
-<appui-ide-mvc :source="source" v-if="isMVC"></appui-ide-mvc>
-<appui-ide-file :source="source" v-else></appui-ide-file>
+<appui-ide-mvc :source="source" v-if="isMVC" ref="file"></appui-ide-mvc>
+<appui-ide-file :source="source" v-else ref="file"></appui-ide-file>

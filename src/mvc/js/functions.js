@@ -711,7 +711,7 @@ bbn.ide = {
         default: a.default ? true : false,
         content: a.cfg === undefined ?
           '<div></div>' :
-          '<div class="code" v-bbn-fill-height></div>',
+          '<div class="code bbn-full-screen"></div>',
         close: function (a, b, c) {
           return bbn.ide.close(a, b, c);
         },

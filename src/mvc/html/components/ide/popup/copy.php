@@ -31,8 +31,7 @@
   </div>
 </bbn-form>
 -->
-
-<bbn-form ref="copy_form"
+<bbn-form class="bbn-full-screen"
           :source="source"
           :buttons="[{
             text: '<?=_("Copy")?>',
@@ -43,32 +42,32 @@
             icon: 'fa fa-close',
             command: close
           }]"
-          class="bbn-100"
+
 >
-  <div class="bbn-padded">
-    <div class="bbn-form-label"><?=_("Name")?></div>
-    <div class="bbn-form-field">
-      <bbn-input v-model="newName" v-bbn-fill-width></bbn-input>
-      <bbn-dropdown v-if="!isMVC && isFile"
-                    class="bbn-block"
-                    :source="extensions()"
-                    v-model="newExt"
-                    style="width: 100px"
-      ></bbn-dropdown>
-    </div>
-    <div class="bbn-form-label">
-      <?=_("Path")?>
-    </div>
-    <div class="bbn-form-field">
-      <bbn-input v-bbn-fill-width
-                 v-model="path"
-                 readonly="readonly"
-                 required="required"
-      ></bbn-input>
-      <div style="float:left">
+  <div class="bbn-padded bbn-flex-height">
+    <div class="bbn-flex-fill bbn-grid-fields">
+      <label><?=_("Name")?></label>
+      <div>
+        <bbn-input v-model="newName" v-bbn-fill-width></bbn-input>
+        <bbn-dropdown v-if="!isMVC && isFile"
+                      class="bbn-block"
+                      :source="extensions()"
+                      v-model="newExt"
+
+        ></bbn-dropdown>
+      </div>
+      <label>
+        <?=_("Path")?>
+      </label>
+      <div>
+        <bbn-input v-model="path"
+                   readonly="readonly"
+                   required="required"
+        ></bbn-input>
         <bbn-button type="button" @click="selectDir"><?=_("Browse")?></bbn-button>
         <bbn-button @click="() => {path = './'}"><?=_("Root")?></bbn-button>
       </div>
     </div>
   </div>
+
 </bbn-form>

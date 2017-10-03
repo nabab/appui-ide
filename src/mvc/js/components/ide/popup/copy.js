@@ -10,8 +10,8 @@ Vue.component('appui-ide-popup-copy', {
   data(){
     return $.extend({
       path: '',
-      newName: this.source.fData.data.name,
-      path: this.source.fData.data.dir || './',
+      newName: this.source.data.name,
+      path: this.source.data.dir || './',
       newExt: ''
     }, this.source);
   },
@@ -46,17 +46,17 @@ Vue.component('appui-ide-popup-copy', {
     },
     submit(){
       console.log("dss", this);
-     if ( (this.fData.data.name !== this.newName) ||
-        (this.fData.data.dir !== this.path) ||
-        (this.isFile && (this.newExt !== this.fData.data.ext))
+     if ( (this.data.name !== this.newName) ||
+        (this.data.dir !== this.path) ||
+        (this.isFile && (this.newExt !== this.data.ext))
       ){
          let obj =  {
            repository: this.repositories[this.currentRep],
-           path: this.fData.data.dir,
+           path: this.data.dir,
            new_path: this.path,
-           name: this.fData.data.name,
+           name: this.data.name,
            new_name: this.newName,
-           ext: this.fData.data.ext,
+           ext: this.data.ext,
            new_ext:  this.newExt === undefined ? '' : this.newExt,
            is_mvc: this.isMVC,
            is_file: this.isFile
@@ -66,7 +66,7 @@ Vue.component('appui-ide-popup-copy', {
         bbn.fn.post(this.root + 'actions/copy', obj, ( d ) => {
           if ( d.success ){
 
-            const tab = bbn.vue.closest(this, ".bbn-tab");
+            /*const tab = bbn.vue.closest(this, ".bbn-tab");
             $.each(tab.$children, (i, v) => {
               if ( v.$refs.filesList &&
                 v.$refs.filesList.widgetName &&
@@ -85,15 +85,14 @@ Vue.component('appui-ide-popup-copy', {
                 node.render(true);
 
               }
-              v.$refs.filesList.reload();
-              bbn.vue.closest(this, ".bbn-popup").close();
+              v.$refs.filesList.reload();*/
               appui.success(bbn._("Copy succesfully!"));
-            });
-
-          }
-          else {
-            appui.error(bbn._("Error!"));
-          }
+              bbn.vue.closest(this, ".bbn-tab").$children[0].$refs.filesList.reload();
+           }
+           else {
+             appui.error(bbn._("Error!"));
+           }
+           bbn.vue.closest(this, ".bbn-popup").close();
         });
       }
     }
@@ -103,12 +102,13 @@ Vue.component('appui-ide-popup-copy', {
      return (this.repositories[this.currentRep] !== undefined ) && (this.repositories[this.currentRep].tabs !== undefined);
     },
     isFile(){
-      if ( this.fData.data.folder ){
+      return !this.data.folder
+    /*  if ( this.data.folder ){
         return false
       }
       else{
         return true;
-      }
+      }*/
     }
   },
   mounted(){
@@ -120,5 +120,10 @@ Vue.component('appui-ide-popup-copy', {
         $(this.$el).bbn('analyzeContent', true);
       }, 100);
     });
+/*    this.$nextTick(() => {
+      setTimeout(() => {
+        bbn.fn.analyzeContent(this.$el, true);
+      }, 1500);
+    });*/
   }
 });

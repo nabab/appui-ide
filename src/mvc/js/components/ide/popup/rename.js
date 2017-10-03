@@ -32,7 +32,7 @@
       },
       submit(){
         if ( (this.newName !== this.fData.name) || (this.isFile && (this.newExt !== this.fData.ext)) ){
-          let obj= {
+          let obj = {
             repository: this.repositories[this.currentRep],
             path: this.fData.dir,
             name: this.fData.name,
@@ -42,34 +42,36 @@
             is_mvc: this.isMVC,
             is_file: this.isFile
           };
-          bbn.fn.post(this.root + 'actions/rename', obj , (d) =>{
+          bbn.fn.post(this.root + 'actions/rename', obj, (d) =>{
             if ( d.success ){
-              const tab = bbn.vue.closest(this, ".bbn-tab");
-              console.log("dsd", tab);
-              alert("dsds");
-              $.each(tab.$children, (i, v) =>{
-                if (v.$refs.tabstrip){
-                  console.log("dddd", v.getTab())
-                  alert("dsdsds")
-                }
-                if ( v.$refs.filesList && $.isFunction(v.$refs.filesList.reload) ){
-                 // var path = this.fData.path.split('/');
-                  if ( this.isFile ){
-                    v.$refs.filesList.reload();
-                    this.fdata = obj;
-                    this.fdata.ext = this.newExt;
-                    this.close();
-                    appui.success(bbn._("Renamed!"));
-                  }
-                 // path.pop();
-                 // path.push(this.newName);
-                }
-              });
+              const ide = bbn.vue.closest(this, ".bbn-tab").getComponent();
+              const tabStrip = ide.$refs.tabstrip;
+              const filesList = ide.$refs.filesList;
+              const editor = ide.$refs.editor;
 
+              if ( tabStrip ){
+                var idx = tabStrip.getIndex('file/' + this.currentRep + obj.path + obj.name);
+
+                if ( idx > -1 ){
+                  console.log("editor",editor);
+                  alert("esiste");
+                }
+              }
+              if ( filesList && $.isFunction(filesList.reload) ){
+
+                if ( this.isFile ){
+                  filesList.reload();
+                  this.fdata = obj;
+                  this.fdata.ext = this.newExt;
+                }
+              }
+              appui.success(bbn._("Renamed!"));
             }
             else {
               appui.error(bbn._("Error!"));
             }
+            this.close();
+
           });
         }
       }

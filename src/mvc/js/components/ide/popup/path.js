@@ -13,12 +13,13 @@ Vue.component('appui-ide-popup-path', {
   },
   computed:{
     treeInitialData(e){
+      console.log("dsddsrfr", this)
       return {
         repository: this.currentRep,
         repository_cfg: this.repositories[this.currentRep],
         is_mvc: this.isMVC,
         onlydirs: true,
-        tab: this.selectedType || false
+        tab: this.obj.tab || false,
       };
     },
     isMVC(){
@@ -37,15 +38,17 @@ Vue.component('appui-ide-popup-path', {
           filter: this.searchFile
         });
       }
+      console.log("dsddd",a);
       return a;
     },
     treeNodeActivate(d){
       const popup = bbn.vue.closest(this, ".bbn-popup");
-      this.source.path = d.data.path;
+      this.obj.path = d.data.path;
       popup.close();
     },
   },
   mounted(){
+    bbn.fn.log("TREEEEE", this)
     this.$nextTick(() =>{
       $(this.$el).bbn('analyzeContent', true);
     });

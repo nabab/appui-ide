@@ -89,54 +89,94 @@
   </div>
 </bbn-form>
 -->
-
-<bbn-form ref="new_form"
-          :data="source"
+<!--
+<bbn-form :source="obj"
+          :data="obj2"
+          :action="source.root + 'actions/create'"
           class="bbn-100"
-          :buttons="[{
-            text: '<?=_("Save")?>',
-            icon: 'fa fa-check',
-            command: submit
-            }, {
-            text: '<?=_("Cancel")?>',
-            icon: 'fa fa-close',
-            command: close
-          }]"
+          @success="successActive"
+
 >
-  <div class="bbn-padded">
-    <div class="bbn-form-label" v-if="isMVC"><?=_("Type")?></div>
-    <div class="bbn-form-field" v-if="isMVC">
-      <bbn-dropdown :source="types"
-                    v-model="selectedType"
-                    required="required"
-                    class="bbn-w-100"
-      ></bbn-dropdown>
-    </div>
-    <div class="bbn-form-label"><?=_("Name")?></div>
-    <div class="bbn-form-field">
-      <bbn-input class="v-bbn-fill-width"
-                 v-model="name"
-                 required="required"
-      ></bbn-input>
-      <bbn-dropdown :source="extensions"
-                    v-model="selectedExt"
-                    required="required"
-                    style="width: 100px"
-                    v-if="isFile"
-      ></bbn-dropdown>
-    </div>
-    <div class="bbn-form-label"><?=_("Path")?></div>
-    <div class="bbn-form-field">
-      <bbn-input class="v-bbn-fill-width"
-                 v-model="allData.path"
-                 readonly="readonly"
-                 required="required"
-      ></bbn-input>
-      <span>
-        <bbn-button @click="selectDir"><?=_("Browse")?></bbn-button>
-        <bbn-button @click="() => {path = './'}"><?=_("Root")?></bbn-button>
-      </span>
+  <div class="bbn-padded bbn-flex-height">
+    <div class="bbn-flex-grows bbn-flex-grid">
+      <div  v-if="isMVC"><?=_("Type")?></div>
+      <div  v-if="isMVC">
+        <bbn-dropdown :source="source.types"
+                      v-model="obj.tab"
+                      required="required"
+                      class="bbn-w-100"
+        ></bbn-dropdown>
+      </div>
+      <div><?=_("Name")?></div>
+      <div>
+        <bbn-input v-model="obj.name"
+                   required="required"
+        ></bbn-input>
+        <bbn-dropdown :source="source.extensions"
+                      v-model="obj.extension"
+                      required="required"
+                      style="width: 100px"
+                      v-if="source.isFile"
+        ></bbn-dropdown>
+      </div>
+      <div><?=_("Path")?></div>
+      <div>
+        <bbn-input v-model="obj.path"
+                   readonly="readonly"
+                   required="required"
+        ></bbn-input>
+        <span>
+          <bbn-button @click="selectDir"><?=_("Browse")?></bbn-button>
+          <bbn-button @click="() => {obj.path = './'}"><?=_("Root")?></bbn-button>
+        </span>
+     </div>
     </div>
   </div>
+</bbn-form>-->
+<bbn-form class="bbn-full-screen"
+          :source="obj"
+          :data="obj2"
+          :action="source.root + 'actions/create'"
+          @success="successActive"
+>
 
+  <div class="bbn-padded bbn-flex-height">
+    <div class="bbn-flex-fill bbn-grid-fields">
+
+      <label  v-if="isMVC"><?=_("Type")?></label>
+      <div  v-if="isMVC">
+        <bbn-dropdown :source="types"
+                      v-model="selectedType"
+                      required="required"
+                      class="bbn-w-100"
+        ></bbn-dropdown>
+      </div>
+
+      <label><?=_("Name")?></label>
+      <div>
+        <bbn-input v-model="obj.name"
+                   required="required"
+        ></bbn-input>
+        <bbn-dropdown :source="extensions"
+                      v-model="obj.extension"
+                      required="required"
+                      style="width: 100px"
+                      v-if="source.isFile"
+        ></bbn-dropdown>
+      </div>
+
+      <label><?=_("Path")?></label>
+      <div>
+        <bbn-input v-model="obj.path"
+                   readonly="readonly"
+                   required="required"
+        ></bbn-input>
+        <span>
+          <bbn-button @click="selectDir"><?=_("Browse")?></bbn-button>
+          <bbn-button @click="() => {obj.path = './'}"><?=_("Root")?></bbn-button>
+        </span>
+      </div>
+
+    </div>
+  </div>
 </bbn-form>

@@ -55,6 +55,7 @@
                     ref="filesList"
                     :map="treeMapper"
                     :icon-color="color"
+
           ></bbn-tree>
         </div>
       </div>
@@ -68,7 +69,9 @@
         </div>
         <bbn-tabnav id="tabstrip_editor"
                     ref="tabstrip"
-                    :autoload="true">
+                    :autoload="true"
+                    @close="ctrlCloseTab"
+        >
           <bbn-tab :static="true"
                    url="home"
                    load="true"
@@ -92,16 +95,33 @@
   <bbn-form ref="new_form">
     <div class="bbn-form-label mvc-ele" v-if="isMVC()">Type</div>
     <div class="bbn-form-field mvc-ele" v-if="isMVC()">
-      <bbn-dropdown v-bbn-fill-width ref="types" :source="types" v-model="selectedType" name="tab" required="required"></bbn-dropdown>
+      <bbn-dropdown class="bbn-w-100"
+                    ref="types"
+                    :source="types"
+                    v-model="selectedType"
+                    name="tab"
+                    required="required"
+      ></bbn-dropdown>
     </div>
     <div class="bbn-form-label">Name</div>
-    <div class="bbn-form-field">
-      <bbn-input type="text" name="name" v-model="name" v-bbn-fill-width required="required"></bbn-input>
+    <div class="bbn-form-field bbn-flex-width">
+      <bbn-input type="text"
+                 name="name"
+                 v-model="name"
+                 class="bbn-flex-fill"
+                 required="required"
+      ></bbn-input>
       <bbn-dropdown ref="ext" :source="extensions" v-model="selectedExt" name="ext" required="required" style="width: 100px" v-if="isFile"></bbn-dropdown>
     </div>
     <div class="bbn-form-label">Path</div>
-    <div class="bbn-form-field">
-      <bbn-input v-bbn-fill-width type="text" name="path" v-model="path" readonly="readonly" required="required"></bbn-input>
+    <div class="bbn-form-field bbn-flex-width">
+      <bbn-input class="bbn-flex-fill"
+                 type="text"
+                 name="path"
+                 v-model="path"
+                 readonly="readonly"
+                 required="required"
+      ></bbn-input>
       <div style="float: left">
         <bbn-button @click="selectDir">Browse</bbn-button>
         <bbn-button @click="setRoot">Root</bbn-button>

@@ -8,52 +8,89 @@ Vue.component('appui-ide-popup-new', {
   template: '#bbn-tpl-component-appui-ide-popup-new',
   props: ['source'],
   data(){
-    return $.extend({
-      selectedType: '',
-      name: '',
-      selectedExt: '',
+    return {
+      obj: {
+        tab:'',
+        name: '',
+        extension: '',
+        path: this.source.node && this.source.node.data && this.source.node.data.path ? this.source.node.data.path : './',
+        is_file: this.source.isFile,
+      },
+      obj2:{
+        tab_path: this.tab_path,
+        default_text: this.text_default,
+        repository: this.source.repositories[this.source.currentRep]
+      },
       extensions: [],
-      path: this.source.node && this.source.node.data && this.source.node.data.path ? this.source.node.data.path : ''
-    }, this.source);
+      selectedType: '',
+    }
   },
   methods: {
+    successActive(){
+      if(this.source.isFile){
+        appui.success(bbn._("File created!"));
+        bbn.fn.link(this.source.root +
+          'editor/file' +
+           this.source.currentRep +
+           (path.startsWith('./') ? path.slice(2) : path) +
+           this.name +
+           '/_end_' +
+           (this.selectedType.length ? '/' + this.selectedType : '')
+        );
+      }else{
+         appui.success(bbn._("Directory created!"));
+      }
+      bbn.vue.closest(this, ".bbn-popup").close();
+      const tab = bbn.vue.closest(this, ".bbn-tab");
+      tab.$children[0].$refs.filesList.reload();
+alert("ciao")
+    },
     selectDir(){
       bbn.vue.closest(this, ".bbn-tab").$refs.popup[0].open({
         width: 300,
         height: 400,
         title: bbn._('Path'),
         component: 'appui-ide-popup-path',
-        source: this.$data
+        source: $.extend( {}, this.$data, this.source)
       });
     },
     setExtensions(){
+      console.log("SETEXTENSION", this.isMVC ,  this.selectedType , this.selectedType.length);
+
       let res = [],
           ext = ( this.isMVC && this.selectedType.length ) ?
-            this.repositories[this.currentRep].tabs[this.selectedType].extensions :
-            this.repositories[this.currentRep].extensions;
+            this.source.repositories[this.source.currentRep].tabs[this.selectedType].extensions :
+            this.source.repositories[this.source.currentRep].extensions;
       if ( ext.length ){
-        $.each(ext, (i, v) => {
+        $.each(ext, (i, v) =>{
           res.push({
             text: '.' + v.ext,
             value: v.ext
           });
         });
       }
+      console.log("EXXXXXXXXX", ext, res);
       this.extensions = res;
+
       if ( this.extensions.length ){
-        setTimeout(() => {
-          this.selectedExt = this.extensions[0].value;
+        setTimeout(() =>{
+          this.obj.extension = this.extensions[0].value;
         }, 100);
       }
     },
     close(){
+      alert("close");
       const popup = bbn.vue.closest(this, ".bbn-popup");
-      popup.close(popup.num - 1);
+      popup.close();
+      //popup.close(popup.num - 1);
+    }
+  },
+   /* success(){
+
     },
     submit(){
-
-      bbn.fn.log("currentrep", this);
-
+      console.log("dsds", this);
+      alert("submit");
       if ( this.currentRep &&
         this.repositories[this.currentRep] &&
         this.name.length &&
@@ -70,7 +107,7 @@ Vue.component('appui-ide-popup-new', {
           repository: rep,
           path: path,
           name: this.name,
-          extension: this.selectedExt,
+          extension: ctedExtthis.sele,
           tab: this.selectedType,
           tab_path: this.isMVC && rep.tabs[this.selectedType] ? rep.tabs[this.selectedType].path : '',
           default_text: bbn.fn.get_field(ext, 'ext', this.selectedExt, 'default') || ''
@@ -102,7 +139,7 @@ Vue.component('appui-ide-popup-new', {
             else {
 
             }*/
-            bbn.vue.closest(this, ".bbn-popup").close();
+       /*     bbn.vue.closest(this, ".bbn-popup").close();
             const tab = bbn.vue.closest(this, ".bbn-tab");
             tab.$children[0].$refs.filesList.reload();
           }
@@ -111,13 +148,13 @@ Vue.component('appui-ide-popup-new', {
           }
         });
       }
-    }
-  },
+    }                                                       height
+  }, */
   computed: {
     types(){
       let res = [];
       if ( this.isMVC ){
-        $.each(this.repositories[this.currentRep].tabs, (i, v) => {
+        $.each(this.source.repositories[this.source.currentRep].tabs, (i, v) => {
           if ( !v.fixed ){
             res.push({
               text: v.title,
@@ -129,25 +166,41 @@ Vue.component('appui-ide-popup-new', {
       return res;
     },
     isMVC(){
-      return (this.repositories[this.currentRep] !== undefined ) && (this.repositories[this.currentRep].tabs !== undefined);
+      return (this.source.repositories[this.source.currentRep] !== undefined ) && (this.source.repositories[this.source.currentRep].tabs !== undefined);
     },
+    rep(){
+      return this.source.repositories[this.source.currentRep];
+    },
+    ext(){
+      return this.isMVC ? this.rep.tabs[this.obj.tab].extensions : this.rep.extensions
+    },
+    tab_path(){
+      this.$data.obj2.tab_path = this.isMVC && this.rep.tabs[this.obj.tab] ? this.rep.tabs[this.obj.tab].path : '';
+      return this.isMVC && this.rep.tabs[this.obj.tab] ? this.rep.tabs[this.obj.tab].path : '';
+    },
+    text_default(){
+      this.$data.obj2.default_text = bbn.fn.get_field(this.ext, 'ext', this.obj.tab, 'default') || '';
+       return bbn.fn.get_field(this.ext, 'ext', this.obj.tab, 'default') || '';
+    }
   },
+
   watch: {
     selectedType(){
-     if ( this.isFile ){
+      this.obj.tab = this.selectedType;
+      console.log("aaaaassss", this.selectedType);
+
+      if ( this.source.isFile ){
         this.setExtensions();
       }
     }
   },
   mounted(){
-    if ( !this.isMVC && this.isFile ){
+    console.log("SOURCEDSDD", this);
+
+    if ( this.source.isFile ){
       this.setExtensions();
     }
-    this.$nextTick(() => {
-      setTimeout(() => {
-        $(this.$el).bbn('analyzeContent', true);
-      }, 100);
-    });
+
   }
 });
 

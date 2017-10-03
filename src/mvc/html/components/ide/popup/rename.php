@@ -23,12 +23,21 @@
 <bbn-form ref="rename_form"
           :source="source"
           class="bbn-100"
-          :buttons="[]"
+          :buttons="[{
+            text: '<?=_("Save")?>',
+            icon: 'fa fa-check',
+            command: submit
+            }, {
+            text: '<?=_("Cancel")?>',
+            icon: 'fa fa-close',
+            command: close
+          }]"
+
 >
   <div class="bbn-padded">
     <div class="bbn-form-label"><?=_("Name")?></div>
-    <div class="bbn-form-field">
-      <bbn-input v-model="newName" v-bbn-fill-width></bbn-input>
+    <div class="bbn-form-field bbn-flex-width">
+      <bbn-input v-model="newName" class="bbn-flex-fill"></bbn-input>
       <bbn-dropdown v-if="!isMVC && isFile"
                     class="bbn-block"
                     :source="extensions()"
@@ -37,8 +46,8 @@
       ></bbn-dropdown>
     </div>
   </div>
-  <div slot="footer">
+  <!--<div slot="footer">
     <bbn-button icon="fa fa-check" @click="submit"><?=_("Save")?></bbn-button>
     <bbn-button icon="fa fa-close" @click="close"><?=_("Cancel")?></bbn-button>
-  </div>
+  </div>-->
 </bbn-form>

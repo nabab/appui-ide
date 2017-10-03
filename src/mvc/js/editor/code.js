@@ -7,18 +7,17 @@
 (() => {
   return {
     data(){
-      return $.extend(this.source, {
+      return $.extend({
         ide: bbn.vue.closest(this, '.bbn-tabnav').$parent.$data,
         originalValue: this.source.value
-      });
+      }, this.source);
     },
     computed: {
       isMVC(){
         return !!this.tab
       },
       isChanged(){
-        let ctrl = this.originalValue !== this.value;
-        return ctrl
+        return this.originalValue !== this.value;
       },
       path(){
         const rep = this.ide.repositories[this.ide.repository];
@@ -52,6 +51,11 @@
         return false;
       }
     },
+    watch: {
+      isChanged(isChanged){
+        this.changeModifiedState(isChanged);
+      }
+    },
     methods: {
       save(cm){
         const state = this.$refs.editor.getState();
@@ -69,14 +73,42 @@
             code: state.value,
           }, (d) => {
             if ( d.data && d.data.success ){
-              this.originalValue = state.value;
+              this.originalValue = this.value;
               appui.success(bbn._("File saved!"));
+              appui.ide.afterCtrlChangeCode();
             }
             else if ( d.data && d.data.deleted ){
               appui.success(bbn._("File deleted!"));
             }
           });
           return true;
+        }
+      },
+      changeModifiedState(val){
+        //appui is editor
+        let selected = appui.ide.$refs.tabstrip.selected,
+            titleTab = appui.ide.$refs.tabstrip.tabs[selected]['title'],
+            idx = titleTab.lastIndexOf("*"),
+            selectedSubTab = bbn.vue.closest(this, '.bbn-tab').tabNav['selected'],
+            titleSubTab = bbn.vue.closest(this, '.bbn-tab').tabNav.tabs[selectedSubTab]['title'],
+            idxSubTab = titleSubTab.lastIndexOf("*");
+        bbn.fn.log("changeModifiedState", selected, titleTab, idx, selectedSubTab, titleSubTab, idxSubTab);
+        // Check all the tabs for modifications for the parent tab
+        if ( appui.ide.$refs.tabstrip.getVue(selected).$refs.component[0].hasCodeChanged() ){
+          if ( idx !== (titleTab.length - 1) ){
+            appui.ide.$refs.tabstrip.tabs[selected]['title'] = titleTab + "*";
+          }
+        }
+        else if ( idx === (titleTab.length - 1) ){
+          appui.ide.$refs.tabstrip.tabs[selected]['title'] = titleTab.substring(0, idx);
+        }
+        if ( val ){
+          if ( idxSubTab !== (titleSubTab.length-1) ){
+            bbn.vue.closest(this, '.bbn-tab').tabNav.tabs[selectedSubTab]['title'] = titleSubTab + "*"
+          }
+        }
+        else if ( idxSubTab === (titleSubTab.length-1) ){
+          bbn.vue.closest(this, '.bbn-tab').tabNav.tabs[selectedSubTab]['title'] = titleSubTab.substring(0, idxSubTab);
         }
       },
       test(){
@@ -212,11 +244,6 @@
           });
         }
       }
-    },
-    mounted(){
-      this.$nextTick(() => {
-        $(this.$el).bbn('analyzeContent', true);
-      });
     }
   }
 })();

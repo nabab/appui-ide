@@ -20,6 +20,7 @@
         selected: 0,
         url: this.source.root + 'editor',
         path:'',
+        ctrlTest: false,
         searchFile: '',
         menu: [
           {
@@ -48,10 +49,10 @@
                 this.deleteActive();
               }
             }, {
-              text: '<i class="fa fa-times-circle"></i>' + bbn._('Close'),
+              text: '<i class="fa fa-times-circle"></i>' + bbn._('Close tab'),
               select: () => {
                 this.closeTab();
-             }
+              }
             }, {
               text: '<i class="fa fa-times-circle-o"></i>' + bbn._('Close all tabs'),
               select: () =>{
@@ -141,8 +142,13 @@
         });
         return bbn.fn.order(r, "text");
       }
+
     },
     methods: {
+      keydownFunction(event) {
+        alert("dsds")
+
+      },
 
       /** ###### REPOSITORY ###### */
 
@@ -276,74 +282,69 @@
         const vm = this;
         return (vm.repositories[vm.currentRep] !== undefined ) && (vm.repositories[vm.currentRep].tabs !== undefined);
       },
-/*
-      closeTab(){
-        let result =[];
-        let tab = this.$refs.tabstrip;
-        console.log("ssss", tab.tabs[tab.selected])
-        for (let i in tab.tabs){
-          if ( tab.tabs[i] ){
-            let code = tab.tabs[i];
+      afterCtrlChangeCode(){
 
-            console.log("dsds", tab.selected, tab.getSubTabNav(tab.selected).getVue(tab.getSubTabNav(tab.selected)),  code);
-            //code = code.getVue(i)
-            if ( code.$children && code.$children[0] ){
-              result.push(code.$children[0]);              ;
+          let selected = this.$refs.tabstrip.selected,
+              titleTab = this.$refs.tabstrip.tabs[selected]['title'],
+              id = titleTab.lastIndexOf("*");
+
+          if ( id > -1 ){
+            this.$refs.tabstrip.tabs[selected]['title'] = titleTab.substring(0, id);
+            let subTabs = this.$refs.tabstrip.getVue(appui.ide.$refs.tabstrip.selected).$refs.component[0].$refs.file.$refs.tabstrip.tabs;
+            if ( subTabs.length ){
+              $.each(subTabs, (i, v) =>{
+                if ( v.title.lastIndexOf("*") > -1 ){
+                  subTabs[i]['title'] = subTabs[i]['title'].substring(0, v.title.lastIndexOf("*"));
+                }
+              });
             }
+
           }
+
+      },
+      /*ctrlChange(){
+        this.ctrlChangeCode(false);
+      },*/
+      ctrlCloseTab(idx, e){
+        let ctrlChangeCode = this.$refs.tabstrip.getVue(this.$refs.tabstrip.tabs[idx]).$refs.component[0].changedCode;
+        if ( ctrlChangeCode ){
+          bbn.fn.confirm(
+            bbn._('Do you want to save the changes before closing the tab?'),
+            () =>{
+              this.afterCtrlChangeCode();
+              this.save( true );
+              $.extend(e,{force :true});
+
+
+            },
+            () => {
+              e.preventDefault()
+            }
+          );
         }
-        console.log("dsdsdgfgfgfgfgf", result);
-        alert("dsds");
-        //if( tab)
-        /*  let tn = this.$refs.tabstrip,
-          code;
-        if ( tn && tn.tabs[tn.selected] ){
-          tn = tn.getSubTabNav(tn.selected);
-          if ( !getCode ){
-            return tn;
-          }
-          if ( tn && tn.tabs[tn.selected]  ){
-            code = tn.getVue(tn.selected);
-            bbn.fn.log('aaaa', code);
-            if ( code.$children && code.$children[0] ){
-              return code.$children[0];
-            }
-          }
-        }*/
-        //let activate = code.getVue(code.selected).$children[0];
-        //console.log("COde", activate);
-        /*if( activate.isChanged ){
 
-        }else{
+      },
+      closeTab(){
+        let ctrlChangeCode = this.$refs.tabstrip.getVue(this.$refs.tabstrip.selected).$refs.component[0].changedCode;
+        if ( ctrlChangeCode ){
+          bbn.fn.confirm(
+            bbn._('Do you want to save the changes before closing the tab?'),
+            () =>{
+              this.afterCtrlChangeCode();
+              this.save( true );
+              this.afterCtrlChangeCode();
+              this.$refs.tabstrip.close(this.$refs.tabstrip.selected);
+            },
+            () => {
+              this.$refs.tabstrip.close(this.$refs.tabstrip.selected);
+              this.afterCtrlChangeCode();
+            }
+          );
+        }
+        else {
           this.$refs.tabstrip.close(this.$refs.tabstrip.selected);
         }
-
-
-      },*/
-      closeTab(){
-        this.$refs.tabstrip.close(this.$refs.tabstrip.selected);
-        /*var code = this.getActive();
-        let activate = code.getVue(code.selected).$children[0];
-
-        console.log(code.selected)
-
-         console.log("COde", code , activate);
-
-        for (let i in code.tabs){
-          //let activate = code.getVue(i).$children[0];
-
-          console.log("entrato", activate )
-          alert("xxs")
-          if( activate.isChanged ){
-           bbn.fn.confirm(bbn._('Do you want to save before closing?'), ()=>{
-           this.save();
-           });
-
-           }else{
-           this.$refs.tabstrip.close(this.$refs.tabstrip.selected);
-           }
-        }*/
-       },
+      },
       /**
        * Check and close all tabs
        * @param tabs array of all tabs open
@@ -401,7 +402,7 @@
       },
 
       treeContextMenu(n , i){
-        return [{
+        let objContext = [{
           icon: 'fa fa-file-o',
           text: bbn._('New file'),
           click: ()=>{ this.newFile(n, i) }
@@ -426,6 +427,17 @@
           text: bbn._('Delete'),
           click: ()=> { this.delete(n) }
         }];
+        if ( n.data.folder ){
+          return objContext;
+        }
+        else{
+          objContext.unshift({
+            icon: 'fa fa-magic',
+            text: bbn._('Test code!'),
+            click: ()=>{ this.testNodeOfTree(n) }
+          });
+          return objContext;
+        }
       },
 
       treeReload(n, i){
@@ -440,10 +452,14 @@
        * @param n The node
        */
       treeNodeActivate(d){
-        bbn.fn.log("Select tree node active", d);
+
         if ( !d.data.folder ){
+          if( !this.isMVC() ){
+            this.ctrlTest = true;
+          }
           this.openFile(d);
         }
+
       },
 
       /**
@@ -470,9 +486,9 @@
        },*/
 
       /*link(link){
-        console.log("link", link);
-        this.$refs.tabstrip.load(link);
-      },*/
+       console.log("link", link);
+       this.$refs.tabstrip.load(link);
+       },*/
 
 
       /**
@@ -524,6 +540,7 @@
        * @param file
        */
       openFile(file){
+
         this.$refs.tabstrip.load(
           'file/' +
           this.currentRep +
@@ -532,6 +549,7 @@
           '/_end_' +
           (file.data.tab ? '/' + file.data.tab : '')
         );
+
       },
 
       getActive(getCode = false){
@@ -544,7 +562,6 @@
           }
           if ( tn && tn.tabs[tn.selected]  ){
             code = tn.getVue(tn.selected);
-            bbn.fn.log('aaaa', code);
             if ( code.$children && code.$children[0] ){
               return code.$children[0];
             }
@@ -685,19 +702,44 @@
           active.test();
         }
       },
+      testNodeOfTree(node){
+        if ( this.isMVC() && !this.ctrlTest ){
+          bbn.fn.link( node.data.path )
+        }
+        else if ( !this.isMVC() ){
+          this.treeNodeActivate(node)
+          if  ( this.ctrlTest ){
+            this.ctrlTest = false;
+            setTimeout( ()=>{
+              this.test() }, 3200);
+          }
+        }
+      },
 
       /**
        * Saves the currently visible codemirror instance
        *
        * @returns {number}
        */
-      save: function(){
+      save(ctrl = false){
         let active = this.getActive(true);
         if ( active && $.isFunction(active.save) ){
-          active.save();
+          console.log("save", active);
+
+          if( ctrl ){
+            active.save();
+          }
+          else{
+            bbn.fn.confirm(
+              bbn._('Are you sure you want to save?'),
+              () =>{
+                this.afterCtrlChangeCode();
+                active.save();
+              }
+            );
+          }
         }
       },
-
       /**
        * Callback function triggered on tab close
        *
@@ -719,14 +761,25 @@
        * @param string path The current path
        */
       new(title, isFile, nodeData){
-        let src =  {
-          allData: nodeData,
+        console.log("ssss", nodeData)
+        let src = {
+          allData: false,
           isFile: isFile,
+          path: './',
           node: false,
           currentRep: this.currentRep,
           repositories: this.repositories,
           root: this.root
         };
+
+        if ( nodeData.folder !== undefined ){
+          src.path = nodeData.folder ? nodeData.path : nodeData.path.slice(0, nodeData.path.lastIndexOf("/"));
+          src.allData = nodeData;
+        }
+
+        if ( nodeData === undefined ){
+          src.path = './'
+        }
         bbn.vue.closest(this, ".bbn-tab").$refs.popup[0].open({
           width: 500,
           height: 250,
@@ -742,7 +795,7 @@
        * @param data The node data
        */
       newFile(node, idx){
-       this.new(bbn._('New File'), true, node != undefined && node.data ? node.data : false);
+        this.new(bbn._('New File'), true, node != undefined && node.data ? node.data : false);
       },
 
       /**
@@ -768,7 +821,7 @@
           component: 'appui-ide-popup-rename',
           source: $.extend({
             fData: d.data,
-            allData: d
+            //allData: d
           }, this.source)
         });
       },
@@ -780,10 +833,11 @@
        */
       copy(d){
         let src = $.extend({
-          fData: d,
+          data: d.data,
         }, this.source);
+
         bbn.vue.closest(this, ".bbn-tab").$refs.popup[0].open({
-          width: 790,
+          width: 500,
           height: 220,
           title: d.data.folder ? bbn._('Copy folder') : bbn._('Copy'),
           component: 'appui-ide-popup-copy',
@@ -801,7 +855,6 @@
        */
       delete(node, id){
         bbn.fn.confirm(bbn._('Are you sure you want to delete it?'), () => {
-          bbn.fn.log("dsd", node.data);
           if ( node.data.name  &&
             ( node.data.dir !== undefined) &&
             ( node.data.folder || ( !node.data.folder && node.data.ext ) )
@@ -817,23 +870,25 @@
               if ( d.success ){
                 const idx = this.$refs.tabstrip.getIndex('file/' + this.currentRep + node.data.dir + node.data.name);
                 // node = this.$refs.filesList.widget.getNodeByKey(data.key);
-                if ( !node.data.folder && (idx > -1) ){
-                  console.log("dddd", idx);
-                  alert();
-                  this.$refs.tabstrip.close(idx);
-                  node.$parent.items.splice(id, 1);
+                if ( idx != false ){
+                  if ( !node.data.folder && (idx > -1) ){
+                    this.$refs.tabstrip.close(idx);
+                    node.$parent.items.splice(id, 1);
+                  }
+                  else if( node.data.folder ){
+                    this.$refs.filesList.reload();
+                  }
                 }
-                else if( node.data.folder ){
-                  this.$refs.filesList.reload();
-                }
+
 
                 /*if ( node ){
-                  if( node.data.folder){
+                 if( node.data.folder){
 
-                  }
-                  node.$parent.items.splice(id, 1);
-                }*/
+                 }
+                 node.$parent.items.splice(id, 1);
+                 }*/
                 appui.success(bbn._("Deleted!"));
+                bbn.vue.closest(this, ".bbn-tab").$children[0].$refs.filesList.reload();
               }
               else {
                 appui.error(bbn._("Error!"));
@@ -842,22 +897,22 @@
           }
         });
       },
-    /*  move(a, select, dest){
-        bbn.fn.log("MOVE", this.root, a, select, dest);
+      /*  move(a, select, dest){
+       bbn.fn.log("MOVE", this.root, a, select, dest);
 
-        let obj ={
-          orig: this.root,
-          dir: select.data.dir,
-          src: select.data.path,
-          dest: dest.data.path
-        };
-        bbn.fn.post(this.root + 'actions/move', obj ,(d)=>{
-          alert("fdfd")
-        });
+       let obj ={
+       orig: this.root,
+       dir: select.data.dir,
+       src: select.data.path,
+       dest: dest.data.path
+       };
+       bbn.fn.post(this.root + 'actions/move', obj ,(d)=>{
+       alert("fdfd")
+       });
 
 
 
-      },*/
+       },*/
       /**
        * Deletes the current opened file
        */
@@ -866,34 +921,34 @@
           const cont = this.$refs.tabstrip.getVue(this.$refs.tabstrip.selected);
           let f;
 
-        /*  if ( cont && cont.$children[1] && cont.$children[1].$children[0] && cont.$children[1].$children[0].$data ){
-            f = cont.$children[1].$children[0].$data;
-            console.log("GUARDDDDDDAD", cont, f);
-            alert("DELETE acTIVE");
-            if ( f.filename &&
-              f.path &&
-              (f.isMVC !== undefined) &&
-              f.repository &&
-              this.repositories[f.repository]
-            ){
-              bbn.fn.post(this.root + 'actions/delete', {
-                repository: this.repositories[f.repository],
-                path: f.path,
-                name: f.filename,
-                ext: f.ext || false,
-                is_file: true,
-                is_mvc: f.isMVC
-              }, (d) => {
-                if ( d.success ){
-                  this.$refs.tabstrip.close(this.$refs.tabstrip.selected);
-                  appui.success(bbn._("Deleted!"));
-                }
-                else {
-                  appui.error(bbn._("Error!"));
-                }
-              });
-            }
-          }*/
+          /*  if ( cont && cont.$children[1] && cont.$children[1].$children[0] && cont.$children[1].$children[0].$data ){
+           f = cont.$children[1].$children[0].$data;
+           console.log("GUARDDDDDDAD", cont, f);
+           alert("DELETE acTIVE");
+           if ( f.filename &&
+           f.path &&
+           (f.isMVC !== undefined) &&
+           f.repository &&
+           this.repositories[f.repository]
+           ){
+           bbn.fn.post(this.root + 'actions/delete', {
+           repository: this.repositories[f.repository],
+           path: f.path,
+           name: f.filename,
+           ext: f.ext || false,
+           is_file: true,
+           is_mvc: f.isMVC
+           }, (d) => {
+           if ( d.success ){
+           this.$refs.tabstrip.close(this.$refs.tabstrip.selected);
+           appui.success(bbn._("Deleted!"));
+           }
+           else {
+           appui.error(bbn._("Error!"));
+           }
+           });
+           }
+           }*/
           if ( cont && cont.$children[0] && cont.$children[0].$children[0] && cont.$children[0].$children[0].$data ){
             f = cont.$children[0].$children[0];
 
@@ -914,7 +969,7 @@
                 if ( d.success ){
                   this.$refs.tabstrip.close(this.$refs.tabstrip.selected);
                   appui.success(bbn._("Deleted!"));
-                 // this.$refs.filesList.reload();
+                  // this.$refs.filesList.reload();
                 }
                 else {
                   appui.error(bbn._("Error!"));
@@ -1097,6 +1152,10 @@
         this.treeReload();
       }
     },
+    created(){
+      appui.ide = this;
+
+    },
     mounted(){
       this.$nextTick(() => {
         $(this.el).bbn('analyzeContent', true);
@@ -1106,7 +1165,7 @@
       //this.setTheme();
 
       // Set the font
-      this.setFont();
+      //this.setFont();
 
       // Function triggered when closing tabs: confirm if unsaved
       /*$(vm.$refs.tabstrip).tabNav("set", "close", function(){
