@@ -82,7 +82,7 @@ Vue.component('appui-ide-history', {
     }
   },
   mounted(){
-
+    bbn.fn.log("HISTORYYYY", this)
     this.$nextTick(() => {
       $(this.$el).bbn('analyzeContent', true);
     });

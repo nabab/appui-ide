@@ -7,14 +7,10 @@
 
 (() =>{
   return {
-    beforeMount(){
+    created(){
       bbn.vue.setComponentRule(this.source.root + 'components/', 'appui');
-      if ( this.source.isMVC ){
-        bbn.vue.addComponent('ide/mvc');
-      }
-      else {
-        bbn.vue.addComponent('ide/file');
-      }
+      bbn.vue.addComponent('ide/mvc');
+      bbn.vue.addComponent('ide/file');
       bbn.vue.unsetComponentRule();
     },
     data(){

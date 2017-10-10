@@ -8,29 +8,31 @@
     template: '#bbn-tpl-component-appui-ide-popup-rename',
     props: ['source'],
     data(){
-      return $.extend({
-        newName: this.source.fData.name,
-        newExt: ''
-      }, this.source);
+      return {
+        new_name: this.source.nodeData.name,
+        new_ext: ''
+      }
     },
     methods: {
-      extensions(){
-        let res = [];
-        if ( !this.isMVC ){
-          $.each(this.repositories[this.currentRep].extensions, (i, v) =>{
-            res.push({
-              text: '.' + v.ext,
-              value: v.ext
-            });
-          });
-        }
-        return res;
-      },
       close(){
         const popup = bbn.vue.closest(this, ".bbn-popup");
         popup.close();
       },
-      submit(){
+      successActive(){
+        const tabStrip = appui.ide.$refs.tabstrip;
+        let path = this.source.nodeData.path.split('/');
+        if ( tabStrip ){
+          var idx = tabStrip.getIndex('file/' + appui.ide.currentRep + this.source.nodeData.dir +  this.source.nodeData.name );
+
+          if ( idx > -1 ){
+            path.pop();
+            path.push(this.new_name);
+            tabStrip.tabs[idx]['title'] = path.join('/');
+          }
+        }
+        appui.success(bbn._("Renamed!"));
+      },
+/*      submit(){
         if ( (this.newName !== this.fData.name) || (this.isFile && (this.newExt !== this.fData.ext)) ){
           let obj = {
             repository: this.repositories[this.currentRep],
@@ -74,25 +76,43 @@
 
           });
         }
-      }
+      }*/
     },
     computed: {
       isFile(){
-        return !this.fData.is_folder;
+        return !this.source.nodeData.isFolder;
       },
       isMVC(){
-        return (this.repositories[this.currentRep] !== undefined ) && (this.repositories[this.currentRep].tabs !== undefined);
+        return (this.source.repositories[this.source.currentRep] !== undefined ) && (this.source.repositories[this.source.currentRep].tabs !== undefined);
       },
+      extensions(){
+        let res = [];
+        if ( !this.isMVC ){
+          $.each(this.source.repositories[this.source.currentRep].extensions, (i, v) =>{
+            res.push({
+              text: '.' + v.ext,
+              value: v.ext
+            });
+          });
+        }
+        return res;
+      },
+      formData(){
+       return{
+         repository: this.source.repositories[this.source.currentRep],
+         path: this.source.nodeData.dir,
+         name: this.source.nodeData.name,
+         ext: this.source.nodeData.ext,
+         is_mvc: this.isMVC,
+         is_file: this.isFile
+       }
+      }
     },
     mounted(){
+
       if ( this.isFile ){
-        this.newExt = this.fData.ext;
+        this.new_ext = this.source.nodeData.ext;
       }
-      this.$nextTick(() => {
-        setTimeout(() => {
-          $(this.$el).bbn('analyzeContent', true);
-        }, 100);
-      });
     }
   });
 

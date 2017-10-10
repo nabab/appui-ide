@@ -310,11 +310,14 @@ class ide {
       !empty($cfg['name']) &&
       isset($cfg['is_file'], $path)
     ){
+      // Each file associated with the structure (MVC case)
       foreach ( $rep['tabs'] as $i => $tab ){
+        // The path of each file
         $tmp = $path;
         if ( !empty($tab['path']) ){
           $tmp .= $tab['path'];
         }
+
         $old = $new = $tmp;
         if ( !empty($cfg['path']) &&  ($cfg['path'] !== './') ){
           $old .= $cfg['path'] . (substr($cfg['path'], -1) !== '/' ? '/' : '');
@@ -331,8 +334,7 @@ class ide {
 
             foreach ( $tab['extensions'] as $k => $ext ){
               if ( $k === 0 ){
-
-                if ( is_file($new.'.'.$ext['ext']) ){
+                if ( !empty($cfg['new_name']) && is_file($new.'.'.$ext['ext']) ){
                   $this->error("The new file exists: $new.$ext[ext]");
                   return false;
                 }
@@ -347,7 +349,7 @@ class ide {
           }
           $old .= !empty($cfg['is_file'])  ? '.' . $ext_ok : '';
           $new .= !empty($cfg['is_file']) ? '.' . $tab['extensions'][0]['ext'] : '';
-          if ( ($new !== $tmp) && file_exists($new) ){
+          if ( !empty($cfg['new_name']) && ($new !== $tmp) && file_exists($new) ){
             $this->error("The new file|folder exists.");
             return false;
           }

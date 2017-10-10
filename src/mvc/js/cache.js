@@ -16,7 +16,7 @@ grid.kendoGrid({
       {
         text : "<i class='fa fa-eye' title='See content'> </i>",
         name : "Content",
-        click: function(e){
+        command: function(e){
           var tr = $(e.target).closest("tr"),
             dataItem = this.dataItem(tr).toJSON();
           bbn.fn.window(data.root + "cache/info", {item: dataItem.name}, "80%", "40%");
@@ -24,7 +24,7 @@ grid.kendoGrid({
       }, {
         text : "<i class='fa fa-times' title='Delete'> </i>",
         name : "Clear",
-        click: function(e){
+        command: function(e){
           var tr = $(e.target).closest("tr"),
             dataItem = this.dataItem(tr).toJSON();
           bbn.fn.post(data.root + "cache/delete", {item: dataItem.name}, function(d){

@@ -9,48 +9,55 @@ Vue.component('appui-ide-popup-path', {
   template: '#bbn-tpl-component-appui-ide-popup-path',
   props: ['source'],
   data(){
-    return this.source;
+    return {
+      root: appui.ide.root
+    }
   },
   computed:{
     treeInitialData(e){
-      console.log("dsddsrfr", this)
       return {
-        repository: this.currentRep,
-        repository_cfg: this.repositories[this.currentRep],
+        repository: appui.ide.currentRep,
+        repository_cfg: appui.ide.repositories[appui.ide.currentRep],
         is_mvc: this.isMVC,
         onlydirs: true,
-        tab: this.obj.tab || false,
+        tab: this.source.tab || false,
       };
     },
     isMVC(){
-      return (this.repositories[this.currentRep] !== undefined ) && (this.repositories[this.currentRep].tabs !== undefined);
+      return (appui.ide.repositories[appui.ide.currentRep] !== undefined ) && (appui.ide.repositories[appui.ide.currentRep].tabs !== undefined);
     },
   },
   methods: {
     treeMapper(a){
       if ( a.folder ){
         $.extend(a, {
-          repository: this.currentRep,
-          repository_cfg: this.repositories[this.currentRep],
+          repository: appui.ide.currentRep,
+          repository_cfg: appui.ide.repositories[appui.ide.currentRep],
           onlydirs: true,
-          tab: this.selectedType || false,
-          is_mvc: this.isMVC,
-          filter: this.searchFile
+          tab: this.source.tab || false,
+          is_mvc: this.isMVC
         });
       }
-      console.log("dsddd",a);
       return a;
     },
     treeNodeActivate(d){
       const popup = bbn.vue.closest(this, ".bbn-popup");
-      this.obj.path = d.data.path;
+      let path_destination = d.data.path.endsWith('/') ?  d.data.path :  d.data.path + '/';
+
+      switch ( this.source.operation ){
+        case 'copy':{
+          this.source.new_path = path_destination;
+        }
+        break;
+        case 'create':{
+          this.source.path =  path_destination;
+        }
+          break;
+      }
+
+      //this.source.path =  d.data.path.endsWith('/') ?  d.data.path :  d.data.path + '/';
       popup.close();
     },
   },
-  mounted(){
-    bbn.fn.log("TREEEEE", this)
-    this.$nextTick(() =>{
-      $(this.$el).bbn('analyzeContent', true);
-    });
-  }
+
 });

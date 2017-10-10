@@ -121,11 +121,19 @@
       })
     },
     computed: {
+      /**
+       * Check if the current repository is a MVC
+       *
+       * @returns {boolean}
+       */
+      isMVC(){
+        return (this.repositories[this.currentRep] !== undefined ) && (this.repositories[this.currentRep].tabs !== undefined);
+      },
       treeInitialData(){
         return {
           repository: this.currentRep,
           repository_cfg: this.repositories[this.currentRep],
-          is_mvc: this.isMVC(),
+          is_mvc: this.isMVC,
           filter: this.searchFile,
           path: this.path,
           onlydirs: false,
@@ -273,21 +281,17 @@
         return false;
       },
 
+
       /**
-       * Check if the current repository is a MVC
+       * check and remove the asterisks from tab headings if necessary
        *
-       * @returns {boolean}
+       *
        */
-      isMVC(){
-        const vm = this;
-        return (vm.repositories[vm.currentRep] !== undefined ) && (vm.repositories[vm.currentRep].tabs !== undefined);
-      },
       afterCtrlChangeCode(){
 
           let selected = this.$refs.tabstrip.selected,
               titleTab = this.$refs.tabstrip.tabs[selected]['title'],
               id = titleTab.lastIndexOf("*");
-
           if ( id > -1 ){
             this.$refs.tabstrip.tabs[selected]['title'] = titleTab.substring(0, id);
             let subTabs = this.$refs.tabstrip.getVue(appui.ide.$refs.tabstrip.selected).$refs.component[0].$refs.file.$refs.tabstrip.tabs;
@@ -298,56 +302,73 @@
                 }
               });
             }
-
           }
 
+
       },
-      /*ctrlChange(){
-        this.ctrlChangeCode(false);
-      },*/
-      ctrlCloseTab(idx, e){
-        let ctrlChangeCode = this.$refs.tabstrip.getVue(this.$refs.tabstrip.tabs[idx]).$refs.component[0].changedCode;
+      /**
+       * check the tab before closing if there are any code changes in case it saves them
+       * the difference with the method and block the close event of the tab and then resume it
+       *
+       */
+      ctrlCloseTab(idx, ev){
+        // check if there are any changes in code
+        let ctrlChangeCode = this.$refs.tabstrip.getVue(this.$refs.tabstrip.selected).$refs.component[0].changedCode,
+            //method close of the tab selected
+            closeProject =  this.$refs.tabstrip.getVue(this.$refs.tabstrip.selected).$parent.close;
+
+        ev.preventDefault();
+        bbn.fn.log("TAB", this.$refs.tabstrip.selected)
+
         if ( ctrlChangeCode ){
           bbn.fn.confirm(
             bbn._('Do you want to save the changes before closing the tab?'),
             () =>{
-              this.afterCtrlChangeCode();
-              this.save( true );
-              $.extend(e,{force :true});
-
+              this.save(true);
+              setTimeout(()=>{
+                closeProject(idx, true);
+              }, 800)
 
             },
             () => {
-              e.preventDefault()
+              closeProject(idx, true);
             }
           );
         }
+        else{
+          closeProject(idx, true);
+        }
 
       },
+      /**
+       * function to close the tab from the dropdown menu file
+       *
+       *
+       */
       closeTab(){
         let ctrlChangeCode = this.$refs.tabstrip.getVue(this.$refs.tabstrip.selected).$refs.component[0].changedCode;
         if ( ctrlChangeCode ){
           bbn.fn.confirm(
             bbn._('Do you want to save the changes before closing the tab?'),
             () =>{
-              this.afterCtrlChangeCode();
+
               this.save( true );
-              this.afterCtrlChangeCode();
-              this.$refs.tabstrip.close(this.$refs.tabstrip.selected);
+
+              this.$refs.tabstrip.close(this.$refs.tabstrip.selected, true);
             },
             () => {
-              this.$refs.tabstrip.close(this.$refs.tabstrip.selected);
+              this.$refs.tabstrip.close(this.$refs.tabstrip.selected, true);
               this.afterCtrlChangeCode();
             }
           );
         }
         else {
-          this.$refs.tabstrip.close(this.$refs.tabstrip.selected);
+          this.$refs.tabstrip.close(this.$refs.tabstrip.selected, true);
         }
       },
       /**
-       * Check and close all tabs
-       * @param tabs array of all tabs open
+       * Check and close all tabs callback the function closeTab
+       *
        */
       closeTabs(){
         let max= this.$refs.tabstrip.tabs.length;
@@ -387,6 +408,10 @@
 
       /** ###### TREE ###### */
 
+      /**
+       * function performed by the map to adapt the date to the tree
+       *
+       */
       treeMapper(a){
         if ( a.folder ){
           $.extend(a, {
@@ -394,38 +419,51 @@
             repository_cfg: this.repositories[this.currentRep],
             onlydirs: false,
             tab: false,
-            is_mvc: this.isMVC(),
+            is_mvc: this.isMVC,
             filter: this.searchFile
           });
         }
         return a;
       },
-
+      /**
+       * function to define the context menu of each node of the tree
+       *
+       */
       treeContextMenu(n , i){
         let objContext = [{
           icon: 'fa fa-file-o',
           text: bbn._('New file'),
-          click: ()=>{ this.newFile(n, i) }
+          command: (node) => {
+            this.newFile(node)
+          }
         }, {
           icon: 'fa fa-folder',
           text: bbn._('New directory'),
-          click: ()=> { this.newDir(n) }
+          command: (node) => {
+            this.newDir(node)
+          }
         }, {
           icon: 'fa fa-edit',
           text: bbn._('Rename'),
-          click: ()=> { this.rename(n) }
+          command: (node) => {
+            this.rename(node)
+          }
         }, {
           icon: 'fa fa-files-o',
           text: bbn._('Copy'),
-          click: ()=> { this.copy(n) }
-        }, {
+          command: (node) => {
+            this.copy(node)
+          }
+        }, /*{
           icon: 'fa fa-file-zip-o',
           text: bbn._('Export'),
-          click: ()=> { this.export(n) }
-        }, {
+          command: () => { this.export(n) }
+        },*/ {
           icon: 'fa fa-trash',
           text: bbn._('Delete'),
-          click: ()=> { this.delete(n) }
+          command: (node) => {
+            this.delete(node)
+          }
         }];
         if ( n.data.folder ){
           return objContext;
@@ -434,14 +472,19 @@
           objContext.unshift({
             icon: 'fa fa-magic',
             text: bbn._('Test code!'),
-            click: ()=>{ this.testNodeOfTree(n) }
+            command: ( node )=>{
+              this.testNodeOfTree(node)
+            }
           });
           return objContext;
         }
       },
-
+      /**
+       * function for reloading the entire tree fileList
+       *
+       */
       treeReload(n, i){
-        this.$refs.filesList.reload(this.$refs.filesList.$refs.root);
+        this.$refs.filesList.reload();
       },
 
       /**
@@ -452,9 +495,9 @@
        * @param n The node
        */
       treeNodeActivate(d){
-
+          console.log("dsdds", d)
         if ( !d.data.folder ){
-          if( !this.isMVC() ){
+          if( !this.isMVC ){
             this.ctrlTest = true;
           }
           this.openFile(d);
@@ -703,10 +746,10 @@
         }
       },
       testNodeOfTree(node){
-        if ( this.isMVC() && !this.ctrlTest ){
+        if ( this.isMVC && !this.ctrlTest ){
           bbn.fn.link( node.data.path )
         }
-        else if ( !this.isMVC() ){
+        else if ( !this.isMVC ){
           this.treeNodeActivate(node)
           if  ( this.ctrlTest ){
             this.ctrlTest = false;
@@ -727,14 +770,15 @@
           console.log("save", active);
 
           if( ctrl ){
-            active.save();
+            return active.save();
           }
+
           else{
-            bbn.fn.confirm(
+            return bbn.fn.confirm(
               bbn._('Are you sure you want to save?'),
               () =>{
                 this.afterCtrlChangeCode();
-                active.save();
+                return active.save();
               }
             );
           }
@@ -760,8 +804,8 @@
        * @param bool isFile A boolean value to identify if you want create a file or a folder
        * @param string path The current path
        */
-      new(title, isFile, nodeData){
-        console.log("ssss", nodeData)
+      new(title, isFile, node){
+        bbn.fn.log("NEW", arguments);
         let src = {
           allData: false,
           isFile: isFile,
@@ -772,20 +816,28 @@
           root: this.root
         };
 
-        if ( nodeData.folder !== undefined ){
-          src.path = nodeData.folder ? nodeData.path : nodeData.path.slice(0, nodeData.path.lastIndexOf("/"));
-          src.allData = nodeData;
-        }
-
-        if ( nodeData === undefined ){
+        if ( !node ){
           src.path = './'
+        }
+        else {
+          if ( node.data.folder !== undefined ){
+            src.path = node.data.folder ? node.data.path : node.data.path.slice(0, node.data.path.lastIndexOf("/"));
+            src.allData = node.data;
+          }
         }
         bbn.vue.closest(this, ".bbn-tab").$refs.popup[0].open({
           width: 500,
           height: 250,
           title: title,
           component: 'appui-ide-popup-new',
-          source: src
+          source: src,
+          afterClose(){
+            appui.ide.reloadAfterTree(node, 'create');/*
+            bbn.fn.log("CLOSING ",node);
+            if ( node && node.items ){
+              bbn.vue.find(node, 'bbn-tree').reload();
+            }*/
+          }
         });
       },
 
@@ -794,8 +846,8 @@
        *
        * @param data The node data
        */
-      newFile(node, idx){
-        this.new(bbn._('New File'), true, node != undefined && node.data ? node.data : false);
+      newFile(node){
+        this.new(bbn._('New File'), true, node != undefined && node ? node : false);
       },
 
       /**
@@ -804,7 +856,7 @@
        * @param data The node data
        */
       newDir(node){
-        this.new(bbn._('New Directory'), false, node != undefined && node.data ? node.data : false);
+        this.new(bbn._('New Directory'), false, node != undefined && node ? node : false);
       },
 
       /**
@@ -812,17 +864,18 @@
        *
        * @param data The node data
        */
-      rename(d){
-        bbn.fn.log("dsdsd", d);
+      rename(node){
         bbn.vue.closest(this, ".bbn-tab").$refs.popup[0].open({
           width: 500,
           height: 150,
           title: bbn._('Rename'),
           component: 'appui-ide-popup-rename',
           source: $.extend({
-            fData: d.data,
-            //allData: d
-          }, this.source)
+            nodeData: node.data,
+          }, this.source),
+          afterClose(){
+            appui.ide.reloadAfterTree(node, 'rename');
+          }
         });
       },
 
@@ -831,33 +884,67 @@
        *
        * @param data The node data
        */
-      copy(d){
+      copy(node){
         let src = $.extend({
-          data: d.data,
+          data: node.data,
         }, this.source);
 
         bbn.vue.closest(this, ".bbn-tab").$refs.popup[0].open({
           width: 500,
           height: 220,
-          title: d.data.folder ? bbn._('Copy folder') : bbn._('Copy'),
+          title: node.data.folder ? bbn._('Copy folder') : bbn._('Copy'),
           component: 'appui-ide-popup-copy',
           source: src
         });
       },
-      export(data){
+
+      /**
+       * Function that is activated to the operation done at the node to make it be carried out again.
+       *
+       * @param data The node
+       */
+      reloadAfterTree(node, action){
+        let treeOfNode = bbn.vue.closest(node, 'bbn-tree'),
+            treeParent = treeOfNode.$parent;
+        switch( action ){
+          case 'delete':{
+            treeOfNode.reload();
+            if ( treeOfNode.items.length === 0 ){
+              bbn.fn.log("items e lung", treeOfNode.items)
+              alert("entarto");
+              //treeParent.numChildren = 0;
+            }
+          }break;
+          case 'create':{
+            console.log("create", node);
+
+            if ( node.isLoaded ){
+              bbn.vue.find(node, 'bbn-tree').reload();
+            }
+            else{
+              node.isExpanded = true;
+              bbn.vue.find(node, 'bbn-tree').reload();
+              
+            }
+          }break;
+          case 'rename':{
+            node.$parent.reload();
+          }break;
+        }
 
       },
-
       /**
        * Deletes a file or a folder selected from the files list
        *
        * @param data The node data
        */
-      delete(node, id){
+      delete(node){
         bbn.fn.confirm(bbn._('Are you sure you want to delete it?'), () => {
-          if ( node.data.name  &&
-            ( node.data.dir !== undefined) &&
-            ( node.data.folder || ( !node.data.folder && node.data.ext ) )
+          if (
+            node &&
+            node.data.name &&
+            (node.data.dir !== undefined) &&
+            (node.data.folder || (!node.data.folder && node.data.ext) )
           ){
             bbn.fn.post(this.root + 'actions/delete', {
               repository: this.repositories[this.currentRep],
@@ -865,30 +952,16 @@
               name: node.data.name,
               ext: node.data.ext,
               is_file: !node.data.folder,
-              is_mvc: this.isMVC()
+              is_mvc: this.isMVC
             }, (d) => {
               if ( d.success ){
                 const idx = this.$refs.tabstrip.getIndex('file/' + this.currentRep + node.data.dir + node.data.name);
                 // node = this.$refs.filesList.widget.getNodeByKey(data.key);
                 if ( idx != false ){
-                  if ( !node.data.folder && (idx > -1) ){
-                    this.$refs.tabstrip.close(idx);
-                    node.$parent.items.splice(id, 1);
-                  }
-                  else if( node.data.folder ){
-                    this.$refs.filesList.reload();
-                  }
+                  this.$refs.tabstrip.close(idx);
                 }
-
-
-                /*if ( node ){
-                 if( node.data.folder){
-
-                 }
-                 node.$parent.items.splice(id, 1);
-                 }*/
+                this.reloadAfterTree(node, 'delete');
                 appui.success(bbn._("Deleted!"));
-                bbn.vue.closest(this, ".bbn-tab").$children[0].$refs.filesList.reload();
               }
               else {
                 appui.error(bbn._("Error!"));
@@ -1154,32 +1227,6 @@
     },
     created(){
       appui.ide = this;
-
-    },
-    mounted(){
-      this.$nextTick(() => {
-        $(this.el).bbn('analyzeContent', true);
-      });
-
-      // Set the theme
-      //this.setTheme();
-
-      // Set the font
-      //this.setFont();
-
-      // Function triggered when closing tabs: confirm if unsaved
-      /*$(vm.$refs.tabstrip).tabNav("set", "close", function(){
-       var conf = false;
-       $(".ui-codemirror").each(function(){
-       if ( $(this).codemirror("isChanged") ){
-       conf = 1;
-       }
-       });
-       if ( conf ){
-       return confirm($.ui.codemirror.confirmation);
-       }
-       return 1;
-       }, vm.root + 'editor');*/
     }
   };
 })();

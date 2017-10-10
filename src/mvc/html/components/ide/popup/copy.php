@@ -1,3 +1,42 @@
+<bbn-form class="bbn-full-screen"
+          :source="$data"
+          :data="formData"
+          :action="source.root + 'actions/copy'"
+          @success="successActive"
+          @failure="failureActive"
+>
+  <div class="bbn-padded bbn-flex-height">
+    <div class="bbn-flex-fill bbn-grid-fields">
+      <label><?=_("Name")?></label>
+      <div>
+        <bbn-input v-model="new_name"></bbn-input>
+        <bbn-dropdown v-if="!isMVC && isFile"
+                      class="bbn-block"
+                      :source="extensions"
+                      v-model="new_ext"
+
+        ></bbn-dropdown>
+      </div>
+      <label>
+        <?=_("Path")?>
+      </label>
+      <div>
+        <bbn-input v-model="new_path"
+                   readonly="readonly"
+                   required="required"
+        ></bbn-input>
+        <bbn-button type="button" @click="selectDir"><?=_("Browse")?></bbn-button>
+        <bbn-button @click="() => {path = './'}"><?=_("Root")?></bbn-button>
+      </div>
+    </div>
+  </div>
+
+</bbn-form>
+
+
+
+
+
 <!-- OLD
 
 <bbn-form class="bbn-full-screen">
@@ -31,6 +70,7 @@
   </div>
 </bbn-form>
 -->
+<!--
 <bbn-form class="bbn-full-screen"
           :source="source"
           :buttons="[{
@@ -70,4 +110,4 @@
     </div>
   </div>
 
-</bbn-form>
+</bbn-form>-->
