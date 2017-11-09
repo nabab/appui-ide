@@ -4,87 +4,73 @@
  * Date: 05/06/2017
  * Time: 14:40
  */
+
 Vue.component('appui-ide-history', {
   template: '#bbn-tpl-component-appui-ide-history',
   props: ['source'],
   data(){
-    return $.extend({
-      selected: '',
+    return {
+      selected: false,
       mode: '',
-      code: ''
-    }, this.source);
+      code: '',
+      url: '',
+      treeLoad:false,
+    }
   },
   methods: {
-    /*treeLoad( ){
-      if ( this.repository &&
-        this.repositories[this.repository] &&
-        this.repositories[this.repository].bbn_path &&
-        this.repositories[this.repository].path &&
-        (this.path !== undefined) &&
-        this.filename
-      ){
-        bbn.fn.log('AAAAAAAAAAAAAAAAAAdsdsdAAA');
-        const url = this.repositories[this.repository].bbn_path + '/' +
-          this.repositories[this.repository].path +
-          (this.path ? this.path + '/' : '') +
-          this.filename +
-          '/__end__';
-       /* return bbn.fn.post(this.root + 'history/tree', {
-          url: url,
-          is_mvc: this.isMVC,
-          ext: !this.isMVC && this.ext ? this.ext : false
-        }).promise().then((pd) => {
-          return pd.data;
-        });
-      }
-    },*/
-    treeLazyLoad(e, d){
-      d.result = this.treeLoad(e, d);
+    //method map for component tree
+    transform(a){
+      return $.extend (a, {
+        text: "name_file" in a ? a.text + ' &nbsp; <span class="bbn-grey">' +  "( " + a.numChildren + " )" + '</span>' : a.text,
+        num: a.numChildren || 0,
+        type: "name_file" in a  ? "" : a.text
+      });
     },
-    treeNodeActivate(id, d, n){
-      if ( !n.folder ){
-        this.selected = n.key;
-        this.code = d.code;
-        this.mode = d.mode;
-        this.$forceUpdate();
+    //  click in node file for to make a post and upload its content
+    treeNodeActivate(node){
+      if ( this.selected ){
+        this.selected = false;
+      }
+      setTimeout(() =>{
+        if ( node.data.folder === false ){
+          bbn.fn.post(this.source.root + 'history/tree',{
+            url: node.data.path + "/" + node.data.file + "." + node.data.ext ,
+          }, d=>{
+            if( d.data.success ){
+              this.selected = true;
+              this.code = d.data.code;
+              this.mode = node.data.mode;
+              this.$forceUpdate();
+            }
+          });
+        }
+      }, 300);
+    }
+  },
+  computed: {
+    //Initial configuration object for the tree component
+    initialData(){
+      if( this.url.length ){
+        return {
+          repository: this.source.repository,
+          repository_cfg: this.source.repositories[this.source.repository],
+          is_mvc: this.source.isMVC,
+          path: this.url,
+        }
       }
     }
   },
-  computed:{
-    treeLoad(){
-      if ( this.repository &&
-        this.repositories[this.repository] &&
-        this.repositories[this.repository].bbn_path &&
-        this.repositories[this.repository].path &&
-        (this.path !== undefined) &&
-        this.filename
-      ){
-
-
-        const url = this.repositories[this.repository].bbn_path + '/' +
-          this.repositories[this.repository].path +
-          (this.path ? this.path + '/' : '') +
-          this.filename +
-          '/__end__';
-        bbn.fn.log(this.repositories[this.repository].bbn_path);
-        bbn.fn.log(this.repositories[this.repository].path);
-        bbn.fn.log(this.path);
-        bbn.fn.log(this.filename + '/__end__');
-        bbn.fn.log(url);
-        bbn.fn.log('AAAAAAAAAAAAAAAAAAdsdsdAAA');
-        return  {
-          url: url,
-          is_mvc: this.isMVC,
-          ext: !this.isMVC && this.ext ? this.ext : false
-        };
-        return objSend
-      }
+  created(){
+    if ( this.source.repository &&
+      this.source.repositories[this.source.repository] &&
+      this.source.repositories[this.source.repository].bbn_path &&
+      this.source.repositories[this.source.repository].path &&
+      (this.source.path !== undefined) &&
+      this.source.filename ){
+      this.url = this.source.repositories[this.source.repository].bbn_path + '/' +
+        this.source.repositories[this.source.repository].path +
+        (this.source.path ? this.source.path + '/' : '') +
+        this.source.filename + '/__end__';
     }
-  },
-  mounted(){
-    bbn.fn.log("HISTORYYYY", this)
-    this.$nextTick(() => {
-      $(this.$el).bbn('analyzeContent', true);
-    });
   }
 });

@@ -2,14 +2,14 @@
           :source="$data"
           :data="formData"
           :action="source.root + 'actions/create'"
-          @success="successActive"
+          @success="onSuccess"
           @failure="failureActive"
 >
 
   <div class="bbn-padded bbn-flex-height">
     <div class="bbn-flex-fill bbn-grid-fields">
 
-      <label  v-if="isMVC"><?=_("Type")?></label>
+      <label v-if="isMVC"><?=_("Type")?></label>
       <div  v-if="isMVC">
         <bbn-dropdown :source="types"
                       v-model="tab"

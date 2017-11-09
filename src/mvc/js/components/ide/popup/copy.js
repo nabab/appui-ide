@@ -15,7 +15,7 @@ Vue.component('appui-ide-popup-copy', {
     }
   },
   methods: {
-    successActive(){
+    onSuccess(){
       //const tab = bbn.vue.closest(this, ".bbn-tab");
       if ( this.isFile && !this.isMvc ){
         appui.success(bbn._("Copy file succesfully!"));

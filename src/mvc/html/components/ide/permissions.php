@@ -1,5 +1,5 @@
 <div class="k-block" style="height: 100%">
-  <div class="k-header bbn-c">Permissions setting</div>
+  <div class="k-header bbn-c">Permissions settings</div>
   <div class="perm_set" style="padding: 10px">
     <input type="hidden" data-bind="value: id">
     <div>

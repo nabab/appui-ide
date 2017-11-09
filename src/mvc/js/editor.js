@@ -43,7 +43,13 @@
               select: () => {
                 this.save();
               }
-            }, {
+            },{
+              text: '<i class="fa fa-edit"></i>' + bbn._('Rename'),
+              select: () => {
+                this.rename(this.$refs.tabstrip['tabs'][this.$refs.tabstrip.selected], true);
+              }
+            },
+              {
               text: '<i class="fa fa-trash-o"></i>' + bbn._('Delete'),
               select: () => {
                 this.deleteActive();
@@ -126,7 +132,7 @@
        *
        * @returns {boolean}
        */
-      isMVC(){
+            isMVC(){
         return (this.repositories[this.currentRep] !== undefined ) && (this.repositories[this.currentRep].tabs !== undefined);
       },
       treeInitialData(){
@@ -288,23 +294,20 @@
        *
        */
       afterCtrlChangeCode(){
-
-          let selected = this.$refs.tabstrip.selected,
-              titleTab = this.$refs.tabstrip.tabs[selected]['title'],
-              id = titleTab.lastIndexOf("*");
-          if ( id > -1 ){
-            this.$refs.tabstrip.tabs[selected]['title'] = titleTab.substring(0, id);
-            let subTabs = this.$refs.tabstrip.getVue(appui.ide.$refs.tabstrip.selected).$refs.component[0].$refs.file.$refs.tabstrip.tabs;
-            if ( subTabs.length ){
-              $.each(subTabs, (i, v) =>{
-                if ( v.title.lastIndexOf("*") > -1 ){
-                  subTabs[i]['title'] = subTabs[i]['title'].substring(0, v.title.lastIndexOf("*"));
-                }
-              });
-            }
+        let selected = this.$refs.tabstrip.selected,
+            titleTab = this.$refs.tabstrip.tabs[selected]['title'],
+            id = titleTab.lastIndexOf("*");
+        if ( id > -1 ){
+          this.$refs.tabstrip.tabs[selected]['title'] = titleTab.substring(0, id);
+          let subTabs = this.$refs.tabstrip.getVue(appui.ide.$refs.tabstrip.selected).$refs.component[0].$refs.file.$refs.tabstrip.tabs;
+          if ( subTabs.length ){
+            $.each(subTabs, (i, v) =>{
+              if ( v.title.lastIndexOf("*") > -1 ){
+                subTabs[i]['title'] = subTabs[i]['title'].substring(0, v.title.lastIndexOf("*"));
+              }
+            });
           }
-
-
+        }
       },
       /**
        * check the tab before closing if there are any code changes in case it saves them
@@ -495,7 +498,6 @@
        * @param n The node
        */
       treeNodeActivate(d){
-          console.log("dsdds", d)
         if ( !d.data.folder ){
           if( !this.isMVC ){
             this.ctrlTest = true;
@@ -583,18 +585,25 @@
        * @param file
        */
       openFile(file){
+        let existTab = false;
+        for(let tab of this.$refs.tabstrip.tabs){
 
-        this.$refs.tabstrip.load(
-          'file/' +
-          this.currentRep +
-          (file.data.dir || '') +
-          file.data.name +
-          '/_end_' +
-          (file.data.tab ? '/' + file.data.tab : '')
-        );
-
+          if ( tab.title === file.data.path ){
+            existTab = true;
+            break;
+          }
+        }
+        if ( !existTab ){
+          this.$refs.tabstrip.load(
+            'file/' +
+            this.currentRep +
+            (file.data.dir || '') +
+            file.data.name +
+            '/_end_' +
+            (file.data.tab ? '/' + file.data.tab : '')
+          );
+        }
       },
-
       getActive(getCode = false){
         let tn = this.$refs.tabstrip,
             code;
@@ -767,20 +776,12 @@
       save(ctrl = false){
         let active = this.getActive(true);
         if ( active && $.isFunction(active.save) ){
-          console.log("save", active);
-
           if( ctrl ){
             return active.save();
           }
-
           else{
-            return bbn.fn.confirm(
-              bbn._('Are you sure you want to save?'),
-              () =>{
-                this.afterCtrlChangeCode();
-                return active.save();
-              }
-            );
+            this.afterCtrlChangeCode();
+            return active.save();
           }
         }
       },
@@ -805,7 +806,7 @@
        * @param string path The current path
        */
       new(title, isFile, node){
-        bbn.fn.log("NEW", arguments);
+        bbn.fn.log("NEW", node);
         let src = {
           allData: false,
           isFile: isFile,
@@ -821,7 +822,18 @@
         }
         else {
           if ( node.data.folder !== undefined ){
-            src.path = node.data.folder ? node.data.path : node.data.path.slice(0, node.data.path.lastIndexOf("/"));
+            if ( node.data.folder ){
+              src.path = node.data.path;
+            }
+            else{
+              if (node.level === 0 ){
+                src.path = './';
+              }
+              else{
+                let id = node.data.path.lastIndexOf("/");
+                src.path = node.data.path.slice(0, id);
+              }
+            }
             src.allData = node.data;
           }
         }
@@ -832,11 +844,7 @@
           component: 'appui-ide-popup-new',
           source: src,
           afterClose(){
-            appui.ide.reloadAfterTree(node, 'create');/*
-            bbn.fn.log("CLOSING ",node);
-            if ( node && node.items ){
-              bbn.vue.find(node, 'bbn-tree').reload();
-            }*/
+            appui.ide.reloadAfterTree(node, 'create');
           }
         });
       },
@@ -864,19 +872,46 @@
        *
        * @param data The node data
        */
-      rename(node){
-        bbn.vue.closest(this, ".bbn-tab").$refs.popup[0].open({
-          width: 500,
-          height: 150,
-          title: bbn._('Rename'),
-          component: 'appui-ide-popup-rename',
-          source: $.extend({
-            nodeData: node.data,
-          }, this.source),
-          afterClose(){
-            appui.ide.reloadAfterTree(node, 'rename');
-          }
-        });
+      rename(node, menuFile= false){
+        console.log("dsdss", node);
+        //case of click rename in contextmenu of the tree
+        if (!menuFile){
+          bbn.vue.closest(this, ".bbn-tab").$refs.popup[0].open({
+            width: 500,
+            height: 150,
+            title: bbn._('Rename'),
+            component: 'appui-ide-popup-rename',
+            source: $.extend({
+              nodeData: node.data,
+            }, this.source),
+            afterClose(){
+              appui.ide.reloadAfterTree(node, 'rename');
+            }
+          });
+        }//case rename of menu file
+        else{
+          let nameFile = node['title'].slice().substring(node.title.lastIndexOf('/') + 1),
+              tabFile = this.isMVC ? node['current'].slice().substring(node.title.lastIndexOf('/') + 1) : '';
+          bbn.vue.closest(this, ".bbn-tab").$refs.popup[0].open({
+            width: 500,
+            height: 150,
+            title: bbn._('Rename'),
+            component: 'appui-ide-popup-rename',
+            source: $.extend({
+              nodeData:{
+                folder: false,
+                ext: node.source.ext,
+                path: node.source.title,
+                name: nameFile,
+                tab: tabFile,
+              }
+            }, this.source),
+            afterClose(){
+              appui.ide.reloadAfterTree(node, 'rename');
+            }
+          });
+        }
+
       },
 
       /**
@@ -908,30 +943,35 @@
             treeParent = treeOfNode.$parent;
         switch( action ){
           case 'delete':{
+            let numChildren = treeOfNode.items.length;
             treeOfNode.reload();
-            if ( treeOfNode.items.length === 0 ){
-              bbn.fn.log("items e lung", treeOfNode.items)
-              alert("entarto");
-              //treeParent.numChildren = 0;
+
+            if ( numChildren === 1 ){
+              treeParent.numChildren = 0;
             }
           }break;
           case 'create':{
-            console.log("create", node);
-
-            if ( node.isLoaded ){
-              bbn.vue.find(node, 'bbn-tree').reload();
+            //In the creation phase if it is a folder that already has children then opens its content (tree) and makes the reload.
+            if ( node.data.folder ){
+              //If you add a file or folder to an existing folder that has no child, then we reload it to the parent tree.
+              if ( node.numChildren > 0 ){
+                node.isExpanded = true;
+                bbn.vue.find(node, 'bbn-tree').reload();
+              }
+              else{
+                bbn.vue.closest(node, 'bbn-tree').reload();
+              }
             }
+            //if we click on a new in a node that is not a folder in an open tree
             else{
-              node.isExpanded = true;
-              bbn.vue.find(node, 'bbn-tree').reload();
-              
+              node.$parent.reload();
             }
+
           }break;
           case 'rename':{
             node.$parent.reload();
           }break;
         }
-
       },
       /**
        * Deletes a file or a folder selected from the files list

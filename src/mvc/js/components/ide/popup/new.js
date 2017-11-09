@@ -18,19 +18,24 @@ Vue.component('appui-ide-popup-new', {
     }
   },
   methods: {
-    successActive(){
+    onSuccess(){
+
       if ( this.source.isFile ){
         bbn.fn.link(this.source.root + 'editor/file/' + this.source.currentRep +
           (this.path.startsWith('./') ? this.path.slice(2) : this.path) +
-          this.name + '/_end_' + ( this.extension.length ? '/' +  this.extension : '')
+          this.name + '/_end_' + ( this.extension.length ? '/' +  this.tab : '')
         );
         appui.success(bbn._("File created!"));
       }
       else{
         appui.success(bbn._("Directory created!"));
       }
-      bbn.vue.closest(this, ".bbn-popup").close();
+      if ( this.path === './'){
+        appui.ide.$refs.filesList.reload();
+      }
+    /*  bbn.vue.closest(this, ".bbn-popup").close();
       const tab = bbn.vue.closest(this, ".bbn-tab");
+      appui.ide.$data.isReload = true;*/
     },
     failureActive(){
       appui.error(bbn._("Error!"));
@@ -43,13 +48,6 @@ Vue.component('appui-ide-popup-new', {
         component: 'appui-ide-popup-path',
         source: $.extend(this.$data, {operation: 'create'})
       });
-    },
-
-    close(){
-      alert("close");
-      const popup = bbn.vue.closest(this, ".bbn-popup");
-      popup.close();
-      //popup.close(popup.num - 1);
     }
   },
 

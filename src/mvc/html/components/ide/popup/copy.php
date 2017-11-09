@@ -2,7 +2,7 @@
           :source="$data"
           :data="formData"
           :action="source.root + 'actions/copy'"
-          @success="successActive"
+          @success="onSuccess"
           @failure="failureActive"
 >
   <div class="bbn-padded bbn-flex-height">

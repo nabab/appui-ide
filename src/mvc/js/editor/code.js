@@ -22,11 +22,62 @@
       path(){
         const rep = this.ide.repositories[this.ide.repository];
         let path = rep.bbn_path + '/' + rep.path;
+        bbn.fn.log("ggggggg", this.ssctrl, rep.bbn_path, rep.path);
         if ( this.isMVC && rep.tabs && rep.tabs[this.tab] ){
           path += rep.tabs[this.tab].path;
         }
+        /*if(this.ssctrl === 0){
+          path = rep.bbn_path + '/' + rep.path
+        }*/
         return path;
       },
+      filePath(){
+        const rep = this.ide.repositories[this.ide.repository],
+              bits = this.ide.path.split('/');
+        let filePath = '';
+        if ( this.isMVC && rep && rep.tabs && rep.tabs[this.tab] && rep.tabs[this.tab].fixed /*&& this.ssctrl !== 0*/ ){
+          if ( $.isNumeric(this.ssctrl) && bits.length ){
+            $.each(bits, (i, v) => {
+              if ( i < this.ssctrl ){
+                filePath += v;
+              }
+              if ( bits[i+1] && ( (i + 1) < this.ssctrl ) ){
+                filePath += '/';
+              }
+            });
+          }
+          if( filePath.length ){
+            return filePath + '/'
+          }
+          else{
+            return this.path;
+          }
+        }
+
+        return this.path
+      },
+      fixed(){
+        const rep = this.ide.repositories[this.ide.repository];
+        if ( this.isMVC && rep && rep.tabs && rep.tabs[this.tab] && rep.tabs[this.tab].fixed ){
+          return this.ide.repositories[this.ide.repository].tabs[this.tab].fixed;
+        }
+        return false
+      },
+      fullPath(){
+
+        if ( this.fixed ){
+        //  if( this.ssctrl !== 0){
+            return this.path + this.filePath + this.fixed;
+          /*}
+          else{
+            return this.path + this.fixed;
+          }*/
+        }
+        if ( this.ide.filename && this.extension && this.path.length ){
+          return this.path + (this.ide.path.length ? this.ide.path + '/' : '') + this.ide.filename + '.' + this.extension;
+        }
+        return false;
+      }/*
       fullPath(){
         const rep = this.ide.repositories[this.ide.repository],
               bits = this.ide.path.split('/');
@@ -49,7 +100,7 @@
           return this.path + (this.ide.path.length ? this.ide.path + '/' : '') + this.ide.filename + '.' + this.extension;
         }
         return false;
-      }
+       }*/
     },
     watch: {
       isChanged(isChanged){
@@ -60,12 +111,13 @@
       save(cm){
         const state = this.$refs.editor.getState();
         if ( this.isChanged && state && state.selections && state.marks ){
+
           bbn.fn.post(this.ide.root + "actions/save", {
             repository: this.ide.repository,
             tab: this.tab,
             ssctrl: this.ssctrl,
-            path: this.ide.path,
-            filename: this.ide.filename,
+            path: this.fixed ? this.filePath : this.ide.path,
+            filename: this.fixed || this.ide.filename,
             extension: this.extension,
             full_path: this.fullPath,
             selections: state.selections,

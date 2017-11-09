@@ -6,7 +6,9 @@ if ( !$ctrl->inc->user->is_admin() ){
 if ( !isset($ctrl->inc->pref) ){
   die("Preferences must be set up for the IDE module to load.");
 }
-define('APPUI_IDE_ROOT', $ctrl->plugin_url('appui-ide').'/');
+if ( !defined('APPUI_IDE_ROOT') ){
+  define('APPUI_IDE_ROOT', $ctrl->plugin_url('appui-ide').'/');
+}
 $ctrl->data['routes'] = $ctrl->get_routes();
 $ctrl->data['shared_path'] = BBN_SHARED_PATH;
 

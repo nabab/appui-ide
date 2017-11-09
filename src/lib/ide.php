@@ -108,7 +108,7 @@ class ide {
    *
    * @param int $id
    */
-  private static function set_permissions(int $id){
+  private static function set_permissions($id){
     self::$permissions = $id;
   }
 
@@ -131,7 +131,7 @@ class ide {
    *
    * @param int $id
    */
-  private static function set_files_pref(int $id){
+  private static function set_files_pref(string $id){
     self::$files_pref = $id;
   }
 
@@ -431,6 +431,7 @@ class ide {
             )
           )
       ){
+
         return true;
       }
       // MVC
@@ -441,6 +442,38 @@ class ide {
           foreach ( $todo as $t ){
             // Rename
             if ( $ope === 'rename' ){
+
+              //set path backups
+
+              $backup_path = self::BACKUP_PATH . $cfg['repository']['bbn_path'] . '/' . $cfg['repository']['path'];
+
+              $old_backup = $backup_path . $cfg['bbn_path'] . $cfg['path'] . explode(".", array_pop(explode("/", $t['old'])))[0];
+              $new_backup = $backup_path . $cfg['bbn_path'] . $cfg['path'] . explode(".", array_pop(explode("/", $t['new'])))[0];
+
+              //if exist a backup
+              if ( is_dir($old_backup) ){
+                // if it isn't a folder
+                if ( !is_dir($t['old']) && !is_dir($t['new']) ){
+                  //$old_backup .= "/__end__";
+                  if ( is_dir($old_backup."/__end__") ){
+                    $new_backup;
+                    if ( !\bbn\file\dir::move($old_backup, $new_backup) ){
+                      $this->error("Error during the file|folder move: old -> $old_backup , new -> $new_backup");       return false;
+                    }
+                    else{
+                      \bbn\file\dir::delete($old_backup);
+                    }
+                  }
+                }
+                else {
+                  if ( !\bbn\file\dir::move($old_backup, $new_backup) ){
+                    $this->error("Error during the file|folder move: old -> $old_backup , new -> $new_backup");
+                    return false;
+                  }
+                }
+                \bbn\x::log("entrato","renameide");
+              }
+
               if ( !\bbn\file\dir::move($t['old'], $t['new']) ){
                 $this->error("Error during the file|folder move: old -> $t[old] , new -> $t[new]");
                 return false;
@@ -765,6 +798,60 @@ class ide {
    */
   public function save(array $file){
     if ( $this->set_current_file($this->decipher_path($file['full_path'])) ){
+
+      //if in the case of a rescue of _ctrl
+      if ( $file['tab'] === "_ctrl" ){
+        $backup_path = self::BACKUP_PATH . $file['repository'] . $file['path'] . $file['tab'] . '/';
+      }
+      else {
+        $backup_path = self::BACKUP_PATH . $file['repository'] . $file['path'] . '/' . $file['filename'] . '/__end__/' . ($file['tab'] ?: $file['extension']) . '/';
+      }
+
+      // Delete the file if code is empty and if it isn't a super controller
+      if ( empty($file['code']) && ($file['tab'] !== '_ctrl') ){
+        if ( @unlink(self::$current_file) ){
+          // Remove permissions
+          $this->delete_perm();
+          // Delete preferences
+          if ( $this->pref ){
+            $this->delete_file_preferences();
+          }
+          if ( !empty(self::$current_id) ){
+
+            // Remove file's preferences
+            $this->options->remove($this->options->from_code(self::$current_id, $this->_files_pref()));
+            // Remove ide backups
+            bbn\file\dir::delete($backup_path, 1);
+          }
+          return ['deleted' => true];
+        }
+      }
+
+        if ( is_file(self::$current_file) ){
+          $backup = $backup_path . date('Y-m-d_His') . '.' . $file['extension'];
+            bbn\file\dir::create_path(dirname($backup));
+            bbn\file\dir::copy(self::$current_file, $backup);
+        }
+        else if ( !is_dir(dirname(self::$current_file)) ){
+          bbn\file\dir::create_path(dirname(self::$current_file));
+        }
+
+      if ( !empty($file['tab']) && ($file['tab'] === 'php') && !is_file(self::$current_file) ){
+        if ( !$this->create_perm_by_real($file['full_path']) ){
+          return $this->error("Impossible to create the option");
+        }
+      }
+      file_put_contents(self::$current_file, $file['code']);
+      if ( $this->pref ){
+        $this->set_file_preferences(md5($file['code']), $file);
+      }
+      return ['success' => true];
+    }
+    return $this->error('Error: Save');
+  }
+  /*public function save(array $file){
+    if ( $this->set_current_file($this->decipher_path($file['full_path'])) ){
+     // die(var_dump($file['repository'] , $file['path'] , $file['filename'], $file['tab'] ));
       $backup_path = self::BACKUP_PATH . $file['repository'] . $file['path'] . '/' . $file['filename'] . '/__end__/' . ($file['tab'] ?: $file['extension']) . '/';
       // Delete the file if code is empty and if it isn't a super controller
       if ( empty($file['code']) && ($file['tab'] !== '_ctrl') ){
@@ -776,6 +863,7 @@ class ide {
             $this->delete_file_preferences();
           }
           if ( !empty(self::$current_id) ){
+
             // Remove file's preferences
             $this->options->remove($this->options->from_code(self::$current_id, $this->_files_pref()));
             // Remove ide backups
@@ -804,7 +892,7 @@ class ide {
       return ['success' => true];
     }
     return $this->error('Error: Save');
-  }
+  }*/
 
   /**
    * Creates a new file|directory
@@ -973,7 +1061,6 @@ class ide {
   public function create_perm_by_real(string $file, string $type = 'file'){
     if ( !empty($file) &&
       defined('BBN_APP_PATH') &&
-      file_exists($file) &&
       // It must be a controller
       (strpos($file, '/mvc/public/') !== false)
     ){
@@ -1086,7 +1173,7 @@ class ide {
       if ( isset($cfg['marks']) ){
         $c['marks'] = $cfg['marks'];
       }
-      if ( ($id_option = $this->option_id()) && $this->pref->set($id_option, $c) ){
+      if ( ($id_option = $this->option_id()) ){
         return true;
       }
     }
@@ -1303,56 +1390,276 @@ class ide {
    * Returns all backups of a file.
    *
    * @param string $url The file's URL
+   * @param bool $all Tparameter that allows you to have all the code if it is set to true
    * @return array|bool
    */
-  public function history(string $url){
+  public function history(string $url, bool $all = false){
+    $check_ctrl = false;
+    $copy_url = explode("/", $url);
+    $backups = [];
+    $history_ctrl = [];
+
+    // File's backup path
+    $path = self::BACKUP_PATH . $url;
     if ( !empty($url) && !empty(self::BACKUP_PATH) ){
-      $backups = [];
-      // File's backup path
-      $path = self::BACKUP_PATH . $url;
+      $ctrl_path = explode("/", $path);
+      for($y=0; $y <2; $y++){
+        array_pop($ctrl_path);
+      }
 
-      if ( is_dir($path) && ($dirs = \bbn\file\dir::get_dirs($path)) ){
+      //check if there is "_ctrl" in the url as the last step of the "$url"; in that case we tart $url to give the right path to get it to take its own backup files.
+      if ( end($copy_url) === "_ctrl" ){
+        $url = explode("/", $url);
+        array_pop($url);
+        $url = implode("/", $url);
+        $check_ctrl_files = true;
+        $copy_url = explode("/", $url);
+        for($y=0; $y <2; $y++){
+          array_pop($copy_url);
+        }
+        $copy_url = implode("/", $copy_url)."/"."_ctrl";
 
-        foreach ( $dirs as $dir ){
-          if ( $files = \bbn\file\dir::get_files($dir) ){
-            $d = basename($dir);
-            foreach ( $files as $file ){
-              $filename = \bbn\str::file_ext($file, true)[0];
-              $moment = strtotime(str_replace('_', ' ', $filename));
-              $date = date('d/m/Y', $moment);
-              $time = date('H:i:s', $moment);
-              if ( ($i = \bbn\x::find($backups, ['title' => $date])) === false ){
-                array_push($backups, [
-                  'title' => $date,
-                  'folder' => true,
-                  'lazy' => true,
-                  'children' => [],
-                  'icon' => 'folder-icon'
-                ]);
-                $i = count($backups) - 1;
+      }
+
+
+
+      //First, check the presence of _ctrl backups.
+      $ctrl_path = implode("/", $ctrl_path)."/"."_ctrl";
+
+      // read _ctrl if exsist
+
+       if ( is_dir($ctrl_path)  ){
+           //If there is a "_ctrl" backup, insert it into the array that will be merged with the remaining backup at the end of the function.
+           if ( $files_ctrl = \bbn\file\dir::get_files($ctrl_path) ){
+
+             $mode = basename($ctrl_path);
+
+             $history_ctrl = [
+               'text' => basename($ctrl_path),
+               'icon' => 'folder-icon',
+               'folder' => true,
+               'items' => [],
+               'num_items' => count(\bbn\file\dir::get_files($files_ctrl))
+             ];
+             //If we are requesting all files with their contents, this block returns to the "_ctrl" block.
+             if( $all===true ){
+
+             foreach ( $files_ctrl as $file ){
+               $filename = \bbn\str::file_ext($file, true)[0];
+               $file_name = $filename;
+               $moment = strtotime(str_replace('_', ' ', $filename));
+               $date = date('d/m/Y', $moment);
+               $time = date('H:i:s', $moment);
+
+               if ( ($i = \bbn\x::find($history_ctrl['items'], ['text' => $date])) === false ){
+                 array_push($history_ctrl['items'], [
+                   'text' => $date,
+                   'items'=> [],
+                   'folder' => true,
+                   'icon' => 'folder-icon'
+                 ]);
+
+                 $i = count($history_ctrl['items']) - 1;
+                 if ( ($idx = \bbn\x::find($history_ctrl['items'][$i]['items'], ['text' => $time])) === false ){
+                   array_push($history_ctrl['items'][$i]['items'], [
+                     'text' => $time,
+                     'mode' => basename($ctrl_path),
+                     'file' => $file_name,
+                     'ext' => \bbn\str::file_ext($file, true)[1],
+                     'path' => $url,
+                     'folder' => false
+                   ]);
+                 }
+               } else {
+                 $j = \bbn\x::find($history_ctrl['items'], ['text' => $date]);
+                 if ( ($idx = \bbn\x::find($history_ctrl['items'][$j]['items'], ['text' => $time])) === false ){
+                   array_push($history_ctrl['items'][$j]['items'], [
+                     'text' => $time,
+                     'code' => file_get_contents($file),
+                     'folder' => false,
+                     'mode' => basename($ctrl_path),
+                     'folder' => false
+                   ]);
+                 }
+               }
+             }
+           }
+           //otherwise pass some useful parameters to get information with other posts see block in case of "$all" to false.
+           else{
+             $check_ctrl = true;
+           }
+         }
+       }
+       //taken or not the backup of the "_ctrl" we move on to acquire the date of the project, if set to true then as done before, we will take into consideration all the date including the contents of the files.
+      if( $all === true ){
+
+        if ( is_dir($path) ){
+          //if we pass a path that contains all the backups
+          if ( $dirs = \bbn\file\dir::get_dirs($path) ){
+            if ( !empty($dirs) ){
+              $mode = basename($path) === "_ctrl" || basename($path) === "model" ? "php" : basename($path);
+              foreach ( $dirs as $dir ){
+                if ( $files = \bbn\file\dir::get_files($dir) ){
+                  foreach ( $files as $file ){
+                    $filename = \bbn\str::file_ext($file, true)[0];
+                    $moment = strtotime(str_replace('_', ' ', $filename));
+                    $date = date('d/m/Y', $moment);
+                    $time = date('H:i:s', $moment);
+                    if ( ($i = \bbn\x::find($backups, ['text' => $date])) === false ){
+                      array_push($backups, [
+                        'text' => $date,
+                        'folder' => true,
+                        'items' => [],
+                        'icon' => 'folder-icon'
+                      ]);
+                      $i = count($backups) - 1;
+                    }
+                    if ( ($idx = \bbn\x::find($backups[$i]['items'], ['title' => $d])) === false ){
+                      array_push($backups[$i]['items'], [
+                        'text' => $d,
+                        'folder' => true,
+                        'items' => [],
+                        'icon' => 'folder-icon'
+                      ]);
+                      $idx = count($backups[$i]['items']) - 1;
+                    }
+                    array_push($backups[$i]['items'][$idx]['items'], [
+                      'text' => $time,
+                      'mode' => $mode,
+                      'code' => file_get_contents($file),
+                      'folder' => false
+                    ]);
+                  }
+                }
               }
-              if ( ($idx = \bbn\x::find($backups[$i]['children'], ['title' => $d])) === false ){
-                array_push($backups[$i]['children'], [
-                  'title' => $d,
-                  'folder' => true,
-                  'lazy' => true,
-                  'children' => [],
-                  'icon' => 'folder-icon'
-                ]);
-                $idx = count($backups[$i]['children']) - 1;
+            }
+          }
+          //If we pass a path that contains the specific backups of a type and is set to "$all" to true then all backups of this type will return.
+          else {
+            if ( $files = \bbn\file\dir::get_files($path) ){
+              if ( !empty($files) ){
+                $mode = basename($path) === "_ctrl" || basename($path) === "model" ? "php" : basename($path);
+                foreach ( $files as $file ){
+
+                  $filename = \bbn\str::file_ext($file, true)[0];
+                  $file_name = $filename;
+                  $moment = strtotime(str_replace('_', ' ', $filename));
+                  $date = date('d/m/Y', $moment);
+                  $time = date('H:i:s', $moment);
+
+                  if ( ($i = \bbn\x::find($backups, ['text' => $date])) === false ){
+                    array_push($backups, [
+                      'text' => $date,
+                      'folder' => true,
+                      'items' => [],
+                      'icon' => 'folder-icon'
+                    ]);
+
+                    $i = count($backups) - 1;
+                    if ( ($idx = \bbn\x::find($backups[$i]['items'], ['text' => $time])) === false ){
+                      array_push($backups[$i]['items'], [
+                        'text' => $time,
+                        'mode' => $mode,
+                        'code' => file_get_contents($file),
+                        'folder' => false
+                      ]);
+                    }
+                  } else {
+                    $j = \bbn\x::find($backups, ['text' => $date]);
+                    if ( ($idx = \bbn\x::find($backups[$j]['items'], ['text' => $time])) === false ){
+                      array_push($backups[$j]['items'], [
+                        'text' => $time,
+                        'mode' => $mode,
+                        'code' => file_get_contents($file),
+                        'folder' => false
+                      ]);
+                    }
+                  }
+                }
               }
-              array_push($backups[$i]['children'][$idx]['children'], [
-                'title' => $time,
-                'mode' => $d,
-                'code' => file_get_contents($file),
-                'folder' => false
-              ]);
+            }
+          }
+        }
+      }//otherwise returns the useful information for processing and to make any subsequent postings.
+      else{
+        //if we want you to return all the backup information useful to process and make other posts
+        $listDir = \bbn\file\dir::get_dirs($path);
+        if ( !empty($listDir) && !isset($check_ctrl_files) ){
+
+          foreach ( $listDir as $val ){
+            array_push($backups, [
+              'text' => basename($val),
+              'icon' => 'folder-icon',
+              'folder' => true,
+              'num_items' => count(\bbn\file\dir::get_files($val))
+            ]);
+          }
+          //If the _ctrl backup folder exists, then it will be added to the list.
+          if( $check_ctrl === true ){
+            array_push($backups, $history_ctrl);
+          }
+        }//If we pass a path that contains the specific backups of a type and is not set "$all" then the backup of with useful information for any other posts returns.
+        else{
+          //If we are requesting ctrl backup files then we give it the right path and "$check_ctrl_files" is a variable that makes us understand whether or not we ask for backup files of "_ctrl".
+          if ( $check_ctrl_files === true  ){
+            $url= $copy_url;
+            $path = self::BACKUP_PATH . $url;
+          }
+          //die(\bbn\x::hdump($files, $copy_url, $path));
+          if ( $files = \bbn\file\dir::get_files($path) ){
+
+            if ( !empty($files) ){
+              $mode = basename($path) === "_ctrl" || basename($path) === "model" ? "php" : basename($path);
+              foreach ( $files as $file ){
+                $filename = \bbn\str::file_ext($file, true)[0];
+                $file_name = $filename;
+                $moment = strtotime(str_replace('_', ' ', $filename));
+                $date = date('d/m/Y', $moment);
+                $time = date('H:i:s', $moment);
+
+                if ( ($i = \bbn\x::find($backups, ['text' => $date])) === false ){
+                  array_push($backups, [
+                    'text' => $date,
+                    'folder' => true,
+                    'items' => [],
+                    'icon' => 'folder-icon'
+                  ]);
+
+                  $i = count($backups) - 1;
+                  if ( ($idx = \bbn\x::find($backups[$i]['items'], ['text' => $time])) === false ){
+                    array_push($backups[$i]['items'], [
+                      'text' => $time,
+                      'mode' => $mode,
+                      'file' => $file_name,
+                      'ext' => \bbn\str::file_ext($file, true)[1],
+                      'path' => $url,
+                      'folder' => false
+                    ]);
+                  }
+                } else {
+                  $j = \bbn\x::find($backups, ['text' => $date]);
+                  if ( ($idx = \bbn\x::find($backups[$j]['items'], ['text' => $time])) === false ){
+                    array_push($backups[$j]['items'], [
+                      'text' => $time,
+                      'mode' => $mode,
+                      'file' => $file_name,
+                      'ext' => \bbn\str::file_ext($file, true)[1],
+                      'path' => $url,
+                      'folder' => false
+                    ]);
+                  }
+                }
+              }
             }
           }
         }
       }
-      return $backups;
     }
+    //If you add the "_ctrl " backup, enter it to the rest of the date.
+    if( !empty($history_ctrl) && !empty($backups) && $all === true && $check_ctrl === false  ){
+      array_push($backups, $history_ctrl);
+    }
+    return $backups;
   }
   /*public function history(string $url){
     if ( !empty($url) && !empty(self::BACKUP_PATH) ){
