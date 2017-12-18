@@ -54,6 +54,7 @@ if ( !empty($model->data['repository']) &&
   $files = [];
 
   $get = function($real, $color, $tab = false) use(&$folders, &$files, $onlydirs, $cur_path, $file_check, $excluded){
+
     if ( !empty($real) && file_exists($real) ){
       $todo = !empty($onlydirs) ? \bbn\file\dir::get_dirs($real) : \bbn\file\dir::get_files($real, true);
       foreach ( $todo as $t ){
@@ -66,7 +67,7 @@ if ( !empty($model->data['repository']) &&
             $name = \bbn\str::file_ext($t, 1)[0];
           }
           if (
-            ($is_file && !isset($files[$name]) && !in_array($ext, $excluded)) ||
+            ($is_file && !isset($files[$name]) && !\in_array($ext, $excluded)) ||
             (!$is_file && !isset($folders[$name]))
           ){
             $num = 0;
@@ -74,7 +75,7 @@ if ( !empty($model->data['repository']) &&
               if ( (empty($onlydirs) && ($tf = \bbn\file\dir::get_files($t, true))) ||
                 (!empty($onlydirs) && ($tf = \bbn\file\dir::get_dirs($t)))
               ){
-                $num = count($tf);
+                $num = \count($tf);
               }
             }
             $cfg = [
@@ -84,8 +85,8 @@ if ( !empty($model->data['repository']) &&
               'has_index' => empty($is_file) && \bbn\file\dir::has_file($t, 'index.php', 'index.html', 'index.htm'),
               //'parenthood' => true,
               'is_svg' => !empty($is_file) && ($ext === 'svg'),
-              'is_viewable' => !empty($is_file) && in_array($ext, $file_check['viewables']) && ($ext !== 'svg'),
-              'is_image' => !empty($is_file) && in_array($ext, $file_check['images']),
+              'is_viewable' => !empty($is_file) && \in_array($ext, $file_check['viewables']) && ($ext !== 'svg'),
+              'is_image' => !empty($is_file) && \in_array($ext, $file_check['images']),
               //'default' => false,
               'dir' => $cur_path,
               'icon' => !empty($is_file) ? "$ext-icon" : "folder-icon",
@@ -97,11 +98,17 @@ if ( !empty($model->data['repository']) &&
               'ext' => !empty($is_file) ? $ext : false,
             ];
 
-            if ( !empty($is_file) && !array_key_exists($name, $files) ){
+            if ( $is_file ){
               $files[$name] = $cfg;
             }
-            else if ( empty($is_file) && !array_key_exists($name, $folders) ){
+            else {
               $folders[$name] = $cfg;
+            }
+          }
+          else if ( !$is_file && isset($folders[$name]) && !$folders[$name]['num'] ){
+            $tf = \bbn\file\dir::get_files($t, true);
+            if ( $num = \count($tf) ){
+              $folders[$name]['num'] = $num;
             }
           }
         }

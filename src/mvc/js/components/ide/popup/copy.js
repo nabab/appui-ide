@@ -23,30 +23,10 @@ Vue.component('appui-ide-popup-copy', {
       else{
         appui.success(bbn._("Copy succesfully!"));
       }
-
-      appui.ide.treeReload();
-      bbn.vue.closest(this, ".bbn-popup").close();
-      //this.source.treeParent.reload();
-      /*  $.each(tab.$children, (i, v) => {
-       if ( v.$refs.filesList &&
-       v.$refs.filesList.widgetName &&
-       (v.$refs.filesList.widgetName === 'fancytree')
-       ){
-       const node = v.$refs.filesList.widget.getNodeByKey(this.fData.key),
-       path = this.fData.path.split('/');
-       node.data.name = this.newName;
-       if ( this.isFile ){
-       node.data.ext = this.newExt;
-       }
-       path.pop();
-       path.push(this.newName);
-       node.data.path = path.join('/');
-       node.setTitle(this.newName);
-       node.render(true);
-
-       }*/
-      /* v.$refs.filesList.reload();*/
-      //bbn.vue.closest(this, ".bbn-tab").$children[0].$refs.filesList.reload();
+      this.source.parent.reload();
+      this.$nextTick(()=>{
+        bbn.vue.closest(this, ".bbn-popup").close();
+      });
     },
     failureActive(){
       appui.error(bbn._("Error!"));
@@ -69,16 +49,15 @@ Vue.component('appui-ide-popup-copy', {
   },
   computed: {
     isMVC(){
-     return (this.source.repositories[this.source.currentRep] !== undefined ) &&
-       (this.source.repositories[this.source.currentRep].tabs !== undefined);
+     return this.source.isMVC
     },
     isFile(){
       return !this.source.data.folder
     },
     extensions(){
       let res = [];
-      if ( this.isMVC ){
-        $.each(appui.ide.repositories[appui.ide.currentRep].extensions, (i, v) =>{
+      if ( !this.isMVC ){
+        $.each(this.source.repositories[this.source.currentRep].extensions, (i, v) =>{
           res.push({
             text: '.' + v.ext,
             value: v.ext

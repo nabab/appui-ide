@@ -20,6 +20,8 @@
         selected: 0,
         url: this.source.root + 'editor',
         path:'',
+        code: false,
+        lastRename: '',
         ctrlTest: false,
         searchFile: '',
         menu: [
@@ -36,13 +38,16 @@
                 text: '<i class="fa fa-folder"></i>' + bbn._('Directory'),
                 select: () => {
                   this.newDir();
-                }
+                },
+
               }]
             }, {
               text: '<i class="fa fa-save"></i>' + bbn._('Save'),
+              //enabled: false,
               select: () => {
                 this.save();
-              }
+              },
+
             },{
               text: '<i class="fa fa-edit"></i>' + bbn._('Rename'),
               select: () => {
@@ -67,22 +72,46 @@
             }]
           }, {
             text: bbn._('Edit'),
+
             items: [{
               text: '<i class="fa fa-search"></i>' + bbn._('Find') + ' <small>CTRL+F</small>',
-              select: "bbn.ide.search();"
+              select: () =>{
+                this.codeSearch();
+              }
             }, {
               text: '<i class="fa fa-search-plus"></i>' + bbn._('Find next') + ' <small>CTRL+G</small>',
-              select: "bbn.ide.findNext();"
+              select: ()=>{
+                this.codeFindNext();
+              }
             }, {
               text: '<i class="fa fa-search-minus"></i>' + bbn._('Find previous') + ' <small>SHIFT+CTRL+G</small>',
-              select: "bbn.ide.findPrev();"
+              select: ()=>{
+                this.codeFindPrev();
+              }
+
             }, {
               text: '<i class="fa fa-exchange"></i>' + bbn._('Replace') + ' <small>SHIFT+CTRL+F</small>',
-              select: "bbn.ide.replace();"
+              select: ()=>{
+                this.codeReplace();
+              }
+
             }, {
               text: '<i class="fa fa-retweet"></i>' + bbn._('Replace All') + ' <small>SHIFT+CTRL+R</small>',
-              select: "bbn.ide.replaceAll();"
-            }]
+              select: () =>{
+                this.codeReplaceAll();
+              },
+            },{
+              text: '<i class="fa fa-level-down"></i>' + bbn._('Unfold all'),
+              select: () =>{
+                this.codeUnfoldAll();
+              }
+            },{
+              text: '<i class="fa fa-level-up"></i>' + bbn._('Fold all'),
+              select: () =>{
+                this.codeFoldAll();
+              }
+            }
+            ]
           }, {
             text: bbn._('History'),
             items: [{
@@ -92,17 +121,19 @@
               }
             }, {
               text: '<i class="fa fa-trash-o"></i>' + bbn._('Clear'),
-              select: 'bbn.ide.historyClear();'
+              select: 'bbn.ide.historyClear();',
+
             }, {
               text: '<i class="fa fa-trash"></i>' + bbn._('Clear All'),
-              select: 'bbn.ide.historyClearAll();'
+              select: 'bbn.ide.historyClearAll();',
+
             }]
           }, {
             text: bbn._('Doc.'),
             items: [{
-              text: '<i class="fa fa-binoculars"></i>' + bbn._('Find')
+              text: '<i class="fa fa-binoculars"></i>' + bbn._('Find'),
             }, {
-              text: '<i class="fa fa-book"></i>' + bbn._('Generate')
+              text: '<i class="fa fa-book"></i>' + bbn._('Generate'),
             }]
           }/*, {
            text: 'Current',
@@ -115,24 +146,45 @@
            }]
            }*/, {
             text: bbn._('Pref.'),
+            //enabled: false,
             items: [{
               text: '<i class="fa fa-cog"></i>' + bbn._('Manage directories'),
-              select: "bbn.ide.cfgDirs();"
+              select: "bbn.ide.cfgDirs();",
             }, {
               text: '<i class="fa fa-language"></i>' + bbn._('IDE style'),
-              select: "bbn.ide.cfgStyle();"
+              select: "bbn.ide.cfgStyle();",
             }]
           }
         ]
       })
     },
     computed: {
+      tabSelected(){
+        return this.$refs.tabstrip.selected;
+      },
+      currentURL(){
+        return this.$refs.tabstrip.currentURL;
+      },
+      /*codeActive(){
+        if ( this.currentURL ){
+          let idx = this.$refs.tabstrip.getSelected(),
+              codes = bbn.vue.findAll(this.$refs.tabstrip.getVue(idx), 'bbn-code'),
+              code = false;
+          $.each(codes, (i, a) => {
+            if ( $(a.$el).is(":visible") ){
+              code = a;
+            }
+          });
+          return code;
+        }
+      },*/
+
       /**
        * Check if the current repository is a MVC
        *
        * @returns {boolean}
        */
-            isMVC(){
+      isMVC(){
         return (this.repositories[this.currentRep] !== undefined ) && (this.repositories[this.currentRep].tabs !== undefined);
       },
       treeInitialData(){
@@ -156,9 +208,15 @@
         });
         return bbn.fn.order(r, "text");
       }
-
     },
     methods: {
+      updateActiveCode(){
+        if ( this.currentURL ){
+         this.code= bbn.vue.find(this.getActive(), '.bbn-code:visible');
+        }
+
+
+      },
       keydownFunction(event) {
         alert("dsds")
 
@@ -287,28 +345,6 @@
         return false;
       },
 
-
-      /**
-       * check and remove the asterisks from tab headings if necessary
-       *
-       *
-       */
-      afterCtrlChangeCode(){
-        let selected = this.$refs.tabstrip.selected,
-            titleTab = this.$refs.tabstrip.tabs[selected]['title'],
-            id = titleTab.lastIndexOf("*");
-        if ( id > -1 ){
-          this.$refs.tabstrip.tabs[selected]['title'] = titleTab.substring(0, id);
-          let subTabs = this.$refs.tabstrip.getVue(appui.ide.$refs.tabstrip.selected).$refs.component[0].$refs.file.$refs.tabstrip.tabs;
-          if ( subTabs.length ){
-            $.each(subTabs, (i, v) =>{
-              if ( v.title.lastIndexOf("*") > -1 ){
-                subTabs[i]['title'] = subTabs[i]['title'].substring(0, v.title.lastIndexOf("*"));
-              }
-            });
-          }
-        }
-      },
       /**
        * check the tab before closing if there are any code changes in case it saves them
        * the difference with the method and block the close event of the tab and then resume it
@@ -319,10 +355,7 @@
         let ctrlChangeCode = this.$refs.tabstrip.getVue(this.$refs.tabstrip.selected).$refs.component[0].changedCode,
             //method close of the tab selected
             closeProject =  this.$refs.tabstrip.getVue(this.$refs.tabstrip.selected).$parent.close;
-
         ev.preventDefault();
-        bbn.fn.log("TAB", this.$refs.tabstrip.selected)
-
         if ( ctrlChangeCode ){
           bbn.fn.confirm(
             bbn._('Do you want to save the changes before closing the tab?'),
@@ -353,15 +386,13 @@
         if ( ctrlChangeCode ){
           bbn.fn.confirm(
             bbn._('Do you want to save the changes before closing the tab?'),
-            () =>{
-
+            () => {
               this.save( true );
-
               this.$refs.tabstrip.close(this.$refs.tabstrip.selected, true);
             },
             () => {
               this.$refs.tabstrip.close(this.$refs.tabstrip.selected, true);
-              this.afterCtrlChangeCode();
+              //this.afterCtrlChangeCode();
             }
           );
         }
@@ -376,7 +407,6 @@
       closeTabs(){
         let max= this.$refs.tabstrip.tabs.length;
         while(max !== 1){
-
           this.closeTab();
           max--;
         }
@@ -449,6 +479,7 @@
           icon: 'fa fa-edit',
           text: bbn._('Rename'),
           command: (node) => {
+            console.log("ddsdsds", node);
             this.rename(node)
           }
         }, {
@@ -465,21 +496,24 @@
           icon: 'fa fa-trash',
           text: bbn._('Delete'),
           command: (node) => {
-            this.delete(node)
+            this.deleteElement(node)
           }
         }];
         if ( n.data.folder ){
           return objContext;
         }
         else{
-          objContext.unshift({
+          let obj = objContext.slice();
+          //obj.splice(1,1);
+
+          obj.unshift({
             icon: 'fa fa-magic',
             text: bbn._('Test code!'),
             command: ( node )=>{
               this.testNodeOfTree(node)
             }
           });
-          return objContext;
+          return obj;
         }
       },
       /**
@@ -498,12 +532,30 @@
        * @param n The node
        */
       treeNodeActivate(d){
+        this.code = false;
         if ( !d.data.folder ){
           if( !this.isMVC ){
             this.ctrlTest = true;
           }
           this.openFile(d);
-        }
+        }/*  let existTab = false;
+         for(let tab of this.$refs.tabstrip.tabs){
+
+         if ( tab.title === file.data.path ){
+         existTab = true;
+         break;
+         }
+         }
+         if ( !existTab ){
+         this.$refs.tabstrip.load(
+         'file/' +
+         this.currentRep +
+         (file.data.dir || '') +
+         file.data.name +
+         '/_end_' +
+         (file.data.tab ? '/' + file.data.tab : '')
+         );
+         }*/
 
       },
 
@@ -690,9 +742,13 @@
             const $elem = wid.element,
                   idx = $elem.closest("div[role=tabpanel]").index() - 1;
             if ( wid.changed ){
+              /*
               //$elem.closest("div[data-role=tabstrip]").find("> ul > li").eq(idx).addClass("changed");
               $elem.closest("div[data-role=reorderabletabstrip]").find("> ul > li").eq(idx).addClass("changed");
               $($(vm.$refs.tabstrip).tabNav('getTab', $(vm.$refs.tabstrip).tabNav('getActiveTab'))).addClass("changed");
+              */
+
+              //vm.$refs.tabstrip.tabs[vm.$refs.tabstrip.selected].isUnsaved = true;
             }
             else {
               let ok = true;
@@ -775,12 +831,13 @@
        */
       save(ctrl = false){
         let active = this.getActive(true);
+        bbn.fn.warning("active");
+        bbn.fn.log("active", active);
         if ( active && $.isFunction(active.save) ){
           if( ctrl ){
             return active.save();
           }
           else{
-            this.afterCtrlChangeCode();
             return active.save();
           }
         }
@@ -814,13 +871,14 @@
           node: false,
           currentRep: this.currentRep,
           repositories: this.repositories,
-          root: this.root
+          root: this.root,
+          parent: false
         };
-
         if ( !node ){
           src.path = './'
         }
         else {
+          src.parent = node.parent;
           if ( node.data.folder !== undefined ){
             if ( node.data.folder ){
               src.path = node.data.path;
@@ -843,9 +901,6 @@
           title: title,
           component: 'appui-ide-popup-new',
           source: src,
-          afterClose(){
-            appui.ide.reloadAfterTree(node, 'create');
-          }
         });
       },
 
@@ -873,45 +928,55 @@
        * @param data The node data
        */
       rename(node, menuFile= false){
-        console.log("dsdss", node);
         //case of click rename in contextmenu of the tree
-        if (!menuFile){
-          bbn.vue.closest(this, ".bbn-tab").$refs.popup[0].open({
-            width: 500,
-            height: 150,
-            title: bbn._('Rename'),
-            component: 'appui-ide-popup-rename',
-            source: $.extend({
-              nodeData: node.data,
-            }, this.source),
-            afterClose(){
-              appui.ide.reloadAfterTree(node, 'rename');
-            }
-          });
-        }//case rename of menu file
-        else{
-          let nameFile = node['title'].slice().substring(node.title.lastIndexOf('/') + 1),
-              tabFile = this.isMVC ? node['current'].slice().substring(node.title.lastIndexOf('/') + 1) : '';
-          bbn.vue.closest(this, ".bbn-tab").$refs.popup[0].open({
-            width: 500,
-            height: 150,
-            title: bbn._('Rename'),
-            component: 'appui-ide-popup-rename',
-            source: $.extend({
-              nodeData:{
-                folder: false,
-                ext: node.source.ext,
-                path: node.source.title,
-                name: nameFile,
-                tab: tabFile,
-              }
-            }, this.source),
-            afterClose(){
-              appui.ide.reloadAfterTree(node, 'rename');
-            }
-          });
+        if ( !menuFile ){
+          var src = {
+            nodeData: {
+              folder: node.data.folder,
+              ext: node.data.ext,
+              path: node.data.path,
+              name: node.data.name,
+              tab: node.data.tab,
+              dir: node.data.dir
+            },
+            parent: node.parent,
+            isMVC: this.isMVC,
+            root: this.source.root,
+            currentRep: this.currentRep,
+            repositories: this.repositories
+          };
         }
-
+        else{
+          let tab = this.$refs.tabstrip.tabs[this.tabSelected].source,
+              tabInfo = {
+                mvc: tab.isMVC,
+                name: !tab.isMVC ? tab.filename : tab.title.slice().substring(tab.title.lastIndexOf('/') + 1) ,
+                path: !tab.isMVC ? tab.path : tab.title.slice().substring(0, tab.title.lastIndexOf('/') + 1),
+                repository: tab.repository
+              };
+          var tabFile = tabInfo.name;
+          var src = {
+            nodeData:{
+              folder: false,
+              ext: !tabInfo.mvc ? this.$refs.tabstrip.tabs[this.tabSelected].source.ext : "",
+              path: tabInfo.path,
+              name: tabInfo.name,
+              tab: tabFile,
+            },
+            isMVC: tabInfo.mvc,
+            currentRep: tabInfo.repository,
+            repositories: this.source.repositories,
+            root: this.source.root,
+            parent: false,
+          }
+        }
+        bbn.vue.closest(this, ".bbn-tab").$refs.popup[0].open({
+          width: 370,
+          height: 150,
+          title: bbn._('Rename'),
+          component: 'appui-ide-popup-rename',
+          source: src
+        });
       },
 
       /**
@@ -920,16 +985,20 @@
        * @param data The node data
        */
       copy(node){
-        let src = $.extend({
-          data: node.data,
-        }, this.source);
-
         bbn.vue.closest(this, ".bbn-tab").$refs.popup[0].open({
-          width: 500,
-          height: 220,
+          width: 370,
+          height: 170,
           title: node.data.folder ? bbn._('Copy folder') : bbn._('Copy'),
           component: 'appui-ide-popup-copy',
-          source: src
+          source: {
+            data: node.data,
+            currentRep: this.currentRep,
+            repositories: this.source.repositories,
+            root: this.source.root,
+            isMVC: this.isMVC,
+            config: this.source.config,
+            parent: node.parent
+          }
         });
       },
 
@@ -954,7 +1023,22 @@
             //In the creation phase if it is a folder that already has children then opens its content (tree) and makes the reload.
             if ( node.data.folder ){
               //If you add a file or folder to an existing folder that has no child, then we reload it to the parent tree.
-              if ( node.numChildren > 0 ){
+
+              if ( node.numChildren === 0 ){
+                node.isExpanded = true;
+
+                this.$nextTick(() => {
+                  node.numChildren = node.numChildren + 1;
+                });
+
+                setTimeout(()=>{
+                  this.$nextTick(() => {
+                    bbn.vue.find(node, 'bbn-tree').reload();
+                  });
+                }, 800);
+
+              }
+              else if ( node.numChildren > 0 ){
                 node.isExpanded = true;
                 bbn.vue.find(node, 'bbn-tree').reload();
               }
@@ -964,12 +1048,14 @@
             }
             //if we click on a new in a node that is not a folder in an open tree
             else{
-              node.$parent.reload();
+              node.parent.reload();
             }
 
           }break;
           case 'rename':{
-            node.$parent.reload();
+
+          //  bbn.fn.log("ddddd",node)    ;
+         //node.$parent.reload();
           }break;
         }
       },
@@ -978,54 +1064,108 @@
        *
        * @param data The node data
        */
-      delete(node){
-        bbn.fn.confirm(bbn._('Are you sure you want to delete it?'), () => {
-          if (
-            node &&
-            node.data.name &&
-            (node.data.dir !== undefined) &&
-            (node.data.folder || (!node.data.folder && node.data.ext) )
-          ){
-            bbn.fn.post(this.root + 'actions/delete', {
-              repository: this.repositories[this.currentRep],
-              path: node.data.dir,
-              name: node.data.name,
-              ext: node.data.ext,
-              is_file: !node.data.folder,
-              is_mvc: this.isMVC
-            }, (d) => {
-              if ( d.success ){
-                const idx = this.$refs.tabstrip.getIndex('file/' + this.currentRep + node.data.dir + node.data.name);
-                // node = this.$refs.filesList.widget.getNodeByKey(data.key);
-                if ( idx != false ){
-                  this.$refs.tabstrip.close(idx);
+      deleteElement(node){
+        bbn.fn.confirm(  bbn._('Are you sure you want to delete') +
+          ( node.data.folder === true ? ' ' + bbn._('the folder') + ' ': ' ' ) +
+          '<strong>' + node.data.name +  ' </strong>' + ' ?' ,
+          () => {
+            if (
+              node &&
+              node.data.name &&
+              (node.data.dir !== undefined) &&
+              (node.data.folder || (!node.data.folder && node.data.ext) )
+            ){
+              bbn.fn.post(this.root + 'actions/delete', {
+                repository: this.repositories[this.currentRep],
+                path: node.data.dir,
+                name: node.data.name,
+                ext: node.data.ext,
+                is_file: !node.data.folder,
+                is_mvc: this.isMVC
+              }, (d) => {
+                if ( d.success ){
+                  const idx = this.$refs.tabstrip.getIndex('file/' + this.currentRep + node.data.dir + node.data.name);
+                  // node = this.$refs.filesList.widget.getNodeByKey(data.key);
+                  if ( idx != false ){
+                    this.$refs.tabstrip.close(idx);
+                  }
+                  this.reloadAfterTree(node, 'delete');
+                  appui.success(bbn._("Deleted!"));
                 }
-                this.reloadAfterTree(node, 'delete');
-                appui.success(bbn._("Deleted!"));
-              }
-              else {
-                appui.error(bbn._("Error!"));
-              }
-            });
-          }
+                else {
+                  appui.error(bbn._("Error!"));
+                }
+              });
+            }
         });
       },
-      /*  move(a, select, dest){
-       bbn.fn.log("MOVE", this.root, a, select, dest);
+      movetest(a, select, dest){
+  /*     var obj ={
+          root: this.root,
+          mvc: false,
+          repository: this.currentRep,
+          orig: '',
+          tab: false,
+          nameNode: '',
+          nameDestination: '',
+          destination: '',
+          ext: !select.data.folder ? '.'+ select.data.ext : '',
+          pathOrig: select.data.path+'/',
+          pathDest: dest.data.path+'/'
+        };
 
-       let obj ={
-       orig: this.root,
-       dir: select.data.dir,
-       src: select.data.path,
-       dest: dest.data.path
-       };
-       bbn.fn.post(this.root + 'actions/move', obj ,(d)=>{
-       alert("fdfd")
-       });
+        if ( select.data.tab !== false  && dest.data.is_mvc ){
+          obj.mvc = true;
+        }
+
+        // elaborate for node of move
+        if ( !select.data.folder ){
+          obj.orig = obj.repository +
+            ( obj.mvc ? select.data.tab  : '' ) + '/' +
+            select.data.path;
+          obj.nameNode = select.text;
+          obj.tab= obj.mvc ? select.data.tab  : false;
+        }
+
+        // elaborate for node destination
+        if ( dest.data.folder ){
+          obj.destination = obj.repository + dest.data.path;
+          obj.nameDestination = dest.text;
+        }
+
+*/
+
+        let path = select.data.path.split('/');
+        path.pop();
+        let selectPath = path.join('/');
+        var obj = {
+          new_name: select.data.name,
+          is_file: select.data.folder,
+          ext: select.data.ext,
+          path: selectPath+'/',
+          new_path: dest.data.path,
+          name: select.data.name,
+          tab: select.data.tab,
+          dir: select.data.dir,
+          is_mvc: this.isMVC,
+          root: this.source.root,
+          repository: this.repositories[this.currentRep]
+        };
 
 
 
-       },*/
+        bbn.fn.log("MOVE", obj, select, dest);
+        alert("dddd");
+
+        bbn.fn.post(this.root + 'actions/move', obj ,(d)=>{
+          if(d.success){
+            alert("sss");
+          }
+        });
+
+
+
+       },
       /**
        * Deletes the current opened file
        */
@@ -1080,7 +1220,7 @@
                 is_mvc: f.isMVC
               }, (d) => {
                 if ( d.success ){
-                  this.$refs.tabstrip.close(this.$refs.tabstrip.selected);
+                  this.$refs.tabstrip.close(this.tabSelected);
                   appui.success(bbn._("Deleted!"));
                   // this.$refs.filesList.reload();
                 }
@@ -1258,12 +1398,55 @@
          }
          });*/
       },
+      codeSearch(){
+       // let code = $(".bbn-code:visible .CodeMirror");
+        let code = bbn.vue.find(this, '.bbn-code:visible');
+        code.widget.focus();
+        code.widget.execCommand('find');
+      },
+      codeFindPrev(){
+        let code = bbn.vue.find(this, '.bbn-code:visible');
+        code.widget.focus();
+        code.widget.execCommand('findNext');
+      },
+      codeFindNext(){
+        let code = bbn.vue.find(this, '.bbn-code:visible');
+        code.widget.focus();
+        code.widget.execCommand('findPrev');
+      },
+      codeReplace(){
+        let code = bbn.vue.find(this, '.bbn-code:visible');
+        code.widget.focus();
+        code.widget.execCommand('replace');
+      },
+      codeReplaceAll(){
+        let code = bbn.vue.find(this, '.bbn-code:visible');
+        code.widget.focus();
+        code.widget.execCommand('replaceAll');
+      },
+      codeUnfoldAll(){
+        this.updateActiveCode();
+        this.$nextTick(()=>{
+          if ( this.code ){
+            this.code.unfoldAll();
+          }
+        })
+      },
+      codeFoldAll(){
+        this.updateActiveCode();
+        this.$nextTick(()=>{
+          if ( this.code ){
+            this.code.foldAll();
+          }
+        })
+      }
 
     },
     watch: {
       currentRep: function(newVal){
         this.treeReload();
-      }
+      },
+
     },
     created(){
       appui.ide = this;

@@ -29,7 +29,7 @@ if ( empty($ctrl->baseURL) ){
     $dirfile = $dirs->dir_from_url($l);
     if ( $tmp = $ctrl->get_model('./load', [
       'dir' => $dirfile,
-      'file' => substr($l, strlen($dirfile), strlen($l)),
+      'file' => substr($l, \strlen($dirfile), \strlen($l)),
       'routes' => $ctrl->data['routes']
     ])
     ){

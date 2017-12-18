@@ -2,7 +2,7 @@
 //$old_path = getcwd();
 //chdir(BBN_ROOT_PATH);
 if ( BBN_IS_DEV || $ctrl->inc->user->is_admin() ){
-  if ( isset($ctrl->post['code']) && (strlen($ctrl->post['code']) > 5) ){
+  if ( isset($ctrl->post['code']) && (\strlen($ctrl->post['code']) > 5) ){
     $bbn_code = $ctrl->post['code'];
     $_SESSION[BBN_SESS_NAME]['code'] = $bbn_code;
     $bbn_opening = strpos($bbn_code, '<?php');

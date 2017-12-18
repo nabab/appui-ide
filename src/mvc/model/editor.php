@@ -1,7 +1,6 @@
 <?php
 /** @var $model \bbn\mvc\model */
 if ( isset($model->data['routes'], $model->inc->ide) ){
-  
   $current_rep = 'BBN_APP_PATH/mvc/';
   if ( $model->inc->session->has('ide', 'repository') ){
     $current_rep = $model->inc->session->get('ide', 'repository');

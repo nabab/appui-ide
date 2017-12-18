@@ -16,26 +16,26 @@
       isMVC(){
         return !!this.tab
       },
+      rep(){
+        if ( this.ide.repositories && this.ide.repository && this.ide.repositories[this.ide.repository] ){
+          return this.ide.repositories[this.ide.repository]
+        }
+        return false
+      },
       isChanged(){
         return this.originalValue !== this.value;
       },
       path(){
-        const rep = this.ide.repositories[this.ide.repository];
-        let path = rep.bbn_path + '/' + rep.path;
-        bbn.fn.log("ggggggg", this.ssctrl, rep.bbn_path, rep.path);
-        if ( this.isMVC && rep.tabs && rep.tabs[this.tab] ){
-          path += rep.tabs[this.tab].path;
+        let path = this.rep.bbn_path + '/' + this.rep.path;
+        if ( this.isMVC && this.rep.tabs && this.rep.tabs[this.tab] ){
+          path += this.rep.tabs[this.tab].path;
         }
-        /*if(this.ssctrl === 0){
-          path = rep.bbn_path + '/' + rep.path
-        }*/
         return path;
       },
       filePath(){
-        const rep = this.ide.repositories[this.ide.repository],
-              bits = this.ide.path.split('/');
+        const bits = this.ide.path.split('/');
         let filePath = '';
-        if ( this.isMVC && rep && rep.tabs && rep.tabs[this.tab] && rep.tabs[this.tab].fixed /*&& this.ssctrl !== 0*/ ){
+        if ( this.isMVC && this.rep && this.rep.tabs && this.rep.tabs[this.tab] && this.rep.tabs[this.tab].fixed ){
           if ( $.isNumeric(this.ssctrl) && bits.length ){
             $.each(bits, (i, v) => {
               if ( i < this.ssctrl ){
@@ -46,6 +46,7 @@
               }
             });
           }
+
           if( filePath.length ){
             return filePath + '/'
           }
@@ -57,27 +58,26 @@
         return this.path
       },
       fixed(){
-        const rep = this.ide.repositories[this.ide.repository];
-        if ( this.isMVC && rep && rep.tabs && rep.tabs[this.tab] && rep.tabs[this.tab].fixed ){
+        if ( this.isMVC &&  this.rep && this.rep.tabs && this.rep.tabs[this.tab] && this.rep.tabs[this.tab].fixed ){
           return this.ide.repositories[this.ide.repository].tabs[this.tab].fixed;
         }
         return false
       },
       fullPath(){
-
         if ( this.fixed ){
-        //  if( this.ssctrl !== 0){
+          if ( $.isNumeric(this.ssctrl) && (this.ssctrl > 0) ){
             return this.path + this.filePath + this.fixed;
-          /*}
+          }
           else{
             return this.path + this.fixed;
-          }*/
+          }
         }
         if ( this.ide.filename && this.extension && this.path.length ){
           return this.path + (this.ide.path.length ? this.ide.path + '/' : '') + this.ide.filename + '.' + this.extension;
         }
         return false;
       }/*
+
       fullPath(){
         const rep = this.ide.repositories[this.ide.repository],
               bits = this.ide.path.split('/');
@@ -104,7 +104,8 @@
     },
     watch: {
       isChanged(isChanged){
-        this.changeModifiedState(isChanged);
+        let tabNav = bbn.vue.closest(this, 'bbn-tab').tabNav;
+        tabNav.tabs[tabNav.selected].isUnsaved = isChanged;
       }
     },
     methods: {
@@ -127,40 +128,13 @@
             if ( d.data && d.data.success ){
               this.originalValue = this.value;
               appui.success(bbn._("File saved!"));
-              appui.ide.afterCtrlChangeCode();
             }
             else if ( d.data && d.data.deleted ){
+              this.originalValue = this.value;
               appui.success(bbn._("File deleted!"));
             }
           });
           return true;
-        }
-      },
-      changeModifiedState(val){
-        //appui is editor
-        let selected = appui.ide.$refs.tabstrip.selected,
-            titleTab = appui.ide.$refs.tabstrip.tabs[selected]['title'],
-            idx = titleTab.lastIndexOf("*"),
-            selectedSubTab = bbn.vue.closest(this, '.bbn-tab').tabNav['selected'],
-            titleSubTab = bbn.vue.closest(this, '.bbn-tab').tabNav.tabs[selectedSubTab]['title'],
-            idxSubTab = titleSubTab.lastIndexOf("*");
-        bbn.fn.log("changeModifiedState", selected, titleTab, idx, selectedSubTab, titleSubTab, idxSubTab);
-        // Check all the tabs for modifications for the parent tab
-        if ( appui.ide.$refs.tabstrip.getVue(selected).$refs.component[0].hasCodeChanged() ){
-          if ( idx !== (titleTab.length - 1) ){
-            appui.ide.$refs.tabstrip.tabs[selected]['title'] = titleTab + "*";
-          }
-        }
-        else if ( idx === (titleTab.length - 1) ){
-          appui.ide.$refs.tabstrip.tabs[selected]['title'] = titleTab.substring(0, idx);
-        }
-        if ( val ){
-          if ( idxSubTab !== (titleSubTab.length-1) ){
-            bbn.vue.closest(this, '.bbn-tab').tabNav.tabs[selectedSubTab]['title'] = titleSubTab + "*"
-          }
-        }
-        else if ( idxSubTab === (titleSubTab.length-1) ){
-          bbn.vue.closest(this, '.bbn-tab').tabNav.tabs[selectedSubTab]['title'] = titleSubTab.substring(0, idxSubTab);
         }
       },
       test(){

@@ -166,11 +166,11 @@ class ide {
     if ( !empty($file) ){
       if ( empty($bbn_path) && ($url = $this->real_to_url($file)) ){
         $repository = self::repository_from_url($url, true);
-        if ( !empty($repository) && defined($repository['bbn_path']) ){
+        if ( !empty($repository) && \defined($repository['bbn_path']) ){
           $bbn_path = $repository['bbn_path'];
         }
       }
-      if ( !empty($bbn_path) && defined($bbn_path) && (strpos($file, constant($bbn_path)) === 0) ){
+      if ( !empty($bbn_path) && \defined($bbn_path) && (strpos($file, constant($bbn_path)) === 0) ){
         self::$current_id = str_replace(constant($bbn_path), $bbn_path.'/', $file);
       }
     }
@@ -223,7 +223,7 @@ class ide {
       else {
         // Fix the right path
         $bits = explode('/', $path);
-        $count = strlen(substr($tab, 0, $pos));
+        $count = \strlen(substr($tab, 0, $pos));
         if ( !empty($bits) ){
           foreach ( $bits as $i => $b ){
             if ( ($i + 1) > $count ){
@@ -369,7 +369,7 @@ class ide {
    * @return bool
    */
   private function operations(array $cfg, string $ope){
-    if ( is_string($ope) &&
+    if ( \is_string($ope) &&
       !empty($cfg['repository']) &&
       !empty($cfg['name']) &&
       isset($cfg['is_mvc'], $cfg['is_file'], $cfg['path']) &&
@@ -532,7 +532,7 @@ class ide {
     $cats = [];
     $r = [];
     foreach ( $all as $a ){
-      if ( defined($a['bbn_path']) ){
+      if ( \defined($a['bbn_path']) ){
         $k = $a['bbn_path'] . '/' . ($a['code'] === '/' ? '' : $a['code']);
         if ( !isset($cats[$a['id_alias']]) ){
           unset($a['alias']['cfg']);
@@ -580,7 +580,7 @@ class ide {
     $repositories = $this->repositories();
     foreach ( $repositories as $i => $d ){
       if ( (strpos($url, $i) === 0) &&
-        (strlen($i) > strlen($repository) )
+        (\strlen($i) > \strlen($repository) )
       ){
         $repository = $i;
       }
@@ -602,7 +602,7 @@ class ide {
     if ( $this->is_MVC($rep) ){
       $last = basename($url);
       if ( $repo = $this->repository($rep) ){
-        $path = $this->get_root_path($rep).substr($url, strlen($rep));
+        $path = $this->get_root_path($rep).substr($url, \strlen($rep));
         $tabs = $repo['tabs'];
 
         foreach ( $tabs as $key => $r ){
@@ -621,7 +621,7 @@ class ide {
       }
     }
     endFunc:
-    return substr($url, strlen($rep));
+    return substr($url, \strlen($rep));
   }*/
 
   /**
@@ -657,7 +657,7 @@ class ide {
     $constant = $bits[0];
     /** @var string $path The path that will be returned */
     $path = '';
-    if ( defined($constant) ){
+    if ( \defined($constant) ){
       $path .= constant($constant);
       array_shift($bits);
     }
@@ -672,7 +672,7 @@ class ide {
    * @return bool|string
    */
   public function get_root_path($repository){
-    if ( is_string($repository) ){
+    if ( \is_string($repository) ){
       $repository = $this->repository($repository);
     }
     if ( !empty($repository) && !empty($repository['bbn_path']) ){
@@ -946,7 +946,7 @@ class ide {
    */
   public function create_perm_by_real(string $file, string $type = 'file'){
     if ( !empty($file) &&
-      defined('BBN_APP_PATH') &&
+      \defined('BBN_APP_PATH') &&
       file_exists($file) &&
       // It must be a controller
       (strpos($file, '/mvc/public/') !== false)
@@ -956,9 +956,9 @@ class ide {
       foreach ( $this->routes as $i => $r ){
         if ( strpos($file, $r) === 0 ){
           // Remove route
-          $f = substr($file, strlen($r), strlen($file));
+          $f = substr($file, \strlen($r), \strlen($file));
           // Remove /mvc/public
-          $f = substr($f, strlen('/mvc/public'), strlen($f));
+          $f = substr($f, \strlen('/mvc/public'), \strlen($f));
           // Add the route's name to path
           $f = $i . '/' . $f;
         }
@@ -968,7 +968,7 @@ class ide {
         $root_path = BBN_APP_PATH.'mvc/public/';
         if ( strpos($file, $root_path) === 0 ){
           // Remove root path
-          $f = substr($file, strlen($root_path), strlen($file));
+          $f = substr($file, \strlen($root_path), \strlen($file));
         }
       }
       if ( !empty($f) ){
@@ -1094,7 +1094,7 @@ class ide {
       $file = self::$current_file;
     }
     if ( !empty($file) &&
-      defined('BBN_APP_PATH') &&
+      \defined('BBN_APP_PATH') &&
       // It must be a controller
       (strpos($file, '/mvc/public/') !== false)
     ){
@@ -1103,9 +1103,9 @@ class ide {
       foreach ( $this->routes as $i => $r ){
         if ( strpos($file, $r) === 0 ){
           // Remove route
-          $f = substr($file, strlen($r), strlen($file));
+          $f = substr($file, \strlen($r), \strlen($file));
           // Remove /mvc/public
-          $f = substr($f, strlen('/mvc/public'), strlen($f));
+          $f = substr($f, \strlen('/mvc/public'), \strlen($f));
           // Add the route's name to path
           $f = $i . '/' . $f;
           break;
@@ -1116,7 +1116,7 @@ class ide {
         $root_path = BBN_APP_PATH.'mvc/public/';
         if ( strpos($file, $root_path) === 0 ){
           // Remove root path
-          $f = substr($file, strlen($root_path), strlen($file));
+          $f = substr($file, \strlen($root_path), \strlen($file));
         }
       }
       if ( !empty($f) ){
@@ -1145,7 +1145,7 @@ class ide {
       $root = $this->get_root_path($d);
       if ( strpos($file, $root) === 0 ){
         $res = $i . '/';
-        $bits = explode('/', substr($file, strlen($root)));
+        $bits = explode('/', substr($file, \strlen($root)));
         // MVC
         if ( !empty($d['tabs']) ){
           $tab_path = array_shift($bits);
@@ -1179,10 +1179,10 @@ class ide {
    * @return bool|string
    */
   public function real_to_id($file){
-    if ( ($rep = $this->repository_from_url($this->real_to_url($file), true)) && defined($rep['bbn_path']) ){
+    if ( ($rep = $this->repository_from_url($this->real_to_url($file), true)) && \defined($rep['bbn_path']) ){
       $bbn_p = constant($rep['bbn_path']);
       if ( strpos($file, $bbn_p) === 0 ){
-        $f = substr($file, strlen($bbn_p));
+        $f = substr($file, \strlen($bbn_p));
         return \bbn\str::parse_path($rep['bbn_path'].'/'.$f);
       }
     }
@@ -1200,7 +1200,7 @@ class ide {
     if ( ($rep = $this->repository_from_url($url, true)) &&
       ($res = $this->get_root_path($rep))
     ){
-      $bits = explode('/', substr($url, strlen($rep['bbn_path'].$rep['path'])+1));
+      $bits = explode('/', substr($url, \strlen($rep['bbn_path'].$rep['path'])+1));
       $o = [
         'mode' => false,
         'repository' => $rep,
@@ -1300,7 +1300,7 @@ class ide {
                   'children' => [],
                   'icon' => 'folder-icon'
                 ]);
-                $i = count($backups) - 1;
+                $i = \count($backups) - 1;
               }
               if ( ($idx = \bbn\x::find($backups[$i]['children'], ['title' => $d])) === false ){
                 array_push($backups[$i]['children'], [
@@ -1309,7 +1309,7 @@ class ide {
                   'children' => [],
                   'icon' => 'folder-icon'
                 ]);
-                $idx = count($backups[$i]['children']) - 1;
+                $idx = \count($backups[$i]['children']) - 1;
               }
               array_push($backups[$i]['children'][$idx]['children'], [
                 'title' => $time,

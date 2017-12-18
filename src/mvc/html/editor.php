@@ -3,7 +3,7 @@
   <div class="bbn-ide-toolbar-container" style="height: 40px" :scrollable="false">
     <bbn-toolbar class="bbn-ide">
       <div>
-        <bbn-input class="ide-tree-search" placeholder="<?=_('Search file')?>"></bbn-input>
+        <bbn-input class="ide-tree-search" placeholder="<?=_('Search file')?>" v-model="searchFile"></bbn-input>
       </div>
       <div></div>
       <div>
@@ -34,7 +34,9 @@
       </div>
       <div></div>
       <div>
-        <bbn-menu :source="menu"></bbn-menu>
+        <bbn-menu ref="mainMenu"
+                  :source="menu"
+        ></bbn-menu>
       </div>
     </bbn-toolbar>
   </div>
@@ -55,7 +57,8 @@
                     ref="filesList"
                     :map="treeMapper"
                     :icon-color="color"
-
+                    :filter-string="searchFile"
+                    :storage-full-name="'appui-ide-tree-' + currentRep"
           ></bbn-tree>
         </div>
       </div>

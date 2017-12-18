@@ -6,7 +6,7 @@ if ( $ctrl->inc->user->is_admin() ){
   $model = $ctrl->get_model()['res'];
 
   // If present a error show the error
-  if ( (count($model) === 1) && isset($model['error']) ){
+  if ( (\count($model) === 1) && isset($model['error']) ){
     $ctrl->obj->error = $model['error'];
   }
   else{

@@ -6,7 +6,7 @@ $res = [];
 if ( isset($ctrl->inc->ide, $ctrl->post['is_mvc']) && !empty($ctrl->post['path']) ){
   if ( !isset($ctrl->post['type']) ){
     $list = $ctrl->inc->ide->history($ctrl->post['path']);
-    //die(\bbn\x::dump("dsdsd",$list));
+
     if ( !empty($list) ){
       foreach ( $list as $val ){
         array_push($res, [
@@ -24,13 +24,12 @@ if ( isset($ctrl->inc->ide, $ctrl->post['is_mvc']) && !empty($ctrl->post['path']
       foreach ( $files as $val ){
         array_push($res, [
           'text' => $val['text'],
-          'numChildren' => count($val['items']),
+          'numChildren' => \count($val['items']),
           'items' => $val['items'],
           'is_mvc' => $ctrl->post['is_mvc'],
           'name_file' => $val['file'],
         ]);
       }
-
     }
   }
   if ( !empty($res) ){

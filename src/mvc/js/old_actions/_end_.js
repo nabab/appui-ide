@@ -1,2 +1,0 @@
-// Javascript Document
-//gg

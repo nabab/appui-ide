@@ -8,17 +8,17 @@ if ( empty($model->data) ){
 }
 
 else{
-  if ( (count($model->data) === 1) && !empty($model->data['id']) ){
+  if ( (\count($model->data) === 1) && !empty($model->data['id']) ){
     $r = $d->delete($model->data);
   }
 
   else{
-    if ( (count($model->data) > 1) && empty($model->data['id']) ){
+    if ( (\count($model->data) > 1) && empty($model->data['id']) ){
       $r = $d->add($model->data);
     }
 
     else{
-      if ( (count($model->data) > 1) && !empty($model->data['id']) ){
+      if ( (\count($model->data) > 1) && !empty($model->data['id']) ){
         $r = $d->edit($model->data);
       }
     }

@@ -64,7 +64,7 @@ if ( !empty($model->data['repository']) &&
             // File extension
             $ext = \bbn\str::file_ext($t);
             $name = \bbn\str::file_ext($t, 1)[0];
-            if ( in_array($ext, $excluded) ){
+            if ( \in_array($ext, $excluded) ){
               break;
             }
           }
@@ -75,8 +75,8 @@ if ( !empty($model->data['repository']) &&
             'has_index' => empty($is_file) && \bbn\file\dir::has_file($t, 'index.php', 'index.html', 'index.htm'),
             //'parenthood' => true,
             'is_svg' => !empty($is_file) && ($ext === 'svg'),
-            'is_viewable' => !empty($is_file) && in_array($ext, $file_check['viewables']) && ($ext !== 'svg'),
-            'is_image' => !empty($is_file) && in_array($ext, $file_check['images']),
+            'is_viewable' => !empty($is_file) && \in_array($ext, $file_check['viewables']) && ($ext !== 'svg'),
+            'is_image' => !empty($is_file) && \in_array($ext, $file_check['images']),
             //'default' => false,
             'dir' => $cur_path,
             'icon' => !empty($is_file) ? "$ext-icon" : "folder-icon",

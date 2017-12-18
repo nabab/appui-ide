@@ -6,7 +6,7 @@ if ( !$ctrl->inc->user->is_admin() ){
 if ( !isset($ctrl->inc->pref) ){
   die("Preferences must be set up for the IDE module to load.");
 }
-if ( !defined('APPUI_IDE_ROOT') ){
+if ( !\defined('APPUI_IDE_ROOT') ){
   define('APPUI_IDE_ROOT', $ctrl->plugin_url('appui-ide').'/');
 }
 $ctrl->data['routes'] = $ctrl->get_routes();

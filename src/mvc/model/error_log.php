@@ -1,7 +1,7 @@
 <?php
 /** @var $model \bbn\mvc\model */
 $file = ini_get('error_log');
-if ( empty($file) && defined('BBN_LOG_PATH') ){
+if ( empty($file) && \defined('BBN_LOG_PATH') ){
   $file = BBN_LOG_PATH.'error_log';
 }
 if ( is_file($file) ){
@@ -23,7 +23,7 @@ if ( is_file($file) ){
         // Trace
         if ( \bbn\str::is_integer(substr($reste, 0, 1)) ){
           if ( isset($cur) ){
-            $idx = intval(trim(substr($reste, 0, strpos($reste, '.'))));
+            $idx = (int)trim(substr($reste, 0, strpos($reste, '.')));
             if ( $idx === 1 ){
               $res[$cur]['trace'] = [];
             }
@@ -64,7 +64,7 @@ if ( is_file($file) ){
                 'type' => substr($cur, 0, $column),
                 'error' => trim(substr($cur, $column + 1, $before_file - ($column + 1))),
                 'file' => trim(substr($cur, $after_file, $before_line - $after_file)),
-                'line' => intval(trim(substr($cur, $after_line)))
+                'line' => (int)(trim(substr($cur, $after_line)))
               ];
             }
           }
@@ -73,12 +73,12 @@ if ( is_file($file) ){
     }
   }
   foreach ( $res as $k => $v ){
-    if ( isset($res[$k]['trace']) && is_array($res[$k]['trace']) ){
+    if ( isset($res[$k]['trace']) && \is_array($res[$k]['trace']) ){
       ksort($res[$k]['trace']);
     }
   }
   return [
-    'total' => count($res),
+    'total' => \count($res),
     'data' => array_values($res)
   ];
 }

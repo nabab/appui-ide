@@ -8,7 +8,7 @@ if ( is_file($file) ){
     $res = [];
   }
   return [
-    'total' => count($res),
+    'total' => \count($res),
     'data' => $res
   ];
 }
