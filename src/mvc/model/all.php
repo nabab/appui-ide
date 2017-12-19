@@ -102,11 +102,11 @@ if ( $model->inc->ide ){
     $arr = [];
 
 
-    function get_ext($filename) {
+    $get_ext = function($filename) {
       $file = explode(".", basename($filename));
       $ext = $file[count($file)-1];
       return $ext;
-    }
+    };
 
     //first we insert the folders
     foreach($all as $i=>$ele){
@@ -131,7 +131,7 @@ if ( $model->inc->ide ){
         $el = [
           'folder' => is_dir($ele),
           'file' => is_file($ele),
-          'extension' => get_ext($ele),
+          'extension' => $get_ext($ele),
           'path' => isset($model->data['repository']) ? str_replace( constant($rep['bbn_path']), $rep['bbn_path'] .'/', $ele) : str_replace( constant($const), $const.'/', $ele),
           'text' => basename($ele),
           'icon' => 'fa fa-file',

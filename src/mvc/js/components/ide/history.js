@@ -21,7 +21,7 @@ Vue.component('appui-ide-history', {
     //method map for component tree
     transform(a){
       return $.extend (a, {
-        text: "name_file" in a ? a.text + ' &nbsp; <span class="bbn-grey">' +  "( " + a.numChildren + " )" + '</span>' : a.text,
+        text: "name_file" in a ? a.text + ' &nbsp; <span class="w3-badge w3-small w3-light-grey">' +   a.numChildren  + '</span>' : a.text,
         num: a.numChildren || 0,
         type: "name_file" in a  ? "" : a.text
       });

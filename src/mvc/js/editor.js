@@ -1099,73 +1099,43 @@
             }
         });
       },
-      movetest(a, select, dest){
-  /*     var obj ={
-          root: this.root,
-          mvc: false,
-          repository: this.currentRep,
-          orig: '',
-          tab: false,
-          nameNode: '',
-          nameDestination: '',
-          destination: '',
-          ext: !select.data.folder ? '.'+ select.data.ext : '',
-          pathOrig: select.data.path+'/',
-          pathDest: dest.data.path+'/'
-        };
-
-        if ( select.data.tab !== false  && dest.data.is_mvc ){
-          obj.mvc = true;
-        }
-
-        // elaborate for node of move
-        if ( !select.data.folder ){
-          obj.orig = obj.repository +
-            ( obj.mvc ? select.data.tab  : '' ) + '/' +
-            select.data.path;
-          obj.nameNode = select.text;
-          obj.tab= obj.mvc ? select.data.tab  : false;
-        }
-
-        // elaborate for node destination
+      /**
+       * Function for move node in tree
+       */
+      moveNode(a, select, dest){
+        bbn.fn.log("ddddddd", select, dest);
         if ( dest.data.folder ){
-          obj.destination = obj.repository + dest.data.path;
-          obj.nameDestination = dest.text;
+          let path = select.data.path.split('/');
+          path.pop();
+          let selectPath = path.join('/'),
+          obj = {
+            new_name: select.data.name,
+            is_file: !select.data.folder,
+            ext: select.data.ext,
+            path: selectPath + '/',
+            new_path: dest.data.path,
+            name: select.data.name,
+            tab: select.data.tab,
+            dir: select.data.dir,
+            is_mvc: this.isMVC,
+            root: this.source.root,
+            repository: this.repositories[this.currentRep]
+          };
+          bbn.fn.post(this.root + 'actions/move', obj, (d) =>{
+            if ( d.success ){
+              dest.parent.reload();
+              appui.success(bbn._('Successfully moved'));
+            }
+            else{
+              dest.parent.reload();
+              appui.error(bbn._('Error move'));
+            }
+          });
         }
-
-*/
-
-        let path = select.data.path.split('/');
-        path.pop();
-        let selectPath = path.join('/');
-        var obj = {
-          new_name: select.data.name,
-          is_file: select.data.folder,
-          ext: select.data.ext,
-          path: selectPath+'/',
-          new_path: dest.data.path,
-          name: select.data.name,
-          tab: select.data.tab,
-          dir: select.data.dir,
-          is_mvc: this.isMVC,
-          root: this.source.root,
-          repository: this.repositories[this.currentRep]
-        };
-
-
-
-        bbn.fn.log("MOVE", obj, select, dest);
-        alert("dddd");
-
-        bbn.fn.post(this.root + 'actions/move', obj ,(d)=>{
-          if(d.success){
-            alert("sss");
-          }
-        });
-
-
-
-       },
+        else{
+          this.$refs.filesList.reload();
+        }
+      },
       /**
        * Deletes the current opened file
        */
@@ -1246,157 +1216,7 @@
           });
         }
         tabNav.selected = tabNav.getIndex('history');
-        /*var obj = bbn.ide.tabstrip.tabNav("getObs"),
-         // tab config
-         hist = {
-         title: 'History',
-         url: 'history',
-         bcolor: '',
-         fcolor: '',
-         menu: [{
-         text: 'Switch to Diff mode',
-         fn: function(e){
-         var $code = $("div.bbn-ide-history-code", cont),
-         tree = $("div.bbn-ide-history-tree", cont).data("kendoTreeView"),
-         item = tree.select().length ? tree.dataItem(tree.select()) : false;
-         if ( item && item.tab !== undefined ){
-         var c = subTab.tabNav('getContainer', subTab.tabNav('search', item.tab)),
-         orig = $("div.bbn-code.ui-codemirror", c).codemirror("getValue");
-         }
-         $code.children().remove();
-         $code.removeClass("ui-codemirror");
-         $code.codemirror('mergeView', {
-         value: orig ? orig : '',
-         mode: item ? item.mode : '',
-         origRight:  item ? item.code : '',
-         allowEditingOriginals: false,
-         showDifferences: true,
-         readOnly: true
-         });
-         $code.children().addClass("bbn-full-height");
-         $("div.bbn-codeMirror-merge-pane", $code).not(".CodeMirror-merge-pane-rightmost").before(
-         '<div style="border-bottom: 1px solid #ddd">' +
-         '<div class="bbn-c" style="width: 50%; display: inline-block"><strong>CURRENT CODE</strong></div>' +
-         '<div class="bbn-c" style="width: 50%; display: inline-block"><strong>BACKUP CODE</strong></div>' +
-         '</div>'
-         );
-         $code.redraw();
-         }
-         }],
-         callonce: function(){
-         getData();
-         }
-         },
-         subTab = bbn.ide.tabstrip.tabNav("getSubTabNav", obj.url),
-         idx = subTab.tabNav('search', hist.url),
-         treeDS = new kendo.data.HierarchicalDataSource({
-         data: []
-         }),
-         cont,
-         getData = function(){
-         bbn.fn.post(data.root + 'history/load', { url: obj.url }, function(d){
-         if ( d.data.list !== undefined ){
-         // Set new data to datasource
-         treeDS.data(d.data.list);
-         // Resize splitter
-         $("div.bbn-ide-history-splitter", cont).data("kendoSplitter").resize();
-         // Reset CodeMirror
-         $("div.bbn-ide-history-code", cont).codemirror("setValue", '');
-         }
-         });
-         };
 
-         if ( idx === -1 ){
-         // Insert the new tab history
-         subTab.tabNav('add', hist);
-         // Get the tab's index
-         var idx = subTab.tabNav('getIndex', hist.url),
-         // Get container
-         cont = subTab.tabNav('getContainer', idx);
-
-         // Insert html template to container
-         $(cont).html($(ide_history_template).html());
-         // Splitter
-         $("div.bbn-ide-history-splitter", cont).kendoSplitter({
-         panes: [{
-         collapsible: true,
-         size: '150px'
-         }, {
-         collapsible: false
-         }]
-         }).data("kendoSplitter");
-         // Date tree
-         $("div.bbn-ide-history-tree", cont).kendoTreeView({
-         dataSource: treeDS,
-         select: function(e){
-         var item = e.sender.dataItem(e.node),
-         $cm = $("div.bbn-ide-history-code", cont);
-         if ( (item.code !== undefined) &&
-         (item.mode !== undefined)
-         ){
-         if( $cm.children().hasClass("CodeMirror-merge") ){
-         if ( item.tab !== undefined ){
-         var c = subTab.tabNav('getContainer', subTab.tabNav('search', item.tab)),
-         orig = $("div.bbn-code.ui-codemirror", c).codemirror("getValue");
-         }
-         $cm.children().remove();
-         $cm.codemirror('mergeView', {
-         value: orig,
-         mode: item.mode,
-         origRight: item.code,
-         allowEditingOriginals: false,
-         showDifferences: true,
-         readOnly: true
-         });
-         $cm.children().addClass("bbn-full-height");
-         $("div.bbn-codeMirror-merge-pane", $cm).not(".CodeMirror-merge-pane-rightmost").before(
-         '<div style="border-bottom: 1px solid #ddd">' +
-         '<div class="bbn-c" style="width: 50%; display: inline-block"><strong>CURRENT CODE</strong></div>' +
-         '<div class="bbn-c" style="width: 50%; display: inline-block"><strong>BACKUP CODE</strong></div>' +
-         '</div>'
-         );
-         $cm.redraw();
-         }
-         else {
-         $cm.codemirror("setOption", 'mode', item.mode);
-         $cm.codemirror("setValue", item.code);
-         }
-         }
-         }
-         });
-         }
-         else {
-         // Get container
-         cont = subTab.tabNav('getContainer', idx);
-         // Get data
-         getData();
-         // Set new data to tree
-         $("div.bbn-ide-history-tree", cont).data("kendoTreeView").setDataSource(treeDS);
-         }
-         // Activate history tab
-         subTab.tabNav('activate', idx);
-         // CodeMirror
-         $("div.bbn-ide-history-code", cont).codemirror({
-         readOnly: true
-         });
-         },
-
-         historyClear: function(){
-         bbn.fn.post(data.root + 'history/clear', {
-         url: bbn.ide.tabstrip.tabNav("getObs").url
-         }, function(d){
-         if ( d.data.success !== undefined ){
-         appui.success("History cleared!");
-         }
-         });
-         },
-
-         historyClearAll: function(){
-         bbn.fn.post(data.root + 'history/clear', {}, function(d){
-         if ( d.data.success !== undefined ){
-         appui.success("History cleared!");
-         }
-         });*/
       },
       codeSearch(){
        // let code = $(".bbn-code:visible .CodeMirror");

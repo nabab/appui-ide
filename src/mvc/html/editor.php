@@ -55,6 +55,8 @@
                     :menu="treeContextMenu"
                     :data="treeInitialData"
                     ref="filesList"
+                    :draggable="true"
+                    @dragEnd="moveNode"
                     :map="treeMapper"
                     :icon-color="color"
                     :filter-string="searchFile"

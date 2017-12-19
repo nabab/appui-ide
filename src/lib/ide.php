@@ -315,6 +315,7 @@ class ide {
       isset($cfg['is_file'], $path)
     ){
 
+
       // Each file associated with the structure (MVC case)
       foreach ( $rep['tabs'] as $i => $tab ){
         // The path of each file
@@ -324,19 +325,23 @@ class ide {
         }
 
         $old = $new = $tmp;
+
         if ( !empty($cfg['path']) &&  ($cfg['path'] !== './') ){
           $old .= $cfg['path'] . (substr($cfg['path'], -1) !== '/' ? '/' : '');
+
         }
         if ( !empty($cfg['new_path']) && ($cfg['new_path'] !== './') ){
           $new .= $cfg['new_path'] . (substr($cfg['new_path'], -1) !== '/' ? '/' : '');
+
         }
         if ( ($i !== '_ctrl') && !empty($tab['extensions']) ){
 
           $old .= $cfg['name'];
           $new .= $cfg['new_name'] ?? '';
           $ext_ok = false;
+
           if ( !empty($cfg['is_file']) ){
-           foreach ( $tab['extensions'] as $k => $ext ){
+            foreach ( $tab['extensions'] as $k => $ext ){
               if ( $k === 0 ){
                 if ( !empty($cfg['new_name']) && is_file($new.'.'.$ext['ext']) ){
                   $this->error("The new file exists: $new.$ext[ext]");
@@ -353,11 +358,14 @@ class ide {
           }
           $old .= !empty($cfg['is_file'])  ? '.' . $ext_ok : '';
           $new .= !empty($cfg['is_file']) ? '.' . $tab['extensions'][0]['ext'] : '';
+
           if ( !empty($cfg['new_name']) && ($new !== $tmp) && file_exists($new) ){
             $this->error("The new file|folder exists.");
             return false;
           }
+
           if ( file_exists($old) ){
+
             array_push($todo, [
               'old' => $old,
               'new' => ($new === $tmp) ? false : $new,
@@ -367,6 +375,7 @@ class ide {
         }
       }
     }
+
     return $todo;
   }
 
@@ -374,14 +383,27 @@ class ide {
 
 
   }
-
-  private function rename_backup(array $path,  array $cfg ){
+  /**
+   * Renames|movie a file or a folder of the backup.
+   *
+   * @param array $path paths of file|folder, old and new
+   * @param array $cfg The file|folder info
+   * @param string $ope The operation type (rename, copy)
+   * @return bool
+   */
+  private function operations_backup(array $path,  array $cfg, string $case ){
     //set path backups temporaney disattivate for check an complete
     $backup_path = self::BACKUP_PATH . $cfg['repository']['bbn_path'] . '/' . $cfg['repository']['path'];
-    $old_backup = $backup_path . $cfg['bbn_path'] . $cfg['path'] . explode(".", array_pop(explode("/", $path['old'])))
-      [0];
-    $new_backup = $backup_path . $cfg['bbn_path'] . $cfg['path'] . explode(".", array_pop(explode("/", $path['new'])))
-      [0];
+    //CASE RENAME
+    if ( $case === 'rename' ){
+      $old_backup = $backup_path . $cfg['bbn_path'] . $cfg['path'] . explode(".", array_pop(explode("/", $path['old'])))[0];
+      $new_backup = $backup_path . $cfg['bbn_path'] . $cfg['path'] . explode(".", array_pop(explode("/", $path['new'])))[0];
+    }
+    //CASE MOVE
+    if ( $case === 'move' ){
+      $old_backup = $backup_path . $cfg['bbn_path'] . $cfg['path'] . explode(".", array_pop(explode("/", $path['old'])))[0];
+      $new_backup = $backup_path . $cfg['bbn_path'] . $cfg['new_path'] .'/'. explode(".", array_pop(explode("/", $path['new'])))[0];
+    }
     //if exist a backup
     if ( is_dir($old_backup) ){
       // if it isn't a folder
@@ -444,49 +466,55 @@ class ide {
 
       $rep = $cfg['repository'];
       $path = $this->decipher_path($rep['bbn_path'] . '/' . $rep['path']);
-
-
       if ( $ope === 'rename' ){
         $cfg['new_path'] = $cfg['path'];
       }
-
-      // Normal file|folder
+       // Normal file|folder
       if ( empty($cfg['is_mvc']) &&
         ( empty($cfg['is_file']) ||
           ( !empty($cfg['is_file']) &&
             !empty($rep['extensions'])
           )
-        ) &&
-        ($f = $this->check_normal($cfg, $rep, $path)) &&
-            // Copy
-          ( ( ($ope === 'copy') &&
+        )
+      ){
+        $f = $this->check_normal($cfg, $rep, $path);
+        if ( $ope === 'move' && !empty($cfg['is_file']) ){
+          $f['new'] = $f['new']. '.'.$cfg['ext'];
+        }
+        if ( $f &&
+          // Copy
+          ((($ope === 'copy') &&
               \bbn\file\dir::copy($f['old'], $f['new'])
             ) ||
             // Rename
-            ( (($ope === 'rename') || ($ope === 'move')) &&
+            (($ope === 'rename') &&
               \bbn\file\dir::move($f['old'], $f['new'])
-              /** @todo Rename backups */
+            ) ||
+            //Move
+            (($ope === 'move') &&
+              \bbn\file\dir::move($f['old'], $f['new'])
             ) ||
             // Delete
-            ( ($ope === 'delete') &&
+            (($ope === 'delete') &&
               \bbn\file\dir::delete($f['old'])
               /** @todo Remove backups */
             )
           )
-      ){
-        return true;
+        ){//for rename and move backup
+          $this->operations_backup($f, $cfg, $ope);
+          return true;
+        }
       }
       // MVC
       else if ( !empty($rep['tabs']) ){
-//die(var_dump('aaaaa',$this->check_mvc($cfg, $rep, $path), $this->get_last_error()));
+
         if ( $todo = $this->check_mvc($cfg, $rep, $path) ){
 
           foreach ( $todo as $t ){
+
             // Rename
             if ( ($ope === 'rename') || ($ope === 'move') ){
-              if ( $ope === 'rename' ){
-                $this->rename_backup($t, $cfg);
-              }
+
               if ( !\bbn\file\dir::move($t['old'], $t['new']) ){
                  $this->error("Error during the file|folder move: old -> $t[old] , new -> $t[new]");
                 return false;
@@ -509,7 +537,7 @@ class ide {
                 $this->error("Error during the file|folder permissions change: old -> $t[old] , new -> $t[new]");
                 return false;
               }
-
+              $this->operations_backup($t, $cfg, $ope);
             }
             // Copy
             else if ( $ope === 'copy' ){
