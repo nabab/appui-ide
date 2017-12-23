@@ -1,6 +1,10 @@
 <div class="bbn-100">
   <div class="bbn-h-100 code">
-    <bbn-tabnav :autoload="false" :scrollable="false" ref="tabstrip">
+    <bbn-tabnav :autoload="false"
+                :scrollable="false"
+                ref="tabstrip"
+                @tabLoaded="loadingTab"
+    >
       <bbn-tab :static="true"
                :load="true"
                :url="repositories[repository].tabs['_ctrl'].url"
@@ -30,6 +34,7 @@
                :selected="tab.default"
                :bcolor="tab.bcolor"
                :fcolor="tab.fcolor"
+               :menu="getMenu(tab.url)"
       ></bbn-tab>
     </bbn-tabnav>
   </div>

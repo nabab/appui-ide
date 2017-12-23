@@ -479,7 +479,6 @@
           icon: 'fa fa-edit',
           text: bbn._('Rename'),
           command: (node) => {
-            console.log("ddsdsds", node);
             this.rename(node)
           }
         }, {
@@ -1123,11 +1122,26 @@
           };
           bbn.fn.post(this.root + 'actions/move', obj, (d) =>{
             if ( d.success ){
-              dest.parent.reload();
-              appui.success(bbn._('Successfully moved'));
+              let tabTitle = obj.path + obj.name,
+                  tabs = bbn.vue.findAll(appui.ide, 'bbn-tab');
+              //if a node is moved from a tree and that it is open
+              this.$nextTick(()=>{
+                let idTab = bbn.fn.search(tabs, 'title', tabTitle);
+                if( idTab > -1 ){
+                  bbn.vue.find(appui.ide, 'bbn-tabnav').close(idTab);
+                }
+              });            
+              this.$nextTick(()=>{
+                dest.parent.reload();
+                appui.success(bbn._('Successfully moved'));
+              });
             }
             else{
-              dest.parent.reload();
+              if ( d.exist ){
+                alert(bbn._('Impossible to have two items with the same name'));
+              }
+
+
               appui.error(bbn._('Error move'));
             }
           });

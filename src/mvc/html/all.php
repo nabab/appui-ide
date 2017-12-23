@@ -1,7 +1,7 @@
 <!-- HTML Document -->
-<div class="allRepositoriesTree bbn-flex-height">
-  <bbn-splitter class="bbn-flex-width" :orientation="orientationSplitter">
-    <div class="bbn-flex-fill">
+<div class="allRepositoriesTree">
+  <bbn-splitter :orientation="orientationSplitter">
+    <bbn-pane>
       <div class="top k-header bbn-w-100 bbn-vmiddle flexJustifyLeft heightTop">
         <div  class="paddingLeft" v-if="routeFile.filePath != ''">
         <span>
@@ -33,8 +33,8 @@
                 :map="mapperTree"
                 class="bbn-fullscreen bbn-flex-fill"
       ></bbn-tree>
-    </div>
-    <div>
+    </bbn-pane>
+    <bbn-pane>
       <div class="top k-header bbn-w-100 heightTop">
         <div class="bbn-w-50 bbn-h-100 bbn-vmiddle flexJustifyLeft paddingLeft">
         <span class="paddingRight">
@@ -66,10 +66,8 @@
                 :mode="typeFile"
                 v-model="content"
       ></bbn-code>
-    </div>
+    </bbn-pane>
   </bbn-splitter>
-
-
 </div>
 
 

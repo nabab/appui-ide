@@ -1,6 +1,9 @@
 <!--ul class="bbn-ide-context"></ul-->
 <bbn-splitter class="bbn-ide-container" orientation="vertical">
-  <div class="bbn-ide-toolbar-container" style="height: 40px" :scrollable="false">
+  <bbn-pane class="bbn-ide-toolbar-container"
+            :size="40"
+            :scrollable="false"
+            overflow="visible">
     <bbn-toolbar class="bbn-ide">
       <div>
         <bbn-input class="ide-tree-search" placeholder="<?=_('Search file')?>" v-model="searchFile"></bbn-input>
@@ -39,15 +42,14 @@
         ></bbn-menu>
       </div>
     </bbn-toolbar>
-  </div>
-  <div>
+  </bbn-pane>
+  <bbn-pane>
     <bbn-splitter class="bbn-code-container"
-                  orientation="horizontal"
-    >
-      <div style="width: 200px; overflow: hidden"
-           :collapsible="true"
-           :resizable="true"
-      >
+                  :resizable="true"
+                  orientation="horizontal">
+      <bbn-pane :size="200"
+                :collapsible="true"
+                :resizable="true">
         <div class="bbn-100">
           <bbn-tree class="tree"
                     :source="root + 'tree'"
@@ -63,35 +65,32 @@
                     :storage-full-name="'appui-ide-tree-' + currentRep"
           ></bbn-tree>
         </div>
-      </div>
-      <div class="bbn-no-padding"
-           :collapsible="true"
-           :resizable="true"
-           :scrollable="false"
-      >
+      </bbn-pane>
+      <bbn-pane :collapsible="true"
+                :resizable="true"
+                :scrollable="false">
         <div style="position: absolute; top: auto; left: auto; margin: 50%; text-align: center">
           <i class="fa fa-code"></i>
         </div>
         <bbn-tabnav id="tabstrip_editor"
                     ref="tabstrip"
                     :autoload="true"
-                    @close="ctrlCloseTab"
-        >
+                    @close="ctrlCloseTab">
           <bbn-tab :static="true"
                    url="home"
                    load="true"
-                   :title="'<i class=\'bbn-xl zmdi zmdi-pin-help\'> </i>'"
-          ></bbn-tab>
+                   :title="'<i class=\'bbn-xl zmdi zmdi-pin-help\'> </i>'">
+          </bbn-tab>
         </bbn-tabnav>
-      </div>
-      <div style="width: 200px"
-           :collapsible="true"
-           :resizable="true"
-           :collapsed="true">
+      </bbn-pane>
+      <bbn-pane :size="200"
+                :collapsible="true"
+                :resizable="true"
+                :collapsed="true">
         <iframe class="bbn-100"
                 src="#"
         ></iframe>
-      </div>
+      </bbn-pane>
     </bbn-splitter>
-  </div>
+  </bbn-pane>
 </bbn-splitter>

@@ -112,7 +112,6 @@
         return true
       },
       beforeSubmit(){
-        alert("ddddd");
         const tabStrip = appui.ide.$refs.tabstrip;
         let path = this.source.nodeData.path.split('/');
         //if it is a file, you perform open tab check operations and in case we rename its tab title

@@ -13,11 +13,9 @@
               class="perms-splitter"
               orientation="vertical"
 >
-  <div :collapsible="false"
-       :resizable="true"
-       :scrollable="false"
-       style="height: 300px"
-  >
+  <bbn-pane :collapsible="false"
+            :resizable="true"
+            :scrollable="false">
     <bbn-code v-model="value"
               :mode="mode"
               :cfg="{
@@ -28,12 +26,10 @@
               }"
               ref="editor"
     ></bbn-code>
-  </div>
-  <div :collapsible="false"
-       :resizable="true"
-       :scrollable="false"
-       style="height: 30%"
-  >
+  </bbn-pane>
+  <bbn-pane :collapsible="false"
+            :resizable="true"
+            :scrollable="false">
     <div class="k-block bbn-block bbn-100">
       <div class="k-header bbn-c"><?=('Permissions setting')?></div>
         <div class="bbn-block bbn-hspadded bbn-100">
@@ -118,5 +114,5 @@
         </bbn-scroll>
         </div>
     </div>
-  </div>
+  </bbn-pane>
 </bbn-splitter>

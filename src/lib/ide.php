@@ -365,11 +365,10 @@ class ide {
           }
 
           if ( file_exists($old) ){
-
             array_push($todo, [
               'old' => $old,
               'new' => ($new === $tmp) ? false : $new,
-              'perms' => !empty($cfg['is_file']) && ($i === 'php')
+              'perms' => empty($cfg['is_file']) || (!empty($cfg['is_file']) && ($i === 'php'))
             ]);
           }
         }
@@ -379,10 +378,6 @@ class ide {
     return $todo;
   }
 
-  private function delete_backup(){
-
-
-  }
   /**
    * Renames|movie a file or a folder of the backup.
    *
@@ -509,16 +504,18 @@ class ide {
       else if ( !empty($rep['tabs']) ){
 
         if ( $todo = $this->check_mvc($cfg, $rep, $path) ){
-
+          //die(\bbn\x::hdump($todo));
           foreach ( $todo as $t ){
 
             // Rename
             if ( ($ope === 'rename') || ($ope === 'move') ){
 
               if ( !\bbn\file\dir::move($t['old'], $t['new']) ){
-                 $this->error("Error during the file|folder move: old -> $t[old] , new -> $t[new]");
+                $this->error("Error during the file|folder move: old -> $t[old] , new -> $t[new]");
                 return false;
               }
+
+
               if ( !empty($cfg['is_file']) ){
                 // Remove file's options
                 $this->options->remove(
@@ -532,11 +529,22 @@ class ide {
                 // Remove folder's options
                 $this->rem_dir_opt($t['old']);
               }
+
               // Change permissions
-              if ( !empty($t['perms']) && !$this->change_perm_by_real($t['old'], $t['new'], empty($cfg['is_file']) ? 'dir' : 'file') ){
-                $this->error("Error during the file|folder permissions change: old -> $t[old] , new -> $t[new]");
-                return false;
+              if ( $ope === 'rename' ){
+                if ( !empty($t['perms']) && !$this->change_perm_by_real($t['old'], $t['new'], empty($cfg['is_file']) ? 'dir' : 'file') ){
+                  $this->error("Error during the file|folder permissions change: old -> $t[old] , new -> $t[new]");
+                  return false;
+                }
               }
+              else{
+                if ( !empty($t['perms']) && !$this->move_perm_by_real($t['old'], $t['new'], empty($cfg['is_file']) ? 'dir' : 'file') ){
+                  $this->error("Error during the file|folder permissions change: old -> $t[old] , new -> $t[new]");
+                  return false;
+                }
+              }
+
+
               $this->operations_backup($t, $cfg, $ope);
             }
             // Copy
@@ -1097,16 +1105,18 @@ class ide {
    */
   public function change_perm_by_real(string $old, string $new, string $type = 'file'){
     $type = strtolower($type);
+
     if ( !empty($old) &&
       !empty($new) &&
       file_exists($new) &&
       ($id_opt = $this->real_to_perm($old, $type)) &&
       !$this->real_to_perm($new, $type)
     ){
-
       $is_file = $type === 'file';
       $code = $is_file ? bbn\str::file_ext(basename($new), 1)[0] : basename($new).'/';
+
       if ( $id_parent = $this->create_perm_by_real(dirname($new).'/', 'dir') ){
+
         $this->options->set_code($id_opt, $code);
         $this->options->move($id_opt, $id_parent);
         return true;
@@ -1114,6 +1124,39 @@ class ide {
     }
     return false;
   }
+
+  /**
+   * Moves permissions to a file/dir from the old and new real file/dir's path
+   *
+   * @param string $old The old file/dir's path
+   * @param string $new The new file/dir's path
+   * @param string $type The type (file/dir)
+   * @return bool
+   */
+  public function move_perm_by_real(string $old, string $new, string $type = 'file'){
+    $type = strtolower($type);
+    if ( !empty($old) &&
+      !empty($new) &&
+      file_exists($new)
+    ){
+       $id_opt = $this->real_to_perm($old, $type);
+       $id_new_opt = $this->real_to_perm($new, $type);
+       if ( empty($id_new_opt) ){
+         $id_new_opt = $this->create_perm_by_real(dirname($new).'/', 'dir');
+       }
+       if ( ($id_opt !== $id_new_opt) && !empty($id_new_opt) ){
+          $is_file = $type === 'file';
+          $code = $is_file ? bbn\str::file_ext(basename($new), 1)[0] : basename($new).'/';
+          if ( $id_parent = $this->create_perm_by_real(dirname($new).'/', 'dir') ){
+             $this->options->set_code($id_opt, $code);
+             $this->options->move($id_opt, $id_parent);
+             return true;
+          }
+       }
+     }
+   return false;
+  }
+
 
   /**
    * Creates a permission option from a real file/dir's path
@@ -1275,11 +1318,12 @@ class ide {
       // It must be a controller
       (strpos($file, '/mvc/public/') !== false)
     ){
+
       $is_file = $type === 'file';
       // Check if it's an external route
       foreach ( $this->routes as $i => $r ){
         if ( strpos($file, $r) === 0 ){
-          // Remove route
+         // Remove route
           $f = substr($file, \strlen($r), \strlen($file));
           // Remove /mvc/public
           $f = substr($f, \strlen('/mvc/public'), \strlen($f));
@@ -1291,12 +1335,15 @@ class ide {
       // Internal route
       if ( empty($f) ){
         $root_path = BBN_APP_PATH.'mvc/public/';
+
         if ( strpos($file, $root_path) === 0 ){
           // Remove root path
           $f = substr($file, \strlen($root_path), \strlen($file));
+
         }
       }
       if ( !empty($f) ){
+
         $bits = bbn\x::remove_empty(explode('/', $f));
         $code = $is_file ? bbn\str::file_ext(array_pop($bits), 1)[0] : array_pop($bits).'/';
         $bits = array_map(function($b){

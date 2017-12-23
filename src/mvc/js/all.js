@@ -38,7 +38,7 @@
       },
       selectNode(ele){
         if ( !ele.data.folder ){
-          bbn.fn.post(this.source.root+'all/actions/getContent', ele.data, d =>{
+          bbn.fn.post(this.source.root+'all/actions/get_content', ele.data, d =>{
             if ( d.success ){
               this.getRoute(ele);
               this.content = d.content;
@@ -54,7 +54,7 @@
             orig: node.data.path,
             dest: overNode.data.path
           };
-          bbn.fn.post(this.source.root+'all/actions/moveNodeTree', src, d =>{
+          bbn.fn.post(this.source.root+'all/actions/move_node_tree', src, d =>{
             if ( d.success ){
               overNode.parent.reload();
               if( !overNode.isExpanded ){
