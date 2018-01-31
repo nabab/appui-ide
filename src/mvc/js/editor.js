@@ -5,6 +5,7 @@
       bbn.vue.addComponent('ide/history');
       bbn.vue.addComponent('ide/popup/new');
       bbn.vue.addComponent('ide/popup/rename');
+      bbn.vue.addComponent('ide/popup/search');
       bbn.vue.addComponent('ide/popup/copy');
       bbn.vue.addComponent('ide/popup/path');
       bbn.vue.unsetComponentRule();
@@ -24,6 +25,20 @@
         lastRename: '',
         ctrlTest: false,
         searchFile: '',
+        //for search content
+        search:{
+          link: false,
+          searchInRepository: '',
+          caseSensitiveSearch: false,
+          lastSearchRepository: ''
+        },
+        //for search content
+        showSearchContent: false,
+        cursorPosition:{
+          line: 0,
+          ch: 0
+        },
+
         menu: [
           {
             text: 'File',
@@ -159,6 +174,14 @@
       })
     },
     computed: {
+      typeSearch(){
+        if( this.caseSensitiveSearch ){
+          return bbn._('sensitive');
+        }
+        else{
+          return bbn._('insensitive');
+        }
+      },
       tabSelected(){
         return this.$refs.tabstrip.selected;
       },
@@ -214,14 +237,32 @@
         if ( this.currentURL ){
          this.code= bbn.vue.find(this.getActive(), '.bbn-code:visible');
         }
-
-
       },
       keydownFunction(event) {
         alert("dsds")
-
       },
-
+      searchOfContext(node){
+        bbn.vue.closest(this, ".bbn-tab").$refs.popup[0].open({
+          width: 400,
+          height: 120,
+          title: bbn._('Search in: ') + node.data.path,
+          component: 'appui-ide-popup-search',
+          source: {
+            url: this.url,
+            repository: node.data.repository,
+            path: node.data.path
+          }
+        });
+        bbn.fn.log("ggg", node);
+      },
+      searchingContent(e){
+        if( this.search.searchInRepository.length > 0 ){
+          this.search.lastSearchRepository = this.search.searchInRepository;
+          this.$nextTick(()=>{
+            bbn.fn.link(this.url+'/search/'+ this.currentRep +'_end_/'+ this.typeSearch +'/'+ this.search.searchInRepository, true);
+          });
+        }
+      },
       /** ###### REPOSITORY ###### */
 
       /**
@@ -487,7 +528,8 @@
           command: (node) => {
             this.copy(node)
           }
-        }, /*{
+        },
+        /*{
           icon: 'fa fa-file-zip-o',
           text: bbn._('Export'),
           command: () => { this.export(n) }
@@ -499,11 +541,19 @@
           }
         }];
         if ( n.data.folder ){
-          return objContext;
+          let obj = objContext.slice();
+          obj.unshift({
+            icon: 'fa fa-search',
+            text: bbn._('Find in Path'),
+            command: (node) => {
+              this.searchOfContext(node)
+            }
+          });
+          return obj;
         }
         else{
           let obj = objContext.slice();
-          //obj.splice(1,1);
+
 
           obj.unshift({
             icon: 'fa fa-magic',
@@ -636,6 +686,7 @@
        * @param file
        */
       openFile(file){
+
         let existTab = false;
         for(let tab of this.$refs.tabstrip.tabs){
 
@@ -1130,7 +1181,7 @@
                 if( idTab > -1 ){
                   bbn.vue.find(appui.ide, 'bbn-tabnav').close(idTab);
                 }
-              });            
+              });
               this.$nextTick(()=>{
                 dest.parent.reload();
                 appui.success(bbn._('Successfully moved'));
@@ -1280,7 +1331,11 @@
       currentRep: function(newVal){
         this.treeReload();
       },
-
+      showSearchContent: function(newVal){
+        if ( newVal === true ){
+          this.searchFile= "";
+        }
+      }
     },
     created(){
       appui.ide = this;

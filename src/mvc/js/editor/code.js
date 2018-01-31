@@ -9,7 +9,13 @@
     data(){
       return $.extend({
         ide: bbn.vue.closest(this, '.bbn-tabnav').$parent.$data,
-        originalValue: this.source.value
+        originalValue: this.source.value,
+        initialState: {
+          marks: this.source.marks,
+          selections: this.source.selections,
+          line: this.source.line,
+          char: this.source.char
+        }
       }, this.source);
     },
     computed: {
@@ -110,9 +116,9 @@
     },
     methods: {
       save(cm){
-        const state = this.$refs.editor.getState();
-        if ( this.isChanged && state && state.selections && state.marks ){
-
+        const editor = this.$refs.editor,
+              state = editor.getState();
+        if ( (this.isChanged && state && state.selections && state.marks) || (this.initialState !== state) && (state !== false) ){
           bbn.fn.post(this.ide.root + "actions/save", {
             repository: this.ide.repository,
             tab: this.tab,
@@ -123,7 +129,9 @@
             full_path: this.fullPath,
             selections: state.selections,
             marks: state.marks,
-            code: state.value,
+            line: state.line,
+            char: state.char,
+            code: editor.value,
           }, (d) => {
             if ( d.data && d.data.success ){
               this.originalValue = this.value;
@@ -132,6 +140,9 @@
             else if ( d.data && d.data.deleted ){
               this.originalValue = this.value;
               appui.success(bbn._("File deleted!"));
+            }
+            else {
+              appui.error(bbn._('Error'));
             }
           });
           return true;
@@ -269,6 +280,34 @@
             });
           });
         }
+      },
+      setState(){
+        const code = this.$refs.editor;
+        //case for serach a content
+        if ( appui.ide.search.link && (appui.ide.cursorPosition.line > 0 || appui.ide.cursorPosition.ch > 0) ){
+          let start = {
+                line: appui.ide.cursorPosition.line,
+                ch: appui.ide.cursorPosition.ch
+              },
+              end = {
+                line: appui.ide.cursorPosition.line,
+                ch: appui.ide.search.lastSearchRepository.length + appui.ide.cursorPosition.ch
+              };
+          setTimeout(() => {
+            code.widget.focus();
+            code.widget.getDoc().setSelections([{ 'anchor': start, 'head': end}]);
+            appui.ide.cursorPosition.line = 0;
+            appui.ide.cursorPosition.ch = 0;
+            appui.ide.search.link = false;
+          }, 400);
+        }
+        else{
+          this.$nextTick(() => {
+            console.log("dddd",this.initialState);
+            code.loadState(this.initialState);
+          });
+        }
+        //this.$refs.editor.loadState(info);
       }
     }
   }

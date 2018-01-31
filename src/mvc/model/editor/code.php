@@ -4,6 +4,7 @@
 
 if ( !empty($model->data['url']) && isset($model->inc->ide) ){
   $model->data['url'] = str_replace('/_end_', '', $model->data['url']);
+  //die(var_dump($model->data['url']));
   if ( $ret = $model->inc->ide->load($model->data['url']) ){
     return $ret;
   }

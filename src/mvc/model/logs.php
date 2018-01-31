@@ -2,7 +2,7 @@
 /** @var $model \bbn\mvc\model */
 //die(\bbn\file\dir::get_files(BBN_LOG_PATH));
 $log_files = array_filter(\bbn\file\dir::get_files(BBN_DATA_PATH.'logs'), function($a){
-  return substr($a, -3) === 'log';
+  return substr($a, -4) !== '.old';
 });
 if ( ($log_file = ini_get('error_log')) && (strpos($log_file, BBN_DATA_PATH.'logs') === false) ){
   array_unshift($log_files, $log_file);
@@ -12,7 +12,8 @@ foreach ( $log_files as $lf ){
   $res[basename($lf)] = $lf;
 }
 ksort($res);
-if ( isset($model->data['log']) ){
+if ( !empty($model->data['log']) ){
+  //die(var_dump("wwww"));
   $output = [];
   if ( $model->data['clear'] ){
     file_put_contents($res[$model->data['log']], '');
@@ -27,10 +28,42 @@ if ( isset($model->data['log']) ){
   }
   return ['content' => implode("\n", $output)];
 }
-else{
-  $data = ['logs' => []];
-  foreach ( $res as $k => $v ){
-    array_push($data['logs'], ['text' => $k]);
+else {
+  if( !empty($model->data['md5']) && !empty($model->data['fileLog']) ){
+    $file = escapeshellarg($res[$model->data['fileLog']]); // for the security concious (should be everyone!)
+    //for md5
+    $output = [];
+    $line = "tail -n 10 ".$file;
+    exec($line, $output);
+    //for content
+    $output2=[];
+    $num_lines = isset($model->data['num_lines']) && \bbn\str::is_integer($model->data['num_lines']) && ($model->data['num_lines'] > 0) && ($model->data['num_lines'] <= 1000) ? $model->data['num_lines'] : 100;
+    $line2 = "tail -n $num_lines $file";
+    exec($line2, $output2);
+    
+    if ( $model->data['md5'] === md5(implode("\n", $output)) ){
+      return ['change' => false];
+    }
+    else{
+      return [
+        'change' => true,
+        'md5' => md5(implode("\n", $output)),
+        'content' => implode("\n", $output2)
+      ];
+    }
   }
-  return $data;
+  else{
+    $data = ['logs' => []];
+    foreach ( $res as $k => $v ){
+      $output = [];
+      $line = "tail -n 10 ".escapeshellarg($v);
+      exec($line, $output);
+      $res = [];
+      array_push($data['logs'], [
+        'text' => $k,
+        'md5' => md5(implode("\n", $output))
+      ]);
+    }
+    return $data;
+  }
 }

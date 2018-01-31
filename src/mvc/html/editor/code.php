@@ -7,6 +7,7 @@
             save: save,
             test: test
           }"
+          @ready="setState"
           ref="editor"
 ></bbn-code>
 <bbn-splitter v-else
@@ -24,6 +25,7 @@
                 save: save,
                 test: test
               }"
+              @ready="setState"
               ref="editor"
     ></bbn-code>
   </bbn-pane>

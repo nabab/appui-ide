@@ -813,6 +813,8 @@ class ide {
         'extension' => \bbn\str::file_ext(self::$current_file),
         'permissions' => false,
         'selections' => false,
+        'line' => false,
+        'char' => false,
         'marks' => false,
       ];
       if ( is_file(self::$current_file) ){
@@ -848,6 +850,7 @@ class ide {
    * @return array|string
    */
   public function save(array $file){
+//die(var_dump("ssss", $file['code']));
     if ( $this->set_current_file($this->decipher_path($file['full_path'])) ){
       //if in the case of a rescue of _ctrl
       if ( $file['tab'] === "_ctrl" ){
@@ -866,7 +869,9 @@ class ide {
 
       // Delete the file if code is empty and if it isn't a super controller
       if ( empty($file['code']) && ($file['tab'] !== '_ctrl') ){
+
         if ( @unlink(self::$current_file) ){
+
           // Remove permissions
           $this->delete_perm();
           // Delete preferences
@@ -1251,10 +1256,12 @@ class ide {
     if ( !empty(self::$current_id) &&
       ($id_option = $this->options->from_code(self::$current_id, $this->_files_pref()))
     ){
-      $o = $this->pref->get($id_option);
+      $pref = $this->pref->get_all($id_option);
       return [
-        'selections' => $o['selections'] ?: [],
-        'marks' => $o['marks'] ?: []
+        'selections' => $pref[0]['selections'] ?: [],
+        'marks' => $pref[0]['marks'] ?: [],
+        'line' => $pref[0]['line'] ?:[],
+        'char' => $pref[0]['char'] ?:[],
       ];
     }
     return false;
@@ -1280,8 +1287,26 @@ class ide {
       if ( isset($cfg['marks']) ){
         $c['marks'] = $cfg['marks'];
       }
+      if ( isset($cfg['line']) ){
+        $c['line'] = $cfg['line'];
+      }
+      if ( isset($cfg['char']) ){
+        $c['char'] = $cfg['char'];
+      }
       if ( ($id_option = $this->option_id()) ){
-        return true;
+      //  return true;
+        $ele = $this->pref->get_all($id_option);
+
+        if ( !empty($ele) ){
+          if( $this->pref->update($ele[0]['id'], $c) ){
+            return true;
+          }
+        }
+        else{
+          if( $this->pref->add($id_option, $c) ){
+            return true;
+          }
+        }
       }
     }
     return false;
