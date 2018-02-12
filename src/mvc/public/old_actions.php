@@ -1,7 +1,7 @@
 <?php
 /* @var $ctrl \bbn\mvc */
 
-if ( $ctrl->inc->user->is_admin() ){
+if ( $ctrl->inc->user->is_dev() ){
   $ctrl->data = $ctrl->post;
   $model = $ctrl->get_model()['res'];
 

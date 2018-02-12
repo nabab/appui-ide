@@ -19,6 +19,7 @@ if ( !empty($model->data) &&
   $fileData = [];
   $result = [];
   $totLines = 0;
+  $tot_num_files = 0;
 //function that defines whether the search is sensitive or non-sensitive
   $typeSearch= function($element, $code, $type){
     if ( $type === "sensitive"){
@@ -31,6 +32,7 @@ if ( !empty($model->data) &&
 
 
   $path = $model->inc->ide->decipher_path($model->data['repository']['bbn_path'].'/'.$model->data['repository']['path']);
+  /*
   //case mvc
   if ( !empty($model->data['mvc']) ){
     $all = \bbn\file\dir::get_files($path, true);
@@ -44,9 +46,19 @@ if ( !empty($model->data) &&
     }
     $all = \bbn\file\dir::scan($path);
   }
+  */
 
+  //case no mvc
+  if ( empty($model->data['mvc']) ){
+    //if case search folder in a repository no mvc
+    if ( isset($model->data['searchFolder']) && !empty($model->data['searchFolder']) ){
+      $path .= $model->data['searchFolder'];
+      $path = str_replace("//","/",$path);
+    }
+  }
+  $all = \bbn\file\dir::get_files($path, true);
   foreach($all as $i => $v){
-    if ( basename($v) !== "cli" ){
+    if ( basename($v) !== "cli"  ){
       if ( is_dir($v) ){
         if ( isset($model->data['searchFolder']) && !empty($model->data['searchFolder']) ){
           $comp = $v.$model->data['searchFolder'];
@@ -57,57 +69,61 @@ if ( !empty($model->data) &&
         $content = \bbn\file\dir::scan($comp);
         foreach($content as $j => $val){
           $list= [];
-          if ( (is_file($val)) && ($typeSearch(file_get_contents($val), $model->data['search'], $model->data['typeSearch']) !== false) ){
-            //for plugin in vendor
-            if ( explode("/",$model->data['repository']['path'])[0] === 'bbn'){
-              $pathFile = substr($val, strpos($val, 'mvc'));
-            }
-            else{
-              $pathFile = substr($val, strpos($val, $model->data['repository']['path']));
-            }
-           $fileName = basename($pathFile);
-            //object initialization with every single file to check the lines that contain it
-            $file = new \SplFileObject($val);
-            //cycle that reads all the lines of the file, it means until it has finished reading a file
-            while( !$file->eof() ){
-              //current line reading
-              $lineCurrent = $file->current();
-              //if we find what we are looking for in this line and that this is not '\ n' then we will take the coirispjective line number with the key function, insert it into the array and the line number
-              if ( ($typeSearch($lineCurrent, $model->data['search'], $model->data['typeSearch']) !== false) && (strpos($lineCurrent, '\n') === false) ){
-                $lineNumber = $file->key()+1;
-                $namePath = substr(dirname($val), strpos($val, $model->data['repository']['path']));
-                $position = $typeSearch($lineCurrent, $model->data['search'], $model->data['typeSearch']);
-                $line = "<strong>".'line ' . $lineNumber . ' : '."</strong>";
-                $text = $line;
-                if ( !empty($model->data['mvc']) ){
-                  if ( explode("/",$pathFile)[1] === "public" ){
-                    $tab = 'php';
-                  }
-                  else{
-                    if ( explode("/",$pathFile)[1] === "html" ){
-                      $lineCurrent = htmlentities($lineCurrent);
-                    }
-                    $tab = explode("/",$pathFile)[1];
-                  }
-                  $link =  explode(".",substr($pathFile, strlen(explode("/",$pathFile)[0].'/'.explode("/",$pathFile)[1])+1))[0];
-                }
-                $text .= str_replace($model->data['search'], "<strong><span class='underlineSeach'>".$model->data['search']."</span></strong>", $lineCurrent);
-                array_push($list, [
-                  //'text' => !empty($tab) && ($tab==='html') ? htmlspecialchars($text) : $text,
-                  'text' => strlen($text) > 1000 ? $line."<strong><i>"._('content too long to be shown')."</i></strong>" : $text,
-                  'line' =>  $lineNumber-1,
-                  'position' => $position,
-                  'linkPosition' => explode(".",substr($pathFile, strlen(explode("/",$pathFile)[0].'/'.explode("/",$pathFile)[1])+1))[0],
-                  'tab' =>  !empty($tab) ? $tab : false,
-                  'code' => true,
-                  'path' =>  $model->data['repository']['bbn_path'].'/'.$pathFile,
-                  'icon' => 'zmdi zmdi-code'
-                ]);
+          if ( is_file($val) ){
+            $tot_num_files++;
+            if ( $typeSearch(file_get_contents($val), $model->data['search'], $model->data['typeSearch']) !== false ){
+              //for plugin in vendor
+              if ( explode("/",$model->data['repository']['path'])[0] === 'bbn'){
+                $pathFile = substr($val, strpos($val, 'mvc'));
               }
-              //next line
-              $file->next();
+              else{
+                $pathFile = substr($val, strpos($val, $model->data['repository']['path']));
+              }
+             $fileName = basename($pathFile);
+              //object initialization with every single file to check the lines that contain it
+              $file = new \SplFileObject($val);
+              //cycle that reads all the lines of the file, it means until it has finished reading a file
+              while( !$file->eof() ){
+                //current line reading
+                $lineCurrent = $file->current();
+                //if we find what we are looking for in this line and that this is not '\ n' then we will take the coirispjective line number with the key function, insert it into the array and the line number
+                if ( ($typeSearch($lineCurrent, $model->data['search'], $model->data['typeSearch']) !== false) && (strpos($lineCurrent, '\n') === false) ){
+                  $lineNumber = $file->key()+1;
+                  $namePath = substr(dirname($val), strpos($val, $model->data['repository']['path']));
+                  $position = $typeSearch($lineCurrent, $model->data['search'], $model->data['typeSearch']);
+                  $line = "<strong>".'line ' . $lineNumber . ' : '."</strong>";
+                  $text = $line;
+                  if ( !empty($model->data['mvc']) ){
+                    if ( explode("/",$pathFile)[1] === "public" ){
+                      $tab = 'php';
+                    }
+                    else{
+                      if ( explode("/",$pathFile)[1] === "html" ){
+                        $lineCurrent = htmlentities($lineCurrent);
+                      }
+                      $tab = explode("/",$pathFile)[1];
+                    }
+                    $link =  explode(".",substr($pathFile, strlen(explode("/",$pathFile)[0].'/'.explode("/",$pathFile)[1])+1))[0];
+                  }
+                  $text .= str_replace($model->data['search'], "<strong><span class='underlineSeach'>".$model->data['search']."</span></strong>", $lineCurrent);
+                  array_push($list, [
+                    //'text' => !empty($tab) && ($tab==='html') ? htmlspecialchars($text) : $text,
+                    'text' => strlen($text) > 1000 ? $line."<strong><i>"._('content too long to be shown')."</i></strong>" : $text,
+                    'line' =>  $lineNumber-1,
+                    'position' => $position,
+                    'linkPosition' => explode(".",substr($pathFile, strlen(explode("/",$pathFile)[0].'/'.explode("/",$pathFile)[1])+1))[0],
+                    'tab' =>  !empty($tab) ? $tab : false,
+                    'code' => true,
+                    'path' =>  $model->data['repository']['bbn_path'].'/'.$pathFile,
+                    'icon' => 'zmdi zmdi-code'
+                  ]);
+                }
+                //next line
+                $file->next();
+              }
             }
-          }//if we find rows then we will create the tree structure with all the information
+          }
+          //if we find rows then we will create the tree structure with all the information
           if ( count($list) > 0 ){
             $totLines = $totLines + count($list);
             if ( !empty($model->data['mvc']) ){
@@ -121,7 +137,7 @@ if ( !empty($model->data) &&
             }
 
             $fileData = [
-              'text' => basename($pathFile)."&nbsp;<span class='w3-badge w3-small w3-light-grey'>".count($list)." occurences</span>",
+              'text' => basename($pathFile)."&nbsp;<span class='w3-badge w3-small w3-light-grey'>".count($list)."</span>",
               'icon' => 'fa fa-file-code-o',
               'num' => count($list),
               'numChildren' => count($list),
@@ -138,7 +154,7 @@ if ( !empty($model->data) &&
                 'num' => 1,
                 'numChildren' => 1,
                 'items' => [],
-                'icon' => 'fa fa-folder'
+                'icon' => 'folder-icon'
                 ];
               array_push($result[$namePath]['items'], $fileData);
             }
@@ -161,6 +177,7 @@ if ( !empty($model->data) &&
         }
       }
       else{
+        $tot_num_files++;
         $list= [];
         if ( $typeSearch(file_get_contents($v), $model->data['search'], $model->data['typeSearch']) !== false ){
           $pathFile = substr($v, strpos($v, $model->data['repository']['path']));
@@ -201,7 +218,7 @@ if ( !empty($model->data) &&
           if ( count($list) > 0 ){
             $totLines = $totLines + count($list);
             $fileData = [
-              'text' => basename($pathFile)."&nbsp;<span class='w3-badge w3-small w3-light-grey'>".count($list)." occurences</span>",
+              'text' => basename($pathFile)."&nbsp;<span class='w3-badge w3-small w3-light-grey'>".count($list)."</span>",
               'icon' => 'fa fa-file-code-o',
               'num' => count($list),
               'numChildren' => count($list),
@@ -218,8 +235,8 @@ if ( !empty($model->data) &&
                 'num' => 1,
                 'numChildren' => 1,
                 'items' => [],
-                'icon' => 'fa fa-folder'
-                ];
+                'icon' => "folder-icon"
+              ];
               array_push($result[$namePath]['items'], $fileData);
             }
             else{
@@ -246,11 +263,12 @@ if ( !empty($model->data) &&
     $totFiles = 0;
     foreach ($result as $key => $value) {
       $totFiles = $totFiles + $result[$key]['numChildren'];
-      $result[$key]['text'] = str_replace($result[$key]['text'], $result[$key]['text']."&nbsp;<span class='w3-badge w3-small w3-light-grey'>".$result[$key]['numChildren']." files</span>",$result[$key]['text']);
+      $result[$key]['text'] = str_replace($result[$key]['text'], $result[$key]['text']."&nbsp;<span class='w3-badge w3-small w3-light-grey'>".$result[$key]['numChildren']."</span>",$result[$key]['text']);
     }
     return [
       'list' => array_values($result),
       'totFiles' => $totFiles,
+      'allFiles' => $tot_num_files++,
       'totLines' => $totLines
     ];
   }

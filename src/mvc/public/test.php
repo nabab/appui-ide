@@ -1,7 +1,7 @@
 <?php
 //$old_path = getcwd();
 //chdir(BBN_ROOT_PATH);
-if ( BBN_IS_DEV || $ctrl->inc->user->is_admin() ){
+if ( BBN_IS_DEV || $ctrl->inc->user->is_dev() ){
   if ( isset($ctrl->post['code']) && (\strlen($ctrl->post['code']) > 5) ){
     $bbn_code = $ctrl->post['code'];
     $_SESSION[BBN_SESS_NAME]['code'] = $bbn_code;

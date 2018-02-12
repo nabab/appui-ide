@@ -36,6 +36,6 @@ Vue.component('appui-ide-popup-search', {
       else{
         return bbn._('insensitive');
       }
-    },
+    }
   }
 });

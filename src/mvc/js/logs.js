@@ -58,7 +58,7 @@
       runInterval(){
         this.md5Current= this.files[bbn.fn.search(this.files, 'value', this.fileLog )].md5;
         if ( this.md5Current.length ){
-        //  clearInterval(logPoller);
+          clearInterval(logPoller);
           logPoller = setInterval(() => {
             if ( !this.isPolling ){
               this.isPolling = true;

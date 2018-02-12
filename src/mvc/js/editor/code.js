@@ -118,6 +118,8 @@
       save(cm){
         const editor = this.$refs.editor,
               state = editor.getState();
+              bbn.fn.warning("stato");
+              bbn.fn.log(state);
         if ( (this.isChanged && state && state.selections && state.marks) || (this.initialState !== state) && (state !== false) ){
           bbn.fn.post(this.ide.root + "actions/save", {
             repository: this.ide.repository,
@@ -303,11 +305,9 @@
         }
         else{
           this.$nextTick(() => {
-            console.log("dddd",this.initialState);
             code.loadState(this.initialState);
           });
-        }
-        //this.$refs.editor.loadState(info);
+        }        
       }
     }
   }

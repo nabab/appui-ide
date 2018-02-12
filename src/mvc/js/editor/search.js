@@ -7,7 +7,9 @@
 (() => {
   return {
     data(){
-      return {}
+      return {
+        typeSearch: this.source.typeSearch === 'insensitive' ? 'In' : 'Se' 
+      }
     },
     mounted(){
       appui.ide.search.searchInRepository =  '';

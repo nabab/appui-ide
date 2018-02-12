@@ -1,6 +1,6 @@
 <!-- HTML Document -->
 <div class="bbn-flex-height">
-  <div class="bbn-centered  bbn-padded">
+  <div class="bbn-c bbn-padded">
     <bbn-checkbox label="<?=_('Auto')?>"
                   v-model="autoRefreshFile"
                   :value="!autoRefreshFile"
@@ -21,7 +21,9 @@
     <bbn-button @click="onChange()"><i class="fa fa-refresh"> </i><?=_('Refresh')?></bbn-button>
   </div>
   <div v-if="textContent.length" class="bbn-flex-fill">
-    <bbn-code :mode="type" v-model="textContent" :readonly="true"></bbn-code>
+    <div class="bbn-full-screen">
+      <bbn-code :mode="type" v-model="textContent" :readonly="true"></bbn-code>
+    </div>
   </div>
   <div v-else>
     <span class="bbn-xxxxl"><?=_('Empty file content')?></span>

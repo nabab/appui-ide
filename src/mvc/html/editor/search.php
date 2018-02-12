@@ -1,5 +1,6 @@
-<div class="bbn-full-screen bbn-ide-searchContent">
+<div class="bbn-full-screen">
   <bbn-splitter orientation="vertical"
+                class="bbn-ide-searchContent"
                 :collapsible="true"
                 :resizable="true">
     <bbn-pane :size="35"
@@ -12,7 +13,8 @@
             <span>
               <strong>
                 <i class="zmdi zmdi-search-in-file"></i>
-                <?=_('Search:')?>
+                <?=_('Search')?>
+                <span v-text="'('+ typeSearch +') :'"></span>
               </strong>
               &nbsp;
             </span>
@@ -46,18 +48,20 @@
           <div>
             <span>
               <strong>
-                <?=_('Total Files:')?>
+                <?=_('Files:')?>
               </strong>
               &nbsp;
             </span>
           </div>
           <div class="bbn-flex-fill">
             <span v-text="source.totFiles ? source.totFiles : '--'"></span>
+            <span>/</span>
+            <span v-text="source.allFiles ? source.allFiles : '--'"></span>
           </div>
           <div>
             <span>
               <strong>
-                <?=_('Total line code:')?>
+                <?=_('Occourences:')?>
               </strong>
               &nbsp;
             </span>
@@ -65,22 +69,12 @@
           <div class="bbn-flex-fill">
             <span v-text="source.totLines ? source.totLines : '--'"></span>
           </div>
-          <div>
-            <span>
-              <strong>
-                <?=_('Case:')?>
-              </strong>
-              &nbsp;
-            </span>
-          </div>
-          <div class="bbn-flex-fill">
-            <span v-text="source.typeSearch"></span>
-          </div>
 
       </div>
     </bbn-pane>
     <div v-if="source.totFiles" class="bbn-h-100 bbn-w-100 bbn-padded">
-      <bbn-tree :source="source.list"
+      <bbn-tree class="tree"
+                :source="source.list"
                 @select="selectElement"
                 ref="searchContent"
       ></bbn-tree>

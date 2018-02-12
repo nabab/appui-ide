@@ -21,7 +21,6 @@
         selected: 0,
         url: this.source.root + 'editor',
         path:'',
-        code: false,
         lastRename: '',
         ctrlTest: false,
         searchFile: '',
@@ -97,7 +96,7 @@
               text: '<i class="fa fa-search-plus"></i>' + bbn._('Find next') + ' <small>CTRL+G</small>',
               select: ()=>{
                 this.codeFindNext();
-              }
+              },
             }, {
               text: '<i class="fa fa-search-minus"></i>' + bbn._('Find previous') + ' <small>SHIFT+CTRL+G</small>',
               select: ()=>{
@@ -188,9 +187,9 @@
       currentURL(){
         return this.$refs.tabstrip.currentURL;
       },
-      /*codeActive(){
+      currentEditor(){
         if ( this.currentURL ){
-          let idx = this.$refs.tabstrip.getSelected(),
+          let idx = this.$refs.tabstrip.selected,
               codes = bbn.vue.findAll(this.$refs.tabstrip.getVue(idx), 'bbn-code'),
               code = false;
           $.each(codes, (i, a) => {
@@ -200,7 +199,7 @@
           });
           return code;
         }
-      },*/
+      },
 
       /**
        * Check if the current repository is a MVC
@@ -233,11 +232,6 @@
       }
     },
     methods: {
-      updateActiveCode(){
-        if ( this.currentURL ){
-         this.code= bbn.vue.find(this.getActive(), '.bbn-code:visible');
-        }
-      },
       keydownFunction(event) {
         alert("dsds")
       },
@@ -581,7 +575,6 @@
        * @param n The node
        */
       treeNodeActivate(d){
-        this.code = false;
         if ( !d.data.folder ){
           if( !this.isMVC ){
             this.ctrlTest = true;
@@ -764,66 +757,7 @@
 
       /** ###### EDITOR ###### */
 
-      /**
-       * Make a codemirror editor
-       *
-       * @param c The tab page's container
-       * @param d The tab page's data
-       */
-      mkCodeMirror(c, d){
-        const vm = this;
-        let $cm;
-        if ( d.tab && (d.tab === 'php') ){
-          vm.permissionsPanel(c, d);
-        }
-        $cm = $("div.code", c).codemirror({
-          mode: d.mode,
-          value: d.value,
-          selections: d.selections,
-          marks: d.marks,
-          save: vm.save,
-          keydown(widget, e){
-            if ( e.ctrlKey && e.shiftKey && (e.key.toLowerCase() === 't') ){
-              e.preventDefault();
-              vm.test();
-            }
-          },
-          changeFromOriginal(wid){
-            const $elem = wid.element,
-                  idx = $elem.closest("div[role=tabpanel]").index() - 1;
-            if ( wid.changed ){
-              /*
-              //$elem.closest("div[data-role=tabstrip]").find("> ul > li").eq(idx).addClass("changed");
-              $elem.closest("div[data-role=reorderabletabstrip]").find("> ul > li").eq(idx).addClass("changed");
-              $($(vm.$refs.tabstrip).tabNav('getTab', $(vm.$refs.tabstrip).tabNav('getActiveTab'))).addClass("changed");
-              */
 
-              //vm.$refs.tabstrip.tabs[vm.$refs.tabstrip.selected].isUnsaved = true;
-            }
-            else {
-              let ok = true;
-              //$elem.closest("div[data-role=tabstrip]").find("> ul > li").eq(idx).removeClass("changed");
-              $elem.closest("div[data-role=reorderabletabstrip]").find("> ul > li").eq(idx).removeClass("changed");
-              //$elem.closest("div[data-role=tabstrip]").find("> ul > li").each(function(i, e){
-              $elem.closest("div[data-role=reorderabletabstrip]").find("> ul > li").each((i, e) => {
-                if ( $(e).hasClass("changed") ){
-                  ok = false;
-                }
-              });
-              if ( ok ){
-                $($(vm.$refs.tabstrip).tabNav('getTab', $(vm.$refs.tabstrip).tabNav('getActiveTab'))).removeClass("changed");
-              }
-            }
-          }
-        });
-        if ( d.file.id ) {
-          const $link = $("div.ui-codemirror[data-id='" + d.file.id + "']").first();
-          if ( $link.length ){
-            $cm.codemirror("link", $link);
-          }
-          $cm.attr("data-id", d.file.id);
-        }
-      },
       color(node){
         return node.data.bcolor
       },
@@ -928,7 +862,16 @@
           src.path = './'
         }
         else {
-          src.parent = node.parent;
+          if ( node.num > 0 ){
+            if( !node.isExpanded ){
+              node.isExpanded = true;
+            }
+            src.parent= bbn.vue.find(node, 'bbn-tree');
+          }
+          else{
+            src.parent= node.parent;
+          }
+
           if ( node.data.folder !== undefined ){
             if ( node.data.folder ){
               src.path = node.data.path;
@@ -1284,46 +1227,44 @@
 
       },
       codeSearch(){
-       // let code = $(".bbn-code:visible .CodeMirror");
-        let code = bbn.vue.find(this, '.bbn-code:visible');
-        code.widget.focus();
-        code.widget.execCommand('find');
+        if ( this.currentEditor ){
+          this.currentEditor.widget.focus();
+          this.currentEditor.widget.execCommand('find');
+        }
       },
       codeFindPrev(){
-        let code = bbn.vue.find(this, '.bbn-code:visible');
-        code.widget.focus();
-        code.widget.execCommand('findNext');
+        if ( this.currentEditor ){
+          this.currentEditor.widget.focus();
+          this.currentEditor.widget.execCommand('findPrev');
+        }
       },
       codeFindNext(){
-        let code = bbn.vue.find(this, '.bbn-code:visible');
-        code.widget.focus();
-        code.widget.execCommand('findPrev');
+        if ( this.currentEditor ){
+          this.currentEditor.widget.focus();
+          this.currentEditor.widget.execCommand('findNext');
+        }
       },
       codeReplace(){
-        let code = bbn.vue.find(this, '.bbn-code:visible');
-        code.widget.focus();
-        code.widget.execCommand('replace');
+        if ( this.currentEditor ){
+          this.currentEditor.widget.focus();
+          this.currentEditor.widget.execCommand('replace');
+        }
       },
       codeReplaceAll(){
-        let code = bbn.vue.find(this, '.bbn-code:visible');
-        code.widget.focus();
-        code.widget.execCommand('replaceAll');
+        if ( this.currentEditor ){
+          this.currentEditor.widget.focus();
+          this.currentEditor.widget.execCommand('replaceAll');
+        }
       },
       codeUnfoldAll(){
-        this.updateActiveCode();
-        this.$nextTick(()=>{
-          if ( this.code ){
-            this.code.unfoldAll();
-          }
-        })
+        if ( this.currentEditor ){
+          this.currentEditor.unfoldAll();
+        }
       },
       codeFoldAll(){
-        this.updateActiveCode();
-        this.$nextTick(()=>{
-          if ( this.code ){
-            this.code.foldAll();
-          }
-        })
+        if ( this.currentEditor ){
+          this.currentEditor.foldAll();
+        }
       }
 
     },

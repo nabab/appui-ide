@@ -9,33 +9,57 @@ Vue.component('appui-ide-popup-new', {
   template: '#bbn-tpl-component-appui-ide-popup-new',
   props: ['source'],
   data(){
+    let rep = this.source.repositories[this.source.currentRep],
+        isMVC = (rep !== undefined ) && (rep.tabs !== undefined),
+        defaultTab = '',
+        defaultExt = '';
+    if ( rep.tabs ){
+      $.each(rep.tabs, (k, a) => {
+        if ( a.default ){
+          defaultTab = k;
+          if ( this.source.isFile ){
+            defaultExt = a.extensions[0].mode;
+          }
+        }
+      })
+    }
     return {
-      tab:'',
-      name: '',
-      extension: '',
-      path: this.source && (this.source.path === './')  ? this.source.path : this.source.path + '/',
-      is_file: this.source.isFile
+      isMVC: isMVC,
+      rep: rep,
+      is_file: this.source.isFile,
+      data: {
+        tab: defaultTab,
+        name: '',
+        extension: defaultExt,
+        is_file: this.source.isFile,
+        path: this.source && (this.source.path === './')  ? this.source.path : this.source.path + '/'
+      }
     }
   },
   methods: {
     onSuccess(){
       if ( this.source.isFile ){
         bbn.fn.link(this.source.root + 'editor/file/' + this.source.currentRep +
-          (this.path.startsWith('./') ? this.path.slice(2) : this.path) +
-          this.name + '/_end_' + ( this.extension.length ? '/' +  this.tab : '')
+          (this.data.path.startsWith('./') ? this.data.path.slice(2) : this.data.path) +
+          this.data.name + '/_end_' + ( this.data.extension ? '/' +  this.data.tab : '')
         );
         appui.success(bbn._("File created!"));
       }
       else{
         appui.success(bbn._("Directory created!"));
       }
-      if ( this.path === './'){
+      if ( this.data.path === './'){
         appui.ide.$refs.filesList.reload();
       }
       else{
-        if( this.source.parent ){
+        //if( this.source.parent && this.source.isFile ){
           this.source.parent.reload();
-        }
+        //}
+        /*else{
+          bbn.fn.log("folder", this, this.source);
+          bbn.fn.log("folder", bbn.vue.closest(this, 'bbn-tree'));
+          alert();
+        }*/
       }
     },
     failureActive(){
@@ -53,6 +77,21 @@ Vue.component('appui-ide-popup-new', {
   },
 
   computed: {
+    availableExtensions(){
+      if ( this.rep && this.is_file ){
+        if ( this.rep.tabs ){
+          for ( let n in this.rep.tabs ){
+            if ( this.rep.tabs[n].default ){
+              return this.rep.tabs[n].extensions
+            }
+          }
+				}
+        else{
+          return this.rep.extensions
+        }
+      }
+      return [];
+    },
     types(){
       let res = [];
       if ( this.isMVC ){
@@ -67,21 +106,12 @@ Vue.component('appui-ide-popup-new', {
       }
       return res;
     },
-    isMVC(){
-      return (this.source.repositories[this.source.currentRep] !== undefined ) && (this.source.repositories[this.source.currentRep].tabs !== undefined);
-    },
-    rep(){
-      if ( this.isMVC ){
-        return this.source.repositories[this.source.currentRep];
-      }
-      return false
-    },
     ext(){
       if ( this.isMVC ){
-        return this.tab.length ? this.source.repositories[this.source.currentRep].tabs[this.tab].extensions : false;
+        return this.data.tab ? this.source.repositories[this.source.currentRep].tabs[this.data.tab].extensions : false;
       }
       else{
-        if( this.extensions ){
+        if( this.data.extensions ){
           let res;
           for(let ext of this.source.repositories[this.source.currentRep]['extensions']){
             if ( ext.mode === this.extension){
@@ -97,7 +127,7 @@ Vue.component('appui-ide-popup-new', {
       if( this.ext ){
         if ( this.isMVC ){
           for ( let i in this.ext ){
-            if ( this.extension === this.ext[i].mode ){
+            if ( this.data.extension === this.ext[i].mode ){
               return this.ext[i].default;
             }
           }
@@ -109,43 +139,18 @@ Vue.component('appui-ide-popup-new', {
     },
     formData(){
       return {
-        tab_path: this.isMVC && this.rep.tabs[this.tab] ? this.rep.tabs[this.tab].path : '',
+        tab_path: this.isMVC && this.rep && this.rep.tabs[this.data.tab] ? this.rep.tabs[this.data.tab].path : '',
         default_text: this.defaultText,
         repository: this.source.repositories[this.source.currentRep]
       }
     },
+
     extensions(){
-      let res = [],
-          ext;
-      if ( this.source.isFile ){
-        if ( this.isMVC ){
-          ext = this.tab.length ? this.source.repositories[this.source.currentRep].tabs[this.tab].extensions : false;
-        }
-        else {
-          ext = this.source.repositories[this.source.currentRep].extensions;
-        }
-        if ( ext.length ){
-          $.each(ext, (i, v) =>{
-            res.push({
-              text: '.' + v.ext,
-              value: v.ext
-            });
-          });
-
-          setTimeout(() =>{
-            this.extension = this.extensions[0].value;
-          }, 100);
-
-        }
+      if ( this.availableExtensions ){
+        return $.map((a) => { return {text: '.' + a.ext, value: a.ext};}, this.availableExtensions);
       }
-      return res;
+      return [];
     }
   },
 
 });
-
-
-
-
-
-

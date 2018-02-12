@@ -37,7 +37,7 @@
           path: ele.path || [],
           icon: ele.folder ? 'zmdi zmdi-folder' : 'fa fa-file',
           folder: ele.folder,
-          text: ele.text + (ele.num ? "<span class='w3-badge w3-small w3-light-grey'>" + ele.num + "</span>" : ''),
+          text: ele.text + (ele.num ? "&nbsp;&nbsp;<span class='w3-badge w3-small w3-light-grey'>" + ele.num + "</span>" : ''),
           num: ele.num || 0,
           numChildren: ele.num || 0
         }

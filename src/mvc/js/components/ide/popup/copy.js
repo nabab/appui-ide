@@ -11,19 +11,29 @@ Vue.component('appui-ide-popup-copy', {
     return {
       new_name: this.source.data.name,
       new_ext: '',
-      new_path: this.source.data.dir === "" ? "./" : this.source.data.dir
+      new_path: this.source.data.dir === "" ? "./" : this.source.data.dir,
+      //pathTree: false
     }
   },
   methods: {
     onSuccess(){
       //const tab = bbn.vue.closest(this, ".bbn-tab");
+      if ( this.new_path === './' ){
+        appui.ide.$refs.filesList.reload();
+      }
+      /*else{
+        //alert("entrato");
+        //console.log(this.pathTree);
+        //this.pathTree.reload();
+        //this.source.parent.reload();
+      }*/
+
       if ( this.isFile && !this.isMvc ){
         appui.success(bbn._("Copy file succesfully!"));
       }
       else{
         appui.success(bbn._("Copy succesfully!"));
       }
-      this.source.parent.reload();
       this.$nextTick(()=>{
         bbn.vue.closest(this, ".bbn-popup").close();
       });

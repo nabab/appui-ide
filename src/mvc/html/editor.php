@@ -78,7 +78,7 @@
             <div class="bbn-full-screen">
               <bbn-tree class="tree"
                         :source="root + 'tree'"
-                        @select="treeNodeActivate"
+                        @activate="treeNodeActivate"
                         :menu="treeContextMenu"
                         :data="treeInitialData"
                         ref="filesList"

@@ -1,6 +1,6 @@
 <?php
 /** @var $ctrl \bbn\mvc\controller */
-if ( !$ctrl->inc->user->is_admin() ){
+if ( !$ctrl->inc->user->is_dev() ){
   die("You aren't an admin user.");
 }
 if ( !isset($ctrl->inc->pref) ){

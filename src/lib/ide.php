@@ -368,7 +368,7 @@ class ide {
             array_push($todo, [
               'old' => $old,
               'new' => ($new === $tmp) ? false : $new,
-              'perms' => empty($cfg['is_file']) || (!empty($cfg['is_file']) && ($i === 'php'))
+              'perms' => $i === 'php'
             ]);
           }
         }
@@ -437,6 +437,7 @@ class ide {
    * @return bool
    */
   private function operations(array $cfg, string $ope){
+
     if ( is_string($ope) &&
       !empty($cfg['repository']) &&
       !empty($cfg['name']) &&
@@ -473,6 +474,7 @@ class ide {
         )
       ){
         $f = $this->check_normal($cfg, $rep, $path);
+
         if ( $ope === 'move' && !empty($cfg['is_file']) ){
           $f['new'] = $f['new']. '.'.$cfg['ext'];
         }
@@ -566,10 +568,12 @@ class ide {
             }
             // Delete
             else if ( $ope === 'delete' ){
+
               if ( !\bbn\file\dir::delete($t['old']) ){
                 $this->error("Error during the file|folder delete: $t[old]");
                 return false;
               }
+
               // Delete permissions
               if ( !empty($t['perms']) ){
                 $this->delete_perm($t['old']);
@@ -822,9 +826,26 @@ class ide {
         if ( $permissions = $this->get_file_permissions() ){
           $f = array_merge($f, $permissions);
         }
-        if ( $preferences = $this->get_file_preferences() ){
+        /*if ( $preferences = $this->get_file_preferences() ){
           $f = array_merge($f, $preferences);
+        }*/
+
+
+        if ( $id_opt = $this->option_id() ){
+          $val_opt =   $this->options->option($id_opt);
         }
+
+        if( !empty($val_opt) ){
+          $arr = [
+              'selections' => $val_opt['selections'] ?: [],
+              'marks' => $val_opt['marks'] ?: [],
+              'line' => $val_opt['line'] ?:[],
+              'char' => $val_opt['char'] ?:[],
+            ];
+
+          $f = array_merge($f, $arr);
+        }
+
       }
       else if ( !empty($real['tab']) &&
         !empty($real['repository']['tabs'][$real['tab']]['extensions'][0]['default'])
@@ -850,7 +871,6 @@ class ide {
    * @return array|string
    */
   public function save(array $file){
-//die(var_dump("ssss", $file['code']));
     if ( $this->set_current_file($this->decipher_path($file['full_path'])) ){
       //if in the case of a rescue of _ctrl
       if ( $file['tab'] === "_ctrl" ){
@@ -858,7 +878,7 @@ class ide {
         if ( is_numeric($file['ssctrl'])  && $file['ssctrl'] === 0){
           $backup_path = self::BACKUP_PATH . $file['repository'] . $file['tab'] . '/';
           //$backup_path =   $file['tab'] . '/';
-          //die(var_dump($backup_path));
+
         }else{
           $backup_path = self::BACKUP_PATH . $file['repository'] . $file['path'] . $file['tab'] . '/';
         }
@@ -889,14 +909,14 @@ class ide {
         }
       }
 
-        if ( is_file(self::$current_file) ){
-          $backup = $backup_path . date('Y-m-d_His') . '.' . $file['extension'];
-            bbn\file\dir::create_path(dirname($backup));
-            bbn\file\dir::copy(self::$current_file, $backup);
-        }
-        else if ( !is_dir(dirname(self::$current_file)) ){
-          bbn\file\dir::create_path(dirname(self::$current_file));
-        }
+      if ( is_file(self::$current_file) ){
+        $backup = $backup_path . date('Y-m-d_His') . '.' . $file['extension'];
+          bbn\file\dir::create_path(dirname($backup));
+          bbn\file\dir::copy(self::$current_file, $backup);
+      }
+      else if ( !is_dir(dirname(self::$current_file)) ){
+        bbn\file\dir::create_path(dirname(self::$current_file));
+      }
 
       if ( !empty($file['tab']) && ($file['tab'] === 'php') && !is_file(self::$current_file) ){
         if ( !$this->create_perm_by_real($file['full_path']) ){
@@ -904,8 +924,32 @@ class ide {
         }
       }
       file_put_contents(self::$current_file, $file['code']);
-      if ( $this->pref ){
+    
+      /*if ( $this->pref ){
         $this->set_file_preferences(md5($file['code']), $file);
+      }*/
+
+      if( !empty($file['selections']) ||
+        !empty($file['marks']) ||
+        !empty($file['line']) ||
+        !empty($file['char'])
+      ){
+        if ( $id_opt = $this->option_id() ){
+          $arr= [];
+          if ( !empty($file['selections']) ){
+            $arr['selections'] = $file['selections'];
+          }
+          if ( !empty($file['marks']) ){
+            $arr['marks'] = $file['marks'];
+          }
+          if ( !empty($file['line']) ){
+            $arr['line'] = $file['line'];
+          }
+          if ( !empty($file['char']) ){
+            $arr['char'] = $file['char'];
+          };
+          $this->options->set_prop($id_opt, $arr);
+        }
       }
       return ['success' => true];
     }
@@ -971,9 +1015,9 @@ class ide {
       !empty($cfg['path']) &&
       isset($cfg['is_file'], $cfg['extension'], $cfg['tab'], $cfg['tab_path'])
     ){
+
       $rep = $cfg['repository'];
       $path = $this->decipher_path($rep['bbn_path'] . '/' . $rep['path']);
-
       if ( !empty($cfg['tab_path']) ){
         $path .= $cfg['tab_path'];
       }
@@ -1110,7 +1154,6 @@ class ide {
    */
   public function change_perm_by_real(string $old, string $new, string $type = 'file'){
     $type = strtolower($type);
-
     if ( !empty($old) &&
       !empty($new) &&
       file_exists($new) &&
@@ -1139,11 +1182,12 @@ class ide {
    * @return bool
    */
   public function move_perm_by_real(string $old, string $new, string $type = 'file'){
-    $type = strtolower($type);
+      $type = strtolower($type);
     if ( !empty($old) &&
       !empty($new) &&
       file_exists($new)
     ){
+
        $id_opt = $this->real_to_perm($old, $type);
        $id_new_opt = $this->real_to_perm($new, $type);
        if ( empty($id_new_opt) ){
@@ -1279,6 +1323,7 @@ class ide {
     if ( empty($id_file) ){
       $id_file = self::$current_id;
     }
+
     if ( !empty($id_file) && !empty($this->pref) && preg_match('/^[a-f0-9]{32}$/i', $md5) && !empty($cfg) ){
       $c['md5'] = $md5;
       if ( isset($cfg['selections']) ){
@@ -1294,9 +1339,9 @@ class ide {
         $c['char'] = $cfg['char'];
       }
       if ( ($id_option = $this->option_id()) ){
+
       //  return true;
         $ele = $this->pref->get_all($id_option);
-
         if ( !empty($ele) ){
           if( $this->pref->update($ele[0]['id'], $c) ){
             return true;
