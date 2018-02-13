@@ -24,7 +24,7 @@
                    required="required"
         ></bbn-input>
         <bbn-dropdown v-if="source.isFile && availableExtensions && (availableExtensions.length > 1)"
-                      :source="extensions"
+                      :source="exts"
                       v-model="data.extension"
                       required="required"
                       style="width: 100px"
