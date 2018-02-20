@@ -24,11 +24,19 @@
                    required="required"
         ></bbn-input>
         <bbn-dropdown v-if="source.isFile && availableExtensions && (availableExtensions.length > 1)"
-                      :source="exts"
+                      :source="extensions"
                       v-model="data.extension"
                       required="required"
                       style="width: 100px"
         ></bbn-dropdown>
+        <!--<bbn-dropdown v-if="source.isFile && availableExtensions && (availableExtensions.length > 1)"
+                      :source="availableExtensions"
+                      :source-text="ext"
+                      :source-value="ext"
+                      v-model="data.extension"
+                      required="required"
+                      style="width: 100px"
+        ></bbn-dropdown>-->
       </div>
 
       <label><?=_("Path")?></label>

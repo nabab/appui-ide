@@ -28,7 +28,7 @@ Vue.component('appui-ide-mvc', {
           let ext = tab.extensions[id].ext;
           exts.push({
             icon: 'zmdi zmdi-refresh',
-            text: ext,
+            text: "switch to " +  '<strong>' + ext + '</strong>',
             key: ext,
             command: this.changeExtension
 

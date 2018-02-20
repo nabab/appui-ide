@@ -796,7 +796,7 @@
       },
       testNodeOfTree(node){
         if ( this.isMVC && !this.ctrlTest ){
-          bbn.fn.link( node.data.path )
+          bbn.fn.link( node.data.path, true );
         }
         else if ( !this.isMVC ){
           this.treeNodeActivate(node)

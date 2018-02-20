@@ -155,7 +155,7 @@
           bbn.fn.link(
             (this.ide.route ? this.ide.route + '/' : '') +
             (this.ide.path ? this.ide.path + '/' : '') +
-            this.ide.filename
+            this.ide.filename, true
           );
           return true;
         }
@@ -307,7 +307,7 @@
           this.$nextTick(() => {
             code.loadState(this.initialState);
           });
-        }        
+        }
       }
     }
   }
