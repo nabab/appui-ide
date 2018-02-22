@@ -1,13 +1,13 @@
 (() => {
   return {
     beforeMount(){
-      bbn.vue.setComponentRule(this.source.root + 'components/', 'appui');
-      bbn.vue.addComponent('ide/history');
-      bbn.vue.addComponent('ide/popup/new');
-      bbn.vue.addComponent('ide/popup/rename');
-      bbn.vue.addComponent('ide/popup/search');
-      bbn.vue.addComponent('ide/popup/copy');
-      bbn.vue.addComponent('ide/popup/path');
+      bbn.vue.setComponentRule(this.source.root + 'components/', 'appui-ide');
+      bbn.vue.addComponent('history');
+      bbn.vue.addComponent('popup/new');
+      bbn.vue.addComponent('popup/rename');
+      bbn.vue.addComponent('popup/search');
+      bbn.vue.addComponent('popup/copy');
+      bbn.vue.addComponent('popup/path');
       bbn.vue.unsetComponentRule();
     },
     props: ['source'],

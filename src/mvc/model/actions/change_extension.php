@@ -10,8 +10,7 @@ if ( !empty($model->data) &&
   !empty($model->inc->ide)
 ){
   // case mvc
-  if( !empty($model->data['is_mvc']) &&
-    !empty($model->data['path'])  &&
+  if( !empty($model->data['is_mvc']) &&    
     !empty($model->data['tab'])
   ){
     // define the two path for change

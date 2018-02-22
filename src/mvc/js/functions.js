@@ -4,7 +4,7 @@ bbn.ide = {
   title: 'IDE - ',
   selected: 0,
   dirs: data.dirs,
-  
+
   /**
    * Resizes the codemirror instance contained in ele
    * @param ele
@@ -18,7 +18,7 @@ bbn.ide = {
     }
     */
   },
-  
+
   /**
    * Returns the current value of the source dropdown - which is the current tree source
    *
@@ -63,7 +63,7 @@ bbn.ide = {
     }
     return hasVisibleChildren;
   },
-  
+
   /**
    * Closes a tab from the IDE and sends a request to the server to inform
    *
@@ -104,7 +104,7 @@ bbn.ide = {
     }
     return false;
   },
-  
+
   /**
    * Sets the dataSource of the sources dropdown
    *
@@ -132,7 +132,7 @@ bbn.ide = {
       return dataItem.value === value;
     });
   },
-  
+
   /**
    * Evaluates a code, in different ways depending on its nature
    * @returns {number}
@@ -246,7 +246,7 @@ bbn.ide = {
       });
     }
   },
-  
+
   /**
    * Duplicates an item (file or folder) from the tree
    *
@@ -316,7 +316,7 @@ bbn.ide = {
       });
     }
   },
-  
+
   /**
    * Deletes a file or a folder
    *
@@ -350,7 +350,7 @@ bbn.ide = {
       });
     })
   },
-  
+
   /**
    * Renames a file or folder
    *
@@ -408,7 +408,7 @@ bbn.ide = {
       });
     });
   },
-  
+
   /**
    * Reloads a node of the tree to refresh it
    * @param dataItem The node
@@ -437,7 +437,7 @@ bbn.ide = {
       });
     }
   },
-  
+
   /**
    * Exports the whole tree of a node into a ZIP file
    *
@@ -454,7 +454,7 @@ bbn.ide = {
       appui.success("Exported!");
     });
   },
-  
+
   /**
    * Creates a new directory
    *
@@ -537,7 +537,7 @@ bbn.ide = {
       });
     }
   },
-  
+
   /**
    * Creates a new file (or group fof files)
    *
@@ -665,7 +665,7 @@ bbn.ide = {
       });
     }
   },
-  
+
   /**
    * Saves the currently visible codemirror instance
    *
@@ -692,7 +692,7 @@ bbn.ide = {
       return 1;
     }
   },
-  
+
   /**
    * Returns an object formatted for using as a new tab in the main tabNav
    * @param a
@@ -747,7 +747,7 @@ bbn.ide = {
       return b;
     }
   },
-  
+
   /**
    *
    * @param panel
@@ -903,7 +903,7 @@ bbn.ide = {
     wid.activateTab(tab);
     bbn.ide.arrange(ele.tabNav("getContainer", ele.tabNav("getLength") - 1), obj, url, title);
   },
-  
+
   /**
    * Launches codemirror search function on current editor
    *
@@ -912,7 +912,7 @@ bbn.ide = {
   search: function (value) {
     $("div.bbn-code:visible", bbn.ide.tabstrip).codemirror("search", value || '');
   },
-  
+
   /**
    * Launches codemirror's replace all function on current editor
    *
@@ -922,7 +922,7 @@ bbn.ide = {
   replaceAll: function (v) {
     $("div.bbn-code:visible", bbn.ide.tabstrip).codemirror("replaceAll", v || '');
   },
-  
+
   /**
    * Launches codemirror's replace function on current editor
    *
@@ -932,7 +932,7 @@ bbn.ide = {
   replace: function (v) {
     $("div.bbn-code:visible", bbn.ide.tabstrip).codemirror("replace", v || '');
   },
-  
+
   /**
    * Launches codemirror's replace function on current editor
    *
@@ -941,7 +941,7 @@ bbn.ide = {
   findNext: function (v) {
     $("div.bbn-code:visible", bbn.ide.tabstrip).codemirror("findNext", v || '');
   },
-  
+
   /**
    * Launches codemirror's replace function on current editor
    *
@@ -950,7 +950,7 @@ bbn.ide = {
   findPrev: function (v) {
     $("div.bbn-code:visible", bbn.ide.tabstrip).codemirror("findPrev", v || '');
   },
-  
+
   /**
    * Adds a menu to a tab and submenus to sub
    *
@@ -997,7 +997,7 @@ bbn.ide = {
     return url + path + (data.dirs[src]['tabs'] !== undefined ? name : fn);
 
   },
-  
+
   /**
    * Changes the mode of a codemirror instance
    *
@@ -1023,7 +1023,7 @@ bbn.ide = {
       });
     }
   },
-  
+
   findCfg: function(file){
     for ( var n in bbn.ide.dirs ){
       if ( file.indexOf(n) === 0 ){
@@ -1032,7 +1032,7 @@ bbn.ide = {
     }
     return false;
   },
-  
+
   /**
    *
    * @param bt

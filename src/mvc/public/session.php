@@ -1,17 +1,11 @@
 <?php
-if ( isset($ctrl->post['session']) ){
-  echo \bbn\x::make_tree($ctrl->inc->session->get()).'<p> </p><hr><p> </p>'.\bbn\x::make_tree($_SERVER);
+if ( isset($ctrl->post['type']) ){
+  $ctrl->obj->data = \bbn\x::get_tree(
+    $ctrl->post['type'] === 'server' ?
+	    $_SERVER : $ctrl->inc->user->get_session()
+  );
 }
 else{
-  $ctrl->set_title('Infos Session');
-  echo
-    '<h2><button class="k-button"
-onclick="bbn.fn.post(\''.$ctrl->say_dir().'/session\',
-{session:1},
-$(\'#info_session_container\'));"><i class="fa fa-refresh"> </i></button> &nbsp; &nbsp; &nbsp; Infos de session</h2>'.
-    '<div
-class="bbn-line-break">'.
-    '</div>'.
-    '<div id="info_session_container" class="bbn-nl"> </div>';
-  $ctrl->add_script("bbn.fn.post('".$ctrl->say_dir()."/session', {session:1}, \$('#info_session_container'));");
+  $ctrl->obj->icon = 'fa fa-user-secret';
+  $ctrl->combo('Infos Session', ['root' => APPUI_IDE_ROOT]);
 }

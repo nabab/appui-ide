@@ -9,8 +9,8 @@ Vue.component('appui-ide-file', {
   template: '#bbn-tpl-component-appui-ide-file',
   props: ['source'],
   beforeMount(){
-    bbn.vue.setComponentRule(this.source.root + 'components/', 'appui');
-    bbn.vue.addComponent('ide/code');
+    bbn.vue.setComponentRule(this.source.root + 'components/', 'appui-ide');
+    bbn.vue.addComponent('code');
     bbn.vue.unsetComponentRule();
   },
   data(){
@@ -87,5 +87,3 @@ Vue.component('appui-ide-file', {
     });
   }
 });
-
-

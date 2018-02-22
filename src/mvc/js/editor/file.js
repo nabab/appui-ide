@@ -8,9 +8,9 @@
 (() =>{
   return {
     created(){
-      bbn.vue.setComponentRule(this.source.root + 'components/', 'appui');
-      bbn.vue.addComponent('ide/mvc');
-      bbn.vue.addComponent('ide/file');
+      bbn.vue.setComponentRule(this.source.root + 'components/', 'appui-ide');
+      bbn.vue.addComponent('mvc');
+      bbn.vue.addComponent('file');
       bbn.vue.unsetComponentRule();
     },
     data(){
