@@ -284,24 +284,28 @@
         }
       },
       setState(){
+
         const code = this.$refs.editor;
+
         //case for serach a content
         if ( appui.ide.search.link && (appui.ide.cursorPosition.line > 0 || appui.ide.cursorPosition.ch > 0) ){
-          let start = {
+          //for selection
+          /*let start = {
                 line: appui.ide.cursorPosition.line,
                 ch: appui.ide.cursorPosition.ch
               },
               end = {
                 line: appui.ide.cursorPosition.line,
                 ch: appui.ide.search.lastSearchRepository.length + appui.ide.cursorPosition.ch
-              };
+
+              };*/
+          code.widget.focus();
           setTimeout(() => {
-            code.widget.focus();
-            code.widget.getDoc().setSelections([{ 'anchor': start, 'head': end}]);
-            appui.ide.cursorPosition.line = 0;
-            appui.ide.cursorPosition.ch = 0;
-            appui.ide.search.link = false;
-          }, 400);
+            code.cursorPosition(appui.ide.cursorPosition.line, appui.ide.cursorPosition.ch);
+            this.$nextTick(()=>{
+               appui.ide.search.link = false;
+            });
+          }, 800);
         }
         else{
           this.$nextTick(() => {

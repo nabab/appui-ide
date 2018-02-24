@@ -82,7 +82,7 @@
     <div v-else class="bbn-h-100 bbn-w-100 bbn-padded">
       <span class="bbn-xxxl">
         <strong>
-          <?=_('no search result required')?>
+          <?=_('no search result')?>
         </strong>
       </span>
     </div>
