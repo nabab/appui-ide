@@ -286,9 +286,10 @@
       setState(){
 
         const code = this.$refs.editor;
-
+        bbn.fn.warning("setState");
         //case for serach a content
         if ( appui.ide.search.link && (appui.ide.cursorPosition.line > 0 || appui.ide.cursorPosition.ch > 0) ){
+
           //for selection
           /*let start = {
                 line: appui.ide.cursorPosition.line,
@@ -304,6 +305,8 @@
             code.cursorPosition(appui.ide.cursorPosition.line, appui.ide.cursorPosition.ch);
             this.$nextTick(()=>{
                appui.ide.search.link = false;
+               appui.ide.cursorPosition.line= 0;
+               appui.ide.cursorPosition.ch= 0;
             });
           }, 800);
         }

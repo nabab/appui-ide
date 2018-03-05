@@ -1,6 +1,6 @@
 <?php
 if ( $ctrl->inc->ide ){
-  $ctrl->data=[
+  $ctrl->data = [
     'repository' => '',
     'nameRepository' => '',
     'typeSearch' => '',
@@ -39,6 +39,7 @@ if ( $ctrl->inc->ide ){
       $ctrl->data['mvc'] = true;
     }
     $ctrl->obj->url = $ctrl->get_url();
-    $ctrl->combo("<i class='fa fa-search'></i>"._("Search"), true);
+    $ctrl->obj->icon = 'fa fa-search';
+    $ctrl->combo(\bbn\str::cut($ctrl->data['search'], 12), true);
   }
 }

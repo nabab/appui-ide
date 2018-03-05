@@ -11,11 +11,11 @@
           ref="editor"
 ></bbn-code>
 <bbn-splitter v-else
-              class="perms-splitter"
               orientation="vertical"
+              :collapsible="true"
+              :resizable="true"
 >
   <bbn-pane :collapsible="false"
-            :resizable="true"
             :scrollable="false">
     <bbn-code v-model="value"
               :mode="mode"
@@ -29,9 +29,7 @@
               ref="editor"
     ></bbn-code>
   </bbn-pane>
-  <bbn-pane :collapsible="false"
-            :resizable="true"
-            :scrollable="false">
+  <bbn-pane :scrollable="false">
     <div class="k-block bbn-block bbn-100">
       <div class="k-header bbn-c"><?=('Permissions setting')?></div>
         <div class="bbn-block bbn-hspadded bbn-100">

@@ -535,12 +535,30 @@ class ide {
 
               // Change permissions
               if ( $ope === 'rename' ){
-                if ( !empty($t['perms']) && !$this->change_perm_by_real($t['old'], $t['new'], empty($cfg['is_file']) ? 'dir' : 'file') ){
-                  $this->error("Error during the file|folder permissions change: old -> $t[old] , new -> $t[new]");
-                  return false;
+                  if( empty( $this->real_to_perm($t['old']) ) &&
+                    !empty($cfg['is_file']) &&
+                    (strpos($t['old'], '/mvc/public/') !== false)
+                  ){
+                    if ( !$this->create_perm_by_real($t['old']) ){
+                      return $this->error("Impossible to create the option for rename");
+                    }
                 }
+                if ( !empty($t['perms']) && !$this->change_perm_by_real($t['old'], $t['new'], empty($cfg['is_file']) ? 'dir' : 'file') ){
+                  if( !empty( $this->real_to_perm($t['old'])) ){
+                    $this->error("Error during the file|folder permissions change: old -> $t[old] , new -> $t[new]");
+                    return false;
+                  }
+                }
+
               }
               else{
+                if( !empty( $this->real_to_perm($t['old']) ) &&
+                    !empty($cfg['is_file']) && (strpos($t['old'], '/mvc/public/') !== false)
+                  ){
+                  if ( !$this->create_perm_by_real($t['old']) ){
+                    return $this->error("Impossible to create the option for move");
+                  }
+                }
                 if ( !empty($t['perms']) && !$this->move_perm_by_real($t['old'], $t['new'], empty($cfg['is_file']) ? 'dir' : 'file') ){
                   $this->error("Error during the file|folder permissions change: old -> $t[old] , new -> $t[new]");
                   return false;
@@ -925,7 +943,7 @@ class ide {
         }
       }
       file_put_contents(self::$current_file, $file['code']);
-    
+
       /*if ( $this->pref ){
         $this->set_file_preferences(md5($file['code']), $file);
       }*/
@@ -1155,12 +1173,14 @@ class ide {
    */
   public function change_perm_by_real(string $old, string $new, string $type = 'file'){
     $type = strtolower($type);
+
     if ( !empty($old) &&
       !empty($new) &&
       file_exists($new) &&
       ($id_opt = $this->real_to_perm($old, $type)) &&
       !$this->real_to_perm($new, $type)
     ){
+
       $is_file = $type === 'file';
       $code = $is_file ? \bbn\str::file_ext(basename($new), 1)[0] : basename($new).'/';
 
@@ -1391,6 +1411,7 @@ class ide {
     ){
 
       $is_file = $type === 'file';
+
       // Check if it's an external route
       foreach ( $this->routes as $i => $r ){
         if ( strpos($file, $r) === 0 ){
@@ -1402,6 +1423,7 @@ class ide {
           $f = $i . '/' . $f;
           break;
         }
+
       }
       // Internal route
       if ( empty($f) ){
