@@ -124,8 +124,7 @@
               select: () =>{
                 this.codeFoldAll();
               }
-            }
-            ]
+            }]
           }, {
             text: bbn._('History'),
             items: [{
