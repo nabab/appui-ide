@@ -793,9 +793,10 @@
           active.test();
         }
       },
-      testNodeOfTree(node){
+      testNodeOfTree(node){        
         if ( this.isMVC && !this.ctrlTest ){
-          bbn.fn.link( node.data.path, true );
+          let route = this.repositories[this.currentRep].route ? this.repositories[this.currentRep].route + '/' :'' ;
+          bbn.fn.link( route +node.data.path, true );
         }
         else if ( !this.isMVC ){
           this.treeNodeActivate(node)

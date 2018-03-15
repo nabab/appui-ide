@@ -97,7 +97,6 @@ if ( !empty($model->data['repository']) &&
               'tab' => $tab,
               'ext' => !empty($is_file) ? $ext : false,
             ];
-
             if ( $is_file ){
               $files[$name] = $cfg;
             }
