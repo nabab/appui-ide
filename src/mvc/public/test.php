@@ -4,7 +4,7 @@
 if ( BBN_IS_DEV || $ctrl->inc->user->is_dev() ){
   if ( isset($ctrl->post['code']) && (\strlen($ctrl->post['code']) > 5) ){
     $bbn_code = $ctrl->post['code'];
-    $_SESSION[BBN_SESS_NAME]['code'] = $bbn_code;
+    $_SESSION[BBN_APP_NAME]['code'] = $bbn_code;
     $bbn_opening = strpos($bbn_code, '<?php');
     $bbn_closing = strrpos($bbn_code, '?>');
     $bbn_num_open = preg_match_all('#<\\?php[\\s+]#', $bbn_code);

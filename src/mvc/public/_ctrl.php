@@ -13,9 +13,4 @@ $ctrl->data['routes'] = $ctrl->get_routes();
 $ctrl->data['shared_path'] = BBN_SHARED_PATH;
 
 $ctrl->add_inc('ide', new \appui\ide($ctrl->inc->options, $ctrl->data['routes'], $ctrl->inc->pref));
-
-bindtextdomain('appui_ide', BBN_LIB_PATH.'bbn/appui-ide/src/locale');
-setlocale(LC_ALL, "fr_FR.utf8");
-textdomain('appui_ide');
-
 return 1;
