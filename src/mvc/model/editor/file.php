@@ -13,7 +13,7 @@ if ( !empty($model->data['url']) && isset($model->inc->ide) ){
   $file = $model->inc->ide->url_to_real($model->data['url']);
   $route = '';
   foreach ( $model->data['routes'] as $i => $r ){
-    if ( strpos($file, $r) === 0 ){
+    if ( strpos($file, $r['path']) === 0 ){
       $route = $i;
     }
   }

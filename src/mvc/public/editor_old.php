@@ -17,7 +17,7 @@ if ( empty($ctrl->baseURL) ){
   // Routes
   foreach ( $model['dirs'] as $i => $dir ){
     foreach ( $ctrl->data['routes'] as $k => $r ){
-      if ( strpos($dirs->decipher_path($i), $r) === 0 ){
+      if ( strpos($dirs->decipher_path($i), $r['path']) === 0 ){
         $model['dirs'][$i]['route'] = $k;
       }
     }

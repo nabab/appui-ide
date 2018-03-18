@@ -10,7 +10,7 @@ if ( isset($model->data['routes'], $model->inc->ide) ){
   // Routes
   foreach ( $repos as $i => $dir ){
     foreach ( $model->data['routes'] as $k => $r ){
-      if ( strpos($model->inc->ide->decipher_path($i), $r) === 0 ){
+      if ( strpos($model->inc->ide->decipher_path($i), $r['path']) === 0 ){
         $repos[$i]['route'] = $k;
       }
     }
