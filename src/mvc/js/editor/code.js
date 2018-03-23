@@ -10,6 +10,14 @@
       return $.extend({
         ide: bbn.vue.closest(this, '.bbn-tabnav').$parent.$data,
         originalValue: this.source.value,
+        imessage: {
+          title: '',
+          content: '',
+          start: null,
+          end: null,
+          id_option: this.source.permissions ? this.source.permissions.id : null
+        },
+        today: moment().format('YYYY-MM-DD HH:mm:ss'),
         initialState: {
           marks: this.source.marks,
           selections: this.source.selections,
@@ -82,7 +90,11 @@
           return this.path + (this.ide.path.length ? this.ide.path + '/' : '') + this.ide.filename + '.' + this.extension;
         }
         return false;
-      }/*
+      },
+      settingFormPermissions(){
+        return this.permissions !== undefined
+      },
+      /*
 
       fullPath(){
         const rep = this.ide.repositories[this.ide.repository],
@@ -106,7 +118,10 @@
           return this.path + (this.ide.path.length ? this.ide.path + '/' : '') + this.ide.filename + '.' + this.extension;
         }
         return false;
-       }*/
+       },*/
+      saveButtonText(){
+        return this.imessage.id ? bbn._('Save') : bbn._('Add');
+      }
     },
     watch: {
       isChanged(isChanged){
@@ -284,9 +299,7 @@
         }
       },
       setState(){
-
         const code = this.$refs.editor;
-        bbn.fn.warning("setState");
         //case for serach a content
         if ( appui.ide.search.link && (appui.ide.cursorPosition.line > 0 || appui.ide.cursorPosition.ch > 0) ){
 
@@ -315,7 +328,35 @@
             code.loadState(this.initialState);
           });
         }
-      }
+      },
+      saveImessage(){
+        if ( this.imessage.title && this.imessage.content && this.imessage.id_option ){
+          bbn.vue.closest(this, 'bbn-tab').popup().confirm(bbn._('Are you sure you want save this internal message?'), () => {
+            bbn.fn.post(this.ide.root + 'actions/imessages/add', this.imessage, d => {
+              if ( d.success ){
+                this.source.imessages.push($.extend({}, this.imessage));
+                this.newImessage();
+                appui.success(bbn._('Saved'));
+              }
+            });
+          });
+        }
+      },
+      newImessage(){
+        this.imessage.title = '';
+        this.imessage.content = '';
+        this.imessage.start = null;
+        this.imessage.end = null;
+      },
+      editImessage(im){
+        this.imessage.title = im.title;
+        this.imessage.content = im.content;
+        this.imessage.start = im.start;
+        this.imessage.end = im.end;
+      },
+			changeStart(e){
+				bbn.fn.log('aaaa', e);
+			}
     }
   }
 })();

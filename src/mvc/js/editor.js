@@ -37,7 +37,7 @@
           line: 0,
           ch: 0
         },
-
+        permFile:{},
         menu: [
           {
             text: 'File',
@@ -497,42 +497,44 @@
        *
        */
       treeContextMenu(n , i){
-        let objContext = [{
-          icon: 'fa fa-file-o',
-          text: bbn._('New file'),
-          command: (node) => {
-            this.newFile(node)
+        let objContext = [
+          {
+            icon: 'fa fa-file-o',
+            text: bbn._('New file'),
+            command: (node) => {
+              this.newFile(node)
+            }
+          }, {
+            icon: 'fa fa-folder',
+            text: bbn._('New directory'),
+            command: (node) => {
+              this.newDir(node)
+            }
+          }, {
+            icon: 'fa fa-edit',
+            text: bbn._('Rename'),
+            command: (node) => {
+              this.rename(node)
+            }
+          }, {
+            icon: 'fa fa-files-o',
+            text: bbn._('Copy'),
+            command: (node) => {
+              this.copy(node)
+            }
+          },
+          /*{
+            icon: 'fa fa-file-zip-o',
+            text: bbn._('Export'),
+            command: () => { this.export(n) }
+          },*/ {
+            icon: 'fa fa-trash',
+            text: bbn._('Delete'),
+            command: (node) => {
+              this.deleteElement(node)
+            }
           }
-        }, {
-          icon: 'fa fa-folder',
-          text: bbn._('New directory'),
-          command: (node) => {
-            this.newDir(node)
-          }
-        }, {
-          icon: 'fa fa-edit',
-          text: bbn._('Rename'),
-          command: (node) => {
-            this.rename(node)
-          }
-        }, {
-          icon: 'fa fa-files-o',
-          text: bbn._('Copy'),
-          command: (node) => {
-            this.copy(node)
-          }
-        },
-        /*{
-          icon: 'fa fa-file-zip-o',
-          text: bbn._('Export'),
-          command: () => { this.export(n) }
-        },*/ {
-          icon: 'fa fa-trash',
-          text: bbn._('Delete'),
-          command: (node) => {
-            this.deleteElement(node)
-          }
-        }];
+        ];
         if ( n.data.folder ){
           let obj = objContext.slice();
           obj.unshift({
@@ -546,8 +548,47 @@
         }
         else{
           let obj = objContext.slice();
+          if ( this.isMVC ){
+            let arr = [
+              {
+                icon: 'fa fa-external-link-square',
+                text: bbn._('Go to') + " CSS",
+                color: "red",
+                command: (node) => {
+                  this.goToTab(node, "css")
+                }
+              },{
+                  icon: 'fa fa-external-link-square',
+                  text: bbn._('Go to') + " Javascript",
+                  command: (node) => {
+                    this.goToTab(node, "js")
+                  }
+              },{
+                  icon: 'fa fa-external-link-square',
+                  text: bbn._('Go to') + " View",
+                  command: (node) => {
+                    this.goToTab(node, "html")
+                  }
+              },{
+                  icon: 'fa fa-external-link-square',
+                  text: bbn._('Go to') + " Model",
+                  command: (node) => {
+                    this.goToTab(node, "model")
+                  }
+              },{
+                  icon: 'fa fa-external-link-square',
+                  text: bbn._('Go to') + " Controller",
+                  command: (node) => {
+                    this.goToTab(node, "php")
+                  }
+              }
+            ];
+            arr.forEach((item ,id)=>{
+              obj.unshift(item);
+            })
 
 
+          }
           obj.unshift({
             icon: 'fa fa-magic',
             text: bbn._('Test code!'),
@@ -557,6 +598,16 @@
           });
           return obj;
         }
+      },
+      goToTab(ele, tab){
+        bbn.fn.log("guarda go to ", ele);
+        this.$refs.tabstrip.load(
+          'file/' +
+          this.currentRep +
+          (ele.data.dir || '') +
+          ele.data.name +
+          '/_end_/' + tab
+        );
       },
       /**
        * function for reloading the entire tree fileList
@@ -578,6 +629,20 @@
           if( !this.isMVC ){
             this.ctrlTest = true;
           }
+          else{
+            if(d.data.tab === "php"){
+              let pathFile = this.repositories[this.currentRep]['bbn_path']+"/"+this.repositories[this.currentRep]['path'] + d.data.path +".php";
+              bbn.fn.post(this.root + 'permissions/get', {
+                file: this.repositories[this.currentRep]['path'] +"public/"+ d.data.path +".php",
+                path: this.repositories[this.currentRep]['bbn_path']+"/"
+              }, (ele)=>{
+                  this.permFile = ele.permissions
+                }
+              );
+            }
+            bbn.fn.log("opendata", d)
+          }
+
           this.openFile(d);
         }/*  let existTab = false;
          for(let tab of this.$refs.tabstrip.tabs){
@@ -678,23 +743,40 @@
        * @param file
        */
       openFile(file){
-
         let existTab = false;
         for(let tab of this.$refs.tabstrip.tabs){
-
           if ( tab.title === file.data.path ){
             existTab = true;
             break;
           }
         }
         if ( !existTab ){
-          this.$refs.tabstrip.load(
+          let tab = "";
+          if ( file.data.tab ){
+            if ( file.data.tab === "php" ){
+              tab = '/permissions_settings';
+            }
+            else{
+              tab = '/' + file.data.tab;
+            }
+          }
+
+
+          //old temporaney disbled
+          /*this.$refs.tabstrip.load(
             'file/' +
             this.currentRep +
             (file.data.dir || '') +
             file.data.name +
             '/_end_' +
             (file.data.tab ? '/' + file.data.tab : '')
+          );*/
+          this.$refs.tabstrip.load(
+            'file/' +
+            this.currentRep +
+            (file.data.dir || '') +
+            file.data.name +
+            '/_end_' + tab
           );
         }
       },
@@ -793,7 +875,7 @@
           active.test();
         }
       },
-      testNodeOfTree(node){        
+      testNodeOfTree(node){
         if ( this.isMVC && !this.ctrlTest ){
           let route = this.repositories[this.currentRep].route ? this.repositories[this.currentRep].route + '/' :'' ;
           bbn.fn.link( route +node.data.path, true );

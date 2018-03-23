@@ -4,11 +4,35 @@
 
 if ( !empty($model->data['url']) && isset($model->inc->ide) ){
   $model->data['url'] = str_replace('/_end_', '', $model->data['url']);
-  //die(var_dump($model->data['url']));
-  if ( $ret = $model->inc->ide->load($model->data['url']) ){
-    return $ret;
+  //we convert the string into an array to check whether we need to provide permission information or not
+  $stepUrl = explode("/",$model->data['url']);
+  //if we are loading the settings tab
+  if ( $stepUrl[count($stepUrl) - 1 ] === 'permissions_settings' ){
+    $url = str_replace('/permissions_settings', '/php', $model->data['url']);
+    $ris = $model->inc->ide->url_to_real($url, true);
+    if ( !$model->inc->ide->get_file_permissions($ris['file']) ){
+      \bbn\x::log(["no" ],"codeIde");
+      if ( !$model->inc->ide->create_perm_by_real($ris['file']) ){
+        return ['error' => $model->inc->ide->get_last_error()];
+      }
+    }
+    if ( ($perm = $model->inc->ide->get_file_permissions($ris['file'])) &&
+      !empty($perm['permissions'])
+    ){
+      if ( !empty($perm['permissions']['id']) ){
+        $imess = new \bbn\appui\imessages($model->db);
+        $perm['imessages'] = $imess->get_by_perm($perm['permissions']['id'], false);
+      }
+      return $perm;
+    }
   }
   else {
-    return ['error' => $model->inc->ide->get_last_error()];
+    if ( $ret = $model->inc->ide->load($model->data['url']) ){
+      if ( isset($ret['permissions']) ){
+        unset($ret['permissions']);
+      }
+    }
+    return $ret;
   }
 }
+return ['error' => $model->inc->ide->get_last_error()];

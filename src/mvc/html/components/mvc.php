@@ -23,6 +23,13 @@
                :fcolor="repositories[repository].tabs['_ctrl'].fcolor"
       >
       </bbn-tab>
+      <!--form permision-->
+      <bbn-tab :static="true"
+               :load="true"
+               url="permissions_settings"
+               title= "<?=_('Settings')?>"
+               :selected="true"
+      ></bbn-tab>
       <bbn-tab v-for="(tab, idx) in repositories[repository].tabs"
                v-if="tab.url !== '_ctrl'"
                :static="true"

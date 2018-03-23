@@ -24,7 +24,7 @@ Vue.component('appui-ide-file', {
       if ( tab.extensions ){
         for ( let id in tab.extensions ){
           exts.push({
-            icon: 'zmdi zmdi-refresh',
+            icon: 'fa fa-cogs',
             text: tab.extensions[id].ext,
             key: tab.extensions[id].ext,
             command: this.changeExtension
@@ -45,7 +45,32 @@ Vue.component('appui-ide-file', {
   methods:{
     //used in the template, returns a copy of the complete menu that will later be retracted in the tabLoaded event with the 'loading tab' function
     getMenu(){
-      return this.tabMenus ? this.tabMenus.slice() : undefined;
+      let arr = this.tabMenus ? this.tabMenus.slice() : [];
+      arr.push({
+        icon: 'zmdi zmdi-refresh',
+        text: bbn._("Refresh code"),
+        command: this.reloadTab
+      })
+      return arr
+    },
+    reloadTab(){
+      let tab = this.$refs.tabstrip.getVue(this.$refs.tabstrip.selected);
+      if ( tab.getComponent().isChanged ){
+        bbn.fn.confirm( bbn._("Modified code do you want to refresh anyway?"), ()=>{
+          bbn.fn.post( appui.ide.root + 'editor/' + this.$refs.tabstrip.baseURL + tab.url, (d)=>{
+            if ( d.data.id ){
+              tab.reload();
+            }
+          });
+        });
+      }
+      else{
+        bbn.fn.post( appui.ide.root + 'editor/' + this.$refs.tabstrip.baseURL + tab.url, (d)=>{
+          if ( d.data.id ){
+            tab.reload();
+          }
+        });
+      }
     },
     changeExtension(idx, obj){
       let code = bbn.vue.find(this , 'bbn-code'),

@@ -1133,9 +1133,11 @@ class ide {
    * @return array|false
    */
   public function get_file_permissions(string $file = null){
+
     if ( empty($file) ){
       $file = self::$current_file;
     }
+
     if ( !empty($file) &&
       ($id_opt = $this->real_to_perm($file)) &&
       ($opt = $this->options->option($id_opt))
@@ -1243,14 +1245,14 @@ class ide {
     ){
       $is_file = $type === 'file';
       // Check if it's an external route
-      foreach ( $this->routes as $i => $r ){
-        if ( strpos($file, $r) === 0 ){
+      foreach ( $this->routes as $r ){
+        if ( strpos($file, $r['path']) === 0 ){
           // Remove route
-          $f = substr($file, \strlen($r), \strlen($file));
+          $f = substr($file, \strlen($r['path']), \strlen($file));
           // Remove /mvc/public
           $f = substr($f, \strlen('/mvc/public'), \strlen($f));
           // Add the route's name to path
-          $f = $i . '/' . $f;
+          $f = $r['url'] . '/' . $f;
         }
       }
       // Internal route
@@ -1413,14 +1415,16 @@ class ide {
       $is_file = $type === 'file';
 
       // Check if it's an external route
-      foreach ( $this->routes as $i => $r ){
-        if ( strpos($file, $r) === 0 ){
+      foreach ( $this->routes as  $r ){
+
+        if ( strpos($file, $r['path']) === 0 ){
          // Remove route
-          $f = substr($file, \strlen($r), \strlen($file));
+          $f = substr($file, \strlen($r['path']), \strlen($file));
           // Remove /mvc/public
           $f = substr($f, \strlen('/mvc/public'), \strlen($f));
           // Add the route's name to path
-          $f = $i . '/' . $f;
+          $f = $r['url'] . '/' . $f;
+
           break;
         }
 
@@ -1428,15 +1432,12 @@ class ide {
       // Internal route
       if ( empty($f) ){
         $root_path = BBN_APP_PATH.'mvc/public/';
-
         if ( strpos($file, $root_path) === 0 ){
           // Remove root path
           $f = substr($file, \strlen($root_path), \strlen($file));
-
         }
       }
       if ( !empty($f) ){
-
         $bits = \bbn\x::remove_empty(explode('/', $f));
         $code = $is_file ? \bbn\str::file_ext(array_pop($bits), 1)[0] : array_pop($bits).'/';
         $bits = array_map(function($b){
