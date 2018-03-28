@@ -134,7 +134,7 @@
         const editor = this.$refs.editor,
               state = editor.getState();
               bbn.fn.warning("stato");
-              bbn.fn.log(state);
+              bbn.fn.log(  this.getTab());
         if ( (this.isChanged && state && state.selections && state.marks) || (this.initialState !== state) && (state !== false) ){
           bbn.fn.post(this.ide.root + "actions/save", {
             repository: this.ide.repository,
@@ -153,6 +153,17 @@
             if ( d.data && d.data.success ){
               this.originalValue = this.value;
               appui.success(bbn._("File saved!"));
+              bbn.fn.log("save",this, this.getTab());
+              if ( this.getTab().source.tab === "php" ){
+
+                let tabs = bbn.vue.closest(this, 'appui-ide-mvc').$refs.tabstrip.tabs;
+                for( let tab of tabs ){
+                  if ( tab.title === "Settings" && (tab.disabled === true) ){
+                    tab.disabled = false;
+                  }
+                }
+                bbn.vue.find(appui.ide, "appui-ide-mvc").source.setting = true;
+              }
             }
             else if ( d.data && d.data.deleted ){
               this.originalValue = this.value;

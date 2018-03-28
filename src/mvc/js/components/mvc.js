@@ -107,12 +107,19 @@ Vue.component('appui-ide-mvc', {
         return vm.path.split('/');
       }
       return [];
+    },
+    disabledSetting(){
+      return !this.source.settings
     }
   },
+  /*mounted:{
+    if ( appui.ide.settings ){
+      return appui.ide.settings
+    }
+  }*/
   methods:{
     //used in the template, returns a copy of the complete menu that will later be retracted in the tabLoaded event with the 'loading tab' function
     getMenu(url){
-
       let addCode = {
           icon: 'fa fa-plus',
           text: bbn._("Add code"),

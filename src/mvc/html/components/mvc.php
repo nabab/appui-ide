@@ -26,7 +26,8 @@
       <!--form permision-->
       <bbn-tab :static="true"
                :load="true"
-               url="permissions_settings"
+               url="settings"
+               :disabled="disabledSetting"               
                title= "<?=_('Settings')?>"
                :selected="true"
       ></bbn-tab>

@@ -37,7 +37,7 @@
           line: 0,
           ch: 0
         },
-        permFile:{},
+
         menu: [
           {
             text: 'File',
@@ -625,20 +625,22 @@
        * @param n The node
        */
       treeNodeActivate(d){
+        //this.settings = false;
         if ( !d.data.folder ){
           if( !this.isMVC ){
             this.ctrlTest = true;
           }
           else{
             if(d.data.tab === "php"){
-              let pathFile = this.repositories[this.currentRep]['bbn_path']+"/"+this.repositories[this.currentRep]['path'] + d.data.path +".php";
+              //this.settings= d.data;
+          /*    let pathFile = this.repositories[this.currentRep]['bbn_path']+"/"+this.repositories[this.currentRep]['path'] + d.data.path +".php";
               bbn.fn.post(this.root + 'permissions/get', {
                 file: this.repositories[this.currentRep]['path'] +"public/"+ d.data.path +".php",
                 path: this.repositories[this.currentRep]['bbn_path']+"/"
               }, (ele)=>{
                   this.permFile = ele.permissions
                 }
-              );
+              );*/
             }
             bbn.fn.log("opendata", d)
           }
@@ -754,7 +756,7 @@
           let tab = "";
           if ( file.data.tab ){
             if ( file.data.tab === "php" ){
-              tab = '/permissions_settings';
+              tab = '/settings';
             }
             else{
               tab = '/' + file.data.tab;
@@ -869,16 +871,19 @@
        */
       test(){
         let  active = this.getActive(true);
-        bbn.fn.log("test", active);
-
-        if ( active && $.isFunction(active.test) ){
-          active.test();
+        
+        if ( active ){
+          //active.test();
+          let project =  active.rep.route ? active.rep.route + "/" : '';
+          project += this.$refs.tabstrip.tabs[this.$refs.tabstrip.selected].title;
+          bbn.fn.link( project, true );
         }
       },
       testNodeOfTree(node){
         if ( this.isMVC && !this.ctrlTest ){
           let route = this.repositories[this.currentRep].route ? this.repositories[this.currentRep].route + '/' :'' ;
-          bbn.fn.link( route +node.data.path, true );
+          bbn.fn.log("TEST", route, node.data.path);
+          bbn.fn.link( route + node.data.path, true );
         }
         else if ( !this.isMVC ){
           this.treeNodeActivate(node)
