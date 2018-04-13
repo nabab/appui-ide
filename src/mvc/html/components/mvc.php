@@ -27,7 +27,7 @@
       <bbn-tab :static="true"
                :load="true"
                url="settings"
-               :disabled="disabledSetting"               
+               :disabled="disabledSetting"
                title= "<?=_('Settings')?>"
                :selected="true"
       ></bbn-tab>
@@ -36,7 +36,7 @@
                :static="true"
                :load="true"
                :url="tab.url"
-               :title="tab.title"
+               :title="renderTitleTab(tab)"
                :key="tab.url"
                :style="{backgroundColor: tab.bcolor, color: tab.fcolor}"
                :selected="tab.default"

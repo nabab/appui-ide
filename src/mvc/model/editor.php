@@ -7,6 +7,7 @@ if ( isset($model->data['routes'], $model->inc->ide) ){
   }
 
   $repos = $model->inc->ide->repositories();
+
   // Routes
   foreach ( $repos as $i => $dir ){
     foreach ( $model->data['routes'] as $k => $r ){
@@ -15,9 +16,9 @@ if ( isset($model->data['routes'], $model->inc->ide) ){
       }
     }
   }
-  
+
   $ide_cfg = $model->inc->user->get_cfg('ide');
-  
+
   return [
     'config' => [],
     'repositories' => $repos,

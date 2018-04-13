@@ -37,7 +37,6 @@
           line: 0,
           ch: 0
         },
-
         menu: [
           {
             text: 'File',
@@ -162,7 +161,10 @@
             //enabled: false,
             items: [{
               text: '<i class="fa fa-cog"></i>' + bbn._('Manage directories'),
-              select: "bbn.ide.cfgDirs();",
+              select: ()=>{
+                //for show Directories manager
+                this.$refs.tabstrip.load('directories');
+              }
             }, {
               text: '<i class="fa fa-language"></i>' + bbn._('IDE style'),
               select: "bbn.ide.cfgStyle();",
@@ -871,7 +873,7 @@
        */
       test(){
         let  active = this.getActive(true);
-        
+
         if ( active ){
           //active.test();
           let project =  active.rep.route ? active.rep.route + "/" : '';

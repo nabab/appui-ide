@@ -58,9 +58,27 @@ Vue.component('appui-ide-mvc', {
           },{ //tab javascript
             type:"js",
             codes:{
+              VueStructure: "(() => {\n"+
+                "  return{\n" +
+                "    mixins:[],\n" +
+                "    props:{},\n" +
+                "    data(){\n" +
+                "      return{}\n" +
+                "    },\n"+
+                "    computed:{},\n" +
+                "    methods:{},\n" +
+                "    watch:{},\n" +
+                "    created(){},\n" +
+                "    mounted(){},\n" +
+                "    components:{}\n" +
+                "  }\n"+
+                "})();",
               function_arrow: "()=>{}",
               for_in: "for(let variable in variable){}",
-              for_of: "for(let variable of variable){}"
+              for_of: "for(let variable of variable){}",
+              forEach: "array.forEach((item, id)=>{\n"+"});",
+              arrayFilter: "array.filter(()=>{\n" +
+                      "   return  condition \n" +"});"
             }
           },{ //tab css
             type:"css",
@@ -79,7 +97,7 @@ Vue.component('appui-ide-mvc', {
           let ext = tab.extensions[id].ext;
           exts.push({
             icon: 'fa fa-cogs',
-            text: bbn._('switch to')  +  '<strong>' + ext + '</strong>',
+            text: bbn._('switch to')  +  ' <strong>' + ext + '</strong>',
             key: ext,
             command: this.changeExtension
           });
@@ -97,7 +115,7 @@ Vue.component('appui-ide-mvc', {
       filename: filename,
       tabsMenu: tabsMenu,
       permissions: ide.permFile,
-      codesBlock: listCodes
+      codesBlock: listCodes,      
     });
   },
   computed: {
@@ -118,6 +136,30 @@ Vue.component('appui-ide-mvc', {
     }
   }*/
   methods:{
+    //for title in tabs ide
+    renderTitleTab(tab){
+        switch(tab.title){
+          //icon for tab controller
+          case "Controller": return "<i class='bbn-xl icon-php'></i>";
+                break;
+          //icon for tab private
+          case "Private": return "<i class='bbn-xl icon-php-alt'></i>";
+                break;
+          //icon for tab model
+          case "Model": return "<i class='bbn-xl icon-database'></i>";
+                break;
+          //icon for tab html
+          case "View": return "<i class='bbn-xl icon-html'></i>";
+                break;
+          //icon for tab javascript
+          case "JavaScript": return "<i class='bbn-xl icon-javascript-alt'></i>";
+                break;
+          //icon for tab css
+          case "CSS": return "<i class='bbn-xl icon-css'></i>";
+                break;
+          default: return tab.title;
+        }
+    },
     //used in the template, returns a copy of the complete menu that will later be retracted in the tabLoaded event with the 'loading tab' function
     getMenu(url){
       let addCode = {
@@ -133,7 +175,7 @@ Vue.component('appui-ide-mvc', {
               icon: 'fa fa-code',
               text: i,
               command: () =>{
-                this.addSnaipet(this.codesBlock[id].codes[i])
+                this.addSnippet(this.codesBlock[id].codes[i])
               }
             });
           }
@@ -151,15 +193,9 @@ Vue.component('appui-ide-mvc', {
       arr.push(addCode);
       return arr;
     },//method for add block of code menu sub tab
-    addSnaipet(addCode){
-      let tab = this.$refs.tabstrip.getVue(this.$refs.tabstrip.selected),
-          code = bbn.vue.find(tab, "bbn-code"),
-          state = code.getState(),
-          position = {
-            line: state.line,
-            ch: state.char
-          };
-      code.widget.replaceRange("\n" + addCode + "\n", position);
+    addSnippet(addCode){
+      let tab = this.$refs.tabstrip.getVue(this.$refs.tabstrip.selected);
+      bbn.vue.find(tab, "bbn-code").addSnippet(addCode);
     },
     reloadTab(){
       let tab = this.$refs.tabstrip.getVue(this.$refs.tabstrip.selected);

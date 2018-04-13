@@ -108,6 +108,13 @@
                    load="true"
                    :title="'<i class=\'bbn-xl zmdi zmdi-pin-help\'> </i>'">
           </bbn-tab>
+          <!--manager directory-->
+          <bbn-tab :static="true"
+                   :load="true"
+                   url="directories"
+                   title="Manager directories"
+                   :style="{backgroundColor:'white', color: 'black'}"
+          ></bbn-tab>
         </bbn-tabnav>
       </bbn-pane>
       <bbn-pane :size="200"

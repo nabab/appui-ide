@@ -1,5 +1,5 @@
 // Javascript Document
-$("#error_log_grid").kendoGrid({
+/*$("#error_log_grid").kendoGrid({
   filterable: true,
   sortable: true,
   pageable: {
@@ -108,3 +108,14 @@ $("#error_log_grid").kendoGrid({
     });
   }
 });
+*/
+(()=>{
+  return{
+  /*  components:{
+      'ide-info-error-log': {
+        template: '#apst-ide-info-error-log',
+        name:'ide-info-error-log'
+      }
+    }*/
+  }
+})();

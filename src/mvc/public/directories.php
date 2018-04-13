@@ -1,5 +1,6 @@
 <?php
 /* @var $ctrl \bbn\mvc */
+
 $ctrl->data = $ctrl->post;
 $model = $ctrl->get_model()['ret'];
 
