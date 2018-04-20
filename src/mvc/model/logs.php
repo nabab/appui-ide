@@ -12,6 +12,7 @@ foreach ( $log_files as $lf ){
   $res[basename($lf)] = $lf;
 }
 ksort($res);
+
 if ( !empty($model->data['log']) ){
   //die(var_dump("wwww"));
   $output = [];
@@ -19,14 +20,18 @@ if ( !empty($model->data['log']) ){
     file_put_contents($res[$model->data['log']], '');
   }
   else{
+
     $file = escapeshellarg($res[$model->data['log']]); // for the security concious (should be everyone!)
     $num_lines = isset($model->data['num_lines']) && \bbn\str::is_integer($model->data['num_lines']) && ($model->data['num_lines'] > 0) && ($model->data['num_lines'] <= 1000) ? $model->data['num_lines'] : 100;
     $line = "tail -n $num_lines $file";
     exec($line, $output);
     $res = [];
     $pid = 0;
+
   }
+  
   return ['content' => implode("\n", $output)];
+
 }
 else {
   if( !empty($model->data['md5']) && !empty($model->data['fileLog']) ){
@@ -40,7 +45,7 @@ else {
     $num_lines = isset($model->data['num_lines']) && \bbn\str::is_integer($model->data['num_lines']) && ($model->data['num_lines'] > 0) && ($model->data['num_lines'] <= 1000) ? $model->data['num_lines'] : 100;
     $line2 = "tail -n $num_lines $file";
     exec($line2, $output2);
-    
+
     if ( $model->data['md5'] === md5(implode("\n", $output)) ){
       return ['change' => false];
     }

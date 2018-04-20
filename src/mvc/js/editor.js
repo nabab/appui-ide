@@ -8,6 +8,8 @@
       bbn.vue.addComponent('popup/search');
       bbn.vue.addComponent('popup/copy');
       bbn.vue.addComponent('popup/path');
+      bbn.vue.addComponent('popup/directories/types');
+      bbn.vue.addComponent('popup/directories/form/types');
       bbn.vue.unsetComponentRule();
     },
     props: ['source'],
@@ -163,7 +165,7 @@
               text: '<i class="fa fa-cog"></i>' + bbn._('Manage directories'),
               select: ()=>{
                 //for show Directories manager
-                this.$refs.tabstrip.load('directories');
+                this.managerTypeDirectories();
               }
             }, {
               text: '<i class="fa fa-language"></i>' + bbn._('IDE style'),
@@ -233,6 +235,22 @@
       }
     },
     methods: {
+      managerTypeDirectories(){
+        bbn.fn.post(this.source.root + 'directories/data/types',(d)=>{
+            if ( d.data.success ){
+              bbn.vue.closest(this, ".bbn-tab").$refs.popup[0].open({
+                width: 600,
+                height: 800,
+                title: bbn._('Manager type directories'),
+                component: 'appui-ide-popup-directories-types',
+                source:{
+                  id: d.data.id,
+                  types: d.data.types
+                }
+              });
+            }
+        });
+      },
       keydownFunction(event) {
         alert("dsds")
       },
@@ -248,7 +266,7 @@
             path: node.data.path
           }
         });
-        bbn.fn.log("ggg", node);
+
       },
       searchingContent(e){
         if( this.search.searchInRepository.length > 0 ){
