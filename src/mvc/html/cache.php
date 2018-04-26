@@ -6,7 +6,7 @@
     <div class="bbn-flex-fill  bbn-r">
       <span class="bbn-xl">
         <strong>
-          <?=_('Cache Managment')?>
+          <?=_('Cache Management')?>
         </strong>
       </span>
     </div>
@@ -25,17 +25,20 @@
         </div>
       </bbn-pane>
       <bbn-pane>
-        <div class="bbn-full-screen" style="border: 0.5px solid #CCC">
-          <div class="bbn-flex-height bbn-padded" v-if="selectedFile.length && contentCache.length">
-            <div class="w3-card bbn-h-5 bbn-w-100 bbn-padded bbn-l bbn-vmiddle">
-              <strong>
-                <span v-text="selectedFile"></span>
-              </strong>
-            </div>
-            <br>
-            <div class="bbn-flex-fill">
-              <bbn-json-editor v-model="contentCache"></bbn-json-editor>
-            </div>
+        <div class="bbn-full-screen bbn-padded" style="border: 0.5px solid #CCC">
+          <div class="bbn-flex-height" v-if="selectedFile.length && contentCache.length">
+						<div class="bbn-w-100">
+							<div class="w3-card bbn-padded bbn-l bbn-vmargin">
+								<strong>
+									<span v-text="selectedFile"></span>
+								</strong>
+							</div>
+						</div>
+						<div class="bbn-w-100 bbn-flex-fill">
+							<div class="bbn-full-screen">
+								<bbn-json-editor v-model="contentCache"></bbn-json-editor>
+							</div>
+						</div>
           </div>
           <div class="bbn-full-screen bbn-vmiddle bbn-padded" v-else>
             <div class="w3-card bbn-h-100 bbn-vmiddle bbn-w-100 bbn-c">
