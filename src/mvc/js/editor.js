@@ -3,6 +3,7 @@
     beforeMount(){
       bbn.vue.setComponentRule(this.source.root + 'components/', 'appui-ide');
       bbn.vue.addComponent('history');
+      bbn.vue.addComponent('i18n');
       bbn.vue.addComponent('popup/new');
       bbn.vue.addComponent('popup/rename');
       bbn.vue.addComponent('popup/search');
@@ -70,21 +71,21 @@
               }
             },
               {
-              text: '<i class="fa fa-trash-o"></i>' + bbn._('Delete'),
-              select: () => {
-                this.deleteActive();
-              }
-            }, {
-              text: '<i class="fa fa-times-circle"></i>' + bbn._('Close tab'),
-              select: () => {
-                this.closeTab();
-              }
-            }, {
-              text: '<i class="fa fa-times-circle-o"></i>' + bbn._('Close all tabs'),
-              select: () =>{
-                this.closeTabs();
-              } //"bbn.ide.tabstrip.tabNav('closeAll');"
-            }]
+                text: '<i class="fa fa-trash-o"></i>' + bbn._('Delete'),
+                select: () => {
+                  this.deleteActive();
+                }
+              }, {
+                text: '<i class="fa fa-times-circle"></i>' + bbn._('Close tab'),
+                select: () => {
+                  this.closeTab();
+                }
+              }, {
+                text: '<i class="fa fa-times-circle-o"></i>' + bbn._('Close all tabs'),
+                select: () =>{
+                  this.closeTabs();
+                } //"bbn.ide.tabstrip.tabNav('closeAll');"
+              }]
           }, {
             text: bbn._('Edit'),
 
@@ -193,8 +194,8 @@
       currentEditor(){
         if ( this.currentURL ){
           let idx = this.$refs.tabstrip.selected,
-              codes = bbn.vue.findAll(this.$refs.tabstrip.getVue(idx), 'bbn-code'),
-              code = false;
+            codes = bbn.vue.findAll(this.$refs.tabstrip.getVue(idx), 'bbn-code'),
+            code = false;
           $.each(codes, (i, a) => {
             if ( $(a.$el).is(":visible") ){
               code = a;
@@ -237,18 +238,18 @@
     methods: {
       managerTypeDirectories(){
         bbn.fn.post(this.source.root + 'directories/data/types',(d)=>{
-            if ( d.data.success ){
-              bbn.vue.closest(this, ".bbn-tab").$refs.popup[0].open({
-                width: 600,
-                height: 800,
-                title: bbn._('Manager type directories'),
-                component: 'appui-ide-popup-directories-types',
-                source:{
-                  id: d.data.id,
-                  types: d.data.types
-                }
-              });
-            }
+          if ( d.data.success ){
+            bbn.vue.closest(this, ".bbn-tab").$refs.popup[0].open({
+              width: 600,
+              height: 800,
+              title: bbn._('Manager type directories'),
+              component: 'appui-ide-popup-directories-types',
+              source:{
+                id: d.data.id,
+                types: d.data.types
+              }
+            });
+          }
         });
       },
       keydownFunction(event) {
@@ -407,8 +408,8 @@
       ctrlCloseTab(idx, ev){
         // check if there are any changes in code
         let ctrlChangeCode = this.$refs.tabstrip.getVue(this.$refs.tabstrip.selected).$refs.component[0].changedCode,
-            //method close of the tab selected
-            closeProject =  this.$refs.tabstrip.getVue(this.$refs.tabstrip.selected).$parent.close;
+          //method close of the tab selected
+          closeProject =  this.$refs.tabstrip.getVue(this.$refs.tabstrip.selected).$parent.close;
         ev.preventDefault();
         if ( ctrlChangeCode ){
           bbn.fn.confirm(
@@ -578,29 +579,29 @@
                   this.goToTab(node, "css")
                 }
               },{
-                  icon: 'fa fa-external-link-square',
-                  text: bbn._('Go to') + " Javascript",
-                  command: (node) => {
-                    this.goToTab(node, "js")
-                  }
+                icon: 'fa fa-external-link-square',
+                text: bbn._('Go to') + " Javascript",
+                command: (node) => {
+                  this.goToTab(node, "js")
+                }
               },{
-                  icon: 'fa fa-external-link-square',
-                  text: bbn._('Go to') + " View",
-                  command: (node) => {
-                    this.goToTab(node, "html")
-                  }
+                icon: 'fa fa-external-link-square',
+                text: bbn._('Go to') + " View",
+                command: (node) => {
+                  this.goToTab(node, "html")
+                }
               },{
-                  icon: 'fa fa-external-link-square',
-                  text: bbn._('Go to') + " Model",
-                  command: (node) => {
-                    this.goToTab(node, "model")
-                  }
+                icon: 'fa fa-external-link-square',
+                text: bbn._('Go to') + " Model",
+                command: (node) => {
+                  this.goToTab(node, "model")
+                }
               },{
-                  icon: 'fa fa-external-link-square',
-                  text: bbn._('Go to') + " Controller",
-                  command: (node) => {
-                    this.goToTab(node, "php")
-                  }
+                icon: 'fa fa-external-link-square',
+                text: bbn._('Go to') + " Controller",
+                command: (node) => {
+                  this.goToTab(node, "php")
+                }
               }
             ];
             arr.forEach((item ,id)=>{
@@ -653,14 +654,14 @@
           else{
             if(d.data.tab === "php"){
               //this.settings= d.data;
-          /*    let pathFile = this.repositories[this.currentRep]['bbn_path']+"/"+this.repositories[this.currentRep]['path'] + d.data.path +".php";
-              bbn.fn.post(this.root + 'permissions/get', {
-                file: this.repositories[this.currentRep]['path'] +"public/"+ d.data.path +".php",
-                path: this.repositories[this.currentRep]['bbn_path']+"/"
-              }, (ele)=>{
-                  this.permFile = ele.permissions
-                }
-              );*/
+              /*    let pathFile = this.repositories[this.currentRep]['bbn_path']+"/"+this.repositories[this.currentRep]['path'] + d.data.path +".php";
+                  bbn.fn.post(this.root + 'permissions/get', {
+                    file: this.repositories[this.currentRep]['path'] +"public/"+ d.data.path +".php",
+                    path: this.repositories[this.currentRep]['bbn_path']+"/"
+                  }, (ele)=>{
+                      this.permFile = ele.permissions
+                    }
+                  );*/
             }
             bbn.fn.log("opendata", d)
           }
@@ -726,8 +727,8 @@
        */
       filterTree(dataSource, query, field){
         var vm = this,
-            hasVisibleChildren = false,
-            d = dataSource instanceof kendo.data.HierarchicalDataSource && dataSource.data();
+          hasVisibleChildren = false,
+          d = dataSource instanceof kendo.data.HierarchicalDataSource && dataSource.data();
         if ( !field ){
           field = "text";
         }
@@ -736,12 +737,12 @@
           if ( item[field] ){
             var text = item[field].toLowerCase();
             var itemVisible =
-                  // parent already matches
-                  (query === true) ||
-                  // query is empty
-                  (query === "") ||
-                  // item text matches query
-                  (text.indexOf(query) >= 0);
+              // parent already matches
+              (query === true) ||
+              // query is empty
+              (query === "") ||
+              // item text matches query
+              (text.indexOf(query) >= 0);
             var anyVisibleChildren = vm.filterTree(item.children, itemVisible || query, field); // pass true if parent
             // matches
             hasVisibleChildren = hasVisibleChildren || anyVisibleChildren || itemVisible;
@@ -804,7 +805,7 @@
       },
       getActive(getCode = false){
         let tn = this.$refs.tabstrip,
-            code;
+          code;
         if ( tn && tn.tabs[tn.selected] ){
           tn = tn.getSubTabNav(tn.selected);
           if ( !getCode ){
@@ -1048,12 +1049,12 @@
         }
         else{
           let tab = this.$refs.tabstrip.tabs[this.tabSelected].source,
-              tabInfo = {
-                mvc: tab.isMVC,
-                name: !tab.isMVC ? tab.filename : tab.title.slice().substring(tab.title.lastIndexOf('/') + 1) ,
-                path: !tab.isMVC ? tab.path : tab.title.slice().substring(0, tab.title.lastIndexOf('/') + 1),
-                repository: tab.repository
-              };
+            tabInfo = {
+              mvc: tab.isMVC,
+              name: !tab.isMVC ? tab.filename : tab.title.slice().substring(tab.title.lastIndexOf('/') + 1) ,
+              path: !tab.isMVC ? tab.path : tab.title.slice().substring(0, tab.title.lastIndexOf('/') + 1),
+              repository: tab.repository
+            };
           var tabFile = tabInfo.name;
           var src = {
             nodeData:{
@@ -1109,7 +1110,7 @@
        */
       reloadAfterTree(node, action){
         let treeOfNode = bbn.vue.closest(node, 'bbn-tree'),
-            treeParent = treeOfNode.$parent;
+          treeParent = treeOfNode.$parent;
         switch( action ){
           case 'delete':{
             let numChildren = treeOfNode.items.length;
@@ -1154,8 +1155,8 @@
           }break;
           case 'rename':{
 
-          //  bbn.fn.log("ddddd",node)    ;
-         //node.$parent.reload();
+            //  bbn.fn.log("ddddd",node)    ;
+            //node.$parent.reload();
           }break;
         }
       },
@@ -1197,7 +1198,7 @@
                 }
               });
             }
-        });
+          });
       },
       /**
        * Function for move node in tree
@@ -1208,23 +1209,23 @@
           let path = select.data.path.split('/');
           path.pop();
           let selectPath = path.join('/'),
-          obj = {
-            new_name: select.data.name,
-            is_file: !select.data.folder,
-            ext: select.data.ext,
-            path: selectPath + '/',
-            new_path: dest.data.path,
-            name: select.data.name,
-            tab: select.data.tab,
-            dir: select.data.dir,
-            is_mvc: this.isMVC,
-            root: this.source.root,
-            repository: this.repositories[this.currentRep]
-          };
+            obj = {
+              new_name: select.data.name,
+              is_file: !select.data.folder,
+              ext: select.data.ext,
+              path: selectPath + '/',
+              new_path: dest.data.path,
+              name: select.data.name,
+              tab: select.data.tab,
+              dir: select.data.dir,
+              is_mvc: this.isMVC,
+              root: this.source.root,
+              repository: this.repositories[this.currentRep]
+            };
           bbn.fn.post(this.root + 'actions/move', obj, (d) =>{
             if ( d.success ){
               let tabTitle = obj.path + obj.name,
-                  tabs = bbn.vue.findAll(appui.ide, 'bbn-tab');
+                tabs = bbn.vue.findAll(appui.ide, 'bbn-tab');
               //if a node is moved from a tree and that it is open
               this.$nextTick(()=>{
                 let idTab = bbn.fn.search(tabs, 'title', tabTitle);
@@ -1333,6 +1334,35 @@
         tabNav.selected = tabNav.getIndex('history');
 
       },
+      /** ###### I18N ###### */
+      i18n(){
+        let tabnav = appui.ide.$refs.tabstrip,
+            tabnavActive = tabnav.activeTabNav,
+            currentIde = tabnavActive.$parent,
+            table_data  = [];
+
+        bbn.fn.post( this.source.root + 'i18n/data/table', {
+          table_path: currentIde.path ? currentIde.path : '',
+          /** path of current repository */
+          currentRep: this.currentRep,
+          /** cfg of current repository */
+          repository: this.repositories[currentIde.repository],
+          ext: $.inArray(currentIde.ext, this.repositories[currentIde.repository].extensions) ? currentIde.ext : '',
+          file_name: currentIde.filename,
+        }, ( d ) => {
+          if ( tabnavActive && d.success ){
+            tabnavActive.add({
+              title: bbn._('i18n'),
+              load: false,
+              url: 'i18n',
+              selected: true,
+              component: 'appui-ide-i18n',
+              source: d
+            });
+            tabnavActive.selected = tabnavActive.getIndex('i18n');
+          }
+        });
+      },
       codeSearch(){
         if ( this.currentEditor ){
           this.currentEditor.widget.focus();
@@ -1373,6 +1403,10 @@
           this.currentEditor.foldAll();
         }
       }
+
+    },
+    mounted(){
+      bbn.fn.log('editor',this)
 
     },
     watch: {

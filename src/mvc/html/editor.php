@@ -45,6 +45,12 @@
                     icon="fa fa-history"
         ></bbn-button>
       </div>
+      <div>
+        <bbn-button title="<?=_('Show strings and translations')?>"
+                    @click="i18n"
+                    icon="fa fa-flag"
+        ></bbn-button>
+      </div>
       <div></div>
       <div>
         <bbn-menu ref="mainMenu"
