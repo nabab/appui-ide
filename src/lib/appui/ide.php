@@ -335,8 +335,8 @@ class ide {
           $new .= $cfg['new_path'] . (substr($cfg['new_path'], -1) !== '/' ? '/' : '');
 
         }
-        if ( ($i !== '_ctrl') && !empty($tab['extensions']) ){
-
+        //if ( ($i !== '_ctrl') && !empty($tab['extensions']) ){
+        if ( ($tab['url'] !== '_ctrl') && !empty($tab['extensions']) ){
           $old .= $cfg['name'];
           $new .= $cfg['new_name'] ?? '';
           $ext_ok = false;
@@ -674,6 +674,7 @@ class ide {
         $r[$k] = $a;
         $r[$k]['title'] = $r[$k]['text'];
         $r[$k]['alias_code'] = $cats[$a['id_alias']]['code'];
+//        \bbn\x::log([$r, $cats], "ideFortype");
         if ( !empty($cats[$a['id_alias']]['tabs']) ){
           $r[$k]['tabs'] = $cats[$a['id_alias']]['tabs'];
         }
@@ -828,6 +829,7 @@ class ide {
       !empty($real['mode']) &&
       !empty($real['repository'])
     ){
+     \bbn\x::log(["load", $real], "modIde");
       $this->set_current_file($real['file']);
       $f = [
         'mode' => $real['mode'],
@@ -866,10 +868,19 @@ class ide {
         }
 
       }
-      else if ( !empty($real['tab']) &&
+
+/*      else if ( !empty($real['tab']) &&
         !empty($real['repository']['tabs'][$real['tab']]['extensions'][0]['default'])
       ){
         $f['value'] = $real['repository']['tabs'][$real['tab']]['extensions'][0]['default'];
+      }*/
+
+      else if ( !empty($real['tab']) &&
+       ( ($i = \bbn\x::find($real['repository']['tabs'], ['url' => $real['tab']])) !== false )
+      ){
+        if( !empty($real['repository']['tabs'][$i]['extensions'][0]['default']) ){
+          $f['value'] = $real['repository']['tabs'][$i]['extensions'][0]['default'];
+        }
       }
       else if (!empty($real['repository']['extensions'][0]['default'])){
         $f['value'] = $real['repository']['extensions'][0]['default'];
@@ -890,6 +901,7 @@ class ide {
    * @return array|string
    */
   public function save(array $file){
+    \bbn\x::log([$file['full_path'],$this->decipher_path($file['full_path'])], "modIde");
     if ( $this->set_current_file($this->decipher_path($file['full_path'])) ){
       //if in the case of a rescue of _ctrl
       if ( $file['tab'] === "_ctrl" ){
@@ -927,7 +939,7 @@ class ide {
           return ['deleted' => true];
         }
       }
-
+\bbn\x::log([$file, self::$current_file], "modIde");
       if ( is_file(self::$current_file) ){
         $backup = $backup_path . date('Y-m-d_His') . '.' . $file['extension'];
           \bbn\file\dir::create_path(dirname($backup));
@@ -1471,7 +1483,7 @@ class ide {
           $ext = \bbn\str::file_ext($fn);
           $fn = \bbn\str::file_ext($fn, 1)[0];
           $res .= implode('/', $bits);
-          foreach ( $d['tabs'] as $t ){
+          foreach ( $d['tabs'] as $i => $t ){
             if ( empty($t['fixed']) &&
               ($t['path'] === $tab_path . '/')
             ){
@@ -1537,8 +1549,8 @@ class ide {
           $tab = $ssc['tab'];
           $o['tab'] = $tab;
           $fp = $ssc['path'].'/';
-          if ( !empty($rep['tabs'][$tab]) ){
-            $tab = $rep['tabs'][$tab];
+          if ( ($i = \bbn\x::find($rep['tabs'], ['url' => $tab])) !== false ){
+            $tab = $rep['tabs'][$i];
             $res .= $tab['path'];
             if ( !empty($tab['fixed']) ){
               $res .= $fp . $tab['fixed'];

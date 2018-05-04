@@ -7,20 +7,20 @@
     >
       <bbn-tab :static="true"
                :load="true"
-               :url="repositories[repository].tabs['_ctrl'].url"
-               :title="repositories[repository].tabs['_ctrl'].title"
-               :bcolor="repositories[repository].tabs['_ctrl'].bcolor"
-               :fcolor="repositories[repository].tabs['_ctrl'].fcolor"
+               :url="repositories[repository].tabs[search(repositories[repository].tabs, 'url' ,'_ctrl')]['url']"
+               :title="repositories[repository].tabs[search(repositories[repository].tabs, 'url' ,'_ctrl')]['title']"
+               :bcolor="repositories[repository].tabs[search(repositories[repository].tabs, 'url' ,'_ctrl')]['bcolor']"
+               :fcolor="repositories[repository].tabs[search(repositories[repository].tabs, 'url' ,'_ctrl')]['fcolor']"
       >
       </bbn-tab>
       <bbn-tab v-for="(tab, idx) in sctrl"
                :static="true"
                :load="true"
-               :url="'_'.repeat(idx+1) + repositories[repository].tabs['_ctrl'].url"
-               :title="repositories[repository].tabs['_ctrl'].title + (idx+1)"
-               :key="'_'.repeat(idx+1) + repositories[repository].tabs['_ctrl'].url"
-               :bcolor="repositories[repository].tabs['_ctrl'].bcolor"
-               :fcolor="repositories[repository].tabs['_ctrl'].fcolor"
+               :url="'_'.repeat(idx+1) + repositories[repository].tabs[search(repositories[repository].tabs, 'url' ,'_ctrl')]['url']"
+               :title="repositories[repository].tabs[search(repositories[repository].tabs, 'url' ,'_ctrl')]['title'] + (idx+1)"
+               :key="'_'.repeat(idx+1) + repositories[repository].tabs[search(repositories[repository].tabs, 'url' ,'_ctrl')]['url']"
+               :bcolor="repositories[repository].tabs[search(repositories[repository].tabs, 'url' ,'_ctrl')]['bcolor']"
+               :fcolor="repositories[repository].tabs[search(repositories[repository].tabs, 'url' ,'_ctrl')]['fcolor']"
       >
       </bbn-tab>
       <!--form permision-->

@@ -115,7 +115,7 @@ Vue.component('appui-ide-mvc', {
       filename: filename,
       tabsMenu: tabsMenu,
       permissions: ide.permFile,
-      codesBlock: listCodes,      
+      codesBlock: listCodes,
     });
   },
   computed: {
@@ -136,6 +136,7 @@ Vue.component('appui-ide-mvc', {
     }
   }*/
   methods:{
+    search: bbn.fn.search,
     //for title in tabs ide
     renderTitleTab(tab){
         switch(tab.title){

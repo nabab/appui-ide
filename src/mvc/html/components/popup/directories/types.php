@@ -1,24 +1,3 @@
-<!--<div class="bbn-full-screen" v-if="source.types.length">
-  <bbn-table ref="types_table"
-             :source="source.types"
-             class="bbn-100"
-             :sortable="true"
-             :toolbar="btns_toolbar"
-             :showable="false"
-             editor="appui-ide-popup-directories-form-types"
-             :editable="true"
-  >
-    <bbn-column title="<?=_("Type")?>"
-                field="text"
-                cls="bbn-c"
-    ></bbn-column>
-    <bbn-column title=" "
-                cls="bbn-c"
-                :width="100"
-                :buttons="btns_types"
-    ></bbn-column>
-  </bbn-table>
-</div>-->
 <div class="bbn-full-screen" v-if="source.types.length">
   <bbn-table ref="types_table"
              :source="source.types"
@@ -27,7 +6,7 @@
              :toolbar="[{
                text: '<?=_('Add Type')?>',
                icon: 'fa fa-plus',
-               command: openFormManager
+               command: addType
              }]"
              :showable="false"
              editor="appui-ide-popup-directories-form-types"
@@ -55,17 +34,22 @@
                 :width="70"
                 :render="renderIconTabs"
                 cls="bbn-c"
-                default="{}"
+                default="[]"
     ></bbn-column>
     <bbn-column title=" "
                 cls="bbn-c"
-                :width="100"
+                :width="150"
                 :buttons="[{
-                  text: '<?=_("Modif.")?>',
+                  text: '<?=_("Edit")?>',
                   command: editType,
                   notext: true,
                   icon: 'fa fa-pencil'
-                }, {
+                },{
+                  text: '<?=_("Copy")?>',
+                  command: copyType,
+                  notext: true,
+                  icon: 'fa fa-copy'
+                },{
                   text: '<?=_("Delete")?>',
                   command: deleteType,
                   icon: 'fa fa-trash',

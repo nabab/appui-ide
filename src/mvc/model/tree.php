@@ -5,6 +5,7 @@ if ( !empty($model->data['repository']) &&
   isset($model->data['onlydirs'], $model->data['tab'])
 ){
   $rep_cfg = $model->data['repository_cfg'];
+
   $is_mvc = $model->data['is_mvc'];
   $onlydirs = $model->data['onlydirs'];
   // Set the current path
@@ -119,11 +120,12 @@ if ( !empty($model->data['repository']) &&
   if ( !empty($is_mvc) ){
     // Get all files and all folders of each mvc's tabs (_ctrl tab excluded)
     foreach ( $rep_cfg['tabs'] as $i => $t ){
-      if ( ($i !== '_ctrl') &&
+
+      if ( ($t['url'] !== '_ctrl') &&
         !empty($t['path']) &&
         ( empty($model->data['tab']) ||
           ( !empty($model->data['tab']) &&
-            ($model->data['tab'] === $i)
+            ($model->data['tab'] === $t['url'])
           )
         )
       ){

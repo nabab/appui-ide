@@ -1,22 +1,51 @@
 (() => {
+  let types;
   return {
+    mixins: [bbn.vue.localStorageComponent],
     props: ['source'],
     methods:{
       renderIconExts(ele){
-        return ( ele.extensions && ele.extensions.length ) ?
+        let exts = [];
+        if (ele.extensions ){
+          exts = JSON.parse(ele.extensions);
+        }
+        return exts.length ?
           '<div class="bbn-c"><i style="color: green"  class="fa fa-chevron-down"></i></div>' :
           '';
       },
       renderIconTabs(ele){
-        return ( ele.tabs && ele.tabs.length ) ?
+        let tabs = [];
+        if (ele.tabs ){
+          tabs = JSON.parse(ele.tabs);
+        }
+        return tabs.length ?
           '<div class="bbn-c"><i style="color: green" class="fa fa-chevron-down"></i></div>' :
           '';
       },
-      openFormManager(){
+      addType(){
         return this.$refs.types_table.insert({}, {
           title: bbn._('Add new type'),
           height: '95%',
           width: '85%'
+        });
+      },
+      copyType(ele){
+        var copyType = {
+              text: '',
+              code: '',
+              id_parent: ele.id_parent,
+              tabs: (ele.tabs && ele.tabs.length) ? ele.tabs : JSON.stringify([]),
+              extensions: (ele.extensions && ele.extensions.length) ? ele.extensions : JSON.stringify([])
+            },
+            titlePopup = bbn._('Copy type') + " " + ele.text;        
+        bbn.vue.closest(this, ".bbn-tab").$refs.popup[0].open({
+          height: '95%',
+          width: '85%',
+          title: titlePopup,
+          component: 'appui-ide-popup-directories-form-types',
+          source:{
+            row: copyType
+          }
         });
       },
       refreshListTypes(){
@@ -43,12 +72,33 @@
         });
       },
       editType(row, col, idx){
+        if( row.id.length ){
+          if ( row.tabs && !row.extensions ){
+            this.$set(row,'extensions', JSON.stringify([]));
+          }
+          if ( row.extensions && !row.tabs ){
+            this.$set(row,'tabs', JSON.stringify([]));
+          }
+        }
         return this.$refs.types_table.edit(row, {
           title: bbn._('Modify type') + ' ' + row.text,
           height: '95%',
           width: '85%'
-        }, idx);
+        }, idx)
       }
+    },
+    created(){
+      types = this;
+      let mixins = [{
+        data(){
+          return {
+            types: types
+          }
+        },
+      }];
+      bbn.vue.setComponentRule(appui.ide.root + 'components/', 'appui-ide');
+      bbn.vue.addComponent('popup/directories/form/types', mixins);
+      bbn.vue.unsetComponentRule();
     }
   }
 })();

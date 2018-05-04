@@ -10,7 +10,6 @@
       bbn.vue.addComponent('popup/copy');
       bbn.vue.addComponent('popup/path');
       bbn.vue.addComponent('popup/directories/types');
-      bbn.vue.addComponent('popup/directories/form/types');
       bbn.vue.unsetComponentRule();
     },
     props: ['source'],
@@ -244,8 +243,7 @@
               height: 800,
               title: bbn._('Manager type directories'),
               component: 'appui-ide-popup-directories-types',
-              source:{
-                id: d.data.id,
+              source:{          
                 types: d.data.types
               }
             });
@@ -768,14 +766,17 @@
       openFile(file){
         let existTab = false;
         for(let tab of this.$refs.tabstrip.tabs){
+          bbn.fn.log("open file", tab);
           if ( tab.title === file.data.path ){
             existTab = true;
             break;
           }
         }
+
         if ( !existTab ){
           let tab = "";
           if ( file.data.tab ){
+            bbn.fn.log("open file", file.data);
             if ( file.data.tab === "php" ){
               tab = '/settings';
             }
@@ -794,6 +795,8 @@
             '/_end_' +
             (file.data.tab ? '/' + file.data.tab : '')
           );*/
+          bbn.fn.warning("ssss");
+          bbn.fn.log("sssss", file)
           this.$refs.tabstrip.load(
             'file/' +
             this.currentRep +

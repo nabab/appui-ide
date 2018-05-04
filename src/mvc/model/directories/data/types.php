@@ -13,7 +13,7 @@ if ( isset($model->inc->options) ){
       return $t;
     }, $types);
     $res = [
-      'success' => true,      
+      'success' => true,
       'types' => $types
     ];
   }

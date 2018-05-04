@@ -89,7 +89,7 @@ if (
 
   /** @var (array) $strings will be filled with strings found in files*/
   $strings  = [];
-
+  $langs = [];
   foreach ( $files as $idx => $f ) {
     if ( $translation->analyze_file($files[$idx]['file']) ){
       /** array of strings in each file */
@@ -98,7 +98,7 @@ if (
 
 
       /** @var array $langs will be fill with langs of translations found in db for strings of this file*/
-      $langs = [];
+
 
       foreach ( $files[$idx]['strings'] as $i => $string ){
         if ( $id = $model->db->get_val('bbn_i18n', 'id', [
@@ -116,14 +116,16 @@ if (
               'id_exp' => $id
             ]
           )){
-            foreach( $rows as $r ){
-              if ( !in_array($r['lang'], $langs) ){
-                $langs[] = $r['lang'];
+            foreach( $rows as $index => $r){
+              if ( !in_array($rows[$index]['lang'], $langs) ){
+                $langs[] = $rows[$index]['lang'];
               }
               $files[$idx]['strings'][$i][$r['lang']] = $r['expression'];
             }
+
           }
           $strings[] = $files[$idx]['strings'][$i];
+
         }
       }
 
@@ -133,6 +135,7 @@ if (
     /** reconverting the file name to constant */
     //$files[$idx]['file'] = $model->inc->ide->real_to_url($files[$idx]['file']);
   }
+
   $success = true;
   return [
     'id_option' => $repository['id'],

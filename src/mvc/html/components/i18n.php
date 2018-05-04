@@ -6,8 +6,6 @@
              :sortable="true"
              :limit="25"
              :info="true"
-             :filterable="true"
-             :multifilter="true"
              @change="insert_translation"
              ref="table"
              :expander="$options.components['file_linker']"

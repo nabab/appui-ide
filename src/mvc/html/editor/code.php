@@ -10,6 +10,7 @@
           @ready="setState"
           ref="editor"
 ></bbn-code>
+<!-- tab setting-->
 <div v-else>
   <div class="k-block bbn-block bbn-100 bbn-full-screen">
     <div class="k-header bbn-c"><?=('Permissions setting')?></div>

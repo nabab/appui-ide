@@ -40,16 +40,18 @@
         return this.originalValue !== this.value;
       },
       path(){
-        let path = this.rep.bbn_path + '/' + this.rep.path;
-        if ( this.isMVC && this.rep.tabs && this.rep.tabs[this.tab] ){
-          path += this.rep.tabs[this.tab].path;
+        let path = this.rep.bbn_path + '/' + this.rep.path,
+            idx = bbn.fn.search(this.rep.tabs, "url", this.tab);
+        if ( this.isMVC && this.rep.tabs && this.rep.tabs[idx] ){
+          path += this.rep.tabs[idx].path;
         }
         return path;
       },
       filePath(){
         const bits = this.ide.path.split('/');
-        let filePath = '';
-        if ( this.isMVC && this.rep && this.rep.tabs && this.rep.tabs[this.tab] && this.rep.tabs[this.tab].fixed ){
+        let filePath = '',
+            idx = bbn.fn.search(this.rep.tabs, "url", this.tab);
+        if ( this.isMVC && this.rep && this.rep.tabs && this.rep.tabs[idx] && this.rep.tabs[idx].fixed ){
           if ( $.isNumeric(this.ssctrl) && bits.length ){
             $.each(bits, (i, v) => {
               if ( i < this.ssctrl ){
@@ -72,8 +74,9 @@
         return this.path
       },
       fixed(){
-        if ( this.isMVC &&  this.rep && this.rep.tabs && this.rep.tabs[this.tab] && this.rep.tabs[this.tab].fixed ){
-          return this.ide.repositories[this.ide.repository].tabs[this.tab].fixed;
+        let idx = bbn.fn.search(this.rep.tabs, "url", this.tab);
+        if ( this.isMVC &&  this.rep && this.rep.tabs && this.rep.tabs[idx] && this.rep.tabs[idx].fixed ){
+          return this.ide.repositories[this.ide.repository].tabs[idx].fixed;
         }
         return false
       },
