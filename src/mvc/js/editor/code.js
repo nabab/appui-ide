@@ -197,7 +197,7 @@
                 tn.add({
                   title: moment().format('HH:mm:ss'),
                   load: false,
-                  content: d,
+                  content: d.content,
                   url: 'output' + idx,
                   selected: true
                 });
