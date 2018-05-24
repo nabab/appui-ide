@@ -22,6 +22,7 @@
       <div>
         <bbn-input v-model="data.name"
                    required="required"
+                   class="bbn-w-100"
         ></bbn-input>
         <bbn-dropdown v-if="source.isFile && availableExtensions && (availableExtensions.length > 1)"
                       :source="extensions"
@@ -40,15 +41,18 @@
       </div>
 
       <label><?=_("Path")?></label>
-      <div>
-        <bbn-input v-model="data.path"
-                   readonly="readonly"
-                   required="required"
-        ></bbn-input>
-        <span>
+      <div class="bbn-flex-width">
+        <div class="bbn-flex-fill">
+          <bbn-input v-model="data.path"
+                     readonly="readonly"
+                     required="required"
+                     class="bbn-w-100"
+          ></bbn-input>
+        </div>
+        <div>
           <bbn-button @click="selectDir"><?=_("Browse")?></bbn-button>
           <bbn-button @click="data.path = './'"><?=_("Root")?></bbn-button>
-        </span>
+        </div>
       </div>
 
     </div>

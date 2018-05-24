@@ -22,7 +22,7 @@ Vue.component('appui-ide-popup-new', {
     return {
       isMVC: isMVC,
       rep: rep,
-      is_file: this.source.isFile,      
+      is_file: this.source.isFile,
       data: {
         tab: defaultTab,
         name: '',
@@ -37,7 +37,7 @@ Vue.component('appui-ide-popup-new', {
       if ( this.source.isFile ){
         bbn.fn.link(this.source.root + 'editor/file/' + this.source.currentRep +
           (this.data.path.startsWith('./') ? this.data.path.slice(2) : this.data.path) +
-          this.data.name + '/_end_' + ( this.data.extension ? '/' +  this.data.tab : '')
+          this.data.name + '/_end_' + ( this.data.extension ? '/' +  this.rep.tabs[this.data.tab]['url'] : '')
         );
         appui.success(bbn._("File created!"));
       }
