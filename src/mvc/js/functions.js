@@ -187,14 +187,14 @@ bbn.ide = {
           case "svg":
             var oDocument = new DOMParser().parseFromString(c, "text/xml");
             if (oDocument.documentElement.nodeName == "parsererror" || !oDocument.documentElement) {
-              bbn.fn.alert("There is an XML error in this SVG");
+              appui.alert("There is an XML error in this SVG");
             }
             else {
               bbn.fn.popup($("<div/>").append(document.importNode(oDocument.documentElement, true)).html(), "Problem with SVG");
             }
             break;
           default:
-            bbn.fn.alert(c, "Test: " + m);
+            appui.alert(c, "Test: " + m);
         }
       }
     }
@@ -331,7 +331,7 @@ bbn.ide = {
     else {
       msg = "Are you sure that you want to delete the file " + dataItem.path + "?";
     }
-    bbn.fn.confirm(msg, function(){
+    appui.confirm(msg, function(){
       bbn.fn.post(data.root + "actions/delete", {
         path: dataItem.path,
         type: dataItem.type,
@@ -1150,7 +1150,7 @@ bbn.ide = {
         code = $(ele[0]).val(),
         $id = $("input:hidden", $cont.closest("div.perm_set"));
 
-    bbn.fn.confirm('Are you sure to remove this item?', function(){
+    appui.confirm('Are you sure to remove this item?', function(){
       bbn.fn.post(data.root + 'permissions/delete', {
         code: code,
         id: $id.val()

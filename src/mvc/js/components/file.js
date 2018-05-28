@@ -51,7 +51,7 @@ Vue.component('appui-ide-file', {
     reloadTab(){
       let tab = this.$refs.tabstrip.getVue(this.$refs.tabstrip.selected);
       if ( tab.getComponent().isChanged ){
-        bbn.fn.confirm( bbn._("Modified code do you want to refresh anyway?"), ()=>{
+        appui.confirm( bbn._("Modified code do you want to refresh anyway?"), ()=>{
           bbn.fn.post( appui.ide.root + 'editor/' + this.$refs.tabstrip.baseURL + tab.url, (d)=>{
             if ( d.data.id ){
               tab.reload();

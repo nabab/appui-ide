@@ -409,7 +409,7 @@
           closeProject =  this.$refs.tabstrip.getVue(this.$refs.tabstrip.selected).$parent.close;
         ev.preventDefault();
         if ( ctrlChangeCode ){
-          bbn.fn.confirm(
+          appui.confirm(
             bbn._('Do you want to save the changes before closing the tab?'),
             () =>{
               this.save(true);
@@ -436,7 +436,7 @@
       closeTab(){
         let ctrlChangeCode = this.$refs.tabstrip.getVue(this.$refs.tabstrip.selected).$refs.component[0].changedCode;
         if ( ctrlChangeCode ){
-          bbn.fn.confirm(
+          appui.confirm(
             bbn._('Do you want to save the changes before closing the tab?'),
             () => {
               this.save( true );
@@ -1126,7 +1126,7 @@
        * @param data The node data
        */
       deleteElement(node){
-        bbn.fn.confirm(  bbn._('Are you sure you want to delete') +
+        appui.confirm(  bbn._('Are you sure you want to delete') +
           ( node.data.folder === true ? ' ' + bbn._('the folder') + ' ': ' ' ) +
           '<strong>' + node.data.name +  ' </strong>' + ' ?' ,
           () => {
@@ -1216,7 +1216,7 @@
        * Deletes the current opened file
        */
       deleteActive(){
-        bbn.fn.confirm(bbn._('Are you sure you want to delete it?'), () => {
+        appui.confirm(bbn._('Are you sure you want to delete it?'), () => {
           const cont = this.$refs.tabstrip.getVue(this.$refs.tabstrip.selected);
           let f;
 

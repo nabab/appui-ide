@@ -725,7 +725,7 @@
        * @param data The node data
        */
       delete(node, id){
-        bbn.fn.confirm(bbn._('Are you sure you want to delete it?'), () => {
+        appui.confirm(bbn._('Are you sure you want to delete it?'), () => {
           if ( node.data.name  &&
             ( node.data.dir !== undefined) &&
             ( node.data.is_folder || ( !node.data.is_folder && node.data.ext ) )
@@ -762,7 +762,7 @@
        * Deletes the current opened file
        */
       deleteActive(){
-        bbn.fn.confirm(bbn._('Are you sure you want to delete it?'), () => {
+        appui.confirm(bbn._('Are you sure you want to delete it?'), () => {
           const cont = this.$refs.tabstrip.getContainer(this.$refs.tabstrip.selected);
           let f;
 

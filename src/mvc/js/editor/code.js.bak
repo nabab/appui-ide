@@ -112,14 +112,14 @@
             case "svg":
               const oDocument = new DOMParser().parseFromString(vm.value, "text/xml");
               if ( (oDocument.documentElement.nodeName == "parsererror") || !oDocument.documentElement){
-                bbn.fn.alert("There is an XML error in this SVG");
+                appui.alert("There is an XML error in this SVG");
               }
               else {
                 bbn.fn.popup($("<div/>").append(document.importNode(oDocument.documentElement, true)).html(), "Problem with SVG");
               }
               break;
             default:
-              bbn.fn.alert(vm.value, "Test: " + vm.mode);
+              appui.alert(vm.value, "Test: " + vm.mode);
           }
         }
 
@@ -215,7 +215,7 @@
               };
 
         if ( obj.id && obj.code.length ){
-          bbn.fn.confirm('Are you sure to remove this item?', () => {
+          appui.confirm('Are you sure to remove this item?', () => {
             bbn.fn.post(vm.ide.root + 'permissions/delete', obj, (d) => {
               if ( d.data && d.data.success ){
                 vm.permissions.children.splice(bbn.fn.search(vm.permissions.children, 'code', obj.code), 1);

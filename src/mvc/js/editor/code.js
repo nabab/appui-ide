@@ -210,14 +210,14 @@
             case "svg":
               const oDocument = new DOMParser().parseFromString(this.value, "text/xml");
               if ( (oDocument.documentElement.nodeName == "parsererror") || !oDocument.documentElement){
-                bbn.fn.alert("There is an XML error in this SVG");
+                appui.alert("There is an XML error in this SVG");
               }
               else {
                 bbn.vue.closest(this, ".bbn-tab").popup($("<div/>").append(document.importNode(oDocument.documentElement, true)).html(), "Problem with SVG");
               }
               break;
             default:
-              bbn.fn.alert(this.value, "Test: " + this.mode);
+              appui.alert(this.value, "Test: " + this.mode);
           }
         }
 
@@ -303,7 +303,7 @@
               };
 
         if ( obj.id && obj.code.length ){
-          bbn.fn.confirm('Are you sure to remove this item?', () => {
+          appui.confirm('Are you sure to remove this item?', () => {
             bbn.fn.post(this.ide.root + 'permissions/delete', obj, (d) => {
               if ( d.data && d.data.success ){
                 this.permissions.children.splice(bbn.fn.search(this.permissions.children, 'code', obj.code), 1);

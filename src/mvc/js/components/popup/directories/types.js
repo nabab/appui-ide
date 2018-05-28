@@ -59,7 +59,7 @@
         });
       },
       deleteType(row){
-        bbn.fn.confirm(bbn._("Are you sure you want to delete the") + " " + row.text  + " " + bbn._("type?"), ()=>{
+        appui.confirm(bbn._("Are you sure you want to delete the") + " " + row.text  + " " + bbn._("type?"), ()=>{
           bbn.fn.post(appui.ide.root + 'directories/actions/types/delete', {id_type: row.id}, (d) => {
             if ( d.success ){
               this.refreshListTypes();

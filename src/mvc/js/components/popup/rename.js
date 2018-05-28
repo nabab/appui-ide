@@ -31,7 +31,7 @@
             current = tab[idx]['current'];
         if ( ctrlChangeCode ){
           let dirTab = this.formData.path + this.formData.name;
-          bbn.fn.confirm(
+          appui.confirm(
             bbn._('Do you want to save the changes before?'),
             () =>{
               appui.ide.save( true );
