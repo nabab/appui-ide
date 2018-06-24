@@ -138,7 +138,7 @@ if ( !empty($model->data) &&
 
             $fileData = [
               'text' => basename($pathFile)."&nbsp;<span class='w3-badge w3-small w3-light-grey'>".count($list)."</span>",
-              'icon' => 'fa fa-file-code-o',
+              'icon' => 'far fa-file-code',
               'num' => count($list),
               'numChildren' => count($list),
               'repository' => $model->data['repository']['bbn_path'].'/',
@@ -219,7 +219,7 @@ if ( !empty($model->data) &&
             $totLines = $totLines + count($list);
             $fileData = [
               'text' => basename($pathFile)."&nbsp;<span class='w3-badge w3-small w3-light-grey'>".count($list)."</span>",
-              'icon' => 'fa fa-file-code-o',
+              'icon' => 'far fa-file-code',
               'num' => count($list),
               'numChildren' => count($list),
               'repository' => $model->data['repository']['bbn_path'].'/',

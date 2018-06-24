@@ -200,7 +200,7 @@ $("ul.bbn-ide-context").kendoContextMenu({
     cssClass: "bbn-tree-new-dir",
     encoded: false,
     items: [{
-      text: '<i class="fa fa-file-o"></i>File',
+      text: '<i class="far fa-file"></i>File',
       cssClass: "bbn-tree-new-file",
       encoded: false
     }, {
@@ -209,11 +209,11 @@ $("ul.bbn-ide-context").kendoContextMenu({
       encoded: false
     }]
   }, {
-    text: '<i class="fa fa-files-o"></i>Duplicate',
+    text: '<i class="far fa-files"></i>Duplicate',
     cssClass: "bbn-tree-duplicate",
     encoded: false
   }, {
-    text: '<i class="fa fa-file-archive-o"></i>Export',
+    text: '<i class="far fa-file-archive"></i>Export',
     cssClass: "bbn-tree-export",
     encoded: false
   }, {
@@ -221,7 +221,7 @@ $("ul.bbn-ide-context").kendoContextMenu({
     cssClass: "bbn-tree-rename",
     encoded: false
   }, {
-    text: '<i class="fa fa-trash-o"></i>Delete',
+    text: '<i class="far fa-trash-alt"></i>Delete',
     cssClass: "bbn-tree-delete",
     encoded: false
   }, {

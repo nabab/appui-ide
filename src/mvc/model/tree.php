@@ -90,7 +90,7 @@ if ( !empty($model->data['repository']) &&
               'is_image' => !empty($is_file) && \in_array($ext, $file_check['images']),
               //'default' => false,
               'dir' => $cur_path,
-              'icon' => !empty($is_file) ? "$ext-icon" : "folder-icon",
+              'icon' => !empty($is_file) ? "$ext-icon" :  "fas fa-folder",
               'bcolor' => $color,
               'folder' => empty($is_file),
               'lazy' => empty($is_file) && ( (empty($onlydirs) && !empty(\bbn\file\dir::get_files($t, true))) || (!empty($onlydirs) && !empty(\bbn\file\dir::get_dirs($t)))),

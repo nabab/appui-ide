@@ -38,7 +38,7 @@
               extensions: (ele.extensions && ele.extensions.length) ? ele.extensions : JSON.stringify([])
             },
             titlePopup = bbn._('Copy type') + " " + ele.text;        
-        bbn.vue.closest(this, ".bbn-tab").$refs.popup[0].open({
+        bbn.vue.closest(this, ".bbns-tab").$refs.popup[0].open({
           height: '95%',
           width: '85%',
           title: titlePopup,
@@ -87,18 +87,5 @@
         }, idx)
       }
     },
-    created(){
-      types = this;
-      let mixins = [{
-        data(){
-          return {
-            types: types
-          }
-        },
-      }];
-      bbn.vue.setComponentRule(appui.ide.root + 'components/', 'appui-ide');
-      bbn.vue.addComponent('popup/directories/form/types', mixins);
-      bbn.vue.unsetComponentRule();
-    }
   }
 })();

@@ -109,11 +109,11 @@
                     ref="tabstrip"
                     :autoload="true"
                     @close="ctrlCloseTab">
-          <bbn-tab :static="true"
+          <bbns-tab :static="true"
                    url="home"
                    load="true"
                    :title="'<i class=\'bbn-xl zmdi zmdi-pin-help\'> </i>'">
-          </bbn-tab>          
+          </bbns-tab>
         </bbn-tabnav>
       </bbn-pane>
       <bbn-pane :size="200"

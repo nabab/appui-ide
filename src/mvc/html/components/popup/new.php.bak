@@ -37,6 +37,6 @@
   </div>
   <div class="bbn-block bbn-w-100 k-edit-buttons k-state-default" align="right" style="bottom: 0">
     <bbn-button type="button" @click="submit" icon="fa fa-check"><?=_("Save")?></bbn-button>
-    <bbn-button type="button" @click="close" icon="fa fa-close"><?=_("Cancel")?></bbn-button>
+    <bbn-button type="button" @click="close" icon="fas fa-times"><?=_("Cancel")?></bbn-button>
   </div>
 </bbn-form>

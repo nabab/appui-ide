@@ -7,13 +7,8 @@
 Vue.component('appui-ide-mvc', {
   template: '#bbn-tpl-component-appui-ide-mvc',
   props: ['source'],
-  beforeMount(){
-    bbn.vue.setComponentRule(this.source.root + 'components/', 'appui');
-    bbn.vue.addComponent('ide/code');
-    bbn.vue.unsetComponentRule();
-  },
   data(){
-    const ide = bbn.vue.closest(bbn.vue.closest(this, '.bbn-tabnav'), '.bbn-tab').getComponent().$data;
+    const ide = bbn.vue.closest(bbn.vue.closest(this, '.bbn-tabnav'), '.bbns-tab').getComponent().$data;
     let path = this.source.url.substr(this.source.repository.length).replace('/_end_', '').split('/'),
         filename = path.pop(),
         tabs = ide.repositories[this.source.repository].tabs,

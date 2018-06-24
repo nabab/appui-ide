@@ -1,15 +1,15 @@
 <div class=v-bbn-fill-height "bbn-w-100">
   <div class="bbn-h-100 code">
     <bbn-tabnav :autoload="false" :scrollable="false">
-      <bbn-tab :static="true"
+      <bbns-tab :static="true"
                :load="true"
                :url="repositories[repository].tabs['_ctrl'].url"
                :title="repositories[repository].tabs['_ctrl'].title"
                :bcolor="repositories[repository].tabs['_ctrl'].bcolor"
                :fcolor="repositories[repository].tabs['_ctrl'].fcolor"
       >
-      </bbn-tab>
-      <bbn-tab v-for="(tab, idx) in sctrl"
+      </bbns-tab>
+      <bbns-tab v-for="(tab, idx) in sctrl"
                :static="true"
                :load="true"
                :url="'_'.repeat(idx+1) + repositories[repository].tabs['_ctrl'].url"
@@ -18,8 +18,8 @@
                :bcolor="repositories[repository].tabs['_ctrl'].bcolor"
                :fcolor="repositories[repository].tabs['_ctrl'].fcolor"
       >
-      </bbn-tab>
-      <bbn-tab v-for="(tab, idx) in repositories[repository].tabs"
+      </bbns-tab>
+      <bbns-tab v-for="(tab, idx) in repositories[repository].tabs"
                v-if="tab.url !== '_ctrl'"
                :static="true"
                :load="true"
@@ -30,7 +30,7 @@
                :selected="tab.default"
                :bcolor="tab.bcolor"
                :fcolor="tab.fcolor"
-      ></bbn-tab>
+      ></bbns-tab>
     </bbn-tabnav>
   </div>
 </div>

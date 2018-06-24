@@ -128,7 +128,7 @@
     },
     watch: {
       isChanged(isChanged){
-        let tabNav = bbn.vue.closest(this, 'bbn-tab').tabNav;
+        let tabNav = bbn.vue.closest(this, 'bbns-tab').tabNav;
         tabNav.tabs[tabNav.selected].isUnsaved = isChanged;
       }
     },
@@ -213,7 +213,7 @@
                 appui.alert("There is an XML error in this SVG");
               }
               else {
-                bbn.vue.closest(this, ".bbn-tab").popup($("<div/>").append(document.importNode(oDocument.documentElement, true)).html(), "Problem with SVG");
+                bbn.vue.closest(this, ".bbns-tab").popup($("<div/>").append(document.importNode(oDocument.documentElement, true)).html(), "Problem with SVG");
               }
               break;
             default:
@@ -345,7 +345,7 @@
       },
       saveImessage(){
         if ( this.imessage.title && this.imessage.content && this.imessage.id_option ){
-          bbn.vue.closest(this, 'bbn-tab').popup().confirm(bbn._('Are you sure you want save this internal message?'), () => {
+          bbn.vue.closest(this, 'bbns-tab').popup().confirm(bbn._('Are you sure you want save this internal message?'), () => {
             bbn.fn.post(this.ide.root + 'actions/imessages/add', this.imessage, d => {
               if ( d.success ){
                 this.source.imessages.push($.extend({}, this.imessage));

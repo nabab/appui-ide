@@ -857,23 +857,20 @@ class ide {
         }
 
         if( !empty($val_opt) ){
-          $arr = [
-              'selections' => $val_opt['selections'] ?: [],
-              'marks' => $val_opt['marks'] ?: [],
-              'line' => $val_opt['line'] ?:[],
-              'char' => $val_opt['char'] ?:[],
-            ];
-
-          $f = array_merge($f, $arr);
+          foreach ( $f as $n => $v ){
+            if ( isset($val_opt[$n]) ){
+              $f[$n] = $v;
+            }
+          }
         }
-
       }
-
-/*      else if ( !empty($real['tab']) &&
+      /*
+      else if ( !empty($real['tab']) &&
         !empty($real['repository']['tabs'][$real['tab']]['extensions'][0]['default'])
       ){
         $f['value'] = $real['repository']['tabs'][$real['tab']]['extensions'][0]['default'];
-      }*/
+      }
+      */
 
       else if ( !empty($real['tab']) &&
        ( ($i = \bbn\x::find($real['repository']['tabs'], ['url' => $real['tab']])) !== false )

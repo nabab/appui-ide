@@ -14,7 +14,7 @@ Vue.component('appui-ide-mvc', {
   },
   data(){
     const vm = this,
-          ide = bbn.vue.closest(bbn.vue.closest(vm, '.bbn-tabnav'), '.bbn-tab').$children[0].$data;
+          ide = bbn.vue.closest(bbn.vue.closest(vm, '.bbn-tabnav'), '.bbns-tab').$children[0].$data;
     let path = vm.source.url.substr(vm.source.repository.length).replace('/_end_', '').split('/'),
         filename = path.pop();
 

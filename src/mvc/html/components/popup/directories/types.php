@@ -12,31 +12,31 @@
              editor="appui-ide-popup-directories-form-types"
              :editable="true"
   >
-    <bbn-column field="code"
+    <bbns-column field="code"
                 :hidden="true"
-    ></bbn-column>
-    <bbn-column field="id"
+    ></bbns-column>
+    <bbns-column field="id"
                 :hidden="true"
-    ></bbn-column>
-    <bbn-column title="<?=_("Type")?>"
+    ></bbns-column>
+    <bbns-column title="<?=_("Type")?>"
                 field="text"
                 cls="bbn-c"
-    ></bbn-column>
-    <bbn-column title= "<?=_("Extensions")?>"
+    ></bbns-column>
+    <bbns-column title= "<?=_("Extensions")?>"
                 field="extensions"
                 :width="70"
                 :render="renderIconExts"
                 cls="bbn-c"
                 default="[]"
-    ></bbn-column>
-    <bbn-column title= "<?=_("Tabs")?>"
+    ></bbns-column>
+    <bbns-column title= "<?=_("Tabs")?>"
                 field="tabs"
                 :width="70"
                 :render="renderIconTabs"
                 cls="bbn-c"
                 default="[]"
-    ></bbn-column>
-    <bbn-column title=" "
+    ></bbns-column>
+    <bbns-column title=" "
                 cls="bbn-c"
                 :width="150"
                 :buttons="[{
@@ -55,6 +55,6 @@
                   icon: 'fa fa-trash',
                   notext: true
                 }]"
-    ></bbn-column>
+    ></bbns-column>
   </bbn-table>
 </div>

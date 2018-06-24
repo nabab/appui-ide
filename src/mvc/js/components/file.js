@@ -9,7 +9,7 @@ Vue.component('appui-ide-file', {
   template: '#bbn-tpl-component-appui-ide-file',
   props: ['source'],
   data(){
-    const ide = bbn.vue.closest(bbn.vue.closest(this, '.bbn-tabnav'), '.bbn-tab').getComponent().$data;
+    const ide = bbn.vue.closest(bbn.vue.closest(this, '.bbn-tabnav'), '.bbns-tab').getComponent().$data;
     let path = this.source.url.substr(this.source.repository.length).replace('/_end_', '').split('/'),
         filename = path.pop(),
         tab = ide.repositories[this.source.repository],
@@ -100,11 +100,6 @@ Vue.component('appui-ide-file', {
         tab.menu.splice(idx, 1);
       }
     }
-  },
-  beforeMount(){
-    bbn.vue.setComponentRule(this.source.root + 'components/', 'appui-ide');
-    bbn.vue.addComponent('code');
-    bbn.vue.unsetComponentRule();
   },
   mounted(){
     this.$nextTick(() => {

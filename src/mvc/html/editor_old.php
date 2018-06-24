@@ -35,7 +35,7 @@
         <i class="fa fa-check"> </i> Save
       </button>
       <button class="k-button" type="button" onclick="bbn.fn.closePopup();">
-        <i class="fa fa-close"> </i> Cancel
+        <i class="fas fa-times"> </i> Cancel
       </button>
     </div>
   </form>
@@ -55,7 +55,7 @@
         <i class="fa fa-edit"></i> Rename
       </button>
       <button class="k-button" type="button" onclick="bbn.fn.closePopup();">
-        <i class="fa fa-close"></i> Cancel
+        <i class="fas fa-times"></i> Cancel
       </button>
     </div>
   </form>
@@ -89,7 +89,7 @@ function findSequence(goal) {
 }</textarea>
       <br><br>
       <div align="right">
-        <button class="k-button" type="button" onclick="bbn.fn.closePopup();"><i class="fa fa-close"></i> Annule
+        <button class="k-button" type="button" onclick="bbn.fn.closePopup();"><i class="fas fa-times"></i> Annule
         </button>
         <button class="k-button" type="button"><i class="fa fa-save"></i> Sauver</button>
       </div>

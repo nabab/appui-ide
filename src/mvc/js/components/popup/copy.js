@@ -17,7 +17,7 @@ Vue.component('appui-ide-popup-copy', {
   },
   methods: {
     onSuccess(){
-      //const tab = bbn.vue.closest(this, ".bbn-tab");
+      //const tab = bbn.vue.closest(this, ".bbns-tab");
       if ( this.new_path === './' ){
         appui.ide.$refs.filesList.reload();
       }
@@ -44,7 +44,7 @@ Vue.component('appui-ide-popup-copy', {
     },
 
     selectDir(){
-      bbn.vue.closest(this, ".bbn-tab").$refs.popup[0].open({
+      bbn.vue.closest(this, ".bbns-tab").$refs.popup[0].open({
         width: 300,
         height: 400,
         title: bbn._('Path'),

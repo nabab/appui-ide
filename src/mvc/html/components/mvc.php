@@ -5,15 +5,15 @@
                 ref="tabstrip"
                 @tabLoaded="loadingTab"
     >
-      <bbn-tab :static="true"
+      <bbns-tab :static="true"
                :load="true"
                :url="repositories[repository].tabs[search(repositories[repository].tabs, 'url' ,'_ctrl')]['url']"
                :title="repositories[repository].tabs[search(repositories[repository].tabs, 'url' ,'_ctrl')]['title']"
                :bcolor="repositories[repository].tabs[search(repositories[repository].tabs, 'url' ,'_ctrl')]['bcolor']"
                :fcolor="repositories[repository].tabs[search(repositories[repository].tabs, 'url' ,'_ctrl')]['fcolor']"
       >
-      </bbn-tab>
-      <bbn-tab v-for="(tab, idx) in sctrl"
+      </bbns-tab>
+      <bbns-tab v-for="(tab, idx) in sctrl"
                :static="true"
                :load="true"
                :url="'_'.repeat(idx+1) + repositories[repository].tabs[search(repositories[repository].tabs, 'url' ,'_ctrl')]['url']"
@@ -22,16 +22,16 @@
                :bcolor="repositories[repository].tabs[search(repositories[repository].tabs, 'url' ,'_ctrl')]['bcolor']"
                :fcolor="repositories[repository].tabs[search(repositories[repository].tabs, 'url' ,'_ctrl')]['fcolor']"
       >
-      </bbn-tab>
+      </bbns-tab>
       <!--form permision-->
-      <bbn-tab :static="true"
+      <bbns-tab :static="true"
                :load="true"
                url="settings"
                :disabled="disabledSetting"
                title= "<?=_('Settings')?>"
                :selected="true"
-      ></bbn-tab>
-      <bbn-tab v-for="(tab, idx) in repositories[repository].tabs"
+      ></bbns-tab>
+      <bbns-tab v-for="(tab, idx) in repositories[repository].tabs"
                v-if="tab.url !== '_ctrl'"
                :static="true"
                :load="true"
@@ -43,7 +43,7 @@
                :bcolor="tab.bcolor"
                :fcolor="tab.fcolor"
                :menu="getMenu(tab.url)"
-      ></bbn-tab>
+      ></bbns-tab>
     </bbn-tabnav>
   </div>
 </div>

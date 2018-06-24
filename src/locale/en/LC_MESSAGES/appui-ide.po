@@ -1,0 +1,628 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: 1\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: BBN Solutions <support@bbn.solutions>\n"
+"Language-Team: EN <EN@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2018-05-07 18:09+0200\n"
+"PO-Revision-Date: 2018-05-07 18:09+0200\n"
+"Language: en\n"
+"X-Domain: appui-ide\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/all.php:1
+msgid "Repository : "
+msgstr "Repositoryo :"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/all.php:1
+msgid "File : "
+msgstr "File :"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/all.php:1
+msgid "Theme : "
+msgstr "Theme :"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/cache.php:1
+msgid "Delete all"
+msgstr "Delete all"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/cache.php:1
+msgid "Cache Managent"
+msgstr "Cache Managent"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/cache.php:1
+msgid "Select a cache file"
+msgstr "Select a cache file"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/editor.php:1
+msgid "Search content"
+msgstr "Search content"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/editor.php:1
+msgid "Search file"
+msgstr "Search file"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/editor.php:1
+msgid "Refresh files list"
+msgstr "Refresh files list"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/editor.php:1
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js:1
+msgid "Test code!"
+msgstr "Test code!"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/editor.php:1
+msgid "Show History"
+msgstr "Show History"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/editor.php:1
+msgid "Show strings and translations"
+msgstr "Show strings and translations"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/editor.php:1
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/components/popup/search.php:1
+msgid "Match cases"
+msgstr "Match cases"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/error_log.php:1
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/components/new.php:1
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/components/popup/new.php:1
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/components/popup/directories/types.php:1
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor/directories.js:1
+msgid "Type"
+msgstr "Type"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/error_log.php:1
+msgid "Last"
+msgstr "Last"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/error_log.php:1
+msgid "Count"
+msgstr "Count"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/error_log.php:1
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/components/popup/directories/types.js:1
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/components/popup/directories/form/types.js:1
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor/code.js:1
+msgid "Error"
+msgstr "Error"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/error_log.php:1
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js:1
+msgid "File"
+msgstr "File"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/error_log.php:1
+msgid "Line"
+msgstr "Line"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/error_log.php:1
+msgid "First"
+msgstr "First"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/error_log.php:1
+msgid "Message"
+msgstr "Message"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/logs.php:1
+msgid "Auto"
+msgstr "Auto"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/logs.php:1
+msgid "Clear file"
+msgstr "Clear file"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/logs.php:1
+msgid "Refresh"
+msgstr "Refresh"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/logs.php:1
+msgid "Empty file content"
+msgstr "Empty file content"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/session.php:1
+msgid "Infos"
+msgstr "Infos"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/session.php:1
+msgid "Server"
+msgstr "Server"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/session.php:1
+msgid "Session"
+msgstr "Session"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/components/file.php:1
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/components/mvc/permissions_setting.php:1
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/components/popup/directories/form/types.php:1
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/editor/code.php:1
+msgid "Code"
+msgstr "Code"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/components/i18n.php:1
+msgid "Original Expression"
+msgstr "Original Expression"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/components/mvc.php:1
+msgid "Settings"
+msgstr "Settings"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/components/new.php:1
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/components/popup/copy.php:1
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/components/popup/new.php:1
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/components/popup/rename.php:1
+msgid "Name"
+msgstr "Name"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/components/new.php:1
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/components/popup/copy.php:1
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/components/popup/new.php:1
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/components/popup/copy.js:1
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/components/popup/new.js:1
+msgid "Path"
+msgstr "Path"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/components/new.php:1
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/components/popup/copy.php:1
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/components/popup/new.php:1
+msgid "Browse"
+msgstr "Browse"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/components/new.php:1
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/components/popup/copy.php:1
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/components/popup/new.php:1
+msgid "Root"
+msgstr "Root"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/components/new.php:1
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js:1
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor/code.js:1
+msgid "Save"
+msgstr "Save"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/components/new.php:1
+msgid "Cancel"
+msgstr "Cancel"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/components/mvc/permissions_setting.php:1
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/editor/code.php:1
+msgid "Title/Description"
+msgstr "Title/Description"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/components/mvc/permissions_setting.php:1
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/editor/code.php:1
+msgid "Help"
+msgstr "Help"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/components/mvc/permissions_setting.php:1
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/editor/code.php:1
+msgid "Children permissions"
+msgstr "Children permissions"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/components/popup/search.php:1
+msgid "Search..."
+msgstr "Search..."
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/components/popup/directories/types.php:1
+msgid "Add Type"
+msgstr "Add Type"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/components/popup/directories/types.php:1
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/components/popup/directories/form/types.php:1
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/components/popup/directories/form/types.js:1
+msgid "Extensions"
+msgstr "Extensions"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/components/popup/directories/types.php:1
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/components/popup/directories/form/types.php:1
+msgid "Tabs"
+msgstr "Tabs"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/components/popup/directories/types.php:1
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js:1
+msgid "Edit"
+msgstr "Edit"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/components/popup/directories/types.php:1
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js:1
+msgid "Copy"
+msgstr "Copy"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/components/popup/directories/types.php:1
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js:1
+msgid "Delete"
+msgstr "Delete"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/components/popup/directories/form/types.php:1
+msgid "Text"
+msgstr "Text"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/components/popup/directories/form/types.php:1
+msgid "Do you want to insert extensions or tabs?"
+msgstr "Do you want to insert extensions or tabs?"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/components/popup/directories/form/types.php:1
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/components/popup/directories/form/types.js:1
+msgid "Tab"
+msgstr "Tab"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/editor/code.php:1
+msgid "Internal messages"
+msgstr "Internal messages"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/editor/code.php:1
+msgid "EXISTING"
+msgstr "EXISTING"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/editor/code.php:1
+msgid "Start"
+msgstr "Start"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/editor/code.php:1
+msgid "End"
+msgstr "End"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/editor/code.php:1
+msgid "Title"
+msgstr "Title"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/editor/code.php:1
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js:1
+msgid "New"
+msgstr "New"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/editor/search.php:1
+msgid "Search"
+msgstr "Search"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/editor/search.php:1
+msgid "Repository:"
+msgstr "Repository:"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/editor/search.php:1
+msgid "Folder:"
+msgstr "Folder:"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/editor/search.php:1
+msgid "Files:"
+msgstr "Files:"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/editor/search.php:1
+msgid "Occourences:"
+msgstr "Occourences:"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/html/editor/search.php:1
+msgid "no search result"
+msgstr "no search result"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/all.js:1
+msgid "successfully moved!"
+msgstr "successfully moved!"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/all.js:1
+msgid "Error move!"
+msgstr "Error move!"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/cache.js:1
+msgid "Delete file cache"
+msgstr "Delete file cache"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/cache.js:1
+msgid "Delete folder"
+msgstr "Delete folder"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/cache.js:1
+msgid "Delete folder's contents"
+msgstr "Delete folder's contents"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js:1
+msgid "Directory"
+msgstr "Directory"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js:1
+msgid "Rename"
+msgstr "Rename"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js:1
+msgid "Close tab"
+msgstr "Close tab"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js:1
+msgid "Close all tabs"
+msgstr "Close all tabs"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js:1
+msgid "Find"
+msgstr "Find"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js:1
+msgid "Find next"
+msgstr "Find next"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js:1
+msgid "Find previous"
+msgstr "Find previous"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js:1
+msgid "Replace"
+msgstr "Replace"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js:1
+msgid "Replace All"
+msgstr "Replace All"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js:1
+msgid "Unfold all"
+msgstr "Unfold all"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js:1
+msgid "Fold all"
+msgstr "Fold all"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js:1
+msgid "History"
+msgstr "History"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js:1
+msgid "Show"
+msgstr "Show"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js:1
+msgid "Clear"
+msgstr "Clear"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js:1
+msgid "Clear All"
+msgstr "Clear All"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js:1
+msgid "Doc."
+msgstr "Doc."
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js:1
+msgid "Generate"
+msgstr "Generate"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js:1
+msgid "Pref."
+msgstr "Pref."
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js:1
+msgid "Manage directories"
+msgstr "Manage directories"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js:1
+msgid "IDE style"
+msgstr "IDE style"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js:1
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/components/popup/search.js:1
+msgid "sensitive"
+msgstr "sensitive"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js:1
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/components/popup/search.js:1
+msgid "insensitive"
+msgstr "insensitive"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js:1
+msgid "Manager type directories"
+msgstr "Manager type directories"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js:1
+msgid "Search in: "
+msgstr "Search in:"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js:1
+msgid "Do you want to save the changes before closing the tab?"
+msgstr "Do you want to save the changes before closing the tab?"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js:1
+msgid "New file"
+msgstr "New file"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js:1
+msgid "New directory"
+msgstr "New directory"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js:1
+msgid "Find in Path"
+msgstr "Find in Path"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js:1
+msgid "Go to"
+msgstr "Go to"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js:1
+msgid "New File"
+msgstr "New file"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js:1
+msgid "New Directory"
+msgstr "New directory"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js:1
+msgid "Copy folder"
+msgstr "Copy folder"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js:1
+msgid "Are you sure you want to delete"
+msgstr "Are you sure you want to delete"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js:1
+msgid "the folder"
+msgstr "the folder"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js:1
+msgid "Deleted!"
+msgstr "Deleted!"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js:1
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/components/popup/copy.js:1
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/components/popup/new.js:1
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor/code.js:1
+msgid "Error!"
+msgstr "Error!"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js:1
+msgid "Successfully moved"
+msgstr "Successfully moved"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js:1
+msgid "Impossible to have two items with the same name"
+msgstr "Impossible to have two items with the same name"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js:1
+msgid "Error move"
+msgstr "Error move"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js:1
+msgid "Are you sure you want to delete it?"
+msgstr "Are you sure you want to delete it?"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js:1
+msgid "i18n"
+msgstr "i18n"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/components/file.js:1
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/components/mvc.js:1
+msgid "Refresh code"
+msgstr "Refresh code"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/components/file.js:1
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/components/mvc.js:1
+msgid "Modified code do you want to refresh anyway?"
+msgstr "Modified code do you want to refresh anyway?"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/components/file.js:1
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/components/mvc.js:1
+msgid "Extension changed successfully"
+msgstr "Extension changed successfully"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/components/file.js:1
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/components/mvc.js:1
+msgid "Change error extension"
+msgstr "Change error extension"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/components/i18n.js:1
+msgid "Select languages you want to hide from the table"
+msgstr "Select languages you want to hide from the table"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/components/mvc.js:1
+msgid "switch to"
+msgstr "switch to"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/components/mvc.js:1
+msgid "Add code"
+msgstr "Add code"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/components/popup/copy.js:1
+msgid "Copy file succesfully!"
+msgstr "Copy file succesfully!"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/components/popup/copy.js:1
+msgid "Copy succesfully!"
+msgstr "Copy succesfully!"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/components/popup/new.js:1
+msgid "File created!"
+msgstr "File created!"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/components/popup/new.js:1
+msgid "Directory created!"
+msgstr "Directory created!"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/components/popup/rename.js:1
+msgid "Do you want to save the changes before?"
+msgstr "Do you want to save the changes before?"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/components/popup/rename.js:1
+msgid "Renamed!"
+msgstr "Renamed!"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/components/popup/directories/types.js:1
+msgid "Add new type"
+msgstr "Add new type"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/components/popup/directories/types.js:1
+msgid "Copy type"
+msgstr "Copy types"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/components/popup/directories/types.js:1
+msgid "Are you sure you want to delete the"
+msgstr "Are you sure you want to delete the"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/components/popup/directories/types.js:1
+msgid "type?"
+msgstr "type?"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/components/popup/directories/types.js:1
+msgid "Deleted"
+msgstr "Deleted"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/components/popup/directories/types.js:1
+msgid "Modify type"
+msgstr "Modify type"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/components/popup/directories/form/types.js:1
+msgid "Insert a new extension"
+msgstr "Insert a new extension"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/components/popup/directories/form/types.js:1
+msgid "Insert a new tab"
+msgstr "Insert a new tab"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/components/popup/directories/form/types.js:1
+msgid "Insert a title"
+msgstr "Insert a title"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/components/popup/directories/form/types.js:1
+msgid "Insert a path"
+msgstr "Insert a path"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/components/popup/directories/form/types.js:1
+msgid "Insert a url"
+msgstr "Insert a url"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/components/popup/directories/form/types.js:1
+msgid "success"
+msgstr "Success"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor/code.js:1
+msgid "Add"
+msgstr "Add"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor/code.js:1
+msgid "File saved!"
+msgstr "File saved!"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor/code.js:1
+msgid "File deleted!"
+msgstr "File deleted!"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor/code.js:1
+msgid "Permission saved!"
+msgstr "Permission saved!"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor/code.js:1
+msgid "Are you sure you want save this internal message?"
+msgstr "Are you sure you want save this internal message?"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor/code.js:1
+msgid "Saved"
+msgstr "Saved"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/js/editor/directories.js:1
+msgid "Repositories"
+msgstr "Repositories"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/model/editor/search.php:1
+msgid "content too long to be shown"
+msgstr "content too long to be shown"
+
+#: /home/thomas/domains/apstapp2.thomas.lan/_appui/vendor/bbn/appui-ide/src/mvc/public/all.php:1
+msgid "All Repository"
+msgstr "All Repository"

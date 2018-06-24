@@ -24,6 +24,6 @@
   </div>
   <div slot="footer">
     <bbn-button icon="fa fa-check" type="submit"><?=_("Save")?></bbn-button>
-    <bbn-button icon="fa fa-close" @click="close"><?=_("Cancel")?></bbn-button>
+    <bbn-button icon="fas fa-times" @click="close"><?=_("Cancel")?></bbn-button>
   </div>
 </bbn-form>

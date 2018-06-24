@@ -11,40 +11,40 @@ old
            :editable="true"
            :pageable="true"        
 >
-  <bbn-column title="<?=_("Type")?>"
+  <bbns-column title="<?=_("Type")?>"
               field="type"
               :width="80"
-  ></bbn-column>
+  ></bbns-column>
 
-  <bbn-column title="<?=_("Last")?>"
+  <bbns-column title="<?=_("Last")?>"
               :width="100"
               field="last_date"
               type="date"
-  ></bbn-column>
+  ></bbns-column>
 
-  <bbn-column title="<?=_("Count")?>"
+  <bbns-column title="<?=_("Count")?>"
               field="count"
               :width="60"
-  ></bbn-column>
+  ></bbns-column>
 
-  <bbn-column title="<?=_("Error")?>"
+  <bbns-column title="<?=_("Error")?>"
               field="error"
-  ></bbn-column>
+  ></bbns-column>
 
-  <bbn-column title="<?=_("File")?>"
+  <bbns-column title="<?=_("File")?>"
               field="file"
 
-  ></bbn-column>
-  <bbn-column title="<?=_("Line")?>"
+  ></bbns-column>
+  <bbns-column title="<?=_("Line")?>"
               field="line"
               :width="80"
               type="number"
-  ></bbn-column>
-  <bbn-column  title="<?=_("First")?>"
+  ></bbns-column>
+  <bbns-column  title="<?=_("First")?>"
                :width="100"
                field="first_date"
                type="date"
-  ></bbn-column>
+  ></bbns-column>
 </bbn-table>
 
 <!--
@@ -55,13 +55,13 @@ old
                ref="tableInfoErrorLog"
                class="bbn-full-screen"
     >
-      <bbn-column title="dddd"
+      <bbns-column title="dddd"
                   field="index"
                   :width="40"
-      ></bbn-column>
-      <bbn-column title="<?=_("Message")?>"
+      ></bbns-column>
+      <bbns-column title="<?=_("Message")?>"
                   field="text"
-      ></bbn-column>
+      ></bbns-column>
     </bbn-table>
   </div>
 </script>

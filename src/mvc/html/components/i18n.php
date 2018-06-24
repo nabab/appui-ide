@@ -11,9 +11,9 @@
              :expander="$options.components['file_linker']"
              :toolbar="$options.components['toolbar']"
   >
-    <bbn-column field="original_exp"
+    <bbns-column field="original_exp"
                 :editable="false"
                 title="<?=_("Original Expression")?>"
-    ></bbn-column>
+    ></bbns-column>
   </bbn-table>
 </div>

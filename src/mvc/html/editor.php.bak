@@ -67,11 +67,11 @@
         <bbn-tabnav id="tabstrip_editor"
                     ref="tabstrip"
                     :autoload="true">
-          <bbn-tab :static="true"
+          <bbns-tab :static="true"
                    url="home"
                    load="true"
                    :title="'<i class=\'bbn-xl zmdi zmdi-pin-help\'> </i>'"
-          ></bbn-tab>
+          ></bbns-tab>
         </bbn-tabnav>
       </div>
       <div style="width: 200px"
@@ -108,7 +108,7 @@
     <div class="bbn-form-label"></div>
     <div class="bbn-form-field" style="text-align: right">
       <bbn-button type="submit" icon="fa fa-check"> Save</bbn-button>
-      <bbn-button @click="close" icon="fa fa-close"> Cancel</bbn-button>
+      <bbn-button @click="close" icon="fas fa-times"> Cancel</bbn-button>
     </div>
   </bbn-form>
 </script>
@@ -126,7 +126,7 @@
         <i class="fa fa-edit"></i> Rename
       </button>
       <button class="k-button" type="button" onclick="bbn.fn.closePopup();">
-        <i class="fa fa-close"></i> Cancel
+        <i class="fas fa-times"></i> Cancel
       </button>
     </div>
   </form>
@@ -160,7 +160,7 @@ function findSequence(goal) {
 }</textarea>
       <br><br>
       <div align="right">
-        <button class="k-button" type="button" onclick="bbn.fn.closePopup();"><i class="fa fa-close"></i> Annule
+        <button class="k-button" type="button" onclick="bbn.fn.closePopup();"><i class="fas fa-times"></i> Annule
         </button>
         <button class="k-button" type="button"><i class="fa fa-save"></i> Sauver</button>
       </div>

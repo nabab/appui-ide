@@ -6,7 +6,7 @@ Vue.component('appui-ide-popup-new', {
   props: ['source'],
   data(){
     let rep = this.source.repositories[this.source.currentRep],
-      isMVC = (rep !== undefined ) && (rep.tabs !== undefined),
+      isMVC = (rep !== undefined ) && (rep.tabs !== undefined) && (rep.alias_code !== "component"),
       defaultTab = '',
       defaultExt = '';
     if ( rep.tabs ){
@@ -21,6 +21,7 @@ Vue.component('appui-ide-popup-new', {
     }
     return {
       isMVC: isMVC,
+      isComponent: (rep !== undefined ) && (rep.tabs !== undefined) && (rep.alias_code === "component"),
       rep: rep,
       is_file: this.source.isFile,
       data: {
@@ -55,7 +56,7 @@ Vue.component('appui-ide-popup-new', {
       appui.error(bbn._("Error!"));
     },
     selectDir(){
-      bbn.vue.closest(this, ".bbn-tab").$refs.popup[0].open({
+      bbn.vue.closest(this, ".bbns-tab").$refs.popup[0].open({
         width: 300,
         height: 400,
         title: bbn._('Path'),

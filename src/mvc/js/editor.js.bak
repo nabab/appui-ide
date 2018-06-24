@@ -27,7 +27,7 @@
             items: [{
               text: '<i class="fa fa-plus"></i>' + bbn._('New'),
               items: [{
-                text: '<i class="fa fa-file-o"></i>' + bbn._('File'),
+                text: '<i class="far fa-file"></i>' + bbn._('File'),
                 select: () => {
                   this.newFile();
                 }
@@ -43,7 +43,7 @@
                 this.save();
               }
             }, {
-              text: '<i class="fa fa-trash-o"></i>' + bbn._('Delete'),
+              text: '<i class="far fa-trash-alt"></i>' + bbn._('Delete'),
               select: () => {
                 this.deleteActive();
               }
@@ -53,7 +53,7 @@
 
               }
             }, {
-              text: '<i class="fa fa-times-circle-o"></i>' + bbn._('Close all tabs'),
+              text: '<i class="far fa-times-circle"></i>' + bbn._('Close all tabs'),
               select: "bbn.ide.tabstrip.tabNav('closeAll');"
             }]
           }, {
@@ -82,7 +82,7 @@
                 this.history();
               }
             }, {
-              text: '<i class="fa fa-trash-o"></i>' + bbn._('Clear'),
+              text: '<i class="far fa-trash-alt"></i>' + bbn._('Clear'),
               select: 'bbn.ide.historyClear();'
             }, {
               text: '<i class="fa fa-trash"></i>' + bbn._('Clear All'),
@@ -321,7 +321,7 @@
 
       treeContextMenu(n , i){
         return [{
-          icon: 'fa fa-file-o',
+          icon: 'far fa-file',
           text: bbn._('New file'),
           click: ()=>{ this.newFile(n, i) }
         }, {
@@ -333,11 +333,11 @@
           text: bbn._('Rename'),
           click: ()=> { this.rename(a) }
         }, {
-          icon: 'fa fa-files-o',
+          icon: 'far fa-files',
           text: bbn._('Copy'),
           click: ()=> { this.copy(n) }
         }, {
-          icon: 'fa fa-file-zip-o',
+          icon: 'far fa-file-zip',
           text: bbn._('Export'),
           click: ()=> { this.export(n) }
         }, {
@@ -643,7 +643,7 @@
        * @param string path The current path
        */
       new(title, isFile, node){
-        bbn.vue.closest(this, ".bbn-tab").$refs.popup.open({
+        bbn.vue.closest(this, ".bbns-tab").$refs.popup.open({
           width: 500,
           height: 250,
           title: title,
@@ -687,7 +687,7 @@
        * @param data The node data
        */
       rename(d){
-        bbn.vue.closest(this, ".bbn-tab").$refs.popup.open({
+        bbn.vue.closest(this, ".bbns-tab").$refs.popup.open({
           width: 500,
           height: 150,
           title: bbn._('Rename'),
@@ -705,7 +705,7 @@
        * @param data The node data
        */
       copy(data){
-        bbn.vue.closest(this, ".bbn-tab").$refs.popup[0].open({
+        bbn.vue.closest(this, ".bbns-tab").$refs.popup[0].open({
           width: 690,
           height: 220,
           title: bbn._('Copy'),

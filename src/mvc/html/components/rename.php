@@ -10,7 +10,7 @@
       <i class="fa fa-edit"></i> Rename
     </button>
     <button class="k-button" type="button" onclick="bbn.fn.closePopup()">
-      <i class="fa fa-close"></i> Cancel
+      <i class="fas fa-times"></i> Cancel
     </button>
   </div>
 </form>
