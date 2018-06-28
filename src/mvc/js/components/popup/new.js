@@ -96,11 +96,11 @@ Vue.component('appui-ide-popup-new', {
     },
     defaultText(){
       if ( this.availableExtensions ){
-       for ( let i  in  this.availableExtensions ){
+       for ( let i in this.availableExtensions ){
          if ( this.availableExtensions[i].ext === this.data.extension ){
            return this.availableExtensions[i].default;
          }
-       };
+       }
       }
       return false
     },
@@ -112,14 +112,13 @@ Vue.component('appui-ide-popup-new', {
       }
     },
     extensions(){
+      let arr= [];
       if ( this.availableExtensions ){
-        let arr= [];
         for ( let obj of this.availableExtensions ){
-          arr.push( {text: obj.ext, value: obj.ext} );
+          arr.push({text: obj.ext, value: obj.ext});
         }
-        return arr;
       }
-      return [];
+      return arr;
     }
   }
 });
