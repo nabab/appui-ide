@@ -123,6 +123,16 @@ Vue.component('appui-ide-mvc', {
     },
     disabledSetting(){
       return !this.source.settings
+    },
+    titleTabCtrl(){
+      let level = this.sctrl.length;
+      return level === 0 ? `CTRL` : `CTRL${level}`
+    },
+    countCtrl(){
+      let steps = this.source.title.split("/").slice();
+      let i = steps.length;
+       return  "_".repeat(i) + 'ctrl'
+
     }
   },
   /*mounted:{
@@ -155,6 +165,51 @@ Vue.component('appui-ide-mvc', {
                 break;
           default: return tab.title;
         }
+    },
+    listCtrls(){
+      let path="",
+          url = "_ctrl",
+          arr = [{
+            text: 'CTRL: ./',
+            title: 'CTRL',
+            icon : 'fas fa-cogs',
+            url: url,
+            command: (a) => {
+              this.loadCtrl(a);
+            }
+          }];
+      this.sctrl.forEach((val, i) => {
+        path += val + "/";
+        arr.push({
+          text: `CTRL${(i+1)}:   ${path}`,
+          title: `CTRL${(i+1)}`,
+          icon : 'fas fa-cogs',
+          url: "_".repeat(i+1) + url,
+          command: (a) => {
+            this.loadCtrl(a);
+          }
+        });
+      });
+      return arr;
+    },
+    loadCtrl(ctrl){
+      let i = this.$refs.tabstrip.selected,
+          tab = this.$refs.tabstrip.tabs.splice(0,1),
+          val = tab[0].menu[ctrl-1];
+      this.$refs.tabstrip.selected = '';
+      this.$refs.tabstrip.add({
+        load: true,
+        static: true,
+        url: val.url,
+        bcolor: tab[0].bcolor,
+        fcolor: tab[0].fcolor,
+        title: val.title,
+        menu: tab[0].menu.slice()
+      }, i);
+      this.$nextTick(() => {
+        this.$refs.tabstrip.selected = i;
+        this.$refs.tabstrip.load(val.url, true);
+      });
     },
     //used in the template, returns a copy of the complete menu that will later be retracted in the tabLoaded event with the 'loading tab' function
     getMenu(url){

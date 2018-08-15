@@ -898,7 +898,7 @@ class ide {
    * @return array|string
    */
   public function save(array $file){
-    \bbn\x::log([$file['full_path'],$this->decipher_path($file['full_path'])], "modIde");
+
     if ( $this->set_current_file($this->decipher_path($file['full_path'])) ){
       //if in the case of a rescue of _ctrl
       if ( $file['tab'] === "_ctrl" ){
@@ -936,7 +936,6 @@ class ide {
           return ['deleted' => true];
         }
       }
-\bbn\x::log([$file, self::$current_file], "modIde");
       if ( is_file(self::$current_file) ){
         $backup = $backup_path . date('Y-m-d_His') . '.' . $file['extension'];
           \bbn\file\dir::create_path(dirname($backup));

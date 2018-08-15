@@ -149,7 +149,7 @@
             text: bbn._('Pref.'),
             //enabled: false,
             items: [{
-              text: '<i class="fa fa-cog"></i>' + bbn._('Manage directories'),
+              text: '<i class="fas fa-cog"></i>' + bbn._('Manage directories'),
               select: ()=>{
                 //for show Directories manager
                 this.managerTypeDirectories();
@@ -757,7 +757,7 @@
       },
       getActive(getCode = false){
         let tn = this.$refs.tabstrip,
-          code;
+            code;
         if ( tn && tn.tabs[tn.selected] ){
           tn = tn.getSubTabNav(tn.selected);
           if ( !getCode ){

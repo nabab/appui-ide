@@ -101,7 +101,7 @@ if (
 
 
       foreach ( $files[$idx]['strings'] as $i => $string ){
-        if ( $id = $model->db->get_val('bbn_i18n', 'id', [
+        if ( $id = $model->db->select_one('bbn_i18n', 'id', [
           'exp' => $string,
           'lang'=> $lang
         ]) ){
