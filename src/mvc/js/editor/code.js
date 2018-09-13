@@ -201,7 +201,7 @@
                   url: 'output' + idx,
                   selected: true
                 });
-                tn.selected = tn.getIndex('output' + idx);
+                tn.selected = tn.tabs.length - 1;
               });
               break;
             case "js":

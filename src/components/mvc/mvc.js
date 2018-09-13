@@ -207,8 +207,8 @@ Vue.component('appui-ide-mvc', {
         menu: tab[0].menu.slice()
       }, i);
       this.$nextTick(() => {
-        this.$refs.tabstrip.selected = i;
-        this.$refs.tabstrip.load(val.url, true);
+        //this.$refs.tabstrip.selected = i;
+        this.$refs.tabstrip.load(this.$refs.tabstrip.parseURL(url), true);
       });
     },
     //used in the template, returns a copy of the complete menu that will later be retracted in the tabLoaded event with the 'loading tab' function

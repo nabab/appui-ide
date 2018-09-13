@@ -248,8 +248,8 @@
 
          this.$nextTick(()=>{
            let newUrl = appui.ide.$refs.tabstrip.tabs[appui.ide.tabSelected].current;
-           appui.ide.$refs.tabstrip.currentURL = newUrl;
-           bbn.fn.link('ide/editor/' + newUrl);
+           //appui.ide.$refs.tabstrip.currentURL = newUrl;
+           //bbn.fn.link('ide/editor/' + newUrl);
            appui.ide.$refs.tabstrip.load(newUrl);
          });
 

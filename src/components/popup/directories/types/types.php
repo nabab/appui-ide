@@ -43,7 +43,7 @@
                   text: '<?=_("Edit")?>',
                   command: editType,
                   notext: true,
-                  icon: 'fa fa-pencil'
+                  icon: 'fas fa-pencil-alt'
                 },{
                   text: '<?=_("Copy")?>',
                   command: copyType,

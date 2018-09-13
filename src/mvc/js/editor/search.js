@@ -60,7 +60,7 @@
             appui.ide.search.link = true;
             appui.ide.cursorPosition.line = node.data.line;
             appui.ide.cursorPosition.ch =node.data.position;
-            appui.ide.$refs.tabstrip.load(link)
+            appui.ide.$refs.tabstrip.load(appui.ide.$refs.tabstrip.parseURL(link))
           }
         }
       }
