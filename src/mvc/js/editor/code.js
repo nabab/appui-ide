@@ -233,7 +233,7 @@
           bbn.fn.post(this.ide.root + 'permissions/add', obj, (d) => {
             if ( d.data && d.data.success ){
               // Notify
-              //$cont.append('<i class="fa fa-thumbs-up" style="margin-left: 5px; color: green"></i>');
+              //$cont.append('<i class="fas fa-thumbs-up" style="margin-left: 5px; color: green"></i>');
               // Insert the new item to list
               delete obj.id;
               this.permissions.children.push(obj);
@@ -243,7 +243,7 @@
             }
             else {
               // Notify
-              //$cont.append('<i class="fa fa-thumbs-down" style="margin-left: 5px; color: red"></i>');
+              //$cont.append('<i class="fas fa-thumbs-down" style="margin-left: 5px; color: red"></i>');
             }
             // Remove notify
             /*setTimeout(function(){
@@ -283,11 +283,11 @@
           bbn.fn.post(this.ide.root + 'permissions/save', obj, (d) => {
             /*if ( d.data && d.data.success ){
               // Notify
-              $cont.append('<i class="fa fa-thumbs-up" style="margin-left: 5px; color: green"></i>');
+              $cont.append('<i class="fas fa-thumbs-up" style="margin-left: 5px; color: green"></i>');
             }
             else {
               // Notify
-              $cont.append('<i class="fa fa-thumbs-down" style="margin-left: 5px; color: red"></i>');
+              $cont.append('<i class="fas fa-thumbs-down" style="margin-left: 5px; color: red"></i>');
             }
             // Remove notify
             setTimeout(function(){

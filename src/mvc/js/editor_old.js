@@ -72,9 +72,9 @@ $("div.bbn-ide", ele).kendoToolBar({
   }, {
     type: "separator"
   }, {
-    template: '<button class="k-button" title="Test code!" onclick="bbn.ide.test();"><i class="fa fa-magic"> </i></button>'
+    template: '<button class="k-button" title="Test code!" onclick="bbn.ide.test();"><i class="fas fa-magic"> </i></button>'
   }, {
-    template: '<button class="k-button" title="Show History" onclick="bbn.ide.history();"><i class="fa fa-history"> </i></button>'
+    template: '<button class="k-button" title="Show History" onclick="bbn.ide.history();"><i class="fas fa-history"> </i></button>'
   }, {
     type: "separator"
   }, {
@@ -196,7 +196,7 @@ $("ul.bbn-ide-context").kendoContextMenu({
     duration: 500
   },
   dataSource: [{
-    text: '<i class="fa fa-plus"></i>New',
+    text: '<i class="fas fa-plus"></i>New',
     cssClass: "bbn-tree-new-dir",
     encoded: false,
     items: [{
@@ -204,7 +204,7 @@ $("ul.bbn-ide-context").kendoContextMenu({
       cssClass: "bbn-tree-new-file",
       encoded: false
     }, {
-      text: '<i class="fa fa-folder"></i>Directory',
+      text: '<i class="fas fa-folder"></i>Directory',
       cssClass: "bbn-tree-new-dir",
       encoded: false
     }]
@@ -217,7 +217,7 @@ $("ul.bbn-ide-context").kendoContextMenu({
     cssClass: "bbn-tree-export",
     encoded: false
   }, {
-    text: '<i class="fa fa-pencil"></i>Rename',
+    text: '<i class="fas fa-pencil"></i>Rename',
     cssClass: "bbn-tree-rename",
     encoded: false
   }, {
@@ -225,7 +225,7 @@ $("ul.bbn-ide-context").kendoContextMenu({
     cssClass: "bbn-tree-delete",
     encoded: false
   }, {
-    text: '<i class="fa fa-refresh"></i>Refresh',
+    text: '<i class="fas fa-sync-alt"></i>Refresh',
     cssClass: "bbn-tree-refresh",
     encoded: false
   }],

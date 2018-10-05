@@ -5,7 +5,7 @@
              :sortable="true"
              :toolbar="[{
                text: '<?=_('Add Type')?>',
-               icon: 'fa fa-plus',
+               icon: 'fas fa-plus',
                command: addType
              }]"
              :showable="false"
@@ -24,14 +24,14 @@
     ></bbns-column>
     <bbns-column title= "<?=_("Extensions")?>"
                 field="extensions"
-                :width="70"
+                :width="90"
                 :render="renderIconExts"
                 cls="bbn-c"
                 default="[]"
     ></bbns-column>
     <bbns-column title= "<?=_("Tabs")?>"
                 field="tabs"
-                :width="70"
+                :width="90"
                 :render="renderIconTabs"
                 cls="bbn-c"
                 default="[]"
@@ -48,11 +48,11 @@
                   text: '<?=_("Copy")?>',
                   command: copyType,
                   notext: true,
-                  icon: 'fa fa-copy'
+                  icon: 'fas fa-copy'
                 },{
                   text: '<?=_("Delete")?>',
                   command: deleteType,
-                  icon: 'fa fa-trash',
+                  icon: 'fas fa-trash',
                   notext: true
                 }]"
     ></bbns-column>

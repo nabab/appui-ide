@@ -30,28 +30,28 @@
           {
             text: 'File',
             items: [{
-              text: '<i class="fa fa-plus"></i>' + bbn._('New'),
+              text: '<i class="fas fa-plus"></i>' + bbn._('New'),
               items: [{
                 text: '<i class="far fa-file"></i>' + bbn._('File'),
                 select: () => {
                   this.newFile();
                 }
               }, {
-                text: '<i class="fa fa-folder"></i>' + bbn._('Directory'),
+                text: '<i class="fas fa-folder"></i>' + bbn._('Directory'),
                 select: () => {
                   this.newDir();
                 },
 
               }]
             }, {
-              text: '<i class="fa fa-save"></i>' + bbn._('Save'),
+              text: '<i class="fas fa-save"></i>' + bbn._('Save'),
               //enabled: false,
               select: () => {
                 this.save();
               },
 
             },{
-              text: '<i class="fa fa-edit"></i>' + bbn._('Rename'),
+              text: '<i class="fas fa-edit"></i>' + bbn._('Rename'),
               select: () => {
                 this.rename(this.$refs.tabstrip['tabs'][this.$refs.tabstrip.selected], true);
               }
@@ -62,7 +62,7 @@
                   this.deleteActive();
                 }
               }, {
-                text: '<i class="fa fa-times-circle"></i>' + bbn._('Close tab'),
+                text: '<i class="fas fa-times-circle"></i>' + bbn._('Close tab'),
                 select: () => {
                   this.closeTab();
                 }
@@ -76,39 +76,39 @@
             text: bbn._('Edit'),
 
             items: [{
-              text: '<i class="fa fa-search"></i>' + bbn._('Find') + ' <small>CTRL+F</small>',
+              text: '<i class="fas fa-search"></i>' + bbn._('Find') + ' <small>CTRL+F</small>',
               select: () =>{
                 this.codeSearch();
               }
             }, {
-              text: '<i class="fa fa-search-plus"></i>' + bbn._('Find next') + ' <small>CTRL+G</small>',
+              text: '<i class="fas fa-search-plus"></i>' + bbn._('Find next') + ' <small>CTRL+G</small>',
               select: ()=>{
                 this.codeFindNext();
               },
             }, {
-              text: '<i class="fa fa-search-minus"></i>' + bbn._('Find previous') + ' <small>SHIFT+CTRL+G</small>',
+              text: '<i class="fas fa-search-minus"></i>' + bbn._('Find previous') + ' <small>SHIFT+CTRL+G</small>',
               select: ()=>{
                 this.codeFindPrev();
               }
 
             }, {
-              text: '<i class="fa fa-exchange"></i>' + bbn._('Replace') + ' <small>SHIFT+CTRL+F</small>',
+              text: '<i class="fas fa-exchange-alt"></i>' + bbn._('Replace') + ' <small>SHIFT+CTRL+F</small>',
               select: ()=>{
                 this.codeReplace();
               }
 
             }, {
-              text: '<i class="fa fa-retweet"></i>' + bbn._('Replace All') + ' <small>SHIFT+CTRL+R</small>',
+              text: '<i class="fas fa-retweet"></i>' + bbn._('Replace All') + ' <small>SHIFT+CTRL+R</small>',
               select: () =>{
                 this.codeReplaceAll();
               },
             },{
-              text: '<i class="fa fa-level-down"></i>' + bbn._('Unfold all'),
+              text: '<i class="fas fa-level-down-alt"></i>' + bbn._('Unfold all'),
               select: () =>{
                 this.codeUnfoldAll();
               }
             },{
-              text: '<i class="fa fa-level-up"></i>' + bbn._('Fold all'),
+              text: '<i class="fas fa-level-up-alt"></i>' + bbn._('Fold all'),
               select: () =>{
                 this.codeFoldAll();
               }
@@ -116,7 +116,7 @@
           }, {
             text: bbn._('History'),
             items: [{
-              text: '<i class="fa fa-history"></i>' + bbn._('Show'),
+              text: '<i class="fas fa-history"></i>' + bbn._('Show'),
               select: () => {
                 this.history();
               }
@@ -125,16 +125,16 @@
               select: 'bbn.ide.historyClear();',
 
             }, {
-              text: '<i class="fa fa-trash"></i>' + bbn._('Clear All'),
+              text: '<i class="fas fa-trash"></i>' + bbn._('Clear All'),
               select: 'bbn.ide.historyClearAll();',
 
             }]
           }, {
             text: bbn._('Doc.'),
             items: [{
-              text: '<i class="fa fa-binoculars"></i>' + bbn._('Find'),
+              text: '<i class="fas fa-binoculars"></i>' + bbn._('Find'),
             }, {
-              text: '<i class="fa fa-book"></i>' + bbn._('Generate'),
+              text: '<i class="fas fa-book"></i>' + bbn._('Generate'),
             }]
           }/*, {
            text: 'Current',
@@ -155,7 +155,7 @@
                 this.managerTypeDirectories();
               }
             }, {
-              text: '<i class="fa fa-language"></i>' + bbn._('IDE style'),
+              text: '<i class="fas fa-language"></i>' + bbn._('IDE style'),
               select: "bbn.ide.cfgStyle();",
             }]
           }
@@ -523,7 +523,7 @@
               this.newDir(node)
             }
           }, {
-            icon: 'fa fa-edit',
+            icon: 'fas fa-edit',
             text: bbn._('Rename'),
             command: (node) => {
               this.rename(node)
@@ -550,7 +550,7 @@
         if ( n.data.folder ){
           let obj = objContext.slice();
           obj.unshift({
-            icon: 'fa fa-search',
+            icon: 'fas fa-search',
             text: bbn._('Find in Path'),
             command: (node) => {
               this.searchOfContext(node)
@@ -602,7 +602,7 @@
 
           }
           obj.unshift({
-            icon: 'fa fa-magic',
+            icon: 'fas fa-magic',
             text: bbn._('Test code!'),
             command: ( node )=>{
               this.testNodeOfTree(node)
@@ -740,13 +740,7 @@
        * @param file
        */
       openFile(file){
-        let tab = "";
-        if ( file.data.tab === "php" ){
-          tab = '/settings';
-        }
-        else{
-          tab = '/' + file.data.tab;
-        }
+        let tab = file.data.tab === "php" ? '/settings' :  '/' + file.data.tab;
         this.$refs.tabstrip.load(
           'file/' +
           this.currentRep +
@@ -1359,7 +1353,6 @@
     },
     mounted(){
       bbn.fn.log('editor',this)
-
     },
     watch: {
       currentRep: function(newVal){

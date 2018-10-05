@@ -16,9 +16,13 @@
                   style="width: 150px"
     ></bbn-dropdown>
     &nbsp;
-    <bbn-button @click="onChange(1)"><i class="far fa-file"> </i><?=_('Clear file')?></bbn-button>
+    <bbn-button @click="onChange(1)" icon="far fa-file">
+      <?=_('Clear file')?>
+    </bbn-button>
     &nbsp;
-    <bbn-button @click="onChange()"><i class="fa fa-refresh"> </i><?=_('Refresh')?></bbn-button>
+    <bbn-button @click="onChange()" icon="zmdi zmdi-refresh-sync">
+      <?=_('Refresh')?>
+    </bbn-button>
   </div>
   <div v-if="textContent.length" class="bbn-flex-fill">
     <div class="bbn-full-screen">

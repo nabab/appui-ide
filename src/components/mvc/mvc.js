@@ -91,7 +91,7 @@ Vue.component('appui-ide-mvc', {
         for ( let id in tab.extensions ){
           let ext = tab.extensions[id].ext;
           exts.push({
-            icon: 'fa fa-cogs',
+            icon: 'fas fa-cogs',
             text: bbn._('switch to')  +  ' <strong>' + ext + '</strong>',
             key: ext,
             command: this.changeExtension
@@ -143,28 +143,28 @@ Vue.component('appui-ide-mvc', {
   methods:{
     search: bbn.fn.search,
     //for title in tabs ide
-    renderTitleTab(tab){
-        switch(tab.title){
-          //icon for tab controller
-          case "Controller": return "<i class='bbn-xl icon-php'></i>";
-                break;
-          //icon for tab private
-          case "Private": return "<i class='bbn-xl icon-php-alt'></i>";
-                break;
-          //icon for tab model
-          case "Model": return "<i class='bbn-xl icon-database'></i>";
-                break;
-          //icon for tab html
-          case "View": return "<i class='bbn-xl icon-html'></i>";
-                break;
-          //icon for tab javascript
-          case "JavaScript": return "<i class='bbn-xl icon-javascript-alt'></i>";
-                break;
-          //icon for tab css
-          case "CSS": return "<i class='bbn-xl icon-css'></i>";
-                break;
-          default: return tab.title;
-        }
+    renderIconTab(tab){
+      switch(tab.title){
+        //icon for tab controller
+        case "Controller":
+          return 'icon-php';
+        //icon for tab private
+        case "Private":
+          return 'icon-php-alt';
+        //icon for tab model
+        case "Model":
+          return 'icon-database';
+        //icon for tab html
+        case "View":
+          return 'icon-html';
+        //icon for tab javascript
+        case "JavaScript":
+          return 'icon-javascript-alt';
+        //icon for tab css
+        case "CSS":
+          return 'icon-css';
+      }
+      return '';
     },
     listCtrls(){
       let path="",
@@ -214,7 +214,7 @@ Vue.component('appui-ide-mvc', {
     //used in the template, returns a copy of the complete menu that will later be retracted in the tabLoaded event with the 'loading tab' function
     getMenu(url){
       let addCode = {
-          icon: 'fa fa-plus',
+          icon: 'fas fa-plus',
           text: bbn._("Add code"),
           items:[]
         };
@@ -223,7 +223,7 @@ Vue.component('appui-ide-mvc', {
           for ( let i in this.codesBlock[id].codes ){
             let code = this.codesBlock[id].codes[i];
             addCode.items.push({
-              icon: 'fa fa-code',
+              icon: 'fas fa-code',
               text: i,
               command: () =>{
                 this.addSnippet(this.codesBlock[id].codes[i])

@@ -154,7 +154,7 @@ if ( !empty($model->data) &&
                 'num' => 1,
                 'numChildren' => 1,
                 'items' => [],
-                'icon' => 'folder-icon'
+                'icon' => 'fas fa-folder'
                 ];
               array_push($result[$namePath]['items'], $fileData);
             }
@@ -235,7 +235,7 @@ if ( !empty($model->data) &&
                 'num' => 1,
                 'numChildren' => 1,
                 'items' => [],
-                'icon' => "folder-icon"
+                'icon' => "fas fa-folder"
               ];
               array_push($result[$namePath]['items'], $fileData);
             }

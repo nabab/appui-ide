@@ -35,7 +35,7 @@
       treeMapper(ele){
         return {
           path: ele.path || [],
-          icon: ele.folder ? 'zmdi zmdi-folder' : 'fa fa-file',
+          icon: ele.folder ? 'zmdi zmdi-folder' : 'fas fa-file',
           folder: ele.folder,
           text: ele.text + (ele.num ? "&nbsp;&nbsp;<span class='w3-badge w3-small w3-light-grey'>" + ele.num + "</span>" : ''),
           num: ele.num || 0,
@@ -45,7 +45,7 @@
       contextMenu(n , i){
         let obj = [
           {
-            icon: 'fa fa-trash',
+            icon: 'fas fa-trash',
             text: !n.data.folder ? bbn._('Delete file cache') : bbn._('Delete folder'),
             command: (node) => {
               bbn.fn.post( this.root + 'data_cache',{
@@ -89,7 +89,7 @@
         else{
           if ( n.data.numChildren > 0 ){
             obj.push({
-              icon: 'fa fa-trash',
+              icon: 'fas fa-trash',
               text: bbn._("Delete folder's contents"),
               command: (node) => {
                 bbn.fn.post( this.root + 'data_cache',{

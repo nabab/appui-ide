@@ -19,7 +19,7 @@ class ide {
         BACKUP_PATH = BBN_DATA_PATH . 'ide/backup/';
 
   private static
-    /** @var bool|int $appui_path */
+    /** @var bool|int $ide_path */
     $ide_path = false,
     /** @var bool|int $dev_path */
     $dev_path = false,
@@ -35,6 +35,8 @@ class ide {
     $current_id = false;
 
   protected
+    /** @var \bbn\db $db */
+    $db,
     /** @var \bbn\appui\options $options */
     $options,
     /** @var null|string The last error recorded by the class */
@@ -42,7 +44,9 @@ class ide {
     /** @var array MVC routes for linking with repositories */
     $routes = [],
     /** @var \bbn\user\preferences $pref */
-    $pref;
+    $pref,
+    /** @var \bbn\appui\project $projects */
+    $projects;
 
   /**
    * Gets the ID of the development paths option
@@ -645,118 +649,47 @@ class ide {
    * @param $routes
    * @param \bbn\user\preferences $pref
    */
-  public function __construct(\bbn\appui\options $options, $routes, \bbn\user\preferences $pref){
+  public function __construct(\bbn\db $db, \bbn\appui\options $options, $routes, \bbn\user\preferences $pref){
+    $this->db = $db;
     $this->options = $options;
     $this->routes = $routes;
     $this->pref = $pref;
     $this->_ide_path();
+    $this->projects = new \bbn\appui\project($this->db);
   }
 
+  /************************** REPOSITORIES **************************/
+
   /**
-   * Make repositories' configurations
+   * Makes repositories' configurations.
    *
    * @param string|bool $code The repository's name (code)
    * @return array|bool
    */
-  public function repositories($code=false){
-    $all = $this->options->full_soptions(self::_dev_path());
-    $cats = [];
-    $r = [];
-    foreach ( $all as $a ){
-      if ( \defined($a['bbn_path']) ){
-        $k = $a['bbn_path'] . '/' . ($a['code'] === '/' ? '' : $a['code']);
-        if ( !isset($cats[$a['id_alias']]) ){
-          unset($a['alias']['cfg']);
-          $cats[$a['id_alias']] = $a['alias'];
-        }
-        unset($a['cfg']);
-        unset($a['alias']);
-        $r[$k] = $a;
-        $r[$k]['title'] = $r[$k]['text'];
-        $r[$k]['alias_code'] = $cats[$a['id_alias']]['code'];
-//        \bbn\x::log([$r, $cats], "ideFortype");
-        if ( !empty($cats[$a['id_alias']]['tabs']) ){
-          $r[$k]['tabs'] = $cats[$a['id_alias']]['tabs'];
-        }
-        else{
-          $r[$k]['extensions'] = $cats[$a['id_alias']]['extensions'];
-        }
-        unset($r[$k]['alias']);
-      }
-    }
-    if ( $code ){
-      return isset($r[$code]) ? $r[$code] : false;
-    }
-    return $r;
+  public function repositories($code=''){
+    return $this->projects->repositories($code);
   }
 
   /**
-   * Gets a repository's configuration
+   * Gets a repository's configuration.
    *
    * @param string $code The repository's name (code)
    * @return array|bool
    */
   public function repository($code){
-    return $this->repositories($code);
+    return $this->projects->repository($code);
   }
 
   /**
-   * Returns the repository's name from an URL
+   * Returns the repository's name or object from an URL.
    *
    * @param string $url
    * @param bool $obj
    * @return bool|int|string
    */
   public function repository_from_url(string $url, bool $obj = false){
-    $repository = '';
-    $repositories = $this->repositories();
-    foreach ( $repositories as $i => $d ){
-      if ( (strpos($url, $i) === 0) &&
-        (\strlen($i) > \strlen($repository) )
-      ){
-        $repository = $i;
-      }
-    }
-    if ( !empty($repository) ){
-      return empty($obj) ? $repository : $repositories[$repository];
-    }
-    return false;
+    return $this->projects->repository_from_url($url, $obj);
   }
-
-  /***
-   * Returns the filename and relative path from an URL
-   *
-   * @param string $url
-   * @return bool|string
-   */
-  /*public function file_from_url(string $url){
-    $rep = $this->repository_from_url($url);
-    if ( $this->is_MVC($rep) ){
-      $last = basename($url);
-      if ( $repo = $this->repository($rep) ){
-        $path = $this->get_root_path($rep).substr($url, \strlen($rep));
-        $tabs = $repo['tabs'];
-
-        foreach ( $tabs as $key => $r ){
-          if ( $key === $last ){
-            foreach ( $tabs as $key2 => $r2 ){
-              foreach ( $r2['extensions'] as $ext ){
-                if ( is_file($path.'.'.$ext['ext']) ){
-                  goto endFunc;
-                }
-              }
-            }
-            $url = dirname($url);
-            break;
-          }
-        }
-      }
-    }
-    endFunc:
-    return substr($url, \strlen($rep));
-  }*/
-
-
 
   /**
    * Checks if a repository is a MVC
@@ -779,24 +712,13 @@ class ide {
   }
 
   /**
-   *
+   * Replaces the constant at the first part of the path with its value.
    *
    * @param string $st
    * @return bool|string
    */
   public function decipher_path($st){
-    $st = \bbn\str::parse_path($st);
-    $bits = explode('/', $st);
-    /** @var string $constant The first path of the path which might be a constant */
-    $constant = $bits[0];
-    /** @var string $path The path that will be returned */
-    $path = '';
-    if ( \defined($constant) ){
-      $path .= constant($constant);
-      array_shift($bits);
-    }
-    $path .= implode('/', $bits);
-    return $path;
+    return $this->projects::decipher_path($st);
   }
 
   /**
@@ -806,16 +728,12 @@ class ide {
    * @return bool|string
    */
   public function get_root_path($repository){
-    if ( \is_string($repository) ){
-      $repository = $this->repository($repository);
-    }
-    if ( !empty($repository) && !empty($repository['bbn_path']) ){
-      $repository_path = !empty($repository['path']) ? '/' . $repository['path'] : '';
-      $path = $this->decipher_path(\bbn\str::parse_path($repository['bbn_path'] . $repository_path)) . '/';
-      return \bbn\str::parse_path($path);
-    }
-    return false;
+    return $this->projects->get_root_path($repository);
   }
+
+  /************************ END REPOSITORIES ************************/
+
+  /************************** ACTIONS **************************/
 
   /**
    * Loads a file.
@@ -1134,6 +1052,10 @@ class ide {
     return $this->operations($cfg, 'delete');
   }
 
+  /********************** END ACTIONS **************************/
+
+  /************************** PERMISSIONS **************************/
+
   /**
    * Gets file's permissions
    *
@@ -1172,71 +1094,6 @@ class ide {
     }
     return false;
   }
-
-  /**
-   * Changes permissions to a file/dir from the old and new real file/dir's path
-   *
-   * @param string $old The old file/dir's path
-   * @param string $new The new file/dir's path
-   * @param string $type The type (file/dir)
-   * @return bool
-   */
-  public function change_perm_by_real(string $old, string $new, string $type = 'file'){
-    $type = strtolower($type);
-
-    if ( !empty($old) &&
-      !empty($new) &&
-      file_exists($new) &&
-      ($id_opt = $this->real_to_perm($old, $type)) &&
-      !$this->real_to_perm($new, $type)
-    ){
-
-      $is_file = $type === 'file';
-      $code = $is_file ? \bbn\str::file_ext(basename($new), 1)[0] : basename($new).'/';
-
-      if ( $id_parent = $this->create_perm_by_real(dirname($new).'/', 'dir') ){
-
-        $this->options->set_code($id_opt, $code);
-        $this->options->move($id_opt, $id_parent);
-        return true;
-      }
-    }
-    return false;
-  }
-
-  /**
-   * Moves permissions to a file/dir from the old and new real file/dir's path
-   *
-   * @param string $old The old file/dir's path
-   * @param string $new The new file/dir's path
-   * @param string $type The type (file/dir)
-   * @return bool
-   */
-  public function move_perm_by_real(string $old, string $new, string $type = 'file'){
-      $type = strtolower($type);
-    if ( !empty($old) &&
-      !empty($new) &&
-      file_exists($new)
-    ){
-
-       $id_opt = $this->real_to_perm($old, $type);
-       $id_new_opt = $this->real_to_perm($new, $type);
-       if ( empty($id_new_opt) ){
-         $id_new_opt = $this->create_perm_by_real(dirname($new).'/', 'dir');
-       }
-       if ( ($id_opt !== $id_new_opt) && !empty($id_new_opt) ){
-          $is_file = $type === 'file';
-          $code = $is_file ? \bbn\str::file_ext(basename($new), 1)[0] : basename($new).'/';
-          if ( $id_parent = $this->create_perm_by_real(dirname($new).'/', 'dir') ){
-             $this->options->set_code($id_opt, $code);
-             $this->options->move($id_opt, $id_parent);
-             return true;
-          }
-       }
-     }
-   return false;
-  }
-
 
   /**
    * Creates a permission option from a real file/dir's path
@@ -1317,6 +1174,130 @@ class ide {
     }
     return false;
   }
+
+  /**
+   * Changes permissions to a file/dir from the old and new real file/dir's path
+   *
+   * @param string $old The old file/dir's path
+   * @param string $new The new file/dir's path
+   * @param string $type The type (file/dir)
+   * @return bool
+   */
+  public function change_perm_by_real(string $old, string $new, string $type = 'file'){
+    $type = strtolower($type);
+
+    if ( !empty($old) &&
+      !empty($new) &&
+      file_exists($new) &&
+      ($id_opt = $this->real_to_perm($old, $type)) &&
+      !$this->real_to_perm($new, $type)
+    ){
+
+      $is_file = $type === 'file';
+      $code = $is_file ? \bbn\str::file_ext(basename($new), 1)[0] : basename($new).'/';
+
+      if ( $id_parent = $this->create_perm_by_real(dirname($new).'/', 'dir') ){
+
+        $this->options->set_code($id_opt, $code);
+        $this->options->move($id_opt, $id_parent);
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Moves permissions to a file/dir from the old and new real file/dir's path
+   *
+   * @param string $old The old file/dir's path
+   * @param string $new The new file/dir's path
+   * @param string $type The type (file/dir)
+   * @return bool
+   */
+  public function move_perm_by_real(string $old, string $new, string $type = 'file'){
+    $type = strtolower($type);
+    if ( !empty($old) &&
+      !empty($new) &&
+      file_exists($new)
+    ){
+
+      $id_opt = $this->real_to_perm($old, $type);
+      $id_new_opt = $this->real_to_perm($new, $type);
+      if ( empty($id_new_opt) ){
+        $id_new_opt = $this->create_perm_by_real(dirname($new).'/', 'dir');
+      }
+      if ( ($id_opt !== $id_new_opt) && !empty($id_new_opt) ){
+        $is_file = $type === 'file';
+        $code = $is_file ? \bbn\str::file_ext(basename($new), 1)[0] : basename($new).'/';
+        if ( $id_parent = $this->create_perm_by_real(dirname($new).'/', 'dir') ){
+          $this->options->set_code($id_opt, $code);
+          $this->options->move($id_opt, $id_parent);
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Returns the permission's id from a real file/dir's path
+   *
+   * @param string $file The real file/dir's path
+   * @param string $type The path type (file or dir)
+   * @return bool|int
+   */
+  public function real_to_perm(string $file, $type = 'file'){
+    if ( empty($file) ){
+      $file = self::$current_file;
+    }
+    if ( !empty($file) &&
+      \defined('BBN_APP_PATH') &&
+      // It must be a controller
+      (strpos($file, '/mvc/public/') !== false)
+    ){
+
+      $is_file = $type === 'file';
+
+      // Check if it's an external route
+      foreach ( $this->routes as  $r ){
+
+        if ( strpos($file, $r['path']) === 0 ){
+          // Remove route
+          $f = substr($file, \strlen($r['path']), \strlen($file));
+          // Remove /mvc/public
+          $f = substr($f, \strlen('/mvc/public'), \strlen($f));
+          // Add the route's name to path
+          $f = $r['url'] . '/' . $f;
+
+          break;
+        }
+
+      }
+      // Internal route
+      if ( empty($f) ){
+        $root_path = BBN_APP_PATH.'mvc/public/';
+        if ( strpos($file, $root_path) === 0 ){
+          // Remove root path
+          $f = substr($file, \strlen($root_path), \strlen($file));
+        }
+      }
+      if ( !empty($f) ){
+        $bits = \bbn\x::remove_empty(explode('/', $f));
+        $code = $is_file ? \bbn\str::file_ext(array_pop($bits), 1)[0] : array_pop($bits).'/';
+        $bits = array_map(function($b){
+          return $b.'/';
+        }, array_reverse($bits));
+        array_unshift($bits, $code);
+        array_push($bits, $this->_permissions());
+        return $this->options->from_code($bits);
+      }
+    }
+    return false;
+  }
+
+  /********************** END PERMISSIONS **************************/
+
+  /********************** PREFERENCES **************************/
 
   /**
    * Gets file's preferences
@@ -1403,61 +1384,9 @@ class ide {
     }
   }
 
-  /**
-   * Returns the permission's id from a real file/dir's path
-   *
-   * @param string $file The real file/dir's path
-   * @param string $type The path type (file or dir)
-   * @return bool|int
-   */
-  public function real_to_perm(string $file, $type = 'file'){
-    if ( empty($file) ){
-      $file = self::$current_file;
-    }
-    if ( !empty($file) &&
-      \defined('BBN_APP_PATH') &&
-      // It must be a controller
-      (strpos($file, '/mvc/public/') !== false)
-    ){
+  /******************** END PREFERENCES ************************/
 
-      $is_file = $type === 'file';
-
-      // Check if it's an external route
-      foreach ( $this->routes as  $r ){
-
-        if ( strpos($file, $r['path']) === 0 ){
-         // Remove route
-          $f = substr($file, \strlen($r['path']), \strlen($file));
-          // Remove /mvc/public
-          $f = substr($f, \strlen('/mvc/public'), \strlen($f));
-          // Add the route's name to path
-          $f = $r['url'] . '/' . $f;
-
-          break;
-        }
-
-      }
-      // Internal route
-      if ( empty($f) ){
-        $root_path = BBN_APP_PATH.'mvc/public/';
-        if ( strpos($file, $root_path) === 0 ){
-          // Remove root path
-          $f = substr($file, \strlen($root_path), \strlen($file));
-        }
-      }
-      if ( !empty($f) ){
-        $bits = \bbn\x::remove_empty(explode('/', $f));
-        $code = $is_file ? \bbn\str::file_ext(array_pop($bits), 1)[0] : array_pop($bits).'/';
-        $bits = array_map(function($b){
-          return $b.'/';
-        }, array_reverse($bits));
-        array_unshift($bits, $code);
-        array_push($bits, $this->_permissions());
-        return $this->options->from_code($bits);
-      }
-    }
-    return false;
-  }
+  /*************************** FILE ***************************/
 
   /**
    * Returns the file's URL from the real file's path.
@@ -1466,53 +1395,7 @@ class ide {
    * @return bool|string
    */
   public function real_to_url(string $file){
-    foreach ( $this->repositories() as $i => $d ){
-      // Repository's root path
-      $root = $this->get_root_path($d);
-      if ( strpos($file, $root) === 0 ){
-        $res = $i . '/';
-        $bits = explode('/', substr($file, \strlen($root)));
-        // MVC
-        if ( !empty($d['tabs']) ){
-          $tab_path = array_shift($bits);
-          $fn = array_pop($bits);
-          $ext = \bbn\str::file_ext($fn);
-          $fn = \bbn\str::file_ext($fn, 1)[0];
-          $res .= implode('/', $bits);
-          foreach ( $d['tabs'] as $i => $t ){
-            if ( empty($t['fixed']) &&
-              ($t['path'] === $tab_path . '/')
-            ){
-              $res .= "/$fn/$t[url]";
-              break;
-            }
-          }
-        }
-        // Normal file
-        else {
-          $res .= implode('/', $bits);
-        }
-        return \bbn\str::parse_path($res);
-      }
-    }
-    return false;
-  }
-
-  /**
-   * Returns the file's ID from the real file's path.
-   *
-   * @param string $file The real file's path
-   * @return bool|string
-   */
-  public function real_to_id($file){
-    if ( ($rep = $this->repository_from_url($this->real_to_url($file), true)) && \defined($rep['bbn_path']) ){
-      $bbn_p = constant($rep['bbn_path']);
-      if ( strpos($file, $bbn_p) === 0 ){
-        $f = substr($file, \strlen($bbn_p));
-        return \bbn\str::parse_path($rep['bbn_path'].'/'.$f);
-      }
-    }
-    return false;
+    return $this->projects->real_to_url($file);
   }
 
   /**
@@ -1598,6 +1481,58 @@ class ide {
     }
     return false;
   }
+
+  /**
+   * Returns the file's ID from the real file's path.
+   *
+   * @param string $file The real file's path
+   * @return bool|string
+   */
+  public function real_to_id($file){
+    if ( ($rep = $this->repository_from_url($this->real_to_url($file), true)) && \defined($rep['bbn_path']) ){
+      $bbn_p = constant($rep['bbn_path']);
+      if ( strpos($file, $bbn_p) === 0 ){
+        $f = substr($file, \strlen($bbn_p));
+        return \bbn\str::parse_path($rep['bbn_path'].'/'.$f);
+      }
+    }
+    return false;
+  }
+
+  /***
+   * Returns the filename and relative path from an URL
+   *
+   * @param string $url
+   * @return bool|string
+   */
+  /*public function file_from_url(string $url){
+    $rep = $this->repository_from_url($url);
+    if ( $this->is_MVC($rep) ){
+      $last = basename($url);
+      if ( $repo = $this->repository($rep) ){
+        $path = $this->get_root_path($rep).substr($url, \strlen($rep));
+        $tabs = $repo['tabs'];
+
+        foreach ( $tabs as $key => $r ){
+          if ( $key === $last ){
+            foreach ( $tabs as $key2 => $r2 ){
+              foreach ( $r2['extensions'] as $ext ){
+                if ( is_file($path.'.'.$ext['ext']) ){
+                  goto endFunc;
+                }
+              }
+            }
+            $url = dirname($url);
+            break;
+          }
+        }
+      }
+    }
+    endFunc:
+    return substr($url, \strlen($rep));
+  }*/
+
+  /************************* END FILE *************************/
 
   /**
    * Returns all backups of a file.
@@ -1878,6 +1813,8 @@ class ide {
     return $backups;
   }
 
+
+
   /*public function history(string $url){
     if ( !empty($url) && !empty(self::BACKUP_PATH) ){
       $backups = [];
@@ -1925,6 +1862,7 @@ class ide {
       return $backups;
     }
   }*/
+
 
 
 }

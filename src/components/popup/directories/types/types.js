@@ -10,7 +10,7 @@
           exts = JSON.parse(ele.extensions);
         }
         return exts.length ?
-          '<div class="bbn-c"><i style="color: green"  class="fa fa-chevron-down"></i></div>' :
+          '<div class="bbn-c"><i style="color: green"  class="fas fa-chevron-down"></i></div>' :
           '';
       },
       renderIconTabs(ele){
@@ -19,7 +19,7 @@
           tabs = JSON.parse(ele.tabs);
         }
         return tabs.length ?
-          '<div class="bbn-c"><i style="color: green" class="fa fa-chevron-down"></i></div>' :
+          '<div class="bbn-c"><i style="color: green" class="fas fa-chevron-down"></i></div>' :
           '';
       },
       addType(){

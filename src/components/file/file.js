@@ -19,7 +19,7 @@ Vue.component('appui-ide-file', {
       if ( tab.extensions ){
         for ( let id in tab.extensions ){
           exts.push({
-            icon: 'fa fa-cogs',
+            icon: 'fas fa-cogs',
             text: tab.extensions[id].ext,
             key: tab.extensions[id].ext,
             command: this.changeExtension

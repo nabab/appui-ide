@@ -29,26 +29,26 @@
       <div>
         <bbn-button title="<?=_('Refresh files list')?>"
                     @click="treeReload()"
-                    icon="fa fa-refresh"
+                    icon="fas fa-sync-alt"
         ></bbn-button>
       </div>
       <div></div>
       <div>
         <bbn-button title="<?=_('Test code!')?>"
                     @click="test"
-                    icon="fa fa-magic"
+                    icon="fas fa-magic"
         ></bbn-button>
       </div>
       <div>
         <bbn-button title="<?=_('Show History')?>"
                     @click="history"
-                    icon="fa fa-history"
+                    icon="fas fa-history"
         ></bbn-button>
       </div>
       <div>
         <bbn-button title="<?=_('Show strings and translations')?>"
                     @click="i18n"
-                    icon="fa fa-flag"
+                    icon="fas fa-flag"
         ></bbn-button>
       </div>
       <div></div>
@@ -103,16 +103,16 @@
                 :resizable="true"
                 :scrollable="false">
         <div style="position: absolute; top: auto; left: auto; margin: 50%; text-align: center">
-          <i class="fa fa-code"></i>
+          <i class="fas fa-code"></i>
         </div>
         <bbn-tabnav id="tabstrip_editor"
                     ref="tabstrip"
                     :autoload="true"
                     @close="ctrlCloseTab">
           <bbns-tab :static="true"
-                   url="home"
-                   load="true"
-                   :title="'<i class=\'bbn-xl zmdi zmdi-pin-help\'> </i>'">
+                    url="home"
+                    :load="true"
+                    :title="'<i class=\'bbn-xl zmdi zmdi-pin-help\'> </i>'">
           </bbns-tab>
         </bbn-tabnav>
       </bbn-pane>

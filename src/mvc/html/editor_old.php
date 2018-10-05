@@ -32,7 +32,7 @@
     <div class="bbn-form-label"></div>
     <div class="bbn-form-field" style="text-align: right">
       <button class="k-button" type="submit">
-        <i class="fa fa-check"> </i> Save
+        <i class="fas fa-check"> </i> Save
       </button>
       <button class="k-button" type="button" onclick="bbn.fn.closePopup();">
         <i class="fas fa-times"> </i> Cancel
@@ -52,7 +52,7 @@
     <div class="bbn-form-label"></div>
     <div class="bbn-form-field" style="text-align: right">
       <button class="k-button" type="submit">
-        <i class="fa fa-edit"></i> Rename
+        <i class="fas fa-edit"></i> Rename
       </button>
       <button class="k-button" type="button" onclick="bbn.fn.closePopup();">
         <i class="fas fa-times"></i> Cancel
@@ -91,7 +91,7 @@ function findSequence(goal) {
       <div align="right">
         <button class="k-button" type="button" onclick="bbn.fn.closePopup();"><i class="fas fa-times"></i> Annule
         </button>
-        <button class="k-button" type="button"><i class="fa fa-save"></i> Sauver</button>
+        <button class="k-button" type="button"><i class="fas fa-save"></i> Sauver</button>
       </div>
     </form>
   </div>
@@ -108,7 +108,7 @@ function findSequence(goal) {
           <label>Title/Description</label>
           <input class="k-textbox" maxlength="255" style="width:400px; margin: 0 10px" data-bind="value: perm_text, events: {keydown: checkEnter}">
           <button class="k-button" data-bind="click: save">
-            <i class="fa fa-save"> </i>
+            <i class="fas fa-save"> </i>
           </button><br>
 
           <label style="margin-top: 5px">Help</label>
@@ -124,7 +124,7 @@ function findSequence(goal) {
               <label>Title/Description</label>
               <input class="k-textbox" maxlength="255" style="width:400px; margin: 0 10px" data-bind="events: {keydown: checkEnter}">
               <button class="k-button" data-bind="click: add">
-                <i class="fa fa-plus"> </i>
+                <i class="fas fa-plus"> </i>
               </button>
             </div>
             <ul style="list-style: none; padding: 0" data-template="ide_child_permissions_form_template" data-bind="source: perm_children"></ul>
@@ -143,10 +143,10 @@ function findSequence(goal) {
       <label>Title/Description</label>
       <input class="k-textbox" maxlength="255" style="width:400px; margin: 0 10px" data-bind="value: perm_text, events: {keydown: checkEnter}">
       <button class="k-button" data-bind="click: saveChild" style="margin-right: 5px">
-        <i class="fa fa-save"> </i>
+        <i class="fas fa-save"> </i>
       </button>
       <button class="k-button" data-bind="click: removeChild">
-        <i class="fa fa-trash"> </i>
+        <i class="fas fa-trash"> </i>
       </button>
     </div>
   </li>

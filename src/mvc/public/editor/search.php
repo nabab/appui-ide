@@ -39,7 +39,7 @@ if ( $ctrl->inc->ide ){
       $ctrl->data['mvc'] = true;
     }
     $ctrl->obj->url = $ctrl->get_url();
-    $ctrl->obj->icon = 'fa fa-search';
+    $ctrl->obj->icon = 'fas fa-search';
     $ctrl->combo(\bbn\str::cut($ctrl->data['search'], 12), true);
   }
 }

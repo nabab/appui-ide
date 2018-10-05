@@ -14,6 +14,6 @@ else {
   $ctrl->data['root'] = $ctrl->say_dir().'/';
   $ctrl->obj->bcolor = '#333';
   $ctrl->obj->fcolor = '#FFF';
-  $ctrl->obj->icon = 'fa fa-file-text';
+  $ctrl->obj->icon = 'fas fa-file-text';
   $ctrl->combo("Log files", true);
 }

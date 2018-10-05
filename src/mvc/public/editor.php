@@ -16,5 +16,5 @@ if ( !$ctrl->inc->session->has('ide') ){
 $ctrl->obj->url = APPUI_IDE_ROOT.'editor';
 $ctrl->obj->bcolor = '#333';
 $ctrl->obj->fcolor = '#FFF';
-$ctrl->obj->icon = "fa fa-code";
+$ctrl->obj->icon = "fas fa-code";
 $ctrl->combo('I.D.E.', true);

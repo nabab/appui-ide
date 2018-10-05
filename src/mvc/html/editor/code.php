@@ -28,7 +28,7 @@
                      v-model="permissions.text"
                      @keydown.enter.prevent="savePermission"
           ></bbn-input>
-          <bbn-button icon="fa fa-save"
+          <bbn-button icon="fas fa-save"
                       @click="savePermission"
           ></bbn-button>
           <br>
@@ -58,7 +58,7 @@
                          ref="perm_child_text"
 
               ></bbn-input>
-              <bbn-button icon="fa fa-plus"
+              <bbn-button icon="fas fa-plus"
                           @click="addChildPermission"
               ></bbn-button>
             </div>
@@ -83,10 +83,10 @@
                                @keydown.enter.prevent="saveChildPermission($event)"
                     ></bbn-input>
                     <bbn-button @click="saveChildPermission($event)"
-                                icon="fa fa-save"
+                                icon="fas fa-save"
                                 style="margin-right: 5px"
                     ></bbn-button>
-                    <bbn-button @click="removeChildPermission($event)" icon="fa fa-trash"></bbn-button>
+                    <bbn-button @click="removeChildPermission($event)" icon="fas fa-trash"></bbn-button>
                   </div>
                 </li>
               </ul>
@@ -126,12 +126,12 @@
                            v-model="imessage.title"
                            required="required"
                 ></bbn-input>
-                <bbn-button icon="fa fa-save"
+                <bbn-button icon="fas fa-save"
                             @click="saveImessage"
                             :title="saveButtonText"
                             style="margin-left: 10px"
                 ></bbn-button>
-                <bbn-button icon="fa fa-plus"
+                <bbn-button icon="fas fa-plus"
                             @click="newImessage"
                             title="<?=_('New')?>"
                 ></bbn-button>

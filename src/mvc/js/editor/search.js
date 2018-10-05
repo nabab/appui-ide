@@ -4,7 +4,7 @@
  * Date: 08/01/2018
  * Time: 12:57
  */
- 
+
 (() => {
   return {
     data(){
@@ -30,12 +30,8 @@
             tabStrip.activateIndex(i);
             let st = bbn.vue.find(tabStrip.getVue(i),'bbn-tabnav'),
                 idxSubTab = st.getIndex(node.data.tab ? node.data.tab : 'code'),
-                tab = st.getVue(idxSubTab);
-
-                bbn.fn.log('ss',tab)
-                let code = bbn.vue.find( tab, 'bbn-code');
-
-                console.log('code', code)
+                tab = st.getVue(idxSubTab),
+                code = bbn.vue.find( tab, 'bbn-code');
             st.activateIndex(idxSubTab);
             if( code ){
               let start = {

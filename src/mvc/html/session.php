@@ -2,10 +2,10 @@
 <div class="bbn-hpadded bbn-flex-height">
   <div>
     <div class="bbn-w-100 bbn-vpadded">
-      <bbn-button icon="fa fa-user-secret"
+      <bbn-button icon="fas fa-user-secret"
                   @click="type = 'session'">
       </bbn-button> 
-      <bbn-button icon="fa fa-server"
+      <bbn-button icon="fas fa-server"
                   @click="type = 'server'">
       </bbn-button>
     </div>

@@ -14,21 +14,21 @@ if ( isset($model->data['routes']) ){
       [
         'text' => 'File',
         'items' => [[
-          'text' => '<i class="fa fa-plus"></i>New',
+          'text' => '<i class="fas fa-plus"></i>New',
           'items' => [[
             'text' => '<i class="far fa-file"></i>File',
             'function' => "bbn.ide.newFile()"
           ], [
-            'text' => '<i class="fa fa-folder"></i>Directory',
+            'text' => '<i class="fas fa-folder"></i>Directory',
             'function' => "bbn.ide.newDir()"
           ]]
         ], [
-          'text' => '<i class="fa fa-save"></i>Save',
+          'text' => '<i class="fas fa-save"></i>Save',
           'function' => "bbn.ide.save();"
         ], [
           'text' => '<i class="far fa-trash-alt"></i>Delete',
         ], [
-          'text' => '<i class="fa fa-times-circle"></i>Close',
+          'text' => '<i class="fas fa-times-circle"></i>Close',
           'function' => "bbn.ide.tabstrip.tabNav('close');"
         ], [
           'text' => '<i class="far fa-times-circle"></i>Close all tabs',
@@ -37,39 +37,39 @@ if ( isset($model->data['routes']) ){
       ], [
         'text' => 'Edit',
         'items' => [[
-          'text' => '<i class="fa fa-search"></i>Find <small>CTRL+F</small>',
+          'text' => '<i class="fas fa-search"></i>Find <small>CTRL+F</small>',
           'function' => "bbn.ide.search();"
         ], [
-          'text' => '<i class="fa fa-search-plus"></i>Find next <small>CTRL+G</small>',
+          'text' => '<i class="fas fa-search-plus"></i>Find next <small>CTRL+G</small>',
           'function' => "bbn.ide.findNext();"
         ], [
-          'text' => '<i class="fa fa-search-minus"></i>Find previous <small>SHIFT+CTRL+G</small>',
+          'text' => '<i class="fas fa-search-minus"></i>Find previous <small>SHIFT+CTRL+G</small>',
           'function' => "bbn.ide.findPrev();"
         ], [
-          'text' => '<i class="fa fa-exchange"></i>Replace <small>SHIFT+CTRL+F</small>',
+          'text' => '<i class="fas fa-exchange-alt"></i>Replace <small>SHIFT+CTRL+F</small>',
           'function' => "bbn.ide.replace();"
         ], [
-          'text' => '<i class="fa fa-retweet"></i>Replace All <small>SHIFT+CTRL+R</small>',
+          'text' => '<i class="fas fa-retweet"></i>Replace All <small>SHIFT+CTRL+R</small>',
           'function' => "bbn.ide.replaceAll();"
         ]]
       ], [
         'text' => 'History',
         'items' => [[
-          'text' => '<i class="fa fa-history"></i>Show',
+          'text' => '<i class="fas fa-history"></i>Show',
           'function' => 'bbn.ide.history();'
         ], [
           'text' => '<i class="far fa-trash-alt"></i>Clear',
           'function' => 'bbn.ide.historyClear();'
         ], [
-          'text' => '<i class="fa fa-trash"></i>Clear All',
+          'text' => '<i class="fas fa-trash"></i>Clear All',
           'function' => 'bbn.ide.historyClearAll();'
         ]]
       ], [
         'text' => 'Doc.',
         'items' => [[
-          'text' => '<i class="fa fa-binoculars"></i>Find',
+          'text' => '<i class="fas fa-binoculars"></i>Find',
         ], [
-          'text' => '<i class="fa fa-book"></i>Generate',
+          'text' => '<i class="fas fa-book"></i>Generate',
         ]]
       ], /*[
         'text' => 'Current',
@@ -83,10 +83,10 @@ if ( isset($model->data['routes']) ){
       ], */[
         'text' => 'Pref.',
         'items' => [[
-          'text' => '<i class="fa fa-cog"></i>Manage directories',
+          'text' => '<i class="fas fa-cog"></i>Manage directories',
           'function' => "bbn.ide.cfgDirs();"
         ], [
-          'text' => '<i class="fa fa-language"></i>IDE style',
+          'text' => '<i class="fas fa-language"></i>IDE style',
           'function' => "bbn.ide.cfgStyle();"
         ]]
       ]

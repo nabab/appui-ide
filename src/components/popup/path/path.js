@@ -43,8 +43,6 @@ Vue.component('appui-ide-popup-path', {
     treeNodeActivate(d){
       const popup = bbn.vue.closest(this, ".bbn-popup");
       let path_destination = d.data.path.endsWith('/') ?  d.data.path :  d.data.path + '/';
-      //bbn.fn.log("nodo",d);
-      //alert();
       switch ( this.source.operation ){
         case 'copy':{
           this.source.new_path = path_destination;

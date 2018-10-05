@@ -12,25 +12,25 @@ if ( isset($model->data['routes']) ){
       [
         'text' => 'File',
         'items' => [[
-          'text' => '<i class="fa fa-plus"></i>New',
+          'text' => '<i class="fas fa-plus"></i>New',
           'items' => [[
             'text' => '<i class="far fa-file"></i>File',
             'function' => "bbn.ide.newFile()"
           ], [
-            'text' => '<i class="fa fa-folder"></i>Directory',
+            'text' => '<i class="fas fa-folder"></i>Directory',
             'function' => "bbn.ide.newDir()"
           ]]
         ], [
-          'text' => '<i class="fa fa-save"></i>Save',
+          'text' => '<i class="fas fa-save"></i>Save',
           'function' => "bbn.ide.save();"
         ], [
           'text' => '<i class="far fa-trash-alt"></i>Delete',
         ], [
           'text' => '<i class="far fa-files"></i>Duplicate',
         ], [
-          'text' => '<i class="fa fa-search"></i>Search',
+          'text' => '<i class="fas fa-search"></i>Search',
         ], [
-          'text' => '<i class="fa fa-times-circle"></i>Close',
+          'text' => '<i class="fas fa-times-circle"></i>Close',
           'function' => "bbn.ide.tabstrip.tabNav('close');"
         ], [
           'text' => '<i class="far fa-times-circle"></i>Close all tabs',
@@ -57,7 +57,7 @@ if ( isset($model->data['routes']) ){
       ], [
         'text' => 'History',
         'items' => [[
-          'text' => '<i class="fa fa-history"></i>Show',
+          'text' => '<i class="fas fa-history"></i>Show',
           'function' => 'bbn.ide.history();'
         ], [
           'text' => '<i class="far fa-trash-alt"></i>Clear',

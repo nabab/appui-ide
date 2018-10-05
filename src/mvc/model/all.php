@@ -134,7 +134,7 @@ if ( $model->inc->ide ){
           'extension' => $get_ext($ele),
           'path' => isset($model->data['repository']) ? str_replace( constant($rep['bbn_path']), $rep['bbn_path'] .'/', $ele) : str_replace( constant($const), $const.'/', $ele),
           'text' => basename($ele),
-          'icon' => 'fa fa-file',
+          'icon' => 'fas fa-file',
           'num' => 0
         ];
         array_push($arr, $el);
