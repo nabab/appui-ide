@@ -36,9 +36,14 @@ Vue.component('appui-ide-popup-new', {
   methods: {
     onSuccess(){
       if ( this.source.isFile ){
-        bbn.fn.link(this.source.root + 'editor/file/' + this.source.currentRep +
+      
+        /*bbn.fn.link(this.source.root + 'editor/file/' + this.source.currentRep +
           (this.data.path.startsWith('./') ? this.data.path.slice(2) : this.data.path) +
           this.data.name + '/_end_' + ( this.data.extension ? '/' +  this.rep.tabs[this.data.tab]['url'] : '')
+        );*/
+        bbn.fn.link(this.source.root + 'editor/file/' + this.source.currentRep +
+          (this.data.path.startsWith('./') ? this.data.path.slice(2) : this.data.path) +
+          this.data.name + '/_end_' + ( this.isMVC ? '/' +  this.rep.tabs[this.data.tab]['url'] : '/code')
         );
         appui.success(bbn._("File created!"));
       }

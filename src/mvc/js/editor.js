@@ -740,7 +740,7 @@
        * @param file
        */
       openFile(file){
-        let tab = file.data.tab === "php" ? '/settings' :  '/' + file.data.tab;
+        let tab = file.data.tab === "php" ? '/settings' :  '/' + (file.data.tab !== false ? file.data.tab : 'code');
         this.$refs.tabstrip.load(
           'file/' +
           this.currentRep +
@@ -900,8 +900,7 @@
        * @param bool isFile A boolean value to identify if you want create a file or a folder
        * @param string path The current path
        */
-      new(title, isFile, node){
-        bbn.fn.log("NEW", node);
+      new(title, isFile, node){      
         let src = {
           allData: false,
           isFile: isFile,

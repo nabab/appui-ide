@@ -94,8 +94,7 @@ Vue.component('appui-ide-file', {
     },
     //in event tabLoadded in tab-nav
     loadingTab(data, url , tab){
-      let ext = data.extension,
-          idx = bbn.fn.search(tab.menu, 'key', ext);
+      let idx = bbn.fn.search(tab.menu, 'key', data.extension);
       if ( idx > -1 ){
         tab.menu.splice(idx, 1);
       }
