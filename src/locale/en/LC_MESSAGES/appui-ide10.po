@@ -3,35 +3,35 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: info@bbn.so\n"
 "last-Translator: BBN Solutions <support@bbn.solutions>\n"
-"Language-Team: FR <FR@li.org>\n"
+"Language-Team: EN <EN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2018-10-26 17:46+0200\n"
-"POT-Revision-Date: 2018-10-26 17:46+0200\n"
-"Language: fr\n"
-"X-Domain: appui-ide4\n"
+"POT-Creation-Date: 2018-12-10 17:41+0100\n"
+"POT-Revision-Date: 2018-12-10 17:41+0100\n"
+"Language: en\n"
+"X-Domain: appui-ide10\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/file/file.js
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/mvc/mvc.js
 msgid "Refresh code"
-msgstr ""
+msgstr "Refresh code"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/file/file.js
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/mvc/mvc.js
 msgid "Modified code do you want to refresh anyway?"
-msgstr ""
+msgstr "Modified code do you want to refresh anyway?"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/file/file.js
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/mvc/mvc.js
 msgid "Extension changed successfully"
-msgstr ""
+msgstr "Extension changed successfully"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/file/file.js
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/mvc/mvc.js
 msgid "Change error extension"
-msgstr ""
+msgstr "Change error extension"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/html/editor/code.php
 msgid "Code"
@@ -39,35 +39,35 @@ msgstr "Code"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/i18n/i18n.js
 msgid "Select languages you want to hide from the table"
-msgstr ""
+msgstr "Select languages you want to hide from the table"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/i18n/i18n.php
 msgid "Original Expression"
-msgstr "Expression originale"
+msgstr "Original Expression"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/mvc/mvc.js
 msgid "switch to"
-msgstr ""
+msgstr "switch to"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/mvc/mvc.js
 msgid "Add code"
-msgstr ""
+msgstr "Add code"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/mvc/mvc.php
 msgid "Settings"
-msgstr "Paramètres"
+msgstr "Settings"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/html/editor/code.php
 msgid "Title/Description"
-msgstr ""
+msgstr "Title/Description"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/html/editor/code.php
 msgid "Help"
-msgstr "Aide"
+msgstr "Help"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/html/editor/code.php
 msgid "Children permissions"
-msgstr ""
+msgstr "Children permissions"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/html/error_log.php
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor/directories.js
@@ -79,7 +79,7 @@ msgstr "Type"
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/popup/new/new.php
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/popup/rename/rename.php
 msgid "Name"
-msgstr "Nom"
+msgstr "Name"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/new/new.php
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/popup/copy/copy.js
@@ -87,413 +87,413 @@ msgstr "Nom"
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/popup/new/new.js
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/popup/new/new.php
 msgid "Path"
-msgstr ""
+msgstr "Path"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/new/new.php
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/popup/copy/copy.php
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/popup/new/new.php
 msgid "Browse"
-msgstr "Parcourir"
+msgstr "Browse"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/new/new.php
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/popup/copy/copy.php
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/popup/new/new.php
 msgid "Root"
-msgstr "Racine"
+msgstr "Root"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor/code.js
 msgid "Save"
-msgstr "Sauvegarder"
+msgstr "Save"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/new/new.php
 msgid "Cancel"
-msgstr "Annuler"
+msgstr "Cancel"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/popup/copy/copy.js
 msgid "Copy file succesfully!"
-msgstr ""
+msgstr "Copy file succesfully!"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/popup/copy/copy.js
 msgid "Copy succesfully!"
-msgstr ""
+msgstr "Copy succesfully!"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor/code.js
 msgid "Error!"
-msgstr "Erreur!"
+msgstr "Error!"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/popup/directories/form/types/types.js
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/popup/directories/form/types/types.php
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/popup/directories/types/types.php
 msgid "Extensions"
-msgstr ""
+msgstr "Extensions"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/popup/directories/form/types/types.js
 msgid "Insert a new extension"
-msgstr ""
+msgstr "Insert a new extension"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/popup/directories/form/types/types.js
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/popup/directories/form/types/types.php
 msgid "Tab"
-msgstr ""
+msgstr "Tab"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/popup/directories/form/types/types.js
 msgid "Insert a new tab"
-msgstr ""
+msgstr "Insert a new tab"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/popup/directories/form/types/types.js
 msgid "Insert a title"
-msgstr "Insérer un titre"
+msgstr "Insert a title"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/popup/directories/form/types/types.js
 msgid "Insert a path"
-msgstr ""
+msgstr "Insert a path"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/popup/directories/form/types/types.js
 msgid "Insert a url"
-msgstr ""
+msgstr "Insert a url"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/popup/directories/form/types/types.js
 msgid "success"
-msgstr "Succès"
+msgstr "success"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/html/error_log.php
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor/code.js
 msgid "Error"
-msgstr "Erreur"
+msgstr "Error"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/popup/directories/form/types/types.php
 msgid "Text"
-msgstr "Texte"
+msgstr "Text"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/popup/directories/form/types/types.php
 msgid "Do you want to insert extensions or tabs?"
-msgstr ""
+msgstr "Do you want to insert extensions or tabs?"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/popup/directories/form/types/types.php
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/popup/directories/types/types.php
 msgid "Tabs"
-msgstr ""
+msgstr "Tabs"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/popup/directories/types/types.js
 msgid "Add new type"
-msgstr ""
+msgstr "Add new type"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/popup/directories/types/types.js
 msgid "Copy type"
-msgstr ""
+msgstr "Copy type"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/popup/directories/types/types.js
 msgid "Are you sure you want to delete the"
-msgstr ""
+msgstr "Are you sure you want to delete the"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/popup/directories/types/types.js
 msgid "type?"
-msgstr ""
+msgstr "type?"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/popup/directories/types/types.js
 msgid "Deleted"
-msgstr "Supprimé"
+msgstr "Deleted"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/popup/directories/types/types.js
 msgid "Modify type"
-msgstr ""
+msgstr "Modify type"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/popup/directories/types/types.php
 msgid "Add Type"
-msgstr ""
+msgstr "Add Type"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js
 msgid "Edit"
-msgstr "Modifier"
+msgstr "Edit"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js
 msgid "Copy"
-msgstr "Copier"
+msgstr "Copy"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js
 msgid "Delete"
-msgstr "Supprimer"
+msgstr "Delete"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/popup/new/new.js
 msgid "File created!"
-msgstr ""
+msgstr "File created!"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/popup/new/new.js
 msgid "Directory created!"
-msgstr ""
+msgstr "Directory created!"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/popup/rename/rename.js
 msgid "Do you want to save the changes before?"
-msgstr ""
+msgstr "Do you want to save the changes before?"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/popup/rename/rename.js
 msgid "Renamed!"
-msgstr ""
+msgstr "Renamed!"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js
 msgid "sensitive"
-msgstr ""
+msgstr "sensitive"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js
 msgid "insensitive"
-msgstr ""
+msgstr "insensitive"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/components/popup/search/search.php
 msgid "Search..."
-msgstr ""
+msgstr "Search..."
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/html/editor.php
 msgid "Match cases"
-msgstr ""
+msgstr "Match cases"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/html/all.php
 msgid "Repository : "
-msgstr ""
+msgstr "Repository :"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/html/all.php
 msgid "File : "
-msgstr ""
+msgstr "File :"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/html/all.php
 msgid "Theme : "
-msgstr ""
+msgstr "Theme :"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/html/cache.php
 msgid "Delete all"
-msgstr ""
+msgstr "Delete all"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/html/cache.php
-msgid "Cache Managent"
-msgstr ""
+msgid "Cache Management"
+msgstr "Cache Management"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/html/cache.php
 msgid "Select a cache file"
-msgstr ""
+msgstr "Select a cache file"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/html/editor.php
 msgid "Search content"
-msgstr ""
+msgstr "Search content"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/html/editor.php
 msgid "Search file"
-msgstr ""
+msgstr "Search file"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/html/editor.php
 msgid "Refresh files list"
-msgstr ""
+msgstr "Refresh files list"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/html/editor.php
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js
 msgid "Test code!"
-msgstr ""
+msgstr "Test code!"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/html/editor.php
 msgid "Show History"
-msgstr ""
+msgstr "Show History"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/html/editor.php
 msgid "Show strings and translations"
-msgstr ""
+msgstr "Show strings and translations"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/html/error_log.php
 msgid "Last"
-msgstr "Dernier"
+msgstr "Last"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/html/error_log.php
 msgid "Count"
-msgstr "Compte"
+msgstr "Count"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/html/error_log.php
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js
 msgid "File"
-msgstr "Fichier"
+msgstr "File"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/html/error_log.php
 msgid "Line"
-msgstr ""
+msgstr "Line"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/html/error_log.php
 msgid "First"
-msgstr ""
+msgstr "First"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/html/error_log.php
 msgid "Message"
-msgstr ""
+msgstr "Message"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/html/logs.php
 msgid "Auto"
-msgstr ""
+msgstr "Auto"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/html/logs.php
 msgid "Clear file"
-msgstr ""
+msgstr "Clear file"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/html/logs.php
 msgid "Refresh"
-msgstr "Rafraîchir"
+msgstr "Refresh"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/html/logs.php
 msgid "Empty file content"
-msgstr ""
+msgstr "Empty file content"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/html/session.php
 msgid "Infos"
-msgstr ""
+msgstr "Infos"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/html/session.php
 msgid "Server"
-msgstr ""
+msgstr "Server"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/html/session.php
 msgid "Session"
-msgstr ""
+msgstr "Session"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/html/editor/code.php
 msgid "Internal messages"
-msgstr ""
+msgstr "Internal messages"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/html/editor/code.php
 msgid "EXISTING"
-msgstr ""
+msgstr "EXISTING"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/html/editor/code.php
 msgid "Start"
-msgstr "Début"
+msgstr "Start"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/html/editor/code.php
 msgid "End"
-msgstr ""
+msgstr "End"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/html/editor/code.php
 msgid "Title"
-msgstr "Titre"
+msgstr "Title"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/html/editor/code.php
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js
 msgid "New"
-msgstr ""
+msgstr "New"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/html/editor/search.php
 msgid "Search"
-msgstr "Recherche"
+msgstr "Search"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/html/editor/search.php
 msgid "Repository:"
-msgstr ""
+msgstr "Repository:"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/html/editor/search.php
 msgid "Folder:"
-msgstr ""
+msgstr "Folder:"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/html/editor/search.php
 msgid "Files:"
-msgstr "Fichiers:"
+msgstr "Files:"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/html/editor/search.php
 msgid "Occourences:"
-msgstr ""
+msgstr "Occourences:"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/html/editor/search.php
 msgid "no search result"
-msgstr ""
+msgstr "no search result"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/all.js
 msgid "successfully moved!"
-msgstr ""
+msgstr "successfully moved!"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/all.js
 msgid "Error move!"
-msgstr ""
+msgstr "Error move!"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/cache.js
 msgid "Delete file cache"
-msgstr ""
+msgstr "Delete file cache"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/cache.js
 msgid "Delete folder"
-msgstr ""
+msgstr "Delete folder"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/cache.js
 msgid "Delete folder's contents"
-msgstr ""
+msgstr "Delete folder's contents"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js
 msgid "Directory"
-msgstr ""
+msgstr "Directory"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js
 msgid "Rename"
-msgstr "Renommer"
+msgstr "Rename"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js
 msgid "Close tab"
-msgstr ""
+msgstr "Close tab"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js
 msgid "Close all tabs"
-msgstr ""
+msgstr "Close all tabs"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js
 msgid "Find"
-msgstr ""
+msgstr "Find"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js
 msgid "Find next"
-msgstr ""
+msgstr "Find next"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js
 msgid "Find previous"
-msgstr ""
+msgstr "Find previous"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js
 msgid "Replace"
-msgstr ""
+msgstr "Replace"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js
 msgid "Replace All"
-msgstr ""
+msgstr "Replace All"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js
 msgid "Unfold all"
-msgstr ""
+msgstr "Unfold all"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js
 msgid "Fold all"
-msgstr ""
+msgstr "Fold all"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js
 msgid "History"
-msgstr ""
+msgstr "History"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js
 msgid "Show"
-msgstr "Montrer"
+msgstr "Show"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js
 msgid "Clear"
-msgstr "Remettre à zéro"
+msgstr "Clear"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js
 msgid "Clear All"
-msgstr ""
+msgstr "Clear All"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js
 msgid "Doc."
-msgstr ""
+msgstr "Doc."
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js
 msgid "Generate"
-msgstr ""
+msgstr "Generate"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js
 msgid "Pref."
-msgstr ""
+msgstr "Pref."
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js
 msgid "Manage directories"
-msgstr ""
+msgstr "Manage directories"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js
 msgid "IDE style"
@@ -501,116 +501,116 @@ msgstr "IDE style"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js
 msgid "Manager type directories"
-msgstr ""
+msgstr "Manager type directories"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js
 msgid "Search in: "
-msgstr ""
+msgstr "Search in:"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js
 msgid "Do you want to save the changes before closing the tab?"
-msgstr ""
+msgstr "Do you want to save the changes before closing the tab?"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js
 msgid "New file"
-msgstr ""
+msgstr "New file"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js
 msgid "New directory"
-msgstr ""
+msgstr "New directory"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js
 msgid "Find in Path"
-msgstr ""
+msgstr "Find in Path"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js
 msgid "Go to"
-msgstr ""
+msgstr "Go to"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js
 msgid "New File"
-msgstr ""
+msgstr "New file"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js
 msgid "New Directory"
-msgstr ""
+msgstr "New directory"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js
 msgid "Copy folder"
-msgstr ""
+msgstr "Copy folder"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js
 msgid "Are you sure you want to delete"
-msgstr ""
+msgstr "Are you sure you want to delete"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js
 msgid "the folder"
-msgstr ""
+msgstr "the folder"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js
 msgid "Deleted!"
-msgstr "Supprimé!"
+msgstr "Deleted!"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js
 msgid "Successfully moved"
-msgstr ""
+msgstr "Successfully moved"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js
 msgid "Impossible to have two items with the same name"
-msgstr ""
+msgstr "Impossible to have two items with the same name"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js
 msgid "Error move"
-msgstr ""
+msgstr "Error move"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js
 msgid "Are you sure you want to delete it?"
-msgstr ""
+msgstr "Are you sure you want to delete it?"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor.js
 msgid "i18n"
-msgstr ""
+msgstr "i18n"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor/code.js
 msgid "Add"
-msgstr "Ajouter"
+msgstr "Add"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor/code.js
 msgid "File saved!"
-msgstr ""
+msgstr "File saved!"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor/code.js
 msgid "File deleted!"
-msgstr ""
+msgstr "File deleted!"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor/code.js
 msgid "Permission saved!"
-msgstr ""
+msgstr "Permission saved!"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor/code.js
 msgid "Are you sure you want save this internal message?"
-msgstr ""
+msgstr "Are you sure you want save this internal message?"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor/code.js
 msgid "Saved"
-msgstr "Sauvegardé"
+msgstr "Saved"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/js/editor/directories.js
 msgid "Repositories"
-msgstr ""
+msgstr "Repositories"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/model/editor/search.php
 msgid "content too long to be shown"
-msgstr ""
+msgstr "content too long to be shown"
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/public/_ctrl.php
 msgid "You aren't a developer user."
-msgstr ""
+msgstr "You aren't a developer user."
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/public/_ctrl.php
 msgid "Preferences must be set up for the IDE module to load."
-msgstr ""
+msgstr "Preferences must be set up for the IDE module to load."
 
 #: /home/app2/_appui/vendor/bbn/appui-ide/src/mvc/public/all.php
 msgid "All Repository"
-msgstr ""
+msgstr "All Repository"

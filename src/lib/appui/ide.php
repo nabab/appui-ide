@@ -747,8 +747,9 @@ class ide {
       !empty($real['mode']) &&
       !empty($real['repository'])
     ){
-     \bbn\x::log(["load", $real], "modIde");
       $this->set_current_file($real['file']);
+
+
       $f = [
         'mode' => $real['mode'],
         'tab' => $real['tab'],
@@ -1415,6 +1416,7 @@ class ide {
         'repository' => $rep,
         'tab' => false
       ];
+
       if ( !empty($bits) ){
         if ( !empty($rep['tabs']) && (end($bits) !== 'code') ){
           // Tab's nane
@@ -1459,6 +1461,7 @@ class ide {
         }
         else {
           array_pop($bits);
+
           $res .= implode('/', $bits);
           foreach ( $rep['extensions'] as $ext ){
             if ( is_file("$res.$ext[ext]") ){

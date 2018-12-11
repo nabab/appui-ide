@@ -637,7 +637,9 @@
        */
       treeNodeActivate(d){
         if ( !d.data.folder ){
-          if( !this.isMVC && this.existingTab(d)){
+          if( !this.isMVC && !this.existingTab(d)){
+            bbn.fn.log(this.root + 'editor/file/' +  this.currentRep +  (d.data.path || '') +  '/_end_/code', d.data.path, "link")
+            alert('ide');
             bbn.fn.link(
               this.root + 'editor/file/' +
               this.currentRep +
@@ -900,7 +902,7 @@
        * @param bool isFile A boolean value to identify if you want create a file or a folder
        * @param string path The current path
        */
-      new(title, isFile, node){      
+      new(title, isFile, node){
         let src = {
           allData: false,
           isFile: isFile,
