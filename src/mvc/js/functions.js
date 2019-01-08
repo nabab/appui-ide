@@ -222,7 +222,6 @@ bbn.ide = {
         tab: tab
       }, function (d) {
         if ( d.data ){
-          d.data.url = this.parseUrl(d.data.url);
           if (bbn.ide.tabstrip.tabNav("search", d.data.url) === -1) {
             bbn.ide.add(d.data);
             force = true;
@@ -897,7 +896,6 @@ bbn.ide = {
       url = bbn.ide.url;
       title = bbn.ide.title;
     }
-    bbn.fn.log("ADDING TO IDE", url);
     var tn = ele.tabNav("add", bbn.ide.tabObj(obj)),
         idx = ele.tabNav("getList").length - 1,
         tab = ele.tabNav("getTab", idx),

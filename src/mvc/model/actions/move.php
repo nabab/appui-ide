@@ -44,10 +44,11 @@ if ( isset($model->inc->ide) ){
       \bbn\file\dir::create_path($folder);
     }
     $content= \bbn\file\dir::get_files($folder, true);
-    if ( !empty($content) ){
+    //die(var_dump("si", $content, $model->data['name'], $folder) );
+
+    if ( !empty($content) && empty($model->data['is_project'])){
       foreach ( $content as $i => $v ){
         if ( explode('.', basename($v))[0] === $model->data['name'] ){
-
           return [
             'success' => false,
             'exist' => true
@@ -57,7 +58,6 @@ if ( isset($model->inc->ide) ){
     }
   }
   /*if ( !empty(is_dir($folder)) || !empty($exist)){
-    die(var_dump("si", $folder, $exist) );
   }*/
 
   if ( !empty($model->inc->ide->move($model->data)) ){
@@ -66,7 +66,7 @@ if ( isset($model->inc->ide) ){
   else{
 
     $res = [
-      'success' => false,      
+      'success' => false,
     ];
   }
 }

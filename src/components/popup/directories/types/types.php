@@ -24,14 +24,14 @@
     ></bbns-column>
     <bbns-column title= "<?=_("Extensions")?>"
                 field="extensions"
-                :width="90"
+                :width="70"
                 :render="renderIconExts"
                 cls="bbn-c"
                 default="[]"
     ></bbns-column>
     <bbns-column title= "<?=_("Tabs")?>"
                 field="tabs"
-                :width="90"
+                :width="70"
                 :render="renderIconTabs"
                 cls="bbn-c"
                 default="[]"

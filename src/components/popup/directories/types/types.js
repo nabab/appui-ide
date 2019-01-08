@@ -37,7 +37,7 @@
               tabs: (ele.tabs && ele.tabs.length) ? ele.tabs : JSON.stringify([]),
               extensions: (ele.extensions && ele.extensions.length) ? ele.extensions : JSON.stringify([])
             },
-            titlePopup = bbn._('Copy type') + " " + ele.text;        
+            titlePopup = bbn._('Copy type') + " " + ele.text;
         bbn.vue.closest(this, ".bbns-tab").$refs.popup[0].open({
           height: '95%',
           width: '85%',
@@ -87,5 +87,15 @@
         }, idx)
       }
     },
+    created(){
+      types = this;
+      let mixins = [{
+        data(){
+          return {
+            types: types
+          }
+        },
+      }];
+    }
   }
 })();

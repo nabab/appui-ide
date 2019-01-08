@@ -14,7 +14,7 @@
          <bbn-input v-model="new_name"
                     class="bbn-flex-fill"
          ></bbn-input>
-         <bbn-dropdown v-if="!isMVC && isFile"
+         <bbn-dropdown v-if="!source.isMVC && isFile"
                        style="width: 115px"
                        :source="extensions"
                        v-model="new_ext"
@@ -30,7 +30,7 @@
                     required="required"
          ></bbn-input>
          <bbn-button @click="selectDir"><?=_("Browse")?></bbn-button>
-         <bbn-button @click="() => {path = './'}"><?=_("Root")?></bbn-button>
+         <bbn-button @click="() => {new_path = './'}"><?=_("Root")?></bbn-button>
        </div>
      </div>
   </div>

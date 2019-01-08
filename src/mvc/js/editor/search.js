@@ -9,7 +9,8 @@
   return {
     data(){
       return {
-        typeSearch: this.source.typeSearch === 'insensitive' ? 'In' : 'Se'
+        typeSearch: this.source.typeSearch === 'insensitive' ? 'In' : 'Se',
+        list: this.source.list,
       }
     },
     mounted(){
@@ -20,7 +21,7 @@
       selectElement(node){
         if ( node.data.forLink ){
           let link = 'file/' + this.source.nameRepository + node.data.forLink + '/_end_' + (node.data.tab ? '/' + node.data.tab : '');
-          appui.ide.$refs.tabstrip.load(link);
+          appui.ide.getRef(tabstrip).load(link);
         }
         if( node.data.code ){
           let link = 'file/' + this.source.nameRepository + node.data.linkPosition + '/_end_' + (node.data.tab ? '/' + node.data.tab : ''),
@@ -33,7 +34,7 @@
                 tab = st.getVue(idxSubTab),
                 code = bbn.vue.find( tab, 'bbn-code');
             st.activateIndex(idxSubTab);
-            if( code ){
+            if ( code ){
               let start = {
                     line: node.data.line,
                     ch: node.data.position
@@ -44,11 +45,7 @@
                   };
               this.$nextTick(()=>{
                 code.cursorPosition(node.data.line, node.data.position);
-                /*setTimeout(()=>{
-                   code.widget.getDoc().setSelections([{'anchor': start, 'head': end}]);
-                   appui.ide.search.link = true;
-                 },200);*/
-                 tabStrip.load(link)
+                tabStrip.load(link)
               });
             }
           }
@@ -56,7 +53,7 @@
             appui.ide.search.link = true;
             appui.ide.cursorPosition.line = node.data.line;
             appui.ide.cursorPosition.ch =node.data.position;
-            appui.ide.$refs.tabstrip.load(appui.ide.$refs.tabstrip.parseURL(link))
+            appui.ide.$refs.tabstrip.load(link)
           }
         }
       }

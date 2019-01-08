@@ -17,4 +17,9 @@ $ctrl->obj->url = APPUI_IDE_ROOT.'editor';
 $ctrl->obj->bcolor = '#333';
 $ctrl->obj->fcolor = '#FFF';
 $ctrl->obj->icon = "fas fa-code";
-$ctrl->combo('I.D.E.', true);
+//$ctrl->combo('I.D.E.', true);
+
+echo $ctrl
+    ->set_title('I.D.E')
+    ->add_js($ctrl->get_model(['routes' => $ctrl->get_routes()]))
+    ->get_view();

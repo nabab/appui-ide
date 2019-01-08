@@ -3,38 +3,18 @@
   let logPoller = null;
   return {
     data(){
-      let lignes = [
-        {
-          text: "10 lignes",
-          value: 10
-        },
-        {
-          text: "50 lignes",
-          value: 50
-        },
-        {
-          text: "100 lignes",
-          value: 100
-        },
-        {
-          text: "250 lignes",
-          value: 250
-        },
-        {
-          text: "500 lignes",
-          value: 500
-        },
-        {
-          text: "1000 lignes",
-          value: 1000
-        }
-      ];
+      let lignes = [10, 50, 100, 250, 500, 1000, 2000, 5000];
       return{
         fileLog: '',
         md5Current: '',
         autoRefreshFile: false,
-        listLignes: lignes,
-        lignes: lignes[1].value,
+        listLignes: lignes.map((a) => {
+          return {
+            value: a,
+            text: a + ' ' + bbn._('lines')
+          }
+        }),
+        lignes: lignes[2],
         textContent: '',
         type: "ruby",
         showText: false,
@@ -46,13 +26,13 @@
       onChange(clear, e){
         if ( this.fileLog.length && this.lignes ){
           bbn.fn.post(this.source.root + 'logs', {
-            log: this.fileLog,
-            clear: clear ? 1 : "0",
-            num_lines: this.lignes,
-          },
-          (d)=>{
-            this.textContent = d.content;
-          });
+              log: this.fileLog,
+              clear: clear ? 1 : "0",
+              num_lines: this.lignes,
+            },
+            (d)=>{
+              this.textContent = d.content;
+            });
         }
       },
       runInterval(){
@@ -63,17 +43,17 @@
             if ( !this.isPolling ){
               this.isPolling = true;
               bbn.fn.post(this.source.root + 'logs', {
-                fileLog: this.fileLog,
-                md5: this.md5Current,
-                num_lines: this.lignes
-              },
-              (d)=>{
-                this.isPolling = false;
-                if ( d.change ){
-                  this.textContent = d.content;
-                  this.md5Current = d.md5
-                }
-              });
+                  fileLog: this.fileLog,
+                  md5: this.md5Current,
+                  num_lines: this.lignes
+                },
+                (d)=>{
+                  this.isPolling = false;
+                  if ( d.change ){
+                    this.textContent = d.content;
+                    this.md5Current = d.md5
+                  }
+                });
             }
           }, this.interval);
         }

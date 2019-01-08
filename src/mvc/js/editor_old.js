@@ -221,7 +221,7 @@ $("ul.bbn-ide-context").kendoContextMenu({
     cssClass: "bbn-tree-rename",
     encoded: false
   }, {
-    text: '<i class="far fa-trash-alt"></i>Delete',
+    text: '<i class="far fa-trash"></i>Delete',
     cssClass: "bbn-tree-delete",
     encoded: false
   }, {

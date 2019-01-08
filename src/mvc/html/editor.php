@@ -67,7 +67,7 @@
                 :collapsible="true"
                 :resizable="true">
         <div class="bbn-flex-height">
-          <div class="bbn-l" style="padding-top: 10px;padding-bottom: 10px;padding-left: 5px;">
+          <div class="bbn-l" style="padding-top: 10px; padding-bottom: 10px;padding-left: 5px;">
             <bbn-checkbox name ="searchContent"
                           label="<?=_('Search content')?>"
                           v-model="showSearchContent"
@@ -79,10 +79,15 @@
                             :value="!search.caseSensitiveSearch"
               ></bbn-checkbox>
             </div>
+            <bbn-dropdown v-if="isProject"
+                          class="bbn-w-100 bbn-padded"
+                          :source="listRootProject"
+                          v-model="typeProject"
+            ></bbn-dropdown>
           </div>
-          <div class="bbn-flex-fill">
+          <div class="bbn-flex-fill" >
             <div class="bbn-full-screen">
-              <bbn-tree class="tree"
+               <bbn-tree class="tree"
                         :source="root + 'tree'"
                         @activate="treeNodeActivate"
                         :menu="treeContextMenu"
@@ -111,8 +116,10 @@
                     @close="ctrlCloseTab">
           <bbns-tab :static="true"
                     url="home"
-                    :load="true"
-                    :title="'<i class=\'bbn-xl zmdi zmdi-pin-help\'> </i>'">
+                    load="true"
+                    :notext="true"
+                    title="<?=_('Help')?>"
+                    icon="zmdi zmdi-pin-help">
           </bbns-tab>
         </bbn-tabnav>
       </bbn-pane>
@@ -122,6 +129,7 @@
                 :collapsed="true">
         <!--iframe class="bbn-100"
                 src="#"
+                 :bcolor="tab.bcolor"
         ></iframe-->
       </bbn-pane>
     </bbn-splitter>

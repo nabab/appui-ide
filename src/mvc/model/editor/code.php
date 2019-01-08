@@ -1,18 +1,14 @@
 <?php
 /** @var $model \bbn\mvc\model */
-
-
 if ( !empty($model->data['url']) && isset($model->inc->ide) ){
   $model->data['url'] = str_replace('/_end_', '', $model->data['url']);
-
   //we convert the string into an array to check whether we need to provide permission information or not
   $stepUrl = explode("/",$model->data['url']);
 
-  //if we are loading the settings tab
+
   if ( $stepUrl[count($stepUrl) - 1 ] === 'settings' ){
     $url = str_replace('/settings', '/php', $model->data['url']);
     $ris = $model->inc->ide->url_to_real($url, true);
-
     if ( !$model->inc->ide->get_file_permissions($ris['file']) ){
       if ( !$model->inc->ide->create_perm_by_real($ris['file']) ){
         return ['error' => $model->inc->ide->get_last_error()];
@@ -30,8 +26,9 @@ if ( !empty($model->data['url']) && isset($model->inc->ide) ){
     }
   }
   else {
+
     if ( $ret = $model->inc->ide->load($model->data['url']) ){
-      \bbn\x::log([ "model code",$ret],"modIde");
+
       if ( isset($ret['permissions']) ){
         unset($ret['permissions']);
       }

@@ -1,15 +1,11 @@
-// Javascript Document
-
-
 (() => {
   return {
     data(){
-      let rep = this.source.repositories[this.source.currentRep],
-          isMVC = (rep !== undefined ) && (rep.tabs !== undefined) && (rep.alias_code !== "component"),
+      var rep =  this.source.type !== false ? this.source.repositoryProject : this.source.repositories[this.source.currentRep],
           defaultTab = '',
           defaultExt = '';
       if ( rep.tabs ){
-        $.each(rep.tabs, (k, a) => {
+        bbn.fn.each(rep.tabs, (a, k) => {
           if ( a.default ){
             defaultTab = k;
             if ( this.source.isFile ){
@@ -18,38 +14,56 @@
           }
         });
       }
+      if ( this.source.isFile && rep.extensions ){
+        defaultExt = rep.extensions[0].ext;
+      }
       return {
-        isMVC: isMVC,
-        isComponent: (rep !== undefined ) && (rep.tabs !== undefined) && (rep.alias_code === "component"),
+        isMVC: ((rep !== undefined) && (rep.tabs !== undefined) && ((rep.alias_code !== "components") && (rep.alias_code !== "bbn-project"))) || ((rep !== undefined) && (this.source.type === "mvc")),
+        isComponent: ((rep !== undefined) && (rep.tabs !== undefined) && ((rep.alias_code === "components") && (rep.alias_code !== "bbn-project"))) || (this.source.type === "components"),
         rep: rep,
-        is_file: this.source.isFile,
+        type:  this.source.type || false,
         data: {
           tab: defaultTab,
           name: '',
           extension: defaultExt,
           is_file: this.source.isFile,
-          path: this.source && (this.source.path === './')  ? this.source.path : this.source.path + '/'
+          type: this.source.type || false,
+          path: (this.source.path === './') ? './' : this.source.path + '/'
         }
       }
     },
     methods: {
       onSuccess(){
         if ( this.source.isFile ){
+          let link = this.source.root + 'editor/file/' + this.source.currentRep +
+            (this.isMVC && this.source.type === 'mvc' ? 'mvc/' : '');
+            if ( this.data.path.startsWith('./') ){
+              link += this.data.path.slice(2);
+            }
+            else if ( this.data.path.startsWith('mvc/') ){
+              link += this.data.path.slice(4);
+            }
+            else{
+              link += this.data.path;
+            }
+            link += this.data.name + (this.isComponent === true ? '/'+ this.data.name  : '' ) + '/_end_';
 
-          /*bbn.fn.link(this.source.root + 'editor/file/' + this.source.currentRep +
-            (this.data.path.startsWith('./') ? this.data.path.slice(2) : this.data.path) +
-            this.data.name + '/_end_' + ( this.data.extension ? '/' +  this.rep.tabs[this.data.tab]['url'] : '')
-          );*/
-          bbn.fn.link(this.source.root + 'editor/file/' + this.source.currentRep +
-            (this.data.path.startsWith('./') ? this.data.path.slice(2) : this.data.path) +
-            this.data.name + '/_end_' + ( this.isMVC ? '/' +  this.rep.tabs[this.data.tab]['url'] : '/code')
-          );
-          appui.success(bbn._("File created!"));
+          if ( (this.data.tab.length > 0) && this.data.extension.length ){
+            link += '/' + this.rep.tabs[this.data.tab]['url'];
+          }
+          else if ( (this.data.tab.length === 0) && this.data.extension ){
+            link += '/code';
+          }
+          if ( link.indexOf('//') !== -1 ){
+            link= link.replace('//', '/');            
+          }
+          bbn.fn.link(link);
+          appui.success(this.isComponent === true ? bbn._("Component created!") : bbn._("File created!"));
         }
         else{
           appui.success(bbn._("Directory created!"));
         }
-        if ( this.data.path === './'){
+        if ( (this.data.path === './')  || (this.source.parent === false) ){
           appui.ide.$refs.filesList.reload();
         }
         else{
@@ -60,18 +74,26 @@
         appui.error(bbn._("Error!"));
       },
       selectDir(){
-        bbn.vue.closest(this, ".bbns-tab").$refs.popup[0].open({
+        bbn.vue.closest(this, "bbns-tab").getPopup({
           width: 300,
           height: 400,
           title: bbn._('Path'),
           component: 'appui-ide-popup-path',
           source: $.extend(this.$data, {operation: 'create'})
         });
+      },
+      getRoot(){
+        if ( this.source.isProject ){
+          this.data.path = this.source.type + '/';
+        }
+        else{
+          this.data.path = './';
+        }
       }
     },
     computed: {
       availableExtensions(){
-        if ( this.rep && this.is_file ){
+        if ( this.rep && this.source.isFile ){
           if ( this.rep.tabs ){
             this.data.extension = this.rep.tabs[this.data.tab].extensions[0].ext;
             return this.rep.tabs[this.data.tab].extensions
@@ -86,8 +108,8 @@
       },
       types(){
         let res = [];
-        if ( this.isMVC ){
-          $.each(this.source.repositories[this.source.currentRep].tabs, (i, v) => {
+        if ( this.isMVC || (this.source.isFile && this.isComponent) ){
+          $.each(this.rep.tabs, (i, v) => {
             if ( !v.fixed ){
               res.push({
                 text: v.title,
@@ -100,11 +122,12 @@
       },
       defaultText(){
         if ( this.availableExtensions ){
-          for ( let i in this.availableExtensions ){
+          for ( let i  in  this.availableExtensions ){
             if ( this.availableExtensions[i].ext === this.data.extension ){
               return this.availableExtensions[i].default;
             }
           }
+          ;
         }
         return false
       },
@@ -112,19 +135,20 @@
         return {
           tab_path: this.isMVC && this.rep && this.rep.tabs[this.data.tab] ? this.rep.tabs[this.data.tab].path : '',
           default_text: this.defaultText,
-          repository: this.source.repositories[this.source.currentRep]
+          repository: this.rep,
+          type: this.source.type
         }
       },
       extensions(){
-        let arr= [];
         if ( this.availableExtensions ){
+          let arr = [];
           for ( let obj of this.availableExtensions ){
             arr.push({text: obj.ext, value: obj.ext});
           }
+          return arr;
         }
-        return arr;
+        return [];
       }
     }
   }
 })();
-

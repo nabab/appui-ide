@@ -20,20 +20,19 @@
         if ( this.new_path === './' ){
           appui.ide.$refs.filesList.reload();
         }
-        /*else{
-          //alert("entrato");
-          //console.log(this.pathTree);
-          //this.pathTree.reload();
-          //this.source.parent.reload();
-        }*/
+        else{
+          if ( this.source.parent ){
+            this.source.parent.reload();
+          }
+        }
 
-        if ( this.isFile && !this.isMvc ){
+        if ( this.isFile && !this.source.isMVC ){
           appui.success(bbn._("Copy file succesfully!"));
         }
         else{
           appui.success(bbn._("Copy succesfully!"));
         }
-        this.$nextTick(()=>{
+        this.$nextTick(() => {
           bbn.vue.closest(this, ".bbn-popup").close();
         });
       },
@@ -48,25 +47,27 @@
           height: 400,
           title: bbn._('Path'),
           component: 'appui-ide-popup-path',
-          source: $.extend(this.$data, {operation: 'copy'})
+          source: $.extend(this.$data, {
+            operation: 'copy',
+            isComponent: this.source.isComponent,
+            isMvc: this.source.isMVC,
+            rep: this.source.repository
+          })
         });
       }/*,
-    setRoot(){
-      this.newPath = './';
-    },
-    */
+      setRoot(){
+        this.newPath = './';
+      },
+      */
     },
     computed: {
-      isMVC(){
-        return this.source.isMVC
-      },
       isFile(){
-        return !this.source.data.folder
+        return !this.source.data.folder && !this.source.isComponent
       },
       extensions(){
         let res = [];
         if ( !this.isMVC ){
-          $.each(this.source.repositories[this.source.currentRep].extensions, (i, v) =>{
+          $.each(this.source.repositories[this.source.currentRep].extensions, (i, v) => {
             res.push({
               text: '.' + v.ext,
               value: v.ext
@@ -76,14 +77,20 @@
         return res;
       },
       formData(){
-        return{
+        let obj = {
           path: this.source.data.dir,
           repository: this.source.repositories[this.source.currentRep],
           name: this.source.data.name,
           ext: this.source.data.ext,
-          is_mvc: this.isMVC,
-          is_file: this.isFile
+          is_mvc: this.source.isMVC,
+          is_file: this.isFile,
+          is_component: this.source.isComponent
         }
+        if ( this.source.repository['types'] !== undefined ){
+          obj.component_vue =  this.source.component_vue;
+          obj.only_component = this.source.only_component;
+        }
+        return obj;
       }
     },
     mounted(){

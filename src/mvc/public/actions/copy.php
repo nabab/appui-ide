@@ -2,7 +2,6 @@
 /** @var $ctrl \bbn\mvc\controller */
 if ( isset($ctrl->inc->ide) ){
   if ( !empty($ctrl->inc->ide->copy($ctrl->post)) ){
-
     $ctrl->obj->success = true;
   }
   else {

@@ -42,7 +42,6 @@
 
               } else{
                 for ( let i = 0; i < tabs.length; i++ ){
-
                   if ( tabs[i] ){
                     //If you rename a folder that is inserted in the context of the path of one or more open
                     //tabs then you proceed with the closure of the tab (s) and its reopening.
@@ -111,7 +110,7 @@
         return true
       },
       beforeSubmit(){
-        const tabStrip = appui.ide.$refs.tabstrip;
+        const tabStrip = appui.ide.getRef('tabstrip');
         let path = this.source.nodeData.path.split('/');
         //if it is a file, you perform open tab check operations and in case we rename its tab title
         if ( tabStrip ){
@@ -124,140 +123,24 @@
         }
       },
       onSuccess(){
-        //  alert("dddd")
-        /*  const tabStrip = appui.ide.$refs.tabstrip;
-          let path = this.source.nodeData.path.split('/');
-          //if it is a file, you perform open tab check operations and in case we rename its tab title
-
-          if ( tabStrip ){
-            var idx = tabStrip.getIndex('file/' + appui.ide.currentRep + this.source.nodeData.dir + this.source.nodeData.name);
-            //if the file we have to rename is open and is also active then we rename it
-            if ( Number.isInteger(idx) && idx > -1 ){
-              if ( this.isFile ){
-                path.pop();
-                path.push(this.new_name);
-                tabStrip.tabs[idx]['title'] = path.join('/');
-
-              }
-              //folder
-              else {
-                console.log(this);
-                //I compose the initial directory to compare with open tabs
-
-                let dirTab = this.formData.path + this.formData.name;
-
-                //copy of the open tabs to make sure that I can make changes without affecting the original.
-                var tabs = appui.ide.$refs.tabstrip['tabs'].slice();
-
-                //browse the' array for control and in case do the closing and reopening tab operation
-                for ( let i = 0; i < tabs.length; i++ ){
-
-                  if ( tabs[i] ){
-                    bbn.fn.warning("guardadaddad");
-                    console.log("titlotab", tabs[i]['title'])
-                    console.log("dirtab", dirTab)
-                    console.log("indice", i);
-                    console.log("tab", tabs[i]);
-                    console.log("condizione", tabs[i]['title'].indexOf(dirTab) === 0)
-                    console.log("trova paarte titolo", tabs[i]['title'].indexOf(dirTab))
-                    console.log("this", this)
-
-                    //If you rename a folder that is inserted in the context of the path of one or more open
-                    //tabs then you proceed with the closure of the tab (s) and its reopening.
-                    let idx = tabs[i]['title'].indexOf(dirTab);
-
-                    if ( idx === 0 ){
-
-                      let cfg = {
-                        data: {
-                          dir: '',
-                          name: '',
-                          tab: ''
-                        }
-                      };
-
-                      if ( this.isMVC ){
-                        let tabFile = tabs[i]['current'].lastIndexOf('/');
-                        tabFile = tabFile + 1;
-                        cfg.data.tab = tabs[i]['current'].substring(tabFile);
-                      }
-                      //  if the folder to be renamed is not the direct relative
-                      if ( dirTab !== tabs[i]['title'].substring(0, tabs[i]['title'].lastIndexOf('/')) ){
-
-                        let end = tabs[i]['title'].lastIndexOf('/'),
-                            nameFile = tabs[i]['title'].substring(end),
-                            addDir = tabs[i]['title'].substring(0, end);
-
-                        var levels = addDir.split('/');
-
-                        for (let i in levels){
-                          if ( levels[i] ===  this.formData.name ){
-                            levels[i] = this.new_name;
-                          }
-                        }
-
-                        cfg.data.dir = levels.join('/');
-                        cfg.data.name = nameFile;
-                      }
-                      else{
-                        let end = tabs[i]['title'].lastIndexOf('/'),
-                            nameFile = tabs[i]['title'].substring(end);
-                        cfg.data.dir =  this.formData.path + this.new_name;
-                        cfg.data.name = nameFile;
-                      }
-                      appui.ide.$refs.tabstrip.close(i);
-                      setTimeout(()=>{
-                        appui.ide.openFile(cfg);
-                      }, 800);
-                    }
-                  }
-
-                }
-              }
-            }
-          }*/
         if ( this.source.parent ){
           this.source.parent.reload();
         }
         else{
-          /*
-          *  TODO  update of the open tab after the rename
-          *
-          *
-          */
-          /*
-          let tab = appui.ide.$refs.tabstrip.tabs[appui.ide.tabSelected];
-          if ( this.isMVC ){
-            tab.source.title = this.formData.path +  this.new_name;
-            tab.source.path = this.formData.path +  this.new_name;
-            tab.source.url = this.source.currentRep +  this.formData.path + this.formData.name + '/__end__';
-            tab.title =  this.formData.path + this.new_name;
-            let id = appui.ide.$refs.tabstrip.tabs[appui.ide.tabSelected].url.lastIndexOf(this.formData.name) + 1;
-            tab.url =  tab.url.substring(0, id) + '/__end__';
-          }
-          else{
-            tab.source.filename = this.new_name;
-            tab.source.path = this.formData.path;
-          }
-         */
-
           this.$nextTick(() => {
             appui.ide.$refs.tabstrip.close(appui.ide.tabSelected);
           });
-
-
           this.$nextTick(() => {
             let newUrl = appui.ide.$refs.tabstrip.tabs[appui.ide.tabSelected].current;
-            //appui.ide.$refs.tabstrip.currentURL = newUrl;
-            //bbn.fn.link('ide/editor/' + newUrl);
-            appui.ide.$refs.tabstrip.load(newUrl);
+            appui.ide.getRef('tabstrip').currentURL = newUrl;
+            bbn.fn.link('ide/editor/' + newUrl);
+            appui.ide.getRef('tabstrip').load(newUrl);
           });
 
           if ( appui.ide.currentRep === this.source.currentRep ){
-            appui.ide.$refs.filesList.reload();
+            appui.ide.getRef('filesList').reload();
           }
         }
-
         appui.success(bbn._("Renamed!"));
       },
     },
@@ -282,14 +165,23 @@
       },
 
       formData(){
-        return {
-          repository: this.source.repositories[this.source.currentRep],
+        let obj = {
+          repository: this.source.repository,
           path: !this.source.parent ? this.source.nodeData.path : this.source.nodeData.dir,
           name: this.source.nodeData.name,
           ext: this.source.nodeData.ext,
           is_mvc: this.isMVC,
-          is_file: this.isFile
+          is_file: this.isFile,
+          is_component: this.source.isComponent
+        };
+        if ( this.source.is_component ){
+          obj.path = this.source.nodeData.path;
         }
+        if ( this.source.repository['types'] !== undefined ){
+          obj.component_vue =  this.source.component_vue;
+          obj.only_component = this.source.only_component;
+        }
+        return obj;
       }
     },
     mounted(){

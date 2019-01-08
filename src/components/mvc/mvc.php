@@ -1,66 +1,16 @@
-<!-- <div class="bbn-100">
-  <div class="bbn-h-100 code">
-    <bbn-tabnav :autoload="false"
-                :scrollable="false"
-                ref="tabstrip"
-                @tabLoaded="loadingTab"
-    >
-      <bbns-tab :static="true"
-               :load="true"
-               :url="repositories[repository].tabs[search(repositories[repository].tabs, 'url' ,'_ctrl')]['url']"
-               :title="repositories[repository].tabs[search(repositories[repository].tabs, 'url' ,'_ctrl')]['title']"
-               :bcolor="repositories[repository].tabs[search(repositories[repository].tabs, 'url' ,'_ctrl')]['bcolor']"
-               :fcolor="repositories[repository].tabs[search(repositories[repository].tabs, 'url' ,'_ctrl')]['fcolor']"
-      >
-      </bbns-tab>
-      <bbns-tab v-for="(tab, idx) in sctrl"
-               :static="true"
-               :load="true"
-               :url="'_'.repeat(idx+1) + repositories[repository].tabs[search(repositories[repository].tabs, 'url' ,'_ctrl')]['url']"
-               :title="repositories[repository].tabs[search(repositories[repository].tabs, 'url' ,'_ctrl')]['title'] + (idx+1)"
-               :key="'_'.repeat(idx+1) + repositories[repository].tabs[search(repositories[repository].tabs, 'url' ,'_ctrl')]['url']"
-               :bcolor="repositories[repository].tabs[search(repositories[repository].tabs, 'url' ,'_ctrl')]['bcolor']"
-               :fcolor="repositories[repository].tabs[search(repositories[repository].tabs, 'url' ,'_ctrl')]['fcolor']"
-      >
-      </bbns-tab>
-      <!--form permision-->
-      <!--bbns-tab :static="true"
-               :load="true"
-               url="settings"
-               :disabled="disabledSetting"
-               title= "<?=_('Settings')?>"
-               :selected="true"
-      ></bbns-tab>
-      <bbns-tab v-for="(tab, idx) in repositories[repository].tabs"
-               v-if="tab.url !== '_ctrl'"
-               :static="true"
-               :load="true"
-               :url="tab.url"
-               :title="renderTitleTab(tab)"
-               :key="tab.url"
-               :style="{backgroundColor: tab.bcolor, color: tab.fcolor}"
-               :selected="tab.default"
-               :bcolor="tab.bcolor"
-               :fcolor="tab.fcolor"
-               :menu="getMenu(tab.url)"
-      ></bbns-tab>
-    </bbn-tabnav>
-  </div>
-  :url="source.tab.indexOf('_ctrl') === (source.tab.length - 5) ? source.tab : '_ctrl'"
-</div> -->
+      <!-- @tabLoaded="loadingTab" -->
 <div class="bbn-100">
   <div class="bbn-h-100 code">
     <bbn-tabnav :autoload="false"
                 :scrollable="false"
                 ref="tabstrip"
-                @tabLoaded="loadingTab"
     >
       <bbns-tab :static="true"
                :load="true"
                :url="countCtrl"
                :title="titleTabCtrl"
-               :bcolor="repositories[repository].tabs[search(repositories[repository].tabs, 'url' ,'_ctrl')]['bcolor']"
-               :fcolor="repositories[repository].tabs[search(repositories[repository].tabs, 'url' ,'_ctrl')]['fcolor']"
+               :bcolor="tabsRepository[search(tabsRepository, 'url' ,'_ctrl')]['bcolor']"
+               :fcolor="tabsRepository[search(tabsRepository, 'url' ,'_ctrl')]['fcolor']"
                :menu="listCtrls()"
       >
       </bbns-tab>
@@ -74,7 +24,7 @@
                :selected="true"
                icon="fas fa-cogs"
       ></bbns-tab>
-      <bbns-tab v-for="(tab, idx) in repositories[repository].tabs"
+      <bbns-tab v-for="(tab, idx) in tabsRepository"
                v-if="tab.url !== '_ctrl'"
                :static="true"
                :load="true"

@@ -13,16 +13,16 @@
         mode: '',
         code: '',
         url: '',
-        treeLoad:false,
+        treeLoad: false,
       }
     },
     methods: {
       //method map for component tree
       transform(a){
-        return $.extend (a, {
-          text: "name_file" in a ? a.text + ' &nbsp; <span class="w3-badge w3-small w3-light-grey">' +   a.numChildren  + '</span>' : a.text,
+        return $.extend(a, {
+          text: "name_file" in a ? a.text + ' &nbsp; <span class="w3-badge w3-small w3-light-grey">' + a.numChildren + '</span>' : a.text,
           num: a.numChildren || 0,
-          type: "name_file" in a  ? "" : a.text
+          type: "name_file" in a ? "" : a.text
         });
       },
       //  click in node file for to make a post and upload its content
@@ -30,12 +30,12 @@
         if ( this.selected ){
           this.selected = false;
         }
-        setTimeout(() =>{
+        setTimeout(() => {
           if ( node.data.folder === false ){
-            bbn.fn.post(this.source.root + 'history/tree',{
-              url: node.data.path + "/" + node.data.file + "." + node.data.ext ,
-            }, d=>{
-              if( d.data.success ){
+            bbn.fn.post(this.source.root + 'history/tree', {
+              url: node.data.path + "/" + node.data.file + "." + node.data.ext,
+            }, d => {
+              if ( d.data.success ){
                 this.selected = true;
                 this.code = d.data.code;
                 this.mode = node.data.mode;
@@ -49,7 +49,7 @@
     computed: {
       //Initial configuration object for the tree component
       initialData(){
-        if( this.url.length ){
+        if ( this.url.length ){
           return {
             repository: this.source.repository,
             repository_cfg: this.source.repositories[this.source.repository],

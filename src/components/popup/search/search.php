@@ -3,7 +3,7 @@
     <bbn-input placeholder="<?=_('Search...')?>"
                v-model="search"
                class="bbn-w-100"
-               @keydown.enter="searchInFolder"
+               @keydown.enter="searchInElement"
     ></bbn-input>
   </div>
   <div class="bbn-w-30 bbn-padded">

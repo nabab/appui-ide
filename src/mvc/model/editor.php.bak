@@ -24,7 +24,7 @@ if ( isset($model->data['routes']) ){
           'text' => '<i class="fas fa-save"></i>Save',
           'function' => "bbn.ide.save();"
         ], [
-          'text' => '<i class="far fa-trash-alt"></i>Delete',
+          'text' => '<i class="far fa-trash"></i>Delete',
         ], [
           'text' => '<i class="far fa-files"></i>Duplicate',
         ], [
@@ -60,10 +60,10 @@ if ( isset($model->data['routes']) ){
           'text' => '<i class="fas fa-history"></i>Show',
           'function' => 'bbn.ide.history();'
         ], [
-          'text' => '<i class="far fa-trash-alt"></i>Clear',
+          'text' => '<i class="far fa-trash"></i>Clear',
           'function' => 'bbn.ide.historyClear();'
         ], [
-          'text' => '<i class="far fa-trash-alt"></i>Clear All',
+          'text' => '<i class="far fa-trash"></i>Clear All',
           'function' => 'bbn.ide.historyClearAll();'
         ]]
       ], [

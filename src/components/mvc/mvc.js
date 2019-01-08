@@ -8,21 +8,21 @@
   return {
     data(){
       const ide = bbn.vue.closest(bbn.vue.closest(this, '.bbn-tabnav'), '.bbns-tab').getComponent().$data;
-      let path = this.source.url.substr(this.source.repository.length).replace('/_end_', '').split('/'),
-          filename = path.pop(),
-          tabs = ide.repositories[this.source.repository].tabs,
-          exts = [],
-          tabsMenu = {},
+      let path      = this.source.url.substr(this.source.repository.length).replace('/_end_', '').split('/'),
+          filename  = path.pop(),
+          tabs      = ide.repositories[this.source.repository].tabs,
+          exts      = [],
+          tabsMenu  = {},
           //list block code for testing
           listCodes = [{ //tab controller
-            type:"php",
-            codes:{
-              foreach: "foreach (array_expression as $key => $value){\n" +" statement"+"\n};",
+            type: "php",
+            codes: {
+              foreach: "foreach (array_expression as $key => $value){\n" + " statement" + "\n};",
               cout: "count();"
             }
-          },{ //tab private
-            type:"private",
-            codes:{
+          }, { //tab private
+            type: "private",
+            codes: {
               if: "if (expr){\n" + "  statement\n}",
               switch_Case: "switch ($variable) {\n" +
                 "  case 0: \n " +
@@ -30,54 +30,54 @@
                 "     break;\n" +
                 "  case 1:\n" +
                 "    statement\n" +
-                "    break;\n "+
+                "    break;\n " +
                 " default:\n" +
                 "    statement\n}"
             }
-          },{ //tab model
-            type:"model",
-            codes:{
+          }, { //tab model
+            type: "model",
+            codes: {
               $model: "$model->",
               $model_data: "$model->data[]",
               $model_inc: "$model->inc->"
             }
-          },{ //tab view
-            type:"html",
-            codes:{
+          }, { //tab view
+            type: "html",
+            codes: {
               bbn_input: '<bbn-input v-model=""></bbn-input>',
-              bbn_numeric : '<bbn-numeric v-model=""></bbn-numeric>',
+              bbn_numeric: '<bbn-numeric v-model=""></bbn-numeric>',
               component: '<component is=""></component>',
               div: '<div></div>'
             },
-          },{ //tab javascript
-            type:"js",
-            codes:{
-              VueStructure: "(() => {\n"+
+          }, { //tab javascript
+            type: "js",
+            codes: {
+              VueStructure: "(() => {\n" +
                 "  return{\n" +
                 "    mixins:[],\n" +
                 "    props:{},\n" +
                 "    data(){\n" +
                 "      return{}\n" +
-                "    },\n"+
+                "    },\n" +
                 "    computed:{},\n" +
                 "    methods:{},\n" +
                 "    watch:{},\n" +
                 "    created(){},\n" +
                 "    mounted(){},\n" +
                 "    components:{}\n" +
-                "  }\n"+
+                "  }\n" +
                 "})();",
               function_arrow: "()=>{}",
               for_in: "for(let variable in variable){}",
               for_of: "for(let variable of variable){}",
-              forEach: "array.forEach((item, id)=>{\n"+"});",
+              forEach: "array.forEach((item, id)=>{\n" + "});",
               arrayFilter: "array.filter(()=>{\n" +
-                "   return  condition \n" +"});"
+                "   return  condition \n" + "});"
             }
-          },{ //tab css
-            type:"css",
-            codes:{
-              class: "class{\n"+"}",
+          }, { //tab css
+            type: "css",
+            codes: {
+              class: "class{\n" + "}",
               backgroundColor: "background-color:"
             }
           }
@@ -91,7 +91,7 @@
             let ext = tab.extensions[id].ext;
             exts.push({
               icon: 'fas fa-cogs',
-              text: bbn._('switch to')  +  ' <strong>' + ext + '</strong>',
+              text: bbn._('switch to') + ' <strong>' + ext + '</strong>',
               key: ext,
               command: this.changeExtension
             });
@@ -110,6 +110,7 @@
         tabsMenu: tabsMenu,
         permissions: ide.permFile,
         codesBlock: listCodes,
+        tabsRepository: this.source.repository_content.tabs['mvc'] !== undefined ? this.source.repository_content.tabs['mvc'][0] : this.source.repository_content.tabs
       });
     },
     computed: {
@@ -130,7 +131,7 @@
       countCtrl(){
         let steps = this.source.title.split("/").slice();
         let i = steps.length;
-        return  "_".repeat(i) + 'ctrl'
+        return "_".repeat(i) + 'ctrl'
 
       }
     },
@@ -139,11 +140,11 @@
         return appui.ide.settings
       }
     }*/
-    methods:{
+    methods: {
       search: bbn.fn.search,
       //for title in tabs ide
       renderIconTab(tab){
-        switch(tab.title){
+        switch ( tab.title ){
           //icon for tab controller
           case "Controller":
             return 'icon-php';
@@ -166,12 +167,12 @@
         return '';
       },
       listCtrls(){
-        let path="",
-            url = "_ctrl",
-            arr = [{
+        let path = "",
+            url  = "_ctrl",
+            arr  = [{
               text: 'CTRL: ./',
               title: 'CTRL',
-              icon : 'fas fa-cogs',
+              icon: 'fas fa-cogs',
               url: url,
               command: (a) => {
                 this.loadCtrl(a);
@@ -180,10 +181,10 @@
         this.sctrl.forEach((val, i) => {
           path += val + "/";
           arr.push({
-            text: `CTRL${(i+1)}:   ${path}`,
-            title: `CTRL${(i+1)}`,
-            icon : 'fas fa-cogs',
-            url: "_".repeat(i+1) + url,
+            text: `CTRL${(i + 1)}:   ${path}`,
+            title: `CTRL${(i + 1)}`,
+            icon: 'fas fa-cogs',
+            url: "_".repeat(i + 1) + url,
             command: (a) => {
               this.loadCtrl(a);
             }
@@ -192,9 +193,9 @@
         return arr;
       },
       loadCtrl(ctrl){
-        let i = this.$refs.tabstrip.selected,
-            tab = this.$refs.tabstrip.tabs.splice(0,1),
-            val = tab[0].menu[ctrl-1];
+        let i   = this.$refs.tabstrip.selected,
+            tab = this.$refs.tabstrip.tabs.splice(0, 1),
+            val = tab[0].menu[ctrl - 1];
         this.$refs.tabstrip.selected = '';
         this.$refs.tabstrip.add({
           load: true,
@@ -210,21 +211,27 @@
           this.$refs.tabstrip.load(this.$refs.tabstrip.parseURL(url), true);
         });
       },
+      /*renderEmptyTab(tab){
+        if ( this.emptyTabs.indexOf(tab.url) !== -1 ){
+          return `<i class='zmdi zmdi-plus' style='color:black;'></i>`;
+        }
+        return '';
+      },*/
       //used in the template, returns a copy of the complete menu that will later be retracted in the tabLoaded event with the 'loading tab' function
       getMenu(url){
         let addCode = {
           icon: 'fas fa-plus',
           text: bbn._("Add code"),
-          items:[]
+          items: []
         };
-        for( let id in this.codesBlock ){
+        for ( let id in this.codesBlock ){
           if ( this.codesBlock[id].type === url ){
             for ( let i in this.codesBlock[id].codes ){
               let code = this.codesBlock[id].codes[i];
               addCode.items.push({
                 icon: 'fas fa-code',
                 text: i,
-                command: () =>{
+                command: () => {
                   this.addSnippet(this.codesBlock[id].codes[i])
                 }
               });
@@ -232,7 +239,7 @@
           }
         }
         //if no switch to extension arr arr will be an array that contains the remaining menus and specifically: the tab reload and the addition of codes
-        let arr =  this.tabsMenu[url] ? this.tabsMenu[url].slice() : [];
+        let arr = this.tabsMenu[url] ? this.tabsMenu[url].slice() : [];
         //add reload in menu
         arr.push({
           icon: 'zmdi zmdi-refresh',
@@ -250,8 +257,8 @@
       reloadTab(){
         let tab = this.$refs.tabstrip.getVue(this.$refs.tabstrip.selected);
         if ( tab.getComponent().isChanged ){
-          appui.confirm( bbn._("Modified code do you want to refresh anyway?"), ()=>{
-            bbn.fn.post( appui.ide.root + 'editor/' + this.$refs.tabstrip.baseURL + tab.url, (d)=>{
+          appui.confirm(bbn._("Modified code do you want to refresh anyway?"), () => {
+            bbn.fn.post(appui.ide.root + 'editor/' + this.$refs.tabstrip.baseURL + tab.url, (d) => {
               if ( d.data.id ){
                 tab.reload();
               }
@@ -259,7 +266,7 @@
           });
         }
         else{
-          bbn.fn.post( appui.ide.root + 'editor/' + this.$refs.tabstrip.baseURL + tab.url, (d)=>{
+          bbn.fn.post(appui.ide.root + 'editor/' + this.$refs.tabstrip.baseURL + tab.url, (d) => {
             if ( d.data.id ){
               tab.reload();
             }
@@ -268,8 +275,8 @@
       },
       //method change expension click of the menu subtab
       changeExtension(idx, obj){
-        let code = bbn.vue.find(this , 'bbn-code'),
-            tab = this.$refs.tabstrip.getVue(this.$refs.tabstrip.selected),
+        let code   = bbn.vue.find(this, 'bbn-code'),
+            tab    = this.$refs.tabstrip.getVue(this.$refs.tabstrip.selected),
             oldExt = tab.source.extension,
             newExt = obj.key;
 
@@ -281,11 +288,11 @@
           path: this.path,
           fileName: this.filename,
           is_mvc: this.isMVC
-        }, d=>{
+        }, d => {
           if ( d.success ){
             tab.deleteMenu(obj.key);
             tab.addMenu(this.getMenu(tab.url)[bbn.fn.search(this.tabsMenu[tab.url], 'key', oldExt)]);
-            code.$parent.mode= newExt;
+            code.$parent.mode = newExt;
             tab.source.extension = newExt;
             tab.source.mode = newExt;
             appui.success(bbn._('Extension changed successfully'));
@@ -295,7 +302,7 @@
           }
         });
       },//in event tabLoadded in tab-nav
-      loadingTab(data, url , tab){
+      loadingTab(data, url, tab){
         let idx = bbn.fn.search(tab.menu, 'key', data.extension);
         if ( idx > -1 ){
           tab.menu.splice(idx, 1);

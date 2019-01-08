@@ -147,6 +147,7 @@ class ide {
    * @return string|false
    */
   private function set_current_file(string $file = null){
+
     if ( empty($file) ){
       self::$current_file = false;
       return false;
@@ -164,13 +165,16 @@ class ide {
    * @return string
    */
   private function set_current_id(string $file = null, string $bbn_path = null){
+
     self::$current_id = false;
     if ( empty($file) ){
       $file = self::$current_file;
     }
+
     if ( !empty($file) ){
       if ( empty($bbn_path) && ($url = $this->real_to_url($file)) ){
         $repository = self::repository_from_url($url, true);
+
         if ( !empty($repository) && \defined($repository['bbn_path']) ){
           $bbn_path = $repository['bbn_path'];
         }
@@ -179,6 +183,7 @@ class ide {
         self::$current_id = str_replace(constant($bbn_path), $bbn_path.'/', $file);
       }
     }
+    \bbn\x::log([self::$current_id], 'currentIDD');
     return self::$current_id;
   }
 
@@ -199,6 +204,7 @@ class ide {
     if ( empty($id_file) ){
       $id_file = self::$current_id;
     }
+
     if ( !empty($id_file) ){
       if ( !$id = $this->options->from_code($id_file, $this->_files_pref()) ){
         $id = $this->options->add([
@@ -275,8 +281,8 @@ class ide {
   }
 
   private function check_normal(array $cfg, array $rep, string $path){
-
     if ( !empty($cfg) && !empty($path) && !empty($cfg['name']) ){
+
       $old = $new = $path;
       if ( !empty($cfg['path']) && ($cfg['path'] !== './') ){
         $old .= $cfg['path'] . (substr($cfg['path'], -1) !== '/' ? '/' : '');
@@ -289,13 +295,17 @@ class ide {
           ( !empty($cfg['new_ext']) && (\bbn\x::find($rep['extensions'], ['ext' => $cfg['new_ext']]) === false) )
         )
       ){
-         return false;
+        return false;
       }
+
       $old .= $cfg['name'] . (!empty($cfg['is_file']) ? '.' . $cfg['ext'] : '');
+
       $new .= ($cfg['new_name'] ?? '') .
         (!empty($cfg['is_file']) && !empty($cfg['new_ext']) ? '.' . $cfg['new_ext'] : '');
-      if ( ($path !== $new) && file_exists($new) ){
 
+    //    die(\bbn\x::dump("sdess",$old, $new));
+
+      if ( ($path !== $new) && file_exists($new) ){
         $this->error("The new file|folder exists: $new");
         return false;
       }
@@ -312,13 +322,16 @@ class ide {
 
   private function check_mvc(array $cfg, array $rep, string $path){
     $todo = [];
-
     if ( !empty($cfg) &&
       !empty($rep) &&
       !empty($rep['tabs']) &&
       !empty($cfg['name']) &&
       isset($cfg['is_file'], $path)
     ){
+
+      if ( !empty($rep['alias_code']) && ($rep['alias_code'] === 'bbn-project') ){
+        $path .= 'mvc/';
+      }
 
 
       // Each file associated with the structure (MVC case)
@@ -333,12 +346,13 @@ class ide {
 
         if ( !empty($cfg['path']) &&  ($cfg['path'] !== './') ){
           $old .= $cfg['path'] . (substr($cfg['path'], -1) !== '/' ? '/' : '');
-
         }
         if ( !empty($cfg['new_path']) && ($cfg['new_path'] !== './') ){
           $new .= $cfg['new_path'] . (substr($cfg['new_path'], -1) !== '/' ? '/' : '');
-
         }
+
+
+
         //if ( ($i !== '_ctrl') && !empty($tab['extensions']) ){
         if ( ($tab['url'] !== '_ctrl') && !empty($tab['extensions']) ){
           $old .= $cfg['name'];
@@ -346,6 +360,8 @@ class ide {
           $ext_ok = false;
 
           if ( !empty($cfg['is_file']) ){
+            // die(\bbn\x::dump("entarto", $cfg['new_name'], $old, $new ));
+
             foreach ( $tab['extensions'] as $k => $ext ){
               if ( $k === 0 ){
                 if ( !empty($cfg['new_name']) && is_file($new.'.'.$ext['ext']) ){
@@ -369,6 +385,7 @@ class ide {
             return false;
           }
 
+
           if ( file_exists($old) ){
             array_push($todo, [
               'old' => $old,
@@ -382,6 +399,320 @@ class ide {
 
     return $todo;
   }
+
+  /*private function check_mvc(array $cfg, array $rep, string $path){
+      $todo = [];
+      if ( !empty($cfg) &&
+        !empty($rep) &&
+        !empty($rep['tabs']) &&
+        !empty($cfg['name']) &&
+        isset($cfg['is_file'], $path)
+      ){
+
+        if ( !empty($rep['alias_code']) && ($rep['alias_code'] === 'bbn-project') ){
+          $path .= 'mvc/';
+        }
+
+
+        // Each file associated with the structure (MVC case)
+        foreach ( $rep['tabs'] as $i => $tab ){
+          // The path of each file
+          $tmp = $path;
+          if ( !empty($tab['path']) ){
+            $tmp .= $tab['path'];
+          }
+
+          $old = $new = $tmp;
+
+          if ( !empty($cfg['path']) &&  ($cfg['path'] !== './') ){
+            $old .= $cfg['path'] . (substr($cfg['path'], -1) !== '/' ? '/' : '');
+          }
+          if ( !empty($cfg['new_path']) && ($cfg['new_path'] !== './') ){
+            $new .= $cfg['new_path'] . (substr($cfg['new_path'], -1) !== '/' ? '/' : '');
+          }
+
+
+
+          //if ( ($i !== '_ctrl') && !empty($tab['extensions']) ){
+          if ( ($tab['url'] !== '_ctrl') && !empty($tab['extensions']) ){
+            $old .= $cfg['name'];
+            $new .= $cfg['new_name'] ?? '';
+            $ext_ok = false;
+
+            if ( !empty($cfg['is_file']) ){
+              // die(\bbn\x::dump("entarto", $cfg['new_name'], $old, $new ));
+              foreach ( $tab['extensions'] as $k => $ext ){
+                if ( $k === 0 ){
+                  if ( !empty($cfg['new_name']) && is_file($new.'.'.$ext['ext']) ){
+                    $this->error("The new file exists: $new.$ext[ext]");
+                    return false;
+                  }
+                }
+                if ( is_file($old.'.'.$ext['ext']) ){
+                  $ext_ok = $ext['ext'];
+                }
+              }
+            }
+            if ( !empty($cfg['is_file']) && empty($ext_ok) ){
+              continue;
+            }
+            $old .= !empty($cfg['is_file'])  ? '.' . $ext_ok : '';
+            $new .= !empty($cfg['is_file']) ? '.' . $tab['extensions'][0]['ext'] : '';
+
+
+            if ( !empty($cfg['new_name']) && ($new !== $tmp) && file_exists($new) ){
+              $this->error("The new file|folder exists.");
+              return false;
+            }
+
+            if ( file_exists($old) ){
+              $todo[] = [
+                'old' => $old,
+                'new' => ($new === $tmp) ? false : $new,
+                'perms' => $i === 'php'
+              ];
+            }
+          }
+        }
+      }
+
+      return $todo;
+    }*/
+
+
+
+  /**
+   * Delete a component vue or all folder
+   *
+   * @param array $cfg component info
+   * @return bool
+   */
+  private function delete_component(array $cfg){
+    if( !empty($cfg) && !empty($cfg['repository']) ){
+      $rep = $cfg['repository'];
+      $path = $this->decipher_path($rep['bbn_path'] . '/' . $rep['path']);
+      if ( !empty($cfg['path']) && !empty($cfg['is_file']) ){
+        if ( empty(\bbn\file\dir::delete($path.$cfg['path'])) ){
+          return false;
+        }
+        return true;
+      }
+      //case of context menu
+      else{
+        $ctrl_error = false;
+
+        if ( !empty($rep['bbn_path']) && !empty($rep['path']) && !empty($cfg['path']) && !empty($cfg['name']) ){
+    //      $path = $this->decipher_path($rep['bbn_path'] . '/' . $rep['path']);
+          //all
+          if ( empty($cfg['only_component']) ){
+            $component = $path.$cfg['path'].$cfg['name'];
+            if ( empty(\bbn\file\dir::delete($component)) ){
+              return false;
+            }
+            return true;
+          }
+          else{
+
+            if ( !empty($rep['tabs']) && is_array($rep['tabs']) ){
+              foreach( $rep['tabs'] as $ele ){
+                if ( empty($ctrl_error) ){
+                  if ( is_array($ele['extensions']) ){
+                    foreach($ele['extensions'] as $a){
+                      $component = $path.$cfg['path'].$cfg['name'].'/'.$cfg['name'].'.'.$a['ext'];
+                      if( !empty(file_exists($component)) ){
+                        if ( empty(\bbn\file\dir::delete($component)) ){
+                          $ctrl_error = true;
+                          break;
+                        }
+                      }
+                    }
+                  }
+                }
+                else{
+                  return false;
+                }
+              }
+              return true;
+            }
+          }
+        }
+      }
+    }
+    return false;
+  }
+
+  /**
+   * Copy a component vue or all folder
+   *
+   * @param array $cfg component info
+   * @return bool
+   */
+  private function copy_component(array $cfg){
+    if ( !empty($cfg) &&
+      !empty($cfg['path']) &&
+      !empty($cfg['new_path']) &&
+      !empty($cfg['name']) &&
+      !empty($cfg['new_name']) &&
+      !empty($cfg['repository'])
+    ){
+      $ctrl_error = false;
+      $rep = $cfg['repository'];
+      if( !empty($rep['bbn_path']) && !empty($rep['path']) ){
+        $path = $this->decipher_path($rep['bbn_path'] . '/' . $rep['path']);
+        $old_folder_component = $path.$cfg['path'].$cfg['name'];
+        $new_folder_component = $path.$cfg['new_path'].$cfg['new_name'];
+        //copy only component
+        if ( !empty($cfg['only_component']) ){
+          if( \bbn\file\dir::create_path($new_folder_component) ){
+            if ( !empty($rep['tabs']) && is_array($rep['tabs']) ){
+              foreach( $rep['tabs'] as $ele ){
+                if ( empty($ctrl_error) ){
+                  if ( !empty($ele['extensions']) && is_array($ele['extensions']) ){
+                    foreach($ele['extensions'] as $a){
+                      $old_component = $old_folder_component.'/'.$cfg['name'].'.'.$a['ext'];
+                      $new_component = $new_folder_component.'/'.$cfg['new_name'].'.'.$a['ext'];
+                      if( !empty(file_exists($old_component)) && empty(file_exists($new_component)) ){
+                        //die(\bbn\x::dump("entrato in copia", $old_component, $new_component));
+                        if ( empty(\bbn\file\dir::copy($old_component, $new_component)) ){
+                          $ctrl_error = true;
+                          break;
+                        }
+                      }
+                    }
+                  }
+                }
+                else{
+                  $this->error("Error during the copy of component");
+                  return false;
+                }
+              }
+            }
+          }
+        }
+        else{
+          if ( empty(\bbn\file\dir::copy($old_folder_component, $new_folder_component)) ){
+            //case error
+            $ctrl_error = true;
+          }
+          if( empty($ctrl_error) &&
+              empty($cfg['is_file']) &&
+              !empty($cfg['component_vue'])
+          ){
+            if ( !empty($rep['tabs']) && is_array($rep['tabs']) ){
+              foreach( $rep['tabs'] as $ele ){
+                if ( empty($ctrl_error) ){
+                  if ( !empty($ele['extensions']) && is_array($ele['extensions']) ){
+                    foreach($ele['extensions'] as $a){
+                      $old_component = $new_folder_component.'/'.$cfg['name'].'.'.$a['ext'];
+                      $new_component = $new_folder_component.'/'.$cfg['new_name'].'.'.$a['ext'];
+                      if( !empty(file_exists($old_component)) && empty(file_exists($new_component)) ){
+                        if ( empty(\bbn\file\dir::move($old_component, $new_component)) ){
+                          $ctrl_error = true;
+                          break;
+                        }
+                      }
+                    }
+                  }
+                }
+                else{
+                  $this->error("Error during the copy component");
+                  return false;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    return false;
+  }
+
+
+  /**
+   * Rename a component vue or all folder
+   *
+   * @param array $cfg component info
+   * @return bool
+   */
+  private function rename_component(array $cfg){
+  //  die(\bbn\x::dump('entrato',$cfg, $rep, $new_folder_component));
+
+    if ( !empty($cfg) &&
+      !empty($cfg['path']) &&
+      !empty($cfg['new_path']) &&
+      !empty($cfg['name']) &&
+      !empty($cfg['new_name']) &&
+      !empty($cfg['repository'])
+    ){
+
+      $rep = $cfg['repository'];
+      if( !empty($rep['bbn_path']) && !empty($rep['path']) ){
+        $path = $this->decipher_path($rep['bbn_path'] . '/' . $rep['path']);
+        $ctrl_error = false;
+        $old_folder_component = $path.$cfg['path'].$cfg['name'];
+        $new_folder_component = $path.$cfg['path'].$cfg['new_name'];
+        //folder
+        if ( empty($cfg['only_component']) ){
+          if ( empty(\bbn\file\dir::move($old_folder_component, $new_folder_component)) ){
+            $ctrl_error = true;
+            $this->error("Error during the rename component");
+          }
+        }
+        else{
+          if ( empty(is_dir($new_folder_component)) &&
+            empty(\bbn\file\dir::create_path($new_folder_component))
+          ){
+            $ctrl_error = true;
+          }
+        }
+
+        if( empty($ctrl_error) && empty($cfg['is_file']) && !empty($cfg['component_vue'])){
+          if ( !empty($rep['tabs']) && is_array($rep['tabs']) ){
+            foreach( $rep['tabs'] as $ele ){
+              if ( empty($ctrl_error) ){
+                if ( !empty($ele['extensions']) && is_array($ele['extensions']) ){
+                  foreach($ele['extensions'] as $a){
+                    $old_component = (empty($cfg['only_component']) ? $new_folder_component : $old_folder_component) .'/'.$cfg['name'].'.'.$a['ext'];
+                    $new_component = $new_folder_component.'/'.$cfg['new_name'].'.'.$a['ext'];
+
+
+                    if( !empty(file_exists($old_component)) && empty(file_exists($new_component)) ){
+                      if ( !empty($cfg['only_component']) ){
+                        if ( empty(\bbn\file\dir::move($old_component, $new_component)) ){
+                          $ctrl_error = true;
+                          $this->error("Error during the rename component");
+                          return false;
+                        }
+                      }
+                      else{
+                        if ( empty(\bbn\file\dir::move($old_component, $new_component)) ){
+                          $ctrl_error = true;
+                          $this->error("Error during the rename component");
+                          return false;
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+              else{
+                break;
+              }
+            }
+          }
+        }
+        if( !empty($ctrl_error) ){
+          $this->error("Impossible to $ope the file|folder.");
+          return false;
+        }
+        else{
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
 
   /**
    * Renames|movie a file or a folder of the backup.
@@ -464,14 +795,14 @@ class ide {
       )
     ){
 
-
       $rep = $cfg['repository'];
       $path = $this->decipher_path($rep['bbn_path'] . '/' . $rep['path']);
       if ( $ope === 'rename' ){
         $cfg['new_path'] = $cfg['path'];
       }
-       // Normal file|folder
-      if ( empty($cfg['is_mvc']) &&
+           // Normal file|folder
+      if ( empty($cfg['is_component']) &&
+        empty($cfg['is_mvc']) &&
         ( empty($cfg['is_file']) ||
           ( !empty($cfg['is_file']) &&
             !empty($rep['extensions'])
@@ -479,10 +810,10 @@ class ide {
         )
       ){
         $f = $this->check_normal($cfg, $rep, $path);
-
         if ( $ope === 'move' && !empty($cfg['is_file']) ){
           $f['new'] = $f['new']. '.'.$cfg['ext'];
         }
+
         if ( $f &&
           // Copy
           ((($ope === 'copy') &&
@@ -503,17 +834,30 @@ class ide {
             )
           )
         ){//for rename and move backup
-          $this->operations_backup($f, $cfg, $ope);
+      //    $this->operations_backup($f, $cfg, $ope);
           return true;
         }
       }
       // MVC
-      else if ( !empty($rep['tabs']) ){
-
+      else if ( !empty($rep['tabs']) &&
+       (($rep['alias_code'] === 'mvc') || ($rep['alias_code'] === 'bbn-project')) &&
+       !empty($cfg['is_mvc'])
+     ){
+        if ( ($rep['alias_code'] === 'bbn-project') &&
+         ($ope === 'delete') &&
+         !empty($cfg['active_file'])
+        ){
+          if ( !\bbn\file\dir::delete($path.$cfg['path']) ){
+            $this->error("Error during the file|folder delete: $t[old]");
+            return false;
+          }
+          return true;
+        }
+      //  die(\bbn\x::dump($this->check_mvc($cfg, $rep, $path)));
         if ( $todo = $this->check_mvc($cfg, $rep, $path) ){
-          //die(\bbn\x::hdump($todo));
-          foreach ( $todo as $t ){
 
+
+          foreach ( $todo as $t ){
             // Rename
             if ( ($ope === 'rename') || ($ope === 'move') ){
 
@@ -570,7 +914,7 @@ class ide {
               }
 
 
-              $this->operations_backup($t, $cfg, $ope);
+          //    $this->operations_backup($t, $cfg, $ope);
             }
             // Copy
             else if ( $ope === 'copy' ){
@@ -591,7 +935,6 @@ class ide {
             }
             // Delete
             else if ( $ope === 'delete' ){
-
               if ( !\bbn\file\dir::delete($t['old']) ){
                 $this->error("Error during the file|folder delete: $t[old]");
                 return false;
@@ -607,10 +950,35 @@ class ide {
           return true;
         }
       }
-    }
+      //case components
+      else if( !empty($cfg['is_component']) ){
+        // DELETE COMPONENT
+        if( $ope === 'delete' && $this->delete_component($cfg) ){
+          return true;
+        }
+        // COPY COMPONENT
+        else if ( $ope === 'copy' && $this->copy_component($cfg) ){
+          return true;
+        }
+        // RENAME COMPONENT
+        else if ( $ope === 'rename' && $this->rename_component($cfg) ){
+          return true;
+        }
+        else if ( $ope === 'move' ){
+          $ele = $this->check_normal($cfg, $rep, $path);
+          if ( !empty($ele) && is_array($ele) && \bbn\file\dir::move($ele['old'], $ele['new']) ){
+            return true;
+          }
+        }
+        return false;
+        //$this->operations_backup($t, $cfg, $ope);
+      }
 
-    $this->error("Impossible to $ope the file|folder.");
-    return false;
+    }
+    else{
+      $this->error("Impossible to $ope the file|folder.");
+      return false;
+    }
   }
   /**
    * Sets the last error as the given string.
@@ -622,6 +990,99 @@ class ide {
     \bbn\x::log($st, "ide");
     $this->last_error = $st;
     return $this->last_error;
+  }
+
+  public function is_project(string $url){
+    $rep = $this->repository_from_url($url);
+    $repository = $this->repository($rep);
+    if ( is_array($repository) && !empty($repository) ){
+      return $repository['alias_code'] === 'bbn-project';
+    }
+    return false;
+  }
+
+
+
+  /**
+   * Checks if a repository is a Component manager
+   *
+   * @param string $rep
+   * @return bool
+   */
+  public function is_component(string $rep){
+    $rep = $this->repository($rep);
+    if ( $rep && isset($rep['tabs']) && ($rep['alias_code']  === "components") ){
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Checks if a repository is a Component from URL
+   *
+   * @param string $url
+   * @return bool
+   */
+  public function is_component_from_url(string $url){
+    $ele = explode("/",$url);
+    if ( is_array($ele) ){
+      //case plugin
+      if ( ($ele[0] === 'BBN_LIB_PATH') && ($ele[4] === 'components') ){
+        return true;
+      }
+      else if ( $ele[1] === 'components' ){
+        return true;
+      }
+    }
+    return $this->is_component($this->repository_from_url($url));
+  }
+
+  /**
+   * Function that returns the list of tab that contains a file or not for mvc and component
+   *
+   * @param string $type type project of check
+   * @param string $path path project
+   * @return bool||array list file with property extension and value the path of the file existing or not
+   */
+  public function list_tabs_with_file(string $type, string $path, string $repository){
+
+    $ele = explode("/",$path);
+    $list = [];
+    $root = $this->get_root_path($repository);
+    if ( $type === 'components' ){
+      $id = $this->options->from_code('components','PTYPES', 'ide', BBN_APPUI);
+    }
+    else if ( $type === 'mvc' ){
+      $id = $this->options->from_code('mvc','PTYPES', 'ide', BBN_APPUI);
+    }
+    $tabs =  $this->options->option($id)['tabs'];
+    if ( is_string($path) && is_array($tabs) ){
+      foreach($tabs as $tab){
+        $exist= false;
+        if ( $type === 'mvc' ){
+          $file =  $root.'mvc/'.$tab['path'].$path.'.';
+          if( !empty(strpos($file, 'mvc/mvc')) ){
+            $file = str_replace('mvc/mvc/', 'mvc/', $file);
+          }
+        }
+        else if ( $type === 'components' ){
+          $file = $root. $path.'.';
+        }
+
+        foreach($tab['extensions'] as $ext ){
+          if( file_exists($file.$ext['ext']) ){
+            $exist= true;
+            break;
+          }
+        }
+      
+        if ( ($exist === false) && !in_array($tab['url'], $list) ){
+          $list[] = $tab['url'];
+        }
+      }
+      return $list;
+    }
+    return false;
   }
 
   /**
@@ -660,15 +1121,54 @@ class ide {
 
   /************************** REPOSITORIES **************************/
 
-  /**
-   * Makes repositories' configurations.
-   *
-   * @param string|bool $code The repository's name (code)
-   * @return array|bool
-   */
-  public function repositories($code=''){
-    return $this->projects->repositories($code);
-  }
+  // /**
+  //  * Makes repositories' configurations.
+  //  *
+  //  * @param string|bool $code The repository's name (code)
+  //  * @return array|bool
+  //  */
+  // public function repositories($code=''){
+    /**
+     * Makes the repositories' configurations.
+     *
+     * @param string $code The repository's name (code)
+     * @return array|bool
+     */
+    public function repositories(string $code=''){
+      $all = $this->options->full_soptions($this->options->from_code('PATHS', 'ide', 'appui'));
+      $cats = [];
+      $r = [];
+      foreach ( $all as $a ){
+        if ( \defined($a['bbn_path']) ){
+          $k = $a['bbn_path'] . '/' . ($a['code'] === '/' ? '' : $a['code']);
+          if ( !isset($cats[$a['id_alias']]) ){
+            unset($a['alias']['cfg']);
+            $cats[$a['id_alias']] = $a['alias'];
+          }
+          unset($a['cfg']);
+          unset($a['alias']);
+          $r[$k] = $a;
+          $r[$k]['title'] = $r[$k]['text'];
+          $r[$k]['alias_code'] = $cats[$a['id_alias']]['code'];
+          if ( !empty($cats[$a['id_alias']]['tabs']) ){
+            $r[$k]['tabs'] = $cats[$a['id_alias']]['tabs'];
+          }
+          else if( !empty($cats[$a['id_alias']]['extensions']) ){
+            $r[$k]['extensions'] = $cats[$a['id_alias']]['extensions'];
+          }
+          else if( !empty($cats[$a['id_alias']]['types']) ){
+            $r[$k]['types'] = $cats[$a['id_alias']]['types'];
+          }
+          unset($r[$k]['alias']);
+        }
+      }
+      if ( $code ){
+        return isset($r[$code]) ? $r[$code] : false;
+      }
+      return $r;
+    }
+    //return $this->projects->repositories($code);
+  //}
 
   /**
    * Gets a repository's configuration.
@@ -698,7 +1198,12 @@ class ide {
    * @return bool
    */
   public function is_MVC(string $rep){
-    return isset($this->repository($rep)['tabs']);
+    if ( isset($this->repository($rep)['tabs']) &&
+       ($this->repository($rep)['alias_code'] !== 'components')
+    ){
+      return true;
+    }
+    return false;
   }
 
   /**
@@ -708,8 +1213,27 @@ class ide {
    * @return bool
    */
   public function is_MVC_from_url(string $url){
-    return $this->is_MVC($this->repository_from_url($url));
+    if ( !empty($this->is_project($this->repository_from_url($url))) ){
+      $rep = $this->repository_from_url($url, true);
+      $res = $this->get_root_path($rep);
+      $ele = explode("/",$url);
+      if ( is_array($ele) ){
+        $plugin= $this->is_plugin($res);
+         //case plugin
+        if ( ($plugin === true) && ($ele[4] === 'mvc') ){
+          return true;
+        }
+        else if ( $ele[1] === 'mvc' ){
+          return true;
+        }
+     }
+      return false;
+    }
+    else{
+     return $this->is_MVC($this->repository_from_url($url));
+    }
   }
+
 
   /**
    * Replaces the constant at the first part of the path with its value.
@@ -736,20 +1260,23 @@ class ide {
   /************************** ACTIONS **************************/
 
   /**
-   * Loads a file.
+   * (Load)s a file.
    *
    * @param string $url File's URL
    * @return array|bool
    */
   public function load(string $url){
+
+
+
     if ( ($real = $this->url_to_real($url, true)) &&
       !empty($real['file']) &&
       !empty($real['mode']) &&
       !empty($real['repository'])
     ){
+
+
       $this->set_current_file($real['file']);
-
-
       $f = [
         'mode' => $real['mode'],
         'tab' => $real['tab'],
@@ -772,7 +1299,7 @@ class ide {
 
 
         if ( $id_opt = $this->option_id() ){
-          $val_opt =   $this->options->option($id_opt);
+          $val_opt = $this->options->option($id_opt);
         }
 
         if( !empty($val_opt) ){
@@ -790,7 +1317,6 @@ class ide {
         $f['value'] = $real['repository']['tabs'][$real['tab']]['extensions'][0]['default'];
       }
       */
-
       else if ( !empty($real['tab']) &&
        ( ($i = \bbn\x::find($real['repository']['tabs'], ['url' => $real['tab']])) !== false )
       ){
@@ -823,20 +1349,25 @@ class ide {
       if ( $file['tab'] === "_ctrl" ){
         $backup_path = self::BACKUP_PATH . $file['repository'] . $file['path'] . $file['tab'] . '/';
         if ( is_numeric($file['ssctrl'])  && $file['ssctrl'] === 0){
-          $backup_path = self::BACKUP_PATH . $file['repository'] . $file['tab'] . '/';
-          //$backup_path =   $file['tab'] . '/';
+        $backup_path = self::BACKUP_PATH . $file['repository'] . $file['tab'] . '/';
 
         }else{
           $backup_path = self::BACKUP_PATH . $file['repository'] . $file['path'] . $file['tab'] . '/';
         }
       }
       else {
-        $backup_path = self::BACKUP_PATH . $file['repository'] . $file['path'] . '/' . $file['filename'] . '/__end__/' . ($file['tab'] ?: $file['extension']) . '/';
+        $backup_path = self::BACKUP_PATH;
+        if ( !isset($file['repository']) ){
+          $backup_path .= dirname($file['full_path']);
+          $fn = \bbn\str::file_ext($file['full_path'],1);
+          $backup_path .= $fn[0]. '/__end__/' . ($file['tab'] ?: $fn[1]) . '/';
+        }
+        else{
+          $backup_path .= $file['repository'] . $file['path'] . '/' . $file['filename'] . '/__end__/' . ($file['tab'] ?: $file['extension']) . '/';
+        }
       }
-
       // Delete the file if code is empty and if it isn't a super controller
       if ( empty($file['code']) && ($file['tab'] !== '_ctrl') ){
-
         if ( @unlink(self::$current_file) ){
 
           // Remove permissions
@@ -857,14 +1388,15 @@ class ide {
       }
       if ( is_file(self::$current_file) ){
         $backup = $backup_path . date('Y-m-d_His') . '.' . $file['extension'];
-          \bbn\file\dir::create_path(dirname($backup));
-          \bbn\file\dir::copy(self::$current_file, $backup);
+    \bbn\file\dir::create_path(dirname($backup));
+    \bbn\file\dir::copy(self::$current_file, $backup);
       }
       else if ( !is_dir(dirname(self::$current_file)) ){
         \bbn\file\dir::create_path(dirname(self::$current_file));
       }
 
       if ( !empty($file['tab']) && ($file['tab'] === 'php') && !is_file(self::$current_file) ){
+
         if ( !$this->create_perm_by_real($file['full_path']) ){
           return $this->error("Impossible to create the option");
         }
@@ -895,6 +1427,7 @@ class ide {
             $arr['char'] = $file['char'];
           };
           $this->options->set_prop($id_opt, $arr);
+
         }
       }
       return ['success' => true];
@@ -953,23 +1486,43 @@ class ide {
    * @return bool
    */
   public function create(array $cfg){
-    //die(var_dump(isset($cfg['extension'], $cfg['tab'], $cfg['tab_path'])));
     if ( !empty($cfg['repository']) &&
       !empty($cfg['repository']['bbn_path']) &&
       !empty($cfg['repository']['path']) &&
       !empty($cfg['name']) &&
       !empty($cfg['path']) &&
-      isset($cfg['is_file'], $cfg['extension'], $cfg['tab'], $cfg['tab_path'])
+      isset($cfg['is_file'], $cfg['extension'], $cfg['tab'], $cfg['tab_path'], $cfg['type'])
     ){
 
       $rep = $cfg['repository'];
       $path = $this->decipher_path($rep['bbn_path'] . '/' . $rep['path']);
-      if ( !empty($cfg['tab_path']) ){
-        $path .= $cfg['tab_path'];
+      if ( ($rep['alias_code'] === 'bbn-project') && !empty($cfg['type']) ){
+        if ( $cfg['type'] === 'components' ){
+          $path .= $cfg['path'].$cfg['name'];
+        }
+        if ( $cfg['type'] === 'mvc' ){
+          if ( $cfg['path'] === 'mvc/' ){
+            $path .= 'mvc/'.$cfg['tab_path'];
+          }
+          else{
+            $path .= 'mvc/'.$cfg['tab_path'].$cfg['path'];
+          }
+
+        }
+        if ( $cfg['type'] === 'lib' ){
+          $path .= $cfg['path'];
+        }
       }
-      if ( $cfg['path'] !== './' ){
+      else {
+        if ( !empty($cfg['tab_path']) ){
+          $path .= $cfg['tab_path'];
+        }
+      }
+
+      if ( ($cfg['path'] !== './') && empty($cfg['type']) ){
         $path .= $cfg['path'];
       }
+
 
       // New folder
 
@@ -978,14 +1531,24 @@ class ide {
           $this->error("Directory exists");
           return false;
         }
-        if ( !\bbn\file\dir::create_path($path.$cfg['name']) ){
+        if ( (($rep['alias_code'] !== 'bbn-project')) ||
+          (($rep['alias_code'] === 'bbn-project') && !empty($cfg['type'])) &&
+           ($cfg['type'] !== 'components'
+          )
+        ){
+          $path .= $cfg['name'];
+        }
+        if ( !\bbn\file\dir::create_path($path) ){
           $this->error("Impossible to create the directory");
           return false;
         }
+        return true;
       }
       // New file
       else if ( !empty($cfg['is_file']) && !empty($cfg['extension']) ){
-        $file = $path . $cfg['name'] . '.' . $cfg['extension'];
+
+        $file = $path .'/'. $cfg['name'] . '.' . $cfg['extension'];
+        $file = str_replace('//','/', $file);
         if ( !is_dir($path) && !\bbn\file\dir::create_path($path) ){
           $this->error("Impossible to create the container directory");
           return false;
@@ -996,19 +1559,20 @@ class ide {
             return false;
           }
           if ( !file_put_contents($file, $cfg['default_text']) ){
-
             $this->error("Impossible to create the file");
             return false;
           }
         }
         // Add item to options table for permissions
-        if ( !empty($cfg['tab']) && ($cfg['tab'] === 'php') && !empty($file) ){
+        if ( (empty($cfg['type']) || ($cfg['type'] !== 'components')) &&
+          !empty($cfg['tab']) && ($cfg['tab'] === 'php') && !empty($file)
+        ){
           if ( !$this->create_perm_by_real($file) ){
             return $this->error("Impossible to create the option");
           }
         }
+        return true;
       }
-      return true;
     }
     return false;
   }
@@ -1400,6 +1964,25 @@ class ide {
   }
 
   /**
+   * check if $path is of a plugin
+   *
+   * @param string $path
+   * @return bool
+   */
+  public function is_plugin($path){
+    $plugin = false;
+    if ( is_array($this->routes) ){
+      foreach( $this->routes as $route ){
+        if ( $route['path'] === $path ){
+          $plugin = true;
+          break;
+        }
+      }
+    }
+    return $plugin;
+  }
+
+  /**
    * Gets the real file's path from an URL
    *
    * @param string $url The file's URL
@@ -1410,7 +1993,29 @@ class ide {
     if ( ($rep = $this->repository_from_url($url, true)) &&
       ($res = $this->get_root_path($rep))
     ){
-      $bits = explode('/', substr($url, \strlen($rep['bbn_path'].$rep['path'])+1));
+      $plugin = $this->is_plugin($res);
+      if ( $rep['alias_code'] === 'bbn-project' ){
+        $bits = explode('/', substr($url, \strlen($rep['bbn_path'].$rep['path'])));
+        if ( !empty($this->is_component_from_url($url)) &&
+             !empty($idx = $this->options->from_code('components','PTYPES',$this->_ide_path()))
+        ){
+          $ptype = $this->options->option($idx);
+          $rep['tabs'] = $ptype['tabs'];
+        }
+        if ( !empty($this->is_MVC_from_url($url)) &&
+             !empty($idx = $this->options->from_code('mvc','PTYPES',$this->_ide_path()))
+        ){
+          $ptype = $this->options->option($idx);
+          $rep['tabs'] = $ptype['tabs'];
+          if ( $plugin ){
+            array_shift($bits);
+            array_shift($bits);
+          }
+        }
+      }
+      else{
+        $bits = explode('/', substr($url, \strlen($rep['bbn_path'].$rep['path'])+1));
+      }
       $o = [
         'mode' => false,
         'repository' => $rep,
@@ -1418,6 +2023,7 @@ class ide {
       ];
 
       if ( !empty($bits) ){
+        // Tab's nane
         if ( !empty($rep['tabs']) && (end($bits) !== 'code') ){
           // Tab's nane
           $tab = array_pop($bits);
@@ -1425,21 +2031,36 @@ class ide {
           $fn = array_pop($bits);
           // File's path
           $fp = implode('/', $bits);
+
           // Check if the file is a superior super-controller
           $ssc = $this->superior_sctrl($tab, $fp);
           $tab = $ssc['tab'];
+
+          if ( $plugin ){
+            if ( empty($this->is_component_from_url($url)) ){
+              $tab = $tab === 'settings' ? 'php' : $tab;
+            }
+          }
+
           $o['tab'] = $tab;
           $fp = $ssc['path'].'/';
+
           if ( ($i = \bbn\x::find($rep['tabs'], ['url' => $tab])) !== false ){
             $tab = $rep['tabs'][$i];
-            $res .= $tab['path'];
+            if( !empty($this->is_MVC_from_url($url)) && ($plugin === true) ){
+              $res .= 'mvc/';
+            }
+
+            if( empty($this->is_component_from_url($url)) ){
+              $res .= $tab['path'];
+            }
             if ( !empty($tab['fixed']) ){
               $res .= $fp . $tab['fixed'];
               $o['mode'] = $tab['extensions'][0]['mode'];
               $o['ssctrl'] = $ssc['ssctrl'];
             }
             else {
-              $res .= $fp . $fn;
+              $res .=  $fp . $fn;
               $ext_ok = false;
               foreach ( $tab['extensions'] as $e ){
                 if ( is_file("$res.$e[ext]") ){
@@ -1459,14 +2080,34 @@ class ide {
             return false;
           }
         }
+        /*else if( !empty($rep['alias_code']) && ($rep['alias_code'] === 'bbn-project') ){
+          // Tab's nane
+          $tab = array_pop($bits);
+          $res .= implode('/', $bits);
+          if ( !empty($this->is_component_from_url($url)) && !empty($idx =               $this->options->from_code('components','PTYPES',$this->_ide_path()))
+          ){
+            $ptype = $this->options->option($idx);
+            $rep['extensions'] = [];
+            $rep['tabs'] = $ptype['tabs'];
+            foreach( $rep['tabs'] as $i => $tab){
+              if ( $rep['tabs']['url'] === $tab ){
+                $res .= $tab;
+                $o['mode'] = $tab;
+                $o['tab'] = $tab;
+              }
+            }
+            die(\bbn\x::dump($o, $res, $rep));
+          }
+        }*/
         else {
           array_pop($bits);
-
           $res .= implode('/', $bits);
-          foreach ( $rep['extensions'] as $ext ){
-            if ( is_file("$res.$ext[ext]") ){
-              $res .= ".$ext[ext]";
-              $o['mode'] = $ext['mode'];
+          if( is_array($rep) ){
+            foreach ( $rep['extensions'] as $ext ){
+              if ( is_file("$res.$ext[ext]") ){
+                $res .= ".$ext[ext]";
+                $o['mode'] = $ext['mode'];
+              }
             }
           }
           if ( empty($o['mode']) ){
@@ -1513,7 +2154,7 @@ class ide {
     if ( $this->is_MVC($rep) ){
       $last = basename($url);
       if ( $repo = $this->repository($rep) ){
-        $path = $this->get_root_path($rep).substr($url, \strlen($rep));
+      $path = $this->get_root_path($rep).substr($url, \strlen($rep));
         $tabs = $repo['tabs'];
 
         foreach ( $tabs as $key => $r ){

@@ -6,7 +6,7 @@
     <div class="bbn-flex-fill  bbn-r">
       <span class="bbn-xl">
         <strong>
-          <?=_('Cache Management')?>
+          <?=_('Cache Managent')?>
         </strong>
       </span>
     </div>

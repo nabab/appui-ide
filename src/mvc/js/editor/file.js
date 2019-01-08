@@ -5,11 +5,14 @@
  * Time: 11:44
  */
 
+ (() =>{
+   return {}
+ })();
+
+
+/*
 (() =>{
   return {
-    data(){
-      return this.source
-    },
     methods: {
       // Checks from all tabs if any of the anonymous components has isChanged true
       hasCodeChanged(){
@@ -34,3 +37,4 @@
 
   }
 })();
+*/

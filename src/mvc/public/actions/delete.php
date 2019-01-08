@@ -1,6 +1,6 @@
 <?php
 /** @var $ctrl \bbn\mvc\controller */
-if ( isset($ctrl->inc->ide) ){
+if ( isset($ctrl->inc->ide) ){  
   if ( !empty($ctrl->inc->ide->delete($ctrl->post)) ){
     $ctrl->obj->success = true;
   }

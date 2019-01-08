@@ -22,7 +22,7 @@ if ( !empty($model->data['log']) ){
   else{
 
     $file = escapeshellarg($res[$model->data['log']]); // for the security concious (should be everyone!)
-    $num_lines = isset($model->data['num_lines']) && \bbn\str::is_integer($model->data['num_lines']) && ($model->data['num_lines'] > 0) && ($model->data['num_lines'] <= 1000) ? $model->data['num_lines'] : 100;
+    $num_lines = isset($model->data['num_lines']) && \bbn\str::is_integer($model->data['num_lines']) && ($model->data['num_lines'] > 0) && ($model->data['num_lines'] <= 5000) ? $model->data['num_lines'] : 100;
     $line = "tail -n $num_lines $file";
     exec($line, $output);
     $res = [];
@@ -42,7 +42,7 @@ else {
     exec($line, $output);
     //for content
     $output2=[];
-    $num_lines = isset($model->data['num_lines']) && \bbn\str::is_integer($model->data['num_lines']) && ($model->data['num_lines'] > 0) && ($model->data['num_lines'] <= 1000) ? $model->data['num_lines'] : 100;
+    $num_lines = isset($model->data['num_lines']) && \bbn\str::is_integer($model->data['num_lines']) && ($model->data['num_lines'] > 0) && ($model->data['num_lines'] <= 5000) ? $model->data['num_lines'] : 100;
     $line2 = "tail -n $num_lines $file";
     exec($line2, $output2);
 

@@ -35,16 +35,16 @@
       /** don't hide column also if col.hidden === true */
       'toolbar': {
         template: `
-<div class="bbn-padded bbn-r">
- <span>` + bbn._("Select languages you want to hide from the table") + `:</span>
-  <bbn-checkbox v-for="l in languages"
-                :key="l"
-                @change="hide_col"
-                :value="l"
-                :label="l"
-                class="bbn-hsmargin"
-  ></bbn-checkbox>
-</div>`,
+          <div class="bbn-padded bbn-r">
+            <span>` + bbn._("Select languages you want to hide from the table") + `:</span>
+            <bbn-checkbox v-for="l in languages"
+                          :key="l"
+                          @change="hide_col"
+                          :value="l"
+                          :label="l"
+                          class="bbn-hsmargin"
+            ></bbn-checkbox>
+            </div>`,
         props: ['source'],
         data(){
           return {
