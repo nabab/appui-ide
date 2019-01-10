@@ -11,8 +11,8 @@ if ( isset($model->data['routes'], $model->inc->ide) ){
   if ( !empty($types) && is_array($types) ){
     foreach($types as $type){
       //temporaney
-      $typeRep = $type['url'] = $type['url'] === 'lib' ? 'cls' : $type['url'];
-      if ( $ptype = $model->inc->options->option($model->inc->options->from_code($typeRep,'PTYPES', 'ide', BBN_APPUI)) ){
+      $type['url'] = $type['url'] === 'lib' ? 'cls' : $type['url'];
+      if ( $ptype = $model->inc->options->option($model->inc->options->from_code($type['url'],'PTYPES', 'ide', BBN_APPUI)) ){
 
         if ( !empty($ptype['tabs']) ){
           $tabs[$type['url']][] = $ptype['tabs'];
@@ -23,24 +23,17 @@ if ( isset($model->data['routes'], $model->inc->ide) ){
       }
     }
 
+
     $projects = [
       'tabs_type' => $tabs,
       'roots' => array_map( function($val){
         return [
-          'text' => $val['text'],
-          'value' => $val['text']
+          'text' => $val['url'],
+          'value' => $val['url']
         ];
-      },$model->get_model(APPUI_IDE_ROOT.'tree', [
-        'repository' => $current_rep,
-        'repository_cfg' => $repos[$current_rep],
-        'is_mvc' => false,
-        'is_component' => false,
-        'from_editor' => true,
-        'onlydirs' => true,
-        'tab' => false,
-        'is_project' => true
-      ]))
+      },$types)
     ];
+
   }
 
   if ( $model->inc->session->has('ide', 'repository') ){

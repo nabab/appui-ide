@@ -9,7 +9,7 @@ if ( !empty($model->data['repository']) &&
   $is_component = !empty($model->data['is_component']);
   $is_project = !empty($model->data['is_project']) && empty($is_mvc) && empty($is_component);
   $onlydirs = !empty($model->data['onlydirs']);
-  
+
   //for tree in the popup
   $get_all = !empty($model->data['all_content']);
 
@@ -85,8 +85,7 @@ if ( !empty($model->data['repository']) &&
   if ( isset($model->data['repository_cfg']['types']) ){
     foreach( $model->data['repository_cfg']['types'] as $type ){
       $types_to_include[] = $type['url'];
-    }
-    //$types_to_include[] = 'components_test';
+    }    
   }
 
   // List of folders
