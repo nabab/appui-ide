@@ -20,7 +20,7 @@
           is_mvc: this.isMVC,
           is_component: this.source.isComponent,
           onlydirs: true,
-          all_content: true,
+          tree_popup: true,
           tab: this.source.tab || false,
           path: this.source.data.path,
           type: this.source.type || false

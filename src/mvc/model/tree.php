@@ -11,7 +11,7 @@ if ( !empty($model->data['repository']) &&
   $onlydirs = !empty($model->data['onlydirs']);
 
   //for tree in the popup
-  $get_all = !empty($model->data['all_content']);
+  $tree_popup = !empty($model->data['tree_popup']);
 
   //case of a folder and a component we treat the '$current_path' differently
   if ( !empty($model->data['is_vue']) ){
@@ -85,7 +85,7 @@ if ( !empty($model->data['repository']) &&
   if ( isset($model->data['repository_cfg']['types']) ){
     foreach( $model->data['repository_cfg']['types'] as $type ){
       $types_to_include[] = $type['url'];
-    }    
+    }
   }
 
   // List of folders
@@ -128,7 +128,7 @@ if ( !empty($model->data['repository']) &&
     }
   };
   // function for create the node for tree
-  $get = function($real, $color, $tab = false, $type = false, $types =[]) use(&$folders, &$files, $onlydirs, $cur_path, $file_check, $excludeds, $opt, $types_to_include, $is_project, $get_all, $dirs){
+  $get = function($real, $color, $tab = false, $type = false, $types =[]) use(&$folders, &$files, $onlydirs, $cur_path, $file_check, $excludeds, $opt, $types_to_include, $is_project, $tree_popup, $dirs){
 
     if( !empty($real) && !empty(strpos($real,'//')) ){
       $real = str_replace('//','/', $real);
@@ -152,7 +152,7 @@ if ( !empty($model->data['repository']) &&
             //filter any folders that we want to see in the root in case of a project
 
             if ( empty($is_project) ||
-              !empty($get_all) ||
+              !empty($tree_popup) ||
               (!empty($is_project) &&
                ((empty($type) && in_array($name, $types_to_include, true)) || !empty($type))
               )
@@ -258,7 +258,12 @@ if ( !empty($model->data['repository']) &&
                   //on the basis of various checks, set the icon
                   //case file but no component
                   if ( !empty($is_file) && empty($component) ){
-                    $icon =  "icon-$ext";
+                    if ( $ext === 'js'){
+                      $icon = "icon-javascript";
+                    }
+                    else{
+                      $icon =  "icon-$ext";
+                    }
                   }
                   //case component o folder who contain other component
                   else if ( !empty($component) && !empty($is_vue) ){
@@ -288,6 +293,9 @@ if ( !empty($model->data['repository']) &&
                     'tab' => $tab,
                     'ext' => !empty($is_file) ? $ext : false
                   ];
+                  if( !empty($tree_popup) ){
+                    $cfg['tree_popup'] = !empty($tree_popup);
+                  }
                   //based on various checks, we set the type by adding it to the cfg
                   if ( empty($type) && !empty($types) ){
                     $cfg['type'] = !empty($types[$name]) ? $types[$name] : false;
@@ -324,7 +332,7 @@ if ( !empty($model->data['repository']) &&
  //case mvc, only components or normal file but no types (case repository no current)
   if ( (!empty($is_mvc) || !empty($is_component)) ||
     empty($rep_cfg['types']) ||
-    !empty($get_all) ||
+    !empty($tree_popup) ||
     empty($model->data['type'])
   ){
     // Get all files and all folders of each mvc's tabs (_ctrl tab excluded)
@@ -339,7 +347,7 @@ if ( !empty($model->data['repository']) &&
          )
         ){//type mvc
           if( !empty($is_mvc) ){
-            if ( !empty($get_all) ){
+            if ( !empty($tree_popup) ){
               $path_complete = $path . 'mvc/'. $t['path'] . $cur_path;
               $type= 'mvc';
             }
@@ -351,12 +359,12 @@ if ( !empty($model->data['repository']) &&
             $path_complete =  $path . $cur_path;
             $type= 'components';
             $t['bcolor'] = '#44b782';
-            //die(\bbn\x::dump($t['bcolor'],$path_complete, $get_all, $type));
+            //die(\bbn\x::dump($t['bcolor'],$path_complete, $tree_popup, $type));
           }
 
           $get($path_complete, $t['bcolor'], $t['url'], $type);
 
-          // if ( !empty($get_all) ){
+          // if ( !empty($tree_popup) ){
           //   $get($path_complete, $t['bcolor'], $t['url'], $type);
           // }
           // else{

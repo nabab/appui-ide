@@ -37,25 +37,24 @@
         if ( this.source.isFile ){
           let link = this.source.root + 'editor/file/' + this.source.currentRep +
             (this.isMVC && this.source.type === 'mvc' ? 'mvc/' : '');
-            if ( this.data.path.startsWith('./') ){
-              link += this.data.path.slice(2);
-            }
-            else if ( this.data.path.startsWith('mvc/') ){
-              link += this.data.path.slice(4);
-            }
-            else{
-              link += this.data.path;
-            }
-            link += this.data.name + (this.isComponent === true ? '/'+ this.data.name  : '' ) + '/_end_';
-
-          if ( (this.data.tab.length > 0) && this.data.extension.length ){
+          if ( this.data.path.startsWith('./') ){
+            link += this.data.path.slice(2);
+          }
+          else if ( this.data.path.startsWith('mvc/') ){
+            link += this.data.path.slice(4);
+          }
+          else{
+            link += this.data.path;
+          }
+          link += this.data.name + (this.isComponent === true ? '/'+ this.data.name  : '' ) + '/_end_';
+          if ( (this.data.tab > 0) && this.data.extension.length ){
             link += '/' + this.rep.tabs[this.data.tab]['url'];
           }
-          else if ( (this.data.tab.length === 0) && this.data.extension ){
+          else if ( (this.data.tab === 0) && this.data.extension ){
             link += '/code';
           }
           if ( link.indexOf('//') !== -1 ){
-            link= link.replace('//', '/');            
+            link= link.replace('//', '/');
           }
           bbn.fn.link(link);
           appui.success(this.isComponent === true ? bbn._("Component created!") : bbn._("File created!"));
