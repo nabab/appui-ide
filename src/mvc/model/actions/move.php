@@ -44,7 +44,7 @@ if ( isset($model->inc->ide) ){
       \bbn\file\dir::create_path($folder);
     }
     $content= \bbn\file\dir::get_files($folder, true);
-    //die(var_dump("si", $content, $model->data['name'], $folder) );
+
 
     if ( !empty($content) && empty($model->data['is_project'])){
       foreach ( $content as $i => $v ){
@@ -57,9 +57,7 @@ if ( isset($model->inc->ide) ){
       }
     }
   }
-  /*if ( !empty(is_dir($folder)) || !empty($exist)){
-  }*/
-
+  
   if ( !empty($model->inc->ide->move($model->data)) ){
     $res['success'] = true;
   }

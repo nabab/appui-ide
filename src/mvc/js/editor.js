@@ -13,7 +13,7 @@
         path: '',
         lastRename: '',
         searchFile: '',
-    //    component: false,
+        tempNodeofTree: false,
         //for search content
         search:{
           link: false,
@@ -285,9 +285,11 @@
             path = node.data.path;
         if ( component ){
           title = bbn._('Search in') + ' : ' + node.data.name + ` <i class='fab fa-vuejs'></i>`;
-          path = node.data.path.split('/');
-          path.pop();
-          path = path.join('/');
+          if ( is_vue ){
+            path = node.data.path.split('/');
+            path.pop();
+            path = path.join('/');
+          }
         }
         this.getPopup().open({
           width: 500,
@@ -307,12 +309,18 @@
       },
       searchingContent(e){
         if( this.search.searchInRepository.length > 0 ){
-          let url = this.url+'/search/'+ this.currentRep;
+          let url = this.url+'/search/'+ this.currentRep,
+          //for encode string in base64
+              search = btoa(this.search.searchInRepository);
+            //search = encodeURIComponent(this.search.searchInRepository);
+          //search in a project
           if ( this.isProject ){
-            url += '_project_/' + this.typeProject;
+            url += '_project_/' + this.typeProject + '/';
           }
-          url += '/_end_/' + this.typeSearch +'/'+ this.search.searchInRepository;
-          url.replace( '//',  '/');
+
+          url += '_end_/' + this.typeSearch +'/'+ search;
+
+
           this.$nextTick(()=>{
             bbn.fn.link(url, true);
           });
@@ -587,7 +595,7 @@
             command: (node) => {
               this.copy(node)
             }
-          },{
+          }, {
             icon: 'fas fa-trash',
             text: bbn._('Delete'),
             command: (node) => {
@@ -636,7 +644,8 @@
             icon: 'fas fa-search',
             text: n.data.type && n.data.type === 'components' ? bbn._('Find in folder Component vue') : bbn._('Find in Path'),
             command: node => {
-              this.searchOfContext(node, n.data.type && n.data.type === 'components' ? true : false, false);
+              let comp = n.data.type && n.data.type === 'components'  ? true : false;
+              this.searchOfContext(node, comp, n.data.is_vue);
             }
           });
           return obj;
@@ -795,7 +804,6 @@
        * @param file
        */
       openFile(file){
-        bbn.fn.log("file OPen", file)
 
         let tab = '',
             link = false;
@@ -808,10 +816,9 @@
             '/_end_' + (tab.indexOf('_') === 0 ? '/' + tab : tab);
         }
         else{
-          //tab = '/'+file.data.tab;
           link =  'file/' +  this.currentRep + file.data.path + '/_end_/' + (file.data.tab !== false ? file.data.tab : 'code');
         }
-        console.log("LINKKKKFILE", link);
+
         if ( link ){
           this.$refs.tabstrip.load(link);
         }
@@ -905,7 +912,7 @@
       },
 
       testNodeOfTree(node){
-        if ( this.isMVC  ){
+        if ( this.isProject && (this.typeProject === 'mvc') ){
           let route = this.repositories[this.currentRep].route ? this.repositories[this.currentRep].route + '/' :'' ;
           bbn.fn.link( route + node.data.path, true );
         }
@@ -1280,7 +1287,7 @@
 
           }break;
           case 'rename':{
-            //  bbn.fn.log("ddddd",node)    ;
+
             //node.$parent.reload();
           }break;
         }
@@ -1291,7 +1298,6 @@
        * @param data The node data
        */
      deleteElement(node, onlyComponent= false){
-
         if (
           node &&
           node.data.name &&
@@ -1307,6 +1313,8 @@
             is_file: !node.data.folder,
             is_mvc: this.isMVC || node.data.type === 'mvc',
             is_component: this.isComponent || node.data.type === 'components',
+            data: node.data,
+            root: this.root
           },
           text = "";
           if ( (node.data.type !== undefined) && this.isProject ){
@@ -1343,27 +1351,45 @@
               ( node.data.folder === true ? ' ' + bbn._('the folder') + ' ': ' ' ) +
               '<strong>' + node.data.name +  ' </strong>' + ' ?' ;
           }
-          appui.confirm( text, () => {
-            bbn.fn.post(this.root + 'actions/delete', src, (d) => {
-              if ( d.success ){
-                const idx = this.$refs.tabstrip.getIndex('file/' + this.currentRep + node.data.dir + node.data.name);
-                // node = this.$refs.filesList.widget.getNodeByKey(data.key);
-                if ( idx != false ){
-                  this.$refs.tabstrip.close(idx);
-                }
-                this.reloadAfterTree(node, 'delete');
-                appui.success(bbn._("Deleted!"));
-              }
-              else {
-                appui.error(bbn._("Error!"));
-              }
+
+
+          // if ( node.data.type === undefined  ||
+          //   (!node.data.type) ||
+          //   ((node.data.type !== 'mvc') || (node.data.type !== 'components'))
+          // ){
+          //   appui.confirm( text, () => {
+          //     bbn.fn.post(this.root + 'actions/delete', src, (d) => {
+          //       if ( d.success ){
+          //         const idx = this.$refs.tabstrip.getIndex('file/' + this.currentRep + node.data.dir + node.data.name);
+          //         if ( idx != false ){
+          //           this.$refs.tabstrip.close(idx);
+          //         }
+          //         this.reloadAfterTree(node, 'delete');
+          //         appui.success(bbn._("Deleted!"));
+          //       }
+          //       else {
+          //         appui.error(bbn._("Error!"));
+          //       }
+          //     });
+          //   });
+          // }
+          // else{
+            let title = src.is_file ? bbn._('Remove File') : bbn._('Remove Folder');
+            this.tempNodeofTree = node;
+            this.getPopup().open({
+              width: 450,
+              title: node.data.type === 'components' && node.data.is_vue ? bbn._('Remove Component') : title,
+              height: 250,
+              component: 'appui-ide-popup-remove',
+              source: src
             });
-          });
+
         }
         else{
           appui.error(bbn._("Error!"));
         }
       },
+
       /**
        * Function for move node in tree
        */

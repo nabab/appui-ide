@@ -26,7 +26,6 @@ if ( !empty($model->data['url']) && isset($model->inc->ide) ){
     }
   }
   else {
-
     if ( $ret = $model->inc->ide->load($model->data['url']) ){
 
       if ( isset($ret['permissions']) ){

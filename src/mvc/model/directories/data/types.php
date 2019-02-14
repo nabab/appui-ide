@@ -10,6 +10,9 @@ if ( isset($model->inc->options) ){
       if ( $t['extensions'] ){
         $t['extensions'] = json_encode($t['extensions']);
       }
+      if ( $t['types'] ){
+        $t['types'] = json_encode($t['types']);
+      }
       return $t;
     }, $types);
     $res = [

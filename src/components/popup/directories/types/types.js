@@ -22,6 +22,19 @@
           '<div class="bbn-c"><i style="color: green" class="fas fa-chevron-down"></i></div>' :
           '';
       },
+      renderIconTypes(ele){
+        let types = [];
+        if (ele.types ){
+          types = JSON.parse(ele.types);
+        }
+        return types.length ?
+          '<div class="bbn-c"><i style="color: green" class="fas fa-chevron-down"></i></div>' :
+          '';
+        // if ( (ele.types !== undefined) && ele.types.length ){
+        //   return '<div class="bbn-c"><i style="color: green" class="fas fa-chevron-down"></i></div>';
+        // }
+        // return '';
+      },
       addType(){
         return this.$refs.types_table.insert({}, {
           title: bbn._('Add new type'),
@@ -30,6 +43,8 @@
         });
       },
       copyType(ele){
+        alert()
+        bbn.fn.log("sss", ele)
         var copyType = {
               text: '',
               code: '',
@@ -86,16 +101,6 @@
           width: '85%'
         }, idx)
       }
-    },
-    created(){
-      types = this;
-      let mixins = [{
-        data(){
-          return {
-            types: types
-          }
-        },
-      }];
     }
   }
 })();

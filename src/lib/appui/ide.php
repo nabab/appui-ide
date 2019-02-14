@@ -183,7 +183,6 @@ class ide {
         self::$current_id = str_replace(constant($bbn_path), $bbn_path.'/', $file);
       }
     }
-    \bbn\x::log([self::$current_id], 'currentIDD');
     return self::$current_id;
   }
 
@@ -334,6 +333,7 @@ class ide {
       }
 
 
+
       // Each file associated with the structure (MVC case)
       foreach ( $rep['tabs'] as $i => $tab ){
         // The path of each file
@@ -390,7 +390,7 @@ class ide {
             array_push($todo, [
               'old' => $old,
               'new' => ($new === $tmp) ? false : $new,
-              'perms' => $i === 'php'
+              'perms' =>  $tab['url'] === 'php' //$i === 'php'
             ]);
           }
         }
@@ -766,6 +766,21 @@ class ide {
   }
 
   /**
+   * remover oprion of file preference
+   *
+   * @param string $path The path of the file
+   * @return bool
+   */
+  public function remove_file_pref($path){
+    $this->options->remove(
+      $this->options->from_code(
+        $this->real_to_id($t['old']),
+        $this->_files_pref()
+      )
+    );
+  }
+
+  /**
    * Renames|copies a file or a folder.
    *
    * @param array $cfg The file|folder info
@@ -847,13 +862,14 @@ class ide {
          ($ope === 'delete') &&
          !empty($cfg['active_file'])
         ){
+
           if ( !\bbn\file\dir::delete($path.$cfg['path']) ){
             $this->error("Error during the file|folder delete: $t[old]");
             return false;
           }
           return true;
         }
-      //  die(\bbn\x::dump($this->check_mvc($cfg, $rep, $path)));
+
         if ( $todo = $this->check_mvc($cfg, $rep, $path) ){
 
 
@@ -869,12 +885,7 @@ class ide {
 
               if ( !empty($cfg['is_file']) ){
                 // Remove file's options
-                $this->options->remove(
-                  $this->options->from_code(
-                    $this->real_to_id($t['old']),
-                    $this->_files_pref()
-                  )
-                );
+                $this->remove_file_pref($t['old']);
               }
               else {
                 // Remove folder's options
@@ -883,15 +894,19 @@ class ide {
 
               // Change permissions
               if ( $ope === 'rename' ){
-                  if( empty( $this->real_to_perm($t['old']) ) &&
-                    !empty($cfg['is_file']) &&
-                    (strpos($t['old'], '/mvc/public/') !== false)
-                  ){
-                    if ( !$this->create_perm_by_real($t['old']) ){
-                      return $this->error("Impossible to create the option for rename");
-                    }
+
+                if( empty( $this->real_to_perm($t['old']) ) &&
+                  !empty($cfg['is_file']) &&
+                  (strpos($t['old'], '/mvc/public/') !== false)
+                ){
+                  if ( !$this->create_perm_by_real($t['old']) ){
+                    return $this->error("Impossible to create the option for rename");
+                  }
                 }
-                if ( !empty($t['perms']) && !$this->change_perm_by_real($t['old'], $t['new'], empty($cfg['is_file']) ? 'dir' : 'file') ){
+
+                if ( !empty($t['perms']) &&
+                  !$this->change_perm_by_real($t['old'], $t['new'], empty($cfg['is_file']) ? 'dir' : 'file')
+                ){
                   if( !empty( $this->real_to_perm($t['old'])) ){
                     $this->error("Error during the file|folder permissions change: old -> $t[old] , new -> $t[new]");
                     return false;
@@ -907,7 +922,9 @@ class ide {
                     return $this->error("Impossible to create the option for move");
                   }
                 }
-                if ( !empty($t['perms']) && !$this->move_perm_by_real($t['old'], $t['new'], empty($cfg['is_file']) ? 'dir' : 'file') ){
+                if ( !empty($t['perms']) &&
+                  !$this->move_perm_by_real($t['old'], $t['new'], empty($cfg['is_file']) ? 'dir' : 'file')
+                ){
                   $this->error("Error during the file|folder permissions change: old -> $t[old] , new -> $t[new]");
                   return false;
                 }
@@ -1025,6 +1042,7 @@ class ide {
    */
   public function is_component_from_url(string $url){
     $ele = explode("/",$url);
+
     if ( is_array($ele) ){
       //case plugin
       if ( ($ele[0] === 'BBN_LIB_PATH') && ($ele[4] === 'components') ){
@@ -1075,7 +1093,7 @@ class ide {
             break;
           }
         }
-      
+
         if ( ($exist === false) && !in_array($tab['url'], $list) ){
           $list[] = $tab['url'];
         }
@@ -1220,6 +1238,7 @@ class ide {
       if ( is_array($ele) ){
         $plugin= $this->is_plugin($res);
          //case plugin
+
         if ( ($plugin === true) && ($ele[4] === 'mvc') ){
           return true;
         }
@@ -1268,13 +1287,11 @@ class ide {
   public function load(string $url){
 
 
-
     if ( ($real = $this->url_to_real($url, true)) &&
       !empty($real['file']) &&
       !empty($real['mode']) &&
       !empty($real['repository'])
     ){
-
 
       $this->set_current_file($real['file']);
       $f = [
@@ -1750,7 +1767,6 @@ class ide {
    */
   public function change_perm_by_real(string $old, string $new, string $type = 'file'){
     $type = strtolower($type);
-
     if ( !empty($old) &&
       !empty($new) &&
       file_exists($new) &&
@@ -1760,9 +1776,7 @@ class ide {
 
       $is_file = $type === 'file';
       $code = $is_file ? \bbn\str::file_ext(basename($new), 1)[0] : basename($new).'/';
-
       if ( $id_parent = $this->create_perm_by_real(dirname($new).'/', 'dir') ){
-
         $this->options->set_code($id_opt, $code);
         $this->options->move($id_opt, $id_parent);
         return true;
@@ -1994,6 +2008,7 @@ class ide {
       ($res = $this->get_root_path($rep))
     ){
       $plugin = $this->is_plugin($res);
+
       if ( $rep['alias_code'] === 'bbn-project' ){
         $bits = explode('/', substr($url, \strlen($rep['bbn_path'].$rep['path'])));
         if ( !empty($this->is_component_from_url($url)) &&
@@ -2007,6 +2022,7 @@ class ide {
         ){
           $ptype = $this->options->option($idx);
           $rep['tabs'] = $ptype['tabs'];
+
           if ( $plugin ){
             array_shift($bits);
             array_shift($bits);
@@ -2021,19 +2037,23 @@ class ide {
         'repository' => $rep,
         'tab' => false
       ];
-
       if ( !empty($bits) ){
         // Tab's nane
         if ( !empty($rep['tabs']) && (end($bits) !== 'code') ){
+
           // Tab's nane
           $tab = array_pop($bits);
           // File's name
           $fn = array_pop($bits);
           // File's path
+          if ( !$plugin ){
+            array_shift($bits);
+          }
           $fp = implode('/', $bits);
 
           // Check if the file is a superior super-controller
           $ssc = $this->superior_sctrl($tab, $fp);
+
           $tab = $ssc['tab'];
 
           if ( $plugin ){
@@ -2047,12 +2067,18 @@ class ide {
 
           if ( ($i = \bbn\x::find($rep['tabs'], ['url' => $tab])) !== false ){
             $tab = $rep['tabs'][$i];
-            if( !empty($this->is_MVC_from_url($url)) && ($plugin === true) ){
+            // if( !empty($this->is_MVC_from_url($url)) && ($plugin === true) ){
+            //   $res .= 'mvc/';
+            // }
+            if( !empty($this->is_MVC_from_url($url)) ){
               $res .= 'mvc/';
             }
 
             if( empty($this->is_component_from_url($url)) ){
               $res .= $tab['path'];
+            }
+            else if( !empty($this->is_component_from_url($url)) && !$plugin ){
+              $res .= 'components/';
             }
             if ( !empty($tab['fixed']) ){
               $res .= $fp . $tab['fixed'];

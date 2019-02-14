@@ -70,22 +70,9 @@
             break;
         }
 
-        //this.source.path =  d.data.path.endsWith('/') ?  d.data.path :  d.data.path + '/';
         popup.close();
       },
     },
 
   }
 })();
-
-/*return {
-  repository: appui.ide.currentRep,
-  repository_cfg: appui.ide.repositories[appui.ide.currentRep],
-  is_mvc: this.isMVC,
-  isComponent: this.source.isComponent,
-  content_component: this.source.isComponent,
-  types_repositoy: this.source.rep.types !== undefined,
-  content_mvc: this.isMVC,
-  onlydirs: true,
-  tab: this.source.tab || false,
-};*/

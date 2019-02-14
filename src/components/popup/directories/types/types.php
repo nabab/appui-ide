@@ -13,48 +13,55 @@
              :editable="true"
   >
     <bbns-column field="code"
-                :hidden="true"
+                 :hidden="true"
     ></bbns-column>
     <bbns-column field="id"
-                :hidden="true"
+                 :hidden="true"
     ></bbns-column>
     <bbns-column title="<?=_("Type")?>"
-                field="text"
-                cls="bbn-c"
+                 field="text"
+                 cls="bbn-c"
     ></bbns-column>
     <bbns-column title= "<?=_("Extensions")?>"
-                field="extensions"
-                :width="70"
-                :render="renderIconExts"
-                cls="bbn-c"
-                default="[]"
+                 field="extensions"
+                 :width="70"
+                 :render="renderIconExts"
+                 cls="bbn-c"
+                 default="[]"
     ></bbns-column>
     <bbns-column title= "<?=_("Tabs")?>"
-                field="tabs"
-                :width="70"
-                :render="renderIconTabs"
-                cls="bbn-c"
-                default="[]"
+                 field="tabs"
+                 :width="70"
+                 :render="renderIconTabs"
+                 cls="bbn-c"
+                 default="[]"
+    ></bbns-column>
+    <bbns-column title= "<?=_("Types")?>"
+                 field="types"
+                 :width="70"
+                 :render="renderIconTypes"
+                 cls="bbn-c"
+                 default="[]"
     ></bbns-column>
     <bbns-column title=" "
-                cls="bbn-c"
-                :width="150"
-                :buttons="[{
-                  text: '<?=_("Edit")?>',
-                  command: editType,
-                  notext: true,
-                  icon: 'fas fa-pencil-alt'
-                },{
-                  text: '<?=_("Copy")?>',
-                  command: copyType,
-                  notext: true,
-                  icon: 'fas fa-copy'
-                },{
-                  text: '<?=_("Delete")?>',
-                  command: deleteType,
-                  icon: 'fas fa-trash',
-                  notext: true
-                }]"
+                 cls="bbn-c"
+                 :width="150"
+                 :buttons="[{
+                   text: '<?=_("Edit")?>',
+                   command: editType,
+                   notext: true,
+                   icon: 'fas fa-pencil-alt'
+                 },{
+                   text: '<?=_("Copy")?>',
+                   command: copyType,
+                   notext: true,
+                   icon: 'fas fa-copy'
+                 },{
+                   text: '<?=_("Delete")?>',
+                   command: deleteType,
+                   icon: 'fas fa-trash',
+                   notext: true
+                 }]"
     ></bbns-column>
   </bbn-table>
 </div>

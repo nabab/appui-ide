@@ -24,7 +24,7 @@
     computed: {
       isMVC(){
       //  return (!!appui.ide.isComponent || this.rep.alias_code === 'mvc') || !!this.ide.isMVC || (bbn.vue.closest(this, 'appui-ide-mvc') !== false);
-       return (appui.ide.isComponent === false || this.rep.alias_code === 'mvc') || (bbn.vue.closest(this, 'appui-ide-mvc') !== false);
+       return (appui.ide.isComponent === false && this.rep.alias_code === 'mvc') || (bbn.vue.closest(this, 'appui-ide-mvc') !== false);
       },
       isComponent(){
         return (appui.ide.isComponent === true || this.rep.alias_code === "components") || (bbn.vue.closest(this, 'appui-ide-components') !== false);
@@ -36,20 +36,9 @@
         return !this.isMVC && !this.isComponent;
       },
       rep(){
-      //  if ( !this.isProject ){
-          if ( appui.ide.repositories && appui.ide.currentRep &&              appui.ide.repositories[appui.ide.currentRep]
-          ){
-            return this.ide.repositories[appui.ide.currentRep]
-          }
-      /*  }
-        else{
-          if( this.isMvc ){
-            return appui.ide.repositoryProject('mvc');
-          }
-          if( this.isComponent ){
-            return appui.ide.repositoryProject('components');
-          }
-        }*/
+        if ( appui.ide.repositories && appui.ide.currentRep ){
+          return this.ide.repositories[appui.ide.currentRep]
+        }
         return false
       },
       isChanged(){
@@ -59,13 +48,6 @@
         let path = this.rep.bbn_path + '/' + (this.rep.path === '/' ? '' : this.rep.path);
         if ( this.isProject ){
           if ( this.isMVC ){
-          /*  path = this.rep.bbn_path + '/mvc/';
-            appui.ide.source.projects.tabs_type['mvc'][0];
-            let tabs = appui.ide.source.projects.tabs_type['mvc'][0],
-                i = bbn.fn.search(tabs, "url", this.tab);
-            if ( tabs[i] ){
-              path += tabs[i].path;
-            }*/
             path = this.source.id.slice();
             path = path.split('/');
             path.shift();
@@ -236,48 +218,48 @@
         }
       },
       test(){
-        if ( this.isComponent === false ){
-          if ( this.isMVC ){
-            bbn.fn.log("ddddd", )
-
-            bbn.fn.link(
-              (this.ide.route ? this.ide.route + '/' : '') +
-              (this.ide.path && this.ide.path !== 'mvc' ? this.ide.path + '/' : '') +
-              this.ide.filename, true
-            );
-            return true;
+        if ( this.isMVC ){
+          let pathMVC = this.ide.path;
+          if ( pathMVC.indexOf('mvc/') === 0 ){
+            pathMVC = pathMVC.replace("mvc/","");
           }
-          if ( typeof(this.mode) === 'string' ){
-            switch ( this.mode ){
-              case "php":
-                bbn.fn.post(this.ide.root + "test", {code: this.value}, (d) => {
-                  const tn = bbn.vue.closest(this, '.bbn-tabnav'),
-                        idx = tn.tabs.length;
-                  tn.add({
-                    title: moment().format('HH:mm:ss'),
-                    load: false,
-                    content: d.content,
-                    url: 'output' + idx,
-                    selected: true
-                  });
-                  tn.selected = tn.getIndex('output' + idx);
+          bbn.fn.link(
+            (this.ide.route ? this.ide.route + '/' : '') +
+            (pathMVC === 'mvc' ? '' : pathMVC) + '/' + this.ide.filename,
+             true
+          );
+          return true;
+        }
+        if ( typeof(this.mode) === 'string' ){
+          switch ( this.mode ){
+            case "php":
+              bbn.fn.post(this.ide.root + "test", {code: this.value}, (d) => {
+                const tn = bbn.vue.closest(this, '.bbn-tabnav'),
+                      idx = tn.tabs.length;
+                tn.add({
+                  title: moment().format('HH:mm:ss'),
+                  load: false,
+                  content: d.content,
+                  url: 'output' + idx,
+                  selected: true
                 });
-                break;
-              case "js":
-                eval(this.value);
-                break;
-              case "svg":
-                const oDocument = new DOMParser().parseFromString(this.value, "text/xml");
-                if ( (oDocument.documentElement.nodeName == "parsererror") || !oDocument.documentElement){
-                  appui.alert("There is an XML error in this SVG");
-                }
-                else {
-                  bbn.vue.closest(this, ".bbns-tab").popup($("<div/>").append(document.importNode(oDocument.documentElement, true)).html(), "Problem with SVG");
-                }
-                break;
-              default:
-                appui.alert(this.value, "Test: " + this.mode);
-            }
+                tn.selected = tn.getIndex('output' + idx);
+              });
+              break;
+            case "js":
+              eval(this.value);
+              break;
+            case "svg":
+              const oDocument = new DOMParser().parseFromString(this.value, "text/xml");
+              if ( (oDocument.documentElement.nodeName == "parsererror") || !oDocument.documentElement){
+                appui.alert("There is an XML error in this SVG");
+              }
+              else {
+                bbn.vue.closest(this, ".bbns-tab").popup($("<div/>").append(document.importNode(oDocument.documentElement, true)).html(), "Problem with SVG");
+              }
+              break;
+            default:
+              appui.alert(this.value, "Test: " + this.mode);
           }
         }
       },

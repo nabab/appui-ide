@@ -76,7 +76,8 @@
           oldExt: oldExt,
           repository: this.repositories[this.repository]['bbn_path'] + '/' + this.repositories[this.repository]['path'],
           is_mvc: this.isMVC,
-          fileName: this.filename
+          fileName: this.filename,
+          path: this.path
         }, d => {
           if ( d.success ){
             tab.deleteMenu(obj.key);

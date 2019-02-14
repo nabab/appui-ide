@@ -14,6 +14,9 @@
       }
     },
     methods: {
+      focus(a){
+        bbn.fn.log(arguments, a ,"FOCUS");
+      },
       close(){
         var popup = bbn.vue.closest(this, "bbn-popup");
         popup.close();
@@ -30,18 +33,18 @@
               path = path.join('/');
             }
             url += '_project_/' +  this.source.type + '/';
-            //bbn.fn.log('url2', url);
+
             if ( this.source.is_vue ){
               let name = this.source.path.slice();
               name = name.split('/').pop();
               url += '_vue_/' + name + '/';
             }
           }
-          //bbn.fn.log('url3', url);
+
           url += '_end_/' + this.typeSearch + '/_folder_/' + path + '/' + this.search;
           bbn.fn.log('url4', url);
           url = url.replace( '//',  '/');
-          this.$nextTick(() => {          
+          this.$nextTick(() => {
             bbn.fn.link( url, true);
           });
           this.close();

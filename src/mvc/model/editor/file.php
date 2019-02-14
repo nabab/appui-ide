@@ -30,17 +30,6 @@ if ( !empty($model->data['url']) && isset($model->inc->ide) ){
   $f = $model->inc->ide->decipher_path($model->data['url']);
 
 
-  if ( !empty($repository['tabs']) && (strpos( $f, $repository['path']) > 0) ){
-    $arr = explode("/",$model->data['url']);
-    if ( is_array($arr) ){
-      array_pop($arr);
-      array_pop($arr);
-      $arr[] = $repository['alias_code'] !== 'components' ? "php" : 'js';
-      //array_push($arr, ($repository['alias_code'] !== 'components' ? "php" : 'js'));
-      $ctrl_file = $model->inc->ide->url_to_real(implode("/", $arr));
-    }
-  }
-
   if ( isset($repository['types']) ){
     $tabs=[];
     foreach( $repository['types'] as $type ){
@@ -59,6 +48,14 @@ if ( !empty($model->data['url']) && isset($model->inc->ide) ){
     $repository['tabs'] = $tabs;
   }
 
+  $arr = explode("/",$model->data['url']);
+  if ( is_array($arr) ){
+    array_pop($arr);
+    array_pop($arr);
+    $arr[] = $repository['alias_code'] !== 'components' ? "php" : 'js';
+    $ctrl_file = $model->inc->ide->url_to_real(implode("/", $arr));
+  }
+
   $is_mvc = $model->inc->ide->is_MVC_from_url(str_replace('/_end_', '', $url));
   $is_component = $model->inc->ide->is_component_from_url(str_replace('/_end_', '', $url));
 
@@ -71,7 +68,7 @@ if ( !empty($model->data['url']) && isset($model->inc->ide) ){
     'repository_content' => $repository,
     'url' => $rep.$path.'/_end_',
     'route' => $route,
-    'settings' => isset($ctrl_file) ? is_file($ctrl_file) : false,
+    'settings' => !empty($ctrl_file) ? is_file($ctrl_file) : false,
     'ext' => \bbn\str::file_ext($file)
   ];
 

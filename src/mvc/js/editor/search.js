@@ -11,6 +11,7 @@
       return {
         typeSearch: this.source.typeSearch === 'insensitive' ? 'In' : 'Se',
         list: this.source.list,
+
       }
     },
     mounted(){
@@ -19,12 +20,13 @@
     },
     methods:{
       selectElement(node){
+        bbn.fn.log("NODE select search", node)
         if ( node.data.forLink ){
-          let link = 'file/' + this.source.nameRepository + node.data.forLink + '/_end_' + (node.data.tab ? '/' + node.data.tab : '');
-          appui.ide.getRef(tabstrip).load(link);
+          let link = 'file/' + this.source.nameRepository +(this.source.isProject === true ? this.source.type +'/' : '' ) + node.data.forLink + '/_end_' + (node.data.tab ? '/' + node.data.tab : '');
+          appui.ide.getRef('tabstrip').load(link);
         }
         if( node.data.code ){
-          let link = 'file/' + this.source.nameRepository + node.data.linkPosition + '/_end_' + (node.data.tab ? '/' + node.data.tab : ''),
+          let link = 'file/' + this.source.nameRepository + (this.source.isProject === true ? this.source.type +'/' : '' ) + node.data.linkPosition + '/_end_' + (node.data.tab ? '/' + node.data.tab : ''),
               tabStrip = appui.ide.$refs.tabstrip,
               i = tabStrip.getIndex('file/' + this.source.nameRepository + node.data.linkPosition );
           if ( i !== false ){

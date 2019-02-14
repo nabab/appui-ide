@@ -112,11 +112,11 @@ if ( !empty($model->data['repository']) &&
       if ( is_array($folders) ){
         if( count($folders) > 0 ){
           foreach ($folders as $i => $folder){
-            if ( strpos($folder, '.') !== 0 ){
+            if ( strpos($folder, '.') === 0 ){
               unset($folders[$i]);
-              return array_merge($folders);
             }
           }
+          return $folders;
         }
         else{
           return [];
@@ -129,16 +129,13 @@ if ( !empty($model->data['repository']) &&
   };
   // function for create the node for tree
   $get = function($real, $color, $tab = false, $type = false, $types =[]) use(&$folders, &$files, $onlydirs, $cur_path, $file_check, $excludeds, $opt, $types_to_include, $is_project, $tree_popup, $dirs){
-
     if( !empty($real) && !empty(strpos($real,'//')) ){
       $real = str_replace('//','/', $real);
     }
+
     //if the element exists
-
-
     if ( !empty($real) ){
       $todo = !empty($onlydirs) ? $dirs($real) : \bbn\file\dir::get_files($real, true);
-
       if ( is_array($todo) ){
         //we browse the element
         foreach ( $todo as $t ){
@@ -150,6 +147,7 @@ if ( !empty($model->data['repository']) &&
             $is_vue = false;
             $name = basename($t);
             //filter any folders that we want to see in the root in case of a project
+
 
             if ( empty($is_project) ||
               !empty($tree_popup) ||
@@ -171,7 +169,7 @@ if ( !empty($model->data['repository']) &&
 
                 if (
                   ($is_file && !isset($files[$name]) && !\in_array($ext, $excludeds)) ||
-                  (!$is_file && !isset($folders[$name]))
+                  (!$is_file && (!isset($folders[$name]) || $folders[$name]['num'] === 0))
                 ){
                   $num = 0;
                   //case folder
@@ -179,6 +177,7 @@ if ( !empty($model->data['repository']) &&
                     if ( (empty($onlydirs) && ($tf = \bbn\file\dir::get_files($t, true))) ||
                       (!empty($onlydirs) && ($tf = $dirs($t)))
                     ){
+
                       $num = \count($tf);
                     }
                   }
@@ -240,7 +239,7 @@ if ( !empty($model->data['repository']) &&
                         }
                         // if ( count($cnt) === ($num_check + $excludeds_exts) ){
                         //   $num = 0;
-                        //     \bbn\x::log(["dentro2222", $name], 'testIDE');
+                        //
                         // }
                       }
                       //in this block check check if there is the file with the extension 'js' otherwise take the first from the list and if it is php then let's say that we are in the html
@@ -293,6 +292,7 @@ if ( !empty($model->data['repository']) &&
                     'tab' => $tab,
                     'ext' => !empty($is_file) ? $ext : false
                   ];
+
                   if( !empty($tree_popup) ){
                     $cfg['tree_popup'] = !empty($tree_popup);
                   }
@@ -306,13 +306,17 @@ if ( !empty($model->data['repository']) &&
                   else if ( empty($type) && empty($types) ){
                     $cfg['type'] = false;
                   }
-
                   //add to the list of folders or files so that we traced them for the next cycle
                   if ( !empty($is_file) ){
                     $files[$name] = $cfg;
                   }
                   else {
-                    $folders[$name] = $cfg;
+                    if ( empty($folders[$name]) ){
+                      $folders[$name] = $cfg;
+                    }
+                    else if ( $cfg['num'] > 0 ){
+                      $folders[$name] = $cfg;
+                    }
                   }
                 }
                 else if ( !$is_file && !empty($component) && isset($folders[$name]) && !$folders[$name]['num'] ){
@@ -359,9 +363,7 @@ if ( !empty($model->data['repository']) &&
             $path_complete =  $path . $cur_path;
             $type= 'components';
             $t['bcolor'] = '#44b782';
-            //die(\bbn\x::dump($t['bcolor'],$path_complete, $tree_popup, $type));
           }
-
           $get($path_complete, $t['bcolor'], $t['url'], $type);
 
           // if ( !empty($tree_popup) ){
@@ -397,11 +399,13 @@ if ( !empty($model->data['repository']) &&
         }
       }
     }
+
     //we execute the function that will return the date for the tree of the ide
     $get($path . $cur_path, false, false, false, $types);
   }
   //else if we are in depth and we already know what types of elements we are opening and dealing with in the tree of the ide
   else if( !empty($model->data['type']) ){
+
     if ( $model->data['type'] === 'lib' ){
       // lib
       $get($path . $cur_path, $rep_cfg['bcolor'], false, $type);
@@ -433,6 +437,7 @@ if ( !empty($model->data['repository']) &&
     }
   }
   if ( ksort($folders, SORT_STRING | SORT_FLAG_CASE) && ksort($files, SORT_STRING | SORT_FLAG_CASE) ){
+    \bbn\x::log($folders, 'ideTest');
     //return merge of file and folder create in function get
     $tot = array_merge(array_values($folders), array_values($files));
     return $tot;

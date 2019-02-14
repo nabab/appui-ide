@@ -4,6 +4,7 @@
                v-model="search"
                class="bbn-w-100"
                @keydown.enter="searchInElement"
+               ref="search_input"
     ></bbn-input>
   </div>
   <div class="bbn-w-30 bbn-padded">

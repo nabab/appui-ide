@@ -4,32 +4,27 @@
     data(){
       let show = '',
           tabs = '',
-          exts = '';
-      //case edit type
-      if( this.source.row.id && this.source.row.id.length ){
-        tabs = JSON.parse(this.source.row.tabs),
-        exts = JSON.parse(this.source.row.extensions);
-      }
-      //case duplicate type
-      else if ( (this.source.row.id && !this.source.row.id.length)  &&
-        (this.source.row.tabs.length || this.source.row.extensions.length)
-      ){
-        tabs = this.source.row.tabs.length ? JSON.parse(this.source.row.tabs) : [];
-        exts = this.source.row.extensions.length ? JSON.parse( this.source.row.extensions) : [];
-      }//case add type
-      else{
-        tabs = "";
-        exts = "";
+          exts = '',
+          types = '';
+      if ( this.source.row.id && (this.source.row.id.length || !this.source.row.id.length) ){
+        tabs = (this.source.row.tabs !== undefined && this.source.row.tabs.length) ? JSON.parse(this.source.row.tabs) : [];
+        exts = (this.source.row.extensions !== undefined && this.source.row.extensions.length) ? JSON.parse(this.source.row.extensions) : [];
+        types = (this.source.row.types !== undefined && this.source.row.types.length) ? JSON.parse(this.source.row.types) : [];
       }
 
       if ( tabs.length ){
-        show = "tabs"
+        show = "tabs";
       }
       if ( exts.length ){
-        show = "exts"
+        show = "exts";
+      }
+      if ( types.length ){
+        show = "types";
       }
 
       return {
+        tabSelected: false,
+        extension: false,
         show: show,
         jsonSchemaExtension: {
           "type": "array",
@@ -37,16 +32,20 @@
             "type": "object",
             "properties": {
               "ext": {
-                "type": "string"
+                "type": "string",
+                "readonly": true
               },
               "mode": {
-                "type": "string"
+                "type": "string",
+                "readonly": true
               },
               "default": {
-                "type": "string"
+                "type": "string",
+                "readonly": true
               }
             },
-            "required": ["ext", "mode"]
+            "required": ["ext", "mode"],
+
           }
         },
         jsonSchemaTab: {
@@ -73,29 +72,107 @@
                 "type": "boolean"
               },
               "extensions": {
-                "$ref": "exts"
+                "$ref": "exts",
+                "readonly": true
               }
             },
             "required": ["title", "path", "url", "extensions"]
+          }
+        },
+        jsonSchemaProject: {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "url": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string"
+              },
+              "bcolor": {
+                "type": "string"
+              },
+              "fcolor": {
+                "type": "string"
+              }
+            },
+            "required": ["path", "url", "type"]
           }
         }
       }
     },
     computed:{
-      formAction(){
-        return appui.ide.source.root + "directories/actions/types/" + (this.source.row.id ? 'edit' : 'add');
-      },
       isTabs(){
         return this.show === "tabs";
       },
       isExts(){
         return this.show === "exts";
       },
+      isProject(){
+        return this.show === "types";
+      },
+      listTabs(){
+        if ( this.source.row.tabs !== undefined && this.source.row.tabs.length ){
+          return JSON.parse(this.source.row.tabs);
+        }
+        return [];
+      },
+      extensions(){
+        if ( this.source.row.extensions !== undefined && this.source.row.extensions.length ){
+          return JSON.parse(this.source.row.extensions);
+        }
+        return [];
+      },
+      tabs(){
+        let arr = [];
+        if ( this.listTabs.length ){
+            arr =  this.listTabs.map( obj =>{
+             return {
+               text: obj.title,
+               value: obj.title,
+             }
+           });
+        }
+        return arr;
+      },
+      listExtensions(){
+        let listExts = [];
+        if ( (this.isTabs === true) &&
+          (this.listTabs.length > 0) &&
+          this.tabSelected
+        ){
+          let exts = bbn.fn.get_field(this.listTabs, 'title', this.tabSelected, 'extensions');
+          if ( exts.length ){
+            listExts = exts.map( obj =>{
+              return {
+                text: obj.ext,
+                value: obj.ext,
+              }
+            });
+          }
+        }
+        else if( this.isExts === true ){          
+          listExts = tempExtensions.map( obj =>{
+            return {
+              text: obj.ext,
+              value: obj.ext,
+            }
+          });
+        }
+        return listExts;
+      },
+      formAction(){
+        return appui.ide.source.root + "directories/actions/types/" + (this.source.row.id ? 'edit' : 'add');
+      },
       cfgEditor(){
         if ( this.isExts ){
           return {
             schema: this.jsonSchemaExtension,
-            templates: this.jsonDataTemplate
+            templates: this.jsonDataTemplate,
           };
         }
         if ( this.isTabs ){
@@ -105,10 +182,16 @@
             templates: this.jsonDataTemplate
           };
         }
+        if ( this.isProject ){
+          return {
+            schema: this.jsonSchemaProject,
+            templates: this.jsonDataTemplate
+          };
+        }
         return {}
       },
       jsonDataTemplate(){
-        if ( this.isTabs || this.isExts ){
+        if ( this.isTabs || this.isExts || this.isType ){
           let arr = [{
             text: bbn._('Extensions'),
             title: bbn._('Insert a new extension'),
@@ -139,22 +222,134 @@
               }
             });
           }
+          if ( this.isType ){
+            arr = [{
+              text: bbn._('Types'),
+              title: bbn._('Insert a new type'),
+              className: 'jsoneditor-type-object',
+              value: {
+                url: bbn._("Insert a url"),
+                path: bbn._("Insert a path"),
+                type: bbn._("Insert a link to a type"),
+                bcolor: "",
+                fcolor: ""
+              }
+            }];
+          }
           return arr;
         }
         return [];
       },
     },
     methods:{
+      openFormExtensions(action){
+        let exts = [],
+            id = -1,
+            idExtension = -1;
+        ///case tabs
+        if( this.isTabs === true ){
+          if ( this.listTabs.length && this.tabSelected ){
+            exts = bbn.fn.get_field(this.listTabs, 'title', this.tabSelected, 'extensions');
+            id = bbn.fn.search(this.listTabs, 'title', this.tabSelected);
+            idExtension = bbn.fn.search(this.listTabs[id]['extensions'], 'ext', this.extension);
+          }
+          if ( (exts.length > 0) && (id > -1) ){
+            var src = {
+              action: action,
+              type: this.show,
+              tab: this.tabSelected,
+              listTabs: this.listTabs,
+              extesionsTab: exts,
+              idTab: id,
+              idExt: idExtension === -1 ? false : idExtension,
+              extension:{
+                ext: action === 'edit' ? exts[idExtension].ext : '',
+                mode: action === 'edit' ? exts[idExtension].mode : '',
+                default: action === 'edit' ? exts[idExtension].default : ''
+              }
+            };
+          }
+        }
+        //case extensions (code)
+        else if ( this.isExts === true ){
+          if ( this.extensions.length > 0 ){
+            id = bbn.fn.search(this.extensions, 'ext', this.extension);
+          }
+          else{
+            id = 0;
+          }
+          if ( id > -1 ){
+            var src = {
+              action: action,
+              type: this.show,
+              extesionsTab: this.extensions,
+              idExt: id === -1 ? false : id,
+              extension:{
+                ext: action === 'edit' ? this.extensions[id].ext : '',
+                mode: action === 'edit' ? this.extensions[id].mode : '',
+                default: action === 'edit' ? this.extensions[id].default : ''
+              }
+            };
+          }
+        }
+
+        if ( src !== undefined ){
+          this.getPopup().open({
+            width: 800,
+            height: 600,
+            title: action === 'edit' ? bbn._('Edit Extension') : bbn._('Add Extension'),
+            component: this.$options.components.formExtension,
+            source: src
+          });
+        }
+
+      },
+      editExtension(){
+        this.openFormExtensions('edit');
+      },
+      createExtension(){
+        this.openFormExtensions('create');
+      },
+      deleteExtension(){
+        if ( this.extension !== false ){
+          if ( this.isTabs ){
+            if ( this.listTabs.length && this.tabSelected ){
+              let id = bbn.fn.search(this.listTabs, 'title', this.tabSelected);
+              if ( id > -1 ){
+                let idExtension = bbn.fn.search(this.listTabs[id]['extensions'], 'ext', this.extension);
+                if ( idExtension > -1 ){
+                  let tabs = this.listTabs.slice();
+                  tabs[id]['extensions'].splice(idExtension, 1);
+                  this.$set(this.source.row, 'tabs' , JSON.stringify(tabs));
+                  this.$refs.jsonEditor.reinit();
+                }
+              }
+            }
+          }
+          else if ( this.isExts ){
+            if ( this.extensions.length > 0 ){
+              let id = bbn.fn.search(this.extensions, 'title', this.extension);
+              if ( id > -1 ){
+                let exts = this.extensions.slice();
+                exts.splice(id, 1);
+                this.$set(this.source.row, 'tabs' , JSON.stringify(exts));
+                this.$refs.jsonEditor.reinit();
+              }
+            }
+          }
+        }
+
+      },
       success(){
-        this.types.refreshListTypes();
+        bbn.vue.find(bbn.vue.closest(this, 'bbns-tab'), 'appui-ide-popup-directories-types').refreshListTypes();
         appui.success(bbn._("success"));
       },
       failure(){
         appui.error(bbn._("Error"));
       },
       validation(d){
-        var tabs = [];
-        var exts = [];
+        var tabs = [],
+            exts = [];
 
         if ( this.source.row.tabs ){
           tabs = JSON.parse(this.source.row.tabs);
@@ -183,7 +378,6 @@
             delete d.tabs
           }
         }
-
         return true;
       }
     },
@@ -193,16 +387,100 @@
         if( val === 'tabs' ){
           this.source.row.tabs = originalData.tabs;
           this.source.row.extensions = JSON.stringify([]);
+          this.source.row.types = JSON.stringify([]);
         }
         if( val === 'exts' ){
           this.source.row.extensions = originalData.extensions;
           this.source.row.tabs = JSON.stringify([]);
+          this.source.row.types = JSON.stringify([]);
+        }
+        if( val === 'types' ){
+          this.source.row.types = originalData.types;
+          this.source.row.tabs = JSON.stringify([]);
+          this.source.row.extensions = JSON.stringify([]);
         }
         this.$nextTick(() => {
           if ( this.$refs.jsonEditor ){
            this.$refs.jsonEditor.reinit();
           }
         });
+      }
+    },
+    components:{
+      'formExtension':{
+        props: ['source'],
+        template: `
+        <bbn-form class="bbn-full-screen"
+                  :buttons="btns"
+                  :source="source"
+                  ref="form"
+        >
+          <div class="bbn-grid-fields bbn-l">
+            <label>${bbn._('Ext:')}</label>
+            <bbn-input v-model="extension.ext"
+                       required="required"
+            ></bbn-input>
+
+            <label>${bbn._('Mode:')}</label>
+            <bbn-input v-model="extension.mode"></bbn-input>
+
+            <label>${bbn._("Default:")}</label>
+            <div style="height: 420px">
+              <bbn-code ref="codeDefault"
+                        theme="pastel-on-dark"
+                        mode="text"
+                        v-model="extension.default"
+              ></bbn-code>
+            </div>
+          </div>
+        </bbn-form>`,
+        data(){
+          return{
+            //disabled: true,
+            extension:{
+              default: this.source.extension.default,
+              ext: this.source.extension.ext,
+              mode: this.source.extension.mode
+            },
+            btns: [
+              'cancel', {
+              text: "Confirm",
+              title: "Confirm",
+              class: "k-primary",
+              icon: "far fa-check-circle",
+              command: this.closeForm
+            }]
+          }
+        },
+        methods:{
+          closeForm(){
+            let popup = bbn.vue.closest(this, "bbn-popup"),
+                form = bbn.vue.find(bbn.vue.closest(this, 'bbns-tab'), 'appui-ide-popup-directories-form-types');
+            if ( this.source.type === "tabs" ){
+              if ( this.source.action === 'edit' ){
+                this.source.listTabs[this.source.idTab]['extensions'][this.source.idExt] = this.extension;
+                form.$set(form.source.row, 'tabs' , JSON.stringify(this.source.listTabs));
+              }
+              else if ( this.source.action === 'create' ){
+                this.source.listTabs[this.source.idTab]['extensions'].push(this.extension);
+                form.$set(form.source.row, 'tabs' , JSON.stringify(this.source.listTabs));
+              }
+            }
+            if ( this.source.type === "exts" ){
+              if ( this.source.action === 'edit' ){
+                this.source.extesionsTab[this.source.idExt] = this.extension;
+                form.$set(form.source.row, 'extensions' , JSON.stringify(this.source.extesionsTab));
+
+              }
+              else if ( this.source.action === 'create' ){
+                this.source.extesionsTab.push(this.extension);
+                form.$set(form.source.row, 'extensions' , JSON.stringify(this.source.extesionsTab));
+              }
+            }
+            form.$refs.jsonEditor.reinit();
+            popup.close();
+          }
+        }
       }
     }
   }
