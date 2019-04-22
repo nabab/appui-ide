@@ -7,7 +7,7 @@
 (() => {
   return {
     data(){
-      const ide = bbn.vue.closest(bbn.vue.closest(this, '.bbn-tabnav'), '.bbns-tab').getComponent().$data;
+      const ide = this.closest('bbn-splitter').closest('bbn-splitter').$parent.$data;
       let path      = this.source.url.substr(this.source.repository.length).replace('/_end_', '').split('/'),
           filename  = path.pop(),
           tabs      = ide.repositories[this.source.repository].tabs,
@@ -90,7 +90,7 @@
           for ( let id in tab.extensions ){
             let ext = tab.extensions[id].ext;
             exts.push({
-              icon: 'fas fa-cogs',
+              icon: 'nf nf-fa-cogs',
               text: bbn._('switch to') + ' <strong>' + ext + '</strong>',
               key: ext,
               command: this.changeExtension
@@ -114,24 +114,58 @@
       });
     },
     computed: {
+      routerSource(){
+        if ( this.emptyTabs !== undefined ){
+          let ctrlRepo = this.tabsRepository[bbn.fn.search(this.tabsRepository, 'url' ,'_ctrl')];
+          let r = [{
+            load: true,
+            cached: false,
+            title: this.titleTabCtrl,
+            bcolor: ctrlRepo.bcolor,
+            fcolor: ctrlRepo.fcolor,
+            menu: this.listCtrls(),
+            url: this.countCtrl
+          }, {
+            load: true,
+            url: "settings",
+            disabled: !this.source.settings,
+            title: bbn._("Settings"),
+            icon: "nf nf-fa-cogs"
+          }];
+          bbn.fn.each(this.tabsRepository, (tab, idx) => {
+            if ( tab.url !== '_ctrl' ){
+              r.push({
+                static: true,
+                load: true,
+                url: tab.url,
+                title: tab.title,
+                icon: tab.icon,
+                notext: true,
+                bcolor: tab.bcolor ,
+                fcolor: tab.fcolor,
+                cls: this.emptyTabs.indexOf(tab.url) !== -1 ? 'empty-tab' : '',
+                menu: this.getMenu(tab.url)
+              });
+            }
+          });
+          return r;
+        }
+        return [];
+      },
       sctrl(){
-        const vm = this;
-        if ( vm.path.length ){
-          return vm.path.split('/');
+        if ( this.path.length ){
+          return this.path.split('/');
         }
         return [];
       },
       disabledSetting(){
-        return !this.source.settings
+        return !this.source.settings;
       },
       titleTabCtrl(){
-        let level = this.sctrl.length;
-        return level === 0 ? `CTRL` : `CTRL${level}`
+        return this.sctrl.length ? 'CTRL' + this.sctrl.length : 'CTRL';
       },
       countCtrl(){
-        let steps = this.source.title.split("/").slice();
-        let i = steps.length;
-        return "_".repeat(i) + 'ctrl'
+        return "_".repeat(this.sctrl.length) + 'ctrl'
 
       }
     },
@@ -143,36 +177,36 @@
     methods: {
       search: bbn.fn.search,
       //for title in tabs ide
-      renderIconTab(tab){
-        switch ( tab.title ){
-          //icon for tab controller
-          case "Controller":
-            return 'icon-php';
-          //icon for tab private
-          case "Private":
-            return 'icon-php-alt';
-          //icon for tab model
-          case "Model":
-            return 'icon-database';
-          //icon for tab html
-          case "View":
-            return 'icon-html';
-          //icon for tab javascript
-          case "JavaScript":
-            return 'icon-javascript-alt';
-          //icon for tab css
-          case "CSS":
-            return 'icon-css';
-        }
-        return '';
-      },
+      // renderIconTab(tab){
+      //   switch ( tab.title ){
+      //     //icon for tab controller
+      //     case "Controller":
+      //       return 'icon-php';
+      //     //icon for tab private
+      //     case "Private":
+      //       return 'icon-php-alt';
+      //     //icon for tab model
+      //     case "Model":
+      //       return 'icon-database';
+      //     //icon for tab html
+      //     case "View":
+      //       return 'icon-html';
+      //     //icon for tab javascript
+      //     case "JavaScript":
+      //       return 'icon-javascript-alt';
+      //     //icon for tab css
+      //     case "CSS":
+      //       return 'icon-css';
+      //   }
+      //   return '';
+      // },
       listCtrls(){
         let path = "",
             url  = "_ctrl",
             arr  = [{
               text: 'CTRL: ./',
               title: 'CTRL',
-              icon: 'fas fa-cogs',
+              icon: 'nf nf-fa-cogs',
               url: url,
               command: (a) => {
                 this.loadCtrl(a);
@@ -183,7 +217,7 @@
           arr.push({
             text: `CTRL${(i + 1)}:   ${path}`,
             title: `CTRL${(i + 1)}`,
-            icon: 'fas fa-cogs',
+            icon: 'nf nf-fa-cogs',
             url: "_".repeat(i + 1) + url,
             command: (a) => {
               this.loadCtrl(a);
@@ -193,11 +227,11 @@
         return arr;
       },
       loadCtrl(ctrl){
-        let i   = this.$refs.tabstrip.selected,
-            tab = this.$refs.tabstrip.tabs.splice(0, 1),
+        let i   = this.getRef('tabstrip').selected,
+            tab = this.getRef('tabstrip').tabs.splice(0, 1),
             val = tab[0].menu[ctrl - 1];
-        this.$refs.tabstrip.selected = '';
-        this.$refs.tabstrip.add({
+        this.getRef('tabstrip').selected = '';
+        this.getRef('tabstrip').add({
           load: true,
           static: true,
           url: val.url,
@@ -207,20 +241,14 @@
           menu: tab[0].menu.slice()
         }, i);
         this.$nextTick(() => {
-          //this.$refs.tabstrip.selected = i;
-          this.$refs.tabstrip.load(this.$refs.tabstrip.parseURL(url), true);
+          //this.getRef('tabstrip').selected = i;
+          this.getRef('tabstrip').load(this.getRef('tabstrip').parseURL(url), true);
         });
       },
-      /*renderEmptyTab(tab){
-        if ( this.emptyTabs.indexOf(tab.url) !== -1 ){
-          return `<i class='zmdi zmdi-plus' style='color:black;'></i>`;
-        }
-        return '';
-      },*/
       //used in the template, returns a copy of the complete menu that will later be retracted in the tabLoaded event with the 'loading tab' function
       getMenu(url){
         let addCode = {
-          icon: 'fas fa-plus',
+          icon: 'nf nf-fa-plus',
           text: bbn._("Add code"),
           items: []
         };
@@ -229,7 +257,7 @@
             for ( let i in this.codesBlock[id].codes ){
               let code = this.codesBlock[id].codes[i];
               addCode.items.push({
-                icon: 'fas fa-code',
+                icon: 'nf nf-fa-code',
                 text: i,
                 command: () => {
                   this.addSnippet(this.codesBlock[id].codes[i])
@@ -251,14 +279,14 @@
         return arr;
       },//method for add block of code menu sub tab
       addSnippet(addCode){
-        let tab = this.$refs.tabstrip.getVue(this.$refs.tabstrip.selected);
+        let tab = this.getRef('tabstrip').getVue(this.getRef('tabstrip').selected);
         bbn.vue.find(tab, "bbn-code").addSnippet(addCode);
       },
       reloadTab(){
-        let tab = this.$refs.tabstrip.getVue(this.$refs.tabstrip.selected);
+        let tab = this.getRef('tabstrip').getVue(this.getRef('tabstrip').selected);
         if ( tab.getComponent().isChanged ){
           appui.confirm(bbn._("Modified code do you want to refresh anyway?"), () => {
-            bbn.fn.post(appui.ide.root + 'editor/' + this.$refs.tabstrip.baseURL + tab.url, (d) => {
+            bbn.fn.post(appui.ide.root + 'editor/' + this.getRef('tabstrip').baseURL + tab.url, (d) => {
               if ( d.data.id ){
                 tab.reload();
               }
@@ -266,7 +294,7 @@
           });
         }
         else{
-          bbn.fn.post(appui.ide.root + 'editor/' + this.$refs.tabstrip.baseURL + tab.url, (d) => {
+          bbn.fn.post(appui.ide.root + 'editor/' + this.getRef('tabstrip').baseURL + tab.url, (d) => {
             if ( d.data.id ){
               tab.reload();
             }
@@ -276,7 +304,7 @@
       //method change expension click of the menu subtab
       changeExtension(idx, obj){
         let code   = bbn.vue.find(this, 'bbn-code'),
-            tab    = this.$refs.tabstrip.getVue(this.$refs.tabstrip.selected),
+            tab    = this.getRef('tabstrip').getVue(this.getRef('tabstrip').selected),
             oldExt = tab.source.extension,
             newExt = obj.key;
 

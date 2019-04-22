@@ -97,15 +97,16 @@ if ( !empty($model->data['repository']) &&
   $type = !empty($model->data['type']) ? $model->data['type'] : false;
 
   //function who return the tabs giving the type to the parameter
-  $get_tabs_of_type = function($type = false)use($opt){
-    if ( !empty($type) ){
-      $tabs = false;
-      if ( $ptype = $opt->option($opt->from_code($type,'PTYPES', 'ide', BBN_APPUI)) ){
-        $tabs = $ptype['tabs'];
-      }
-    }
-    return $tabs;
-  };
+  // $get_tabs_of_type = function($type = false)use($opt){
+  //   if ( !empty($type) ){
+  //     $tabs = false;
+  //     if ( $ptype = $opt->option($opt->from_code($type,'PTYPES', 'ide', BBN_APPUI)) ){
+  //       $tabs = $ptype['tabs'];
+  //     }
+  //   }
+  //   return $tabs;
+  // };
+
   //function return olny dirs not hidden
   $dirs = function($dir){
     if ( !empty($folders = \bbn\file\dir::get_dirs($dir)) ){
@@ -132,7 +133,6 @@ if ( !empty($model->data['repository']) &&
     if( !empty($real) && !empty(strpos($real,'//')) ){
       $real = str_replace('//','/', $real);
     }
-
     //if the element exists
     if ( !empty($real) ){
       $todo = !empty($onlydirs) ? $dirs($real) : \bbn\file\dir::get_files($real, true);
@@ -140,19 +140,17 @@ if ( !empty($model->data['repository']) &&
         //we browse the element
         foreach ( $todo as $t ){
           //we can only enter if it is a component type and there is no other child element with the same name or that is not a component type
-          if ( ((\bbn\str::file_ext($t, 1)[0] !== basename($cur_path)) && ($type === 'components')) ||
+          if ( (((\bbn\str::file_ext($t, 1)[0] !== basename($cur_path)) && is_dir($t)) && ($type === 'components')) ||
            ($type !== 'components')
           ){
             $component = false;
             $is_vue = false;
             $name = basename($t);
             //filter any folders that we want to see in the root in case of a project
-
-
             if ( empty($is_project) ||
               !empty($tree_popup) ||
               (!empty($is_project) &&
-               ((empty($type) && in_array($name, $types_to_include, true)) || !empty($type))
+               ((!empty( $types_to_include) && empty($type) && in_array($name, $types_to_include, true)) || !empty($type))
               )
             ){
               //we take the file name if it is not '_ctrl'
@@ -205,42 +203,54 @@ if ( !empty($model->data['repository']) &&
                       $folder = true;
                     }
                     //else is folder
-                    else if ( !empty($cnt = \bbn\file\dir::get_files($t)) ){
+                    else if ( ($cnt = \bbn\file\dir::get_files($t, true, true)) ){
+                      $num =  \count($cnt);
                       $folder = true;
                       $arr = [];
                       $component = false;
                       $num_check = 0;
 
                       if ( is_array($cnt) ){
-                        foreach($cnt as $f){
+                        $num_check = 0;
+                        foreach( $cnt as $f ){
                           //$name = explode(".", basename($f))[0];
-                          $item = explode(".", basename($f))[0];
+                          $ele = explode(".", basename($f));
+                          $item = $ele[0];
+                          $ext = $ele[1];
                           //if is folder and component
                           if ( $item === basename($t) ){
                             $folder = false;
                             $arr[] = \bbn\str::file_ext($f);
                             $is_vue = true;
                             $component = true;
-                            $num_check++;
-                          }
-
-                        }
-
-                        if( $num > 0 ){
-                          $excludeds_exts = 0;
-                          $exts = array_map(function($ele){
-                            return \bbn\str::file_ext($ele, 1)[1];
-                          }, $cnt);
-                          foreach ( $exts as $ext ) {
-                            if ( in_array($ext, $excludeds) === true ){
-                              $excludeds_exts++;
+                            if ( in_array($ext, $excludeds) === false ){
+                              $num_check++;
                             }
                           }
                         }
-                        // if ( count($cnt) === ($num_check + $excludeds_exts) ){
-                        //   $num = 0;
-                        //
-                        // }
+
+                        if( $num > 0 ){
+                          //for component in case file with name different or folder hidden
+                          $element_exluded = 0;
+                          if( $num_check < $num ){
+                            foreach( $cnt as $f ){
+                              $ele = explode(".", basename($f));
+                              $item = $ele[0];
+                              $ext = $ele[1];
+                              if ( (is_dir($f) && (strpos(basename($f), '.') === 0)) ||
+                                (is_file($f) && (($item !== basename($t)) || (in_array($ext, $excludeds) === true)))
+                              ){
+                                $element_exluded++;
+                              }
+                            }
+                          }
+                          //check if the files of the component + those that have a different name or have hidden folders is the same as all the content, leaving only the possibility in case of folders not hidden
+                          $num = $num - ($num_check + $element_exluded);
+                          // if ( $num === ($num_check + $element_exluded) ){
+                          //   $num = 0;
+                          // }
+                        }
+
                       }
                       //in this block check check if there is the file with the extension 'js' otherwise take the first from the list and if it is php then let's say that we are in the html
                       if ( count($arr) > 0 ){
@@ -266,11 +276,11 @@ if ( !empty($model->data['repository']) &&
                   }
                   //case component o folder who contain other component
                   else if ( !empty($component) && !empty($is_vue) ){
-                    $icon =  "fab fa-vuejs";
+                    $icon =  "nf nf-mdi-vuejs";
                   }
                   //case folder
                   else {
-                    $icon =  "fas fa-folder";
+                    $icon =  "nf nf-fa-folder";
                   }
                   //object return of a single node
 
@@ -364,6 +374,8 @@ if ( !empty($model->data['repository']) &&
             $type= 'components';
             $t['bcolor'] = '#44b782';
           }
+
+
           $get($path_complete, $t['bcolor'], $t['url'], $type);
 
           // if ( !empty($tree_popup) ){
@@ -380,6 +392,7 @@ if ( !empty($model->data['repository']) &&
     }
   }//case root repository  with alias bbn-project and contain types
   else if ( !empty($rep_cfg['types']) && !empty($is_project) && empty($model->data['type']) ){
+
     $types = [];
    //browse the root elements and assign the type to each of them
     $todo = !empty($onlydirs) ? $dirs($path.$cur_path) : \bbn\file\dir::get_files($path . $cur_path, true);
@@ -406,13 +419,16 @@ if ( !empty($model->data['repository']) &&
   //else if we are in depth and we already know what types of elements we are opening and dealing with in the tree of the ide
   else if( !empty($model->data['type']) ){
 
+
+
     if ( $model->data['type'] === 'lib' ){
       // lib
       $get($path . $cur_path, $rep_cfg['bcolor'], false, $type);
     }
     else{
       //this function re-sends us the tabs since the repository that we are dealing with has the types and does not have direct access to corispective tabs
-      $tabs = $get_tabs_of_type($model->data['type']);
+      //$tabs = $get_tabs_of_type($model->data['type']);
+      $tabs = $model->inc->ide->tabs_of_type_project($type);
       if( !empty($tabs) ){
         foreach ( $tabs as $i => $t ){
           if ( ($t['url'] !== '_ctrl') &&
@@ -437,7 +453,6 @@ if ( !empty($model->data['repository']) &&
     }
   }
   if ( ksort($folders, SORT_STRING | SORT_FLAG_CASE) && ksort($files, SORT_STRING | SORT_FLAG_CASE) ){
-    \bbn\x::log($folders, 'ideTest');
     //return merge of file and folder create in function get
     $tot = array_merge(array_values($folders), array_values($files));
     return $tot;

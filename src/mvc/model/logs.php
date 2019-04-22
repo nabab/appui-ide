@@ -29,7 +29,7 @@ if ( !empty($model->data['log']) ){
     $pid = 0;
 
   }
-  
+
   return ['content' => implode("\n", $output)];
 
 }

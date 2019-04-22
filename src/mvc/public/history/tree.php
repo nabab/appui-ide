@@ -12,7 +12,7 @@ if ( isset($ctrl->inc->ide, $ctrl->post['is_mvc']) && !empty($ctrl->post['path']
         array_push($res, [
           'text' => $val['text'],
           'numChildren' => $val['num_items'],
-          'icon' => $val['icon'],
+          //'icon' => $val['icon'],
           'path' => $ctrl->post['path']."/".$val['text'],
           'is_mvc' => $ctrl->post['is_mvc']
         ]);

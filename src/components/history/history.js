@@ -20,7 +20,7 @@
       //method map for component tree
       transform(a){
         return $.extend(a, {
-          text: "name_file" in a ? a.text + ' &nbsp; <span class="w3-badge w3-small w3-light-grey">' + a.numChildren + '</span>' : a.text,
+          text: "name_file" in a ? a.text + ' &nbsp; <span class="bbn-badge bbn-s bbn-bg-lightgrey">' + a.numChildren + '</span>' : a.text,
           num: a.numChildren || 0,
           type: "name_file" in a ? "" : a.text
         });
@@ -66,8 +66,8 @@
         this.source.repositories[this.source.repository].path &&
         (this.source.path !== undefined) &&
         this.source.filename ){
-        this.url = this.source.repositories[this.source.repository].bbn_path + '/' +
-          this.source.repositories[this.source.repository].path +
+        this.url = this.source.repositories[this.source.repository].bbn_path + '/' + (
+          this.source.repositories[this.source.repository].path  === '/' ? '' : this.source.repositories[this.source.repository].path  ) +
           (this.source.path ? this.source.path + '/' : '') +
           this.source.filename + '/__end__';
       }

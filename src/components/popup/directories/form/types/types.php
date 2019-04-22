@@ -61,15 +61,15 @@
       ></bbn-dropdown>
       <bbn-button v-if="listExtensions.length > 0"
                   @click="editExtension"
-                  icon="fas fa-edit"
+                  icon="nf nf-fa-edit"
       ><?=_('Edit Extension')?></bbn-button>
       <bbn-button v-if="(listTabs.length > 0 && isTabs)|| isExts"
                   @click="createExtension"
-                  icon="fas fa-plus"
+                  icon="nf nf-fa-plus"
       ><?=_('Add Extension')?></bbn-button>
       <bbn-button v-if="listExtensions.length > 0"
                   @click="deleteExtension"
-                  icon="fas fa-trash"
+                  icon="nf nf-fa-trash"
       ><?=_('Delete Extension')?></bbn-button>
     </div>
   </div>

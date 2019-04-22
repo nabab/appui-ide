@@ -6,6 +6,6 @@ if ( isset($ctrl->post['type']) ){
   );
 }
 else{
-  $ctrl->obj->icon = 'fas fa-user-secret';
+  $ctrl->obj->icon = 'nf nf-fa-user_secret';
   $ctrl->combo('Infos Session', ['root' => APPUI_IDE_ROOT]);
 }

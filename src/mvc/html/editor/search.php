@@ -12,7 +12,7 @@
         <div v-if="source.isProject">
           <span>
             <strong>
-              <i class="fas fa-cogs"></i>
+              <i class="nf nf-fa-cogs"></i>
               <?=_('Type')?>
             </strong>
             &nbsp;
@@ -55,7 +55,7 @@
           </span>
           <span v-else>
             <strong>
-              <i class="fab fa-vuejs"></i>
+              <i class="nf nf-fa-vuejs"></i>
               <?=_('Component:')?>
             </strong>
             &nbsp;

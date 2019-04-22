@@ -10,15 +10,16 @@
       return {
         new_name: this.source.data.name,
         new_ext: '',
-        new_path: this.source.data.dir === "" ? "./" : this.source.data.dir,
+        new_path: this.source.data.dir === "" ? "./" :
+         (this.source.isMVC && this.source.data.tab.length ? this.source.data.tab+'/'+this.source.data.dir : this.source.data.dir),
         //pathTree: false
       }
     },
     methods: {
       onSuccess(){
-        //const tab = bbn.vue.closest(this, ".bbns-tab");
+        //const tab = this.closest("bbn-container");
         if ( this.new_path === './' ){
-          appui.ide.$refs.filesList.reload();
+          appui.ide.getRef('filesList').reload();
         }
         else{
           if ( this.source.parent ){
@@ -42,7 +43,7 @@
       },
 
       selectDir(){
-        bbn.vue.closest(this, ".bbns-tab").$refs.popup[0].open({
+        this.closest("bbn-container").getRef('popup').open({
           width: 300,
           height: 400,
           title: bbn._('Path'),
@@ -51,7 +52,8 @@
             operation: 'copy',
             isComponent: this.source.isComponent,
             isMvc: this.source.isMVC,
-            rep: this.source.repository
+            rep: this.source.repository,
+            data: this.source.data
           })
         });
       }/*,

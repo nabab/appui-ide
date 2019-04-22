@@ -12,7 +12,7 @@
         }, (d) => {
           if ( d.success ){
             appui.success('Translation saved');
-            this.$refs.table.updateData();
+            this.getRef('table').updateData();
           }
           else{
             appui.error('An error occurred while saving translation');
@@ -59,10 +59,10 @@
         methods: {
           hide_col(val){
             if ( val ){
-              let idx = bbn.fn.search(this.i18n.$refs.table.cols, 'field', val);
+              let idx = bbn.fn.search(this.i18n.getRef('table').cols, 'field', val);
               if ( idx > -1 ){
-                this.i18n.$refs.table.cols[idx].hidden = !this.i18n.$refs.table.cols[idx].hidden;
-                this.i18n.$refs.table.$forceUpdate();
+                this.i18n.getRef('table').cols[idx].hidden = !this.i18n.getRef('table').cols[idx].hidden;
+                this.i18n.getRef('table').$forceUpdate();
               }
             }
           }

@@ -9,40 +9,38 @@
           ref="form"
           :buttons="btns"
 >
-
   <div class="bbn-grid-fields bbn-l bbn-padded">
     <label v-if="source.is_file"
-           class="bbn-b bbn-padded"
+           class="bbn-b"
     ><?=_("Delete File")?>:</label>
     <label v-else-if="source.data.is_vue"
-           class="bbn-b bbn-padded"
+           class="bbn-b"
     ><?=_("Delete Component")?>:</label>
     <label v-else
-           class="bbn-b bbn-padded"
+           class="bbn-b"
     ><?=_("Delete folder")?>:</label>
-    <bbn-input class="bbn-flex-fill bbn-padded"
-               v-text="source.name"
-    ></bbn-input>
-  </div>
-  <div class="bbn-padded bbn-w-100 bbn-flex-width bbn-v-middle"
-       v-if="showPannel"
-  >
-    <div class="bbn-w-50 bbn-l bbn-vmiddle">
+    <span class="bbn-vmiddle" v-text="source.name"></span>
+    <div  v-if="showPannel"
+          class="bbn-vmiddle"
+    >
       <span v-if="source.is_mvc"
-             class="bbn-b bbn-padded"
-     ><?=_("Delete all MVC")?>:</span>
+               class="bbn-b"
+      ><?=_("Delete all MVC")?>:</span>
       <span v-else-if="source.data.is_vue"
-             class="bbn-b bbn-padded"
+             class="bbn-b"
       ><?=_("Delete all component")?>:</span>
       <span v-else
-             class="bbn-b bbn-padded"
+             class="bbn-b"
       ><?=_("Delete all folder")?>:</span>
       <bbn-checkbox v-model= "formData.all"
                     :value="true"
                     :novalue="false"
+                    style="margin-left: 6px"
       ></bbn-checkbox>
     </div>
-    <div class="bbn-flex-fill bbn-l bbn-vmiddle">
+    <div v-if="showPannel"
+        class="bbn-vmiddle"
+    >
       <bbn-dropdown :source="list"
                     v-model="formData.section"
                     style="width: 120px"

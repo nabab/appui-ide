@@ -10,7 +10,7 @@
             root: this.source.root,
             rootTab: this.source.root + '/repositories'
           },
-          icon: 'fas fa-cogs',
+          icon: 'nf nf-fa-cogs',
           color: 'red',
           title: bbn._('Repositories')
         },{
@@ -20,7 +20,7 @@
             root: this.source.root,
             rootTab: this.source.root + '/type'
           },
-          icon: 'fas fa-bars',
+          icon: 'nf nf-fa-bars',
           color: 'green',
           title: bbn._('Type')
         }]

@@ -5,7 +5,7 @@
              :sortable="true"
              :toolbar="[{
                text: '<?=_('Add Type')?>',
-               icon: 'fas fa-plus',
+               icon: 'nf nf-fa-plus',
                command: addType
              }]"
              :showable="false"
@@ -50,16 +50,16 @@
                    text: '<?=_("Edit")?>',
                    command: editType,
                    notext: true,
-                   icon: 'fas fa-pencil-alt'
+                   icon: 'nf nf-oct-pencil'
                  },{
                    text: '<?=_("Copy")?>',
                    command: copyType,
                    notext: true,
-                   icon: 'fas fa-copy'
+                   icon: 'nf nf-fa-copy'
                  },{
                    text: '<?=_("Delete")?>',
                    command: deleteType,
-                   icon: 'fas fa-trash',
+                   icon: 'nf nf-fa-trash',
                    notext: true
                  }]"
     ></bbns-column>

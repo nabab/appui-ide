@@ -8,8 +8,7 @@ if ( isset($model->inc->ide) ){
     // else{
     //   $data = $model->data;
     // }
-
-    if ( !empty($model->data['src']) && !empty($model->inc->ide->delete($model->data['src'])) ){
+    if ( !empty($model->data['src']) && !empty($model->inc->ide->delete($model->data['src'])) ){      
       return ['success' => true];
     }
     else {
@@ -35,11 +34,12 @@ if ( isset($model->inc->ide) ){
     }//case mvc files
     else if ( !empty($model->data['src']['is_file']) &&  !empty($model->data['ext']) ){
       $path .= $model->data['ext'];
-    
+
       if ( is_file($path) ){
         if ( !empty(\bbn\file\dir::delete($path)) ){
-          if ( $model-data['section'] === 'public/' ){
-            if ( $model->inc->ide->delete_perm($path) && $model->inc->ide->remove_file_pref($path) ){
+          if ( $model->data['section'] === 'public/' ){
+            if ( $model->inc->ide->delete_perm($path) ){
+              $model->inc->ide->remove_file_pref($path);
               return ['success' => true];
             }
             else{
@@ -53,7 +53,7 @@ if ( isset($model->inc->ide) ){
     else if ( empty($model->data['src']['is_file']) ){
       if ( is_dir($path) ){
         if ( !empty(\bbn\file\dir::delete($path)) ){
-          if ( $model-data['section'] === 'public/' ){
+          if ( $model->data['section'] === 'public/' ){
             if ( $model->inc->ide->delete_perm($path) ){
               return ['success' => true];
             }

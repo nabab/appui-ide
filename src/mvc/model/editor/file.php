@@ -18,36 +18,41 @@ if ( !empty($model->data['url']) && isset($model->inc->ide) ){
       $route = $i;
     }
   }
-
   $path = str_replace($rep, '' , $url);
-
   $path = substr($path, 0, strpos($path, '/_end_'));
-
-
-
   $repos = $model->inc->ide->repositories();
   $repository = $repos[$rep];
   $f = $model->inc->ide->decipher_path($model->data['url']);
-
-
-  if ( isset($repository['types']) ){
-    $tabs=[];
-    foreach( $repository['types'] as $type ){
-      //temporaney
-      $typeRep = $type['url'] = $type['url'] === 'lib' ? 'cls' : $type['url'];
-      if ( $ptype = $model->inc->options->option($model->inc->options->from_code($typeRep,'PTYPES', 'ide', BBN_APPUI)) ){
-
-        if ( !empty($ptype['tabs']) ){
-          $tabs[$type['url']][] = $ptype['tabs'];
-        }
-        else if ( ($type['url'] === 'cls') && empty($ptype['tabs']) && !empty($ptype['extensions']) ){
-          $tabs['lib']['extensions'] = $ptype['extensions'];
+//  die(\bbn\x::dump($file, $f));
+  if ( is_array($repository) &&
+    !empty($model->inc->ide->is_project($model->data['url'])) ||
+    !empty($repository['project'])
+  ){
+    $tabs = [];
+    $styleTabType = [];
+    $project = $model->inc->ide->get_types('bbn-project');
+    if ( is_array($project) && (count($project) > 0) ){
+      foreach( $project['types'] as $type ){
+        $styleTabType[$type['url']] = [
+          'bcolor' => $type['bcolor'],
+          'fcolor' => $type['fcolor'],
+          'icon' => $type['icon']
+        ];
+        //temporaney
+        $typeRep = $type['url'] = $type['url'] === 'lib' ? 'cls' : $type['url'];
+        // if ( $ptype = $model->inc->options->option($model->inc->options->from_code($typeRep,'PTYPES', 'ide', BBN_APPUI)) ){
+        if ( $ptype = $model->inc->ide->get_types($typeRep) ){
+          if ( !empty($ptype['tabs']) ){
+            $tabs[$type['url']][] = $ptype['tabs'];
+          }
+          else if ( ($type['url'] === 'cls') && empty($ptype['tabs']) && !empty($ptype['extensions']) ){
+            $tabs['lib']['extensions'] = $ptype['extensions'];
+          }
         }
       }
+      $repository['tabs'] = $tabs;
     }
-    $repository['tabs'] = $tabs;
   }
-
   $arr = explode("/",$model->data['url']);
   if ( is_array($arr) ){
     array_pop($arr);
@@ -69,11 +74,13 @@ if ( !empty($model->data['url']) && isset($model->inc->ide) ){
     'url' => $rep.$path.'/_end_',
     'route' => $route,
     'settings' => !empty($ctrl_file) ? is_file($ctrl_file) : false,
-    'ext' => \bbn\str::file_ext($file)
+    'ext' => \bbn\str::file_ext($file),
+    'styleTab' => $styleTabType
   ];
 
   if ( $res['isComponent'] && !empty($repository['types']) ){
-    $res['tabs'] = $model->inc->options->option($model->inc->options->from_code('components','PTYPES', 'ide', BBN_APPUI))['tabs'];
+    // $res['tabs'] = $model->inc->options->option($model->inc->options->from_code('components','PTYPES', 'ide', BBN_APPUI))['tabs'];
+    $res['tabs'] = $model->inc->ide->tabs_of_type_project('components');
     $title = explode("/", $path);
     if ( is_array($title) ){
       array_pop($title);
@@ -81,7 +88,8 @@ if ( !empty($model->data['url']) && isset($model->inc->ide) ){
     }
   }
   if ( $res['isMVC'] && !empty($repository['types']) ){
-    $res['tabs'] = $model->inc->options->option($model->inc->options->from_code('mvc','PTYPES', 'ide', BBN_APPUI))['tabs'];
+    //$res['tabs'] = $model->inc->options->option($model->inc->options->from_code('mvc','PTYPES', 'ide', BBN_APPUI))['tabs'];
+    $res['tabs'] = $model->inc->ide->tabs_of_type_project('mvc');
   }
   // we check if some tab of the components or mvc do not contain any files
   if ( $res['isMVC'] === true ){

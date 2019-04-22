@@ -1,6 +1,19 @@
 <?php
+
 if ( isset($model->data['path']) && (strpos($model->data['path'], '../') === false) ){
-  if ( isset($model->data['host'], $model->data['user'], $model->data['pass']) ){
+  if ( 0 ){
+    
+    $fs = new \bbn\file\system('ssh', [
+      'host' => '62.210.93.6',
+      'user' => 'nabab',
+      'private' => BBN_DATA_PATH.'test/cert10_rsa',
+      'public' => BBN_DATA_PATH.'test/cert10_rsa.pub'
+    ]);
+    if ( !empty($model->data['path']) ){
+      $fs->cd($fs->get_current().'/'.$model->data['path']);
+    }
+  }
+  else if ( isset($model->data['host'], $model->data['user'], $model->data['pass']) ){
     $fs = new \bbn\file\system('ftp', [
       'host' => $model->data['host'],
       'user' => $model->data['user'],
@@ -15,12 +28,10 @@ if ( isset($model->data['path']) && (strpos($model->data['path'], '../') === fal
     }
   }
   else{
-    $fs = new \bbn\file\system();
+    $fs = new \bbn\file\system2();
     $fs->cd(BBN_DATA_PATH.$model->data['path']);
-    //die(var_dump('fdfda',$fs->get_current(), getcwd())); 
   }
   $finder = new \appui\finder($fs);
- // die(var_dump('dfa',$finder->get_data()));
   return [
     'path' => $model->data['path'],
     'current' => $fs->get_current(),

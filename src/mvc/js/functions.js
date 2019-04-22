@@ -1055,15 +1055,15 @@ bbn.ide = {
       }, function(d){
         if ( d.data && d.data.success ){
           // Notify
-          $bt.after('<i class="fas fa-thumbs-up" style="margin-left: 5px; color: green"></i>');
+          $bt.after('<i class="nf nf-fa-thumbs_up" style="margin-left: 5px; color: green"></i>');
         }
         else {
           // Notify
-          $bt.after('<i class="fas fa-thumbs-down" style="margin-left: 5px; color: red"></i>');
+          $bt.after('<i class="nf nf-fa-thumbs_down" style="margin-left: 5px; color: red"></i>');
         }
         // Remove notify
         setTimeout(function(){
-          $("i.fa-thumbs-up, i.fa-thumbs-down", $cont).remove();
+          $("i.fa-thumbs_up, i.fa-thumbs_down", $cont).remove();
         }, 3000);
       });
     }
@@ -1084,15 +1084,15 @@ bbn.ide = {
       }, function(d){
         if ( d.data && d.data.success ){
           // Notify
-          $cont.append('<i class="fas fa-thumbs-up" style="margin-left: 5px; color: green"></i>');
+          $cont.append('<i class="nf nf-fa-thumbs_up" style="margin-left: 5px; color: green"></i>');
         }
         else {
           // Notify
-          $cont.append('<i class="fas fa-thumbs-down" style="margin-left: 5px; color: red"></i>');
+          $cont.append('<i class="nf nf-fa-thumbs_down" style="margin-left: 5px; color: red"></i>');
         }
         // Remove notify
         setTimeout(function(){
-          $("i.fa-thumbs-up, i.fa-thumbs-down", $cont).remove();
+          $("i.fa-thumbs_up, i.fa-thumbs_down", $cont).remove();
         }, 3000);
       });
     }
@@ -1115,7 +1115,7 @@ bbn.ide = {
       }, function(d){
         if ( d.data && d.data.success ){
           // Notify
-          $cont.append('<i class="fas fa-thumbs-up" style="margin-left: 5px; color: green"></i>');
+          $cont.append('<i class="nf nf-fa-thumbs_up" style="margin-left: 5px; color: green"></i>');
           // Insert the new item to list
           ul.append(
             '<div style="margin-bottom: 5px">' +
@@ -1123,8 +1123,8 @@ bbn.ide = {
               '<input class="k-textbox" readonly style="margin: 0 10px" value="' + code + '"  maxlength="255">' +
               '<label>Title/Description</label>' +
               '<input class="k-textbox" maxlength="255" style="width:400px; margin: 0 10px" value="' + text + '">' +
-              '<button class="k-button" onclick="bbn.ide.saveChiPermission(this)" style="margin-right: 5px"><i class="fas fa-save"></i></button>' +
-              '<button class="k-button" onclick="bbn.ide.removeChiPermission(this)"><i class="fas fa-trash"></i></button>' +
+              '<button class="k-button" onclick="bbn.ide.saveChiPermission(this)" style="margin-right: 5px"><i class="nf nf-fa-save"></i></button>' +
+              '<button class="k-button" onclick="bbn.ide.removeChiPermission(this)"><i class="nf nf-fa-trash"></i></button>' +
             '</div>'
           );
           // Clear inserted fields
@@ -1133,11 +1133,11 @@ bbn.ide = {
         }
         else {
           // Notify
-          $cont.append('<i class="fas fa-thumbs-down" style="margin-left: 5px; color: red"></i>');
+          $cont.append('<i class="nf nf-fa-thumbs_down" style="margin-left: 5px; color: red"></i>');
         }
         // Remove notify
         setTimeout(function(){
-          $("i.fa-thumbs-up, i.fa-thumbs-down", $cont).remove();
+          $("i.fa-thumbs_up, i.fa-thumbs_down", $cont).remove();
         }, 3000);
       });
     }
@@ -1408,7 +1408,7 @@ bbn.ide = {
               r = '';
             for (var i = 0; i < f.length; i++) {
               r += '<div style="padding: 2px 5px; background-color: ' + ( f[i].bcolor ? f[i].bcolor : e.bcolor ) + '; color: ' + ( f[i].fcolor ? f[i].fcolor : e.fcolor ) + '">' +
-                (f[i].default ? '<i class="fas fa-star"></i> ' : '') + (f[i].title ? f[i].title + ' : ' : '') + f[i].ext + ' : ' + f[i].path + '</div>';
+                (f[i].default ? '<i class="nf nf-fa-star"></i> ' : '') + (f[i].title ? f[i].title + ' : ' : '') + f[i].ext + ' : ' + f[i].path + '</div>';
             }
             return r;
           }
@@ -1563,7 +1563,7 @@ bbn.ide = {
                 style: "text-align: center"
               },
               template: function (e) {
-                return e.default ? '<i class="fas fa-check"></i>' : '';
+                return e.default ? '<i class="nf nf-fa-check"></i>' : '';
               }
             }, {
               title: "BG",

@@ -3,16 +3,8 @@
     props: ['source'],
     data(){
       return $.extend({
-        ide: bbn.vue.closest(this, '.bbn-tabnav').$parent.$data,
+        ide: null,
         originalValue: this.source.value,
-        imessage: {
-          title: '',
-          content: '',
-          start: null,
-          end: null,
-          id_option: this.source.permissions ? this.source.permissions.id : null
-        },
-        today: moment().format('YYYY-MM-DD HH:mm:ss'),
         initialState: {
           marks: this.source.marks,
           selections: this.source.selections,
@@ -23,11 +15,10 @@
     },
     computed: {
       isMVC(){
-      //  return (!!appui.ide.isComponent || this.rep.alias_code === 'mvc') || !!this.ide.isMVC || (bbn.vue.closest(this, 'appui-ide-mvc') !== false);
-       return (appui.ide.isComponent === false && this.rep.alias_code === 'mvc') || (bbn.vue.closest(this, 'appui-ide-mvc') !== false);
+       return ((appui.ide.isComponent === false) && (this.rep.alias_code === 'mvc')) || (bbn.vue.closest(this, 'appui-ide-mvc') !== false);
       },
       isComponent(){
-        return (appui.ide.isComponent === true || this.rep.alias_code === "components") || (bbn.vue.closest(this, 'appui-ide-components') !== false);
+        return ((appui.ide.isComponent === true) || (this.rep.alias_code === "components")) || (bbn.vue.closest(this, 'appui-ide-component') !== false);
       },
       isProject(){
         return !!appui.ide.isProject;
@@ -37,9 +28,9 @@
       },
       rep(){
         if ( appui.ide.repositories && appui.ide.currentRep ){
-          return this.ide.repositories[appui.ide.currentRep]
+          return this.ide.repositories[appui.ide.currentRep];
         }
-        return false
+        return false;
       },
       isChanged(){
         return this.originalValue !== this.value;
@@ -47,13 +38,7 @@
       path(){
         let path = this.rep.bbn_path + '/' + (this.rep.path === '/' ? '' : this.rep.path);
         if ( this.isProject ){
-          if ( this.isMVC ){
-            path = this.source.id.slice();
-            path = path.split('/');
-            path.shift();
-            path = path.join('/');
-          }
-          else if ( this.isComponent){
+          if ( this.isMVC || this.isComponent || this.isFile ){
             path = this.source.id.slice();
             path = path.split('/');
             path.shift();
@@ -70,35 +55,35 @@
       },
       //
       filePath(){
-        let filePath = '';
-        if ( this.isMVC && this.rep && this.rep.tabs){
-          let idx = bbn.fn.search(this.rep.tabs, "url", this.tab);
-          if ( this.rep.tabs[idx] && this.rep.tabs[idx].fixed ){
-            const bits = this.ide.path.split('/');
-            if ( $.isNumeric(this.ssctrl) && bits.length ){
-              $.each(bits, (i, v) => {
-                if ( i < this.ssctrl ){
-                  filePath += v;
-                }
-                if ( bits[i+1] && ( (i + 1) < this.ssctrl ) ){
-                  filePath += '/';
-                }
-              });
-            }
-            if( filePath.length ){
-              return filePath + '/'
-            }
-            else{
-              return this.path;
-            }
+        let paths = this.path.split('/');
+        paths.pop();
+        paths = paths.join("/") ;
+        if ( paths.length ){
+          return  paths
+        }
+        return this.path;
+      },
+      typeProject(){
+        if ( this.isProject ){
+          if ( this.isMVC ){
+            return 'mvc';
+          }
+          else if ( this.isComponent ){
+            return 'components';
+          }
+          else{
+            return 'lib';
           }
         }
-        return this.path
+        return false;
       },
       fixed(){
-        let idx = bbn.fn.search(this.rep.tabs, "url", this.tab);
-        if ( this.isMVC &&  this.rep && this.rep.tabs && this.rep.tabs[idx] && this.rep.tabs[idx].fixed ){
-          return this.ide.repositories[this.ide.repository].tabs[idx].fixed;
+        if ( (this.rep.tabs !== undefined) && (this.typeProject === false) ){
+          let rep = this.isProject ? this.getReposiotryProject() : this.rep,
+            idx = bbn.fn.search(rep.tabs, "url", this.tab);
+          if ( this.isMVC && rep && rep.tabs && rep.tabs[idx] && rep.tabs[idx].fixed ){
+            return this.ide.repositories[this.ide.repository].tabs[idx].fixed;
+          }
         }
         return false
       },
@@ -118,36 +103,66 @@
           }
         }
         if ( this.ide.filename && this.source.extension && this.path.length ){
-          //return this.path + (this.ide.path.length ? this.ide.path + '/' : '') + this.ide.filename + '.' + this.source.extension;
          return  this.source.id
         }
         return false;
-      },
-      settingFormPermissions(){
-        return this.permissions !== undefined
-      },
-      saveButtonText(){
-        return this.imessage.id ? bbn._('Save') : bbn._('Add');
       }
+    },
+    beforeMount(){
+      this.ide = this.closest('.appui-ide-source-holder').$data;
     },
     watch: {
       isChanged(isChanged){
-        let tabNav = bbn.vue.closest(this, 'bbns-tab').tabNav;
+        let tabNav = this.closest('bbn-tabnav');
         tabNav.tabs[tabNav.selected].isUnsaved = isChanged;
       }
     },
     methods: {
+      getReposiotryProject(){
+        if ( appui.ide.repositories && appui.ide.currentRep ){
+          let repository = appui.ide.repositories[appui.ide.currentRep];
+          if ( this.typeProject ){
+            repository = appui.ide.repositoryProject( this.typeProject );
+          }
+          return repository;
+        }
+        return false;
+      },
       save(cm){
-        const editor = this.$refs.editor,
+        const editor = this.getRef('editor'),
               state = editor.getState(),
               tabContainer = this.$parent;
-        if ( (this.isChanged && state && state.selections && state.marks) || (this.initialState !== state) && (state !== false) ){
-          bbn.fn.post(this.ide.root + "actions/save", {
-            repository: this.ide.repository,
+        if ( (this.isChanged && state && state.selections && state.marks) ||
+         (this.initialState !== state) &&
+         (state !== false)
+        ){
+
+          let pathHistory = this.filePath;
+
+          if ( this.isProject && this.isMVC ){
+            pathHistory = "";
+            let arr = this.filePath.split('/'),
+                pos = false;
+            bbn.fn.each(arr, (val, i) =>{
+              if ( val === 'mvc' ){
+                pos = i+1;
+                return false;
+              }
+            });
+
+            if ( pos ){
+              arr.splice(pos, 1);
+              pathHistory = arr.join('/');
+            }
+          }
+
+          let obj = {
+            repository: this.isProject ? this.getReposiotryProject() : this.rep,
+            typeProject: this.typeProject,
             tab: this.tab,
             ssctrl: this.ssctrl,
             path: this.fixed ? this.filePath : this.ide.path,
-            filename: this.fixed || this.ide.filename,
+            filename: this.fixed || this.filename,
             extension: this.extension,
             full_path: this.id,
             selections: state.selections,
@@ -155,31 +170,44 @@
             line: state.line,
             char: state.char,
             code: editor.value,
-          }, (d) => {
+            filePath : pathHistory
+          };
+          bbn.fn.post(this.ide.root + "actions/save", obj , (d) => {
+            let tab = this.closest('bbn-container'),
+                parent = {},
+                tabnav = bbn.vue.closest(this, 'bbn-tabnav'),
+                parentTabNav = {};
+
+            if ( this.isComponent === true ){
+              parent = this.closest('appui-ide-components');
+            }
+            else if ( this.isMVC === true ){
+              parent = this.closest('appui-ide-mvc');
+            }
+            else if ( (!this.typeProject || (this.typeProject === 'lib')) &&
+              this.isFile
+            ){
+              parent = this.closest('appui-ide-file');
+            }
+
+            parentTabNav = parent.closest('bbn-tabnav');
+
             if ( d.data && d.data.success ) {
               //remove icon plus why there is file in tab
-              //if ( this.isProject ){
-                let tab = bbn.vue.closest(this, 'bbns-tab'),
-                parent = {},
-                tabnav = bbn.vue.closest(this, 'bbn-tabnav');
-
-                if ( this.isComponent === true ){
-                  parent = bbn.vue.closest(this, 'appui-ide-components');
-                }
-                else if ( this.isMVC === true ){
-                  parent = bbn.vue.closest(this, 'appui-ide-mvc');
-                }
                 if ( !this.isFile ){
                   tabnav.$set(tabnav.tabs[tab['idx']], 'title', '');
-                  parent.emptyTabs.splice(parent.emptyTabs.lastIndexOf(tab['url']), 1);
+                  if ( (parent.emptyTabs !== undefined) &&
+                    (parent.emptyTabs.lastIndexOf(tab['url']) > -1)
+                  ){
+                    parent.emptyTabs.splice(parent.emptyTabs.lastIndexOf(tab['url']), 1);
+                    parentTabNav.reload(parentTabNav.selected);
+                  }
                 }
-              //}
-
               this.originalValue = this.value;
               appui.success(bbn._("File saved!"));
               if ( this.isMVC ){
                 if ( tabContainer.source.tab === "php" ){
-                  let tabs = bbn.vue.closest(this, 'appui-ide-mvc').$refs.tabstrip.tabs;
+                  let tabs = bbn.vue.closest(this, 'appui-ide-mvc').getRef('tabstrip').tabs;
                   for( let tab of tabs ){
                     if ( tab.title === "Settings" && (tab.disabled === true) ){
                       tab.disabled = false;
@@ -191,22 +219,10 @@
             }
             //Delete the file if code is empty and if it isn't a super controller
             else if ( d.data && d.data.deleted ){
-              //add icon plus why no file in tab
-              //if ( this.isMVC || this.isProject ){
-                let tab = bbn.vue.closest(this, 'bbns-tab'),
-                    parent = {},
-                    tabnav = bbn.vue.closest(this, 'bbn-tabnav');
-
-                if ( this.isComponent === true ){
-                  parent = bbn.vue.closest(this, 'appui-ide-components');
-                }
-                else if ( this.isMVC === true ){
-                  parent = bbn.vue.closest(this, 'appui-ide-mvc');
-                }
-                tabnav.$set(tabnav.tabs[tab['idx']], 'title', `<i class='zmdi zmdi-plus' style='color:black;'></i>`);
+              if ( parent.emptyTabs !== undefined ){
                 parent.emptyTabs.push(tab['url']);
-              //}
-
+                parentTabNav.reload(parentTabNav.selected);
+              }
               this.originalValue = this.value;
               appui.success(bbn._("File deleted!"));
             }
@@ -223,11 +239,11 @@
           if ( pathMVC.indexOf('mvc/') === 0 ){
             pathMVC = pathMVC.replace("mvc/","");
           }
-          bbn.fn.link(
-            (this.ide.route ? this.ide.route + '/' : '') +
-            (pathMVC === 'mvc' ? '' : pathMVC) + '/' + this.ide.filename,
-             true
-          );
+          let link = (this.ide.route ? this.ide.route + '/' : '') +
+          (pathMVC === 'mvc' ? '' : pathMVC + '/') +  this.ide.filename;
+
+          bbn.fn.link(link, true);
+
           return true;
         }
         if ( typeof(this.mode) === 'string' ){
@@ -243,7 +259,7 @@
                   url: 'output' + idx,
                   selected: true
                 });
-                tn.selected = tn.getIndex('output' + idx);
+                tn.selected = tn.router.getIndex('output' + idx);
               });
               break;
             case "js":
@@ -255,7 +271,7 @@
                 appui.alert("There is an XML error in this SVG");
               }
               else {
-                bbn.vue.closest(this, ".bbns-tab").popup($("<div/>").append(document.importNode(oDocument.documentElement, true)).html(), "Problem with SVG");
+                this.closest("bbn-container").popup($("<div/>").append(document.importNode(oDocument.documentElement, true)).html(), "Problem with SVG");
               }
               break;
             default:
@@ -263,98 +279,8 @@
           }
         }
       },
-      addChildPermission(){
-        const obj = {
-                id: this.permissions.id,
-                code: this.$refs.perm_child_code.$refs.element.value,
-                text: this.$refs.perm_child_text.$refs.element.value
-              };
-
-        if ( obj.id && obj.code.length && obj.text.length ){
-          bbn.fn.post(this.ide.root + 'permissions/add', obj, (d) => {
-            if ( d.data && d.data.success ){
-              // Notify
-              //$cont.append('<i class="fas fa-thumbs-up" style="margin-left: 5px; color: green"></i>');
-              // Insert the new item to list
-              delete obj.id;
-              this.permissions.children.push(obj);
-              // Clear fields
-              this.$refs.perm_child_code.$refs.element.value = '';
-              this.$refs.perm_child_text.$refs.element.value = '';
-            }
-            else {
-              // Notify
-              //$cont.append('<i class="fas fa-thumbs-down" style="margin-left: 5px; color: red"></i>');
-            }
-            // Remove notify
-            /*setTimeout(function(){
-              $("i.fa-thumbs-up, i.fa-thumbs-down", $cont).remove();
-            }, 3000);*/
-          });
-        }
-      },
-      savePermission(){
-        const obj = {
-                id: this.permissions.id,
-                code: this.permissions.code,
-                text: this.permissions.text,
-                help: this.permissions.help || ''
-              };
-
-        if ( obj.id && obj.code.length && obj.text.length ){
-          bbn.fn.post(this.ide.root + 'permissions/save', obj, d => {
-            if ( d.data && d.data.success ){
-              appui.success(bbn._("Permission saved!"));
-            }
-            else {
-              appui.error(bbn._("Error!"));
-            }
-          });
-        }
-      },
-      saveChildPermission(e){
-        const inputs = $(e.target).closest('li').find('input'),
-              obj = {
-                id: this.permissions.id,
-                code: $(inputs[0]).val(),
-                text: $(inputs[1]).val()
-              };
-
-        if ( obj.id && obj.code.length && obj.text.length ){
-          bbn.fn.post(this.ide.root + 'permissions/save', obj, (d) => {
-            /*if ( d.data && d.data.success ){
-              // Notify
-              $cont.append('<i class="fas fa-thumbs-up" style="margin-left: 5px; color: green"></i>');
-            }
-            else {
-              // Notify
-              $cont.append('<i class="fas fa-thumbs-down" style="margin-left: 5px; color: red"></i>');
-            }
-            // Remove notify
-            setTimeout(function(){
-              $("i.fa-thumbs-up, i.fa-thumbs-down", $cont).remove();
-            }, 3000);*/
-          });
-        }
-      },
-      removeChildPermission(e){
-        const obj = {
-                id: this.permissions.id,
-                code: $($(e.target).closest('li').find('input')[0]).val()
-              };
-
-        if ( obj.id && obj.code.length ){
-          appui.confirm('Are you sure to remove this item?', () => {
-            bbn.fn.post(this.ide.root + 'permissions/delete', obj, (d) => {
-              if ( d.data && d.data.success ){
-                this.permissions.children.splice(bbn.fn.search(this.permissions.children, 'code', obj.code), 1);
-              }
-            });
-          });
-        }
-      },
       setState(){
-        const code = this.$refs.editor;
+        const code = this.getRef('editor');
         //case for serach a content
         if ( (appui.ide.search.link !== undefined)  && (appui.ide.cursorPosition.line > 0 || appui.ide.cursorPosition.ch > 0) ){
           code.widget.focus();
@@ -372,34 +298,6 @@
             code.loadState(this.initialState);
           });
         }
-      },
-      saveImessage(){
-        if ( this.imessage.title && this.imessage.content && this.imessage.id_option ){
-          bbn.vue.closest(this, 'bbns-tab').popup().confirm(bbn._('Are you sure you want save this internal message?'), () => {
-            bbn.fn.post(this.ide.root + 'actions/imessages/add', this.imessage, d => {
-              if ( d.success ){
-                this.source.imessages.push($.extend({}, this.imessage));
-                this.newImessage();
-                appui.success(bbn._('Saved'));
-              }
-            });
-          });
-        }
-      },
-      newImessage(){
-        this.imessage.title = '';
-        this.imessage.content = '';
-        this.imessage.start = null;
-        this.imessage.end = null;
-      },
-      editImessage(im){
-        this.imessage.title = im.title;
-        this.imessage.content = im.content;
-        this.imessage.start = im.start;
-        this.imessage.end = im.end;
-      },
-      changeStart(e){
-        bbn.fn.log('aaaa', e);
       }
     }
   }

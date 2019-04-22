@@ -14,22 +14,22 @@ class finder
 
   protected $fs;
 
-  public function __construct(\bbn\file\system $fs)
+  public function __construct(\bbn\file\system2 $fs)
   {
     $this->fs = $fs;
   }
-  public function get_info_dir()
+  public function get_info_dir($path = '')
   {
-    $info_dir = []; 
     $num_files = 0;
     $num_dirs = 0;
-    $files = array_filter($this->get_data(), function($a){
+    $files = array_filter($this->get_data($path), function($a){
       return $a['file'] === true;
     });
     if ( !empty($files) ){
       $num_files = count($files);
     };
-    $dirs = array_filter($this->get_data(),function($a){
+   
+    $dirs = array_filter($this->get_data($path), function($a){
       return $a['dir'] === true;
     });
     if ( !empty($dirs) ){
@@ -41,19 +41,20 @@ class finder
     ];
     return $info_dir;
   }
-  public function get_data()
+  public function get_data($path = '')
   {
-   // die(var_dump('here',$this->fs->get_files('.', true, true, null, '')));
-    $data = array_map(function($a){
-      return [
-        'icon' => $this->get_icon($a['file'] ? $a['path'] : 'dir'),
-        'text' => $a['path'],
-        'value' => $a['path'],
-        'dir' => $a['dir'],
-        'file' => $a['file']
-      ];
-    }, $this->fs->get_files('.', true, true, null, 't'));
-    return $data;
+    if ( $files = $this->fs->get_files( !empty($path) ? $path : '.', true, true, null, 't') ){
+      return array_map(function($a){
+        return [
+          'icon' => $this->get_icon($a['file'] ? $a['path'] : 'dir'),
+          'text' => !empty($a['path']) ? basename($a['path']) : $path,
+          'value' =>  !empty($a['path']) ? basename($a['path']) : $path,
+          'dir' => $a['dir'],
+          'file' => $a['file']
+        ];
+      }, $files);
+    }
+    return [];
   }
   public function is_img(string $ext)
   {
@@ -116,29 +117,30 @@ class finder
     ];
     return $info;  
   }
+  
   public function get_info($path, $ext)
   {
+    if ( $this->fs->get_mode() === 'nextcloud' ){
+      $path = $this->fs->get_real_path($path);
+    }
     $info = [];
     if ( $this->fs->exists($path) ){
-    $info['size'] = \bbn\str::say_size($this->fs->filesize($path));
-    $info['mtime'] = \bbn\date::format(filemtime($path));
-    $info['creation'] = \bbn\date::format(filectime($path));;
-    if ( !empty($ext) ){
-      if ( $this->is_img($ext) ){
-        $info['is_image'] = true;
-        $info['image'] = $this->get_image_infos($path);
+      $info['size'] = \bbn\str::say_size($this->fs->filesize($path));
+      $info['mtime'] = \bbn\date::format($this->fs->filemtime($path));
+      //$info['creation'] = \bbn\date::format(filectime($path));
+      if ( !empty($ext) ){
+        if ( $this->is_img($ext) ){
+          $info['is_image'] = true;
+          $info['image'] = $this->get_image_infos($path);
+         
+        }
+        else if ( empty($this->is_img($ext)) && ($this->is_readable($ext)) ){
+          $info['content'] = $this->fs->get_contents($path) ? $this->fs->get_contents($path) : 'Error in getting content';
+          $info['is_image'] = false;
+        } 
       }
-      /*else if ( empty($this->is_img($ext)) ){
-        $info['is_image'] = false;
-      } */
-      else if ( empty($this->is_img($ext)) && ($this->is_readable($ext)) ){
-        $info['content'] = $this->fs->get_contents($path) ? $this->fs->get_contents($path) : 'Error in getting content';
-        $info['is_image'] = false;
-      } 
     }
-  }
-  
-  return $info;
+    return $info;
   }
 
   public function get_icon(string $filename)
@@ -147,55 +149,55 @@ class finder
     if ( !empty($ext) ){
       switch ( $ext ){
         case 'dir':
-          return 'fas fa-folder bbn-yellow';
+          return 'nf nf-fa-folder bbn-yellow';
         case 'xlsx':
         case 'csv':
         case 'ods':
         case 'xsl':
         case 'xlt':
         case 'xltm':
-          return 'fas fa-file-excel';
+          return 'nf nf-fa-file_excel';
         case 'doc':
         case 'dot':
         case 'wbk':
         case 'docx':
         case 'dotx':
         case 'docb':
-          return 'fas fa-file-word';
+          return 'nf nf-fa-file_word';
         case 'html':
         case 'xml':
-          return 'fas fa-file-code';
+          return 'nf nf-fa-file_code';
         case 'js':
-          return 'fab fa-js';
+          return 'nf nf-fa-js';
         case 'php':
-          return 'fab fa-php';
+          return 'nf nf-fa-php';
           break;
         case 'css':
         case 'json':
         case 'less':
           return 'icon-css';
         case 'zip':
-          return 'fas fa-file-archive';
+          return 'nf nf-fa-file_archive';
         case 'pdf':
-          return 'far fa-file-pdf';
+          return 'nf nf-fa-file_pdf';
         case 'txt':
         case 'log':
           return 'zmdi zmdi-file-text';
         case 'cert':
         case 'cer':
-          return 'fas fa-certificate';
+          return 'nf nf-fa-certificate';
         case 'gitignore':
           return 'zmdi zmdi-github-alt';
         case 'lock':
-          return 'fas fa-lock';
+          return 'nf nf-fa-lock';
         case 'gif':
         case 'svg':
         case 'png':
         case 'jpeg':
         case 'jpg':
-          return 'fas fa-image';
+          return 'nf nf-fa-image';
         default:
-          return 'fas fa-file';
+          return 'nf nf-fa-file';
       }
     }
   }

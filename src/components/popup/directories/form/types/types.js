@@ -155,8 +155,8 @@
             });
           }
         }
-        else if( this.isExts === true ){          
-          listExts = tempExtensions.map( obj =>{
+        else if( this.isExts === true ){
+          listExts = this.extensions.map( obj =>{
             return {
               text: obj.ext,
               value: obj.ext,
@@ -321,7 +321,7 @@
                   let tabs = this.listTabs.slice();
                   tabs[id]['extensions'].splice(idExtension, 1);
                   this.$set(this.source.row, 'tabs' , JSON.stringify(tabs));
-                  this.$refs.jsonEditor.reinit();
+                  this.getRef('jsonEditor').reinit();
                 }
               }
             }
@@ -333,7 +333,7 @@
                 let exts = this.extensions.slice();
                 exts.splice(id, 1);
                 this.$set(this.source.row, 'tabs' , JSON.stringify(exts));
-                this.$refs.jsonEditor.reinit();
+                this.getRef('jsonEditor').reinit();
               }
             }
           }
@@ -341,7 +341,7 @@
 
       },
       success(){
-        bbn.vue.find(bbn.vue.closest(this, 'bbns-tab'), 'appui-ide-popup-directories-types').refreshListTypes();
+        bbn.vue.find(this.closest('bbn-container'), 'appui-ide-popup-directories-types').refreshListTypes();
         appui.success(bbn._("success"));
       },
       failure(){
@@ -400,8 +400,8 @@
           this.source.row.extensions = JSON.stringify([]);
         }
         this.$nextTick(() => {
-          if ( this.$refs.jsonEditor ){
-           this.$refs.jsonEditor.reinit();
+          if ( this.getRef('jsonEditor') ){
+           this.getRef('jsonEditor').reinit();
           }
         });
       }
@@ -447,7 +447,7 @@
               text: "Confirm",
               title: "Confirm",
               class: "k-primary",
-              icon: "far fa-check-circle",
+              icon: "nf nf-fa-check_circle",
               command: this.closeForm
             }]
           }
@@ -455,7 +455,7 @@
         methods:{
           closeForm(){
             let popup = bbn.vue.closest(this, "bbn-popup"),
-                form = bbn.vue.find(bbn.vue.closest(this, 'bbns-tab'), 'appui-ide-popup-directories-form-types');
+                form = bbn.vue.find(this.closest('bbn-container'), 'appui-ide-popup-directories-form-types');
             if ( this.source.type === "tabs" ){
               if ( this.source.action === 'edit' ){
                 this.source.listTabs[this.source.idTab]['extensions'][this.source.idExt] = this.extension;
@@ -477,7 +477,7 @@
                 form.$set(form.source.row, 'extensions' , JSON.stringify(this.source.extesionsTab));
               }
             }
-            form.$refs.jsonEditor.reinit();
+            form.getRef('jsonEditor').reinit();
             popup.close();
           }
         }

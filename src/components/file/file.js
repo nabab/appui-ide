@@ -8,7 +8,7 @@
 (() => {
   return {
     data(){
-      const ide = bbn.vue.closest(bbn.vue.closest(this, '.bbn-tabnav'), '.bbns-tab').getComponent().$data;
+      const ide = this.closest('bbn-splitter').closest('bbn-splitter').$parent.$data;
       let path     = this.source.url.substr(this.source.repository.length).replace('/_end_', '').split('/'),
           filename = path.pop(),
           tab      = ide.repositories[this.source.repository],
@@ -18,7 +18,7 @@
       if ( tab.extensions ){
         for ( let id in tab.extensions ){
           exts.push({
-            icon: 'fas fa-cogs',
+            icon: 'nf nf-fa-cogs',
             text: tab.extensions[id].ext,
             key: tab.extensions[id].ext,
             command: this.changeExtension
@@ -48,10 +48,10 @@
         return arr
       },
       reloadTab(){
-        let tab = this.$refs.tabstrip.getVue(this.$refs.tabstrip.selected);
+        let tab = this.getRef('tabstrip').getVue(this.getRef('tabstrip').selected);
         if ( tab.getComponent().isChanged ){
           appui.confirm(bbn._("Modified code do you want to refresh anyway?"), () => {
-            bbn.fn.post(appui.ide.root + 'editor/' + this.$refs.tabstrip.baseURL + tab.url, (d) => {
+            bbn.fn.post(appui.ide.root + 'editor/' + this.getRef('tabstrip').baseURL + tab.url, (d) => {
               if ( d.data.id ){
                 tab.reload();
               }
@@ -59,7 +59,7 @@
           });
         }
         else{
-          bbn.fn.post(appui.ide.root + 'editor/' + this.$refs.tabstrip.baseURL + tab.url, (d) => {
+          bbn.fn.post(appui.ide.root + 'editor/' + this.getRef('tabstrip').baseURL + tab.url, (d) => {
             if ( d.data.id ){
               tab.reload();
             }
@@ -68,7 +68,7 @@
       },
       changeExtension(idx, obj){
         let code   = bbn.vue.find(this, 'bbn-code'),
-            tab    = this.$refs.tabstrip.getVue(this.$refs.tabstrip.selected),
+            tab    = this.getRef('tabstrip').getVue(this.getRef('tabstrip').selected),
             oldExt = tab.source.extension,
             newExt = obj.key;
         bbn.fn.post(this.source.root + 'actions/change_extension', {
@@ -93,14 +93,18 @@
         });
       },
       //in event tabLoadded in tab-nav
-      loadingTab(data, url, tab){
-        let ext = data.extension,
-            idx = bbn.fn.search(tab.menu, 'key', ext);
-        if ( idx > -1 ){
-          tab.menu.splice(idx, 1);
-        }
-      }
+      // temporaney disabled
+      // loadingTab(data, url, tab){
+      //   let ext = data.extension,
+      //       idx = bbn.fn.search(tab.menu, 'key', ext);
+      //   if ( idx > -1 ){
+      //     tab.menu.splice(idx, 1);
+      //   }
+      // }
     },
+    // created(){
+    //   appui.ide.$set(appui.ide, 'type', "file");
+    // },
     mounted(){
       this.$nextTick(() => {
         $(this.$el).bbn('analyzeContent', true);

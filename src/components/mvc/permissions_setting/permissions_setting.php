@@ -14,7 +14,7 @@
                    v-model="permissions.text"
                    @keydown.enter.prevent="savePermission"
         ></bbn-input>
-        <bbn-button icon="fas fa-save"
+        <bbn-button icon="nf nf-fa-save"
                     @click="savePermission"
         ></bbn-button>
         <br>
@@ -44,7 +44,7 @@
                        ref="perm_child_text"
 
             ></bbn-input>
-            <bbn-button icon="fas fa-plus"
+            <bbn-button icon="nf nf-fa-plus"
                         @click="addChildPermission"
             ></bbn-button>
           </div>
@@ -69,10 +69,10 @@
                              @keydown.enter.prevent="saveChildPermission($event)"
                   ></bbn-input>
                   <bbn-button @click="saveChildPermission($event)"
-                              icon="fas fa-save"
+                              icon="nf nf-fa-save"
                               style="margin-right: 5px"
                   ></bbn-button>
-                  <bbn-button @click="removeChildPermission($event)" icon="fas fa-trash"></bbn-button>
+                  <bbn-button @click="removeChildPermission($event)" icon="nf nf-fa-trash"></bbn-button>
                 </div>
               </li>
             </ul>

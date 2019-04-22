@@ -2,6 +2,7 @@
 /** @var $model \bbn\mvc\model */
 if ( isset($model->data['routes'], $model->inc->ide) ){
   $repos = $model->inc->ide->repositories();
+
   $current_rep = 'BBN_APP_PATH/';
   $types = [];
   $tabs = [];
@@ -12,8 +13,8 @@ if ( isset($model->data['routes'], $model->inc->ide) ){
     foreach($types as $type){
       //temporaney
       $type['url'] = $type['url'] === 'lib' ? 'cls' : $type['url'];
-      if ( $ptype = $model->inc->options->option($model->inc->options->from_code($type['url'],'PTYPES', 'ide', BBN_APPUI)) ){
-
+      // if ( $ptype = $model->inc->options->option($model->inc->options->from_code($type['url'],'PTYPES', 'ide', BBN_APPUI)) ){
+      if ( $ptype = $model->inc->ide->get_types($type['url']) ){
         if ( !empty($ptype['tabs']) ){
           $tabs[$type['url']][] = $ptype['tabs'];
         }
@@ -53,6 +54,7 @@ if ( isset($model->data['routes'], $model->inc->ide) ){
   $ide_cfg = $model->inc->user->get_cfg('ide');
 
   return [
+    'staticPath' => BBN_STATIC_PATH,
     'config' => [],
     'repositories' => $repos,
     'root' => APPUI_IDE_ROOT,

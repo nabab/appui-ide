@@ -9,6 +9,8 @@ namespace appui;
 
 class ide {
 
+  use \bbn\models\tts\optional;
+
   const BBN_APPUI = 'appui',
         BBN_PERMISSIONS = 'permissions',
         BBN_PAGE = 'page',
@@ -54,10 +56,9 @@ class ide {
    * @return int
    */
   private function _ide_path(){
+    self::optional_init();
     if ( !self::$ide_path ){
-      if ( $id = $this->options->from_code(self::IDE_PATH, self::BBN_APPUI) ){
-        self::set_ide_path($id);
-      }
+      self::set_ide_path(self::$option_root_id);
     }
     return self::$ide_path;
   }
@@ -78,7 +79,7 @@ class ide {
    */
   private function _dev_path(){
     if ( !self::$dev_path ){
-      if ( $id = $this->options->from_code(self::DEV_PATH, self::_ide_path()) ){
+      if ( $id = self::get_option_id(self::DEV_PATH) ){
         self::set_dev_path($id);
       }
     }
@@ -124,7 +125,7 @@ class ide {
    */
   private function _files_pref(){
     if ( !self::$files_pref ){
-      if ( $id = $this->options->from_code(self::FILES_PREF, $this->_ide_path()) ){
+      if ( $id = self::get_option_id(self::FILES_PREF)){
         self::set_files_pref($id);
       }
     }
@@ -173,7 +174,7 @@ class ide {
 
     if ( !empty($file) ){
       if ( empty($bbn_path) && ($url = $this->real_to_url($file)) ){
-        $repository = self::repository_from_url($url, true);
+        $repository = $this->repository_from_url($url, true);
 
         if ( !empty($repository) && \defined($repository['bbn_path']) ){
           $bbn_path = $repository['bbn_path'];
@@ -200,6 +201,7 @@ class ide {
    * @return int|false
    */
   private function option_id(string $id_file = null){
+
     if ( empty($id_file) ){
       $id_file = self::$current_id;
     }
@@ -269,7 +271,7 @@ class ide {
         // Remove file's options
         $this->options->remove($this->options->from_code($this->real_to_id($sub), $this->_files_pref()));
       }
-      else {
+      else{
         $f = $this->rem_dir_opt($sub);
         if ( !empty($f) ){
           $files = array_merge($files, $f);
@@ -509,10 +511,12 @@ class ide {
             if ( empty(\bbn\file\dir::delete($component)) ){
               return false;
             }
+            else{
+              $this->operations_backup_components($cfg, "delete");
+            }
             return true;
           }
           else{
-
             if ( !empty($rep['tabs']) && is_array($rep['tabs']) ){
               foreach( $rep['tabs'] as $ele ){
                 if ( empty($ctrl_error) ){
@@ -523,6 +527,9 @@ class ide {
                         if ( empty(\bbn\file\dir::delete($component)) ){
                           $ctrl_error = true;
                           break;
+                        }
+                        else{
+                          $this->operations_backup_components($cfg, "delete");
                         }
                       }
                     }
@@ -635,7 +642,6 @@ class ide {
    * @return bool
    */
   private function rename_component(array $cfg){
-  //  die(\bbn\x::dump('entrato',$cfg, $rep, $new_folder_component));
 
     if ( !empty($cfg) &&
       !empty($cfg['path']) &&
@@ -657,12 +663,18 @@ class ide {
             $ctrl_error = true;
             $this->error("Error during the rename component");
           }
+          else{
+            $this->operations_backup_components($cfg, "rename");
+          }
         }
         else{
           if ( empty(is_dir($new_folder_component)) &&
             empty(\bbn\file\dir::create_path($new_folder_component))
           ){
             $ctrl_error = true;
+          }
+          else{
+            $this->operations_backup_components($cfg, "rename");
           }
         }
 
@@ -683,12 +695,18 @@ class ide {
                           $this->error("Error during the rename component");
                           return false;
                         }
+                        else{
+                          $this->operations_backup_components($cfg, "rename");
+                        }
                       }
                       else{
-                        if ( empty(\bbn\file\dir::move($old_component, $new_component)) ){
+                        if ( empty(rename($old_component, $new_component)) ){
                           $ctrl_error = true;
                           $this->error("Error during the rename component");
                           return false;
+                        }
+                        else{
+                          $this->operations_backup_components($cfg, "rename");
                         }
                       }
                     }
@@ -702,7 +720,7 @@ class ide {
           }
         }
         if( !empty($ctrl_error) ){
-          $this->error("Impossible to $ope the file|folder.");
+          $this->error("Impossible to the file|folder.");
           return false;
         }
         else{
@@ -717,6 +735,47 @@ class ide {
   /**
    * Renames|movie a file or a folder of the backup.
    *
+   * @param array $cfg The components info
+   * @param string $ope The operation type (rename, copy)
+   * @return bool
+   */
+  private function operations_backup_components(array $cfg, string $case ){
+    if ( !empty($cfg['is_component']) ){
+      $backup_path = self::BACKUP_PATH . $cfg['repository']['bbn_path'] .'/'.($cfg['repository']['path'] === '/' ? '' : $cfg['repository']['path']);
+      if ( !empty($cfg['is_vue']) ){
+        $old_path_component = $backup_path.$cfg['path'].$cfg['name'].'/'.$cfg['name'];
+        if ( ($case === "move") || ($case === "rename") ){
+          $new_path_component = $backup_path.$cfg['new_path'].'/'.$cfg['new_name'].'/'.$cfg['new_name']."/__end__";
+          if ( is_dir($old_path_component) ){
+            if ( ($case === 'move') || ($case === 'rename') ){
+              if ( !\bbn\file\dir::move($old_path_component, $new_path_component, false) ){
+                $this->error("Error during the component backup move||rename: old -> $old_path_component , new -> $new_path_backup");
+              }
+            }
+
+          }
+        }
+        else if ( $case === 'delete' ){
+          if ( !\bbn\file\dir::delete($old_path_component) ){
+            $this->error("Error during the component backup delete: old -> $old_path_component");
+          }
+        }
+      }
+      else{
+        $old_folder_component = $backup_path.$cfg['path'].$cfg['name'];
+        $new_folder_component = $backup_path.$cfg['new_path'].$cfg['new_name'];
+        if ( ($case === 'move') || ($case === 'rename') ){
+          if ( !\bbn\file\dir::move($old_folder_component, $new_folder_component, false) ){
+            $this->error("Error during the folder backup move||rename: old -> $old_path_component , new -> $new_path_backup");
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * Renames|movie a file or a folder of the backup.
+   *
    * @param array $path paths of file|folder, old and new
    * @param array $cfg The file|folder info
    * @param string $ope The operation type (rename, copy)
@@ -724,43 +783,62 @@ class ide {
    */
   private function operations_backup(array $path,  array $cfg, string $case ){
     //set path backups temporaney disattivate for check an complete
-    $backup_path = self::BACKUP_PATH . $cfg['repository']['bbn_path'] . '/' . $cfg['repository']['path'];
-    //CASE RENAME
-    if ( $case === 'rename' ){
-      $old_backup = $backup_path . $cfg['bbn_path'] . $cfg['path'] . explode(".", array_pop(explode("/", $path['old'])))[0];
-      $new_backup = $backup_path . $cfg['bbn_path'] . $cfg['path'] . explode(".", array_pop(explode("/", $path['new'])))[0];
-    }
-    //CASE MOVE
-    if ( $case === 'move' ){
-      $old_backup = $backup_path . $cfg['bbn_path'] . $cfg['path'] . explode(".", array_pop(explode("/", $path['old'])))[0];
-      $new_backup = $backup_path . $cfg['bbn_path'] . $cfg['new_path'] .'/'. explode(".", array_pop(explode("/", $path['new'])))[0];
-    }
-    //if exist a backup
+    $backup_path = self::BACKUP_PATH . $cfg['repository']['bbn_path'].
+     ($cfg['repository']['path'] === '/' ? '' : '/'.$cfg['repository']['path']);
+
+
+    if ( !empty($cfg['repository']['bbn_path']) && !empty($path['old']) ){
+      $old_backup = $backup_path.($cfg['is_project'] && $cfg['type'] ? '/'.$cfg['type'] .'/' : '/');
+      $old_backup .= $cfg['path'] . explode(".", array_pop(explode("/", $path['old'])))[0];
+
+      //CASE MOVE and RENAME
+      if ( (($case === 'move') || ($case === 'rename')) &&
+        !empty($path['new'])
+      ){
+        $new_backup = $backup_path.'/'.($cfg['is_project'] && $cfg['type'] ? $cfg['type'] .'/' : '');
+        $new_backup .= ($case === 'rename' ? $cfg['path'] : $cfg['new_path'].'/').explode(".", array_pop(explode("/", $path['new'])))[0];
+      }
+    }    //if exist a backup
     if ( is_dir($old_backup) ){
       // if it isn't a folder
       if ( !is_dir($path['old']) && !is_dir($path['new']) ){
         if ( is_dir($old_backup . "/__end__") ){
-          if ( !\bbn\file\dir::move($old_backup . "/__end__", $new_backup . "/__end__", false) ){
-            $this->error("Error during the file|folder backup move: old -> $old_backup , new -> $new_backup");
-          }
-          else {
-            if ( empty(\bbn\file\dir::get_dirs($old_backup)) ){
-              if (!\bbn\file\dir::delete($old_backup)){
-                $this->error("Error during the file|folder backup delete: old -> $old_backup , new -> $new_backup");
+          if ( ($case === 'move') || ($case === 'rename') ){
+
+            if ( !\bbn\file\dir::move($old_backup . "/__end__", $new_backup . "/__end__", false) ){
+              $this->error("Error during the file|folder backup move: old -> $old_backup , new -> $new_backup");
+            }
+            else {
+              if ( empty(\bbn\file\dir::get_dirs($old_backup)) ){
+                if ( !\bbn\file\dir::delete($old_backup) ){
+                  $this->error("Error during the file|folder backup delete: old -> $old_backup");
+                }
               }
+            }
+          }
+          else if ( $case === 'delete' ){
+            if ( !\bbn\file\dir::delete($old_backup) ){
+              $this->error("Error during the file|folder backup delete: old -> $old_backup");
             }
           }
         }
       } //case rename backup folder
       else {
-        if ( \bbn\file\dir::copy($old_backup, $new_backup) ){
-          if ( !\bbn\file\dir::delete($old_backup) ){
-            $this->error("Error during the file|folder backup delete: old -> $old_backup , new -> $new_backup");
+        if ( ($case === 'move') || ($case === 'rename') ){
+          if ( \bbn\file\dir::copy($old_backup, $new_backup) ){
+            if ( !\bbn\file\dir::delete($old_backup) ){
+              $this->error("Error during the file|folder backup delete: old -> $old_backup , new -> $new_backup");
+            }
           }
-        }
-        else{
-          $this->error("Error during the file|folder backup copy: old -> $old_backup , new -> $new_backup");
-        }
+          else{
+            $this->error("Error during the file|folder backup copy: old -> $old_backup , new -> $new_backup");
+          }
+        }//case delete folder
+        /*else if ( $case === 'delete' ){
+          if (!\bbn\file\dir::delete($old_backup)){
+            $this->error("Error during the file|folder backup delete: old -> $old_backup");
+          }
+        }*/
       }
     }
   }
@@ -772,9 +850,9 @@ class ide {
    * @return bool
    */
   public function remove_file_pref($path){
-    $this->options->remove(
+    return $this->options->remove(
       $this->options->from_code(
-        $this->real_to_id($t['old']),
+        $this->real_to_id($path),
         $this->_files_pref()
       )
     );
@@ -849,7 +927,7 @@ class ide {
             )
           )
         ){//for rename and move backup
-      //    $this->operations_backup($f, $cfg, $ope);
+         $this->operations_backup($f, $cfg, $ope);
           return true;
         }
       }
@@ -882,6 +960,10 @@ class ide {
                 return false;
               }
 
+              // $this->options->from_code(
+              //   $this->real_to_id($t['old']),
+              //   $this->_files_pref()
+              // )
 
               if ( !empty($cfg['is_file']) ){
                 // Remove file's options
@@ -931,7 +1013,7 @@ class ide {
               }
 
 
-          //    $this->operations_backup($t, $cfg, $ope);
+              $this->operations_backup($t, $cfg, $ope);
             }
             // Copy
             else if ( $ope === 'copy' ){
@@ -961,7 +1043,8 @@ class ide {
               if ( !empty($t['perms']) ){
                 $this->delete_perm($t['old']);
               }
-              /** @todo Remove backups */
+
+              $this->operations_backup($t, $cfg, $ope);
             }
           }
           return true;
@@ -984,11 +1067,12 @@ class ide {
         else if ( $ope === 'move' ){
           $ele = $this->check_normal($cfg, $rep, $path);
           if ( !empty($ele) && is_array($ele) && \bbn\file\dir::move($ele['old'], $ele['new']) ){
+            $this->operations_backup_components($cfg, "move");
             return true;
           }
         }
         return false;
-        //$this->operations_backup($t, $cfg, $ope);
+
       }
 
     }
@@ -1009,15 +1093,35 @@ class ide {
     return $this->last_error;
   }
 
+
+
+  /**
+   * ide constructor.
+   *
+   * @param \bbn\appui\options $options
+   * @param $routes
+   * @param \bbn\user\preferences $pref
+   */
+  public function __construct(\bbn\db $db, \bbn\appui\options $options, $routes, \bbn\user\preferences $pref){
+    $this->db = $db;
+    $this->options = $options;
+    $this->routes = $routes;
+    $this->pref = $pref;
+    $this->_ide_path();
+    $this->projects = new \bbn\appui\project($this->db);
+  }
+
+
   public function is_project(string $url){
     $rep = $this->repository_from_url($url);
     $repository = $this->repository($rep);
     if ( is_array($repository) && !empty($repository) ){
-      return $repository['alias_code'] === 'bbn-project';
+      if ( ($repository['alias_code'] === 'bbn-project') ){
+        return true;
+      }
     }
     return false;
   }
-
 
 
   /**
@@ -1064,24 +1168,22 @@ class ide {
    */
   public function list_tabs_with_file(string $type, string $path, string $repository){
 
-    $ele = explode("/",$path);
     $list = [];
     $root = $this->get_root_path($repository);
-    if ( $type === 'components' ){
-      $id = $this->options->from_code('components','PTYPES', 'ide', BBN_APPUI);
+    if ( $type === 'mvc' ){
+      //$id = $this->options->from_code('mvc','PTYPES', 'ide', BBN_APPUI);
+      if ( is_string($path) && (strpos($path, 'mvc/') === 0) ){
+        $path = str_replace('mvc/', '', $path);
+      }
     }
-    else if ( $type === 'mvc' ){
-      $id = $this->options->from_code('mvc','PTYPES', 'ide', BBN_APPUI);
-    }
-    $tabs =  $this->options->option($id)['tabs'];
+    $tabs = $this->tabs_of_type_project($type);
+    //$tabs =  $this->options->option($id)['tabs'];
     if ( is_string($path) && is_array($tabs) ){
       foreach($tabs as $tab){
         $exist= false;
+
         if ( $type === 'mvc' ){
           $file =  $root.'mvc/'.$tab['path'].$path.'.';
-          if( !empty(strpos($file, 'mvc/mvc')) ){
-            $file = str_replace('mvc/mvc/', 'mvc/', $file);
-          }
         }
         else if ( $type === 'components' ){
           $file = $root. $path.'.';
@@ -1121,22 +1223,6 @@ class ide {
     return $this->last_error;
   }
 
-  /**
-   * ide constructor.
-   *
-   * @param \bbn\appui\options $options
-   * @param $routes
-   * @param \bbn\user\preferences $pref
-   */
-  public function __construct(\bbn\db $db, \bbn\appui\options $options, $routes, \bbn\user\preferences $pref){
-    $this->db = $db;
-    $this->options = $options;
-    $this->routes = $routes;
-    $this->pref = $pref;
-    $this->_ide_path();
-    $this->projects = new \bbn\appui\project($this->db);
-  }
-
   /************************** REPOSITORIES **************************/
 
   // /**
@@ -1153,35 +1239,43 @@ class ide {
      * @return array|bool
      */
     public function repositories(string $code=''){
-      $all = $this->options->full_soptions($this->options->from_code('PATHS', 'ide', 'appui'));
+
+      $paths = self::get_options(self::DEV_PATH);
       $cats = [];
       $r = [];
-      foreach ( $all as $a ){
-        if ( \defined($a['bbn_path']) ){
-          $k = $a['bbn_path'] . '/' . ($a['code'] === '/' ? '' : $a['code']);
-          if ( !isset($cats[$a['id_alias']]) ){
-            unset($a['alias']['cfg']);
-            $cats[$a['id_alias']] = $a['alias'];
+      if ( !empty($paths) ){
+        foreach ( $paths as $path ){
+          if ( \defined($path['code']) ){
+            $all = self::get_options($path['code'],self::DEV_PATH);
+            foreach($all as $a){
+              if ( \defined($a['bbn_path']) ){
+                $k = $a['bbn_path'] . '/' . ($a['code'] === '/' ? '' : $a['code']);
+                if ( !isset($cats[$a['id_alias']]) ){
+                  unset($a['alias']['cfg']);
+                  $cats[$a['id_alias']] = $a['alias'];
+                }
+                unset($a['cfg']);
+                unset($a['alias']);
+                $r[$k] = $a;
+                $r[$k]['title'] = $r[$k]['text'];
+                $r[$k]['alias_code'] = $cats[$a['id_alias']]['code'];
+                if ( !empty($cats[$a['id_alias']]['tabs']) ){
+                  $r[$k]['tabs'] = $cats[$a['id_alias']]['tabs'];
+                }
+                else if( !empty($cats[$a['id_alias']]['extensions']) ){
+                  $r[$k]['extensions'] = $cats[$a['id_alias']]['extensions'];
+                }
+                else if( !empty($cats[$a['id_alias']]['types']) ){
+                  $r[$k]['types'] = $cats[$a['id_alias']]['types'];
+                }
+                unset($r[$k]['alias']);
+              }
+            }
           }
-          unset($a['cfg']);
-          unset($a['alias']);
-          $r[$k] = $a;
-          $r[$k]['title'] = $r[$k]['text'];
-          $r[$k]['alias_code'] = $cats[$a['id_alias']]['code'];
-          if ( !empty($cats[$a['id_alias']]['tabs']) ){
-            $r[$k]['tabs'] = $cats[$a['id_alias']]['tabs'];
-          }
-          else if( !empty($cats[$a['id_alias']]['extensions']) ){
-            $r[$k]['extensions'] = $cats[$a['id_alias']]['extensions'];
-          }
-          else if( !empty($cats[$a['id_alias']]['types']) ){
-            $r[$k]['types'] = $cats[$a['id_alias']]['types'];
-          }
-          unset($r[$k]['alias']);
         }
-      }
-      if ( $code ){
-        return isset($r[$code]) ? $r[$code] : false;
+        if ( $code ){
+          return isset($r[$code]) ? $r[$code] : false;
+        }
       }
       return $r;
     }
@@ -1209,6 +1303,28 @@ class ide {
     return $this->projects->repository_from_url($url, $obj);
   }
 
+//project
+/*  public function repository_from_url(string $url, bool $obj = false){
+    $repository = '';
+    $repositories = $this->repositories();
+
+    foreach ( $repositories as $i => $d ){
+      if ( (strpos($url, $i) === 0) &&
+        (\strlen($i) > \strlen($repository) )
+      ){
+        $repository = $i;
+      }
+    }
+    if ( !empty($repository) ){
+      return empty($obj) ? $repository : $repositories[$repository];
+    }
+    return false;
+  }
+*/
+
+
+
+
   /**
    * Checks if a repository is a MVC
    *
@@ -1231,7 +1347,9 @@ class ide {
    * @return bool
    */
   public function is_MVC_from_url(string $url){
+
     if ( !empty($this->is_project($this->repository_from_url($url))) ){
+
       $rep = $this->repository_from_url($url, true);
       $res = $this->get_root_path($rep);
       $ele = explode("/",$url);
@@ -1286,7 +1404,6 @@ class ide {
    */
   public function load(string $url){
 
-
     if ( ($real = $this->url_to_real($url, true)) &&
       !empty($real['file']) &&
       !empty($real['mode']) &&
@@ -1318,11 +1435,10 @@ class ide {
         if ( $id_opt = $this->option_id() ){
           $val_opt = $this->options->option($id_opt);
         }
-
         if( !empty($val_opt) ){
           foreach ( $f as $n => $v ){
             if ( isset($val_opt[$n]) ){
-              $f[$n] = $v;
+              $f[$n] = $val_opt[$n];
             }
           }
         }
@@ -1365,7 +1481,7 @@ class ide {
       //if in the case of a rescue of _ctrl
       if ( $file['tab'] === "_ctrl" ){
         $backup_path = self::BACKUP_PATH . $file['repository'] . $file['path'] . $file['tab'] . '/';
-        if ( is_numeric($file['ssctrl'])  && $file['ssctrl'] === 0){
+        if ( is_numeric($file['ssctrl']) && ($file['ssctrl'] === 0) ){
         $backup_path = self::BACKUP_PATH . $file['repository'] . $file['tab'] . '/';
 
         }else{
@@ -1380,7 +1496,9 @@ class ide {
           $backup_path .= $fn[0]. '/__end__/' . ($file['tab'] ?: $fn[1]) . '/';
         }
         else{
-          $backup_path .= $file['repository'] . $file['path'] . '/' . $file['filename'] . '/__end__/' . ($file['tab'] ?: $file['extension']) . '/';
+
+           //$backup_path .= $file['repository']['bbn_path'] . '/' . $file['path'] . '/' . $file['filename'] . '/__end__/' . ($file['tab'] ?: $file['extension']) . '/';
+          $backup_path .= $file['repository']['bbn_path'] . '/' . $file['filePath'] . '/' . $file['filename'] . '/__end__/' . ($file['tab'] ?: $file['extension']) . '/';
         }
       }
       // Delete the file if code is empty and if it isn't a super controller
@@ -1405,8 +1523,8 @@ class ide {
       }
       if ( is_file(self::$current_file) ){
         $backup = $backup_path . date('Y-m-d_His') . '.' . $file['extension'];
-    \bbn\file\dir::create_path(dirname($backup));
-    \bbn\file\dir::copy(self::$current_file, $backup);
+        \bbn\file\dir::create_path(dirname($backup));
+        \bbn\file\dir::copy(self::$current_file, $backup);
       }
       else if ( !is_dir(dirname(self::$current_file)) ){
         \bbn\file\dir::create_path(dirname(self::$current_file));
@@ -2011,18 +2129,20 @@ class ide {
 
       if ( $rep['alias_code'] === 'bbn-project' ){
         $bits = explode('/', substr($url, \strlen($rep['bbn_path'].$rep['path'])));
+
+
         if ( !empty($this->is_component_from_url($url)) &&
-             !empty($idx = $this->options->from_code('components','PTYPES',$this->_ide_path()))
+             //!empty($idx = $this->options->from_code('components','PTYPES',$this->_ide_path()))
+             !empty($ptype = $this->get_types('components'))
         ){
-          $ptype = $this->options->option($idx);
+          //$ptype = $this->options->option($idx);
           $rep['tabs'] = $ptype['tabs'];
         }
         if ( !empty($this->is_MVC_from_url($url)) &&
-             !empty($idx = $this->options->from_code('mvc','PTYPES',$this->_ide_path()))
+             //!empty($idx = $this->options->from_code('mvc','PTYPES',$this->_ide_path()))
+             !empty($ptype = $this->get_types('mvc'))
         ){
-          $ptype = $this->options->option($idx);
           $rep['tabs'] = $ptype['tabs'];
-
           if ( $plugin ){
             array_shift($bits);
             array_shift($bits);
@@ -2055,6 +2175,8 @@ class ide {
           $ssc = $this->superior_sctrl($tab, $fp);
 
           $tab = $ssc['tab'];
+
+
 
           if ( $plugin ){
             if ( empty($this->is_component_from_url($url)) ){
@@ -2216,9 +2338,10 @@ class ide {
     $copy_url = explode("/", $url);
     $backups = [];
     $history_ctrl = [];
-
     // File's backup path
     $path = self::BACKUP_PATH . $url;
+
+
     if ( !empty($url) && !empty(self::BACKUP_PATH) ){
       $ctrl_path = explode("/", $path);
       for($y=0; $y <2; $y++){
@@ -2243,10 +2366,9 @@ class ide {
 
       //First, check the presence of _ctrl backups.
       $ctrl_path = implode("/", $ctrl_path)."/"."_ctrl";
-
       // read _ctrl if exsist
-
        if ( is_dir($ctrl_path)  ){
+
            //If there is a "_ctrl" backup, insert it into the array that will be merged with the remaining backup at the end of the function.
            if ( $files_ctrl = \bbn\file\dir::get_files($ctrl_path) ){
 
@@ -2257,10 +2379,13 @@ class ide {
                'icon' => 'folder-icon',
                'folder' => true,
                'items' => [],
-               'num_items' => \count(\bbn\file\dir::get_files($files_ctrl))
+               'num_items' => \count(\bbn\file\dir::get_files($ctrl_path))
+               //'num_items' => \count(\bbn\file\dir::get_files($files_ctrl))
              ];
+            // die(\bbn\x::dump($ctrl_path, $history_ctrl, "gg"));
+
              //If we are requesting all files with their contents, this block returns to the "_ctrl" block.
-             if( $all===true ){
+             if ( $all === true ){
 
              foreach ( $files_ctrl as $file ){
                $filename = \bbn\str::file_ext($file, true)[0];
@@ -2483,7 +2608,29 @@ class ide {
     return $backups;
   }
 
+  /**
+   * Returns all data of type repository
+   *
+   * @param string $type name ohf type
+   * @return array|bool
+   */
+  public function get_types(string $type){
+    if ( !empty($type) ){
+      return self::get_appui_option($type, self::PATH_TYPE);
+    }
+  }
 
+  /**
+   * Returns the tabs of type repository
+   *
+   * @param string $type name ohf type   
+   * @return array|bool
+   */
+  public function tabs_of_type_project(string $type){
+    if ( !empty($type) && ($ptype = $this->get_types($type))){
+      return !empty($ptype['tabs']) ? $ptype['tabs'] : false;
+    }
+  }
 
   /*public function history(string $url){
     if ( !empty($url) && !empty(self::BACKUP_PATH) ){

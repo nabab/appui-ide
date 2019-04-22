@@ -58,7 +58,7 @@
        */
       get_size(p){
         let idx = bbn.fn.search(this.dirs, 'name', p.name);
-        bbn.fn.post(this.source.root + 'actions/finder/dirsize', {
+        bbn.fn.post(this.source.root + 'actions/finder2/dirsize', {
           path: p.path,
           origin: this.source.origin
         }, (d) => {
@@ -143,7 +143,7 @@
                 ext = node.data.value.slice(- val);
               }
               
-              bbn.fn.post(this.source.root + 'actions/finder/file', {
+              bbn.fn.post(this.source.root + 'actions/finder2/file', {
                 node: node.data,
                 path: this.currentPath,
                 origin: this.source.origin,
@@ -182,7 +182,7 @@
           /* this.dirs.pop();*/
         }
         else{
-          bbn.fn.abort('ide/actions/finder/file')
+          bbn.fn.abort('ide/actions/finder2/file')
         }
         this.currentFile = false;
       },
@@ -237,19 +237,19 @@
       itemsContextMenu(n, i) {
         let objContext = [
           {
-            icon: 'far fa-copy',
+            icon: 'nf nf-fa-copy',
             text: bbn._('Copy'),
             command: (node) => {
               this.copy(node)
             }
           },{
-            icon: 'far fa-edit',
+            icon: 'nf nf-fa-edit',
             text: bbn._('Modify'),
             command: (node) => {
               this.edit(node)
             }
           },{
-            icon: 'fas fa-trash-alt',
+            icon: 'nf nf-fa-trash_alt',
             text: bbn._('Delete'),
             command: (node) => {
               this.delete(node)
@@ -258,7 +258,7 @@
         ]
         if ( n.data.dir && (this.copied !== false) ) {
           objContext.push({
-            icon: 'fas fa-paste',
+            icon: 'nf nf-fa-paste',
             text: bbn._('Paste'),
             command: (node) => {
               this.paste(node)
@@ -269,7 +269,7 @@
       },
       finderContextMenu(n, i) {
         let objContext = [{
-          icon: 'fas fa-paste',
+          icon: 'nf nf-fa-paste',
           text: bbn._('Paste'),
           command: (node) => {
             this.paste_context(node)
@@ -302,7 +302,7 @@
           let trees = this.findAll('bbn-tree'), 
           path = '';
           this.confirm(bbn._(st), () => {
-            bbn.fn.post(this.source.root + 'actions/finder/paste', {
+            bbn.fn.post(this.source.root + 'actions/finder2/paste', {
               node: this.copied.data,
               origin: this.source.origin,
               old_dir: this.oldDir,
@@ -377,7 +377,7 @@
             st += node.data.value;
           }
           
-          bbn.fn.post(this.source.root + 'actions/finder/delete', {
+          bbn.fn.post(this.source.root + 'actions/finder2/delete', {
             path: st
           }, (d) => {
             if ( d.success ){        
@@ -431,6 +431,7 @@
       }
     },
     mounted(){
+      alert(bbn._('test nuova stringa in ide'))
       if ( this.path ){
         bbn.fn.each(this.path.split('/'), (a) => {
           if ( a ){
@@ -494,14 +495,14 @@
         },
         computed: {
           dirs(){
-            return this.closest('bbns-tab').getComponent().dirs;
+            return this.closest('bbn-container').getComponent().dirs;
           }
         },
         props: ['source', 'data'],
 				methods:{
 					success(d){
 						if ( d.success ){
-              let trees = this.closest('bbns-tab').getComponent().findAll('bbn-tree');
+              let trees = this.closest('bbn-container').getComponent().findAll('bbn-tree');
               bbn.fn.each(trees, (v, i) => {
                 if ( v._uid === this.source.treeUid ){
                   this.dirIdx = bbn.fn.search(this.dirs, 'path', v.data.path.trim());

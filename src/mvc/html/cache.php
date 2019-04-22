@@ -28,7 +28,7 @@
         <div class="bbn-full-screen bbn-padded" style="border: 0.5px solid #CCC">
           <div class="bbn-flex-height" v-if="selectedFile.length && contentCache.length">
 						<div class="bbn-w-100">
-							<div class="w3-card bbn-padded bbn-l bbn-vmargin">
+							<div class="bbn-card bbn-padded bbn-l bbn-vmargin">
 								<strong>
 									<span v-text="selectedFile"></span>
 								</strong>
@@ -41,7 +41,7 @@
 						</div>
           </div>
           <div class="bbn-full-screen bbn-vmiddle bbn-padded" v-else>
-            <div class="w3-card bbn-h-100 bbn-vmiddle bbn-w-100 bbn-c">
+            <div class="bbn-card bbn-h-100 bbn-vmiddle bbn-w-100 bbn-c">
                 <span class="bbn-xxxxl bbn-w-100 bbn-c">
                   <?=_("Select a cache file")?>
                 </span>

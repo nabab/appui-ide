@@ -14,7 +14,7 @@
         </div>
         <div class="bbn-hpadded">
           <bbn-button ftitle="<?=_('Is connected')?>"
-                      :icon="'fas fa-lightbulb bbn-' + (isConnected ? 'green' : 'red')"
+                      :icon="'nf nf-fa-lightbulb bbn-' + (isConnected ? 'green' : 'red')"
                       @click="connect"></bbn-button>
         </div>
         <div class="bbn-flex-fill bbn-hpadded">
@@ -64,14 +64,14 @@
 
               <div v-text="_('Size:')"></div>
               <div v-if="!p.size">
-                <bbn-button icon="fas fa-database"
+                <bbn-button icon="nf nf-fa-database"
                             @click="get_size(p)" 
                             title="<?=_("Get dir size")?>"
                 ></bbn-button>         
               </div>
               <span v-text="p.size" v-else></span>
               <div class="bbn-grid-full bbn-c@" v-if="(isLoading && i === (numCols - 1) )">
-                <bbn-button icon="fas fa-hand-paper" 
+                <bbn-button icon="nf nf-fa-hand_paper" 
                             @click="abortRequest('dir')"
                             text="<?=_('Abort request')?>"
                             title="<?=_('Cancel the current request')?>"
@@ -100,7 +100,7 @@
           <span v-text="(currentFile.info && currentFile.info.mtime) ? currentFile.info.mtime : ''"></span>
           <div class="bbn-padded">
             <div v-if="isLoading">
-              <bbn-button icon="fas fa-hand-paper" 
+              <bbn-button icon="nf nf-fa-hand_paper" 
                           @click="abortRequest('file')"
                           text="<?=_('Abort request')?>"
                           title="<?=_('Cancel the current request')?>"

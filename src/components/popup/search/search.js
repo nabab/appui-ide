@@ -40,8 +40,7 @@
               url += '_vue_/' + name + '/';
             }
           }
-
-          url += '_end_/' + this.typeSearch + '/_folder_/' + path + '/' + this.search;
+          url += '_end_/' + this.typeSearch + '/_folder_/' + path + '/' + btoa(this.search);
           bbn.fn.log('url4', url);
           url = url.replace( '//',  '/');
           this.$nextTick(() => {

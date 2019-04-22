@@ -110,7 +110,7 @@
     watch:{
       currentRepository(newVal, oldVal){
         if (  oldVal !== '' ){
-          this.$refs.allContentTree.reset();
+          this.getRef('allContentTree').reset();
         }
       }
     }

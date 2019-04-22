@@ -21,9 +21,9 @@
           {
             text: bbn._("Delete"),
             class:"k-primary",
-            icon: 'fas fa-trash',
+            icon: 'nf nf-fa-trash',
             command: ()=>{
-              this.$refs.form.submit();
+              this.getRef('form').submit();
             }
         }]
       }
@@ -39,7 +39,7 @@
         let text = bbn._('Are you sure you want to delete') + ' ';
 
         if ( this.formData.all ){
-          text += bbn._('all') + ' ' + this.source.name + '?';
+          text += bbn._('all') + ' ' + this.source.name + ' ?';
         }
         else{
           // files mvc or  files components
@@ -47,23 +47,22 @@
             (this.source.is_component && this.source.data.is_vue && !this.source.only_component)
           ){
             if (  this.formData.ext !== "" ){
-              text += bbn._('file') + ':' + this.source.name + this.formData.ext + '?';
+              text += bbn._('file') + ' : ' + this.source.name + this.formData.ext + '?';
             }
           }
           //folders mvc
           else if ( !this.source.is_file && this.source.is_mvc ) {
             if (  this.formData.section !== "" ){
-              text += bbn._('the folder' ) + ' in: ' + this.formData.section + '?';
+              text += bbn._('the folder' ) + ' in: ' + this.formData.section + ' ? ';
             }
           }
           // only component
           else if ( this.source.is_component && this.source.data.is_vue && this.source.only_component){
-            text += bbn._('the component') + ' ' + this.source.name + '?';
+            text += bbn._('the component') + ' ' + this.source.name + ' ? ';
           }
         }
         return text;
-      },
-
+      }
     },
     methods:{
       loaded(){
@@ -77,9 +76,9 @@
         appui.error(bbn._("Error!"));
       },
       successremoveElement(){
-        let editor = bbn.vue.closest(this, "bbns-tab").getComponent();
+        let editor = this.closest("bbn-container").getComponent();
 
-        if ( this.all ){
+        if ( this.formData.all ){
           let key = 'file/' + appui.ide.currentRep;
 
           if ( this.source.is_mvc ){
@@ -89,12 +88,12 @@
             key += this.source.data.path + '/_end_';
           }
 
-          let idx = editor.$refs.tabstrip.getIndex(key);
+          let idx = editor.getRef('tabstrip').router.getIndex(key);
 
 
           this.$nextTick(()=>{
             if ( idx != false ){
-              editor.$refs.tabstrip.close(idx);
+              editor.getRef('tabstrip').close(idx);
             }
           });
         }
@@ -105,7 +104,6 @@
             editor.tempNodeofTree = false;
           }
         });
-
         appui.success(bbn._("Deleted!"));
       }
     }

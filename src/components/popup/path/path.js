@@ -28,7 +28,8 @@
       },
       isMVC(){
         // return ((appui.ide.repositories[appui.ide.currentRep] !== undefined) && (appui.ide.repositories[appui.ide.currentRep].tabs !== undefined)) && (this.source.isMVC === true);
-        return (appui.ide.repositories[appui.ide.currentRep] !== undefined) &&  (this.source.rep.tabs !== undefined) && (this.source.isMVC === true);
+        // return (appui.ide.repositories[appui.ide.currentRep] !== undefined) &&  (this.source.rep.tabs !== undefined) && (this.source.isMVC === true);
+        return this.source.isMvc || this.source.isMVC
       },
     },
     methods: {

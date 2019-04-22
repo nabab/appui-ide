@@ -10,7 +10,7 @@
           exts = JSON.parse(ele.extensions);
         }
         return exts.length ?
-          '<div class="bbn-c"><i style="color: green"  class="fas fa-chevron-down"></i></div>' :
+          '<div class="bbn-c"><i style="color: green"  class="nf nf-fa-chevron_down"></i></div>' :
           '';
       },
       renderIconTabs(ele){
@@ -19,7 +19,7 @@
           tabs = JSON.parse(ele.tabs);
         }
         return tabs.length ?
-          '<div class="bbn-c"><i style="color: green" class="fas fa-chevron-down"></i></div>' :
+          '<div class="bbn-c"><i style="color: green" class="nf nf-fa-chevron_down"></i></div>' :
           '';
       },
       renderIconTypes(ele){
@@ -28,15 +28,15 @@
           types = JSON.parse(ele.types);
         }
         return types.length ?
-          '<div class="bbn-c"><i style="color: green" class="fas fa-chevron-down"></i></div>' :
+          '<div class="bbn-c"><i style="color: green" class="nf nf-fa-chevron_down"></i></div>' :
           '';
         // if ( (ele.types !== undefined) && ele.types.length ){
-        //   return '<div class="bbn-c"><i style="color: green" class="fas fa-chevron-down"></i></div>';
+        //   return '<div class="bbn-c"><i style="color: green" class="nf nf-fa-chevron_down"></i></div>';
         // }
         // return '';
       },
       addType(){
-        return this.$refs.types_table.insert({}, {
+        return this.getRef('types_table').insert({}, {
           title: bbn._('Add new type'),
           height: '95%',
           width: '85%'
@@ -53,7 +53,7 @@
               extensions: (ele.extensions && ele.extensions.length) ? ele.extensions : JSON.stringify([])
             },
             titlePopup = bbn._('Copy type') + " " + ele.text;
-        bbn.vue.closest(this, ".bbns-tab").$refs.popup[0].open({
+        this.closest("bbn-container").getRef('popup').open({
           height: '95%',
           width: '85%',
           title: titlePopup,
@@ -68,7 +68,7 @@
           if( d.data.success ){
             this.source.types = d.data.types;
             this.$nextTick(()=>{
-              this.$refs.types_table.updateData()
+              this.getRef('types_table').updateData()
             });
           }
         });
@@ -95,7 +95,7 @@
             this.$set(row,'tabs', JSON.stringify([]));
           }
         }
-        return this.$refs.types_table.edit(row, {
+        return this.getRef('types_table').edit(row, {
           title: bbn._('Modify type') + ' ' + row.text,
           height: '95%',
           width: '85%'

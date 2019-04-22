@@ -37,8 +37,8 @@ if ( !empty($model->data['search']) &&
   }
 
   $path = $model->inc->ide->decipher_path($model->data['repository']['bbn_path'].'/'.$part);
-
   $all = \bbn\file\dir::get_files($path, true);
+
 
   if ( is_array($all) ){
 
@@ -61,13 +61,16 @@ if ( !empty($model->data['search']) &&
             else{
               $content = $v;
             }
+
             $content = \bbn\file\dir::scan($content);
             if ( is_array($content) ){
               foreach($content as $j => $val){
                 $list= [];
                 if ( is_file($val) ){
                   $tot_num_files++;
+
                   if ( $typeSearch(file_get_contents($val), $model->data['search'], $model->data['typeSearch']) !== false ){
+
                     //for plugin in vendor
                     if ( explode("/",$model->data['repository']['path'])[0] === 'bbn'){
                       $pathFile = substr($val, strpos($val, 'mvc'));
@@ -76,6 +79,7 @@ if ( !empty($model->data['search']) &&
                     else{
                       $pathFile = substr($val, strpos($val, $model->data['repository']['path']));
                     }
+
                     // $base = strpos($pathFile, BBN_APP_PATH) === 0 ? BBN_APP_PATH : BBN_LIB_PATH;
                     // $link = substr($pathFile, strlen($base));
                     // $link = explode('/', $link);
@@ -96,7 +100,6 @@ if ( !empty($model->data['search']) &&
 
 
 
-                    //**/
                     if ( (!empty($model->data['isProject']) && $model->data['type'] === 'mvc') ||
                      !empty($model->data['mvc'])
                     ){
@@ -104,6 +107,12 @@ if ( !empty($model->data['search']) &&
                       $link = implode('/', $link);
                       $link = explode('.', $link);
                       $link = array_shift($link);
+
+                      // $tab = array_shift($link);
+                      // $file = $link[count($link)-1];
+                      // $file = explode('.', $file);
+                      // $link[count($link)-1] = array_shift($file);
+                      // $link = implode('/', $link);
                     }
                     else if ( (!empty($model->data['isProject']) && $model->data['type'] === 'components') ||
                      !empty($model->data['components'])
@@ -112,6 +121,15 @@ if ( !empty($model->data['search']) &&
                       $link = explode('.', $link);
                       $tab = array_pop($link);
                       $link = $link[0];
+                    }
+                    else if( empty($model->data['isProject']) && empty($model->data['type']) ) {
+
+                      $file = $link[count($link)-1];
+                      $file = explode('.', $file);
+                      $tab = array_pop($file);
+                      $link[count($link)-1] = array_shift($file);
+                      $link = implode('/', $link);
+
                     }
 
 
@@ -181,8 +199,8 @@ if ( !empty($model->data['search']) &&
                   $path = str_replace($base, (strpos($pathFile, BBN_APP_PATH) === 0 ? 'BBN_APP_PATH/' : 'BBN_LIB_PATH/'), $path);
 
                   $fileData = [
-                    'text' => basename($pathFile)."&nbsp;<span class='w3-badge w3-small w3-light-grey'>".count($list)."</span>",
-                    'icon' => 'far fa-file-code',
+                    'text' => basename($pathFile)."&nbsp;<span class='bbn-badge bbn-s bbn-bg-lightgrey'>".count($list)."</span>",
+                    'icon' => 'nf nf-fa-file_code',
                     'num' => count($list),
                     'numChildren' => count($list),
                     'repository' => $model->data['repository']['bbn_path'].'/',
@@ -201,7 +219,7 @@ if ( !empty($model->data['search']) &&
                       'num' => 1,
                       'numChildren' => 1,
                       'items' => [],
-                      'icon' => !empty($model->data['component']) ? 'fab fa-vuejs' : 'zmdi zmdi-folder-outline'
+                      'icon' => !empty($model->data['component']) ? 'nf nf-fa-vuejs' : 'zmdi zmdi-folder-outline'
                     ];
                     $result[$namePath]['items'][] = $fileData;
                   }
@@ -223,6 +241,7 @@ if ( !empty($model->data['search']) &&
                 }
               }
             }
+        //    die(\bbn\x::dump("s",$result));
           }
           else{
             $tot_num_files++;
@@ -268,8 +287,8 @@ if ( !empty($model->data['search']) &&
               if ( count($list) > 0 ){
                 $totLines .= count($list);
                 $fileData = [
-                  'text' => basename($pathFile)."&nbsp;<span class='w3-badge w3-small w3-light-grey'>".count($list)."</span>",
-                  'icon' => 'far fa-file-code',
+                  'text' => basename($pathFile)."&nbsp;<span class='bbn-badge bbn-s bbn-bg-lightgrey'>".count($list)."</span>",
+                  'icon' => 'nf nf-fa-file_code',
                   'num' => count($list),
                   'numChildren' => count($list),
                   'repository' => $model->data['repository']['bbn_path'].'/',
@@ -285,7 +304,7 @@ if ( !empty($model->data['search']) &&
                     'num' => 1,
                     'numChildren' => 1,
                     'items' => [],
-                    'icon' => !empty($model->data['component']) ? 'fab fa-vuejs' : 'zmdi zmdi-folder-outline'
+                    'icon' => !empty($model->data['component']) ? 'nf nf-fa-vuejs' : 'zmdi zmdi-folder-outline'
                   ];
                   $result[$namePath]['items'][] = $fileData;
                 }
@@ -312,12 +331,16 @@ if ( !empty($model->data['search']) &&
     }
   }
 
+  //die(\bbn\x::dump("s"));
+
   if( !empty($result) ){
     $totFiles = 0;
     foreach ($result as $key => $value) {
       $totFiles = $totFiles + $result[$key]['numChildren'];
-      $result[$key]['text'] = str_replace($result[$key]['text'], $result[$key]['text']."&nbsp;<span class='w3-badge w3-small w3-light-grey'>".$result[$key]['numChildren']."</span>",$result[$key]['text']);
+      $result[$key]['text'] = str_replace($result[$key]['text'], $result[$key]['text']."&nbsp;<span class='bbn-badge bbn-s bbn-bg-lightgrey'>".$result[$key]['numChildren']."</span>",$result[$key]['text']);
     }
+  //  die(\bbn\x::dump($result));
+
   /*  die(\bbn\x::dump([
       'list' => array_values($result),
       'totFiles' => $totFiles,

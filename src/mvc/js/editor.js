@@ -33,145 +33,134 @@
           {
             text: 'File',
             items: [{
-              text: '<i class="fas fa-plus"></i>' + bbn._('New'),
+              icon: 'nf nf-fa-plus',
+              text: bbn._('New'),
               items: [{
-                text: '<i class="far fa-file"></i>' + bbn._('Element'),
-                select: () => {
-                  this.newElement();
-                }
+                icon: 'nf nf-fa-file',
+                text: bbn._('Element'),
+                command: this.newElement
               },{
-                text: '<i class="fas fa-folder"></i>' + bbn._('Directory'),
-                select: () => {
-                  this.newDir();
-                }
+                icon: 'nf nf-fa-folder',
+                text: bbn._('Directory'),
+                command: this.newDir
               }]
             },{
-              text: '<i class="fas fa-save"></i>' + bbn._('Save'),
-              //enabled: false,
-              select: () => {
-                this.save();
-              },
-
+              icon: 'nf nf-fa-save',
+              text: bbn._('Save'),
+              command: this.save
             },{
-              text: '<i class="fas fa-edit"></i>' + bbn._('Rename'),
-              select: () => {
-                this.rename(this.$refs.tabstrip['tabs'][this.$refs.tabstrip.selected], true);
+              icon: 'nf nf-fa-edit',
+              text: bbn._('Rename'),
+              command: () => {
+                this.rename(this.getRef('tabstrip')['tabs'][this.getRef('tabstrip').selected], true);
               }
             },
               {
-                text: '<i class="fas fa-trash"></i>' + bbn._('Delete'),
-                select: () => {
-                  this.deleteActive();
-                }
+                icon: 'nf nf-fa-trash',
+                text: bbn._('Delete'),
+                command: this.deleteActive
               }, {
-                text: '<i class="fas fa-times-circle"></i>' + bbn._('Close tab'),
-                select: () => {
-                  this.closeTab();
-                }
+                icon: 'nf nf-fa-times_circle',
+                text: bbn._('Close tab'),
+                command: this.closeTab
               }, {
-                text: '<i class="far fa-times-circle"></i>' + bbn._('Close all tabs'),
-                select: () =>{
-                  this.closeTabs();
-                } //"bbn.ide.tabstrip.tabNav('closeAll');"
+                icon: 'nf nf-fa-times_circle',
+                text: bbn._('Close all tabs'),
+                command: this.closeTabs
               }]
           }, {
             text: bbn._('Edit'),
             items: [{
-              text: '<i class="fas fa-search"></i>' + bbn._('Find') + ' <small>CTRL+F</small>',
-              select: () =>{
-                this.codeSearch();
-              }
+              icon: 'nf nf-fa-search',
+              text: bbn._('Find') + ' <small>CTRL+F</small>',
+              command: this.codeSearch
             }, {
-              text: '<i class="fas fa-search-plus"></i>' + bbn._('Find next') + ' <small>CTRL+G</small>',
-              select: ()=>{
-                this.codeFindNext();
-              },
+              icon: 'nf nf-fa-search_plus',
+              text: bbn._('Find next') + ' <small>CTRL+G</small>',
+              command: this.codeFindNext
             }, {
-              text: '<i class="fas fa-search-minus"></i>' + bbn._('Find previous') + ' <small>SHIFT+CTRL+G</small>',
-              select: ()=>{
-                this.codeFindPrev();
-              }
-
+              icon: 'nf nf-fa-search_minus',
+              text: bbn._('Find previous') + ' <small>SHIFT+CTRL+G</small>',
+              command: this.codeFindPrev
             }, {
-              text: '<i class="fas fa-exchange-alt"></i>' + bbn._('Replace') + ' <small>SHIFT+CTRL+F</small>',
-              select: ()=>{
-                this.codeReplace();
-              }
-
+              icon: 'nf nf-fa-exchange',
+              text: bbn._('Replace') + ' <small>SHIFT+CTRL+F</small>',
+              command: this.codeReplace
             }, {
-              text: '<i class="fas fa-retweet"></i>' + bbn._('Replace All') + ' <small>SHIFT+CTRL+R</small>',
-              select: () =>{
-                this.codeReplaceAll();
-              },
+              icon: 'nf nf-fa-retweet',
+              text: bbn._('Replace All') + ' <small>SHIFT+CTRL+R</small>',
+              command: this.codeReplaceAll
             },{
-              text: '<i class="fas fa-level-down-alt"></i>' + bbn._('Unfold all'),
-              select: () =>{
-                this.codeUnfoldAll();
-              }
+              icon: 'nf nf-fa-level_down',
+              text: bbn._('Unfold all'),
+              command: this.codeUnfoldAll
             },{
-              text: '<i class="fas fa-level-up-alt"></i>' + bbn._('Fold all'),
-              select: () =>{
-                this.codeFoldAll();
-              }
+              icon: 'nf nf-fa-level_up',
+              text: bbn._('Fold all'),
+              command: this.codeFoldAll
             }]
           }, {
             text: bbn._('History'),
             items: [{
-              text: '<i class="fas fa-history"></i>' + bbn._('Show'),
-              select: () => {
-                this.history();
+              icon: 'nf nf-fa-history',
+              text: bbn._('Show'),
+              command: this.history
+            }, {
+              icon: 'nf nf-fa-trash',
+              text: bbn._('Clear'),
+              command(){
+                if ( bbn.ide ){
+                  return bbn.ide.historyClear();
+                }
               }
             }, {
-              text: '<i class="far fa-trash"></i>' + bbn._('Clear'),
-              select: 'bbn.ide.historyClear();',
-
-            }, {
-              text: '<i class="fas fa-trash"></i>' + bbn._('Clear All'),
-              select: 'bbn.ide.historyClearAll();',
-
+              icon: 'nf nf-fa-trash',
+              text: bbn._('Clear All'),
+              command(){
+                if ( bbn.ide ){
+                  return bbn.ide.historyClearAll()
+                }
+              }
             }]
           }, {
             text: bbn._('Doc.'),
             items: [{
-              text: '<i class="fas fa-binoculars"></i>' + bbn._('Find'),
+              icon: 'nf nf-fa-binoculars',
+              text: bbn._('Find'),
             }, {
-              text: '<i class="fas fa-book"></i>' + bbn._('Generate'),
+              icon: 'nf nf-fa-book',
+              text: bbn._('Generate'),
             }]
-          }/*, {
-           text: 'Current',
-           items: [{
-           text: 'Add View'
-           }, {
-           text: 'Add Model'
-           }, {
-           text: 'Remove current'
-           }]
-           }*/, {
+          }, {
             text: bbn._('Pref.'),
-            //enabled: false,
             items: [{
-              text: '<i class="fas fa-cog"></i>' + bbn._('Manage directories'),
-              select: ()=>{
-                //for show Directories manager
-                this.managerTypeDirectories();
-              }
+              icon: 'nf nf-fa-cog',
+              text: bbn._('Manage directories'),
+              command: this.managerTypeDirectories
             }, {
-              text: '<i class="fas fa-language"></i>' + bbn._('IDE style'),
-              select: "bbn.ide.cfgStyle();",
+              icon: 'nf nf-fa-language',
+              text: bbn._('IDE style'),
+              command(){
+                if ( bbn.ide ){
+                  return bbn.ide.cfgStyle();
+                }
+              }
             }]
           }
-        ]
+        ],
+        type: false
       })
     },
     computed: {
       listRootProject(){
         let roots = this.source.projects.roots.slice();
-        if ( this.currentRep.indexOf('BBN_LIB_PATH/bbn') !== -1){
-          let i = bbn.fn.search(roots, 'value', 'lib');
-          if ( i > -1 ){
-            roots.splice(i, 1);
-          }
-        }
+        //temporaney disabled
+        // if ( this.currentRep.indexOf('BBN_LIB_PATH/bbn') !== -1){
+        //   let i = bbn.fn.search(roots, 'value', 'lib');
+        //   if ( i > -1 ){
+        //     roots.splice(i, 1);
+        //   }
+        // }
         return roots;
       },
       typeSearch(){
@@ -183,15 +172,15 @@
         }
       },
       tabSelected(){
-        return this.$refs.tabstrip.selected;
+        return this.getRef('tabstrip').selected;
       },
       currentURL(){
-        return this.$refs.tabstrip.currentURL;
+        return this.getRef('tabstrip').currentURL;
       },
       currentEditor(){
         if ( this.currentURL ){
-          let idx = this.$refs.tabstrip.selected,
-            codes = bbn.vue.findAll(this.$refs.tabstrip.getVue(idx), 'bbn-code'),
+          let idx = this.getRef('tabstrip').selected,
+            codes = bbn.vue.findAll(this.getRef('tabstrip').getVue(idx), 'bbn-code'),
             code = false;
           $.each(codes, (i, a) => {
             if ( $(a.$el).is(":visible") ){
@@ -208,12 +197,22 @@
        * @returns {boolean}
        */
       isMVC(){
-        return !!(this.repositories[this.currentRep] &&
-          this.repositories[this.currentRep].tabs &&
-          (this.repositories[this.currentRep].alias_code === "mvc"));
+        if ( !this.type ){
+          return !!(this.repositories[this.currentRep] &&
+            this.repositories[this.currentRep].tabs &&
+            (this.repositories[this.currentRep].alias_code === "mvc"));
+        }
+        else{
+          return this.type === "mvc";
+        }
       },
       isComponent(){
-        return !!(this.repositories[this.currentRep] && (this.repositories[this.currentRep].alias_code === "components"));
+        if ( !this.type ){
+          return !!(this.repositories[this.currentRep] && (this.repositories[this.currentRep].alias_code === "components"));
+        }
+        else{
+          return this.type === "component";
+        }
       },
       isProject(){
         return !!(this.repositories[this.currentRep] && this.repositories[this.currentRep].types && (this.repositories[this.currentRep].types.length > 0));
@@ -231,7 +230,6 @@
           is_project: this.isProject
         };
 
-        //bbn.fn.log("guarda11", this.isProject, )
         if (this.isProject && (this.path.length === 0) ){
           obj.path = 'mvc';
           this.typeTree = 'mvc';
@@ -284,7 +282,7 @@
         let title = bbn._('Search in') + ' : ' + node.data.path,
             path = node.data.path;
         if ( component ){
-          title = bbn._('Search in') + ' : ' + node.data.name + ` <i class='fab fa-vuejs'></i>`;
+          title = bbn._('Search in') + ' : ' + node.data.name + ` <i class='nf nf-fa-vuejs'></i>`;
           if ( is_vue ){
             path = node.data.path.split('/');
             path.pop();
@@ -311,8 +309,8 @@
         if( this.search.searchInRepository.length > 0 ){
           let url = this.url+'/search/'+ this.currentRep,
           //for encode string in base64
-              search = btoa(this.search.searchInRepository);
-            //search = encodeURIComponent(this.search.searchInRepository);
+          search = btoa(this.search.searchInRepository);
+
           //search in a project
           if ( this.isProject ){
             url += '_project_/' + this.typeProject + '/';
@@ -456,9 +454,9 @@
        */
       ctrlCloseTab(idx, ev){
         // check if there are any changes in code
-        let ctrlChangeCode = this.$refs.tabstrip.getVue(this.$refs.tabstrip.selected).$refs.component[0].changedCode,
+        let ctrlChangeCode = this.getRef('tabstrip').getVue(this.getRef('tabstrip').selected).getRef('component').changedCode,
           //method close of the tab selected
-          closeProject =  this.$refs.tabstrip.getVue(this.$refs.tabstrip.selected).$parent.close;
+          closeProject =  this.getRef('tabstrip').getVue(this.getRef('tabstrip').selected).$parent.close;
         ev.preventDefault();
         if ( ctrlChangeCode ){
           appui.confirm(
@@ -486,22 +484,22 @@
        *
        */
       closeTab(){
-        let ctrlChangeCode = this.$refs.tabstrip.getVue(this.$refs.tabstrip.selected).$refs.component[0].changedCode;
+        let ctrlChangeCode = this.getRef('tabstrip').getVue(this.getRef('tabstrip').selected).getRef('component').changedCode;
         if ( ctrlChangeCode ){
           appui.confirm(
             bbn._('Do you want to save the changes before closing the tab?'),
             () => {
               this.save( true );
-              this.$refs.tabstrip.close(this.$refs.tabstrip.selected, true);
+              this.getRef('tabstrip').close(this.getRef('tabstrip').selected, true);
             },
             () => {
-              this.$refs.tabstrip.close(this.$refs.tabstrip.selected, true);
+              this.getRef('tabstrip').close(this.getRef('tabstrip').selected, true);
               //this.afterCtrlChangeCode();
             }
           );
         }
         else {
-          this.$refs.tabstrip.close(this.$refs.tabstrip.selected, true);
+          this.getRef('tabstrip').close(this.getRef('tabstrip').selected, true);
         }
       },
       /**
@@ -509,7 +507,7 @@
        *
        */
       closeTabs(){
-        let max= this.$refs.tabstrip.tabs.length;
+        let max= this.getRef('tabstrip').tabs.length;
         while(max !== 1){
           this.closeTab();
           max--;
@@ -542,7 +540,6 @@
         return false;
       },
 
-
       /** ###### TREE ###### */
 
       /**
@@ -556,6 +553,7 @@
             repository_cfg: this.repositories[this.currentRep],
             onlydirs: false,
             tab: a.is_vue ? a.tab : false,
+            tab_mvc: a.tab,
             root_project: a.root_project,
             is_mvc: this.isMVC,
             is_component: this.isComponent,
@@ -572,31 +570,31 @@
       treeContextMenu(n , i){
         let objContext = [
           {
-            icon: n.data.type && n.data.type === 'components' ? 'fab fa-vuejs' : 'far fa-file',
+            icon: n.data.type && n.data.type === 'components' ? 'nf nf-fa-vuejs' : 'nf nf-fa-file',
             text: n.data.type && n.data.type === 'components' ? bbn._('New component') : bbn._('New file'),
             command: (node) => {
               this.newElement(node)
             }
           }, {
-            icon: 'fas fa-folder',
+            icon: 'nf nf-fa-folder',
             text: n.data.type === 'components' ? bbn._('New directory component') : bbn._('New directory'),
             command: (node) => {
               this.newDir(node)
             }
           }, {
-            icon: 'fas fa-edit',
+            icon: 'nf nf-fa-edit',
             text: bbn._('Rename'),
             command: (node) => {
               this.rename(node)
             }
           }, {
-            icon: 'far fa-copy',
+            icon: 'nf nf-fa-copy',
             text: bbn._('Copy'),
             command: (node) => {
               this.copy(node)
             }
           }, {
-            icon: 'fas fa-trash',
+            icon: 'nf nf-fa-trash',
             text: bbn._('Delete'),
             command: (node) => {
               this.deleteElement(node)
@@ -610,7 +608,7 @@
           (n.num > 0)
         ){
           objContext.push({
-            icon: 'fas fa-search',
+            icon: 'nf nf-fa-search',
             text: bbn._('Find in Component vue'),
             command: node => {
               this.searchOfContext(node, true, true);
@@ -631,7 +629,7 @@
             }
           });
           objContext.push({
-            icon: 'fas fa-trash-alt',
+            icon: 'nf nf-fa-trash_alt',
             text:  bbn._('Delete component vue'),
             command: node => {
              this.deleteElement(node, true);
@@ -641,7 +639,7 @@
         if ( n.data.folder ){
           let obj = objContext.slice();
           obj.unshift({
-            icon: 'fas fa-search',
+            icon: 'nf nf-fa-search',
             text: n.data.type && n.data.type === 'components' ? bbn._('Find in folder Component vue') : bbn._('Find in Path'),
             command: node => {
               let comp = n.data.type && n.data.type === 'components'  ? true : false;
@@ -655,32 +653,32 @@
           if ( this.isMVC ){
             let arr = [
               {
-                icon: 'fas fa-external-link-alt',
+                icon: 'nf nf-fa-external_link',
                 text: bbn._('Go to') + " CSS",
                 color: "red",
                 command: (node) => {
                   this.goToTab(node, "css")
                 }
               },{
-                icon: 'fas fa-external-link-alt',
+                icon: 'nf nf-fa-external_link',
                 text: bbn._('Go to') + " Javascript",
                 command: (node) => {
                   this.goToTab(node, "js")
                 }
               },{
-                icon: 'fas fa-external-link-alt',
+                icon: 'nf nf-fa-external_link',
                 text: bbn._('Go to') + " View",
                 command: (node) => {
                   this.goToTab(node, "html")
                 }
               },{
-                icon: 'fas fa-external-link-alt',
+                icon: 'nf nf-fa-external_link',
                 text: bbn._('Go to') + " Model",
                 command: (node) => {
                   this.goToTab(node, "model")
                 }
               },{
-                icon: 'fas fa-external-link-alt',
+                icon: 'nf nf-fa-external_link',
                 text: bbn._('Go to') + " Controller",
                 command: (node) => {
                   this.goToTab(node, "php")
@@ -694,7 +692,7 @@
 
           }
           obj.unshift({
-            icon: 'fas fa-magic',
+            icon: 'nf nf-fa-magic',
             text: bbn._('Test code!'),
             command: ( node )=>{
               this.testNodeOfTree(node)
@@ -704,7 +702,7 @@
         }
       },
       goToTab(ele, tab){
-        this.$refs.tabstrip.load(
+        this.getRef('tabstrip').load(
           'file/' +
           this.currentRep +
           (ele.data.dir || '') +
@@ -717,7 +715,7 @@
        *
        */
       treeReload(n, i){
-        this.$refs.filesList.reload();
+        this.getRef('filesList').reload();
       },
 
       /**
@@ -729,7 +727,7 @@
        */
       treeNodeActivate(d){
         if ( !d.data.folder || (d.data.folder && d.data.is_vue) ){
-          if( !this.isMVC && this.existingTab(d)){
+          if( !this.isProject && !this.isMVC && this.existingTab(d) ){
             bbn.fn.link(
               this.root + 'editor/file/' +
               this.currentRep +
@@ -788,7 +786,7 @@
        */
       existingTab(ele){
         let exist = false;
-        for(let tab of this.$refs.tabstrip.tabs){
+        for(let tab of this.getRef('tabstrip').tabs){
           if ( tab.title === ele.data.path ){
             exist = true;
             break;
@@ -820,20 +818,16 @@
         }
 
         if ( link ){
-          this.$refs.tabstrip.load(link);
+          this.getRef('tabstrip').load(link);
         }
       },
       getActive(getCode = false){
-        let tn = this.$refs.tabstrip,
-          code;
+        let tn = this.getRef('tabstrip');
         if ( tn && tn.tabs[tn.selected] ){
-          tn = tn.getSubTabNav(tn.selected);
           if ( !getCode ){
-            return tn;
+            return tn.getSubTabNav(tn.selected);
           }
-          //let tabnav = bbn.vue.closest(bbn.vue.find(this, 'appui-ide-code'), 'bbn-tabnav');
-
-          return bbn.vue.find(this.getRef('tabstrip').getSubTabNav().activeRealTab, 'appui-ide-code');
+          return tn.router.getRealVue().find('appui-ide-code');
         }
         return false;
       },
@@ -908,7 +902,60 @@
        *
        */
       test(){
-        this.getActive(true).test()
+        //let is_component = this.getActive(true).rep['alias_code'] === 'components';
+
+        let cp = this.getRef('tabstrip').router.getRealVue();
+        let component = cp.closest('appui-ide-component');
+        if ( component ){
+          let url = component.closest('bbn-container').url;
+          // Removing file/ and /_end_
+          let bits = url.split('/');
+          bits.splice(0, 1);
+          bits.splice(bits.length - 2, 2);
+          let root = '';
+          let cp = '';
+          let foundComponents = false;
+          bbn.fn.each(bits, (a) => {
+            if ( a === 'components' ){
+              foundComponents = true;
+            }
+            else if ( !foundComponents ){
+              root += a + '/';
+            }
+            else {
+              cp += a + '-';
+            }
+          });
+          if ( cp ){
+            let found = false;
+            root = root.substr(0, root.length-1);
+            cp = cp.substr(0, cp.length-1);
+            if ( root === 'BBN_APP_PATH' ){
+              found = bbn.env.appPrefix + '-' + cp;
+            }
+            else if ( root === 'BBN_CDN_PATH/lib/bbn-vue' ){
+              found = 'bbn-' + cp;
+            }
+            else{
+              bbn.fn.iterate(bbn.env.plugins, (a, n) => {
+                if ( root.indexOf(n + '/src') > -1 ){
+                  found = n + '-' + cp;
+                }
+              })
+            }
+            if ( found ){
+              bbn.version++;
+              bbn.vue.unloadComponent(found);
+              appui.info(bbn._("The component has been deleted") + '<br>' + bbn._("Loading a page with this component will redefine it."));
+            }
+            else{
+              appui.error(bbn._("Impossible to retrieve the name of the component"));
+            }
+          }
+        }
+        else{
+          this.getActive(true).test()
+        }
       },
 
       testNodeOfTree(node){
@@ -936,8 +983,7 @@
         }
       },
 
-      repositoryProject( type= false ){
-        bbn.fn.log(type, "type");
+      repositoryProject( type = false ){
         let rep = $.extend({}, this.repositories[this.currentRep]);
         if ( !type ){
           type = this.typeTree
@@ -977,7 +1023,7 @@
         };
         //case top menu
 
-        if ( node === false ){
+        if ( !bbn.fn.isObject(node) ){
           src.path = './'
           //case project
           if ( this.typeTree !== false ){
@@ -991,6 +1037,7 @@
         }
         //of context
         else {
+          src.tab_mvc = node.data.tab_mvc;
           if ( node.num > 0 ){
             if( !node.isExpanded ){
               node.isExpanded = true;
@@ -1024,12 +1071,11 @@
           }
           src.allData = node.data;
         }
-        bbn.fn.log("new", node, src)
 
-        if ( (node === false) || node.data.folder ){
+        if ( !bbn.fn.isObject(node) || node.data.folder ){
           //check path
           src.path = src.path.replace( '//',  '/');
-          bbn.vue.closest(this, ".bbns-tab").$refs.popup[0].open({
+          this.closest("bbn-container").getRef('popup').open({
             width: 500,
             height: 250,
             title: title,
@@ -1046,18 +1092,16 @@
        */
       newElement(node = false){
         let title = bbn._('New File');
-        if ( this.isProject &&
-          ((node !== false) && (node.data.type !== false) || (this.typeTree !== false))
+        if ( this.isProject && bbn.fn.isObject(node) &&
+          ((node.data.type !== false) || (this.typeTree !== false))
         ){
           if ( ((node !== false) && (node.data.type === 'components')) || (this.typeTree === 'components') ){
-            title = bbn._('New Component') +  ` <i class='fab fa-vuejs'></i>`;
+            title = bbn._('New Component') +  ` <i class='nf nf-fa-vuejs'></i>`;
           }
           else if ( ((node !== false) && (node.data.type === 'lib')) || (this.typeTree === 'lib') ){
             title = bbn._('New Class');
           }
         }
-        bbn.fn.log(title, true, node);
-
         this.new(title, true, node);
       },
 
@@ -1080,6 +1124,7 @@
       rename(node, menuFile= false, onlyComponent= false){
         //case of click rename in contextmenu of the tree
         let src = {},
+            tab = false,
             title = '';
         //of context menu
         if ( !menuFile ){
@@ -1090,7 +1135,8 @@
               path: node.data.path,
               name: node.data.name,
               tab: node.data.tab,
-              dir: node.data.dir
+              dir: node.data.dir,
+              type: node.data.type
             },
             parent: node.parent,
             isMVC: this.isProject && node.data.type === 'mvc' ? true : this.isMVC,
@@ -1098,8 +1144,15 @@
             root: this.source.root,
             currentRep: this.currentRep,
             repositories: this.repositories,
-            repository: this.repositories[this.currentRep]
+            repository: this.repositories[this.currentRep],
+            is_project: this.isProject,
           };
+
+          if ( node.data.type === 'lib' ){
+             let temp = node.data.dir.split('/');
+             temp.shift();
+             src.nodeData.type = temp.join('/');
+          }
         }
         else{
           let tab = this.getRef('tabstrip').tabs[this.tabSelected].source,
@@ -1111,7 +1164,6 @@
                 repository: tab.repository
               },
               tabFile = tabInfo.name;
-
           src = {
             nodeData:{
               folder: false,
@@ -1126,13 +1178,27 @@
             repositories: this.source.repositories,
             root: this.source.root,
             parent: false,
-            repository: this.repositories[this.currentRep]
+            repository: this.repositories[this.currentRep],
+            is_project: this.isProject,
           };
         }
         if ( this.isProject &&
           (( node.data !== undefined && node.data.type !== undefined && menuFile === false) ||
           (menuFile === true))
         ){
+
+          if ( (tab !== false) && menuFile ){
+            if ( tab.isMVC ){
+              src.nodeData.type = "mvc";
+            }
+            else if ( tab.isComponent ){
+              src.nodeData.type = 'components';
+            }
+            else{
+              src.nodeData.type = 'lib';
+            }
+          }
+
           src.only_component = onlyComponent;
           //tree
           if  ( !menuFile ){
@@ -1200,6 +1266,7 @@
           data: node.data,
           currentRep: this.currentRep,
           repositories: this.source.repositories,
+          repository: this.source.repositories[this.currentRep],
           root: this.source.root,
           isMVC: this.isMVC || node.data.type === 'mvc',
           isComponent: this.isComponent || node.data.type === 'components',
@@ -1214,7 +1281,7 @@
           title =  node.data.folder ? bbn._('Copy folder') : bbn._('Copy');
         }
 
-        if ( node.data.type !== undefined && this.isProject ){
+        if ( (node.data.type !== undefined) && this.isProject ){
           src.only_component = onlyComponent;
           src.repository = $.extend(this.repositories[this.currentRep], {tabs: this.source.projects.tabs_type[node.data.type][0]});
 
@@ -1227,7 +1294,7 @@
           title = node.data.folder ? bbn._('Copy folder') : bbn._('Copy');
         }
 
-        bbn.vue.closest(this, ".bbns-tab").$refs.popup[0].open({
+        this.closest("bbn-container").getRef('popup').open({
           width: 470,
           height: 250,
           title: title,
@@ -1314,13 +1381,15 @@
             is_mvc: this.isMVC || node.data.type === 'mvc',
             is_component: this.isComponent || node.data.type === 'components',
             data: node.data,
-            root: this.root
+            root: this.root,
+            type: false,
+            is_project: this.isProject
           },
           text = "";
           if ( (node.data.type !== undefined) && this.isProject ){
             src.only_component = onlyComponent;
             src.repository = !this.repositoryProject(node.data.type) ? this.repositories[this.currentRep] : this.repositoryProject(node.data.type);
-
+            src.type = node.data.type;
             if( node.data.type === 'components' && this.isComponent ){
               src.only_component = onlyComponent;
               if (  node.data.is_vue !== undefined ){
@@ -1352,34 +1421,12 @@
               '<strong>' + node.data.name +  ' </strong>' + ' ?' ;
           }
 
-
-          // if ( node.data.type === undefined  ||
-          //   (!node.data.type) ||
-          //   ((node.data.type !== 'mvc') || (node.data.type !== 'components'))
-          // ){
-          //   appui.confirm( text, () => {
-          //     bbn.fn.post(this.root + 'actions/delete', src, (d) => {
-          //       if ( d.success ){
-          //         const idx = this.$refs.tabstrip.getIndex('file/' + this.currentRep + node.data.dir + node.data.name);
-          //         if ( idx != false ){
-          //           this.$refs.tabstrip.close(idx);
-          //         }
-          //         this.reloadAfterTree(node, 'delete');
-          //         appui.success(bbn._("Deleted!"));
-          //       }
-          //       else {
-          //         appui.error(bbn._("Error!"));
-          //       }
-          //     });
-          //   });
-          // }
-          // else{
-            let title = src.is_file ? bbn._('Remove File') : bbn._('Remove Folder');
+          let title = src.is_file ? bbn._('Remove File') : bbn._('Remove Folder');
             this.tempNodeofTree = node;
             this.getPopup().open({
               width: 450,
               title: node.data.type === 'components' && node.data.is_vue ? bbn._('Remove Component') : title,
-              height: 250,
+              height: 200,
               component: 'appui-ide-popup-remove',
               source: src
             });
@@ -1445,21 +1492,22 @@
           };
 
 
-      //    bbn.fn.log("move", obj);
           bbn.fn.post(this.root + 'actions/move', obj, (d) =>{
             if ( d.success ){
               let tabTitle = obj.path + obj.name,
-                tabs = bbn.vue.findAll(appui.ide, 'bbns-tab');
+                tabs = bbn.vue.findAll(appui.ide, 'bbn-container');
 
-
+              if ( this.isProject ){
+                tabTitle = obj.type + '/' + tabTitle;
+              }
               //if a node is moved from a tree and that it is open
               this.$nextTick(()=>{
                 let idTab = bbn.fn.search(tabs, 'title', tabTitle);
+
                 if( idTab > -1 ){
                   bbn.vue.find(appui.ide, 'bbn-tabnav').close(idTab);
                 }
               });
-
               this.$nextTick(()=>{
                 bbn.vue.closest(dest, 'bbn-tree').reload();
                 appui.success(bbn._('Successfully moved'));
@@ -1513,7 +1561,7 @@
               if ( d.success ){
                 this.getRef('tabstrip').close(this.tabSelected);
                 appui.success(bbn._("Deleted!"));
-                 this.$refs.filesList.reload();
+                 this.getRef('filesList').reload();
               }
               else {
                 appui.error(bbn._("Error!"));
@@ -1530,7 +1578,7 @@
       history(){
         const tabNav = this.getActive();
         if ( tabNav ){
-          tabNav.add({
+          tabNav.router.add({
             title: bbn._('History'),
             load: false,
             url: 'history',
@@ -1539,12 +1587,14 @@
             source: tabNav.$parent.$data
           });
         }
-        tabNav.selected = tabNav.getIndex('history');
-
+        tabNav.selected = tabNav.router.getIndex('history');
+        this.$nextTick(()=>{
+          tabNav.router.activateIndex(tabNav.selected);
+        });
       },
       /** ###### I18N ###### */
       i18n(){
-        let tabnav = appui.ide.$refs.tabstrip,
+        let tabnav = appui.ide.getRef('tabstrip'),
             tabnavActive = tabnav.activeTabNav,
             currentIde = tabnavActive.$parent,
             table_data  = [];
@@ -1614,6 +1664,9 @@
 
 
     },
+    created(){
+      appui.ide = this;
+    },
     mounted(){
       bbn.fn.log('editor',this)
     },
@@ -1651,8 +1704,5 @@
         }
       }
     },
-    created(){
-      appui.ide = this;
-    }
   };
 })();

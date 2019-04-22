@@ -23,7 +23,9 @@
         rep: rep,
         type:  this.source.type || false,
         data: {
-          tab: defaultTab,
+          tab: ((this.source.tab_mvc !== undefined) && this.source.tab_mvc.length && (this.source.type === 'mvc')) ?
+                  bbn.fn.search(rep.tabs, 'url', this.source.tab_mvc) :
+                  defaultTab,
           name: '',
           extension: defaultExt,
           is_file: this.source.isFile,
@@ -63,7 +65,7 @@
           appui.success(bbn._("Directory created!"));
         }
         if ( (this.data.path === './')  || (this.source.parent === false) ){
-          appui.ide.$refs.filesList.reload();
+          appui.ide.getRef('filesList').reload();
         }
         else{
           this.source.parent.reload();
@@ -73,7 +75,7 @@
         appui.error(bbn._("Error!"));
       },
       selectDir(){
-        bbn.vue.closest(this, "bbns-tab").getPopup({
+        this.closest("bbn-container").getPopup({
           width: 300,
           height: 400,
           title: bbn._('Path'),

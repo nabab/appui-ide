@@ -14,8 +14,7 @@
     },
     methods: {
       close(){
-        const popup = bbn.vue.closest(this, ".bbn-popup");
-        popup.close();
+        this.closest("bbn-popup").close();
       },
       /**
        *  TODO
@@ -24,8 +23,8 @@
        */
 
       ctrlCloseTab(id){
-        let ctrlChangeCode = appui.ide.$refs.tabstrip.getVue(id).$refs.component[0].changedCode,
-            tabs           = appui.ide.$refs.tabstrip['tabs'].slice(),
+        let ctrlChangeCode = appui.ide.getRef('tabstrip').getVue(id).getRef('component').changedCode,
+            tabs           = appui.ide.getRef('tabstrip')['tabs'].slice(),
             url            = tabs[idx]['url'],
             current        = tab[idx]['current'];
         if ( ctrlChangeCode ){
@@ -86,7 +85,7 @@
                           }
                         }
                         newParamsTab.title = stepTitle.join('/');
-                        appui.ide.$refs.tabstrip['tabs'][i]
+                        //appui.ide.getRef('tabstrip[')'tabs'][i]
                       }
                       else{
                         /*      let end      = tabs[i]['title'].lastIndexOf('/'),
@@ -105,7 +104,7 @@
           );
         }
         else{
-          appui.ide.$refs.tabstrip.close(this.$refs.tabstrip.selected, true);
+          appui.ide.getRef('tabstrip').close(this.getRef('tabstrip').selected, true);
         }
         return true
       },
@@ -114,7 +113,7 @@
         let path = this.source.nodeData.path.split('/');
         //if it is a file, you perform open tab check operations and in case we rename its tab title
         if ( tabStrip ){
-          var idx = tabStrip.getIndex('file/' + appui.ide.currentRep + this.source.nodeData.dir + this.source.nodeData.name);
+          var idx = tabStrip.router.getIndex('file/' + appui.ide.currentRep + this.source.nodeData.dir + this.source.nodeData.name);
           //if the file we have to rename is open and is also active then we rename it
           if ( Number.isInteger(idx) && idx > -1 ){
             if ( this.ctrlCloseTab(idx) ){
@@ -123,15 +122,34 @@
         }
       },
       onSuccess(){
+
+        let editor = this.closest("bbn-container").getComponent(),
+            key = 'file/' + appui.ide.currentRep;
+
+        if ( this.source.isMVC ){
+          key += 'mvc/' + this.source.nodeData.path + '/_end_';
+        }
+        else if ( this.source.isCcomponent ){
+          key += this.source.data.path + '/_end_';
+        }
+
+        let idx = editor.getRef('tabstrip').router.getIndex(key);
+
+
+
+        if ( idx != false ){
+          editor.getRef('tabstrip').close(idx);
+        }
+
         if ( this.source.parent ){
           this.source.parent.reload();
         }
         else{
+          // this.$nextTick(() => {
+          //   appui.ide.getRef('tabstrip').close(appui.ide.tabSelected);
+          // });
           this.$nextTick(() => {
-            appui.ide.$refs.tabstrip.close(appui.ide.tabSelected);
-          });
-          this.$nextTick(() => {
-            let newUrl = appui.ide.$refs.tabstrip.tabs[appui.ide.tabSelected].current;
+            let newUrl = appui.ide.getRef('tabstrip').tabs[appui.ide.tabSelected].current;
             appui.ide.getRef('tabstrip').currentURL = newUrl;
             bbn.fn.link('ide/editor/' + newUrl);
             appui.ide.getRef('tabstrip').load(newUrl);
@@ -172,7 +190,9 @@
           ext: this.source.nodeData.ext,
           is_mvc: this.isMVC,
           is_file: this.isFile,
-          is_component: this.source.isComponent
+          is_component: this.source.isComponent,
+          is_project: this.source.is_project,
+          type: this.source.nodeData.type
         };
         if ( this.source.is_component ){
           obj.path = this.source.nodeData.path;

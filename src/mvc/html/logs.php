@@ -1,31 +1,98 @@
 <!-- HTML Document -->
 <div class="bbn-flex-height">
-  <div class="bbn-c bbn-padded">
-    <bbn-checkbox label="<?=_('Auto')?>"
-                  v-model="autoRefreshFile"
-                  :value="!autoRefreshFile"
-    ></bbn-checkbox>
+  <div class="bbn-flex-width bbn-w-100  bbn-padded">
+    <div>
+      <span v-if="fileLog.length"
+            class="bbn-b bbn-middle bbn-xl"
+            v-text="_('File Log') + ':' +  '  ' + fileLog"
+      ></span>
+      <span v-else
+            class="bbn-b bbn-middle bbn-xl"
+      >
+        <?=_('Manager Log')?>s
+      </span>
+    </div>
+    <div class="bbn-flex-fill bbn-r">
+      <bbn-checkbox label="<?=_('Auto')?>"
+                    v-model="autoRefreshFile"
+                    :value="!autoRefreshFile"
+      ></bbn-checkbox>
       &nbsp;
-    <bbn-dropdown :source="files"
-                  v-model="fileLog"
-                  style="width: 200px"
-    ></bbn-dropdown>
-    &nbsp;
-   <bbn-dropdown :source="listLignes"
-                  v-model="lignes"
-                  style="width: 150px"
-    ></bbn-dropdown>
-    &nbsp;
-    <bbn-button @click="onChange(1)"><i class="far fa-file"> </i><?=_('Clear file')?></bbn-button>
-    &nbsp;
-    <bbn-button @click="onChange()"><i class="fas fa-sync-alt"> </i><?=_('Refresh')?></bbn-button>
-  </div>
-  <div v-if="textContent.length" class="bbn-flex-fill">
-    <div class="bbn-full-screen">
-      <bbn-code :mode="type" v-model="textContent" :readonly="true"></bbn-code>
+     <bbn-dropdown :source="listLignes"
+                    v-model="lignes"
+                    style="width: 150px"
+      ></bbn-dropdown>
+      &nbsp;
+      <bbn-button @click="onChange(1)"
+                  icon="nf nf-fa-file"
+                  text="<?=_('Clear file')?>"
+      ></bbn-button>
+      &nbsp;
+      <bbn-button @click="onChange()"
+                  icon="nf nf-fa-sync"
+                  text="<?=_('Refresh')?>"
+      ></bbn-button>
+      &nbsp;
+      <bbn-dropdown :source="themes"
+                    v-model="theme"
+                    style="width: 150px"
+                    class="bbn-c"
+                    v-if="themes.length"
+      ></bbn-dropdown>
     </div>
   </div>
-  <div v-else>
-    <span class="bbn-xxxxl"><?=_('Empty file content')?></span>
+  <div class="bbn-flex-fill">
+    <bbn-splitter class="bbn-code-container"
+                  :resizable="true"
+                  :collapsible="true"
+                  orientation="horizontal"
+    >
+      <bbn-pane :size="270"
+                :collapsible="true"
+                :resizable="true"
+      >
+        <div class="bbn-flex-height">
+          <div style="padding-top: 10px; padding-bottom: 10px;"
+               class="bbn-w-100 bbn-middle"
+          >
+            <bbn-button title="<?=_('Refresh')?>"
+                        @click="treeReload()"
+                        text="<?=_('Refresh files list')?>"
+                        icon="nf nf-oct-sync"
+            ></bbn-button>
+          </div>
+          <div class="bbn-flex-fill" >
+            <div class="bbn-full-screen">
+              <!-- <bbn-tree :source="source.root + 'tree_logs'"
+                        @select="selectLogFile"
+                        ref="listFilesLog"
+                        :min-expand-level="1"
+              ></bbn-tree> -->
+              <bbn-tree :source="sourceTree"
+                        @select="selectLogFile"
+                        ref="listFilesLog"
+                        :min-expand-level="1"
+                        v-if="sourceTree.length"
+              ></bbn-tree>
+            </div>
+          </div>
+        </div>
+      </bbn-pane>
+      <bbn-pane :collapsible="true"
+                :resizable="true"
+                :scrollable="false"
+      >
+      <div v-if="textContent && textContent.length > 1" class="bbn-overlay">
+        <bbn-code :mode="type"
+                  v-model="textContent"
+                  :readonly="true"
+                  :theme="theme"
+        ></bbn-code>
+      </div>
+      <div v-else class="bbn-overlay bbn-middle">
+        <div class="bbn-xxxxl"><?=_('Empty file content')?></div>
+      </div>
+      </bbn-pane>
+    </bbn-splitter>
   </div>
 </div>
