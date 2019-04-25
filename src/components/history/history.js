@@ -14,16 +14,27 @@
         code: '',
         url: '',
         treeLoad: false,
+        noHistory: false
       }
     },
     methods: {
+      loadedTree(d){
+        if ( bbn.fn.isArray(d.data) && (d.data.length === 0) ){
+          this.noHistory = true;
+          this.$nextTick(()=>{
+            this.$refs.treeHistory.$set(this.$refs.treeHistory, 'isLoaded', false);
+          });
+        }
+      },
       //method map for component tree
       transform(a){
-        return $.extend(a, {
-          text: "name_file" in a ? a.text + ' &nbsp; <span class="bbn-badge bbn-s bbn-bg-lightgrey">' + a.numChildren + '</span>' : a.text,
-          num: a.numChildren || 0,
-          type: "name_file" in a ? "" : a.text
-        });
+        if ( a ){
+          return $.extend(a, {
+            text: "name_file" in a ? a.text + ' &nbsp; <span class="bbn-badge bbn-s bbn-bg-lightgrey">' + a.numChildren + '</span>' : a.text,
+            num: a.numChildren || 0,
+            type: "name_file" in a ? "" : a.text
+          });
+        }
       },
       //  click in node file for to make a post and upload its content
       treeNodeActivate(node){

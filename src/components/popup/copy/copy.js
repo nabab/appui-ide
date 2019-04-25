@@ -4,6 +4,10 @@
  * Date: 13/07/2017
  * Time: 17:57
  */
+
+
+
+
 (() => {
   return {
     data(){
@@ -23,7 +27,14 @@
         }
         else{
           if ( this.source.parent ){
-            this.source.parent.reload();
+            //provisional
+            if ( appui.ide.nodeParent !== false ){
+              appui.ide.nodeParent.relaod();
+              this.$nextTick(()=>{
+                appui.ide.$set(appui.ide, 'nodeParent', false);
+              });
+            }
+            //this.source.parent.reload();
           }
         }
 
@@ -41,7 +52,11 @@
         appui.error(bbn._("Error!"));
         bbn.vue.closest(this, ".bbn-popup").close();
       },
-
+      // selectRoot(){
+      //   if ( this.source.isMVC ){
+      //
+      //   }
+      // },
       selectDir(){
         this.closest("bbn-container").getRef('popup').open({
           width: 300,
@@ -53,7 +68,10 @@
             isComponent: this.source.isComponent,
             isMvc: this.source.isMVC,
             rep: this.source.repository,
-            data: this.source.data
+            data: {
+              path: this.new_path
+            },
+            type: this.source.data.type
           })
         });
       }/*,

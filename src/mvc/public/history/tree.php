@@ -6,7 +6,6 @@ $res = [];
 if ( isset($ctrl->inc->ide, $ctrl->post['is_mvc']) && !empty($ctrl->post['path']) ){
   if ( !isset($ctrl->post['type']) ){
     $list = $ctrl->inc->ide->history($ctrl->post['path']);
-
     if ( !empty($list) ){
       foreach ( $list as $val ){
         array_push($res, [
@@ -18,7 +17,8 @@ if ( isset($ctrl->inc->ide, $ctrl->post['is_mvc']) && !empty($ctrl->post['path']
         ]);
       }
     }
-  }else {
+  }
+  else {
     $files = $ctrl->inc->ide->history($ctrl->post['path']);
     if ( !empty($files) ){
       foreach ( $files as $val ){
@@ -34,12 +34,20 @@ if ( isset($ctrl->inc->ide, $ctrl->post['is_mvc']) && !empty($ctrl->post['path']
   }
   if ( !empty($res) ){
     $ctrl->obj->data = $res;
-  } else {
-    $ctrl->obj->error = $ctrl->inc->ide->get_last_error();
   }
-}else{
-  if ( isset($ctrl->inc->ide, $ctrl->post['url']) && !empty($ctrl->post['url']) ){
+  else {
+    $error = $ctrl->inc->ide->get_last_error();
+    if ( $error === null ){    
+      $ctrl->obj->data = [];
 
+    }
+    else{
+      $ctrl->obj->error = $error;
+    }
+  }
+}
+else{
+  if ( isset($ctrl->inc->ide, $ctrl->post['url']) && !empty($ctrl->post['url']) ){
     $path = BBN_DATA_PATH."ide/backup/".$ctrl->post['url'];
     $code= file_get_contents($path);
 
@@ -48,8 +56,17 @@ if ( isset($ctrl->inc->ide, $ctrl->post['is_mvc']) && !empty($ctrl->post['path']
         'success' => true,
         'code' => $code
       ];
-    } else {
-      $ctrl->obj->error = $ctrl->inc->ide->get_last_error();
+    }
+    else {
+      $error = $ctrl->inc->ide->get_last_error();
+      if ( $error === null ){
+        $ctrl->obj->data =[
+          'success' => false
+        ];
+      }
+      else{
+        $ctrl->obj->error = $error;
+      }
     }
   }
 }

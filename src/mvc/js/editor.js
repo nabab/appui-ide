@@ -148,7 +148,8 @@
             }]
           }
         ],
-        type: false
+        type: false,
+        nodeParent: false
       })
     },
     computed: {
@@ -1017,7 +1018,7 @@
           currentRep: this.currentRep,
           repositories: this.repositories,
           root: this.root,
-          parent: false,
+          //parent: false,
           type: false,
           isProject: this.isProject
         };
@@ -1042,10 +1043,12 @@
             if( !node.isExpanded ){
               node.isExpanded = true;
             }
-            src.parent = bbn.vue.find(node, 'bbn-tree');
+            //src.parent = bbn.vue.find(node, 'bbn-tree');
+            this.nodeParent = bbn.vue.find(node, 'bbn-tree');
           }
           else{
-            src.parent= node.parent;
+            //src.parent= node.parent;
+            this.nodeParent = node.parent;
           }
           //caseproject
           if ( node.data.type !== false ){
@@ -1262,6 +1265,7 @@
        * @param data The node data
        */
       copy(node, onlyComponent= false){
+        this.nodeParent = node.parent;
         let src = {
           data: node.data,
           currentRep: this.currentRep,
@@ -1271,7 +1275,7 @@
           isMVC: this.isMVC || node.data.type === 'mvc',
           isComponent: this.isComponent || node.data.type === 'components',
           config: this.source.config,
-          parent: node.parent
+        //  parent: node.parent
         },
         title = '';
         if ( node.data.type === 'components' ){
@@ -1293,15 +1297,14 @@
         else{
           title = node.data.folder ? bbn._('Copy folder') : bbn._('Copy');
         }
-
-        this.closest("bbn-container").getRef('popup').open({
+        bbn.fn.log("sw", src)
+        this.getPopup().open({
           width: 470,
           height: 250,
           title: title,
           component: 'appui-ide-popup-copy',
           source: src
         });
-
       },
 
       /**

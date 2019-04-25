@@ -22,7 +22,7 @@
           onlydirs: true,
           tree_popup: true,
           tab: this.source.tab || false,
-          path: this.source.data.path,
+          path: this.source.data.path === './' ? '' : this.source.data.path,
           type: this.source.type || false
         };
       },

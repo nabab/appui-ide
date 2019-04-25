@@ -68,7 +68,13 @@
           appui.ide.getRef('filesList').reload();
         }
         else{
-          this.source.parent.reload();
+          if ( appui.ide.nodeParent !== false ){
+            appui.ide.nodeParent.relaod();
+            this.$nextTick(()=>{
+              appui.ide.$set(appui.ide, 'nodeParent', false);
+            });
+          }
+          //this.source.parent.reload();
         }
       },
       failureActive(){
@@ -84,12 +90,13 @@
         });
       },
       getRoot(){
-        if ( this.source.isProject ){
-          this.data.path = this.source.type + '/';
-        }
-        else{
-          this.data.path = './';
-        }
+        this.data.path = './';
+        // if ( this.source.isProject ){
+        //   this.data.path = this.source.type + '/';
+        // }
+        // else{
+        //   this.data.path = './';
+        // }
       }
     },
     computed: {

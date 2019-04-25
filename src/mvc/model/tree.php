@@ -135,13 +135,14 @@ if ( !empty($model->data['repository']) &&
     }
     //if the element exists
     if ( !empty($real) ){
+
       $todo = !empty($onlydirs) ? $dirs($real) : \bbn\file\dir::get_files($real, true);
       if ( is_array($todo) ){
         //we browse the element
         foreach ( $todo as $t ){
-          //we can only enter if it is a component type and there is no other child element with the same name or that is not a component type
-          if ( (((\bbn\str::file_ext($t, 1)[0] !== basename($cur_path)) && is_dir($t)) && ($type === 'components')) ||
-           ($type !== 'components')
+          //we can only enter if it is a component type and there is no other child element with the same name or that is not a component type          
+          if ( ((((\bbn\str::file_ext($t, 1)[0] !== basename($cur_path)) && is_dir($t)) && ($type === 'components')) ||  ($type !== 'components')) &&
+           (strpos(basename($t),".") !== 0)
           ){
             $component = false;
             $is_vue = false;
@@ -153,6 +154,8 @@ if ( !empty($model->data['repository']) &&
                ((!empty( $types_to_include) && empty($type) && in_array($name, $types_to_include, true)) || !empty($type))
               )
             ){
+
+
               //we take the file name if it is not '_ctrl'
               if ( $name !== '_ctrl.php' ){
                 //take note if it is a file or not the element
@@ -364,6 +367,7 @@ if ( !empty($model->data['repository']) &&
             if ( !empty($tree_popup) ){
               $path_complete = $path . 'mvc/'. $t['path'] . $cur_path;
               $type= 'mvc';
+
             }
             else{
               $path_complete = $path . $t['path'] . $cur_path;
@@ -374,7 +378,6 @@ if ( !empty($model->data['repository']) &&
             $type= 'components';
             $t['bcolor'] = '#44b782';
           }
-
 
           $get($path_complete, $t['bcolor'], $t['url'], $type);
 
