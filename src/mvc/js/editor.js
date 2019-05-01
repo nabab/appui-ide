@@ -1275,6 +1275,8 @@
           isMVC: this.isMVC || node.data.type === 'mvc',
           isComponent: this.isComponent || node.data.type === 'components',
           config: this.source.config,
+          isProject: this.isProject,
+          type: this.typeTree
         //  parent: node.parent
         },
         title = '';
@@ -1297,7 +1299,7 @@
         else{
           title = node.data.folder ? bbn._('Copy folder') : bbn._('Copy');
         }
-        bbn.fn.log("sw", src)
+        
         this.getPopup().open({
           width: 470,
           height: 250,

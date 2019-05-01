@@ -13,6 +13,23 @@
       }
     },
     computed: {
+      path(){
+        if ( this.source.data.path === './' ){
+          if ( this.source.type !== undefined ){
+            if ( this.source.isComponent ){
+              return "components/";
+            }
+            else if ( this.isMVC ){
+              return "mvc/";
+            }
+            else{
+              return "lib/";
+            }
+          }
+          return "";
+        }
+        return this.source.data.path;
+      },
       treeInitialData(){
         return {
           repository: appui.ide.currentRep,
@@ -22,7 +39,7 @@
           onlydirs: true,
           tree_popup: true,
           tab: this.source.tab || false,
-          path: this.source.data.path === './' ? '' : this.source.data.path,
+          path: this.path,
           type: this.source.type || false
         };
       },

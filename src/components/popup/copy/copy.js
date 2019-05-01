@@ -11,11 +11,27 @@
 (() => {
   return {
     data(){
+      let path = ""
+      if  ( this.source.data.dir === "" ){
+        if ( this.source.isProject && this.source.type ){
+          path = this.source.type + '/';
+        }
+        else{
+          path =  './';
+        }
+      }
+      else if ( this.source.isMVC && this.source.data.tab.length ){
+        path =  this.source.data.tab + '/' + this.source.data.dir;
+      }
+      else{
+        path =  this.source.data.dir;
+      }
       return {
         new_name: this.source.data.name,
         new_ext: '',
-        new_path: this.source.data.dir === "" ? "./" :
-         (this.source.isMVC && this.source.data.tab.length ? this.source.data.tab+'/'+this.source.data.dir : this.source.data.dir),
+        //new_path: this.source.data.dir === "" ? "./" :
+         //(this.source.isMVC && this.source.data.tab.length ? this.source.data.tab+'/'+this.source.data.dir : this.source.data.dir),
+        new_path: path
         //pathTree: false
       }
     },
@@ -51,12 +67,7 @@
       failureActive(){
         appui.error(bbn._("Error!"));
         bbn.vue.closest(this, ".bbn-popup").close();
-      },
-      // selectRoot(){
-      //   if ( this.source.isMVC ){
-      //
-      //   }
-      // },
+      },      
       selectDir(){
         this.closest("bbn-container").getRef('popup').open({
           width: 300,
@@ -66,7 +77,7 @@
           source: $.extend(this.$data, {
             operation: 'copy',
             isComponent: this.source.isComponent,
-            isMvc: this.source.isMVC,
+            isMVC: this.source.isMVC,
             rep: this.source.repository,
             data: {
               path: this.new_path
@@ -74,11 +85,15 @@
             type: this.source.data.type
           })
         });
-      }/*,
-      setRoot(){
-        this.newPath = './';
       },
-      */
+      getRoot(){
+        if ( this.source.isProject && this.source.type ){
+          this.new_path = this.source.type + '/';
+        }
+        else{
+          this.new_path = './';
+        }
+      }
     },
     computed: {
       isFile(){
@@ -86,7 +101,7 @@
       },
       extensions(){
         let res = [];
-        if ( !this.isMVC ){
+        if ( !this.source.isMVC ){
           $.each(this.source.repositories[this.source.currentRep].extensions, (i, v) => {
             res.push({
               text: '.' + v.ext,

@@ -82,7 +82,7 @@
             ></bbn-checkbox>
           </div>
           <div class="bbn-w-100" v-if="isProject">
-            <bbn-dropdown class="bbn-w-100 bbn-padded"
+            <bbn-dropdown class="bbn-w-100"
                           :source="listRootProject"
                           v-model="typeProject"
             ></bbn-dropdown>

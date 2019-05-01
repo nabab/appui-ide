@@ -3,7 +3,7 @@
           :data="formData"
           :action="source.root + 'actions/copy'"
           @success="onSuccess"
-          @failure="failureActive"
+          @failure="failureActive"          
 >
    <div class="bbn-padded bbn-flex-height">
      <div class="bbn-flex-fill bbn-grid-fields">
@@ -30,8 +30,7 @@
                     required="required"
          ></bbn-input>
          <bbn-button @click="selectDir"><?=_("Browse")?></bbn-button>
-         <!-- <bbn-button @click="selectRoot"><?=_("Root")?></bbn-button> -->
-         <bbn-button @click="() => {new_path = './'}"><?=_("Root")?></bbn-button>
+         <bbn-button @click="getRoot"><?=_("Root")?></bbn-button>
        </div>
      </div>
   </div>

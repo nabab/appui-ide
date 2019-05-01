@@ -89,14 +89,13 @@
           source: $.extend(this.$data, {operation: 'create'})
         });
       },
-      getRoot(){
-        this.data.path = './';
-        // if ( this.source.isProject ){
-        //   this.data.path = this.source.type + '/';
-        // }
-        // else{
-        //   this.data.path = './';
-        // }
+      getRoot(){        
+        if ( this.source.isProject ){
+          this.data.path = this.source.type + '/';
+        }
+        else{
+          this.data.path = './';
+        }
       }
     },
     computed: {
