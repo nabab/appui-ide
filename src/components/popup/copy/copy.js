@@ -45,7 +45,7 @@
           if ( this.source.parent ){
             //provisional
             if ( appui.ide.nodeParent !== false ){
-              appui.ide.nodeParent.relaod();
+              appui.ide.nodeParent.reload();
               this.$nextTick(()=>{
                 appui.ide.$set(appui.ide, 'nodeParent', false);
               });
@@ -67,7 +67,7 @@
       failureActive(){
         appui.error(bbn._("Error!"));
         bbn.vue.closest(this, ".bbn-popup").close();
-      },      
+      },
       selectDir(){
         this.closest("bbn-container").getRef('popup').open({
           width: 300,

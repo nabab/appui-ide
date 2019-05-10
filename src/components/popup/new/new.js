@@ -69,7 +69,7 @@
         }
         else{
           if ( appui.ide.nodeParent !== false ){
-            appui.ide.nodeParent.relaod();
+            appui.ide.nodeParent.reload();
             this.$nextTick(()=>{
               appui.ide.$set(appui.ide, 'nodeParent', false);
             });
@@ -89,7 +89,7 @@
           source: $.extend(this.$data, {operation: 'create'})
         });
       },
-      getRoot(){        
+      getRoot(){
         if ( this.source.isProject ){
           this.data.path = this.source.type + '/';
         }

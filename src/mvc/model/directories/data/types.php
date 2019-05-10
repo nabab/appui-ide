@@ -1,7 +1,7 @@
 <?php
 $res = ['success' => false];
 if ( isset($model->inc->options) ){
-  $types = $model->inc->options->full_options($model->inc->options->from_code('PTYPES', 'ide', BBN_APPUI));
+  $types = $model->inc->options->full_options($model->inc->ide->get_types());  
   if ( !empty($types) ){
     $types = array_map(function($t){
       if ( $t['tabs'] ){

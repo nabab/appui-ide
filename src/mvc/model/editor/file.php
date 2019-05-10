@@ -30,7 +30,7 @@ if ( !empty($model->data['url']) && isset($model->inc->ide) ){
   ){
     $tabs = [];
     $styleTabType = [];
-    $project = $model->inc->ide->get_types('bbn-project');
+    $project = $model->inc->ide->get_type('bbn-project');
     if ( is_array($project) && (count($project) > 0) ){
       foreach( $project['types'] as $type ){
         $styleTabType[$type['url']] = [
@@ -41,7 +41,7 @@ if ( !empty($model->data['url']) && isset($model->inc->ide) ){
         //temporaney
         $typeRep = $type['url'] = $type['url'] === 'lib' ? 'cls' : $type['url'];
         // if ( $ptype = $model->inc->options->option($model->inc->options->from_code($typeRep,'PTYPES', 'ide', BBN_APPUI)) ){
-        if ( $ptype = $model->inc->ide->get_types($typeRep) ){
+        if ( $ptype = $model->inc->ide->get_type($typeRep) ){
           if ( !empty($ptype['tabs']) ){
             $tabs[$type['url']][] = $ptype['tabs'];
           }
@@ -75,7 +75,7 @@ if ( !empty($model->data['url']) && isset($model->inc->ide) ){
     'route' => $route,
     'settings' => !empty($ctrl_file) ? is_file($ctrl_file) : false,
     'ext' => \bbn\str::file_ext($file),
-    'styleTab' => $styleTabType
+    'styleTab' => isset($styleTabType) ? $styleTabType : [] 
   ];
 
   if ( $res['isComponent'] && !empty($repository['types']) ){

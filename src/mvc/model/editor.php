@@ -14,7 +14,7 @@ if ( isset($model->data['routes'], $model->inc->ide) ){
       //temporaney
       $type['url'] = $type['url'] === 'lib' ? 'cls' : $type['url'];
       // if ( $ptype = $model->inc->options->option($model->inc->options->from_code($type['url'],'PTYPES', 'ide', BBN_APPUI)) ){
-      if ( $ptype = $model->inc->ide->get_types($type['url']) ){
+      if ( $ptype = $model->inc->ide->get_type($type['url']) ){
         if ( !empty($ptype['tabs']) ){
           $tabs[$type['url']][] = $ptype['tabs'];
         }

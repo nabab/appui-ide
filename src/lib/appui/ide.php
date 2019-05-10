@@ -2133,14 +2133,14 @@ class ide {
 
         if ( !empty($this->is_component_from_url($url)) &&
              //!empty($idx = $this->options->from_code('components','PTYPES',$this->_ide_path()))
-             !empty($ptype = $this->get_types('components'))
+             !empty($ptype = $this->get_type('components'))
         ){
           //$ptype = $this->options->option($idx);
           $rep['tabs'] = $ptype['tabs'];
         }
         if ( !empty($this->is_MVC_from_url($url)) &&
              //!empty($idx = $this->options->from_code('mvc','PTYPES',$this->_ide_path()))
-             !empty($ptype = $this->get_types('mvc'))
+             !empty($ptype = $this->get_type('mvc'))
         ){
           $rep['tabs'] = $ptype['tabs'];
           if ( $plugin ){
@@ -2614,20 +2614,31 @@ class ide {
    * @param string $type name ohf type
    * @return array|bool
    */
-  public function get_types(string $type){
+  public function get_type(string $type){
     if ( !empty($type) ){
       return self::get_appui_option($type, self::PATH_TYPE);
     }
   }
 
   /**
+   * Returns all data of all types repository
+   *
+   * @return array|bool
+   */
+  public function get_types(){
+
+    return self::get_appui_option(self::PATH_TYPE);
+
+  }
+
+  /**
    * Returns the tabs of type repository
    *
-   * @param string $type name ohf type   
+   * @param string $type name ohf type
    * @return array|bool
    */
   public function tabs_of_type_project(string $type){
-    if ( !empty($type) && ($ptype = $this->get_types($type))){
+    if ( !empty($type) && ($ptype = $this->get_type($type))){
       return !empty($ptype['tabs']) ? $ptype['tabs'] : false;
     }
   }
