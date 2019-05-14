@@ -19,11 +19,13 @@
       </div>
 
       <label><?=_("Name")?></label>
-      <div>
-        <bbn-input v-model="data.name"
-                   required="required"
-                   class="bbn-w-100"
-        ></bbn-input>
+      <div class="bbn-flex-width">
+        <div class="bbn-flex-fill">
+          <bbn-input v-model="data.name"
+                     required="required"
+                     class="bbn-w-100"
+          ></bbn-input>
+        </div>
         <bbn-dropdown v-if="source.isFile && availableExtensions && (availableExtensions.length > 1)"
                       :source="extensions"
                       v-model="data.extension"

@@ -823,7 +823,7 @@
         }
       },
       getActive(getCode = false){
-        let tn = this.getRef('tabstrip');
+        let tn = this.getRef('tabstrip');        
         if ( tn && tn.tabs[tn.selected] ){
           if ( !getCode ){
             return tn.getSubTabNav(tn.selected);
@@ -905,17 +905,19 @@
       test(){
         //let is_component = this.getActive(true).rep['alias_code'] === 'components';
 
-        let cp = this.getRef('tabstrip').router.getRealVue();
-        let component = cp.closest('appui-ide-component');
+        let cp = this.getRef('tabstrip').router.getRealVue(),
+            component = cp.closest('appui-ide-component');
+
         if ( component ){
-          let url = component.closest('bbn-container').url;
+          let url = component.closest('bbn-container').url,
+              root = '',
+              cp = '',
+              foundComponents = false,
           // Removing file/ and /_end_
-          let bits = url.split('/');
+              bits = url.split('/');
           bits.splice(0, 1);
           bits.splice(bits.length - 2, 2);
-          let root = '';
-          let cp = '';
-          let foundComponents = false;
+
           bbn.fn.each(bits, (a) => {
             if ( a === 'components' ){
               foundComponents = true;
@@ -955,7 +957,8 @@
           }
         }
         else{
-          this.getActive(true).test()
+          let code = this.getActive(true);
+          code.test();
         }
       },
 
@@ -1299,7 +1302,7 @@
         else{
           title = node.data.folder ? bbn._('Copy folder') : bbn._('Copy');
         }
-        
+
         this.getPopup().open({
           width: 470,
           height: 250,

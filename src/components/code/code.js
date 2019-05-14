@@ -250,16 +250,19 @@
           switch ( this.mode ){
             case "php":
               bbn.fn.post(this.ide.root + "test", {code: this.value}, (d) => {
-                const tn = bbn.vue.closest(this, '.bbn-tabnav'),
+                const tn = bbn.vue.closest(this, 'bbn-tabnav'),
                       idx = tn.tabs.length;
-                tn.add({
+                tn.router.add({
                   title: moment().format('HH:mm:ss'),
                   load: false,
                   content: d.content,
                   url: 'output' + idx,
                   selected: true
                 });
-                tn.selected = tn.router.getIndex('output' + idx);
+                tn.router.selected = tn.router.getIndex('output' + idx);
+                this.$nextTick(()=>{
+                  tn.selected = tn.router.getIndex('output' + idx);
+                });
               });
               break;
             case "js":
