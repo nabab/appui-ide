@@ -1,4 +1,4 @@
-<div class="bbn-h-100 bbn-vmiddle">
+<div class="bbn-overlay bbn-vmiddle">
   <div class="bbn-w-70 bbn-padded">
     <bbn-input placeholder="<?=_('Search...')?>"
                v-model="search"

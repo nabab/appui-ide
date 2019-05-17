@@ -258,10 +258,9 @@
                   content: d.content,
                   url: 'output' + idx,
                   selected: true
-                });
-                tn.router.selected = tn.router.getIndex('output' + idx);
+                });                
                 this.$nextTick(()=>{
-                  tn.selected = tn.router.getIndex('output' + idx);
+                  tn.router.route('output' + idx);
                 });
               });
               break;
