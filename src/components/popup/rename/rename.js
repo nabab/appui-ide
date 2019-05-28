@@ -141,8 +141,11 @@
           editor.getRef('tabstrip').close(idx);
         }
 
-        if ( this.source.parent ){
-          this.source.parent.reload();
+        if ( appui.ide.nodeParent ){         
+          appui.ide.nodeParent.reload();
+          this.$nextTick(()=>{
+            appui.ide.$set(appui.ide, 'nodeParent', false);
+          });
         }
         else{
           // this.$nextTick(() => {
@@ -185,7 +188,8 @@
       formData(){
         let obj = {
           repository: this.source.repository,
-          path: !this.source.parent ? this.source.nodeData.path : this.source.nodeData.dir,
+          //path: !this.source.parent ? this.source.nodeData.path : this.source.nodeData.dir,
+          path: this.source.nodeData.dir,
           name: this.source.nodeData.name,
           ext: this.source.nodeData.ext,
           is_mvc: this.isMVC,

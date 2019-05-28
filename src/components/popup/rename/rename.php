@@ -1,11 +1,10 @@
-<bbn-form class="bbn-full-screen"
-          :source="$data"
+<bbn-form :source="$data"
           :data="formData"
-          :action="source.root + 'actions/rename'"
+          :action="source.root + 'actions/rename'"          
           @success="onSuccess"
+          :scrollable="false"
 >
-  <div class="bbn-grid-fields bbn-l bbn-vmiddle">
-
+  <div class="bbn-grid-fields bbn-l bbn-padded">  
       <label><?=_("Name")?></label>
       <div class="bbn-flex-width">
         <bbn-input class="bbn-flex-fill"
@@ -17,6 +16,5 @@
                       style="width: 100px"
         ></bbn-dropdown>
       </div>
-
   </div>
 </bbn-form>

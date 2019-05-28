@@ -823,7 +823,7 @@
         }
       },
       getActive(getCode = false){
-        let tn = this.getRef('tabstrip');        
+        let tn = this.getRef('tabstrip');
         if ( tn && tn.tabs[tn.selected] ){
           if ( !getCode ){
             return tn.getSubTabNav(tn.selected);
@@ -1144,7 +1144,7 @@
               dir: node.data.dir,
               type: node.data.type
             },
-            parent: node.parent,
+            //parent: node.parent,
             isMVC: this.isProject && node.data.type === 'mvc' ? true : this.isMVC,
             isComponent: this.isProject && node.data.type === 'components' ? true : this.isComponent,
             root: this.source.root,
@@ -1153,7 +1153,7 @@
             repository: this.repositories[this.currentRep],
             is_project: this.isProject,
           };
-
+          this.nodeParent = node.parent;
           if ( node.data.type === 'lib' ){
              let temp = node.data.dir.split('/');
              temp.shift();
@@ -1239,14 +1239,15 @@
         else{
           title =  node.data.folder ? bbn._('Rename folder') : bbn._('REname');
         }
-        this.getPopup().open({
+        
+        this.getPopup().open({            
           width: 370,
           height: 150,
           title: src.isComponent ? bbn._('Rename component') : bbn._('Rename'),
           component: 'appui-ide-popup-rename',
           source: src
-        });
-
+        });  
+         
         /*if ( node.data.type !== undefined && this.isProject ){
           src.only_component = onlyComponent;
           src.repository = $.extend(this.repositories[this.currentRep], {tabs: this.source.projects.tabs_type[node.data.type][0]});

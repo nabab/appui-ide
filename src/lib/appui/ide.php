@@ -353,7 +353,7 @@ class ide {
           $new .= $cfg['new_path'] . (substr($cfg['new_path'], -1) !== '/' ? '/' : '');
         }
 
-
+        
 
         //if ( ($i !== '_ctrl') && !empty($tab['extensions']) ){
         if ( ($tab['url'] !== '_ctrl') && !empty($tab['extensions']) ){
@@ -361,9 +361,10 @@ class ide {
           $new .= $cfg['new_name'] ?? '';
           $ext_ok = false;
 
-          if ( !empty($cfg['is_file']) ){
-            // die(\bbn\x::dump("entarto", $cfg['new_name'], $old, $new ));
+          //die(var_dump($old, $ext));
 
+          if ( !empty($cfg['is_file']) ){                  
+         
             foreach ( $tab['extensions'] as $k => $ext ){
               if ( $k === 0 ){
                 if ( !empty($cfg['new_name']) && is_file($new.'.'.$ext['ext']) ){
@@ -371,7 +372,7 @@ class ide {
                   return false;
                 }
               }
-              if ( is_file($old.'.'.$ext['ext']) ){
+              if ( is_file($old.'.'.$ext['ext']) ){                
                 $ext_ok = $ext['ext'];
               }
             }
@@ -381,6 +382,7 @@ class ide {
           }
           $old .= !empty($cfg['is_file'])  ? '.' . $ext_ok : '';
           $new .= !empty($cfg['is_file']) ? '.' . $tab['extensions'][0]['ext'] : '';
+  
 
           if ( !empty($cfg['new_name']) && ($new !== $tmp) && file_exists($new) ){
             $this->error("The new file|folder exists.");
@@ -940,14 +942,13 @@ class ide {
          ($ope === 'delete') &&
          !empty($cfg['active_file'])
         ){
-
           if ( !\bbn\file\dir::delete($path.$cfg['path']) ){
             $this->error("Error during the file|folder delete: $t[old]");
             return false;
           }
           return true;
         }
-
+       
         if ( $todo = $this->check_mvc($cfg, $rep, $path) ){
 
 
