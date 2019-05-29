@@ -97,8 +97,8 @@
         }
         return this.getRef('types_table').edit(row, {
           title: bbn._('Modify type') + ' ' + row.text,
-          height: '95%',
-          width: '85%'
+          height: '900',
+          width: '820'
         }, idx)
       }
     }

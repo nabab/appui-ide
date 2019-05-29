@@ -7,7 +7,7 @@
           a.value = i;
         });
       }
-      return $.extend({}, this.source, {
+      return $.extend({}, this.source, {    
         selected: 0,
         url: this.source.root + 'editor',
         path: '',

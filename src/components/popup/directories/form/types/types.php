@@ -1,5 +1,4 @@
-<bbn-form class="bbn-full-screen"
-          :action="formAction"
+<bbn-form :action="formAction"
           @success="success"
           @failure="failure"
           :source="source.row"
