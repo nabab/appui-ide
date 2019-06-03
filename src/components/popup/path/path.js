@@ -75,7 +75,7 @@
         }
         //check path
         path_destination = path_destination.replace( '//',  '/');
-
+        bbn.fn.log("aaa", path_destination, this.source.operation)
         switch ( this.source.operation ){
           case 'copy':{
             this.source.new_path = path_destination;

@@ -31,27 +31,27 @@
         new_ext: '',
         //new_path: this.source.data.dir === "" ? "./" :
          //(this.source.isMVC && this.source.data.tab.length ? this.source.data.tab+'/'+this.source.data.dir : this.source.data.dir),
-        new_path: path
+        //new_path: path
+        new_path: this.source.data.dir,
         //pathTree: false
       }
     },
     methods: {
       onSuccess(){
         //const tab = this.closest("bbn-container");
-        if ( this.new_path === './' ){
-          appui.ide.getRef('filesList').reload();
+        
+        if ( this.source.parent ){
+          //provisional
+          if ( appui.ide.nodeParent !== false ){
+            appui.ide.nodeParent.reload();
+            this.$nextTick(()=>{
+              appui.ide.$set(appui.ide, 'nodeParent', false);
+            });
+          }
+          //this.source.parent.reload();
         }
         else{
-          if ( this.source.parent ){
-            //provisional
-            if ( appui.ide.nodeParent !== false ){
-              appui.ide.nodeParent.reload();
-              this.$nextTick(()=>{
-                appui.ide.$set(appui.ide, 'nodeParent', false);
-              });
-            }
-            //this.source.parent.reload();
-          }
+          appui.ide.getRef('filesList').reload();
         }
 
         if ( this.isFile && !this.source.isMVC ){
@@ -69,7 +69,8 @@
         bbn.vue.closest(this, ".bbn-popup").close();
       },
       selectDir(){
-        this.closest("bbn-container").getRef('popup').open({
+        //this.closest("bbn-container").getRef('popup').open({
+        this.getPopup().open({
           width: 300,
           height: 400,
           title: bbn._('Path'),
@@ -99,6 +100,20 @@
       isFile(){
         return !this.source.data.folder && !this.source.isComponent
       },
+     //  types(){
+     //    let res = [];
+     //    if ( this.source.isMVC || (this.source.isFile && this.isComponent) ){
+     //      bbn.fn.each(this.rep.tabs, (i, v) => {
+     //        if ( !v.fixed ){
+     //          res.push({
+     //            text: v.title,
+     //            value: i
+     //          });
+     //        }
+     //      });
+     //    }
+     //    return res;
+     // },
       extensions(){
         let res = [];
         if ( !this.source.isMVC ){
