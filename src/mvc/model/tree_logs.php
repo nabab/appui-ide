@@ -22,7 +22,7 @@
       'items' =>[]
     ];
     $fs = new \bbn\file\system();
-    $logs = $fs->get_files($folder_log, false, false, null, 'm');
+    $logs = $fs->get_files($folder_log, false, false, null, 'ms');
     if ( !empty($logs) ){
       $tree['num'] = count($logs);
       foreach($logs as $log){
@@ -30,8 +30,10 @@
           $tree['items'][]= [
             'folder' => is_dir($log['path']),
             'file' => is_file($log['path']),
+            'fileName' => basename($log['path']),
             'extension' =>  \bbn\str::file_ext($log['path'], 1)[1],
             'path' => $log['path'],
+            'size' => \bbn\str::say_size($log['size']),
             'text' => basename($log['path']),
             'icon' => 'nf nf-fa-file_text',
             'bcolor' => '#005668',

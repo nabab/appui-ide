@@ -90,7 +90,12 @@
       getSourceTreeLogs(){
         bbn.fn.post(this.source.root + 'tree_logs',{}, d => {
           if ( d.data && d.data[0].items.length ){
-            d.data[0].items = bbn.fn.order(d.data[0].items, 'mtime', 'desc')
+            bbn.fn.each(d.data[0].items, (v, i)=>{
+              if ( v.size !== undefined ){
+                d.data[0].items[i]['text'] = '<span class="bbn-b">' + d.data[0].items[i]['text'] +'</span>  (' + v.size +')' 
+              }
+            });
+            d.data[0].items = bbn.fn.order(d.data[0].items, 'mtime', 'desc');
             this.sourceTree = d.data;
           }
         });
@@ -108,7 +113,7 @@
         }
       },
       selectLogFile(log){
-        this.fileLog = log.text;
+        this.fileLog = log.data.fileName;
         this.onChange();
       },
       runInterval(){

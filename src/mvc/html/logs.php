@@ -47,7 +47,7 @@
                   :collapsible="true"
                   orientation="horizontal"
     >
-      <bbn-pane :size="270"
+      <bbn-pane :size="350"
                 :collapsible="true"
                 :resizable="true"
       >
