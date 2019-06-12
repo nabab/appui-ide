@@ -1,4 +1,4 @@
-<div class="k-block bbn-100 bbn-full-screen">
+<div class="bbn-block bbn-100 bbn-overlay">
   <bbn-scroll>
     <div class="bbn-w-100 bbn-padded" style="min-height: 500px">
       <div v-if="source.imessages && source.imessages.length"

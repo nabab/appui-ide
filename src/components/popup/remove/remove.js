@@ -20,7 +20,7 @@
           'cancel',
           {
             text: bbn._("Delete"),
-            class:"k-primary",
+            class:"bbn-primary",
             icon: 'nf nf-fa-trash',
             command: ()=>{
               this.getRef('form').submit();

@@ -53,7 +53,7 @@ old
     <bbn-table :source=""
                :sortable="true"
                ref="tableInfoErrorLog"
-               class="bbn-full-screen"
+               class="bbn-overlay"
     >
       <bbns-column title="dddd"
                   field="index"

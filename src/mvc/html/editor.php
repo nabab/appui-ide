@@ -88,7 +88,7 @@
             ></bbn-dropdown>
           </div>
           <div class="bbn-flex-fill" >
-            <div class="bbn-full-screen">
+            <div class="bbn-overlay">
                <bbn-tree class="tree"
                         :source="root + 'tree'"
                         @activate="treeNodeActivate"

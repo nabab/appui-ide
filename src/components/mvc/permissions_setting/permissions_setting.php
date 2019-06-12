@@ -1,5 +1,5 @@
-<!--div class="k-block bbn-block bbn-100">
-  <div class="k-header bbn-c"><?=('Permissions setting')?></div>
+<!--div class="bbn-block bbn-block bbn-100">
+  <div class="bbn-header bbn-c"><?=('Permissions setting')?></div>
     <div class="bbn-block bbn-hspadded bbn-100">
     <bbn-scroll>
       <div class="bbn-block bbn-w-100">
@@ -28,8 +28,8 @@
                       v-bbn-fill-width
         ></bbn-textarea>-->
       <!--/div>
-      <div class="k-block bbn-block bbn-w-100" style="margin-top: 10px">
-        <div class="k-header bbn-c"><?=_('Children permissions')?></div>
+      <div class="bbn-block bbn-block bbn-w-100" style="margin-top: 10px">
+        <div class="bbn-header bbn-c"><?=_('Children permissions')?></div>
         <div class="bbn-hspadded bbn-block bbn-w-100">
           <div class="bbn-w-100">
             <span><?=_('Code')?></span>

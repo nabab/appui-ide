@@ -1,4 +1,4 @@
-<div class="k-block bbn-100">
+<div class="bbn-block bbn-100">
   <bbn-scroll>
     <div class="bbn-grid-fields">
       <label><?=_('Code')?></label>
@@ -23,7 +23,7 @@
         ></bbn-button>
       </div>
     </div>
-    <div class="k-header bbn-w-100 bbn-c bbn-b">
+    <div class="bbn-header bbn-w-100 bbn-c bbn-b">
       <?=_('Children Permissios')?>
     </div>
     <ul v-for="perm in source.children"

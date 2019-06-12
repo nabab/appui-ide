@@ -1,7 +1,7 @@
 <!-- HTML Document -->
 <bbn-splitter orientation="vertical" class="appui-ide-finder">
   <bbn-pane :size="40">
-    <div class="bbn-full-screen bbn-middle">
+    <div class="bbn-overlay bbn-middle">
       <div class="bbn-flex-width">
         <div class="bbn-hpadded">
           <bbn-input placeholder="<?=_('Host')?>" v-model="host" ref="host"></bbn-input>
@@ -33,7 +33,7 @@
           <bbn-context :source="finderContextMenu" 
                         @click="select"
           >
-            <div class="bbn-full-screen">
+            <div class="bbn-overlay">
               <bbn-tree :source="source.root + 'finder'"
                         :data="getData(p)"
                         :menu="itemsContextMenu"
@@ -45,14 +45,14 @@
             </div>
           </bbn-context>
         </div>
-        <div class="bbn-w-100 k-widget" style="height: 10em">
+        <div class="bbn-w-100 bbn-widget" style="height: 10em">
           <div :class="{
-                       'bbn-full-screen': true,
-                       'k-state-default': true,
-                       'k-state-active': i === (numCols - 1)
+                       'bbn-overlay': true,
+                       'bbn-state-default': true,
+                       'bbn-state-active': i === (numCols - 1)
                        }"
           >
-            <div class="bbn-grid-fields k-header k-widget info-dirs">
+            <div class="bbn-grid-fields bbn-header bbn-widget info-dirs">
               <div v-text="_('Number of childs:')" v-if="p.num_dirs || p.num_files"></div>
               <div v-text="p.num_dirs + p.num_files" v-if="p.num_dirs || p.num_files"></div>
 
@@ -85,7 +85,7 @@
       <div v-if="currentFile"               
            class="info-file-container bbn-flex-height"
       >
-        <div class="bbn-grid-fields k-header k-widget">
+        <div class="bbn-grid-fields bbn-header bbn-widget">
           <span><?=_('Filename:')?></span>             
           <span v-text="currentFile ? currentFile.node.data.value : ''"></span>             
           <span v-if="currentFile.info && currentFile.info.size"><?=_('Size:')?></span>   
@@ -134,7 +134,7 @@
 </bbn-splitter>
 <script type="text/x-template" id="form">
 	<bbn-form :source="source"
-            class="bbn-full-screen" 
+            class="bbn-overlay" 
             :buttons=[]
             :action="source.root + 'actions/finder/edit'"
 						@success="success"

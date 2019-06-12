@@ -1,6 +1,6 @@
 <?php
 $ctrl->obj->title = "Infos PHP";
-$ctrl->add_script('$("div#tabstrip div.k-content.k-state-active:visible:first").css({
+$ctrl->add_script('$("div#tabstrip div.k-content.bbn-state-active:visible:first").css({
   padding: "0px",
   margin: "0px",
   overflow: "hidden"

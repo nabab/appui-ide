@@ -1,4 +1,4 @@
-<div class="bbn-full-screen bbn-ide-i18n">
+<div class="bbn-overlay bbn-ide-i18n">
   <bbn-table :source="source.data"
              :columns="columns"
              editable="inline"

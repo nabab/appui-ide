@@ -1,5 +1,4 @@
-<bbn-form class="bbn-full-screen"
-          :source="{src: source}"
+<bbn-form :source="{src: source}"
           :data="formData"
           :action="source.root + 'actions/delete'"
           @success="successremoveElement"

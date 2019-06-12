@@ -2,7 +2,7 @@
 <div class="allRepositoriesTree">
   <bbn-splitter :orientation="orientationSplitter">
     <bbn-pane>
-      <div class="top k-header bbn-w-100 bbn-vmiddle flexJustifyLeft heightTop">
+      <div class="top bbn-header bbn-w-100 bbn-vmiddle flexJustifyLeft heightTop">
         <div  class="paddingLeft" v-if="routeFile.filePath != ''">
         <span>
           <strong>
@@ -35,7 +35,7 @@
       ></bbn-tree>
     </bbn-pane>
     <bbn-pane>
-      <div class="top k-header bbn-w-100 heightTop">
+      <div class="top bbn-header bbn-w-100 heightTop">
         <div class="bbn-w-50 bbn-h-100 bbn-vmiddle flexJustifyLeft paddingLeft">
         <span class="paddingRight">
           <strong>

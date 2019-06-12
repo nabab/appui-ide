@@ -86,7 +86,7 @@
           height: 400,
           title: bbn._('Path'),
           component: 'appui-ide-popup-path',
-          source: $.extend(this.$data, {operation: 'create'})
+          source: bbn.fn.extend(this.$data, {operation: 'create'})
         });
       },
       getRoot(){

@@ -16,7 +16,7 @@
   </div>
   <div class="bbn-flex-fill">
     <bbn-tree v-if="items.length"
-              class="bbn-full-screen"
+              class="bbn-overlay"
               ref="tree"
               :source="items">
     </bbn-tree>

@@ -1,4 +1,4 @@
-<div class="bbn-full-screen bbn-ide-history">
+<div class="bbn-overlay bbn-ide-history">
   <bbn-splitter :resizable="true"
                 :collapsible="true"
                 orientation="horizontal"
@@ -14,7 +14,7 @@
       ></bbn-tree>
     </bbn-pane>
     <bbn-pane>
-      <div class="bbn-full-screen" v-if="selected">
+      <div class="bbn-overlay" v-if="selected">
         <bbn-code :value="code"
                   :mode="mode"
         ></bbn-code>

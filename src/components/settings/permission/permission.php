@@ -1,4 +1,4 @@
-<div class="k-block bbn-full-screen bbn-padded">
+<div class="bbn-block bbn-overlay bbn-padded">
     <div class="bbn-grid-fields">
       <label><?=_('Code')?></label>
       <div>

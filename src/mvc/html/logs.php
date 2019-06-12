@@ -62,7 +62,7 @@
             ></bbn-button>
           </div>
           <div class="bbn-flex-fill" >
-            <div class="bbn-full-screen">
+            <div class="bbn-overlay">
               <!-- <bbn-tree :source="source.root + 'tree_logs'"
                         @select="selectLogFile"
                         ref="listFilesLog"

@@ -410,7 +410,7 @@
       'formExtension':{
         props: ['source'],
         template: `
-        <bbn-form class="bbn-full-screen"
+        <bbn-form
                   :buttons="btns"
                   :source="source"
                   ref="form"
@@ -446,7 +446,7 @@
               'cancel', {
               text: "Confirm",
               title: "Confirm",
-              class: "k-primary",
+              class: "bbn-primary",
               icon: "nf nf-fa-check_circle",
               command: this.closeForm
             }]

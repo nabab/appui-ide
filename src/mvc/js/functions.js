@@ -138,7 +138,7 @@ bbn.ide = {
    * @returns {number}
    */
   test: function(){
-    var $c = $("div.k-content.k-state-active div.bbn-code:visible", bbn.ide.tabstrip),
+    var $c = $("div.bbn-content.bbn-state-active div.bbn-code:visible", bbn.ide.tabstrip),
         url = bbn.ide.tabstrip.tabNav("getURL"),
         path = bbn.ide.tabstrip.tabNav("getObs").title,
         src = url.substr(0, url.indexOf(path)),
@@ -711,7 +711,7 @@ bbn.ide = {
         default: a.default ? true : false,
         content: a.cfg === undefined ?
           '<div></div>' :
-          '<div class="code bbn-full-screen"></div>',
+          '<div class="code bbn-overlay"></div>',
         close: function (a, b, c) {
           return bbn.ide.close(a, b, c);
         },
@@ -1120,9 +1120,9 @@ bbn.ide = {
           ul.append(
             '<div style="margin-bottom: 5px">' +
               '<label>Code</label>' +
-              '<input class="k-textbox" readonly style="margin: 0 10px" value="' + code + '"  maxlength="255">' +
+              '<input class="bbn-textbox" readonly style="margin: 0 10px" value="' + code + '"  maxlength="255">' +
               '<label>Title/Description</label>' +
-              '<input class="k-textbox" maxlength="255" style="width:400px; margin: 0 10px" value="' + text + '">' +
+              '<input class="bbn-textbox" maxlength="255" style="width:400px; margin: 0 10px" value="' + text + '">' +
               '<button class="k-button" onclick="bbn.ide.saveChiPermission(this)" style="margin-right: 5px"><i class="nf nf-fa-save"></i></button>' +
               '<button class="k-button" onclick="bbn.ide.removeChiPermission(this)"><i class="nf nf-fa-trash"></i></button>' +
             '</div>'
@@ -1616,7 +1616,7 @@ bbn.ide = {
             group: "gridGroup",
             threshold: 100,
             hint: function (e) {
-              return $('<div class="k-grid k-widget" style="width: 800px"><table><tbody><tr>' + e.html() + '</tr></tbody></table></div>');
+              return $('<div class="k-grid bbn-widget" style="width: 800px"><table><tbody><tr>' + e.html() + '</tr></tbody></table></div>');
             }
           });
           subgrid.table.kendoDropTarget({
@@ -1656,7 +1656,7 @@ bbn.ide = {
         group: "gridGroup",
         threshold: 100,
         hint: function (e) {
-          return $('<div class="k-grid k-widget" style="width: 980px"><table><tbody><tr>' + e.html() + '</tr></tbody></table></div>');
+          return $('<div class="k-grid bbn-widget" style="width: 980px"><table><tbody><tr>' + e.html() + '</tr></tbody></table></div>');
         }
       });
       grid.table.kendoDropTarget({

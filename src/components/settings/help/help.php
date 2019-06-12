@@ -1,4 +1,4 @@
-<div class="bbn-full-screen k-block">
+<div class="bbn-overlay bbn-block">
   <bbn-toolbar class="bbn-r">
     <div style="margin-:2px">
       <bbn-button title="<?=_('Save')?>"

@@ -1,5 +1,4 @@
-<bbn-form class="bbn-full-screen"
-          :source="$data"
+<bbn-form :source="$data"
           :data="formData"
           :action="source.root + 'actions/copy'"
           @success="onSuccess"

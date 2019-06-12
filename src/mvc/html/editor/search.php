@@ -1,4 +1,4 @@
-<div class="bbn-full-screen">
+<div class="bbn-overlay">
   <bbn-splitter orientation="vertical"
                 class="bbn-ide-searchContent"
                 :collapsible="true"
@@ -8,7 +8,7 @@
               :resizable="true"
               class="bbn-padded"
     >
-      <div class="k-header bbn-padded bbn-w-100 bbn-h-100 bbn-vmiddle bbn-flex-width">
+      <div class="bbn-header bbn-padded bbn-w-100 bbn-h-100 bbn-vmiddle bbn-flex-width">
         <div v-if="source.isProject">
           <span>
             <strong>
