@@ -12,19 +12,29 @@
       let path     = this.source.url.substr(this.source.repository.length).replace('/_end_', '').split('/'),
           filename = path.pop(),
           tab      = ide.repositories[this.source.repository],
+          extensions = false,
           exts     = [];
 
       // we consider only those with more than one extension
-      if ( tab.extensions ){
-        for ( let id in tab.extensions ){
+      if ( tab.extension ){
+        extensions = tab.extension;
+      }
+      else {
+        extensions = this.source.repository_content.tabs.lib.extensions
+      }
+
+      if ( extensions ){
+        for ( let id in extensions ){
           exts.push({
             icon: 'nf nf-fa-cogs',
-            text: tab.extensions[id].ext,
-            key: tab.extensions[id].ext,
+            text: extensions[id].ext,
+            key: extensions[id].ext,
             command: this.changeExtension
           });
         }
       }
+
+      
       return $.extend(this.source, {
         repositories: ide.repositories,
         font: ide.font,
@@ -105,7 +115,7 @@
     // created(){
     //   appui.ide.$set(appui.ide, 'type', "file");
     // },
-    mounted(){
+    mounted(){     
       this.$nextTick(() => {
         $(this.$el).bbn('analyzeContent', true);
       });

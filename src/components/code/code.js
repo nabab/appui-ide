@@ -108,15 +108,6 @@
         return false;
       }
     },
-    beforeMount(){
-      this.ide = this.closest('.appui-ide-source-holder').$data;
-    },
-    watch: {
-      isChanged(isChanged){
-        let tabNav = this.closest('bbn-tabnav');
-        tabNav.tabs[tabNav.selected].isUnsaved = isChanged;
-      }
-    },
     methods: {
       getReposiotryProject(){
         if ( appui.ide.repositories && appui.ide.currentRep ){
@@ -301,6 +292,16 @@
           });
         }
       }
-    }
+    },
+    beforeMount(){
+      this.ide = this.closest('.appui-ide-source-holder').$data;      
+    },   
+    watch: {
+      isChanged(isChanged){
+        let tabNav = this.closest('bbn-tabnav');
+        tabNav.tabs[tabNav.selected].isUnsaved = isChanged;
+      }
+    },
+   
   }
 })();

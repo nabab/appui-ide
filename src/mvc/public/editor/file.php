@@ -8,10 +8,11 @@
  * @var $ctrl \bbn\mvc\controller
  */
 if ( !empty($ctrl->arguments) ){
-  if ( $ctrl->baseURL === APPUI_IDE_ROOT.'editor/' ){
+  
+  if ( $ctrl->baseURL === APPUI_IDE_ROOT.'editor/' ){   
     $ctrl->data['url'] = implode('/', $ctrl->arguments);
     $ctrl->data['routes'] = $ctrl->get_routes();
-    $ctrl->obj->data = $ctrl->get_model();
+    $ctrl->obj->data = $ctrl->get_model();    
     $ctrl->obj->data['root'] = APPUI_IDE_ROOT;
     $ctrl->obj->url = $ctrl->baseURL.'file/'.$ctrl->obj->data['url'];
     $title = $ctrl->obj->data['title'];

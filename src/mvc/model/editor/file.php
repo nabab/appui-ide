@@ -75,7 +75,7 @@ if ( !empty($model->data['url']) && isset($model->inc->ide) ){
     'route' => $route,
     'settings' => !empty($ctrl_file) ? is_file($ctrl_file) : false,
     'ext' => \bbn\str::file_ext($file),
-    'styleTab' => isset($styleTabType) ? $styleTabType : [] 
+    'styleTab' => isset($styleTabType) ? $styleTabType : []    
   ];
 
   if ( $res['isComponent'] && !empty($repository['types']) ){

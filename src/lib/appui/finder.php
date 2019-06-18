@@ -44,6 +44,7 @@ class finder
   public function get_data($path = '')
   {
     if ( $files = $this->fs->get_files( !empty($path) ? $path : '.', true, true, null, 't') ){
+      
       return array_map(function($a){
         return [
           'icon' => $this->get_icon($a['file'] ? $a['path'] : 'dir'),

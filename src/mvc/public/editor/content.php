@@ -10,7 +10,7 @@ if ( !empty($ctrl->arguments) ){
       $ctrl->obj->error = $ctrl->obj->data['error'];
     }
   }
-
+  
   echo $ctrl
     ->add_js()
     ->get_view();

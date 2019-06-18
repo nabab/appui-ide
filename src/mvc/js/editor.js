@@ -149,10 +149,34 @@
           }
         ],
         type: false,
-        nodeParent: false
+        nodeParent: false,        
+        urlTreeParser: false,
+        sourceTreeParser: false,
+        showTreeParser: false,
+        showAllParser: false, 
+        legendParser: false,
+       
       })
     },
-    computed: {
+    computed: {     
+      sourceParser(){
+        if ( this.sourceTreeParser.length ){
+          let idx = bbn.fn.search(this.sourceTreeParser, 'name', 'methods');                   
+          if ( !this.showAllParser ){           
+            let sourceTree = bbn.fn.extend(true, [], this.sourceTreeParser);
+            bbn.fn.each(sourceTree[idx]['items'], (meth,i)=>{            
+              meth['items'] =  bbn.fn.filter(meth['items'], 'type', 'origin')
+              meth['numChildren'] = meth['items'].length;
+              meth['num'] =  meth['items'].length;
+            });            
+            return sourceTree;         
+          }
+          else {            
+            return this.sourceTreeParser;                  
+          }
+        }
+        return false;
+      },
       listRootProject(){
         let roots = this.source.projects.roots.slice();
         //temporaney disabled
@@ -190,6 +214,13 @@
           });
           return code;
         }
+        return false;
+      },
+      currentId(){
+        if ( this.currentEditor ){
+          return this.currentEditor.closest('appui-ide-code').source.id;
+        }
+        return false;
       },
 
       /**
@@ -250,6 +281,12 @@
         });
         return bbn.fn.order(r, "text");
       },
+      iconLegendParser(){
+        if ( this.legendParser ){
+          return "nf nf-fa-eye_slash";
+        }
+        return  "nf nf-fa-eye";        
+      }
       // getTypesProject(){
       //   let types= false;
       //    if ( this.repositories[this.currentRep]['types'] !== 'undefiend' ){
@@ -261,8 +298,36 @@
       // },
     },
     methods: {
+      //for parser tree
+      /*getLineTreeParser(ele){      
+        if ( ((ele.data.line !== undefined) || (ele.data.line !== false)) &&
+         this.currentEditor !== false ){
+           this.cursorPosition.line = ele.data.line-1;
+           this.$nextTick(()=>{
+            this.currentEditor.closest('appui-ide-code').setState();
+           })
+        }
+      },*/ 
+      //for parser tree
+      getTreeParser(){       
+        bbn.fn.post(this.source.root + 'parser_class',{
+          cls: this.currentId
+        }, d =>{
+          if ( d.data.success ){            
+            bbn.fn.each(d.data.tree, (val, idx) =>{
+              bbn.fn.each(val['items'], (ele,i)=>{            
+                ele['items'] =  bbn.fn.order(ele['items'], 'name', 'ASC')
+              });
+            })              
+            this.sourceTreeParser = d.data.tree;
+          }
+          else{
+            this.sourceTreeParser = false;
+          } 
+        });
+      },
       managerTypeDirectories(){
-        bbn.fn.post(this.source.root + 'directories/data/types',(d)=>{
+        bbn.fn.post(this.source.root + 'directories/data/types', d => {
           if ( d.data.success ){
             this.getPopup().open({
               width: 600,
@@ -1669,9 +1734,7 @@
         if ( this.currentEditor ){
           this.currentEditor.foldAll();
         }
-      },
-
-
+      },  
     },
     created(){
       appui.ide = this;
@@ -1680,6 +1743,18 @@
       bbn.fn.log('editor',this)
     },
     watch: {
+      sourceParser(newVal, oldVal){
+        if ( (newVal !== oldVal) && (newVal !== false)){
+          this.showTreeParser = false;
+          this.$nextTick(()=>{
+            this.showTreeParser = true;
+          })
+        }
+        else{
+          this.showTreeParser = false;
+        }
+      },
+      
       currentRep(newVal, oldVal){
         if ( this.repositories[oldVal] && this.repositories[newVal].alias_code !== this.repositories[oldVal].alias_code ){
           this.typeTree = false;
@@ -1711,7 +1786,74 @@
         if ( newVal === true ){
           this.searchFile= "";
         }
-      }
+      },
+      
+      /*currentURL(){
+        if ( (this.isProject && this.typeProject === 'lib') || 
+          (this.source.repositories[this.currentRep]['code'] === "lib/")
+        ){
+          this.showParser =  this.getRef('tabstrip').tabs[this.tabSelected].closest('appui-ide-code').source.id;
+        }
+        else{
+          this.showParser = false
+        }  
+      }*/
     },
+    components:{
+      'parser':{
+        props:['source'],
+        template:
+        `<div style="display: inline; cursor: pointer" @click="getRow">
+          <i :class="classIcon"></i>        
+          <span :class="['bbn-b', {'bbn-green': source.type === 'parent', 'bbn-red': source.type === 'trait'}]" 
+                :style="{cursor: (source.line !== undefined) && (source.line !== false) ? 'pointer' : 'default'}"
+                v-text="source.name"
+          ></span>
+          <span v-if="(source.type !== undefined) && (source.type !== false) && (source.line !== false)"
+                :class="['bbn-i', {'bbn-green': source.type === 'parent', 'bbn-red': source.type === 'trait'}]" 
+                :style="{cursor: ((source.line !== undefined) && (source.line !== false) && (source.type === 'origin')) ? 'pointer' : 'default'}" 
+                v-text="' (line: ' + source.line + ')'"
+          ></span>
+        </div>`,
+        computed:{
+          classIcon(){            
+            if ( this.source.type === undefined ){              
+              return 'nf nf-custom-folder_config';
+            }
+            else if ( (this.source.type !== undefined) && (this.source.type === false) ){
+              return "nf nf-dev-code";
+            }
+
+            return 'nf nf-mdi-function';
+          }          
+        },
+        methods:{
+          getRow(){
+            if ( ((this.source.line !== undefined) || (this.source.line !== false)) &&
+              appui.ide.currentEditor !== false ){
+                appui.ide.cursorPosition.line = this.source.line-1;
+                this.$nextTick(()=>{
+                  if ( this.source.type === 'origin' ){
+                    appui.ide.currentEditor.closest('appui-ide-code').setState();    
+                  }
+                  /*else{
+                   let  link =  'file/' + 'BBN_LIB_PATH/bbn/bbn/src/'  + this.source.all.file + '/_end_/code';               
+                    if ( link ){
+                      appui.ide.getRef('tabstrip').load(link);
+                      appui.ide.cursorPosition.line = this.source.line-1;
+                      this.$nextTick(()=>{
+                        appui.ide.currentEditor.closest('appui-ide-code').setState();    
+                      });  
+                    }
+                  }*/                  
+                })
+              }
+          }
+        }       
+      },
+    }
   };
 })();
+
+
+

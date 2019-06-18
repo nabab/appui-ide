@@ -1404,7 +1404,7 @@ class ide {
    * @return array|bool
    */
   public function load(string $url){
-
+   
     if ( ($real = $this->url_to_real($url, true)) &&
       !empty($real['file']) &&
       !empty($real['mode']) &&
@@ -2127,7 +2127,7 @@ class ide {
       ($res = $this->get_root_path($rep))
     ){
       $plugin = $this->is_plugin($res);
-
+      
       if ( $rep['alias_code'] === 'bbn-project' ){
         $bits = explode('/', substr($url, \strlen($rep['bbn_path'].$rep['path'])));
 
@@ -2158,6 +2158,7 @@ class ide {
         'repository' => $rep,
         'tab' => false
       ];
+      
       if ( !empty($bits) ){
         // Tab's nane
         if ( !empty($rep['tabs']) && (end($bits) !== 'code') ){
@@ -2188,6 +2189,7 @@ class ide {
           $o['tab'] = $tab;
           $fp = $ssc['path'].'/';
 
+
           if ( ($i = \bbn\x::find($rep['tabs'], ['url' => $tab])) !== false ){
             $tab = $rep['tabs'][$i];
             // if( !empty($this->is_MVC_from_url($url)) && ($plugin === true) ){
@@ -2209,6 +2211,7 @@ class ide {
               $o['ssctrl'] = $ssc['ssctrl'];
             }
             else {
+             
               $res .=  $fp . $fn;
               $ext_ok = false;
               foreach ( $tab['extensions'] as $e ){
@@ -2252,12 +2255,21 @@ class ide {
           array_pop($bits);
           $res .= implode('/', $bits);
           if( is_array($rep) ){
-            foreach ( $rep['extensions'] as $ext ){
-              if ( is_file("$res.$ext[ext]") ){
-                $res .= ".$ext[ext]";
-                $o['mode'] = $ext['mode'];
+            //temporaney for lib plugin
+            if ( !empty($rep['extensions'] ) ){
+              foreach ( $rep['extensions'] as $ext ){
+                if ( is_file("$res.$ext[ext]") ){
+                  $res .= ".$ext[ext]";
+                  $o['mode'] = $ext['mode'];
+                }
               }
             }
+            else{
+              if ( is_file($res.'.php') ){
+                $res .= ".php";
+                $o['mode'] = 'php';
+              }
+            }            
           }
           if ( empty($o['mode']) ){
             $res .= '.' . $rep['extensions'][0]['ext'];
