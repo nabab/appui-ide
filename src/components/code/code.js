@@ -25,13 +25,19 @@
       },
       isFile(){
         return !this.isMVC && !this.isComponent;
-      },
+      },      
       rep(){
         if ( appui.ide.repositories && appui.ide.currentRep ){
           return this.ide.repositories[appui.ide.currentRep];
         }
         return false;
       },
+      isClass(){
+        if ( (this.isFile && this.isProject) || (this.isFile && (this.rep.alias_code === "cls")) ){
+          return true;
+        }
+        return false;
+      }, 
       isChanged(){
         return this.originalValue !== this.value;
       },
@@ -279,11 +285,11 @@
           code.widget.focus();
           setTimeout(() => {
             code.cursorPosition(appui.ide.cursorPosition.line, appui.ide.cursorPosition.ch);
-            this.$nextTick(()=>{
+            /*this.$nextTick(()=>{
                this.ide.search.link = false;
                this.ide.cursorPosition.line= 0;
                this.ide.cursorPosition.ch= 0;
-            });
+            });*/
           }, 800);
         }
         else{
@@ -295,6 +301,15 @@
     },
     beforeMount(){
       this.ide = this.closest('.appui-ide-source-holder').$data;      
+    },
+    mounted(){     
+      //for get current editor (computed currentEditor)
+      if ( appui.ide.runGetEditor ){        
+        appui.ide.$set(appui.ide, 'runGetEditor', false)
+      }
+      this.$nextTick(()=>{
+        appui.ide.$set(appui.ide, 'runGetEditor', true)
+      })     
     },   
     watch: {
       isChanged(isChanged){

@@ -19,8 +19,11 @@
       if ( tab.extension ){
         extensions = tab.extension;
       }
-      else {
-        extensions = this.source.repository_content.tabs.lib.extensions
+      else if ( this.source.repository_content.tabs !== undefined ) {
+        extensions = this.source.repository_content.tabs.lib.extensions;
+      }
+      else if ( this.source.repository_content.extensions !== undefined ) {
+        extensions = this.source.repository_content.extensions[0]['ext'];
       }
 
       if ( extensions ){
@@ -101,24 +104,7 @@
             appui.error(bbn._('Change error extension'));
           }
         });
-      },
-      //in event tabLoadded in tab-nav
-      // temporaney disabled
-      // loadingTab(data, url, tab){
-      //   let ext = data.extension,
-      //       idx = bbn.fn.search(tab.menu, 'key', ext);
-      //   if ( idx > -1 ){
-      //     tab.menu.splice(idx, 1);
-      //   }
-      // }
-    },
-    // created(){
-    //   appui.ide.$set(appui.ide, 'type', "file");
-    // },
-    mounted(){     
-      this.$nextTick(() => {
-        $(this.$el).bbn('analyzeContent', true);
-      });
+      }     
     }
   }
 })();

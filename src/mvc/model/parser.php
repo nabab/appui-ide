@@ -39,17 +39,31 @@ if ( !empty($model->data['cls']) ){
 
         foreach( $cfg['items'] as &$value ){
           foreach( $tree[$ele][$value['name']] as $name => $val ){ 
-            $value['items'][] = [
-                'text' => $ele === 'properties' ? $val : $name,
-                'name' =>  $ele === 'properties' ? $val : $name,    
+            $element =  [
+              'text' => $ele === 'properties' ? $val : $name,
+              'name' =>  $ele === 'properties' ? $val : $name,    
+              'numChildren' => 0,
+              'num' => 0,
+              'type' => $ele !== 'properties' ? $val['type'] : false,
+              'line' => $ele === 'methods' ? $val['line'] : false,
+              'icon' => $ele === 'properties' ? "nf nf-dev-code" : "nf nf-mdi-function", 
+              'items' =>[],
+              'all' => $val             
+            ];            
+            if ( ($ele === 'methods') && ($val['type'] !== 'origin') ){
+              $element['items'][] = [
+                'text' => $val['file'],
+                'name' => $val['file'],
+                'file' => true,
                 'numChildren' => 0,    
                 'num' => 0,
-                'type' => $ele !== 'properties' ? $val['type'] : false,
-                'line' => $ele === 'methods'  ? $val['line'] : false,
-                'icon' => $ele === 'properties' ? "nf nf-dev-code" : "nf nf-mdi-function", 
-                'items' =>[],
-                'all' => $val             
-            ];
+                'type' => $val['type'],
+                'items' =>[]
+              ];
+            }
+            $element['num'] = count($element['items']);
+            $element['numChildren'] = count($element['items']);
+            $value['items'][] = $element;
           }
         }
       }
@@ -58,4 +72,4 @@ if ( !empty($model->data['cls']) ){
   } 
   $res['success'] = 'true';
 }    
-return $res;
+return $res; 

@@ -155,14 +155,15 @@
         showTreeParser: false,
         showAllParser: false, 
         legendParser: false,
-       
+        runGetEditor: false,
+        errorTreeParser: false 
       })
     },
     computed: {     
       sourceParser(){
-        if ( this.sourceTreeParser.length ){
-          let idx = bbn.fn.search(this.sourceTreeParser, 'name', 'methods');                   
-          if ( !this.showAllParser ){           
+        if ( bbn.fn.isArray(this.sourceTreeParser) && this.sourceTreeParser.length ){
+          if ( (this.possibilityParser === "class") && !this.showAllParser ){
+            let idx = bbn.fn.search(this.sourceTreeParser, 'name', 'methods');
             let sourceTree = bbn.fn.extend(true, [], this.sourceTreeParser);
             bbn.fn.each(sourceTree[idx]['items'], (meth,i)=>{            
               meth['items'] =  bbn.fn.filter(meth['items'], 'type', 'origin')
@@ -171,8 +172,8 @@
             });            
             return sourceTree;         
           }
-          else {            
-            return this.sourceTreeParser;                  
+          else if ( this.showAllParser || (this.possibilityParser === "component") ){
+            return this.sourceTreeParser;
           }
         }
         return false;
@@ -200,29 +201,48 @@
         return this.getRef('tabstrip').selected;
       },
       currentURL(){
-        return this.getRef('tabstrip').currentURL;
-      },
-      currentEditor(){
-        if ( this.currentURL ){
-          let idx = this.getRef('tabstrip').selected,
-            codes = bbn.vue.findAll(this.getRef('tabstrip').getVue(idx), 'bbn-code'),
-            code = false;
-          $.each(codes, (i, a) => {
-            if ( $(a.$el).is(":visible") ){
-              code = a;
-            }
-          });
-          return code;
+        if ( this.getRef('tabstrip') ){
+          return this.getRef('tabstrip').currentURL;
         }
-        return false;
+        return false;  
+      },
+      currentEditor(){        
+        if ( this.runGetEditor || (this.currentURL !== false) ){
+            let tabnav = this.$refs.tabstrip.getSubTabNav();        
+            if ( tabnav ){
+              let currentTab = tabnav.activeRealTab;
+              if ( currentTab ){              
+                if ( currentTab.find('appui-ide-code') ){
+                  if ( this.errorTreeParser ){
+                    this.$set(this,'errorTreeParser',false);  
+                  }
+                  this.$set(this,'sourceTreeParser',false);
+                  return currentTab.find('bbn-code')
+                }
+              }            
+            }          
+        }
+        return false;        
       },
       currentId(){
         if ( this.currentEditor ){
+       
           return this.currentEditor.closest('appui-ide-code').source.id;
         }
         return false;
       },
-
+      //temporanely name 
+      possibilityParser(){
+        if ( this.currentEditor ){          
+          if ( this.currentEditor.closest('appui-ide-code').isClass ){
+            return 'class';
+          }
+          else if ( this.currentEditor.closest('appui-ide-code').isComponent ){
+            return 'component';
+          }          
+        }
+        return false;
+      },
       /**
        * Check if the current repository is a MVC
        *
@@ -287,44 +307,89 @@
         }
         return  "nf nf-fa-eye";        
       }
-      // getTypesProject(){
-      //   let types= false;
-      //    if ( this.repositories[this.currentRep]['types'] !== 'undefiend' ){
-      //       bbn.fn.post(this.root + 'get_types_repository',{repository: this.currentRep}, d => {})
-      //    }
-      //   else{
-      //     types = false;
-      //   }
-      // },
     },
-    methods: {
-      //for parser tree
-      /*getLineTreeParser(ele){      
-        if ( ((ele.data.line !== undefined) || (ele.data.line !== false)) &&
-         this.currentEditor !== false ){
-           this.cursorPosition.line = ele.data.line-1;
-           this.$nextTick(()=>{
-            this.currentEditor.closest('appui-ide-code').setState();
-           })
+    methods: {     
+      parserComponent(){
+        if ( this.currentEditor ){
+          let obj = eval(this.currentEditor.value),
+              src = [],
+              ele = {},
+              values = [];
+         
+          bbn.fn.each(obj, (content, prop) => {            
+           
+            if ( (prop === 'methods') || (prop === 'computed') || (prop === 'watch') ){
+              values = Object.keys(content);             
+            }
+            else if ( prop === 'props' ){
+              values = content
+            }
+            /*else if ( prop === 'data' ){            
+              values = Object.keys(obj.data());                             
+            }*/
+            else{
+              values = false
+            }
+           
+            ele = {
+              text: prop,
+              name: prop,
+              num: !values ? 0 : values.length,
+              numChildren: !values ? 0 : values.length,                  
+              items: []
+            };
+
+            if( ele.num > 0 ){
+              bbn.fn.each(values, (val, i)=>{               
+                ele.items.push({
+                  text: val,
+                  name: val,
+                  num: 0,
+                  numChildren: 0,
+                  eleComponent: ele.name,
+                  component: true,
+                  item: []
+                });
+              });  
+            }
+            src.push(ele);
+          });
+          return src;
         }
-      },*/ 
+        return false;
+      },
       //for parser tree
-      getTreeParser(){       
-        bbn.fn.post(this.source.root + 'parser_class',{
-          cls: this.currentId
-        }, d =>{
-          if ( d.data.success ){            
-            bbn.fn.each(d.data.tree, (val, idx) =>{
-              bbn.fn.each(val['items'], (ele,i)=>{            
-                ele['items'] =  bbn.fn.order(ele['items'], 'name', 'ASC')
-              });
-            })              
-            this.sourceTreeParser = d.data.tree;
+      getTreeParser(){
+        if ( this.possibilityParser === "class" ){       
+          bbn.fn.post(this.source.root + 'parser',{
+            cls: this.currentId,            
+          }, d =>{
+            if ( d.data.success ){
+              if ( this.possibilityParser === 'class' ){
+                bbn.fn.each(d.data.tree, (val, idx) =>{
+                  bbn.fn.each(val['items'], (ele,i)=>{            
+                    ele['items'] =  bbn.fn.order(ele['items'], 'name', 'ASC')
+                  });
+                })               
+              }
+              this.sourceTreeParser = d.data.tree;
+            }
+            else{              
+              this.sourceTreeParser = false;
+            } 
+          });
+        }
+        else if ( this.possibilityParser === "component" ){         
+          if ( this.currentEditor.mode === "js" ){
+            this.sourceTreeParser = this.parserComponent();
           }
           else{
-            this.sourceTreeParser = false;
-          } 
-        });
+            this.errorTreeParser = true; 
+          }          
+        }
+        else{
+          this.errorTreeParser = true; 
+        }
       },
       managerTypeDirectories(){
         bbn.fn.post(this.source.root + 'directories/data/types', d => {
@@ -808,44 +873,7 @@
         }
       },
 
-      /**
-       * Applies a filter to the tree and returns true if some items are shown and false otherwise
-       * @todo fix it (remove kendo datasource)
-       * @param dataSource the tree's dataSource
-       * @param query the filter(s)
-       * @param field the field on which applying filters (text by default)
-       * @returns {boolean}
-       */
-      filterTree(dataSource, query, field){
-        var vm = this,
-          hasVisibleChildren = false,
-          d = dataSource instanceof kendo.data.HierarchicalDataSource && dataSource.data();
-        if ( !field ){
-          field = "text";
-        }
-        for (var i = 0; i < d.length; i++) {
-          var item = d[i];
-          if ( item[field] ){
-            var text = item[field].toLowerCase();
-            var itemVisible =
-              // parent already matches
-              (query === true) ||
-              // query is empty
-              (query === "") ||
-              // item text matches query
-              (text.indexOf(query) >= 0);
-            var anyVisibleChildren = vm.filterTree(item.children, itemVisible || query, field); // pass true if parent
-            // matches
-            hasVisibleChildren = hasVisibleChildren || anyVisibleChildren || itemVisible;
-            item.hidden = !itemVisible && !anyVisibleChildren;
-          }
-        }
-        if ( d ){
-          // re-apply filter on children
-          dataSource.filter({ field: "hidden", operator: "neq", value: true });
-        }
-        return hasVisibleChildren;
-      },
+      
       /** ###### TAB ###### */
       /*
        * check if what we are looking for is in the open tabs
@@ -1527,9 +1555,6 @@
 
           if ( this.isProject === true ){
             repositoryProject = !this.repositoryProject(this.typeTree) ? this.repositories[this.currentRep] : this.repositoryProject(this.typeTree);
-            /*if ( ((this.typeTree === 'components') || (this.typeTree === 'components_test')) &&
-             ((select.data.type === 'components') && (dest.data.type === 'components'))
-           ){*/
             if ( (this.typeTree === 'components') &&
              ((select.data.type === 'components') && (dest.data.type === 'components'))
             ){
@@ -1742,10 +1767,10 @@
     mounted(){
       bbn.fn.log('editor',this)
     },
-    watch: {
-      sourceParser(newVal, oldVal){
-        if ( (newVal !== oldVal) && (newVal !== false)){
-          this.showTreeParser = false;
+    watch: {     
+      sourceParser(newVal, oldVal){        
+        if ( (newVal !== oldVal) && (newVal !== false) ){
+          this.showTreeParser = false;          
           this.$nextTick(()=>{
             this.showTreeParser = true;
           })
@@ -1753,30 +1778,18 @@
         else{
           this.showTreeParser = false;
         }
-      },
-      
+      },     
       currentRep(newVal, oldVal){
         if ( this.repositories[oldVal] && this.repositories[newVal].alias_code !== this.repositories[oldVal].alias_code ){
           this.typeTree = false;
           this.path = '';
-        }
-        /*
-        if (this.source.default_repository !== newVal ){
-          this.typeTree = false;
-          this.path = '';
-        }
-        else if ( newVal === this.source.default_repository ){
-          this.typeTree = this.typeProject;
-          this.path = this.typeProject;
-        }
-        this.treeReload();*/
+        }       
         if ( newVal !== oldVal ){
           this.treeReload();
         }
       },
       typeProject(newVal, oldVal){
-        this.path= newVal;
-        //this.typeTree = newVal === 'components_test' ?  'components' : newVal;
+        this.path= newVal;        
         this.typeTree = newVal;
         this.$nextTick(()=>{
           this.treeReload();
@@ -1787,44 +1800,56 @@
           this.searchFile= "";
         }
       },
-      
-      /*currentURL(){
-        if ( (this.isProject && this.typeProject === 'lib') || 
-          (this.source.repositories[this.currentRep]['code'] === "lib/")
-        ){
-          this.showParser =  this.getRef('tabstrip').tabs[this.tabSelected].closest('appui-ide-code').source.id;
-        }
-        else{
-          this.showParser = false
-        }  
-      }*/
     },
     components:{
       'parser':{
         props:['source'],
         template:
-        `<div style="display: inline; cursor: pointer" @click="getRow">
-          <i :class="classIcon"></i>        
+        `<div :style="{color: colorElement, display: 'inline'}"
+              @click="getRow">
+          <i :class="classIcon"></i>   
+          <span v-if="source.file" class="bbn-b">File:</span>     
           <span :class="['bbn-b', {'bbn-green': source.type === 'parent', 'bbn-red': source.type === 'trait'}]" 
                 :style="{cursor: (source.line !== undefined) && (source.line !== false) ? 'pointer' : 'default'}"
-                v-text="source.name"
+                v-text="source.name"               
           ></span>
-          <span v-if="(source.type !== undefined) && (source.type !== false) && (source.line !== false)"
+          <span v-if="(source.type !== undefined) && (source.type !== false) && (source.line !== false) && (source.file !== true)"
                 :class="['bbn-i', {'bbn-green': source.type === 'parent', 'bbn-red': source.type === 'trait'}]" 
                 :style="{cursor: ((source.line !== undefined) && (source.line !== false) && (source.type === 'origin')) ? 'pointer' : 'default'}" 
-                v-text="' (line: ' + source.line + ')'"
+                v-text="' (line: ' + source.line + ')'"                
           ></span>
         </div>`,
         computed:{
+          colorElement(){
+            return appui.ide.possibilityParser === 'component' ? '#44b782' : "black"
+          },
           classIcon(){            
-            if ( this.source.type === undefined ){              
-              return 'nf nf-custom-folder_config';
+            if ( appui.ide.possibilityParser !== 'component' ){
+              if ( (this.source.type === undefined) ){              
+                return 'nf nf-custom-folder_config';
+              }
+              else if ( (this.source.type !== undefined) && (this.source.type === false) ){
+                return "nf nf-dev-code";
+              }
+              else if ( (this.source.type !== undefined) && (this.source.file === true) ){
+                return "nf nf-mdi-subdirectory_arrow_right";
+              }
+              return 'nf nf-mdi-function';
             }
-            else if ( (this.source.type !== undefined) && (this.source.type === false) ){
-              return "nf nf-dev-code";
+            else if ( appui.ide.possibilityParser === 'component' ){
+              if ( (this.source.eleComponent !== undefined) ){
+                if ( (this.source.eleComponent === 'props') || (this.source.eleComponent === 'data') ){
+                  return "nf nf-dev-code";
+                }
+                else if ( (this.source.eleComponent === 'watch') || (this.source.eleComponent === 'computed') ){
+                  return "nf nf-fa-eye";
+                }
+                else if ( this.source.eleComponent === 'methods' ){
+                  return 'nf nf-mdi-function';
+                }
+              }              
+              return "nf nf-mdi-vuejs";
             }
-
-            return 'nf nf-mdi-function';
           }          
         },
         methods:{
@@ -1835,17 +1860,7 @@
                 this.$nextTick(()=>{
                   if ( this.source.type === 'origin' ){
                     appui.ide.currentEditor.closest('appui-ide-code').setState();    
-                  }
-                  /*else{
-                   let  link =  'file/' + 'BBN_LIB_PATH/bbn/bbn/src/'  + this.source.all.file + '/_end_/code';               
-                    if ( link ){
-                      appui.ide.getRef('tabstrip').load(link);
-                      appui.ide.cursorPosition.line = this.source.line-1;
-                      this.$nextTick(()=>{
-                        appui.ide.currentEditor.closest('appui-ide-code').setState();    
-                      });  
-                    }
-                  }*/                  
+                  }                            
                 })
               }
           }

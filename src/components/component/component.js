@@ -87,6 +87,6 @@
           tab.menu.splice(idx, 1);
         }
       }
-    }
+    }   
   }
 })();

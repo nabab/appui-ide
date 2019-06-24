@@ -168,12 +168,7 @@
         return "_".repeat(this.sctrl.length) + 'ctrl'
 
       }
-    },
-    /*mounted:{
-      if ( appui.ide.settings ){
-        return appui.ide.settings
-      }
-    }*/
+    },    
     methods: {
       search: bbn.fn.search,
       //for title in tabs ide

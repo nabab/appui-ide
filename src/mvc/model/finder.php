@@ -28,6 +28,7 @@ if ( isset($model->data['path']) && (strpos($model->data['path'], '../') === fal
     }
   }
   else{
+    die(var_dump('lore'));
     $fs = new \bbn\file\system2();
     $fs->cd(BBN_DATA_PATH.$model->data['path']);
   }

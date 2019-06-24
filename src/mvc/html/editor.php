@@ -126,9 +126,11 @@
       <!-- for parser tree -->
       <bbn-pane :size="220"
                 :collapsible="true"
+                :collapsed="true"
                 :resizable="true">
         <div class="bbn-flex-height"
-              style="padding-top: 10px; padding-bottom: 10px; padding-left: 5px;  padding-right: 5px;">
+             style="padding-top: 10px; padding-bottom: 10px; padding-left: 5px;  padding-right: 5px;"             
+        >
           <div>
             <div class="bbn-flex-height">
               <bbn-button @click="getTreeParser"
@@ -136,12 +138,15 @@
                           title="<?=_("Class structure")?>"
                           class="bbn-w-100"
               ></bbn-button>            
-              <div class="bbn-flex-fill bbn-vmiddle" v-if="showTreeParser !== false">
+              <div class="bbn-flex-fill bbn-vmiddle"
+                   v-if="showTreeParser !== false"
+              >
                 <bbn-switch v-model="showAllParser"
                             :novalue="false"
-                            :value="true"                                       
+                            :value="true"
+                            v-if="(possibilityParser === 'class') && (sourceParser !== false)"
                 ></bbn-switch>
-                <span class="bbn-b bbn-xl bbn-padded">
+                <span class="bbn-b bbn-xl bbn-padded" v-if="(possibilityParser === 'class') && (sourceParser !== false)">
                   <?=_('All')?>
                 </span>                
               </div>              
@@ -179,10 +184,28 @@
                  style="margin-top: 5px"
             >
               <bbn-tree :source="sourceParser"                          
-                        v-if="sourceParser !== false"                          
+                        v-if="sourceParser !== false"             
                         class="tree"
                         :component="$options.components.parser"                        
-              ></bbn-tree>  
+              ></bbn-tree>
+              <div v-else-if="!sourceParser && !errorTreeParser"
+                   class="bbn-middle bbn-h-100"
+              > 
+                <div class="bbn-card bbn-vmiddle bbn-c bbn-lpadded">
+                  <span class="bbn-b bbn-xl bbn-c">
+                    <?=_("Empty Tree Parser")?>
+                  </span>
+                </div>
+              </div>
+              <div v-else-if="!sourceParser && errorTreeParser"
+                   class="bbn-middle bbn-h-100"
+              > 
+                <div class="bbn-card bbn-vmiddle bbn-c bbn-lpadded">
+                  <span class="bbn-b bbn-xl bbn-c">                    
+                    <?=_("Parser class or file js in component")?>
+                  </span>
+                </div>
+              </div>
             </div>
           </div>  
         </div>          
