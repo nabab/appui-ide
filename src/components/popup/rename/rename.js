@@ -175,7 +175,7 @@
       extensions(){
         let res = [];
         if ( !this.isMVC ){
-          $.each(this.source.repositories[this.source.currentRep].extensions, (i, v) => {
+          bbn.fn.each(this.source.repositories[this.source.currentRep].extensions, ( v, i ) => {
             res.push({
               text: '.' + v.ext,
               value: v.ext

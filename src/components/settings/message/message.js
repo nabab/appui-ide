@@ -27,7 +27,8 @@
           this.closest('bbn-container').popup().confirm(bbn._('Are you sure you want save this internal message?'), () => {
             bbn.fn.post(appui.plugins['appui-ide'] + '/actions/imessages/add', this.imessage, d => {
               if ( d.success ){
-                this.source.imessages.push($.extend({}, this.imessage));
+                //this.source.imessages.push($.extend({}, this.imessage));
+                this.source.imessages.push(bbn.fn.extend(true, {}, this.imessage));
                 this.newImessage();
                 appui.success(bbn._('Saved'));
               }

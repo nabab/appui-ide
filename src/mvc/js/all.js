@@ -84,7 +84,7 @@
       //source for dropdow of the themes of component code
       themes(){
         let types = [];
-        $.each(this.source.typesTheme, (i,v)=>{
+        bbn.fn.each(this.source.typesTheme, ( v, i ) => {
           types.push({
             text: v,
             value: v

@@ -99,7 +99,8 @@
           tabsMenu[i] = exts;
         }
       });
-      return $.extend({}, this.source, {
+      //return $.extend({}, this.source, {
+      return bbn.fn.extend(true, {}, this.source, {
         repositories: ide.repositories,
         font: ide.font,
         font_size: ide.font_size,

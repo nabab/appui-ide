@@ -116,7 +116,7 @@
       types(){
         let res = [];
         if ( this.isMVC || (this.source.isFile && this.isComponent) ){
-          $.each(this.rep.tabs, (i, v) => {
+         bbn.fn.each(this.rep.tabs, ( v, i ) => {
             if ( !v.fixed ){
               res.push({
                 text: v.title,

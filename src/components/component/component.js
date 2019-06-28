@@ -12,7 +12,8 @@
       let path      = this.source.url.substr(this.source.repository.length).replace('/_end_', '').split('/'),
           filename  = path.pop();
       path = path.join('/');
-      return $.extend({}, this.source,{
+      //return $.extend({}, this.source,{
+      return bbn.fn.extend(true, {}, this.source, { 
         repositories: ide.repositories,
         font: ide.font,
         font_size: ide.font_size,

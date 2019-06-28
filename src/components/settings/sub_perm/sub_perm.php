@@ -1,6 +1,6 @@
 <div class="bbn-block bbn-100">
   <bbn-scroll>
-    <div class="bbn-grid-fields">
+    <div class="bbn-grid-fields bbn-padded">
       <label><?=_('Code')?></label>
       <div>
         <bbn-input style="margin: 0 10px"

@@ -75,7 +75,8 @@
           height: 400,
           title: bbn._('Path'),
           component: 'appui-ide-popup-path',
-          source: $.extend(this.$data, {
+          //source: $.extend(this.$data, {
+          source: bbn.fn.extend(true, this.$data, {  
             operation: 'copy',
             isComponent: this.source.isComponent,
             isMVC: this.source.isMVC,
@@ -117,7 +118,7 @@
       extensions(){
         let res = [];
         if ( !this.source.isMVC ){
-          $.each(this.source.repositories[this.source.currentRep].extensions, (i, v) => {
+          bbn.fn.each(this.source.repositories[this.source.currentRep].extensions, (v, i) => {
             res.push({
               text: '.' + v.ext,
               value: v.ext

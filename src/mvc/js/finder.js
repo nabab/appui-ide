@@ -196,14 +196,15 @@
         })
       },
       getData(p){
-        return $.extend({
+        //return $.extend({
+        return bbn.fn.extend(true, {  
           name: p.name,
           path: p.path
         }, this.isConnected ? {
           host: this.host,
           user: this.user,
           pass: this.pass
-        } : {})
+        } : {});
       },
       connect(){
         if ( this.isConnected ){

@@ -2,7 +2,8 @@
   return {
     props: ['source'],
     data(){
-      return $.extend({
+      //return $.extend({
+      return bbn.fn.extend(true, {  
         ide: null,
         originalValue: this.source.value,
         initialState: {
@@ -101,7 +102,7 @@
       },
       fullPath(){
         if ( this.fixed ){
-          if ( $.isNumeric(this.ssctrl) && (this.ssctrl > 0) ){
+          if ( (typeof(this.ssctrl) === "number") && (this.ssctrl > 0) ){
             return this.path + this.filePath + this.fixed;
           }
           else{
@@ -231,6 +232,7 @@
         }
       },
       test(){
+        bbn.fn.log("dentro")
         if ( this.isMVC ){
           let pathMVC = this.ide.path;
           if ( pathMVC.indexOf('mvc/') === 0 ){
@@ -270,7 +272,9 @@
                 appui.alert("There is an XML error in this SVG");
               }
               else {
-                this.closest("bbn-container").popup($("<div/>").append(document.importNode(oDocument.documentElement, true)).html(), "Problem with SVG");
+                //this.closest("bbn-container").popup($("<div/>").append(document.importNode(oDocument.documentElement, true)).html(), "Problem with SVG");
+                let divElement = document.createElement('div').innerHTML = document.importNode(oDocument.documentElement, true);                
+                this.closest("bbn-container").popup(divElement.innerHTML, "Problem with SVG");
               }
               break;
             default:

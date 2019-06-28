@@ -3,11 +3,12 @@
     props: ['source'],
     data(){
       if ( this.source.repositories ){
-        $.each(this.source.repositories, (i, a) => {
+        bbn.fn.each(this.source.repositories, (a, i) => {
           a.value = i;
         });
       }
-      return $.extend({}, this.source, {    
+      //return $.extend({}, this.source, {
+      return bbn.fn.extend(true,{}, this.source, {      
         selected: 0,
         url: this.source.root + 'editor',
         path: '',
@@ -293,7 +294,7 @@
       },
       ddRepData(){
         const r = [];
-        $.each(this.repositories, function(i, a){
+        bbn.fn.each(this.repositories, (a, i) => {
           r.push({
             value: i,
             text: a.text
@@ -679,7 +680,8 @@
        */
       treeMapper(a){
         if ( a.folder ){
-          $.extend(a, {
+          //$.extend(a, {
+          bbn.fn.extend(true, a, {  
             repository: this.currentRep,
             repository_cfg: this.repositories[this.currentRep],
             onlydirs: false,
@@ -952,7 +954,7 @@
             }
             if (o.items && o.items.length) {
               st += '<ul>';
-              $.each(o.items, (i, v) => {
+              bbn.fn.each(o.items, (v, i) => {
                 st += vm.mkMenu(v);
               });
               st += '</ul>';
@@ -974,9 +976,12 @@
        * Sets the theme to editors
        * @param theme
        */
+
+      /*
       setTheme(theme){
-        $("div.code", this.$el).each((i, el) => {
-          $(el).codemirror("setTheme", theme ? theme : this.theme);
+        //$("div.code", this.$el).each((i, el) => {
+        this.$el.querySelectorAll("div.code").each((i, el) => {
+          el.codemirror("setTheme", theme ? theme : this.theme);
         });
       },
 
@@ -984,12 +989,14 @@
        * Sets the font to editors
        * @param font
        * @param font_size
-       */
+      
       setFont(font, font_size){
-        $("div.CodeMirror", this.$el).css("font-family", font ? font : this.font);
-        $("div.CodeMirror", this.$el).css("font-size", font_size ? font_size : this.font_size);
+        //$("div.CodeMirror", this.$el).css("font-family", font ? font : this.font);
+        this.$el.querySelector("div.CodeMirror").style.font_family =  font ? font : this.font;
+        //$("div.CodeMirror", this.$el).css("font-size", font_size ? font_size : this.font_size);
+        this.$el.querySelector("div.CodeMirror").style.font_size =  font ? font : this.font; 
       },
-
+       */
       /**
        * Evaluates a code, in different ways depending on its nature
        *
@@ -1075,21 +1082,24 @@
        */
       save(ctrl = false){
         let active = this.getActive(true);
-        if ( active && $.isFunction(active.save) ){
+        if ( active && (typeof(active.save) === "function") ){
           return active.save();
         }
       },
 
       repositoryProject( type = false ){
-        let rep = $.extend({}, this.repositories[this.currentRep]);
+        //let rep = $.extend({}, this.repositories[this.currentRep]);
+        let rep = bbn.fn.extend(true, {}, this.repositories[this.currentRep]);
         if ( !type ){
           type = this.typeTree
         }
         if ( this.source.projects.tabs_type[type] !== undefined && type !== 'lib' ){
-          return $.extend( rep, {tabs: this.source.projects.tabs_type[type][0]});
+          //return $.extend( rep, {tabs: this.source.projects.tabs_type[type][0]});
+          return bbn.fn.extend(true, rep, {tabs: this.source.projects.tabs_type[type][0]});
         }
         else if ( this.source.projects.tabs_type[type] !== undefined && type === 'lib' ){
-          return $.extend(rep, {extensions: this.source.projects.tabs_type[type]['extensions']});
+          //return $.extend(rep, {extensions: this.source.projects.tabs_type[type]['extensions']});
+          return bbn.fn.extend(true, rep, {extensions: this.source.projects.tabs_type[type]['extensions']});
         }
         else{
           return false
@@ -1340,20 +1350,6 @@
           component: 'appui-ide-popup-rename',
           source: src
         });  
-         
-        /*if ( node.data.type !== undefined && this.isProject ){
-          src.only_component = onlyComponent;
-          src.repository = $.extend(this.repositories[this.currentRep], {tabs: this.source.projects.tabs_type[node.data.type][0]});
-
-          if ( node.data.is_vue === true ){
-            src.component_vue = true;
-          }
-
-        }
-        else{
-          title = node.data.folder ? bbn._('Copy folder') : bbn._('Copy');
-        }*/
-
       },
 
       /**
@@ -1386,7 +1382,8 @@
 
         if ( (node.data.type !== undefined) && this.isProject ){
           src.only_component = onlyComponent;
-          src.repository = $.extend(this.repositories[this.currentRep], {tabs: this.source.projects.tabs_type[node.data.type][0]});
+          //src.repository = $.extend(this.repositories[this.currentRep], {tabs: this.source.projects.tabs_type[node.data.type][0]});
+          src.repository = bbn.fn.extend(true, this.repositories[this.currentRep], {tabs: this.source.projects.tabs_type[node.data.type][0]});
 
           if ( node.data.is_vue === true ){
             src.component_vue = true;
@@ -1704,7 +1701,8 @@
           currentRep: this.currentRep,
           /** cfg of current repository */
           repository: this.repositories[currentIde.repository],
-          ext: $.inArray(currentIde.ext, this.repositories[currentIde.repository].extensions) ? currentIde.ext : '',
+          //ext: $.inArray(currentIde.ext, this.repositories[currentIde.repository].extensions) ? currentIde.ext : '',
+          ext: bbn.fn.search(this.repositories[currentIde.repository].extensions, 'ext', currentIde.ext) > -1 ? currentIde.ext : '',
           file_name: currentIde.filename,
         }, ( d ) => {
           if ( tabnavActive && d.success ){
