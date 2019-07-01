@@ -303,8 +303,7 @@ class ide {
 
       $new .= ($cfg['new_name'] ?? '') .
         (!empty($cfg['is_file']) && !empty($cfg['new_ext']) ? '.' . $cfg['new_ext'] : '');
-
-    //    die(\bbn\x::dump("sdess",$old, $new));
+    
 
       if ( ($path !== $new) && file_exists($new) ){
         $this->error("The new file|folder exists: $new");
@@ -330,6 +329,7 @@ class ide {
       isset($cfg['is_file'], $path)
     ){
 
+      
       if ( !empty($rep['alias_code']) && ($rep['alias_code'] === 'bbn-project') ){
         $path .= 'mvc/';
       }
@@ -345,26 +345,23 @@ class ide {
         }
 
         $old = $new = $tmp;
-
+       
         if ( !empty($cfg['path']) &&  ($cfg['path'] !== './') ){
           $old .= $cfg['path'] . (substr($cfg['path'], -1) !== '/' ? '/' : '');
+          
         }
         if ( !empty($cfg['new_path']) && ($cfg['new_path'] !== './') ){
           $new .= $cfg['new_path'] . (substr($cfg['new_path'], -1) !== '/' ? '/' : '');
         }
 
         
-
+       
         //if ( ($i !== '_ctrl') && !empty($tab['extensions']) ){
         if ( ($tab['url'] !== '_ctrl') && !empty($tab['extensions']) ){
           $old .= $cfg['name'];
           $new .= $cfg['new_name'] ?? '';
-          $ext_ok = false;
-
-          //die(var_dump($old, $ext));
-
-          if ( !empty($cfg['is_file']) ){                  
-         
+          $ext_ok = false;          
+          if ( !empty($cfg['is_file']) ){
             foreach ( $tab['extensions'] as $k => $ext ){
               if ( $k === 0 ){
                 if ( !empty($cfg['new_name']) && is_file($new.'.'.$ext['ext']) ){
@@ -372,6 +369,7 @@ class ide {
                   return false;
                 }
               }
+              
               if ( is_file($old.'.'.$ext['ext']) ){                
                 $ext_ok = $ext['ext'];
               }
@@ -380,15 +378,18 @@ class ide {
           if ( !empty($cfg['is_file']) && empty($ext_ok) ){
             continue;
           }
+
           $old .= !empty($cfg['is_file'])  ? '.' . $ext_ok : '';
           $new .= !empty($cfg['is_file']) ? '.' . $tab['extensions'][0]['ext'] : '';
-  
+          
+          
 
           if ( !empty($cfg['new_name']) && ($new !== $tmp) && file_exists($new) ){
             $this->error("The new file|folder exists.");
             return false;
           }
 
+          
 
           if ( file_exists($old) ){
             array_push($todo, [
@@ -396,7 +397,7 @@ class ide {
               'new' => ($new === $tmp) ? false : $new,
               'perms' =>  $tab['url'] === 'php' //$i === 'php'
             ]);
-          }
+          }         
         }
       }
     }
@@ -580,8 +581,7 @@ class ide {
                     foreach($ele['extensions'] as $a){
                       $old_component = $old_folder_component.'/'.$cfg['name'].'.'.$a['ext'];
                       $new_component = $new_folder_component.'/'.$cfg['new_name'].'.'.$a['ext'];
-                      if( !empty(file_exists($old_component)) && empty(file_exists($new_component)) ){
-                        //die(\bbn\x::dump("entrato in copia", $old_component, $new_component));
+                      if( !empty(file_exists($old_component)) && empty(file_exists($new_component)) ){                        
                         if ( empty(\bbn\file\dir::copy($old_component, $new_component)) ){
                           $ctrl_error = true;
                           break;
@@ -868,7 +868,7 @@ class ide {
    * @return bool
    */
   private function operations(array $cfg, string $ope){
-
+    //die(\bbn\x::dump($cfg['path'], $cfg['name'], $cfg['new_name'], $cfg['is_file'], $ope ));
     if ( is_string($ope) &&
       !empty($cfg['repository']) &&
       !empty($cfg['name']) &&
@@ -891,6 +891,8 @@ class ide {
     ){
 
       $rep = $cfg['repository'];
+      
+
       $path = $this->decipher_path($rep['bbn_path'] . '/' . $rep['path']);
       if ( $ope === 'rename' ){
         $cfg['new_path'] = $cfg['path'];
@@ -948,19 +950,21 @@ class ide {
           }
           return true;
         }
-       
-        if ( $todo = $this->check_mvc($cfg, $rep, $path) ){
+           
 
+        if ( $todo = $this->check_mvc($cfg, $rep, $path) ){
+          
 
           foreach ( $todo as $t ){
             // Rename
             if ( ($ope === 'rename') || ($ope === 'move') ){
-
+              
               if ( !\bbn\file\dir::move($t['old'], $t['new']) ){
                 $this->error("Error during the file|folder move: old -> $t[old] , new -> $t[new]");
                 return false;
               }
 
+              //die(\bbn\x::dump($t['old'], $t['new']));
               // $this->options->from_code(
               //   $this->real_to_id($t['old']),
               //   $this->_files_pref()
@@ -1073,11 +1077,9 @@ class ide {
           }
         }
         return false;
-
       }
-
     }
-    else{
+    else{     
       $this->error("Impossible to $ope the file|folder.");
       return false;
     }
@@ -2394,8 +2396,7 @@ class ide {
                'items' => [],
                'num_items' => \count(\bbn\file\dir::get_files($ctrl_path))
                //'num_items' => \count(\bbn\file\dir::get_files($files_ctrl))
-             ];
-            // die(\bbn\x::dump($ctrl_path, $history_ctrl, "gg"));
+             ];            
 
              //If we are requesting all files with their contents, this block returns to the "_ctrl" block.
              if ( $all === true ){
@@ -2561,7 +2562,7 @@ class ide {
             $url= $copy_url;
             $path = self::BACKUP_PATH . $url;
           }
-          //die(\bbn\x::hdump($files, $copy_url, $path));
+          
           if ( $files = \bbn\file\dir::get_files($path) ){
 
             if ( !empty($files) ){

@@ -177,7 +177,7 @@
                 parentTabNav = {};
 
             if ( this.isComponent === true ){
-              parent = this.closest('appui-ide-components');
+              parent = this.closest('appui-ide-component');
             }
             else if ( this.isMVC === true ){
               parent = this.closest('appui-ide-mvc');

@@ -615,35 +615,40 @@
        *
        *
        */
-      closeTab(){
-        let ctrlChangeCode = this.getRef('tabstrip').getVue(this.getRef('tabstrip').selected).getRef('component').changedCode;
-        if ( ctrlChangeCode ){
-          appui.confirm(
-            bbn._('Do you want to save the changes before closing the tab?'),
-            () => {
-              this.save( true );
-              this.getRef('tabstrip').close(this.getRef('tabstrip').selected, true);
-            },
-            () => {
-              this.getRef('tabstrip').close(this.getRef('tabstrip').selected, true);
-              //this.afterCtrlChangeCode();
-            }
-          );
-        }
-        else {
-          this.getRef('tabstrip').close(this.getRef('tabstrip').selected, true);
-        }
+      closeTab(){       
+        //this.$nextTick(()=>{
+          let ctrlChangeCode = this.getRef('tabstrip').getVue(this.$refs.tabstrip.selected).find('appui-ide-code').isChanged
+
+          if ( ctrlChangeCode ){
+            appui.confirm(
+              bbn._('Do you want to save the changes before closing the tab?'),
+              () => {
+                this.save( true );
+                this.getRef('tabstrip').close(this.getRef('tabstrip').selected, true);
+              },
+              () => {
+                this.getRef('tabstrip').close(this.getRef('tabstrip').selected, true);
+                //this.afterCtrlChangeCode();
+              }
+            );
+          }
+          else {
+            this.getRef('tabstrip').close(this.getRef('tabstrip').selected, true);
+          }
+        //})
       },
       /**
        * Check and close all tabs callback the function closeTab
        *
        */
       closeTabs(){
-        let max= this.getRef('tabstrip').tabs.length;
-        while(max !== 1){
+        //let max= this.getRef('tabstrip').tabs.length;
+        this.$refs.tabstrip.closeAll();
+       /* while(max !== 1){          
+               
           this.closeTab();
-          max--;
-        }
+            max--;
+        }*/
       },
       /**
        * Makes a data object necessary on file actions
@@ -1265,11 +1270,20 @@
         }
         else{
           let tab = this.getRef('tabstrip').tabs[this.tabSelected].source,
-              tabInfo = {
+              path = tab.path.split('/');
+          
+            path.shift();
+          
+         
+          let filename = path.pop();          
+          path = path.join('/');
+          let  tabInfo = {
                 mvc: tab.isMVC,
                 isComponent: this.getActive(true).isComponent,
-                name: !tab.isMVC ? tab.filename : '',
-                path: tab.isMVC ? tab.path : '',
+                //name: !tab.isMVC ? tab.filename : '',                
+                //path: tab.isMVC ? tab.path : '',
+                path: tab.isMVC ? path : '',
+                name: !tab.isMVC ? tab.filename : filename,
                 repository: tab.repository
               },
               tabFile = tabInfo.name;
@@ -1330,7 +1344,11 @@
           }
           if ( (node.data !== undefined  && node.data.is_vue === true) ||
           (menuFile && (this.getActive(true).isComponent)) ){
-            src.component_vue =  true;
+            let filename = this.getRef('tabstrip').tabs[this.tabSelected].title;
+              filename = filename.split('/');
+              filename.pop();
+            src.nodeData.path = 'components/' + filename.join('/')+'/';
+            src.component_vue =  true;                       
             if ( onlyComponent ){
               title = title = bbn._('Rename only component vue');
             }

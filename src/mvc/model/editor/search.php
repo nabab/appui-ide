@@ -36,7 +36,7 @@ if ( !empty($model->data['search']) &&
     $part = $model->data['repository']['path'];
   }
 
-  $path = $model->inc->ide->decipher_path($model->data['repository']['bbn_path'].'/'.$part);
+  $path = $model->inc->ide->decipher_path($model->data['repository']['bbn_path'].'/'.$model->data['repository']['code'].$part);
   $all = \bbn\file\dir::get_files($path, true);
 
 
@@ -241,7 +241,7 @@ if ( !empty($model->data['search']) &&
                 }
               }
             }
-        //    die(\bbn\x::dump("s",$result));
+       
           }
           else{
             $tot_num_files++;
@@ -331,7 +331,7 @@ if ( !empty($model->data['search']) &&
     }
   }
 
-  //die(\bbn\x::dump("s"));
+  
 
   if( !empty($result) ){
     $totFiles = 0;
@@ -339,14 +339,6 @@ if ( !empty($model->data['search']) &&
       $totFiles = $totFiles + $result[$key]['numChildren'];
       $result[$key]['text'] = str_replace($result[$key]['text'], $result[$key]['text']."&nbsp;<span class='bbn-badge bbn-s bbn-bg-lightgrey'>".$result[$key]['numChildren']."</span>",$result[$key]['text']);
     }
-  //  die(\bbn\x::dump($result));
-
-  /*  die(\bbn\x::dump([
-      'list' => array_values($result),
-      'totFiles' => $totFiles,
-      'allFiles' => $tot_num_files++,
-      'totLines' => $totLines
-    ]));*/
     return [
       'list' => array_values($result),
       'totFiles' => $totFiles,

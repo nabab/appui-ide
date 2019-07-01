@@ -11,12 +11,19 @@ if ( $ctrl->inc->ide && !empty($ctrl->arguments) ){
     'search' => base64_decode($ctrl->arguments[count($ctrl->arguments)-1]),
     'component' => false,
     'type' => '',
+    'plugin' => false
   ];
 $ctrl->arguments[count($ctrl->arguments)-1] = $ctrl->data['search'];
 
 
   if ( $ctrl->data['isProject'] === true ){
-    $ctrl->data['type'] = $ctrl->arguments[2];
+    if  ( $ctrl->arguments[1] === '_project_' ){
+      $ctrl->data['type'] = $ctrl->arguments[2];
+    }
+    else if( $ctrl->arguments[4] === '_project_' ){
+      $ctrl->data['plugin'] = $ctrl->arguments[2];
+      $ctrl->data['type'] = $ctrl->arguments[5];
+    }
   }
 
 //case folder
@@ -44,18 +51,21 @@ $ctrl->arguments[count($ctrl->arguments)-1] = $ctrl->data['search'];
 
 
   foreach( $ctrl->arguments as $key => $val ){
-    if ( $val !== "_end_" ){
-      $ctrl->data['nameRepository'] .=  $val.'/';
-    }
-    else{
+    if ( $val === "_end_" ){   
       $ctrl->data['typeSearch'] = $ctrl->arguments[$key+1];
       break;
     }
   }
-  if ( $ctrl->data['isProject'] ){
-    $ctrl->data['nameRepository'] = $ctrl->arguments[0].'/';
-  }
 
+  if ( $ctrl->data['isProject'] ){
+    if ( !empty($ctrl->data['plugin']) ){
+      $ctrl->data['nameRepository'] = $ctrl->arguments[0].'/bbn/'.$ctrl->data['plugin'].'/src/';
+    }
+    else{
+      $ctrl->data['nameRepository'] = $ctrl->arguments[0].'/';
+    }    
+  }
+  
 
   $ctrl->data['repository'] = $ctrl->inc->ide->repositories($ctrl->data['nameRepository']);
   //$ctrl->arguments[count($ctrl->arguments)-1] = urlencode($ctrl->arguments[count($ctrl->arguments)-1]);

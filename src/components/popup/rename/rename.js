@@ -127,7 +127,8 @@
             key = 'file/' + appui.ide.currentRep;
 
         if ( this.source.isMVC ){
-          key += 'mvc/' + this.source.nodeData.path + '/_end_';
+         // key += 'mvc/' + this.source.nodeData.path + '/_end_';
+          key += 'mvc/' + this.source.nodeData.path + '/' +  this.source.nodeData.name + '/_end_';
         }
         else if ( this.source.isCcomponent ){
           key += this.source.data.path + '/_end_';
@@ -153,7 +154,7 @@
           // });
           this.$nextTick(() => {
             let newUrl = appui.ide.getRef('tabstrip').tabs[appui.ide.tabSelected].current;
-            appui.ide.getRef('tabstrip').currentURL = newUrl;
+            //appui.ide.getRef('tabstrip').currentURL = newUrl;
             bbn.fn.link('ide/editor/' + newUrl);
             appui.ide.getRef('tabstrip').load(newUrl);
           });
@@ -189,7 +190,7 @@
         let obj = {
           repository: this.source.repository,
           //path: !this.source.parent ? this.source.nodeData.path : this.source.nodeData.dir,
-          path: this.source.nodeData.dir,
+          path: this.source.nodeData.dir !== undefined ? this.source.nodeData.dir : this.source.nodeData.path,
           name: this.source.nodeData.name,
           ext: this.source.nodeData.ext,
           is_mvc: this.isMVC,
@@ -202,7 +203,7 @@
           obj.path = this.source.nodeData.path;
         }
         if ( this.source.repository['types'] !== undefined ){
-          obj.component_vue =  this.source.component_vue;
+          obj.component_vue =  this.source.component_vue !== undefined ? this.source.component_vue : false;
           obj.only_component = this.source.only_component;
         }
         return obj;
