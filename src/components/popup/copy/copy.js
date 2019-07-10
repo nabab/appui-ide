@@ -76,7 +76,7 @@
           title: bbn._('Path'),
           component: 'appui-ide-popup-path',
           //source: $.extend(this.$data, {
-          source: bbn.fn.extend(true, this.$data, {  
+          source: bbn.fn.extend(this.$data, {  
             operation: 'copy',
             isComponent: this.source.isComponent,
             isMVC: this.source.isMVC,

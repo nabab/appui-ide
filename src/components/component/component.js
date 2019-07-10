@@ -13,7 +13,7 @@
           filename  = path.pop();
       path = path.join('/');
       //return $.extend({}, this.source,{
-      return bbn.fn.extend(true, {}, this.source, { 
+      return bbn.fn.extend({}, this.source, { 
         repositories: ide.repositories,
         font: ide.font,
         font_size: ide.font_size,

@@ -53,7 +53,7 @@
       treeMapper(a){
         if ( a.folder ){
           //$.extend(a, {
-          bbn.fn.extend(true, a, {  
+          bbn.fn.extend(a, {  
             repository: appui.ide.currentRep,
             repository_cfg: this.source.rep,
             onlydirs: true,

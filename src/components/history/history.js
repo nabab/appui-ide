@@ -30,7 +30,7 @@
       transform(a){
         if ( a ){
           //return $.extend(a, {
-          return bbn.fn.extend(true, a, {  
+          return bbn.fn.extend(a, {  
             text: "name_file" in a ? a.text + ' &nbsp; <span class="bbn-badge bbn-s bbn-bg-lightgrey">' + a.numChildren + '</span>' : a.text,
             num: a.numChildren || 0,
             type: "name_file" in a ? "" : a.text

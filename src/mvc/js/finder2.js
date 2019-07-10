@@ -196,7 +196,7 @@
       },
       getData(p){
         //return $.extend({
-        return bbn.fn.extend(true, {  
+        return bbn.fn.extend({  
           name: p.name,
           path: p.path
         }, this.isConnected ? {

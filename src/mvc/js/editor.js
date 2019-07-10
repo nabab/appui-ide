@@ -8,7 +8,7 @@
         });
       }
       //return $.extend({}, this.source, {
-      return bbn.fn.extend(true,{}, this.source, {      
+      return bbn.fn.extend({}, this.source, {      
         selected: 0,
         url: this.source.root + 'editor',
         path: '',
@@ -686,7 +686,7 @@
       treeMapper(a){
         if ( a.folder ){
           //$.extend(a, {
-          bbn.fn.extend(true, a, {  
+          bbn.fn.extend(a, {  
             repository: this.currentRep,
             repository_cfg: this.repositories[this.currentRep],
             onlydirs: false,
@@ -1094,17 +1094,17 @@
 
       repositoryProject( type = false ){
         //let rep = $.extend({}, this.repositories[this.currentRep]);
-        let rep = bbn.fn.extend(true, {}, this.repositories[this.currentRep]);
+        let rep = bbn.fn.extend({}, this.repositories[this.currentRep]);
         if ( !type ){
           type = this.typeTree
         }
         if ( this.source.projects.tabs_type[type] !== undefined && type !== 'lib' ){
           //return $.extend( rep, {tabs: this.source.projects.tabs_type[type][0]});
-          return bbn.fn.extend(true, rep, {tabs: this.source.projects.tabs_type[type][0]});
+          return bbn.fn.extend(rep, {tabs: this.source.projects.tabs_type[type][0]});
         }
         else if ( this.source.projects.tabs_type[type] !== undefined && type === 'lib' ){
           //return $.extend(rep, {extensions: this.source.projects.tabs_type[type]['extensions']});
-          return bbn.fn.extend(true, rep, {extensions: this.source.projects.tabs_type[type]['extensions']});
+          return bbn.fn.extend(rep, {extensions: this.source.projects.tabs_type[type]['extensions']});
         }
         else{
           return false
@@ -1401,7 +1401,7 @@
         if ( (node.data.type !== undefined) && this.isProject ){
           src.only_component = onlyComponent;
           //src.repository = $.extend(this.repositories[this.currentRep], {tabs: this.source.projects.tabs_type[node.data.type][0]});
-          src.repository = bbn.fn.extend(true, this.repositories[this.currentRep], {tabs: this.source.projects.tabs_type[node.data.type][0]});
+          src.repository = bbn.fn.extend(this.repositories[this.currentRep], {tabs: this.source.projects.tabs_type[node.data.type][0]});
 
           if ( node.data.is_vue === true ){
             src.component_vue = true;
