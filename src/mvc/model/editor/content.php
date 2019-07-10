@@ -1,5 +1,6 @@
 <?php
 /** @var $model \bbn\mvc\model */
+
 if ( !empty($model->data['url']) && isset($model->inc->ide) ){
   $model->data['url'] = str_replace('/_end_', '', $model->data['url']);
   //we convert the string into an array to check whether we need to provide permission information or not
@@ -32,8 +33,7 @@ if ( !empty($model->data['url']) && isset($model->inc->ide) ){
       return $perm;
     }
   }
-  else {
-   
+  else {  
     if ( $ret = $model->inc->ide->load($model->data['url']) ){
       
       if ( isset($ret['permissions']) ){

@@ -1182,6 +1182,7 @@ class ide {
     $tabs = $this->tabs_of_type_project($type);
     //$tabs =  $this->options->option($id)['tabs'];
     if ( is_string($path) && is_array($tabs) ){
+      //die(\bbn\x::dump($tabs, $path));
       foreach($tabs as $tab){
         $exist= false;
 
@@ -1425,6 +1426,7 @@ class ide {
         'char' => false,
         'marks' => false,
       ];
+      //die(\bbn\x::dump(self::$current_file));
       if ( is_file(self::$current_file) ){
         $f['value'] = file_get_contents(self::$current_file);
         if ( $permissions = $this->get_file_permissions() ){
@@ -1467,6 +1469,7 @@ class ide {
         $f['value'] = '';
       }
       $f['id'] = self::$current_id;
+      
       return $f;
     }
     return false;

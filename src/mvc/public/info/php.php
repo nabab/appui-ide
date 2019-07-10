@@ -1,9 +1,4 @@
 <?php
-$ctrl->obj->title = "Infos PHP";
-$ctrl->add_script('$("div#tabstrip div.k-content.bbn-state-active:visible:first").css({
-  padding: "0px",
-  margin: "0px",
-  overflow: "hidden"
-})');
-?>
-<iframe style="width: 100%; border: 0; height: 100%" src="admin/info/php"></iframe>
+$ctrl->obj->title = _.("Infos PHP");
+$ctrl->obj->icon = "nf nf-mdi-language_php";
+$ctrl->obj->content = \bbn\x::hdump(phpinfo());

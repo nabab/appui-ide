@@ -83,7 +83,7 @@
           }
           ];
 
-      $.each(tabs, (i, tab) => {
+      bbn.fn.each(tabs, (tab, i) => {
         exts = [];
         // we consider only those with more than one extension
         if ( tab.extensions.length > 1 ){
