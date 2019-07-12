@@ -165,7 +165,7 @@
         if ( bbn.fn.isArray(this.sourceTreeParser) && this.sourceTreeParser.length ){
           if ( (this.possibilityParser === "class") && !this.showAllParser ){
             let idx = bbn.fn.search(this.sourceTreeParser, 'name', 'methods');
-            let sourceTree = bbn.fn.extend(true, [], this.sourceTreeParser);
+            let sourceTree = bbn.fn.extend([], this.sourceTreeParser);
             bbn.fn.each(sourceTree[idx]['items'], (meth,i)=>{            
               meth['items'] =  bbn.fn.filter(meth['items'], 'type', 'origin')
               meth['numChildren'] = meth['items'].length;
@@ -863,7 +863,7 @@
        * @param d The node data
        * @param n The node
        */
-      treeNodeActivate(d){
+      treeNodeActivate(d){        
         if ( !d.data.folder || (d.data.folder && d.data.is_vue) ){
           if( !this.isProject && !this.isMVC && this.existingTab(d) ){
             bbn.fn.link(
