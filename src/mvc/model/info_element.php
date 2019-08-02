@@ -1,5 +1,6 @@
 <?php
 
+
 $res = [
   'list' => [],
   'exts' => []
@@ -17,7 +18,7 @@ if ( !empty($model->data['repository']['bbn_path']) &&
   else if ( $model->data['is_component'] ){
     $path .= 'component/';
   }
-
+/*
   //case folder
   if ( !$model->data['is_folder'] ){
     $path='';
@@ -25,7 +26,7 @@ if ( !empty($model->data['repository']['bbn_path']) &&
   else{
 
   }
-
+*/
 }
 $tabs = [];
 foreach($model->data['repository']['tabs'] as $tab){

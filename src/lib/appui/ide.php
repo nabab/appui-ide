@@ -789,9 +789,23 @@ class ide {
      ($cfg['repository']['path'] === '/' ? '' : '/'.$cfg['repository']['path']);
 
 
-    if ( !empty($cfg['repository']['bbn_path']) && !empty($path['old']) ){
+    if ( !empty($cfg['repository']['bbn_path']) && 
+         !empty($path['old']) &&
+         !empty($cfg['path']) &&
+         !empty($path['old'])
+    ){
       $old_backup = $backup_path.($cfg['is_project'] && $cfg['type'] ? '/'.$cfg['type'] .'/' : '/');
-      $old_backup .= $cfg['path'] . explode(".", array_pop(explode("/", $path['old'])))[0];
+
+      $path_old =  explode("/", $path['old']);
+      if ( is_array($path_old) && count($path_old) ){
+        $path_old = array_pop($path_old);
+        $path_old =  explode(".",$path_old)[0];
+         $old_backup .= $cfg['path'] . $path_old;
+      }
+      else{
+        $this->error("Error during the file|folder backup delete: old -> $old_backup");
+      }
+      
 
       //CASE MOVE and RENAME
       if ( (($case === 'move') || ($case === 'rename')) &&
@@ -1048,7 +1062,7 @@ class ide {
               if ( !empty($t['perms']) ){
                 $this->delete_perm($t['old']);
               }
-
+             
               $this->operations_backup($t, $cfg, $ope);
             }
           }
