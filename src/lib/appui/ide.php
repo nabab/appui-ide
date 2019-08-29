@@ -17,8 +17,9 @@ class ide {
         IDE_PATH = 'ide',
         DEV_PATH = 'PATHS',
         PATH_TYPE = 'PTYPES',
-        FILES_PREF = 'files',
-        BACKUP_PATH = BBN_DATA_PATH . 'ide/backup/';
+        FILES_PREF = 'files';
+
+  public static $backup_path;
 
   private static
     /** @var bool|int $ide_path */
@@ -58,7 +59,7 @@ class ide {
   private function _ide_path(){
     self::optional_init();
     if ( !self::$ide_path ){
-      self::set_ide_path(self::$option_root_id);
+      self::_init_ide();
     }
     return self::$ide_path;
   }
@@ -68,8 +69,9 @@ class ide {
    *
    * @param $id
    */
-  private static function set_ide_path($id){
-    self::$ide_path = $id;
+  private static function _init_ide(){
+    self::$ide_path = self::$option_root_id;
+    self::$backup_path = \bbn\mvc::get_data_path('appui-ide').'backup/';
   }
 
   /**
@@ -743,7 +745,7 @@ class ide {
    */
   private function operations_backup_components(array $cfg, string $case ){
     if ( !empty($cfg['is_component']) ){
-      $backup_path = self::BACKUP_PATH . $cfg['repository']['bbn_path'] .'/'.($cfg['repository']['path'] === '/' ? '' : $cfg['repository']['path']);
+      $backup_path = self::$backup_path . $cfg['repository']['bbn_path'] .'/'.($cfg['repository']['path'] === '/' ? '' : $cfg['repository']['path']);
       if ( !empty($cfg['is_vue']) ){
         $old_path_component = $backup_path.$cfg['path'].$cfg['name'].'/'.$cfg['name'];
         if ( ($case === "move") || ($case === "rename") ){
@@ -785,9 +787,8 @@ class ide {
    */
   private function operations_backup(array $path,  array $cfg, string $case ){
     //set path backups temporaney disattivate for check an complete
-    $backup_path = self::BACKUP_PATH . $cfg['repository']['bbn_path'].
-     ($cfg['repository']['path'] === '/' ? '' : '/'.$cfg['repository']['path']);
-
+    $backup_path = self::$backup_path . $cfg['repository']['bbn_path'].
+     ($cfg['repository']['path'] === '/' ? '' : '/'.$cfg['repository']['path']);     
 
     if ( !empty($cfg['repository']['bbn_path']) && 
          !empty($path['old']) &&
@@ -799,7 +800,7 @@ class ide {
       $path_old =  explode("/", $path['old']);
       if ( is_array($path_old) && count($path_old) ){
         $path_old = array_pop($path_old);
-        $path_old =  explode(".",$path_old)[0];
+        $path_old = explode(".",$path_old)[0];
          $old_backup .= $cfg['path'] . $path_old;
       }
       else{
@@ -857,21 +858,6 @@ class ide {
         }*/
       }
     }
-  }
-
-  /**
-   * remover oprion of file preference
-   *
-   * @param string $path The path of the file
-   * @return bool
-   */
-  public function remove_file_pref($path){
-    return $this->options->remove(
-      $this->options->from_code(
-        $this->real_to_id($path),
-        $this->_files_pref()
-      )
-    );
   }
 
   /**
@@ -1128,6 +1114,21 @@ class ide {
     $this->projects = new \bbn\appui\project($this->db);
   }
 
+
+  /**
+   * remover oprion of file preference
+   *
+   * @param string $path The path of the file
+   * @return bool
+   */
+  public function remove_file_pref($path){
+    return $this->options->remove(
+      $this->options->from_code(
+        $this->real_to_id($path),
+        $this->_files_pref()
+      )
+    );
+  }
 
   public function is_project(string $url){
     $rep = $this->repository_from_url($url);
@@ -1500,16 +1501,16 @@ class ide {
     if ( $this->set_current_file($this->decipher_path($file['full_path'])) ){
       //if in the case of a rescue of _ctrl
       if ( $file['tab'] === "_ctrl" ){
-        $backup_path = self::BACKUP_PATH . $file['repository'] . $file['path'] . $file['tab'] . '/';
+        $backup_path = self::$backup_path . $file['repository'] . $file['path'] . $file['tab'] . '/';
         if ( is_numeric($file['ssctrl']) && ($file['ssctrl'] === 0) ){
-        $backup_path = self::BACKUP_PATH . $file['repository'] . $file['tab'] . '/';
+        $backup_path = self::$backup_path . $file['repository'] . $file['tab'] . '/';
 
         }else{
-          $backup_path = self::BACKUP_PATH . $file['repository'] . $file['path'] . $file['tab'] . '/';
+          $backup_path = self::$backup_path . $file['repository'] . $file['path'] . $file['tab'] . '/';
         }
       }
       else {
-        $backup_path = self::BACKUP_PATH;
+        $backup_path = self::$backup_path;
         if ( !isset($file['repository']) ){
           $backup_path .= dirname($file['full_path']);
           $fn = \bbn\str::file_ext($file['full_path'],1);
@@ -1592,7 +1593,7 @@ class ide {
   /*public function save(array $file){
     if ( $this->set_current_file($this->decipher_path($file['full_path'])) ){
      // die(var_dump($file['repository'] , $file['path'] , $file['filename'], $file['tab'] ));
-      $backup_path = self::BACKUP_PATH . $file['repository'] . $file['path'] . '/' . $file['filename'] . '/__end__/' . ($file['tab'] ?: $file['extension']) . '/';
+      $backup_path = self::$backup_path . $file['repository'] . $file['path'] . '/' . $file['filename'] . '/__end__/' . ($file['tab'] ?: $file['extension']) . '/';
       // Delete the file if code is empty and if it isn't a super controller
       if ( empty($file['code']) && ($file['tab'] !== '_ctrl') ){
         if ( @unlink(self::$current_file) ){
@@ -2371,10 +2372,10 @@ class ide {
     $backups = [];
     $history_ctrl = [];
     // File's backup path
-    $path = self::BACKUP_PATH . $url;
+    $path = self::$backup_path . $url;
 
 
-    if ( !empty($url) && !empty(self::BACKUP_PATH) ){
+    if ( !empty($url) && !empty(self::$backup_path) ){
       $ctrl_path = explode("/", $path);
       for($y=0; $y <2; $y++){
         array_pop($ctrl_path);
@@ -2399,7 +2400,7 @@ class ide {
       //First, check the presence of _ctrl backups.
       $ctrl_path = implode("/", $ctrl_path)."/"."_ctrl";
       // read _ctrl if exsist
-       if ( is_dir($ctrl_path)  ){
+       if ( is_dir($ctrl_path) ){
 
            //If there is a "_ctrl" backup, insert it into the array that will be merged with the remaining backup at the end of the function.
            if ( $files_ctrl = \bbn\file\dir::get_files($ctrl_path) ){
@@ -2577,7 +2578,7 @@ class ide {
           //If we are requesting ctrl backup files then we give it the right path and "$check_ctrl_files" is a variable that makes us understand whether or not we ask for backup files of "_ctrl".
           if ( $check_ctrl_files === true  ){
             $url= $copy_url;
-            $path = self::BACKUP_PATH . $url;
+            $path = self::$backup_path . $url;
           }
           
           if ( $files = \bbn\file\dir::get_files($path) ){
@@ -2675,10 +2676,10 @@ class ide {
   }
 
   /*public function history(string $url){
-    if ( !empty($url) && !empty(self::BACKUP_PATH) ){
+    if ( !empty($url) && !empty(self::$backup_path) ){
       $backups = [];
       // File's backup path
-      $path = self::BACKUP_PATH . $url;
+      $path = self::$backup_path . $url;
       if ( is_dir($path) && ($dirs = \bbn\file\dir::get_dirs($path)) ){
         foreach ( $dirs as $dir ){
           if ( $files = \bbn\file\dir::get_files($dir) ){

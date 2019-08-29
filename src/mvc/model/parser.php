@@ -1,7 +1,8 @@
 <?php
 $res = [
   'success' => false,
-  'tree' => []  
+  'tree' => [],
+  'class' => false  
 ];
 
 $get_tree = ['properties', 'methods'];
@@ -10,22 +11,30 @@ if ( !empty($model->data['cls']) ){
   $parser = new \bbn\parsers\php();
 
   $file = basename($model->data['cls'],'.php');
-  $class = array_pop(explode("/",dirname($model->data['cls']))).'\\'.$file ;    
-  //$cfg = [];  
+
+  $path = dirname($model->data['cls']);
+
+
+  $class = substr($path, strpos($path,'lib/')+4).'\\'.$file;
+  $class = str_replace('/', '\\',$class);
+  
   $tree = $parser->analyze($class);
+
+
+  
   
   if ( !empty($tree) ){
     foreach( $get_tree as $ele ){
-      if ( !empty($tree[$ele]) ){    
-        $cfg = [
-            'text' => $ele,
-            'name' => $ele,    
-            'numChildren' => count($tree[$ele]),    
-            'num' => count($tree[$ele]),    
-            'items' => [],
-            'icon' => "nf nf-fa-folder"
-        ];
+      $cfg = [
+        'text' => $ele,
+        'name' => $ele,    
+        'numChildren' => count($tree[$ele]),    
+        'num' => count($tree[$ele]),    
+        'items' => [],
+        'icon' => "nf nf-fa-folder"
+      ];
 
+      if ( $cfg['num'] > 0 ){      
         foreach( $tree[$ele] as $i => $type ){
           $cfg['items'][] = [
             'text' => $i,
@@ -66,10 +75,11 @@ if ( !empty($model->data['cls']) ){
             $value['items'][] = $element;
           }
         }
-      }
+      }      
       $res['tree'][] = $cfg;        
     }
   } 
-  $res['success'] = 'true';
+  $res['success'] = true;
+  $res['class'] =  $class;  
 }    
 return $res; 

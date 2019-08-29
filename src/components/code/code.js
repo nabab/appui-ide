@@ -231,8 +231,7 @@
           return true;
         }
       },
-      test(){
-        bbn.fn.log("dentro")
+      test(){        
         if ( this.isMVC ){
           let pathMVC = this.ide.path;
           if ( pathMVC.indexOf('mvc/') === 0 ){
@@ -241,7 +240,7 @@
           let link = (this.ide.route ? this.ide.route + '/' : '') +
           (pathMVC === 'mvc' ? '' : pathMVC + '/') +  this.ide.filename;
 
-          bbn.fn.link(link, true);
+          appui.find('bbn-router').load(link, true);
 
           return true;
         }

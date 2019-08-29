@@ -127,7 +127,31 @@
       <bbn-pane :size="220"
                 :collapsible="true"
                 :collapsed="true"
-                :resizable="true">
+                :resizable="true"                
+      >
+        <div class="bbn-flex-height">
+          <div class="bbn-spadded">
+            <bbn-button @click="getTreeParser"
+                        icon="nf nf-mdi-file_tree"
+                        title="<?=_("Structure Element")?>"
+                        class="bbn-w-100"
+            ></bbn-button>
+          </div>
+          <appui-ide-parser v-if="treeParser"
+                            :source="sourceTreeParser"                            
+          ></appui-ide-parser>
+          <div v-else
+               class="bbn-middle bbn-h-100"
+          > 
+            <div class="bbn-card bbn-vmiddle bbn-c bbn-lpadded">
+              <span class="bbn-b bbn-xl bbn-c">                    
+                <?=_("Parser class or file js in component")?>
+              </span>
+            </div>
+          </div>      
+        </div> 
+        
+        <!--
         <div class="bbn-flex-height"
              style="padding-top: 10px; padding-bottom: 10px; padding-left: 5px;  padding-right: 5px;"             
         >
@@ -138,30 +162,41 @@
                           title="<?=_("Class structure")?>"
                           class="bbn-w-100"
               ></bbn-button>            
-              <div class="bbn-flex-fill bbn-vmiddle"
+              <div class="bbn-middle"
                    v-if="showTreeParser !== false"
               >
+                <span class="bbn-b bbn-xl bbn-padded"
+                       v-if="(possibilityParser === 'class') && (sourceParser !== false)"
+                       v-text="_('Own')"
+                       :style="{'color': !showAllParser ? '#ff6b18 ' : '#000000'}"
+                ></span>                
                 <bbn-switch v-model="showAllParser"
                             :novalue="false"
                             :value="true"
                             v-if="(possibilityParser === 'class') && (sourceParser !== false)"
                 ></bbn-switch>
-                <span class="bbn-b bbn-xl bbn-padded" v-if="(possibilityParser === 'class') && (sourceParser !== false)">
-                  <?=_('All')?>
-                </span>                
-              </div>              
-              <div  v-if="showTreeParser !== false && showAllParser">
+                <span class="bbn-b bbn-xl bbn-padded"
+                      v-if="(possibilityParser === 'class') && (sourceParser !== false)"
+                      v-text="_('All')" 
+                      :style="{'color': showAllParser ? '#ff6b18 ' : '#000000'}"                       
+                ></span>                
+              </div>
+              <div v-if="sourceParser"
+                   class="bbn-vpadded" 
+              >
+                <span  v-text="currentId"></span> 
+              </div>
+
+              <div  v-if="showTreeParser && showAllParser">
                 <div class="bbn-flex-width">
                   <div class="bbn-vmiddle"
                        style="margin-right:15px"   
                   >
-                    <bbn-button :icon="iconLegendParser"                                                                        
-                                text="<?=_("Legend")?>"
-                                type="button"
-                                @click="legendParser = !legendParser"
-                    ></bbn-button>                  
+                    <span class="bbn-b"
+                          v-text="_('Legend')+': '"
+                    ></span>                     
                   </div>
-                  <div class="bbn-flex-fill bbn-c bbn-card bbn-grid-fields" v-if="legendParser">
+                  <div class="bbn-flex-fill bbn-c bbn-card bbn-grid-fields bbn-spadded" v-if="showAllParser">
                     <label class="bbn-b"><?=_('Current')?></label>
                     <div class="bbn-w-100 bbn-vmiddle">
                       <div class="bbn-w-90 bbn-h-50 bbn-bg-black"></div> 
@@ -184,7 +219,7 @@
                  style="margin-top: 5px"
             >
               <bbn-tree :source="sourceParser"                          
-                        v-if="sourceParser !== false"             
+                        v-if="sourceParser !== false"          
                         class="tree"
                         :component="$options.components.parser"                        
               ></bbn-tree>
@@ -209,7 +244,7 @@
             </div>
           </div>  
         </div>          
-        
+      -->  
       </bbn-pane>
     </bbn-splitter>
   </bbn-pane>

@@ -34,8 +34,8 @@
       },
       treeMapper(ele){
         return {
-          path: ele.path || [],
-          icon: ele.folder ? 'zmdi zmdi-folder' : 'nf nf-fa-file',
+          path: ele.path || [],          
+          icon: ele.folder ? 'nf nf-custom-folder' : 'nf nf-fa-file',
           folder: ele.folder,
           text: ele.text + (ele.num ? "&nbsp;&nbsp;<span class='bbn-badge bbn-s bbn-bg-light-grey'>" + ele.num + "</span>" : ''),
           num: ele.num || 0,

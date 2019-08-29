@@ -20,6 +20,8 @@ if ( !empty($ctrl->post['id']) &&
   }
   else {
     $ctrl->obj->error = 'Error.';
+    $ctrl->obj->cfg = $cfg;
+    $ctrl->obj->id = $ctrl->post['id'];
   }
 }
 return false;

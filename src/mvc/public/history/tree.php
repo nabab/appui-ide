@@ -1,7 +1,7 @@
 <?php
 /** @var $ctrl \bbn\mvc\controller */
 
-$path = BBN_DATA_PATH."ide/backup/".$ctrl->post['path'];
+$path = $ctrl->data_path('appui-ide').'backup/'.$ctrl->post['path'];
 $res = [];
 if ( isset($ctrl->inc->ide, $ctrl->post['is_mvc']) && !empty($ctrl->post['path']) ){
   if ( !isset($ctrl->post['type']) ){
@@ -48,7 +48,7 @@ if ( isset($ctrl->inc->ide, $ctrl->post['is_mvc']) && !empty($ctrl->post['path']
 }
 else{
   if ( isset($ctrl->inc->ide, $ctrl->post['url']) && !empty($ctrl->post['url']) ){
-    $path = BBN_DATA_PATH."ide/backup/".$ctrl->post['url'];
+    $path = $ctrl->data_path('appui-ide').'backup/'.$ctrl->post['url'];
     $code= file_get_contents($path);
 
     if ( !empty($code) ){

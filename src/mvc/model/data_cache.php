@@ -1,17 +1,18 @@
 <?php
-if ( empty($model->data['path']) ){
-  $folderCache = "bbn_cache";
-}
-else{
-  $folderCache = $model->data['path'];
+
+$folderCache = $model->cache_path();
+$fullPath = $folderCache;
+
+if ( !empty($model->data['path']) ){
+  $fullPath .= $model->data['path'];
 }
 
-if ( !empty($model->data['cache']) ){
-  return [json_encode(unserialize(file_get_contents(BBN_DATA_PATH.$model->data['cache'])))];
+if ( !empty($model->data['cache']) && \bbn\str::check_path($model->data['path']) ){
+  return [json_encode(unserialize(file_get_contents($folderCache.$model->data['cache'])))];
 }
 //case click button for delte all cache
-elseif( !empty($model->data['deleteAll']) ){
-  if ( \bbn\file\dir::delete(BBN_DATA_PATH."bbn_cache", $model->data['deleteContent'] ) ){
+else if( !empty($model->data['deleteAll']) ){
+  if ( \bbn\file\dir::delete($folderCache, false) ){
     return [
       'success' => true
     ];
@@ -23,8 +24,9 @@ elseif( !empty($model->data['deleteAll']) ){
   }
 }
 //case delete a cache or file or folder in tree
-elseif ( !empty($model->data['deleteCache']) ){
-  if ( \bbn\file\dir::delete(BBN_DATA_PATH.$model->data['deleteCache'], $model->data['deleteContent'] ) ){
+else if ( !empty($model->data['deleteCache']) && \bbn\str::check_path($model->data['deleteCache']) ){  
+  $ele = $folderCache.$model->data['deleteCache'];
+  if ( \bbn\file\dir::delete($ele, $model->data['deleteContent'] ) ){
     return [
       'success' => true
     ];
@@ -36,21 +38,21 @@ elseif ( !empty($model->data['deleteCache']) ){
   }
 }//in this block retur tha data of all cache for tree
 else{
-  $fullPath = BBN_DATA_PATH.$folderCache;
-  $content = \bbn\file\dir::get_files($fullPath, true);
+  $content = \bbn\file\dir::get_files($fullPath, true);  
   $cache = \bbn\cache::get_engine();
   $all = [];
-  foreach($content as $i => $v){
-    $arr = explode("/", $v);
-    $element = $arr[count($arr)-1];
-    $path = empty($model->data['path']) ? BBN_DATA_PATH."bbn_cache/".$element :  BBN_DATA_PATH.$folderCache.'/'.$element;
-    array_push($all, [
-      'text'=> $element,
-      'path' => empty($model->data['path']) ? "bbn_cache/".$element : $folderCache.'/'.$element,
-      'items'=> [],
-      'num' => is_dir($path) ? count(\bbn\file\dir::get_files($path, true)) : 0,
-      'folder' => is_dir($path)
-    ]);
+  if ( !empty($content) ){
+    foreach($content as $i => $path){
+      $arr = explode("/", $path);
+      $element = $arr[count($arr)-1];      
+      array_push($all, [
+        'text' => $element,
+        'path' =>  substr($path, strlen($folderCache)),        
+        'items'=> [],
+        'num' => is_dir($path) ? count(\bbn\file\dir::get_files($path, true)) : 0,
+        'folder' => is_dir($path)
+      ]);
+    }
   }
   return $all;
 }

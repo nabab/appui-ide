@@ -32,7 +32,7 @@
         },
         menu: [
           {
-            text: 'File',
+            text: bbn._('File'),
             items: [{
               icon: 'nf nf-fa-plus',
               text: bbn._('New'),
@@ -152,16 +152,19 @@
         type: false,
         nodeParent: false,        
         urlTreeParser: false,
-        sourceTreeParser: false,
-        showTreeParser: false,
-        showAllParser: false, 
-        legendParser: false,
+        sourceTreeParser:{                        
+          error: false,
+          treeData: false,
+          class: false,
+          idElement: false
+        },       
         runGetEditor: false,
-        errorTreeParser: false 
+        errorTreeParser: false,
+        treeParser: false 
       })
     },
     computed: {     
-      sourceParser(){
+     /* sourceParser(){
         if ( bbn.fn.isArray(this.sourceTreeParser) && this.sourceTreeParser.length ){
           if ( (this.possibilityParser === "class") && !this.showAllParser ){
             let idx = bbn.fn.search(this.sourceTreeParser, 'name', 'methods');
@@ -178,7 +181,7 @@
           }
         }
         return false;
-      },
+      },*/
       listRootProject(){
         let roots = this.source.projects.roots.slice();
         //temporaney disabled
@@ -207,6 +210,9 @@
         }
         return false;  
       },
+      isSettings(){        
+        return this.currentURL.indexOf("/_end_/settings/") !== -1; 
+      },
       currentEditor(){        
         if ( this.runGetEditor || (this.currentURL !== false) ){
             let tabnav = this.$refs.tabstrip.getSubTabNav();        
@@ -214,10 +220,10 @@
               let currentTab = tabnav.activeRealTab;
               if ( currentTab ){              
                 if ( currentTab.find('appui-ide-code') ){
-                  if ( this.errorTreeParser ){
+                  /*if ( this.errorTreeParser ){
                     this.$set(this,'errorTreeParser',false);  
                   }
-                  this.$set(this,'sourceTreeParser',false);
+                  this.$set(this,'sourceTreeParser',false);*/
                   return currentTab.find('bbn-code')
                 }
               }            
@@ -309,9 +315,58 @@
         return  "nf nf-fa-eye";        
       }
     },
-    methods: {     
-      parserComponent(){
-        if ( this.currentEditor ){
+    methods: {
+      //for parser tree
+      getTreeParser(){ 
+        this.treeParser = false;               
+        if ( this.possibilityParser === 'class' ){         
+          bbn.fn.post(this.source.root + 'parser',{
+            cls: this.currentId,            
+          }, d =>{ 
+            let obj = {
+              tree: false,
+              class: false
+            };           
+            if ( d.data.success ){
+              if ( this.possibilityParser === 'class' ){                
+                bbn.fn.each(d.data.tree, (val, idx) =>{              
+                  bbn.fn.each(val['items'], (ele,i)=>{
+                     ele['items'] =  bbn.fn.order(ele['items'], 'name', 'ASC')
+                  });
+                })
+              }
+                            
+              this.sourceTreeParser.treeData = d.data.tree;
+
+              this.sourceTreeParser.class = d.data.class;
+              this.sourceTreeParser.error = false;
+              this.sourceTreeParser.idElement = this.currentId;
+              this.treeParser = true;
+            }
+            else{
+              this.sourceTreeParser.treeData = false;
+              this.sourceTreeParser.class = false;
+              this.sourceTreeParser.error = true;
+              this.treeParser = false;
+            }
+          });         
+        }
+        else if ( this.possibilityParser === 'component' ){
+          this.sourceTreeParser.treeData = this.parserComponent();                    
+          if ( this.sourceTreeParser.treeData === false ){
+            this.sourceTreeParser.error = true;
+          }
+          else{
+            this.sourceTreeParser.idElement = this.currentId;
+            this.treeParser = true;
+          }
+        }  
+      },      
+      parserComponent(){        
+        if ( this.currentEditor &&
+          (this.possibilityParser === "component") &&
+          ( this.currentEditor.mode === "js")
+        ){
           let obj = eval(this.currentEditor.value),
               src = [],
               ele = {},
@@ -352,15 +407,47 @@
                   item: []
                 });
               });  
-            }
+            }            
             src.push(ele);
           });
           return src;
         }
         return false;
       },
-      //for parser tree
-      getTreeParser(){
+      //for parser class
+      parserClass(){
+        
+        if ( this.possibilityParser === "class" ){       
+          bbn.fn.post(this.source.root + 'parser',{
+            cls: this.currentId,            
+          }, d =>{ 
+            let obj = {
+              tree: false,
+              class: false
+            };           
+            if ( d.data.success ){
+              if ( this.possibilityParser === 'class' ){
+                bbn.fn.each(d.data.tree, (val, idx) =>{
+                  bbn.fn.each(val['items'], (ele,i)=>{            
+                    ele['items'] =  bbn.fn.order(ele['items'], 'name', 'ASC')
+                  });
+                })               
+              }
+              obj.tree = d.data.tree;
+              obj.class = d.data.class;
+              bbn.fn.log("aaadededede", obj)
+            }
+          });          
+        }
+        this.$nextTick(()=>{
+          if ( obj !== undefined ) 
+          return obj;
+        });
+        
+        
+      },
+      
+     /* getTreeParser(){
         if ( this.possibilityParser === "class" ){       
           bbn.fn.post(this.source.root + 'parser',{
             cls: this.currentId,            
@@ -391,7 +478,7 @@
         else{
           this.errorTreeParser = true; 
         }
-      },
+      },*/
       managerTypeDirectories(){
         bbn.fn.post(this.source.root + 'directories/data/types', d => {
           if ( d.data.success ){
@@ -753,14 +840,14 @@
             }
           });
           objContext.push({
-            icon: 'zmdi zmdi-edit',
+            icon: 'nf nf-fa-edit',
             text:  bbn._('Rename component vue'),
             command: node => {
               this.rename(node, false, true);
             }
           });
           objContext.push({
-            icon: 'zmdi zmdi-copy',
+            icon: 'nf nf-fa-copy',
             text:  bbn._('Copy component vue'),
             command: node => {
               this.copy(node, true);
@@ -1061,9 +1148,22 @@
             }
           }
         }
-        else{
-          let code = this.getActive(true);
-          code.test();
+        else {  
+          if ( this.isSettings ){
+            let mvc = this.find('appui-ide-mvc').$data,            
+                pathMVC = mvc.path;
+            if ( pathMVC.indexOf('mvc/') === 0 ){
+              pathMVC = pathMVC.replace("mvc/","");
+            }
+            let link = (mvc.route ? mvc.route + '/' : '') +
+            (pathMVC === 'mvc' ? '' : pathMVC + '/') +  mvc.filename;
+  
+            appui.find('bbn-router').load(link, true);  
+          }
+          else{
+            let code = this.getActive(true);
+            code.test();
+          }          
         }
       },
 
@@ -1817,15 +1917,15 @@
         }
       },
     },
-    components:{
+    /*components:{
       'parser':{
         props:['source'],
         template:
         `<div :style="{color: colorElement, display: 'inline'}"
               @click="getRow">
           <i :class="classIcon"></i>   
-          <span v-if="source.file" class="bbn-b">File:</span>     
-          <span :class="['bbn-b', {'bbn-green': source.type === 'parent', 'bbn-red': source.type === 'trait'}]" 
+          <span v-if="source.file" >File:</span>     
+          <span :class="['bbn-spadded',{'bbn-green': source.type === 'parent', 'bbn-red': source.type === 'trait'}]" 
                 :style="{cursor: (source.line !== undefined) && (source.line !== false) ? 'pointer' : 'default'}"
                 v-text="source.name"               
           ></span>
@@ -1882,9 +1982,6 @@
           }
         }       
       },
-    }
+  }*/
   };
 })();
-
-
-

@@ -75,7 +75,7 @@
       failureRemove(){
         appui.error(bbn._("Error!"));
       },
-      successremoveElement(){
+      successremoveElement(){        
         let editor = this.closest("bbn-container").getComponent();
 
         if ( this.formData.all ){
