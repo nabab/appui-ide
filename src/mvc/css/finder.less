@@ -1,18 +1,15 @@
 /* LESS Document */
-.appui-ide-finder{
-  font-size: 11px;
-  .bbn-scroll.finder-scroll > .bbn-scroll-container > .bbn-scroll-content{
-    display: flex;
+.appui-finder{
+  background-color: #35BCFA;
+  background-image: none;
+  .bbn-toolbar, .bbn-menu, .bbn-menu-item.bbn-reactive-block, li.bbn-state-default, ul.bbn-tabnav-tabs, a{
+    background-color: #35BCFA;
+    background-image: none;
+    color: #FFF;
+    border-color: #FFF !important;
   }
-  .info-dirs{
-    height: 100%;
-  }
-  .info-file-container{
-    width: 60em;
-    border-right: 2px dotted;
-    float: left;
-    .CodeMirror{
-      font-size: 10px!important;
-    }
+  li.bbn-state-default:hover, li.bbn-state-default:hover a{
+    color: #35BCFA;
+    background-color: #FFF;
   }
 }

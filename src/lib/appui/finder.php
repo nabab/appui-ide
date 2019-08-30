@@ -14,10 +14,43 @@ class finder
 
   protected $fs;
 
-  public function __construct(\bbn\file\system2 $fs)
+  public function __construct(\bbn\file\system $fs)
   {
     $this->fs = $fs;
   }
+  
+  public function explore($path = ''): ?array
+  {
+    if (!$path) {
+      $path = '.';
+    }
+    $res = [
+      'is_dir' => $this->fs->is_dir($path),
+      'path' => $path,
+      'data' => [],
+      'num_files' => 0,
+      'num_dirs' => 0
+    ];
+    if ($tmp = $this->fs->get_files(!empty($path) ? $path : '.', true, true, null, 't')) {
+      $res['data'] = array_map(function($a){
+        return [
+          'text' => !empty($a['path']) ? basename($a['path']) : $path,
+          'value' =>  !empty($a['path']) ? basename($a['path']) : $path,
+          'dir' => $a['dir'],
+          'file' => $a['file']
+        ];
+      }, $tmp);
+      $res['num_files'] = count(array_filter($res['data'], function($a){
+        return $a['file'] === true;
+      }));
+      $res['num_dirs'] = count(array_filter($res['data'], function($a){
+        return $a['dir'] === true;
+      }));
+    }
+    return $res;
+    
+  }
+  
   public function get_info_dir($path = '')
   {
     $num_files = 0;
@@ -126,7 +159,8 @@ class finder
     }
     $info = [];
     if ( $this->fs->exists($path) ){
-      $info['size'] = \bbn\str::say_size($this->fs->filesize($path));
+      $size = $this->fs->filesize($path);
+      $info['size'] = \bbn\str::say_size($size);
       $info['mtime'] = \bbn\date::format($this->fs->filemtime($path));
       //$info['creation'] = \bbn\date::format(filectime($path));
       if ( !empty($ext) ){
@@ -135,10 +169,13 @@ class finder
           $info['image'] = $this->get_image_infos($path);
          
         }
-        else if ( empty($this->is_img($ext)) && ($this->is_readable($ext)) ){
+        else if ( $this->is_readable($ext) ){
           $info['content'] = $this->fs->get_contents($path) ? $this->fs->get_contents($path) : 'Error in getting content';
           $info['is_image'] = false;
-        } 
+        }
+      }
+      else if ( $size < 5000 ){
+        $info['content'] = $this->fs->get_contents($path) ? $this->fs->get_contents($path) : 'Error in getting content';
       }
     }
     return $info;

@@ -1,7 +1,9 @@
 // Javascript Document
-(() => {
-  let fields = ['host', 'user', 'pass'];
-  return {
+(()=>{
+  return{
+    props: {
+      source: {}
+    },
     data(){
       return {
         menu: [
@@ -13,15 +15,10 @@
             ]
           }, {
             text: bbn._('Connections'),
-            items: this.source.connections.map(a => {
-              a.url = this.source.root + 'finder/source/' + a.value;
-              return a;
-            }).concat([{
-              text: bbn._('New connection'),
-              command: () => {
-                this.getPopup('That should open a form')
-              }
-            }])
+            items: [
+              {text: bbn._('My connections'), url: 't1'},
+              {text: bbn._('Public connections'), url: 't2'}
+            ]
           }, {
             text: bbn._('Settings'),
             items: [
@@ -31,6 +28,7 @@
           }
         ],
         connection: this.source.connection,
+        currentPath: '',
         path: '',
         isConnected: false,
         data: [],
@@ -50,6 +48,10 @@
       }
     },
     methods: {
+      updatePath(path){
+        bbn.fn.log("UPDATE PATH", path);
+        this.currentPath = path;
+      },
       abortRequest(a){
         alert( a)
         bbn.fn.log(a, this.dirs)
@@ -104,54 +106,6 @@
           })
         }
       },
-    },
-    mounted(){
-      
-    },
-    watch: {
-      isLoading(val){
-        bbn.fn.log('isloading->>>>', val, new Date())
-      },
-      host(newVal, oldVal){
-        if ( this.isConnected ){
-          this.checkDisconnect(this.getRef('host'), oldVal)
-        }
-      },
-      user(newVal, oldVal){
-        if ( this.isConnected ){
-          this.checkDisconnect(this.getRef('user'), oldVal)
-        }
-      },
-      pass(newVal, oldVal){
-        if ( this.isConnected ){
-          this.checkDisconnect(this.getRef('pass'), oldVal)
-        }
-      },
-      isConnected(){
-        while ( this.numCols ){
-          this.remove()
-        }
-        setTimeout(() => {
-          this.add('');
-        }, 250);
-      },
-      dirs(){
-        this.$nextTick(() => {
-          this.getRef('scroll').onResize(true).then(() => {
-            this.$nextTick(() => {
-              this.getRef('scroll').scrollEnd(true)
-            });
-          });
-        })
-      },
-      currentFile(){
-        this.$nextTick(() => {
-          this.getRef('scroll').onResize(true);
-          setTimeout(() => {
-            this.getRef('scroll').scrollEnd(true)
-          }, 250);
-        })
-      }
     },
   }
 })();

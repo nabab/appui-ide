@@ -7,11 +7,5 @@
  *
  * @var $ctrl \bbn\mvc\controller
  */
-if ( isset($ctrl->post['origin']) && 
-    !empty($ctrl->post['node']) &&
-    isset($ctrl->post['new_dir']) && 
-    isset($ctrl->post['old_dir'])
-    ){
-  $ctrl->action();
-}
+$ctrl->action();
 

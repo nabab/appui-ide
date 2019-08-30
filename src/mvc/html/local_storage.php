@@ -5,4 +5,4 @@
 -->
 
  
-<bbn-tree :source="getData"></bbn-tree>
+<bbn-tree :source="getData()" :object="true"></bbn-tree>

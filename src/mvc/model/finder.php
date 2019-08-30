@@ -1,8 +1,25 @@
 <?php
 
-if ( isset($model->data['path']) && (strpos($model->data['path'], '../') === false) ){
+
+if (
+  isset($model->data['path'], $model->data['origin']) &&
+  (strpos($model->data['path'], '../') === false) &&
+  ($p = $model->inc->pref->get($model->data['origin']))
+){
+  $fields = ['path', 'host', 'user', 'pass'];
+  $cfg = [];
+  foreach ( $fields as $f ){
+    if ( isset($p[$f]) ){
+      $cfg[$f] = $p[$f];
+    }
+  }
+  $fs = new \bbn\file\system($p['type'], $cfg);
+  if ( !empty($cfg['path']) ){
+    $fs->cd($cfg['path']);
+  }
+
+  /*
   if ( 0 ){
-    
     $fs = new \bbn\file\system('ssh', [
       'host' => '62.210.93.6',
       'user' => 'nabab',
@@ -14,6 +31,7 @@ if ( isset($model->data['path']) && (strpos($model->data['path'], '../') === fal
     }
   }
   else if ( isset($model->data['host'], $model->data['user'], $model->data['pass']) ){
+    
     $fs = new \bbn\file\system('ftp', [
       'host' => $model->data['host'],
       'user' => $model->data['user'],
@@ -28,22 +46,32 @@ if ( isset($model->data['path']) && (strpos($model->data['path'], '../') === fal
     }
   }
   else{
-    die(var_dump('lore'));
-    $fs = new \bbn\file\system2();
-    $fs->cd(BBN_DATA_PATH.$model->data['path']);
+    $fs = new \bbn\file\system();
+    $fs->cd(BBN_DATA_PATH);//.'users/'.$model->inc->user->get_id());
   }
-  $finder = new \appui\finder($fs);
-  return [
+  /*
+  $fs = new \bbn\file\system('nextcloud', [
     'path' => $model->data['path'],
-    'current' => $fs->get_current(),
-    'data' => $finder->get_data(),
-    'info_dir' => $finder->get_info_dir()
-  ];
+    'host' => 'cloud.bbn.so',
+    'user' => 'bbn',
+    'pass' => 'bbnsolutionstest'
+  ]);
+  */
+  $finder = new \appui\finder($fs);
+  $res = $finder->explore($model->data['path']);
+  $cur = $fs->get_current();
+  $res['current'] = $cur;
+  return $res;
 }
 else{
+  $conn = $model->inc->pref->text_value($model->inc->options->from_code('sources', 'finder', 'appui'));
+  $fav = $model->inc->pref->text_value($model->inc->options->from_code('favourites', 'finder', 'appui'));
   return [
+    'connection' => $conn[0]['id'],
+    'connections' => $conn,
+    'favourites' => $fav,
     'origin' => BBN_DATA_PATH,
     'root' => $model->plugin_url('appui-ide').'/',
-    'pass' => base64_decode('YlRhb0wzQmo0TnBrVnA3aw==')
+    'pass' => base64_decode('YlRhb0wzQmo0TnBrVnA3aw=='),
   ];
 }

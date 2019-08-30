@@ -8,38 +8,46 @@
     },
     methods: {
       getData(node){
-        if ( node ){
-          bbn.fn.log("NODE", node);
-
-          return JSON.parse(localStorage[node.text]);
-        }
-        return Object.keys(localStorage).map((a) => {
-          let json = localStorage[a];
-          let o = {
-            text: a,
-            object: true,
-            num_children: 0
-          };
-          if ( json ){
-            let t = JSON.parse(json);
+        let res = {};
+        bbn.fn.iterate(localStorage, (a, k) => {
+          if ( a ){
+            let t = JSON.parse(a);
             if ( t.value ){
-              if ( bbn.fn.isArray(t.value) ){
-                o.num = t.value.length;
-              }
-              else if ( typeof t.value === 'object' ){
-                o.num = bbn.fn.numProperties(t.value)
-              }
-              else{
-                o.text += ': ' + o.value;
+              if ( bbn.fn.isString(t.value) ){
+                let c1 = t.value.trim().substr(0, 1);
+                if (['{', '['].includes(c1) ){
+                  let tmp = false;
+                  try {
+                    tmp = JSON.parse(t.value);
+                  }
+                  catch (e){
+                    
+                  }
+                  if (tmp) {
+                    t.value = tmp;
+                  }
+                }
               }
             }
+            res[k] = t;
           }
-          return o;
         });
+        return res;
       }
     },
     mounted(){
       bbn.fn.log("MOUNTED!");
+    },
+    components: {
+      props: ['source'],
+      node: {
+        template: ``,
+        methods: {
+          del(){
+            
+          }
+        }
+      }
     }
   };
 })();

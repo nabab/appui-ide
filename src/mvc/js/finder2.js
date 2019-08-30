@@ -493,17 +493,17 @@
       dirs(){
         this.$nextTick(() => {
           this.getRef('scroll').onResize(true);
-          this.$nextTick(() => {
+          setTimeout(() => {
             this.getRef('scroll').scrollEnd(true)
-          })
+          }, 250);
         })
       },
       currentFile(){
         this.$nextTick(() => {
           this.getRef('scroll').onResize(true);
-          this.$nextTick(() => {
+          setTimeout(() => {
             this.getRef('scroll').scrollEnd(true)
-          })
+          }, 250);
         })
       }
     },
