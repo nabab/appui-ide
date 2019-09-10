@@ -73,19 +73,11 @@ if ( !empty($model->data['search']) &&
 
                     //for plugin in vendor
                     if ( explode("/",$model->data['repository']['path'])[0] === 'bbn'){
-                      $pathFile = substr($val, strpos($val, 'mvc'));
-                      //  $pathFile = substr($val, strpos($val, $model->data['repository']['path']));
+                      $pathFile = substr($val, strpos($val, 'mvc'));                      
                     }
                     else{
                       $pathFile = substr($val, strpos($val, $model->data['repository']['path']));
                     }
-
-                    // $base = strpos($pathFile, BBN_APP_PATH) === 0 ? BBN_APP_PATH : BBN_LIB_PATH;
-                    // $link = substr($pathFile, strlen($base));
-                    // $link = explode('/', $link);
-                    // array_shift($link);
-
-                    //**/
 
                     $base = $model->data['repository']['bbn_path'];
                     if ( strpos($pathFile, $base) === 0 ){
@@ -98,21 +90,13 @@ if ( !empty($model->data['search']) &&
                       array_shift($link);
                     }
 
-
-
                     if ( (!empty($model->data['isProject']) && $model->data['type'] === 'mvc') ||
                      !empty($model->data['mvc'])
                     ){
                       $tab = array_shift($link);
                       $link = implode('/', $link);
                       $link = explode('.', $link);
-                      $link = array_shift($link);
-
-                      // $tab = array_shift($link);
-                      // $file = $link[count($link)-1];
-                      // $file = explode('.', $file);
-                      // $link[count($link)-1] = array_shift($file);
-                      // $link = implode('/', $link);
+                      $link = array_shift($link);                     
                     }
                     else if ( (!empty($model->data['isProject']) && $model->data['type'] === 'components') ||
                      !empty($model->data['components'])
@@ -129,9 +113,7 @@ if ( !empty($model->data['search']) &&
                       $tab = array_pop($file);
                       $link[count($link)-1] = array_shift($file);
                       $link = implode('/', $link);
-
                     }
-
 
                     //object initialization with every single file to check the lines that contain it
                     $file = new \SplFileObject($val);
@@ -139,8 +121,6 @@ if ( !empty($model->data['search']) &&
                     while( !$file->eof() ){
                       //current line reading
                       $lineCurrent = $file->current();
-
-
                       //if we find what we are looking for in this line and that this is not '\ n' then we will take the coirispjective line number with the key function, insert it into the array and the line number
                       if ( ($typeSearch($lineCurrent, $model->data['search'], $model->data['typeSearch']) !== false) && (strpos($lineCurrent, '\n') === false) ){
                         $lineNumber = $file->key()+1;
@@ -165,7 +145,7 @@ if ( !empty($model->data['search']) &&
                         $file_name = array_pop($path);
                         $path= implode('/', $path);
 
-                        $path = str_replace($base, (strpos($pathFile, BBN_APP_PATH) === 0 ? 'BBN_APP_PATH/' : 'BBN_LIB_PATH/'), $path);
+                        $path = str_replace($base, (strpos($pathFile, $model->app_path()) === 0 ? 'BBN_APP_PATH/' : 'BBN_LIB_PATH/'), $path);
 
                         $list[] = [
                           'text' => strlen($text) > 1000 ? $line."<strong><i>"._('content too long to be shown')."</i></strong>" : $text,
@@ -196,7 +176,7 @@ if ( !empty($model->data['search']) &&
                     $link =  explode(".",substr($pathFile, strlen(explode("/",$pathFile)[0].'/'.explode("/",$pathFile)[1])+1))[0];
                   }
 
-                  $path = str_replace($base, (strpos($pathFile, BBN_APP_PATH) === 0 ? 'BBN_APP_PATH/' : 'BBN_LIB_PATH/'), $path);
+                  $path = str_replace($base, (strpos($pathFile, $model->app_path()) === 0 ? 'BBN_APP_PATH/' : 'BBN_LIB_PATH/'), $path);
 
                   $fileData = [
                     'text' => basename($pathFile)."&nbsp;<span class='bbn-badge bbn-s bbn-bg-lightgrey'>".count($list)."</span>",
@@ -259,7 +239,7 @@ if ( !empty($model->data['search']) &&
                   $text = "<strong>".'line ' . $lineNumber . ' : '."</strong>";
                   $text .= str_replace($model->data['search'], "<strong><span class='underlineSeach'>".$model->data['search']."</span></strong>", $lineCurrent);
 
-                  $path = str_replace($base, (strpos($pathFile, BBN_APP_PATH) === 0 ? 'BBN_APP_PATH/' : 'BBN_LIB_PATH/'), $path);
+                  $path = str_replace($base, (strpos($pathFile, $model->app_path()) === 0 ? 'BBN_APP_PATH/' : 'BBN_LIB_PATH/'), $path);
 
                   if ( !empty($model->data['mvc']) ){
                     if ( explode("/",$pathFile)[1] === "public" ){

@@ -38,9 +38,9 @@ if ( !empty($model->data['repository']) &&
   }
 
   // Get the repository's root path
-  $path = $model->inc->ide->get_root_path($rep_cfg);
-
-  //extensions list not to be considered
+  $path = $model->inc->ide->get_root_path($rep_cfg);  
+  
+   //extensions list not to be considered
   $file_check = [
     'viewables' => [
       'html',
@@ -192,8 +192,7 @@ if ( !empty($model->data['repository']) &&
                       if ( is_array($cnt) ){
                         foreach($cnt as $f){
                           $item = explode(".", basename($f))[0];
-                          if ( $item === basename($t) ){
-                            //die(\bbn\x::dump($name, $t, basename($t), $cnt));
+                          if ( $item === basename($t) ){                            
                             $arr[] = \bbn\str::file_ext($f);
                             $is_vue = true;
                           }
@@ -346,14 +345,16 @@ if ( !empty($model->data['repository']) &&
 
     }
   };
+  
  //case mvc, only components or normal file but no types (case repository no current)
   if ( (!empty($is_mvc) || !empty($is_component)) ||
     empty($rep_cfg['types']) ||
     !empty($tree_popup) ||
     empty($model->data['type'])
   ){
+   // die(var_dump("sdss",$rep_cfg));
     // Get all files and all folders of each mvc's tabs (_ctrl tab excluded)
-    if ( !empty($rep_cfg['tabs']) ){
+    if ( !empty($rep_cfg['tabs']) ){      
       foreach ( $rep_cfg['tabs'] as $i => $t ){
         if ( ($t['url'] !== '_ctrl') &&
          !empty($t['path']) &&
@@ -377,10 +378,9 @@ if ( !empty($model->data['repository']) &&
             $path_complete =  $path . $cur_path;
             $type= 'components';
             $t['bcolor'] = '#44b782';
-          }
-
+          }          
+          
           $get($path_complete, $t['bcolor'], $t['url'], $type);
-
           // if ( !empty($tree_popup) ){
           //   $get($path_complete, $t['bcolor'], $t['url'], $type);
           // }
@@ -390,12 +390,11 @@ if ( !empty($model->data['repository']) &&
         }
       }
     }
-    else{
-      $get($path . $cur_path, $rep_cfg['bcolor']);
+    else{      
+      $get($path . $cur_path, (!isset($rep_cfg['bcolor']) ? "#000000" : $rep_cfg['bcolor']) );
     }
   }//case root repository  with alias bbn-project and contain types
   else if ( !empty($rep_cfg['types']) && !empty($is_project) && empty($model->data['type']) ){
-
     $types = [];
    //browse the root elements and assign the type to each of them
     $todo = !empty($onlydirs) ? $dirs($path.$cur_path) : \bbn\file\dir::get_files($path . $cur_path, true);
@@ -421,9 +420,6 @@ if ( !empty($model->data['repository']) &&
   }
   //else if we are in depth and we already know what types of elements we are opening and dealing with in the tree of the ide
   else if( !empty($model->data['type']) ){
-
-
-
     if ( $model->data['type'] === 'lib' ){
       // lib
       $get($path . $cur_path, $rep_cfg['bcolor'], false, $type);

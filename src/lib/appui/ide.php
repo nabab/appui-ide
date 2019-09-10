@@ -1825,7 +1825,7 @@ class ide {
    */
   public function create_perm_by_real(string $file, string $type = 'file'){
     if ( !empty($file) &&
-      \defined('BBN_APP_PATH') &&
+      \is_dir(\bbn\mvc::get_app_path()) &&
       // It must be a controller
       (strpos($file, '/mvc/public/') !== false)
     ){
@@ -1843,7 +1843,7 @@ class ide {
       }
       // Internal route
       if ( empty($f) ){
-        $root_path = BBN_APP_PATH.'mvc/public/';
+        $root_path = \bbn\mvc::get_app_path().'mvc/public/';
         if ( strpos($file, $root_path) === 0 ){
           // Remove root path
           $f = substr($file, \strlen($root_path), \strlen($file));
@@ -1969,7 +1969,7 @@ class ide {
       $file = self::$current_file;
     }
     if ( !empty($file) &&
-      \defined('BBN_APP_PATH') &&
+      \is_dir(\bbn\mvc::get_app_path()) &&
       // It must be a controller
       (strpos($file, '/mvc/public/') !== false)
     ){
@@ -1993,7 +1993,7 @@ class ide {
       }
       // Internal route
       if ( empty($f) ){
-        $root_path = BBN_APP_PATH.'mvc/public/';
+        $root_path = \bbn\mvc::get_app_path().'mvc/public/';
         if ( strpos($file, $root_path) === 0 ){
           // Remove root path
           $f = substr($file, \strlen($root_path), \strlen($file));

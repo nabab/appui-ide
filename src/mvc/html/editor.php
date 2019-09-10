@@ -4,14 +4,15 @@
             :size="40"
             :scrollable="false"
             overflow="visible">
-    <bbn-toolbar class="bbn-ide">
+    <bbn-toolbar class="bbn-ide bbn-overlay">
       <div>
         <bbn-dropdown class="ide-rep-select"
                       :source="ddRepData"
                       v-model="currentRep"
                       style="width: 250px"
-        ></bbn-dropdown>
+        ></bbn-dropdown>      
       </div>
+      <div></div>
       <div>
         <bbn-button title="<?=_('Refresh files list')?>"
                     @click="treeReload()"
