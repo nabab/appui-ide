@@ -65,7 +65,7 @@
         let tab = this.getRef('tabstrip').getVue(this.getRef('tabstrip').selected);
         if ( tab.getComponent().isChanged ){
           appui.confirm(bbn._("Modified code do you want to refresh anyway?"), () => {
-            bbn.fn.post(appui.ide.root + 'editor/' + this.getRef('tabstrip').baseURL + tab.url, (d) => {
+            this.post(appui.ide.root + 'editor/' + this.getRef('tabstrip').baseURL + tab.url, (d) => {
               if ( d.data.id ){
                 tab.reload();
               }
@@ -73,7 +73,7 @@
           });
         }
         else{
-          bbn.fn.post(appui.ide.root + 'editor/' + this.getRef('tabstrip').baseURL + tab.url, (d) => {
+          this.post(appui.ide.root + 'editor/' + this.getRef('tabstrip').baseURL + tab.url, (d) => {
             if ( d.data.id ){
               tab.reload();
             }
@@ -85,7 +85,7 @@
             tab    = this.getRef('tabstrip').getVue(this.getRef('tabstrip').selected),
             oldExt = tab.source.extension,
             newExt = obj.key;
-        bbn.fn.post(this.source.root + 'actions/change_extension', {
+        this.post(this.source.root + 'actions/change_extension', {
           newExt: newExt,
           oldExt: oldExt,
           repository: this.repositories[this.repository]['bbn_path'] + '/' + this.repositories[this.repository]['path'],

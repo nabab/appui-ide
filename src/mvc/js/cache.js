@@ -11,7 +11,7 @@
     methods:{
       getContent(node){
         if ( !node.data.folder ){
-          bbn.fn.post( this.root + 'data_cache',{
+          this.post( this.root + 'data_cache',{
             cache: node.data.path,
             }, d => {
             if ( d.data ){
@@ -22,7 +22,7 @@
         }
       },
       deleteAll(){
-        bbn.fn.post( this.root + 'data_cache',{
+        this.post( this.root + 'data_cache',{
           deleteAll: true,
           deleteContent: 0
           }, d => {
@@ -48,7 +48,7 @@
             icon: 'nf nf-fa-trash',
             text: !n.data.folder ? bbn._('Delete file cache') : bbn._('Delete folder'),
             command: (node) => {
-              bbn.fn.post( this.root + 'data_cache',{
+              this.post( this.root + 'data_cache',{
                 deleteCache: node.data.path,
                 deleteContent: 1
               }, d => {
@@ -92,7 +92,7 @@
               icon: 'nf nf-fa-trash',
               text: bbn._("Delete folder's contents"),
               command: (node) => {
-                bbn.fn.post( this.root + 'data_cache',{
+                this.post( this.root + 'data_cache',{
                   deleteCache: node.data.path,
                   deleteContent: 0
                   }, d=>{

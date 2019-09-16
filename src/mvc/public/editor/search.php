@@ -67,7 +67,7 @@ $ctrl->arguments[count($ctrl->arguments)-1] = $ctrl->data['search'];
   }
   
 
-  $ctrl->data['repository'] = $ctrl->inc->ide->repositories($ctrl->data['nameRepository']);
+  $ctrl->data['repository'] = $ctrl->inc->ide->repositories($ctrl->data['nameRepository']);  
   //$ctrl->arguments[count($ctrl->arguments)-1] = urlencode($ctrl->arguments[count($ctrl->arguments)-1]);
   $ctrl->arguments[count($ctrl->arguments)-1] = base64_encode($ctrl->arguments[count($ctrl->arguments)-1]);
   $url = 'search/'.implode('/', $ctrl->arguments);

@@ -1,7 +1,7 @@
 (()=>{
   return {
     created(){
-      bbn.fn.post(this.source.root + 'info_element', this.source, d => {
+      this.post(this.source.root + 'info_element', this.source, d => {
         this.list = d.list;
         this.listExts = d.exts;
       });

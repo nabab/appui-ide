@@ -320,7 +320,7 @@
       getTreeParser(){ 
         this.treeParser = false;               
         if ( this.possibilityParser === 'class' ){         
-          bbn.fn.post(this.source.root + 'parser',{
+          this.post(this.source.root + 'parser',{
             cls: this.currentId,            
           }, d =>{ 
             let obj = {
@@ -418,7 +418,7 @@
       parserClass(){
         
         if ( this.possibilityParser === "class" ){       
-          bbn.fn.post(this.source.root + 'parser',{
+          this.post(this.source.root + 'parser',{
             cls: this.currentId,            
           }, d =>{ 
             let obj = {
@@ -449,7 +449,7 @@
       
      /* getTreeParser(){
         if ( this.possibilityParser === "class" ){       
-          bbn.fn.post(this.source.root + 'parser',{
+          this.post(this.source.root + 'parser',{
             cls: this.currentId,            
           }, d =>{
             if ( d.data.success ){
@@ -480,7 +480,7 @@
         }
       },*/
       managerTypeDirectories(){
-        bbn.fn.post(this.source.root + 'directories/data/types', d => {
+        this.post(this.source.root + 'directories/data/types', d => {
           if ( d.data.success ){
             this.getPopup().open({
               width: 600,
@@ -1706,7 +1706,7 @@
           };
 
 
-          bbn.fn.post(this.root + 'actions/move', obj, (d) =>{
+          this.post(this.root + 'actions/move', obj, (d) =>{
             if ( d.success ){
               let tabTitle = obj.path + obj.name,
                 tabs = bbn.vue.findAll(appui.ide, 'bbn-container');
@@ -1771,7 +1771,7 @@
               obj.repository = this.repositoryProject('mvc');
               obj.active_file = true;
             }
-            bbn.fn.post(this.root + 'actions/delete', obj, (d) => {
+            this.post(this.root + 'actions/delete', obj, (d) => {
               if ( d.success ){
                 this.getRef('tabstrip').close(this.tabSelected);
                 appui.success(bbn._("Deleted!"));
@@ -1813,7 +1813,7 @@
             currentIde = tabnavActive.$parent,
             table_data  = [];
 
-        bbn.fn.post( this.source.root + 'i18n/data/table', {
+        this.post( this.source.root + 'i18n/data/table', {
           table_path: currentIde.path ? currentIde.path : '',
           /** path of current repository */
           currentRep: this.currentRep,

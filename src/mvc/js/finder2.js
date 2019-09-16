@@ -59,7 +59,7 @@
        */
       get_size(p){
         let idx = bbn.fn.search(this.dirs, 'name', p.name);
-        bbn.fn.post(this.source.root + 'actions/finder2/dirsize', {
+        this.post(this.source.root + 'actions/finder2/dirsize', {
           path: p.path,
           origin: ( (this.mode === 'ftp') || (this.mode === 'ssh')) ? this.source.origin : ''
         }, (d) => {
@@ -142,7 +142,7 @@
                 ext = node.data.value.slice(- val);
               }
               
-              bbn.fn.post(this.source.root + 'actions/finder2/file', {
+              this.post(this.source.root + 'actions/finder2/file', {
                 node: node.data,
                 path: this.currentPath,
                 origin: this.source.origin,
@@ -211,7 +211,7 @@
           return;
         }
         if ( this.host && this.user && this.pass ){
-          bbn.fn.post(this.source.root + 'finder2', {
+          this.post(this.source.root + 'finder2', {
             path: '',
             user: this.user,
             host: this.host,
@@ -308,7 +308,7 @@
           let trees = this.findAll('bbn-tree'), 
           path = '';
           this.confirm(bbn._(st), () => {
-            bbn.fn.post(this.source.root + 'actions/finder2/paste', {
+            this.post(this.source.root + 'actions/finder2/paste', {
               node: this.copied.data,
               origin: ( (this.mode === 'ftp') || (this.mode === 'ssh') ) ? this.source.origin : '',
               old_dir: this.oldDir,
@@ -336,7 +336,7 @@
       },
       //if mode === 'nextcloud' download the file
       download(n){
-        bbn.fn.post(this.source.root + 'actions/finder2/download', {
+        this.post(this.source.root + 'actions/finder2/download', {
           value: n.data.value,
           file: n.data.file,
           path: this.currentPath !== n.data.value + '/' ? this.currentPath : '',
@@ -400,7 +400,7 @@
             st += node.data.value;
           }
           
-          bbn.fn.post(this.source.root + 'actions/finder2/delete', {
+          this.post(this.source.root + 'actions/finder2/delete', {
             path: st
           }, (d) => {
             if ( d.success ){        

@@ -4,7 +4,7 @@
     methods: {
       insert_translation(row,idx){
         //use a different controller
-        bbn.fn.post(this.source.i18n + 'actions/insert_translations', {
+        this.post(this.source.i18n + 'actions/insert_translations', {
           row: row,
           ide: true,
           id_option: this.source.id_option,

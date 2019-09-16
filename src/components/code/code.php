@@ -8,4 +8,5 @@
           }"
           @ready="setState"
           ref="editor"
+          @input="firstInput"
 ></bbn-code>

@@ -5,6 +5,7 @@
       //return $.extend({
       return bbn.fn.extend({  
         ide: null,
+        firstInput: false,
         originalValue: this.source.value,
         initialState: {
           marks: this.source.marks,
@@ -116,6 +117,23 @@
       }
     },
     methods: {
+      firstInput(){
+        if ( !this.firstInput ){
+          this.firstInput = true;
+          let path = this.path.substring(4, this.path.length);
+          this.post('tracking_file',{
+            file: this.path, 
+            
+          }, d=>{
+
+          });
+        }
+        else{
+
+        }*/
+        bbn.fn.log("ddd", arguments);
+        alert("eeee");
+      },
       getReposiotryProject(){
         if ( appui.ide.repositories && appui.ide.currentRep ){
           let repository = appui.ide.repositories[appui.ide.currentRep];
@@ -170,7 +188,7 @@
             code: editor.value,
             filePath : pathHistory
           };
-          bbn.fn.post(this.ide.root + "actions/save", obj , (d) => {
+          this.post(this.ide.root + "actions/save", obj , (d) => {
             let tab = this.closest('bbn-container'),
                 parent = {},
                 tabnav = bbn.vue.closest(this, 'bbn-tabnav'),
@@ -247,7 +265,7 @@
         if ( typeof(this.mode) === 'string' ){
           switch ( this.mode ){
             case "php":
-              bbn.fn.post(this.ide.root + "test", {code: this.value}, (d) => {
+              this.post(this.ide.root + "test", {code: this.value}, (d) => {
                 const tn = bbn.vue.closest(this, 'bbn-tabnav'),
                       idx = tn.tabs.length;
                 tn.router.add({

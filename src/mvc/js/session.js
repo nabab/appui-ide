@@ -11,7 +11,7 @@
     watch: {
       type(newVal){
         if ( newVal ){
-          bbn.fn.post(this.source.root + 'session', {
+          this.post(this.source.root + 'session', {
             type: newVal
           }, (d) => {
             if ( d.data ){

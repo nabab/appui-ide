@@ -88,7 +88,7 @@
     },
     methods:{
       getSourceTreeLogs(){
-        bbn.fn.post(this.source.root + 'tree_logs',{}, d => {
+        this.post(this.source.root + 'tree_logs',{}, d => {
           if ( d.data && d.data[0].items.length ){
             bbn.fn.each(d.data[0].items, (v, i)=>{
               if ( v.size !== undefined ){
@@ -102,7 +102,7 @@
       },
       onChange(clear, e){
         if ( this.fileLog.length && this.lignes ){
-          bbn.fn.post(this.source.root + 'logs', {
+          this.post(this.source.root + 'logs', {
               log: this.fileLog,
               clear: clear ? 1 : "0",
               num_lines: this.lignes,
@@ -123,7 +123,7 @@
           logPoller = setInterval(() => {
             if ( !this.isPolling ){
               this.isPolling = true;
-              bbn.fn.post(this.source.root + 'logs', {
+              this.post(this.source.root + 'logs', {
                 fileLog: this.fileLog,
                 md5: this.md5Current,
                 num_lines: this.lignes
@@ -135,7 +135,7 @@
                   this.md5Current = d.md5
                 }
               });
-              /*bbn.fn.post(this.source.root + 'tree_logs',{}, d => {
+              /*this.post(this.source.root + 'tree_logs',{}, d => {
                 if ( d.data && d.data[0].items.length ){
                   d.data[0].items = bbn.fn.order(d.data[0].items, 'mtime', 'desc')
                   let newData = d.data[0].items.map((item)=>{

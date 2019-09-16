@@ -11,7 +11,7 @@
               };
 
         if ( obj.id && obj.code.length && obj.text.length ){
-          bbn.fn.post(appui.plugins['appui-ide'] + '/permissions/save', obj, d => {
+          this.post(appui.plugins['appui-ide'] + '/permissions/save', obj, d => {
             if ( d.data && d.data.success ){
               appui.success(bbn._("Permission saved!"));
             }

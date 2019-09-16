@@ -66,7 +66,7 @@
         let tab = tn.getVue(tn.selected);
         if ( tab.getComponent().isChanged ){
           appui.confirm( bbn._("Modified code do you want to refresh anyway?"), ()=>{
-            bbn.fn.post( appui.ide.root + 'editor/' + this.getRef('tabstrip').baseURL + tab.url, (d)=>{
+            this.post( appui.ide.root + 'editor/' + this.getRef('tabstrip').baseURL + tab.url, (d)=>{
               if ( d.data.id ){
                 tab.reload();
               }
@@ -74,7 +74,7 @@
           });
         }
         else{
-          bbn.fn.post( appui.ide.root + 'editor/' + this.getRef('tabstrip').baseURL + tab.url, (d)=>{
+          this.post( appui.ide.root + 'editor/' + this.getRef('tabstrip').baseURL + tab.url, (d)=>{
             if ( d.data.id ){
               tab.reload();
             }

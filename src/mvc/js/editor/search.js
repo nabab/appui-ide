@@ -18,43 +18,49 @@
       appui.ide.search.searchInRepository =  '';
       appui.ide.showSearchContent= false;
     },
-    methods:{
+    methods:{      
       selectElement(node){
-        if ( node.data.forLink ){
-          let link = 'file/' + this.source.nameRepository +(this.source.isProject === true ? this.source.type +'/' : '' ) + node.data.forLink + '/_end_' + (node.data.tab ? '/' + node.data.tab : '');
-          appui.ide.getRef('tabstrip').load(link);
-        }
-        if( node.data.code ){
-          let link = 'file/' + this.source.nameRepository + (this.source.isProject === true ? this.source.type +'/' : '' ) + node.data.linkPosition + '/_end_' + (node.data.tab ? '/' + node.data.tab : ''),
-              tabStrip = appui.ide.getRef('tabstrip'),
-              i = tabStrip.router.getIndex('file/' + this.source.nameRepository + node.data.linkPosition );
-          if ( i !== false ){
-            tabStrip.activateIndex(i);
-            let st = bbn.vue.find(tabStrip.getVue(i),'bbn-tabnav'),
-                idxSubTab = st.router.getIndex(node.data.tab ? node.data.tab : 'code'),
-                tab = st.getVue(idxSubTab),
-                code = bbn.vue.find( tab, 'bbn-code');
-            st.activateIndex(idxSubTab);
-            if ( code ){
-              let start = {
+        if ( node.data.link ){
+          let link = 'file/' + this.source.nameRepository +(this.source.isProject === true ? this.source.type +'/' : '' ) + node.data.link + '/_end_' + (node.data.tab ? '/' + node.data.tab : ''),
+              tabStrip =  appui.ide.getRef('tabstrip');        
+          if( node.data.code ){
+            let i = tabStrip.router.getIndex('file/' + this.source.nameRepository + node.data.linkPosition );
+            if ( i !== false ){
+              tabStrip.activateIndex(i);
+              let st = bbn.vue.find(tabStrip.getVue(i),'bbn-tabnav'),
+                  idxSubTab = st.router.getIndex(node.data.tab ? node.data.tab : 'code'),
+                  tab = st.getVue(idxSubTab),
+                  code = bbn.vue.find( tab, 'bbn-code');
+              st.activateIndex(idxSubTab);
+              this.$nextTick(()=>{
+                if ( code ){  
+                  let start = {
                     line: node.data.line,
                     ch: node.data.position
                   },
                   end = {
                     line: node.data.line,
                     ch: this.source.search.length+node.data.position
-                  };
-              this.$nextTick(()=>{
-                code.cursorPosition(node.data.line, node.data.position);
-                tabStrip.load(link)
+                  };           
+                  this.$nextTick(()=>{
+                    code.cursorPosition(node.data.line, node.data.position);
+                    tabStrip.load(link)
+                  });
+                }
               });
             }
+            else{
+              appui.ide.search.link = true;
+              appui.ide.cursorPosition.line = node.data.line;
+              appui.ide.cursorPosition.ch =node.data.position;
+              tabStrip.load(link)
+            }                
           }
           else{
             appui.ide.search.link = true;
-            appui.ide.cursorPosition.line = node.data.line;
-            appui.ide.cursorPosition.ch =node.data.position;
-            appui.ide.getRef('tabstrip').load(link)
+            appui.ide.cursorPosition.line = 0;
+            appui.ide.cursorPosition.ch = 0;
+            tabStrip.load(link);
           }
         }
       }

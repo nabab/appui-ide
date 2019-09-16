@@ -168,7 +168,6 @@ class ide {
    * @return string
    */
   private function set_current_id(string $file = null, string $bbn_path = null){
-
     self::$current_id = false;
     if ( empty($file) ){
       $file = self::$current_file;
@@ -182,6 +181,12 @@ class ide {
           $bbn_path = $repository['bbn_path'];
         }
       }
+      /*if ( !empty($bbn_path) && \defined($bbn_path) ){
+        $bbn_path = $bbn_path === 'BBN_APP_PATH' ? \bbn\mvc::get_app_path() : constant($bbn_path); 
+        if ( strpos($file, $bbn_path) === 0 ){
+          self::$current_id = str_replace($bbn_path, $bbn_path.'/', $file);
+        }
+      }*/
       if ( !empty($bbn_path) && \defined($bbn_path) && (strpos($file, constant($bbn_path)) === 0) ){
         self::$current_id = str_replace(constant($bbn_path), $bbn_path.'/', $file);
       }
@@ -964,7 +969,6 @@ class ide {
                 return false;
               }
 
-              //die(\bbn\x::dump($t['old'], $t['new']));
               // $this->options->from_code(
               //   $this->real_to_id($t['old']),
               //   $this->_files_pref()
@@ -1196,25 +1200,21 @@ class ide {
     }
     $tabs = $this->tabs_of_type_project($type);
     //$tabs =  $this->options->option($id)['tabs'];
-    if ( is_string($path) && is_array($tabs) ){
-      //die(\bbn\x::dump($tabs, $path));
+    if ( is_string($path) && is_array($tabs) ){      
       foreach($tabs as $tab){
         $exist= false;
-
         if ( $type === 'mvc' ){
           $file =  $root.'mvc/'.$tab['path'].$path.'.';
         }
         else if ( $type === 'components' ){
           $file = $root. $path.'.';
         }
-
         foreach($tab['extensions'] as $ext ){
           if( file_exists($file.$ext['ext']) ){
             $exist= true;
             break;
           }
         }
-
         if ( ($exist === false) && !in_array($tab['url'], $list) ){
           $list[] = $tab['url'];
         }
@@ -1264,10 +1264,10 @@ class ide {
       $r = [];
       if ( !empty($paths) ){
         foreach ( $paths as $path ){
-          if ( \defined($path['code']) ){
+          if ( isset($path['code']) && \defined($path['code']) ){
             $all = self::get_options($path['code'],self::DEV_PATH);
             foreach($all as $a){
-              if ( \defined($a['bbn_path']) ){
+              if ( isset($a['bbn_path']) && \defined($a['bbn_path']) ){
                 $k = $a['bbn_path'] . '/' . ($a['code'] === '/' ? '' : $a['code']);
                 if ( !isset($cats[$a['id_alias']]) ){
                   unset($a['alias']['cfg']);
@@ -1422,7 +1422,7 @@ class ide {
    * @return array|bool
    */
   public function load(string $url){
-   
+    $a = $this->url_to_real($url, true);  
     if ( ($real = $this->url_to_real($url, true)) &&
       !empty($real['file']) &&
       !empty($real['mode']) &&
@@ -1440,8 +1440,7 @@ class ide {
         'line' => false,
         'char' => false,
         'marks' => false,
-      ];
-      //die(\bbn\x::dump(self::$current_file));
+      ];      
       if ( is_file(self::$current_file) ){
         $f['value'] = file_get_contents(self::$current_file);
         if ( $permissions = $this->get_file_permissions() ){
@@ -1509,7 +1508,7 @@ class ide {
           $backup_path = self::$backup_path . $file['repository'] . $file['path'] . $file['tab'] . '/';
         }
       }
-      else {
+      else {      
         $backup_path = self::$backup_path;
         if ( !isset($file['repository']) ){
           $backup_path .= dirname($file['full_path']);
@@ -2122,11 +2121,11 @@ class ide {
    * @param string $path
    * @return bool
    */
-  public function is_plugin($path){
+  public function is_plugin($path){        
     $plugin = false;
     if ( is_array($this->routes) ){
-      foreach( $this->routes as $route ){
-        if ( $route['path'] === $path ){
+      foreach( $this->routes as $route ){                 
+        if ( $path === $route['path'].'src/'){
           $plugin = true;
           break;
         }
@@ -2146,8 +2145,7 @@ class ide {
     if ( ($rep = $this->repository_from_url($url, true)) &&
       ($res = $this->get_root_path($rep))
     ){
-      $plugin = $this->is_plugin($res);
-      
+      $plugin = $this->is_plugin($res);     
       if ( $rep['alias_code'] === 'bbn-project' ){
         $bits = explode('/', substr($url, \strlen($rep['bbn_path'].$rep['path'])));
 
@@ -2314,8 +2312,8 @@ class ide {
    * @return bool|string
    */
   public function real_to_id($file){
-    if ( ($rep = $this->repository_from_url($this->real_to_url($file), true)) && \defined($rep['bbn_path']) ){
-      $bbn_p = constant($rep['bbn_path']);
+    if ( ($rep = $this->repository_from_url($this->real_to_url($file), true)) && \defined($rep['bbn_path']) ){      
+      $bbn_p = $rep['bbn_path'] === 'BBN_APP_PATH' ? \bbn\mvc::get_app_path() : constant($rep['bbn_path']);
       if ( strpos($file, $bbn_p) === 0 ){
         $f = substr($file, \strlen($bbn_p));
         return \bbn\str::parse_path($rep['bbn_path'].'/'.$f);

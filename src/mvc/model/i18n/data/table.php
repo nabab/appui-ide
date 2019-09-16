@@ -31,7 +31,8 @@ if (
 
 
   /** @var  $partial_path join to the path of the parent the path of the current repository */
-  $partial_path = constant($repository['bbn_path']).$repository['path'];
+  $partial_path = $repository['bbn_path'] === 'BBN_APP_PATH' ? \bbn\mvc::get_app_path() : constant($repository['bbn_path']);
+  $partial_path .= $repository['path'];
 
   /** @var (array) $paths will be fill with the path to explore */
   $paths = [];

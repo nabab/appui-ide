@@ -64,7 +64,7 @@
         });
       },
       refreshListTypes(){
-        bbn.fn.post(appui.ide.root + 'directories/data/types', d => {
+        this.post(appui.ide.root + 'directories/data/types', d => {
           if( d.data.success ){
             this.source.types = d.data.types;
             this.$nextTick(()=>{
@@ -75,7 +75,7 @@
       },
       deleteType(row){
         appui.confirm(bbn._("Are you sure you want to delete the") + " " + row.text  + " " + bbn._("type?"), ()=>{
-          bbn.fn.post(appui.ide.root + 'directories/actions/types/delete', {id_type: row.id}, (d) => {
+          this.post(appui.ide.root + 'directories/actions/types/delete', {id_type: row.id}, (d) => {
             if ( d.success ){
               this.refreshListTypes();
               appui.success(bbn._('Deleted'));

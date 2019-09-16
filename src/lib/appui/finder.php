@@ -144,7 +144,8 @@ class finder
   
 
   public function get_image_infos($path){
-    $i = new \bbn\file\image($path);
+    die(var_dump($this->fs->get_current(), $path));
+    $i = new \bbn\file\image($path, $this->fs);
     $info = [
       'height' => $i->get_height(),
       'width' =>  $i->get_width(),

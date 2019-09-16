@@ -14,7 +14,6 @@ $max_height = 300;
 $obj = new \bbn\file\image($img);
 $height = $obj->get_height();
 $width = $obj->get_width();
-
 if ( $obj->check() ){
   
   if ( ($width > $height) && ($width > $max_width) ){

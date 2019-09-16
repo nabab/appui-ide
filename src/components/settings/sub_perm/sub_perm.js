@@ -10,7 +10,7 @@
               };
 
         if ( obj.id && obj.code.length && obj.text.length ){
-          bbn.fn.post(appui.plugins['appui-ide'] + '/permissions/add', obj, (d) => {
+          this.post(appui.plugins['appui-ide'] + '/permissions/add', obj, (d) => {
             if ( d.data && d.data.success ){
               // Notify
               //$cont.append('<i class="nf nf-fa-thumbs_up" style="margin-left: 5px; color: green"></i>');
@@ -43,7 +43,7 @@
             };
 
         if ( obj.id && obj.code.length && obj.text.length ){
-          bbn.fn.post(appui.plugins['appui-ide'] + '/permissions/save', obj, (d) => {
+          this.post(appui.plugins['appui-ide'] + '/permissions/save', obj, (d) => {
             /*if ( d.data && d.data.success ){
               // Notify
               $cont.append('<i class="nf nf-fa-thumbs_up" style="margin-left: 5px; color: green"></i>');
@@ -67,7 +67,7 @@
               };      
         if ( obj.id && obj.code.length ){
           appui.confirm('Are you sure to remove this item?', () => {
-            bbn.fn.post(appui.plugins['appui-ide'] + '/permissions/delete', obj, (d) => {
+            this.post(appui.plugins['appui-ide'] + '/permissions/delete', obj, (d) => {
               if ( d.data && d.data.success ){
                 this.source.children.splice(bbn.fn.search(this.source.children, 'code', obj.code), 1);
               }

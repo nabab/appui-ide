@@ -44,7 +44,7 @@
         }
         setTimeout(() => {
           if ( node.data.folder === false ){
-            bbn.fn.post(this.source.root + 'history/tree', {
+            this.post(this.source.root + 'history/tree', {
               url: node.data.path + "/" + node.data.file + "." + node.data.ext,
             }, d => {
               if ( d.data.success ){
