@@ -1,5 +1,5 @@
 (() => {
-  return {
+  return { 
     props: ['source'],
     data(){
       //return $.extend({
@@ -116,23 +116,29 @@
         return false;
       }
     },
-    methods: {
-      firstInput(){
-        if ( !this.firstInput ){
+    methods: {    
+      runTracking(){        
+        if ( !this.firstInput ){          
           this.firstInput = true;
-          let path = this.path.substring(4, this.path.length);
-          this.post('tracking_file',{
-            file: this.path, 
-            
-          }, d=>{
+          let entity = false,
+              code = this.getRef('editor'),
+              info = code.getState(),
+              path=  this.path.substring(this.path.lastIndexOf('src/'+ this.typeProject)+4, this.path.length);
 
+          if ( this.isMVC ){
+            entity = this.closest('appui-ide_mvc');
+          }           
+          this.post(this.ide.root + 'actions/tracking',{
+            file: path, 
+            id_repository: this.rep.id,            
+            state: {
+              selections: info.selections !== undefined ? info.selections : false,
+              marks: info.marks !== undefined ? info.marks : false,
+              line: info.line !== undefined ? info.line : false,
+              char: info.char !== undefined ? info.char : false,
+            }
           });
         }
-        else{
-
-        }*/
-        bbn.fn.log("ddd", arguments);
-        alert("eeee");
       },
       getReposiotryProject(){
         if ( appui.ide.repositories && appui.ide.currentRep ){
@@ -330,7 +336,7 @@
       }
       this.$nextTick(()=>{
         appui.ide.$set(appui.ide, 'runGetEditor', true)
-      })     
+      });         
     },   
     watch: {
       isChanged(isChanged){

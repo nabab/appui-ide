@@ -7,4 +7,4 @@
 /** @var $ctrl \bbn\mvc\controller */
 
 
-$ctrl->combo("Cache management");
+$ctrl->set_color('#391E13', '#FFF')->combo("Cache management");

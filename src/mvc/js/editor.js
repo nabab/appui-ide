@@ -30,46 +30,48 @@
           line: 0,
           ch: 0
         },
-        menu: [
-          {
-            text: bbn._('File'),
+        menu: [{
+          text: bbn._('File'),
+          items: [{
+            icon: 'nf nf-fa-plus',
+            text: bbn._('New'),
             items: [{
-              icon: 'nf nf-fa-plus',
-              text: bbn._('New'),
-              items: [{
-                icon: 'nf nf-fa-file',
-                text: bbn._('Element'),
-                command: this.newElement
-              },{
-                icon: 'nf nf-fa-folder',
-                text: bbn._('Directory'),
-                command: this.newDir
-              }]
-            },{
+              icon: 'nf nf-fa-file',
+              text: bbn._('Element'),
+              command: this.newElement
+            }, {
+              icon: 'nf nf-fa-folder',
+              text: bbn._('Directory'),
+              command: this.newDir
+            }]
+            }, {
               icon: 'nf nf-fa-save',
               text: bbn._('Save'),
               command: this.save
-            },{
+            }, {
               icon: 'nf nf-fa-edit',
               text: bbn._('Rename'),
               command: () => {
                 this.rename(this.getRef('tabstrip')['tabs'][this.getRef('tabstrip').selected], true);
               }
-            },
-              {
-                icon: 'nf nf-fa-trash',
-                text: bbn._('Delete'),
-                command: this.deleteActive
-              }, {
-                icon: 'nf nf-fa-times_circle',
-                text: bbn._('Close tab'),
-                command: this.closeTab
-              }, {
-                icon: 'nf nf-fa-times_circle',
-                text: bbn._('Close all tabs'),
-                command: this.closeTabs
-              }]
-          }, {
+            }, {
+              icon: 'nf nf-fa-trash',
+              text: bbn._('Delete'),
+              command: this.deleteActive
+            }, {
+              icon: 'nf nf-fa-times_circle',
+              text: bbn._('Close tab'),
+              command: this.closeTab
+            }, {
+              icon: 'nf nf-fa-times_circle',
+              text: bbn._('Close all tabs'),
+              command: this.closeTabs
+            }, { 
+              text: bbn._('File Recent'),          
+              icon: 'nf nf-fa-file',          
+              items: []
+            }
+          ]}, {
             text: bbn._('Edit'),
             items: [{
               icon: 'nf nf-fa-search',
@@ -160,28 +162,10 @@
         },       
         runGetEditor: false,
         errorTreeParser: false,
-        treeParser: false 
+        treeParser: false       
       })
     },
-    computed: {     
-     /* sourceParser(){
-        if ( bbn.fn.isArray(this.sourceTreeParser) && this.sourceTreeParser.length ){
-          if ( (this.possibilityParser === "class") && !this.showAllParser ){
-            let idx = bbn.fn.search(this.sourceTreeParser, 'name', 'methods');
-            let sourceTree = bbn.fn.extend([], this.sourceTreeParser);
-            bbn.fn.each(sourceTree[idx]['items'], (meth,i)=>{            
-              meth['items'] =  bbn.fn.filter(meth['items'], 'type', 'origin')
-              meth['numChildren'] = meth['items'].length;
-              meth['num'] =  meth['items'].length;
-            });            
-            return sourceTree;         
-          }
-          else if ( this.showAllParser || (this.possibilityParser === "component") ){
-            return this.sourceTreeParser;
-          }
-        }
-        return false;
-      },*/
+    computed: {
       listRootProject(){
         let roots = this.source.projects.roots.slice();
         //temporaney disabled
@@ -211,7 +195,7 @@
         return false;  
       },
       isSettings(){        
-        return this.currentURL.indexOf("/_end_/settings/") !== -1; 
+        return this.currentURL.indexOf("/_end_/settings") !== -1; 
       },
       currentEditor(){        
         if ( this.runGetEditor || (this.currentURL !== false) ){
@@ -232,8 +216,7 @@
         return false;        
       },
       currentId(){
-        if ( this.currentEditor ){
-       
+        if ( this.currentEditor ){       
           return this.currentEditor.closest('appui-ide-code').source.id;
         }
         return false;
@@ -315,7 +298,29 @@
         return  "nf nf-fa-eye";        
       }
     },
-    methods: {
+    methods: {      
+      selectRecetFile(){
+        alert("dd");
+      },
+      getRecentFiles(){        
+        this.post(this.root + 'editor/get_recent_files',{}, d=>{
+          if ( d.success ){
+            let arr = [];
+            bbn.fn.each(d.files, (v, i)=>{
+              arr.push({
+                icon: 'nf nf-fa-file_text',
+                text: v.path,
+                command: this.selectRecentFile                 
+              });
+            })
+            let menu = this.$refs.mainMenu.currentData[0]['data']['items'];
+            menu[menu.length-1]['items'] = arr;            
+          }
+          else{
+            this.recentFiles = false;
+          } 
+        });        
+      },    
       //for parser tree
       getTreeParser(){ 
         this.treeParser = false;               
@@ -415,8 +420,7 @@
         return false;
       },
       //for parser class
-      parserClass(){
-        
+      parserClass(){        
         if ( this.possibilityParser === "class" ){       
           this.post(this.source.root + 'parser',{
             cls: this.currentId,            
@@ -443,42 +447,7 @@
           if ( obj !== undefined ) 
           return obj;
         });
-        
-        
-      },
-      
-     /* getTreeParser(){
-        if ( this.possibilityParser === "class" ){       
-          this.post(this.source.root + 'parser',{
-            cls: this.currentId,            
-          }, d =>{
-            if ( d.data.success ){
-              if ( this.possibilityParser === 'class' ){
-                bbn.fn.each(d.data.tree, (val, idx) =>{
-                  bbn.fn.each(val['items'], (ele,i)=>{            
-                    ele['items'] =  bbn.fn.order(ele['items'], 'name', 'ASC')
-                  });
-                })               
-              }
-              this.sourceTreeParser = d.data.tree;
-            }
-            else{              
-              this.sourceTreeParser = false;
-            } 
-          });
-        }
-        else if ( this.possibilityParser === "component" ){         
-          if ( this.currentEditor.mode === "js" ){
-            this.sourceTreeParser = this.parserComponent();
-          }
-          else{
-            this.errorTreeParser = true; 
-          }          
-        }
-        else{
-          this.errorTreeParser = true; 
-        }
-      },*/
+      },      
       managerTypeDirectories(){
         this.post(this.source.root + 'directories/data/types', d => {
           if ( d.data.success ){
@@ -990,7 +959,6 @@
        * @param file
        */
       openFile(file){
-
         let tab = '',
             link = false;
         if ( (file.data.type === 'mvc') ){
@@ -1150,7 +1118,8 @@
         }
         else {  
           if ( this.isSettings ){
-            let mvc = this.find('appui-ide-mvc').$data,            
+            let key = this.currentURL.substring(0, this.currentURL.indexOf('_end_/')+5),
+                mvc = this.findByKey(key).find('appui-ide-mvc').$data,            
                 pathMVC = mvc.path;
             if ( pathMVC.indexOf('mvc/') === 0 ){
               pathMVC = pathMVC.replace("mvc/","");
@@ -1881,6 +1850,7 @@
       appui.ide = this;
     },
     mounted(){
+      this.getRecentFiles();
       bbn.fn.log('editor',this)
     },
     watch: {     
@@ -1903,6 +1873,7 @@
         if ( newVal !== oldVal ){
           this.treeReload();
         }
+        this.getRecentFiles();
       },
       typeProject(newVal, oldVal){
         this.path= newVal;        
@@ -1915,7 +1886,7 @@
         if ( newVal === true ){
           this.searchFile= "";
         }
-      },
+      }
     },
     /*components:{
       'parser':{

@@ -41,7 +41,7 @@
       <div></div>
       <div>
         <bbn-menu ref="mainMenu"
-                  :source="menu"
+                  :source="menu"                 
         ></bbn-menu>
       </div>
     </bbn-toolbar>
@@ -101,8 +101,8 @@
                         :map="treeMapper"
                         :icon-color="color"
                         :filter-string="searchFile"
-                        :storage-full-name="'appui-ide-tree-' + currentRep"
-              ></bbn-tree>
+                        :storage-full-name="'appui-ide-tree-' + currentRep"                        
+              ></bbn-tree>              
             </div>
           </div>
         </div>

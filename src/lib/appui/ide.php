@@ -17,7 +17,9 @@ class ide {
         IDE_PATH = 'ide',
         DEV_PATH = 'PATHS',
         PATH_TYPE = 'PTYPES',
-        FILES_PREF = 'files';
+        FILES_PREF = 'files',
+        OPENED_FILE = 'opened',
+        RECENT_FILE = 'recent';
 
   public static $backup_path;
 
@@ -1561,7 +1563,7 @@ class ide {
       /*if ( $this->pref ){
         $this->set_file_preferences(md5($file['code']), $file);
       }*/
-
+/*
       if( !empty($file['selections']) ||
         !empty($file['marks']) ||
         !empty($file['line']) ||
@@ -1584,7 +1586,7 @@ class ide {
           $this->options->set_prop($id_opt, $arr);
 
         }
-      }
+      }*/
       return ['success' => true];
     }
     return $this->error('Error: Save');
@@ -2102,6 +2104,300 @@ class ide {
   }
 
   /******************** END PREFERENCES ************************/
+
+  /******************** OPENED AND RECENT FILES ************************/
+  public function set_recent_file(string $file, string $id_link){
+    die("dentro");
+    $pref_arch = $this->pref->get_class_cfg(); 
+    $pref = false;
+    $project = explode(".", $file)[0];
+    $bit = false;
+    if ( !empty($id_link) && 
+      ($id_recent_file =  $this->options->from_code(self::RECENT_FILE, self::IDE_PATH, self::BBN_APPUI))
+    ){     
+      $pref = $this->db->rselect([
+        'table' => $pref_arch['table'],
+        'fields' => [
+          'id',
+          'id_option',
+          'id_link',
+          'text',
+          'cfg'
+        ],        
+        'where' => [          
+          'conditions' => [[
+            'field' => 'id_option',             
+            'value' => $id_recent_file
+          ],[
+            'field' => 'id_user',
+            'value' => $this->pref->get_user()
+          ]]
+        ]
+      ]);      
+      if ( empty($pref) ){        
+        $id_pref = $this->pref->add($id_recent_file, []);        
+      }
+      else {
+        $id_pref = $pref['id'];      
+      }
+    }
+    
+    $bit_data = $this->db->rselect([
+      'table' => 'bbn_users_options_bits',
+      'fields' => [
+        'id',
+        'id_user_option',
+        'id_option',
+        'cfg',
+        'id_link',
+        'id_user', 
+        'text',
+      ],  
+      'join' => [[
+        'table' => 'bbn_users_options',
+        'on' => [          
+          'conditions' => [[
+            'field' => 'bbn_users_options_bits.id_user_option',            
+            'exp' => 'bbn_users_options.id'
+          ]],
+        ]
+      ]],         
+      'where' => [          
+        'conditions' => [[
+          'field' => 'bbn_users_options.id_option',
+          'value' => $id_recent_file
+        ],[
+          'field' => 'bbn_users_options_bits.id_option',
+          'value' => $id_link
+        ]]
+      ]
+    ]);
+    
+    $date = date('Y-m-d H:i:s');      
+    $cfg =[];
+    \bbn\x::log(["BIT", $bit_data], 'vito');  
+    
+    //set bit
+    if ( !empty($id_pref) && ($bit_data !== NULL) ){    
+      $info= json_decode($bit_data['cfg']);      
+      $cfg = [ 
+        'bit_creation' => $info->bit_creation,  
+        'last_date' => $date,
+        'number' => $info->number + 1
+      ];     
+      \bbn\x::log(["set", $cfg, $bit_data, $info, $info->bit_creation], 'vito');  
+     
+      if ( !empty($this->pref->set_cfg($bit_data['id'], $cfg)) ){
+        $bit = true;        
+      }
+    }
+    //add bit
+    else{
+      $cfg = [
+        'bit_creation' => $date,
+        'last_date' => $date,
+        'number' => 0
+      ];      
+      if ( !empty($id_pref) && $this->pref->add_bit($id_pref,[
+        'id_option' => $id_link,        
+        'cfg' =>  json_encode($cfg),
+        'text' => $file
+        ])
+      ){
+        $bit = true;
+        \bbn\x::log(["add", $file, $cfg, json_encode($cfg)], 'vito');      
+      }
+    }
+  
+    return !empty($bit) && !empty($id_pref);    
+  } 
+  
+  /**
+   * Add OR update option file in repository
+   *
+   * @param string| $id_rep The file's ID
+   * @return bool
+   */
+  public function set_opened_file(string $id_rep, string $file_code, array $file): bool
+  { 
+   
+    $bit = false;
+    $info= [];
+    if ( !empty($file['selections']) ){
+      $info['selections'] = $file['selections'];
+    }
+
+    if ( !empty($file['marks']) ){
+      $info['marks'] = $file['marks'];
+    }
+
+    if ( !empty($file['line']) ){
+      $info['line'] = $file['line'];
+    }
+
+    if ( !empty($file['char']) ){
+      $info['char'] = $file['char'];
+    };      
+    
+    $id_opened_file = $this->options->from_code($file_code, $id_rep);
+   
+    if ( empty($id_opened_file) ){      
+      $id_opened_file = $this->options->add([
+        'id_parent' => $id_rep,
+        'code' => $file_code,
+        'text' => $file_code,
+        'value' => $info
+      ]);      
+    }    
+    else if ( $this->options->get_value($file_code) !== $info ){
+      if ( !empty($this->options->set_prop($id_opened_file, $info)) ){
+        return false;
+      }
+    }
+    if ( !empty($id_opened_file) && 
+      ($id_option_pref =  $this->options->from_code(self::OPENED_FILE,self::IDE_PATH, self::BBN_APPUI))
+    ){
+      $pref = $this->db->rselect([
+        'table' => 'bbn_users_options',
+        'fields' => [
+          'id',
+          'id_option',
+          'id_link',
+          'text'
+        ],        
+        'where' => [          
+          'conditions' => [[
+            'field' => 'id_option',             
+            'value' => $id_option_pref
+          ],[
+            'field' => 'id_user',
+            'value' => $this->pref->get_user()
+          ]]
+        ]
+      ]);      
+      if ( empty($pref) ){        
+        $id_pref = $this->pref->add($id_option_pref, []);       
+      }
+      else{
+        $id_pref = $pref['id'];
+      }
+    }    
+   
+    $bit_data = $this->db->rselect([
+      'table' => 'bbn_users_options_bits',
+      'fields' => [
+        'id',
+        'id_user_option',
+        'id_option',
+        'cfg',
+        'id_link',
+        'id_user', 
+        'text',
+      ],
+      'join' => [[
+        'table' => 'bbn_users_options',
+        'on' => [          
+          'conditions' => [[
+            'field' => 'bbn_users_options_bits.id_user_option',            
+            'exp' => 'bbn_users_options.id'
+          ]],
+        ]
+      ]],         
+      'where' => [          
+        'conditions' => [[
+          'field' => 'bbn_users_options.id_option',
+          'value' => $id_option_pref
+        ],[
+          'field' => 'bbn_users_options_bits.id_option',
+          'value' => $id_opened_file
+        ]]
+      ]
+    ]);      
+    
+    if ( !empty($id_pref) && !empty($bit_data) ){     
+      $cfg = [
+        'last_open' => date('Y-m-d H:i:s')
+      ];   
+
+      die(var_dump("dddd", $id_pref,$bit_data,$bit_data['id'], $cfg, $this->pref->set_cfg($bit_data['id'], $cfg)));  
+      
+      if (!empty($this->pref->set_cfg($bit_data['id'], $cfg)) ){
+        $bit = true;       
+      }      
+    }
+    else{
+      $cfg = [          
+        'last_open' => date('Y-m-d H:i:s')
+      ];
+      if ( !empty($id_pref) && $this->pref->add_bit($id_pref,[
+        'id_option' => $id_opened_file,        
+        'cfg' => json_encode($cfg),
+        'text' => $file_code
+        ])
+      ){
+        $bit = true;
+      }
+    }
+    return !empty($bit) && !empty($id_opened_file) && !empty($id_pref) && $this->set_recent_file($file_code, $id_opened_file);
+  }
+  public function get_recent_files( int $limit = 10 ){
+    $id_user = $this->pref->get_user();
+    if (!empty($id_user) && \bbn\str::is_uid($id_user) ){
+      $pref_arch = $this->pref->get_class_cfg();       
+      $recents =  $bit_data = $this->db->rselect_all([
+        'table' => 'bbn_users_options_bits',
+        'fields' => [
+          'id',
+          'id_user_option',
+          'id_option',
+          'cfg',
+          'id_link',
+          'id_user', 
+          'text'
+        ],
+        'join' => [[
+         // 'type' => 'left',
+          'table' => 'bbn_users_options',
+          'on' => [          
+            'conditions' => [[
+              'field' => 'bbn_users_options_bits.id_user_option',            
+              'exp' => 'bbn_users_options.id'
+            ]],
+          ]
+        ]],         
+        'where' => [          
+          'conditions' => [[
+            'field' => 'bbn_users_options.id_option',
+            'value' =>  $this->options->from_code(self::RECENT_FILE, self::IDE_PATH, self::BBN_APPUI)
+          ], [
+            'field' => 'id_user',
+            'value' => $id_user
+          ]]
+        ],
+        'limit' => 10,
+        'order' =>['cfg->"$.last_date"' => "ASC"]
+      ]);
+
+      //die(var_dump($recents));
+      $all = [];
+      foreach($recents as $id => $file){
+        $file_open = $this->options->option($file['id_link']);
+        $rep_file_open = $this->options->option($file_open['id_parent']);
+        $type = explode("/",$file_open['code'])[0];
+        $all[] = [
+          'cfg' => $file['cfg'],
+          'file' => $file_open['code'],
+          'repository' => $rep_file_open['bbn_path'].'/'.$rep_file_open['code'], 
+          'type' => $type
+        ]; 
+      }
+      return !empty($all) ? $all : null;
+    }
+  }
+   
+  /******************** END OPENED AND RECENT FILES ************************/
+
+
 
   /*************************** FILE ***************************/
 

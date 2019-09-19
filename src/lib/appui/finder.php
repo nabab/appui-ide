@@ -144,7 +144,6 @@ class finder
   
 
   public function get_image_infos($path){
-    die(var_dump($this->fs->get_current(), $path));
     $i = new \bbn\file\image($path, $this->fs);
     $info = [
       'height' => $i->get_height(),
@@ -160,6 +159,7 @@ class finder
     }
     $info = [];
     if ( $this->fs->exists($path) ){
+      
       $size = $this->fs->filesize($path);
       $info['size'] = \bbn\str::say_size($size);
       $info['mtime'] = \bbn\date::format($this->fs->filemtime($path));

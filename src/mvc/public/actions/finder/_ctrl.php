@@ -5,6 +5,7 @@ fs->get_current()<?php
  **/
 
 /** @var $this \bbn\mvc\controller */
+
 if ( isset($ctrl->post['origin']) && ($p = $ctrl->inc->pref->get($ctrl->post['origin'])) ){
   $fields = ['path', 'host', 'user', 'pass'];
   $cfg = [];
