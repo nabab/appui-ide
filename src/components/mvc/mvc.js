@@ -170,32 +170,8 @@
 
       }
     },    
-    methods: {
-      search: bbn.fn.search,
-      //for title in tabs ide
-      // renderIconTab(tab){
-      //   switch ( tab.title ){
-      //     //icon for tab controller
-      //     case "Controller":
-      //       return 'icon-php';
-      //     //icon for tab private
-      //     case "Private":
-      //       return 'icon-php-alt';
-      //     //icon for tab model
-      //     case "Model":
-      //       return 'icon-database';
-      //     //icon for tab html
-      //     case "View":
-      //       return 'icon-html';
-      //     //icon for tab javascript
-      //     case "JavaScript":
-      //       return 'icon-javascript-alt';
-      //     //icon for tab css
-      //     case "CSS":
-      //       return 'icon-css';
-      //   }
-      //   return '';
-      // },
+    methods: {    
+      search: bbn.fn.search,      
       listCtrls(){
         let path = "",
             url  = "_ctrl",

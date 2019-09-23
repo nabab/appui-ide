@@ -117,14 +117,13 @@
       }
     },
     methods: {    
-      runTracking(){        
+      runTracking(recentFile = true){        
         if ( !this.firstInput ){          
           this.firstInput = true;
           let entity = false,
               code = this.getRef('editor'),
               info = code.getState(),
               path=  this.path.substring(this.path.lastIndexOf('src/'+ this.typeProject)+4, this.path.length);
-
           if ( this.isMVC ){
             entity = this.closest('appui-ide_mvc');
           }           
@@ -136,7 +135,8 @@
               marks: info.marks !== undefined ? info.marks : false,
               line: info.line !== undefined ? info.line : false,
               char: info.char !== undefined ? info.char : false,
-            }
+            },
+            set_recent_file: recentFile
           });
         }
       },
@@ -176,8 +176,7 @@
               arr.splice(pos, 1);
               pathHistory = arr.join('/');
             }
-          }
-
+          }          
           let obj = {
             repository: this.isProject ? this.getReposiotryProject() : this.rep,
             typeProject: this.typeProject,
@@ -192,7 +191,8 @@
             line: state.line,
             char: state.char,
             code: editor.value,
-            filePath : pathHistory
+            filePath : pathHistory,
+            code_file_pref: this.path.substring(this.path.lastIndexOf('src/'+ this.typeProject)+4, this.path.length),            
           };
           this.post(this.ide.root + "actions/save", obj , (d) => {
             let tab = this.closest('bbn-container'),
@@ -322,7 +322,20 @@
         else{
           this.$nextTick(() => {
             code.loadState(this.initialState);
-          });
+          });        
+        }
+        //for list recent files
+        if ( appui.ide.readyMenu ){
+          appui.ide.getRecentFiles();
+
+          //for  code  first input tracking
+          let code = this.getRef('editor').$el;       
+          if ( code !== undefined ){
+            code.addEventListener('input', ()=>{
+              this.runTracking();
+              code.removeEventListener('input', this);
+            });
+          }
         }
       }
     },
@@ -335,8 +348,8 @@
         appui.ide.$set(appui.ide, 'runGetEditor', false)
       }
       this.$nextTick(()=>{
-        appui.ide.$set(appui.ide, 'runGetEditor', true)
-      });         
+        appui.ide.$set(appui.ide, 'runGetEditor', true);
+      });  
     },   
     watch: {
       isChanged(isChanged){

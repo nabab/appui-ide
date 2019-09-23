@@ -162,7 +162,8 @@
         },       
         runGetEditor: false,
         errorTreeParser: false,
-        treeParser: false       
+        treeParser: false,
+        readyMenu: false
       })
     },
     computed: {
@@ -189,10 +190,10 @@
         return this.getRef('tabstrip').selected;
       },
       currentURL(){
-        if ( this.getRef('tabstrip') ){
+        if ( this.getRef('tabstrip') ){          
           return this.getRef('tabstrip').currentURL;
         }
-        return false;  
+        return '';  
       },
       isSettings(){        
         return this.currentURL.indexOf("/_end_/settings") !== -1; 
@@ -299,8 +300,16 @@
       }
     },
     methods: {      
-      selectRecetFile(){
-        alert("dd");
+      selectRecentFile(file, obj){       
+        this.getRef('tabstrip').load(obj.path);
+      },
+      setReadyMenu(){
+        if ( !this.readyMenu ){
+          this.readyMenu = true;
+          this.$nextTick(()=>{
+            this.getRecentFiles();
+          });        
+        }
       },
       getRecentFiles(){        
         this.post(this.root + 'editor/get_recent_files',{}, d=>{
@@ -309,12 +318,17 @@
             bbn.fn.each(d.files, (v, i)=>{
               arr.push({
                 icon: 'nf nf-fa-file_text',
-                text: v.path,
-                command: this.selectRecentFile                 
+                text: v.file,
+                path: v.path,
+                command: (v, i) =>{
+                  this.selectRecentFile(v, i);
+                }  
               });
-            })
-            let menu = this.$refs.mainMenu.currentData[0]['data']['items'];
-            menu[menu.length-1]['items'] = arr;            
+            });            
+            let menu = this.getRef('mainMenu').currentData[0]['data']['items'];
+            if ( menu !== undefined ){
+              menu[menu.length-1]['items'] = arr;
+            }            
           }
           else{
             this.recentFiles = false;
@@ -882,8 +896,6 @@
             arr.forEach((item ,id)=>{
               obj.unshift(item);
             })
-
-
           }
           obj.unshift({
             icon: 'nf nf-fa-magic',
@@ -892,6 +904,22 @@
               this.testNodeOfTree(node)
             }
           });
+          // profiling
+          if ( (n.data.type === 'mvc') && 
+            !n.data.folder && 
+            ((n.data.tab === 'php') || (n.data.tab === 'private'))
+          ){
+            obj.push({
+              icon: 'nf nf-fa-cogs',
+              text: bbn._('Profiling'),
+              command:  node =>{
+                let root = appui.plugins[bbn.fn.get_field(this.ddRepData, 'value', this.currentRep,'text')];
+                root = root !== undefined ? root+'/' : '';
+                bbn.fn.link('ide/profiler/url/'+ root + node.data.path);
+                bbn.fn.log("PRofiling",'ide/profiler/url/'+ root + node.data.path)
+              }  
+            });
+          }
           return obj;
         }
       },
@@ -971,8 +999,7 @@
         }
         else{
           link =  'file/' +  this.currentRep + file.data.path + '/_end_/' + (file.data.tab !== false ? file.data.tab : 'code');
-        }
-
+        }        
         if ( link ){
           this.getRef('tabstrip').load(link);
         }
@@ -1585,8 +1612,6 @@
                 if ( node.data.is_vue === true ){
                   src.component_vue = true;
                 }
-
-
                 if ( onlyComponent || (node.num === 0 && node.data.is_vue === true) ){
                   text = bbn._('Are you sure you want to delete the component') + ' ' +
                     '<strong>' + node.data.name +  ' </strong>' + ' ?';
@@ -1849,8 +1874,7 @@
     created(){
       appui.ide = this;
     },
-    mounted(){
-      this.getRecentFiles();
+    mounted(){    
       bbn.fn.log('editor',this)
     },
     watch: {     
@@ -1873,7 +1897,7 @@
         if ( newVal !== oldVal ){
           this.treeReload();
         }
-        this.getRecentFiles();
+        
       },
       typeProject(newVal, oldVal){
         this.path= newVal;        
@@ -1884,75 +1908,9 @@
       },
       showSearchContent(newVal){
         if ( newVal === true ){
-          this.searchFile= "";
+          this.searchFile = "";
         }
-      }
-    },
-    /*components:{
-      'parser':{
-        props:['source'],
-        template:
-        `<div :style="{color: colorElement, display: 'inline'}"
-              @click="getRow">
-          <i :class="classIcon"></i>   
-          <span v-if="source.file" >File:</span>     
-          <span :class="['bbn-spadded',{'bbn-green': source.type === 'parent', 'bbn-red': source.type === 'trait'}]" 
-                :style="{cursor: (source.line !== undefined) && (source.line !== false) ? 'pointer' : 'default'}"
-                v-text="source.name"               
-          ></span>
-          <span v-if="(source.type !== undefined) && (source.type !== false) && (source.line !== false) && (source.file !== true)"
-                :class="['bbn-i', {'bbn-green': source.type === 'parent', 'bbn-red': source.type === 'trait'}]" 
-                :style="{cursor: ((source.line !== undefined) && (source.line !== false) && (source.type === 'origin')) ? 'pointer' : 'default'}" 
-                v-text="' (line: ' + source.line + ')'"                
-          ></span>
-        </div>`,
-        computed:{
-          colorElement(){
-            return appui.ide.possibilityParser === 'component' ? '#44b782' : "black"
-          },
-          classIcon(){            
-            if ( appui.ide.possibilityParser !== 'component' ){
-              if ( (this.source.type === undefined) ){              
-                return 'nf nf-custom-folder_config';
-              }
-              else if ( (this.source.type !== undefined) && (this.source.type === false) ){
-                return "nf nf-dev-code";
-              }
-              else if ( (this.source.type !== undefined) && (this.source.file === true) ){
-                return "nf nf-mdi-subdirectory_arrow_right";
-              }
-              return 'nf nf-mdi-function';
-            }
-            else if ( appui.ide.possibilityParser === 'component' ){
-              if ( (this.source.eleComponent !== undefined) ){
-                if ( (this.source.eleComponent === 'props') || (this.source.eleComponent === 'data') ){
-                  return "nf nf-dev-code";
-                }
-                else if ( (this.source.eleComponent === 'watch') || (this.source.eleComponent === 'computed') ){
-                  return "nf nf-fa-eye";
-                }
-                else if ( this.source.eleComponent === 'methods' ){
-                  return 'nf nf-mdi-function';
-                }
-              }              
-              return "nf nf-mdi-vuejs";
-            }
-          }          
-        },
-        methods:{
-          getRow(){
-            if ( ((this.source.line !== undefined) || (this.source.line !== false)) &&
-              appui.ide.currentEditor !== false ){
-                appui.ide.cursorPosition.line = this.source.line-1;
-                this.$nextTick(()=>{
-                  if ( this.source.type === 'origin' ){
-                    appui.ide.currentEditor.closest('appui-ide-code').setState();    
-                  }                            
-                })
-              }
-          }
-        }       
-      },
-  }*/
+      }      
+    }
   };
 })();

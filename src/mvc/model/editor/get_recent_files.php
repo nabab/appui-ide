@@ -6,7 +6,10 @@ if ( !empty($files) ){
   foreach( $files as $file ){
     $res['files'][] = [
       'file' => $file['file'],
-      'path' => $file['repository'].$file['file'] 
+      'repository' => $file['repository'],
+      'path' => $file['path'],
+      'cfg' => $file['cfg'], 
+      'type' => $file['type'] 
     ];    
   }
   if ( !empty($res['files']) ){

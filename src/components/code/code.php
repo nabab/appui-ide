@@ -7,5 +7,5 @@
             test: test
           }"
           @ready="setState"
-          ref="editor"        
+          ref="editor"
 ></bbn-code>

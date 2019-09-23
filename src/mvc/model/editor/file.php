@@ -23,7 +23,6 @@ if ( !empty($model->data['url']) && isset($model->inc->ide) ){
   $repos = $model->inc->ide->repositories();
   $repository = $repos[$rep];
   $f = $model->inc->ide->decipher_path($model->data['url']);
-
   if ( is_array($repository) &&
     !empty($model->inc->ide->is_project($model->data['url'])) ||
     !empty($repository['project'])

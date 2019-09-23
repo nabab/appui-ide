@@ -5,7 +5,7 @@
                 :scrollable="false"
                 ref="tabstrip"
                 :source="routerSource"
-                v-if="routerSource.length"
+                v-if="routerSource.length"              
     >
     </bbn-tabnav>
   </div>

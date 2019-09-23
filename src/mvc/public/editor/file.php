@@ -51,7 +51,7 @@ if ( !empty($ctrl->arguments) ){
       $ctrl->obj->bcolor = $ctrl->obj->data['styleTab']['lib']['bcolor'];
       $ctrl->obj->icon = $ctrl->obj->data['styleTab']['lib']['icon'];
       $ctrl->obj->fcolor = $ctrl->obj->data['styleTab']['lib']['fcolor'];
-    }
+    }    
     unset($ctrl->obj->data['styleTab']);
 
 
