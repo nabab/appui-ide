@@ -3,7 +3,7 @@
   let logPoller = null;
   return {
     data(){
-      let lignes = [10, 50, 100, 250, 500, 1000, 2000, 5000],
+      let lignes = [10, 50, 100, 150, 250, 500, 1000, 2000, 5000],
         themesCode =[
         '3024-day',
         '3024-night',
@@ -96,7 +96,7 @@
               }
             });
             d.data[0].items = bbn.fn.order(d.data[0].items, 'mtime', 'desc');
-            this.sourceTree = d.data;
+            this.sourceTree = d.data;           
           }
         });
       },
@@ -111,6 +111,33 @@
               this.textContent = d.content;
             });
         }
+      },
+      deleteFile(){
+        this.confirm(bbn._('Are you sure you want to delete the file:') + ' ' + this.fileLog , () => {
+          this.post(this.source.root + 'logs', {          
+            delete_file: this.fileLog,
+          },
+          d => {
+            if ( d.success ){
+              let path = bbn.env.path;
+              if ( path.indexOf(this.source.root + 'logs/') === 0 ){
+                let tmp = path.substr((this.source.root + 'logs/').length);        
+                if ( tmp ){
+                  let idx = bbn.fn.search(this.files, {text: tmp});
+                  if ( idx > -1 ){            
+                    this.fileLog = this.files[idx].value;
+                  }
+                }
+              }
+              if ( !this.fileLog ){
+                this.fileLog = this.files[0].value;
+              }
+              this.onChange();
+              this.getSourceTreeLogs();
+              this.setFileLog();
+            }          
+          });
+        });        
       },
       selectLogFile(log){
         this.fileLog = log.data.fileName;
@@ -166,25 +193,28 @@
           this.getSourceTreeLogs();
         })
         //this.getRef('listFilesLog').reload();
+      },
+      setFileLog(){       
+        this.fileLog = this.sourceTree[0]['items'][0].fileName
       }
     },
-    created(){
+    /*created(){
       let path = bbn.env.path;
-      if ( path.indexOf(this.source.root + 'logs/') === 0 ){
-        let tmp = path.substr((this.source.root + 'logs/').length);
-        bbn.fn.log("PATH OK", tmp, this.files);
+      if ( path.indexOf(this.source.root + 'logs') === 0 ){
+        let tmp = path.substr((this.source.root + 'logs').length);
+        bbn.fn.log("sswwssw", tmp);
         if ( tmp ){
           let idx = bbn.fn.search(this.files, {text: tmp});
-          if ( idx > -1 ){
-            bbn.fn.log("PATH OK", tmp, this.files);
+          if ( idx > -1 ){            
             this.fileLog = this.files[idx].value;
           }
         }
       }
       if ( !this.fileLog ){
-        this.fileLog = this.files[0].value;
+        this.fileLog = this.sourceTree[0]['items'][0].fileName
+        //this.fileLog = this.files[0].value;
       }
-    },
+    },*/
     mounted(){
       this.onChange();
       this.getSourceTreeLogs();

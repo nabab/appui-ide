@@ -34,7 +34,7 @@
             url: a.url,
             static: true,
             icon: a.icon,
-            title: this.renderEmptyTab(a),
+            notext: true,
             bcolor: a.bcolor,
             fcolor: a.fcolor,
             cls: this.source.emptyTabs.indexOf(a.url) !== -1 ? 'empty-tab' : '',
@@ -48,12 +48,12 @@
     methods:{
       search: bbn.fn.search,
       //for title in tabs ide
-      renderEmptyTab(tab){
+      /*renderEmptyTab(tab){
         if ( this.emptyTabs.indexOf(tab.url) !== -1 ){
-          return `<i class='nf nf-oct-plus_small' style='color:black;'></i>`;
+          return `<i class='nf nf-plus' style='color:black;'></i>`;
         }
         return '';
-      },
+      },*/
       getMenu(url){
         return [{
           icon: 'nf nf-fa-refresh',

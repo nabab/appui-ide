@@ -1652,6 +1652,7 @@
        * Function for move node in tree
        */
       moveNode(a, select, dest){
+        bbn.fn.log("DEST", a, select,dest);
         if ( dest.data.folder ){
           let path = select.data.path.split('/'),
               new_path = dest.data.path,

@@ -65,7 +65,8 @@
           appui.success(bbn._("Directory created!"));
         }
         if ( (this.data.path === './')  || (this.source.parent === false) ){
-          appui.ide.getRef('filesList').reload();
+          //appui.ide.getRef('filesList').reload();
+          appui.ide.treeReload();
         }
         else{
           if ( appui.ide.nodeParent !== false ){

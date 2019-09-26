@@ -23,13 +23,18 @@
                     style="width: 150px"
       ></bbn-dropdown>
       &nbsp;
+      <bbn-button @click="deleteFile"
+                  icon="nf nf-mdi-delete_sweep"
+                  text="<?=_('Delete File')?>"
+      ></bbn-button>
+      &nbsp;
       <bbn-button @click="onChange(1)"
                   icon="nf nf-fa-file"
                   text="<?=_('Clear file')?>"
       ></bbn-button>
       &nbsp;
       <bbn-button @click="onChange()"
-                  icon="nf nf-fa-sync"
+                  icon="nf nf-oct-sync"
                   text="<?=_('Refresh')?>"
       ></bbn-button>
       &nbsp;
@@ -72,7 +77,8 @@
                         @select="selectLogFile"
                         ref="listFilesLog"
                         :min-expand-level="1"
-                        v-if="sourceTree.length"
+                        v-if="sourceTree.length"                        
+                        @ready="setFileLog"
               ></bbn-tree>
             </div>
           </div>

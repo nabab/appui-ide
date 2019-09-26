@@ -4,14 +4,13 @@ if ( isset($ctrl->post['log']) ){
   $ctrl->data['log'] = $ctrl->post['log'];
   $ctrl->data['clear'] = !empty($ctrl->post['clear']);
   $ctrl->data['num_lines'] = isset($ctrl->post['num_lines']) && \bbn\str::is_integer($ctrl->post['num_lines']) ? $ctrl->post['num_lines'] : 100;
-  $ctrl->obj = $ctrl->get_object_model();
-  
+  $ctrl->obj = $ctrl->get_object_model();  
 }
-else if ( isset($ctrl->post['fileLog'], $ctrl->post['md5']) ){
+else if ( isset($ctrl->post['fileLog'], $ctrl->post['md5']) || isset($ctrl->post['delete_file']) ){
   $ctrl->action();
 }
 else {
-  $ctrl->data['root'] = $ctrl->say_dir().'/';
+  $ctrl->data['root'] = APPUI_IDE_ROOT;
   $ctrl->obj->bcolor = '#333';
   $ctrl->obj->fcolor = '#FFF';
   $ctrl->obj->icon = 'nf nf-fa-file_text';

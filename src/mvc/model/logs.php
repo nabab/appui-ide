@@ -13,8 +13,15 @@ foreach ( $log_files as $lf ){
 }
 ksort($res);
 
-if ( !empty($model->data['log']) ){
-  //die(var_dump("wwww"));
+if( !empty($model->data['delete_file']) ){
+  $path = BBN_DATA_PATH.'logs/'.$model->data['delete_file'];  
+  if ( is_file($path) ){
+    if ( !empty(\bbn\file\dir::delete($path)) ){
+      return ['success' => true];
+    }
+  }  
+}
+else if ( !empty($model->data['log']) ){  
   $output = [];
   if ( $model->data['clear'] ){
     file_put_contents($res[$model->data['log']], '');

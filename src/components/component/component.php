@@ -5,7 +5,6 @@
                 :scrollable="false"
                 :source="routerSource"
                 ref="tabstripComponents"
-    >
-    </bbn-tabnav>
+    ></bbn-tabnav>
   </div>
 </div>

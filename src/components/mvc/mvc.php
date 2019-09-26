@@ -6,7 +6,6 @@
                 ref="tabstrip"
                 :source="routerSource"
                 v-if="routerSource.length"              
-    >
-    </bbn-tabnav>
+    ></bbn-tabnav>
   </div>
 </div>

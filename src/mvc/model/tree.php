@@ -38,7 +38,7 @@ if ( !empty($model->data['repository']) &&
   }
 
   // Get the repository's root path
-  $path = $model->inc->ide->get_root_path($rep_cfg);  
+  $path = $model->inc->ide->get_root_path($rep_cfg);
   
    //extensions list not to be considered
   $file_check = [
@@ -214,18 +214,18 @@ if ( !empty($model->data['repository']) &&
 
                       if ( is_array($cnt) ){
                         $num_check = 0;
-                        foreach( $cnt as $f ){
+                        foreach( $cnt as $f ){                          
                           //$name = explode(".", basename($f))[0];
-                          $ele = explode(".", basename($f));
+                          $ele = explode(".", basename($f));                          
                           $item = $ele[0];
-                          $ext = $ele[1];
+                          $ext = isset($ele[1]) ? $ele[1] : false;                 
                           //if is folder and component
                           if ( $item === basename($t) ){
                             $folder = false;
                             $arr[] = \bbn\str::file_ext($f);
                             $is_vue = true;
-                            $component = true;
-                            if ( in_array($ext, $excludeds) === false ){
+                            $component = true;                          
+                            if ( !empty($ext) && (in_array($ext, $excludeds) === false) ){
                               $num_check++;
                             }
                           }
@@ -238,9 +238,9 @@ if ( !empty($model->data['repository']) &&
                             foreach( $cnt as $f ){
                               $ele = explode(".", basename($f));
                               $item = $ele[0];
-                              $ext = $ele[1];
+                              $ext = isset($ele[1]) ? $ele[1] : false;                            
                               if ( (is_dir($f) && (strpos(basename($f), '.') === 0)) ||
-                                (is_file($f) && (($item !== basename($t)) || (in_array($ext, $excludeds) === true)))
+                                (is_file($f) && (($item !== basename($t)) || (!empty($ext) && (in_array($ext, $excludeds) === true))))
                               ){
                                 $element_exluded++;
                               }
