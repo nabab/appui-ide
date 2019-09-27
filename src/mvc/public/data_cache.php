@@ -27,7 +27,7 @@ if ( isset($ctrl->post['item'], $ctrl->arguments[0]) ){
 }
 else{
   $ctrl->combo('Cache content ('.\bbn\cache::get_type().')', [
-    'root' => $ctrl->say_dir().'/',
+    'root' => $ctrl->get_dir().'/',
     'items' => array_map(function($a){
       return ['name' => $a];
     }, $cache->items())

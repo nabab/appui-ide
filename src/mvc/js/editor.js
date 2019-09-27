@@ -67,7 +67,7 @@
               text: bbn._('Close all tabs'),
               command: this.closeTabs
             }, { 
-              text: bbn._('File Recent'),          
+              text: bbn._('Recent files'),          
               icon: 'nf nf-fa-file',          
               items: []
             }

@@ -36,9 +36,6 @@
           });
         }
       }
-
-      
-      //return $.extend(this.source, {
       return bbn.fn.extend(this.source, {  
         repositories: ide.repositories,
         font: ide.font,
@@ -47,7 +44,7 @@
         root: ide.root,
         path: path.join('/'),
         filename: filename,
-        tabMenus: exts,
+        tabMenus: exts       
       });
     },
     methods: {

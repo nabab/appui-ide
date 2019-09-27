@@ -9,9 +9,9 @@ if ( !empty($ctrl->arguments) ){
     if ( !empty($ctrl->obj->data['error']) ){
       $ctrl->obj->error = $ctrl->obj->data['error'];
     }
-  }
-  
+  }  
   echo $ctrl
+    ->set_title($ctrl->arguments[count($ctrl->arguments)-1])
     ->add_js()
     ->get_view();
   if ( (end($ctrl->arguments) === "settings") ||
@@ -22,6 +22,5 @@ if ( !empty($ctrl->arguments) ){
   }
   else{
     $ctrl->obj->url = $ctrl->baseURL.end($ctrl->arguments);
-
   }
 }

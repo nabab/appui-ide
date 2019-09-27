@@ -311,18 +311,16 @@
         if ( (appui.ide.search.link !== undefined)  && (appui.ide.cursorPosition.line > 0 || appui.ide.cursorPosition.ch > 0) ){
           code.widget.focus();
           setTimeout(() => {
-            code.cursorPosition(appui.ide.cursorPosition.line, appui.ide.cursorPosition.ch);
-            /*this.$nextTick(()=>{
-               this.ide.search.link = false;
-               this.ide.cursorPosition.line= 0;
-               this.ide.cursorPosition.ch= 0;
-            });*/
+            code.cursorPosition(appui.ide.cursorPosition.line, appui.ide.cursorPosition.ch);            
           }, 800);
         }
-        else{
-          this.$nextTick(() => {
-            code.loadState(this.initialState);
-          });        
+        else{        
+          setTimeout(() => {
+            let state = bbn.fn.extend({}, this.initialState, true);
+            state.line = state.line === false ? 0 : state.line;
+            state.char = state.char === false ? 0 : state.char;            
+            code.loadState(state);         
+          }, 800);
         }
         //for list recent files
         if ( appui.ide.readyMenu ){

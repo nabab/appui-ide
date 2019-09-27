@@ -57,6 +57,9 @@ if ( !empty($model->data['url']) && isset($model->inc->ide) ){
     array_pop($arr);
     array_pop($arr);
     $arr[] = $repository['alias_code'] !== 'components' ? "php" : 'js';
+    if (!empty($i = array_search('src', $arr)) ){
+      $type= $arr[$i+1];
+    }
     $ctrl_file = $model->inc->ide->url_to_real(implode("/", $arr));
   }
 
@@ -66,6 +69,7 @@ if ( !empty($model->data['url']) && isset($model->inc->ide) ){
   $res = [
     'isMVC' => $is_mvc,
     'isComponent' => $is_component,
+    'type' => !empty($type) ? $type : null,
     'title' => $path,
     'path' => $path,
     'repository' => $rep,

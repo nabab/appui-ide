@@ -5,7 +5,7 @@
                :load="true"
                url="code"
                :menu="getMenu()"
-               title="<?=_('Code')?>"
+               icon="nf nf-fa-code"
       ></bbns-container>
     </bbn-tabnav>
   </div>

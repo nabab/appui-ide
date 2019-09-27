@@ -146,6 +146,40 @@ class ide {
   }
 
   /**
+   * Function that returns corresponding bit with option id
+   *
+   * @param string $id_option option linked to the bit 
+   * @param string $id_user if set user id will return the result for that user otherwise the current one will return
+   * @return array|null
+   */
+  private function get_bit_by_option(string $id_option, string $id_user = null): ?array
+  {
+    if ( \bbn\str::is_uid($id_option) &&
+      !empty($this->db) &&
+      !empty($this->pref) &&
+      !empty($pref_arch = $this->pref->get_class_cfg())
+    ){
+      if ( is_null($id_user) ){
+        $id_user = $this->pref->id_user;
+      }
+      return  $this->db->rselect([
+        'table' => $pref_arch['tables']['user_options_bits'],
+        'fields' => [],
+        'where' => [          
+          'conditions' => [[
+            'field' => $pref_arch['arch']['user_options_bits']['id_option'],
+            'value' => $id_option
+          ],[
+            'field' => $pref_arch['arch']['user_options_bits']['id_user_option'],
+            'value' => $id_user          
+          ]]
+        ]
+      ]);
+    }
+    return null;
+  }
+
+  /**
    * Sets the current file path
    *
    * @param string $file
@@ -448,7 +482,7 @@ class ide {
           $delete_bits = false;
           break;
         }         
-      }
+      }     
       return $delete_bits;
     }   
     return null;
@@ -783,9 +817,9 @@ class ide {
       //CASE MOVE and RENAME
       if ( (($case === 'move') || ($case === 'rename')) &&
         !empty($path['new'])
-      ){
+      ){        
         $new_backup = $backup_path.'/'.($cfg['is_project'] && $cfg['type'] ? $cfg['type'] .'/' : '');
-        $new_backup .= ($case === 'rename' ? $cfg['path'] : $cfg['new_path'].'/').explode(".", array_pop(explode("/", $path['new'])))[0];
+        $new_backup .= ($case === 'rename' ? $cfg['path'] : $cfg['new_path'].'/').\bbn\str::file_ext($path['new'], 1)[0]; 
       }
     }    //if exist a backup
     if ( is_dir($old_backup) ){
@@ -1365,7 +1399,7 @@ class ide {
         $f['value'] = file_get_contents(self::$current_file);
        
         if ( $preferences = $this->get_file_preferences($url) ){
-          $f = array_merge($f, $preferences);         
+          $f = array_merge($f, $preferences);            
         }
         if ( $permissions = $this->get_file_permissions() ){
           $f = array_merge($f, $permissions);
@@ -1401,8 +1435,7 @@ class ide {
       else {
         $f['value'] = '';
       }
-      $f['id'] = self::$current_id;
-      
+      $f['id'] = self::$current_id;      
       return $f;
     }
     return false;
@@ -1440,11 +1473,7 @@ class ide {
       if ( empty($file['code']) && ($file['tab'] !== '_ctrl') ){
         if ( @unlink(self::$current_file) ){
           // Remove permissions
-          $this->delete_perm();
-          // Delete preferences
-          /*if ( $this->pref ){
-            $this->delete_file_preferences();
-          }*/
+          $this->delete_perm();        
           if ( !empty(self::$current_id) ){
             // Remove file's preferences
           //  $this->options->remove($this->options->from_code(self::$current_id, $this->_files_pref()));
@@ -1643,7 +1672,6 @@ class ide {
    * @return array|false
    */
   public function get_file_permissions(string $file = null){
-
     if ( empty($file) ){
       $file = self::$current_file;
     }
@@ -1682,7 +1710,8 @@ class ide {
    * @param string $type The type of real (file/dir)
    * @return bool
    */
-  public function create_perm_by_real(string $file, string $type = 'file'){
+  public function create_perm_by_real(string $file, string $type = 'file'): bool
+  {
     if ( !empty($file) &&
       \is_dir(\bbn\mvc::get_app_path()) &&
       // It must be a controller
@@ -1745,7 +1774,8 @@ class ide {
    * @param string $file The real file's path
    * @return bool
    */
-  public function delete_perm($file = null){
+  public function delete_perm($file = null): bool
+  {
     if ( empty($file) ){
       $file = self::$current_file;
     }
@@ -1763,7 +1793,8 @@ class ide {
    * @param string $type The type (file/dir)
    * @return bool
    */
-  public function change_perm_by_real(string $old, string $new, string $type = 'file'){
+  public function change_perm_by_real(string $old, string $new, string $type = 'file'):  bool
+  {
     $type = strtolower($type);
     if ( !empty($old) &&
       !empty($new) &&
@@ -1791,7 +1822,8 @@ class ide {
    * @param string $type The type (file/dir)
    * @return bool
    */
-  public function move_perm_by_real(string $old, string $new, string $type = 'file'){
+  public function move_perm_by_real(string $old, string $new, string $type = 'file'): bool
+  {
     $type = strtolower($type);
     if ( !empty($old) &&
       !empty($new) &&
@@ -1962,7 +1994,7 @@ class ide {
   }
 
   /**
-     * Sets user's preferences for a file.
+     * Rename preferences for a file.
      *
      * @param string $path_code for new code file preference
      * @param array $repository all info repository
@@ -2198,10 +2230,15 @@ class ide {
                     //get id file preference
                     if ( !empty($preferences[$i]['id']) ){  
                       //After deleting all the reference bits, the preference option will be deleted
-                      if ( empty($this->options->remove($preferences[$i]['id'])) && ($this->delete_bits_preferences($preferences[$i]['id']) === false) ){                    
+                      //first remove all bits with this option                   
+                      if ( ($this->delete_bits_preferences($preferences[$i]['id']) === false) ){                     
                         $check = false;
                         break;
-                      }  
+                      }//after felete option
+                      else if ( empty($this->options->remove($preferences[$i]['id'])) ){
+                        $check = false;
+                        break;
+                      } 
                     }                
                   }  
                 }
@@ -2227,10 +2264,15 @@ class ide {
                 //get id file preference
                 if ( ($i = \bbn\x::find($preferences, ['code' => $file_pref])) !== false ){  
                   //After deleting all the reference bits, the preference option will be deleted
-                  if ( empty($this->options->remove($preferences[$i]['id'])) && ($this->delete_bits_preferences($preferences[$i]['id']) === false) ){
+                  //first remove all bits with this option                   
+                  if ( ($this->delete_bits_preferences($preferences[$i]['id']) === false) ){                     
                     $check = false;
                     break;
-                  }                    
+                  }//after felete option
+                  else if ( empty($this->options->remove($preferences[$i]['id'])) ){
+                    $check = false;
+                    break;
+                  }                                      
                 }
               }
               else{
@@ -2249,11 +2291,16 @@ class ide {
                   if ( !empty($file['id']) && 
                     !empty($file['code']) &&
                     (strpos($file['code'], $file_pref) === 0)
-                  ){
-                    if (empty($this->options->remove($file['id'])) && ($this->delete_bits_preferences($file['id']) === false) ){
+                  ){                    
+                    //first remove all bits with this option 
+                    if ( ($this->delete_bits_preferences($file['id']) === false) ){                     
                       $check = false;
                       break;
-                    }  
+                    }//after felete option
+                    else if ( empty($this->options->remove($file['id'])) ){
+                      $check = false;
+                      break;
+                    }
                   }
                 }
               }
@@ -2268,11 +2315,17 @@ class ide {
               if ( !empty($file['id']) && 
                 !empty($file['code']) &&
                 (strpos($file['code'], $file_pref) === 0)
-              ){            
-                if (empty($this->options->remove($file['id'])) && ($this->delete_bits_preferences($file['id']) === false) ){
+              ){
+                //After deleting all the reference bits, the preference option will be deleted
+                //first remove all bits with this option                   
+                if ( ($this->delete_bits_preferences($file['id']) === false) ){                     
                   $check = false;
                   break;
-                }  
+                }//after felete option
+                else if ( empty($this->options->remove($file['id'])) ){
+                  $check = false;
+                  break;
+                }                  
               }
             }
           }
@@ -2288,9 +2341,21 @@ class ide {
  
   /******************** END PREFERENCES ************************/
 
-  /******************** OPENED AND RECENT FILES ************************/
-  public function set_recent_file(string $file, string $id_link){  
-    $pref_arch = $this->pref->get_class_cfg(); 
+  /******************** OPENED AND RECENT FILES BIT ************************/
+
+  
+
+
+  /**
+   * Create or update bit recent file preference
+   *
+   * @param string $file code option
+   * @param string $id_link id option file preference
+   * @return bool
+   */
+  public function set_recent_file(string $file, string $id_link): bool
+  {  
+    //$pref_arch = $this->pref->get_class_cfg(); 
     $pref = false;
     $project = explode(".", $file)[0];
     $bit = false;
@@ -2302,20 +2367,8 @@ class ide {
       $id_pref = !empty($pref) ? $pref['id'] : $this->pref->add($id_recent_file, []);      
     }    
     //search bit in relation at user preference
-    $bit_data = $this->db->rselect([
-      'table' => $pref_arch['tables']['user_options_bits'],
-      'fields' => [],
-      'where' => [          
-        'conditions' => [[
-          'field' => $pref_arch['arch']['user_options_bits']['id_option'],
-          'value' => $id_link
-        ],[
-          'field' => $pref_arch['arch']['user_options_bits']['id_user_option'],
-          'value' => $id_pref
-        ]]
-      ]
-    ]);
-  
+    $bit_data = $this->get_bit_by_option($id_link, $id_pref);
+    
     $date = date('Y-m-d H:i:s');      
     $cfg =[];
     //set bit
@@ -2346,14 +2399,15 @@ class ide {
         'cfg' =>  json_encode($cfg),
         'text' => $file
         ])
-      ){
+      ){       
         $bit = true;        
       }
     }  
     return !empty($bit) && !empty($id_pref);    
-  }  
+  }
+
   /**
-   * Add OR update option file in repository
+   * Add or update option file in repository
    *
    * @param string| $id_rep The file's ID
    * @return bool
@@ -2361,8 +2415,6 @@ class ide {
   public function set_opened_file(string $id_rep, string $file_code, array $info, bool $setRecent = true): bool
   {   
     $bit = false;
-    
-    $pref_arch = $this->pref->get_class_cfg();        
     //file preference in repository
     $id_pref_file = $this->set_file_preferences($file_code, $id_rep, $info, true);
     
@@ -2374,20 +2426,9 @@ class ide {
       $id_pref = !empty($pref) ? $pref['id'] : $this->pref->add($id_option_opened, []);
     }
    
-    //search bit   for setting or add
-    $bit_data = $this->db->rselect([
-      'table' => $pref_arch['tables']['user_options_bits'],
-      'fields' => [],
-      'where' => [        
-        'conditions' => [[
-          'field' => $pref_arch['arch']['user_options_bits']['id_option'],
-          'value' => $id_pref_file
-        ],[
-          'field' => $pref_arch['arch']['user_options_bits']['id_user_option'],
-          'value' => $id_pref
-        ]]
-      ]
-    ]); 
+    //search bit  for setting or add
+    $bit_data = $this->get_bit_by_option($id_pref_file, $id_pref);
+
     
     if ( !empty($id_pref) && ($bit_data !== null) ){     
       $cfg = [
@@ -2425,7 +2466,6 @@ class ide {
         $bit = true;        
       }
     }
-
     if ( $setRecent ){
       return !empty($bit) && !empty($id_pref_file) && !empty($id_pref) && $this->set_recent_file($file_code, $id_pref_file);
     }
@@ -2435,9 +2475,14 @@ class ide {
     
   }
 
-
-  public function get_recent_files( int $limit = 10 ){
-    
+  /**
+   * return list files preferences
+   *
+   * @param integer $limit file numbers to be taken
+   * @return null|array
+   */
+  public function get_recent_files( int $limit = 10 ): ?array
+  {    
     $perm = $this->options->from_code(self::RECENT_FILE, self::IDE_PATH, self::BBN_APPUI);
     $all = [];
     if ( !empty($perm) ){      
@@ -2463,8 +2508,7 @@ class ide {
           ],
           'limit' => 10,
           'order' =>['date' => "DESC"]
-        ]);   
-        
+        ]);           
         foreach ( $recents as $id => $bit ){
           $file_pref = $this->options->option($bit['id_option']);        
           $repository = $this->options->option($file_pref['id_parent']);
@@ -2483,7 +2527,7 @@ class ide {
           }
 
           $file = implode("/",$path_file);
-          $path = \bbn\str::parse_path('file/'.$repository['bbn_path'].'/'.$repository['code'].'/'.$type.'/'.$file.'/_end_/'.$tab);          
+          $path = \bbn\str::parse_path('file/'.$repository['bbn_path'].'/'.$repository['code'].'/'.$type.'/'.$file.'/_end_/'.$tab);
           $all[] = [
             'cfg' => $bit['cfg'],
             'file' =>  \bbn\str::parse_path($repository['code'].'/'.$file_pref['code']),
