@@ -65,9 +65,12 @@ if (
 }
 else{
   $conn = $model->inc->pref->text_value($model->inc->options->from_code('sources', 'finder', 'appui'));
+  $connection = isset($conn[0], $conn[0]['value']) ? $conn[0]['value'] : '';
   $fav = $model->inc->pref->text_value($model->inc->options->from_code('favourites', 'finder', 'appui'));
   return [
-    'connection' => $conn[0]['id'],
+    //id doesn't exist
+    //'connection' => $conn[0]['id'],
+    'connection' => $connection,
     'connections' => $conn,
     'favourites' => $fav,
     'origin' => BBN_DATA_PATH,

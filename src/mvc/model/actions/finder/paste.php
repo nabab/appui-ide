@@ -7,7 +7,7 @@ if (!empty($model->data['node']) &&
   ){
   $success = false;
   
-  $source = $model->data['old_dir'].$model->data['node']['value'];
+  $source = (($model->data['old_dir'] !== '.') ? $model->data['old_dir'].'/' : '' ) .$model->data['node']['value'];
   $dest = $model->data['new_dir'].$model->data['node']['value'];
   
   if ( $model->inc->fs->exists($dest) ){

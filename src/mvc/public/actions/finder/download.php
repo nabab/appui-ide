@@ -1,19 +1,16 @@
 <?php
-
-
 if ( isset($ctrl->post['value']) &&
     isset($ctrl->post['path'])
   ){
-  
+
   $success = false;
-  $dest = $ctrl->tmp_path().$ctrl->post['value'];
+  
   $path = $ctrl->post['path'].$ctrl->post['value'];
- 
   $file = $ctrl->inc->fs->download($path);
-  
-  
-  //$ctrl->obj->data = $file;
   $ctrl->obj->file = $file;
+  if ( $ctrl->inc->fs->get_mode() === 'nextcloud'){
+    
+  }
 }
 
 
