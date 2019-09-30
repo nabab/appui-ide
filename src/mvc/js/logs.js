@@ -144,7 +144,8 @@
         this.onChange();
       },
       runInterval(){
-        this.md5Current= this.files[bbn.fn.search(this.files, 'value', this.fileLog )].md5;
+        let current = bbn.fn.get_row(this.files, {value: this.fileLog});
+        this.md5Current = current ? current.md5 : '';
         if ( this.md5Current.length ){
           clearInterval(logPoller);
           logPoller = setInterval(() => {
