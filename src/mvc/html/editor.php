@@ -45,6 +45,21 @@
                   @ready="setReadyMenu"                
         ></bbn-menu>
       </div>
+      <div></div>
+      <div class="bbn-flex-width bbn-middle">
+        <span class="bbn-flex-fill bbn-r bbn-padded"><?=_('Go to Line:')?></span>
+        <bbn-input v-model="currentLine" 
+                   type="number"
+                   :min="0"
+                   @change="goToLine"
+                   @submit="goToLine"                 
+        ></bbn-input>
+        <bbn-button icon="nf nf-mdi-run_fast"                   
+                    @click="goToLine"
+                    class="bbn-padded"
+        ></bbn-button>
+      </div>
+
     </bbn-toolbar>
   </bbn-pane>
   <bbn-pane>

@@ -53,7 +53,7 @@
           return `<i class='nf nf-plus' style='color:black;'></i>`;
         }
         return '';
-      },*/
+      },*/     
       getMenu(url){
         return [{
           icon: 'nf nf-fa-refresh',

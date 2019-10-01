@@ -7,5 +7,6 @@
             test: test
           }"
           @ready="setState"
+          @input="getLine"
           ref="editor"    
 ></bbn-code>

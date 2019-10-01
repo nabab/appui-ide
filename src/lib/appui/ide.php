@@ -1929,7 +1929,7 @@ class ide {
           if ( !empty($pref) ){
             return [
               'selections' => $pref['selections'] ?: [],
-              'marks' => $pref['marks'] ?: [],
+              'marks' => isset($pref['marks']) ? $pref['marks'] : [],
               'line' => (int)$pref['line'] ?: 0,
               'char' => (int)$pref['char'] ?: 0,
             ];  

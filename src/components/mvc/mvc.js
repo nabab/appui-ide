@@ -170,7 +170,7 @@
 
       }
     },    
-    methods: {    
+    methods: {      
       search: bbn.fn.search,      
       listCtrls(){
         let path = "",

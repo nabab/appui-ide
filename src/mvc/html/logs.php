@@ -93,6 +93,7 @@
                   v-model="textContent"
                   :readonly="true"
                   :theme="theme"
+                  ref="code"
         ></bbn-code>
       </div>
       <div v-else class="bbn-overlay bbn-middle">

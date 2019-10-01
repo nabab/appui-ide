@@ -305,21 +305,40 @@
           }
         }
       },
-      setState(){
-        const code = this.getRef('editor');
+      getLine(){        
+        appui.ide.currentLine = this.getRef('editor').widget.getCursor().line;
+       // appui.ide.disabledLine = false
+      }, 
+      goLine(lineNum){
+        let code = this.getRef('editor'),   
+            obj = {
+              line: parseInt(lineNum)-1,
+              char: 0
+            };                     
+        code.loadState(obj);                   
+      },
+      setState(){        
+        const code = this.getRef('editor');        
         //case for serach a content
         if ( (appui.ide.search.link !== undefined)  && (appui.ide.cursorPosition.line > 0 || appui.ide.cursorPosition.ch > 0) ){
-          code.widget.focus();
+         /* code.widget.focus();
           setTimeout(() => {
             code.cursorPosition(appui.ide.cursorPosition.line, appui.ide.cursorPosition.ch);            
           }, 800);
+         */
+          code.loadState( {
+            line: parseInt(appui.ide.cursorPosition.line),
+            char: parseInt(appui.ide.cursorPosition.ch),
+          });
+          appui.ide.currentLine = parseInt(appui.ide.cursorPosition.line)+1;     
         }
         else{        
           setTimeout(() => {
             let state = bbn.fn.extend({}, this.initialState, true);
-            state.line = state.line === false ? 0 : state.line;
-            state.char = state.char === false ? 0 : state.char;            
-            code.loadState(state);         
+            state.line = state.line === false ?  parseInt(0) :  parseInt(state.line);
+            state.char = state.char === false ?  parseInt(0) :  parseInt(state.char);            
+            code.loadState(state);  
+            appui.ide.currentLine =  parseInt(state.line)+1;                  
           }, 800);
         }
         //for list recent files
@@ -327,11 +346,11 @@
           appui.ide.getRecentFiles();
 
           //for  code  first input tracking
-          let code = this.getRef('editor').$el;       
-          if ( code !== undefined ){
-            code.addEventListener('input', ()=>{
+          let codeEle = this.getRef('editor').$el;       
+          if ( codeEle !== undefined ){
+            codeEle.addEventListener('input', ()=>{
               this.runTracking();
-              code.removeEventListener('input', this);
+              codeEle.removeEventListener('input', this);
             });
           }
         }

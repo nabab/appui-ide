@@ -108,7 +108,7 @@
               num_lines: this.lignes,
             },
             (d)=>{
-              this.textContent = d.content;
+              this.textContent = d.content;           
             });
         }
       },
@@ -149,8 +149,10 @@
         if ( this.md5Current.length ){
           clearInterval(logPoller);
           logPoller = setInterval(() => {
+           
             if ( !this.isPolling ){
               this.isPolling = true;
+           
               this.post(this.source.root + 'logs', {
                 fileLog: this.fileLog,
                 md5: this.md5Current,
@@ -161,6 +163,12 @@
                 if ( d.change ){
                   this.textContent = d.content;
                   this.md5Current = d.md5
+                  let code = this.getRef('code');
+                  this.$nextTick(()=>{
+                    if ( code !== undefined ){                   
+                      code.widget.setCursor( code.widget.lastLine() , 0);
+                    }
+                  });
                 }
               });
               /*this.post(this.source.root + 'tree_logs',{}, d => {
@@ -202,12 +210,14 @@
     /*created(){
       let path = bbn.env.path;
       if ( path.indexOf(this.source.root + 'logs') === 0 ){
-        let tmp = path.substr((this.source.root + 'logs').length);
+        let tmp = path.substr((this.source.root + 'logs').length+1);
         bbn.fn.log("sswwssw", tmp);
         if ( tmp ){
           let idx = bbn.fn.search(this.files, {text: tmp});
           if ( idx > -1 ){            
             this.fileLog = this.files[idx].value;
+            this.onChange();
+            //this.closest("bbn-router").route(this.source.root + 'logs/' + val.toString());    
           }
         }
       }
@@ -242,7 +252,9 @@
     },
     watch: {
       fileLog: function(val, old){
-        this.closest("bbn-router").route(this.source.root + 'logs/' + val.toString());
+        
+        //this.closest("bbn-router").route(this.source.root + 'logs/' + val.toString());
+        
         if ( val && !this.showText ){
           this.showText = true
         }

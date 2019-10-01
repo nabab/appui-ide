@@ -4,7 +4,7 @@
     <bbn-tabnav :autoload="false"
                 :scrollable="false"
                 :source="routerSource"
-                ref="tabstripComponents"
+                ref="tabstripComponents"              
     ></bbn-tabnav>
   </div>
 </div>

@@ -163,10 +163,12 @@
         runGetEditor: false,
         errorTreeParser: false,
         treeParser: false,
-        readyMenu: false
+        readyMenu: false,        
+        currentLine: 0,        
+        disabledLine: true
       })
     },
-    computed: {
+    computed: {      
       listRootProject(){
         let roots = this.source.projects.roots.slice();
         //temporaney disabled
@@ -197,7 +199,7 @@
       },
       isSettings(){        
         return this.currentURL.indexOf("/_end_/settings") !== -1; 
-      },
+      },      
       currentEditor(){        
         if ( this.runGetEditor || (this.currentURL !== false) ){
             let tabnav = this.$refs.tabstrip.getSubTabNav();        
@@ -215,7 +217,7 @@
             }          
         }
         return false;        
-      },
+      },     
       currentId(){
         if ( this.currentEditor ){       
           return this.currentEditor.closest('appui-ide-code').source.id;
@@ -299,7 +301,15 @@
         return  "nf nf-fa-eye";        
       }
     },
-    methods: {      
+    methods: {
+      goToLine(){
+        let lastLine = this.currentEditor.widget.lastLine(),
+            line = this.currentLine;
+        if ( line > lastLine ){
+          line = lastLine;            
+        }
+        this.currentEditor.closest('appui-ide-code').goLine(line);
+      },     
       selectRecentFile(file, obj){       
         this.getRef('tabstrip').load(obj.path);
       },
@@ -313,6 +323,7 @@
       },
       getRecentFiles(){        
         this.post(this.root + 'editor/get_recent_files',{}, d=>{
+          let menu = this.getRef('mainMenu').currentData[0]['data']['items'];
           if ( d.success ){
             let arr = [];
             bbn.fn.each(d.files, (v, i)=>{
@@ -325,12 +336,12 @@
                 }  
               });
             });            
-            let menu = this.getRef('mainMenu').currentData[0]['data']['items'];
             if ( menu !== undefined ){
               menu[menu.length-1]['items'] = arr;
             }            
           }
           else{
+            menu[menu.length-1]['items'] = [];
             this.recentFiles = false;
           } 
         });        
@@ -1874,10 +1885,7 @@
     },
     created(){
       appui.ide = this;
-    },
-    mounted(){    
-      bbn.fn.log('editor',this)
-    },
+    }, 
     watch: {     
       sourceParser(newVal, oldVal){        
         if ( (newVal !== oldVal) && (newVal !== false) ){
@@ -1897,9 +1905,8 @@
         }       
         if ( newVal !== oldVal ){
           this.treeReload();
-        }
-        
-      },
+        }        
+      },      
       typeProject(newVal, oldVal){
         this.path= newVal;        
         this.typeTree = newVal;

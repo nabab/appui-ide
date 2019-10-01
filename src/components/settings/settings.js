@@ -10,6 +10,6 @@
           messages: bbn._('Messages')
         }
       }
-    }
+    }    
   }
 })();
