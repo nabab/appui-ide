@@ -38,7 +38,7 @@ if ( !empty($model->data['url']) && isset($model->inc->ide) ){
           'icon' => $type['icon']
         ];
         //temporaney
-        $typeRep = $type['url'] = $type['url'] === 'lib' ? 'cls' : $type['url'];
+        $typeRep = $type['url'] = $type['url'] === 'lib' ? 'cls' : $type['url'];        
         // if ( $ptype = $model->inc->options->option($model->inc->options->from_code($typeRep,'PTYPES', 'ide', BBN_APPUI)) ){
         if ( $ptype = $model->inc->ide->get_type($typeRep) ){
           if ( !empty($ptype['tabs']) ){
@@ -64,8 +64,7 @@ if ( !empty($model->data['url']) && isset($model->inc->ide) ){
   }
 
   $is_mvc = $model->inc->ide->is_MVC_from_url(str_replace('/_end_', '', $url));
-  $is_component = $model->inc->ide->is_component_from_url(str_replace('/_end_', '', $url));
-
+  $is_component = $model->inc->ide->is_component_from_url(str_replace('/_end_', '', $url));  
   $res = [
     'isMVC' => $is_mvc,
     'isComponent' => $is_component,

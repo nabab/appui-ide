@@ -191,6 +191,11 @@
       tabSelected(){
         return this.getRef('tabstrip').selected;
       },
+      runRepository(){  
+        let rep = this.getRef('tabstrip').tabs[this.getRef('tabstrip').selected].source.repository;
+        this.currentRep = rep;
+        return rep;
+      },
       currentURL(){
         if ( this.getRef('tabstrip') ){          
           return this.getRef('tabstrip').currentURL;
@@ -351,11 +356,12 @@
         this.treeParser = false;               
         if ( this.possibilityParser === 'class' ){         
           this.post(this.source.root + 'parser',{
-            cls: this.currentId,            
+            cls: this.currentId,
+            project: this.isProject
           }, d =>{ 
             let obj = {
               tree: false,
-              class: false
+              class: false,                                        
             };           
             if ( d.data.success ){
               if ( this.possibilityParser === 'class' ){                
@@ -364,10 +370,8 @@
                      ele['items'] =  bbn.fn.order(ele['items'], 'name', 'ASC')
                   });
                 })
-              }
-                            
+              }              
               this.sourceTreeParser.treeData = d.data.tree;
-
               this.sourceTreeParser.class = d.data.class;
               this.sourceTreeParser.error = false;
               this.sourceTreeParser.idElement = this.currentId;
@@ -445,7 +449,7 @@
         return false;
       },
       //for parser class
-      parserClass(){        
+      /*parserClass(){        
         if ( this.possibilityParser === "class" ){       
           this.post(this.source.root + 'parser',{
             cls: this.currentId,            
@@ -472,7 +476,7 @@
           if ( obj !== undefined ) 
           return obj;
         });
-      },      
+      },*/      
       managerTypeDirectories(){
         this.post(this.source.root + 'directories/data/types', d => {
           if ( d.data.success ){
@@ -507,6 +511,7 @@
           height: 120,
           title: title,
           component: 'appui-ide-popup-search',
+          scrollable: false,
           source: {
             url: this.url,
             is_vue: is_vue,
@@ -788,7 +793,7 @@
        */
       treeContextMenu(n , i){
         let objContext = [
-          {
+          /*{
             icon: n.data.type && n.data.type === 'components' ? 'nf nf-fa-vuejs' : 'nf nf-fa-file',
             text: n.data.type && n.data.type === 'components' ? bbn._('New component') : bbn._('New file'),
             command: (node) => {
@@ -800,7 +805,7 @@
             command: (node) => {
               this.newDir(node)
             }
-          }, {
+          },*/ {
             icon: 'nf nf-fa-edit',
             text: bbn._('Rename'),
             command: (node) => {
@@ -856,15 +861,32 @@
           });
         }
         if ( n.data.folder ){
-          let obj = objContext.slice();
-          obj.unshift({
-            icon: 'nf nf-fa-search',
-            text: n.data.type && n.data.type === 'components' ? bbn._('Find in folder Component vue') : bbn._('Find in Path'),
-            command: node => {
-              let comp = n.data.type && n.data.type === 'components'  ? true : false;
-              this.searchOfContext(node, comp, n.data.is_vue);
-            }
+          let obj = objContext.slice(),
+              arr = [ {
+                icon: 'nf nf-fa-folder',
+                text: n.data.type === 'components' ? bbn._('New directory component') : bbn._('New directory'),
+                command: (node) => {
+                  this.newDir(node)
+                }
+              }, {
+                icon: n.data.type && n.data.type === 'components' ? 'nf nf-fa-vuejs' : 'nf nf-fa-file',
+                text: n.data.type && n.data.type === 'components' ? bbn._('New component') : bbn._('New file'),
+                command: (node) => {
+                  this.newElement(node)
+                }
+              }, {
+                icon: 'nf nf-fa-search',
+                text: n.data.type && n.data.type === 'components' ? bbn._('Find in folder Component vue') : bbn._('Find in Path'),
+                command: node => {
+                  let comp = n.data.type && n.data.type === 'components'  ? true : false;
+                  this.searchOfContext(node, comp, n.data.is_vue);
+                }
+              }];         
+
+          bbn.fn.each(arr , (item ,id)=>{
+            obj.unshift(item);
           });
+
           return obj;
         }
         else{
@@ -1918,7 +1940,13 @@
         if ( newVal === true ){
           this.searchFile = "";
         }
-      }      
+      },
+      /*runRepository(newVal){
+        console.log('?kkk?', newVal)
+        if ( this.currentRep !== undefined ){
+          this.currentRep = newVal
+        }
+      }*/
     }
   };
 })();

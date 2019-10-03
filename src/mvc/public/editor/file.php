@@ -15,8 +15,7 @@ if ( !empty($ctrl->arguments) ){
     $ctrl->obj->data = $ctrl->get_model();        
     $ctrl->obj->data['root'] = APPUI_IDE_ROOT;
     $ctrl->obj->url = $ctrl->baseURL.'file/'.$ctrl->obj->data['url'];
-    $title = $ctrl->obj->data['title'];
-
+    $title = $ctrl->obj->data['title'];    
     //case MVC set Tab
     if ( ($ctrl->obj->data['isMVC']) &&
       is_array($ctrl->obj->data['styleTab'])
@@ -39,10 +38,11 @@ if ( !empty($ctrl->arguments) ){
       $ctrl->obj->icon = $ctrl->obj->data['styleTab']['components']['icon'];
       $ctrl->obj->fcolor = $ctrl->obj->data['styleTab']['components']['fcolor'];
     }
+
     //case Lib set Tab
     else if ( empty($ctrl->obj->data['isComponent']) &&
       empty($ctrl->obj->data['isMVC']) &&
-      (($ctrl->obj->data['repository_content']['code'] === "lib/") || ($ctrl->obj->data['type'] === 'lib'))  &&
+      (($ctrl->obj->data['repository_content']['code'] === "lib/") || ($ctrl->obj->data['type'] === 'lib') || ($ctrl->obj->data['type']['path'] === 'lib/'))  &&
       is_array($ctrl->obj->data['styleTab'])
     ){
       if ( $start = stripos($ctrl->obj->data['title'],'/') ){

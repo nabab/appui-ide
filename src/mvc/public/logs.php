@@ -17,8 +17,7 @@ else if ( isset($ctrl->post['fileLog'], $ctrl->post['md5']) || isset($ctrl->post
   $ctrl->action();
 }
 //info at first call at the file 
-else {
-  \bbn\x::log([], 'vito');
+else {  
   $ctrl->data['root'] = APPUI_IDE_ROOT;
   $ctrl->obj->bcolor = '#333';
   $ctrl->obj->fcolor = '#FFF';

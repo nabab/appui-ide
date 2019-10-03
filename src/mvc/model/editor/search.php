@@ -18,6 +18,7 @@ if ( !empty($model->data['search']) &&
   $result = [];
   $totLines = 0;
   $tot_num_files = 0;
+  $occourences = 0;
   $base_rep = $model->data['repository']['bbn_path'] === 'BBN_APP_PATH' ? $model->app_path() : constant(strtoupper($model->data['repository']['bbn_path']));
 //function that defines whether the search is sensitive or non-sensitive
   $typeSearch= function($element, $code, $type){
@@ -120,16 +121,19 @@ if ( !empty($model->data['search']) &&
 
                     //object initialization with every single file to check the lines that contain it
                     $file = new \SplFileObject($val);
+                   
                     //cycle that reads all the lines of the file, it means until it has finished reading a file
                     while( !$file->eof() ){
                       //current line reading
                       $lineCurrent = $file->current();                      
                       //if we find what we are looking for in this line and that this is not '\ n' then we will take the coirispjective line number with the key function, insert it into the array and the line number
                       if ( ($typeSearch($lineCurrent, $model->data['search'], $model->data['typeSearch']) !== false) && (strpos($lineCurrent, '\n') === false) ){
+                      
                         $lineNumber = $file->key()+1;
                         $namePath = substr(dirname($val), strpos($val, $model->data['repository']['path']));
                         $position = $typeSearch($lineCurrent, $model->data['search'], $model->data['typeSearch']);
-                        $line = "<strong>".'line ' . $lineNumber . ' : '."</strong>";
+                        $line = "<strong>".'line ' . $lineNumber . ' : '."</strong>";                       
+
                         $text = $line;
                         if ( !empty($model->data['mvc']) ||
                           (!empty($model->data['isProject']) && $model->data['type'] === 'mvc')
@@ -150,7 +154,8 @@ if ( !empty($model->data['search']) &&
                         $file_name = array_pop($path);
                         $path= implode('/', $path);
                         $path = str_replace($base, (strpos($pathFile, $model->app_path()) === 0 ? 'BBN_APP_PATH/' : 'BBN_LIB_PATH/'), $path);   
-                        //die(var_dump($link, $model->data['components']));
+                        $occourences = $occourences + substr_count($lineCurrent, $model->data['search']);
+                
                         $list[] = [
                           'text' => strlen($text) > 1000 ? $line."<strong><i>"._('content too long to be shown')."</i></strong>" : $text,
                           'line' =>  $lineNumber-1,
@@ -200,7 +205,7 @@ if ( !empty($model->data['search']) &&
                       'num' => 1,
                       'numChildren' => 1,
                       'items' => [],
-                      'icon' => !empty($model->data['component']) ? 'nf nf-mdi-vuejs' : 'nf nf-fa-folder'
+                      'icon' => !empty($model->data['component']) || ($model->data['type'] === 'components')  ? 'nf nf-mdi-vuejs' : 'nf nf-fa-folder'
                     ];
                     $result[$namePath]['items'][] = $fileData;
                   }
@@ -224,10 +229,9 @@ if ( !empty($model->data['search']) &&
             }
        
           }
-          else{
-
+          else{         
             $tot_num_files++;
-            $list= [];
+            $list= [];            
             if ( $typeSearch(file_get_contents($v), $model->data['search'], $model->data['typeSearch']) !== false ){
               $pathFile = substr($v, strpos($v, $model->data['repository']['path']));              
               $file = new \SplFileObject($v);
@@ -240,6 +244,7 @@ if ( !empty($model->data['search']) &&
                   $position = $typeSearch($lineCurrent, $model->data['search'], $model->data['typeSearch']);
                   $text = "<strong>".'line ' . $lineNumber . ' : '."</strong>";
                   $text .= str_replace($model->data['search'], "<strong><span class='underlineSeach'>".$model->data['search']."</span></strong>", $lineCurrent);
+                  $occourences = $occourences + substr_count($lineCurrent, $model->data['search']);
 
                   $path = str_replace($base, (strpos($pathFile, $model->app_path()) === 0 ? 'BBN_APP_PATH/' : 'BBN_LIB_PATH/'), $path);
 
@@ -316,13 +321,15 @@ if ( !empty($model->data['search']) &&
   
 
   if( !empty($result) ){
+   
     $totFiles = 0;
     foreach ($result as $key => $value) {
-      $totFiles = $totFiles + $result[$key]['numChildren'];
+      $totFiles = $totFiles + $value['items'][0]['numChildren'];//$result[$key]['numChildren'];
       $result[$key]['text'] = str_replace($result[$key]['text'], $result[$key]['text']."&nbsp;<span class='bbn-badge bbn-s bbn-bg-lightgrey'>".$result[$key]['numChildren']."</span>",$result[$key]['text']);
     }
     return [
       'list' => array_values($result),
+      'occurences' => $occourences,
       'totFiles' => $totFiles,
       'allFiles' => $tot_num_files++,
       'totLines' => $totLines

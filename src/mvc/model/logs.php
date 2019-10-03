@@ -1,6 +1,6 @@
 <?php
 /** @var $model \bbn\mvc\model */
-//die(\bbn\file\dir::get_files(BBN_LOG_PATH));
+
 $log_files = array_filter(\bbn\file\dir::get_files(BBN_DATA_PATH.'logs'), function($a){
   return substr($a, -4) !== '.old';
 });
@@ -21,9 +21,9 @@ if( !empty($model->data['delete_file']) ){
     }
   }  
 }
-else if ( !empty($model->data['log']) ){  
+else if ( !empty($res[$model->data['log']]) ){  
   $output = [];
-  if ( $model->data['clear'] ){
+  if ( $model->data['clear'] ){    
     file_put_contents($res[$model->data['log']], '');
   }
   else{

@@ -416,15 +416,15 @@
                   ref="form"
         >
           <div class="bbn-grid-fields bbn-l">
-            <label>${bbn._('Ext:')}</label>
+            <label>` + bbn._('Ext:') + `</label>
             <bbn-input v-model="extension.ext"
                        required="required"
             ></bbn-input>
 
-            <label>${bbn._('Mode:')}</label>
+            <label>` + bbn._('Mode:') + `</label>
             <bbn-input v-model="extension.mode"></bbn-input>
 
-            <label>${bbn._("Default:")}</label>
+            <label> ` + bbn._("Default:") +` </label>
             <div style="height: 420px">
               <bbn-code ref="codeDefault"
                         theme="pastel-on-dark"

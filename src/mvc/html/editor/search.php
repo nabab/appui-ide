@@ -86,7 +86,7 @@
           </span>
         </div>
         <div class="bbn-flex-fill">
-          <span v-text="source.totLines ? source.totLines : '--'"></span>
+          <span v-text="source.occurences ? source.occurences : '--'"></span>
         </div>
       </div>
     </bbn-pane>

@@ -1394,6 +1394,8 @@ class ide {
         'line' => false,
         'char' => false,
         'marks' => false,
+        'repository' => $real['repository']['code'],
+        'file' => self::$current_file
       ];
       if ( is_file(self::$current_file) ){
         $f['value'] = file_get_contents(self::$current_file);
@@ -2613,6 +2615,7 @@ class ide {
       }
       else{
         //for lib in current temporaney code
+        die(\bbn\x::dump($rep));
         if ( ($rep['bbn_path'] === "BBN_APP_PATH") && (strpos($url,$rep['bbn_path'].'/'.$rep['code']) === 0) ){         
           $url = str_replace($rep['bbn_path'].'/'.$rep['code'], $rep['bbn_path'].'/'.$rep['path'], $url);
         }        

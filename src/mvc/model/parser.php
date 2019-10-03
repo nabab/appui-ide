@@ -13,16 +13,16 @@ if ( !empty($model->data['cls']) ){
   $file = basename($model->data['cls'],'.php');
 
   $path = dirname($model->data['cls']);
-
-
-  $class = substr($path, strpos($path,'lib/')+4).'\\'.$file;
+  
+  $start = $model->data['project'] ? strpos($path,'lib/')+4 : strpos($path,'src/')+4;
+  //die(var_dump(substr($path, ));
+ 
+  //case project
+  $class = substr($path, $start).'\\'.$file;
   $class = str_replace('/', '\\',$class);
-  
+;
   $tree = $parser->analyze($class);
-
-
-  
-  
+ 
   if ( !empty($tree) ){
     foreach( $get_tree as $ele ){
       $cfg = [

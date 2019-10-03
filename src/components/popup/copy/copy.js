@@ -40,15 +40,12 @@
       onSuccess(){
         //const tab = this.closest("bbn-container");
         
-        if ( this.source.parent ){
-          //provisional
-          if ( appui.ide.nodeParent !== false ){
-            appui.ide.nodeParent.reload();
-            this.$nextTick(()=>{
-              appui.ide.$set(appui.ide, 'nodeParent', false);
-            });
-          }
-          //this.source.parent.reload();
+        
+        if ( appui.ide.nodeParent !== false ){
+          appui.ide.nodeParent.reload();
+          this.$nextTick(()=>{
+            appui.ide.$set(appui.ide, 'nodeParent', false);
+          });        
         }
         else{
           appui.ide.getRef('filesList').reload();
