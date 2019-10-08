@@ -345,6 +345,8 @@ if ( !empty($model->data['repository']) &&
 
     }
   };
+
+
   
  //case mvc, only components or normal file but no types (case repository no current)
   if ( (!empty($is_mvc) || !empty($is_component)) ||
@@ -352,9 +354,10 @@ if ( !empty($model->data['repository']) &&
     !empty($tree_popup) ||
     empty($model->data['type'])
   ){
+    
    // die(var_dump("sdss",$rep_cfg));
     // Get all files and all folders of each mvc's tabs (_ctrl tab excluded)
-    if ( !empty($rep_cfg['tabs']) ){      
+    if ( !empty($rep_cfg['tabs']) ){
       foreach ( $rep_cfg['tabs'] as $i => $t ){
         if ( ($t['url'] !== '_ctrl') &&
          !empty($t['path']) &&
@@ -390,7 +393,7 @@ if ( !empty($model->data['repository']) &&
         }
       }
     }
-    else{      
+    else{
       $get($path . $cur_path, (!isset($rep_cfg['bcolor']) ? "#000000" : $rep_cfg['bcolor']) );
     }
   }//case root repository  with alias bbn-project and contain types
@@ -414,14 +417,13 @@ if ( !empty($model->data['repository']) &&
         }
       }
     }
-
     //we execute the function that will return the date for the tree of the ide
     $get($path . $cur_path, false, false, false, $types);
   }
   //else if we are in depth and we already know what types of elements we are opening and dealing with in the tree of the ide
   else if( !empty($model->data['type']) ){
     if ( $model->data['type'] === 'lib' ){
-      // lib
+      // lib      
       $get($path . $cur_path, $rep_cfg['bcolor'], false, $type);
     }
     else{
@@ -439,11 +441,11 @@ if ( !empty($model->data['repository']) &&
             )
           ){
             //case components
-            if ( $model->data['type'] === 'components' ){
+            if ( $model->data['type'] === 'components' ){              
               $get($path.$cur_path , '#44b782', $t['url'], $type);
             }
             //case mvc
-            else if ( $model->data['type'] === 'mvc' ){
+            else if ( $model->data['type'] === 'mvc' ){              
               $get($path.'mvc/'.$t['path'].$cur_path , $t['bcolor'], $t['url'], $type);
             }
           }

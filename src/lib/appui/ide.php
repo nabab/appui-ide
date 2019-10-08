@@ -1399,9 +1399,8 @@ class ide {
       ];
       if ( is_file(self::$current_file) ){
         $f['value'] = file_get_contents(self::$current_file);
-       
         if ( $preferences = $this->get_file_preferences($url) ){
-          $f = array_merge($f, $preferences);            
+          $f = array_merge($f, $preferences);
         }
         if ( $permissions = $this->get_file_permissions() ){
           $f = array_merge($f, $permissions);
@@ -1416,7 +1415,7 @@ class ide {
             }
           }
         }
-      }  
+      }
       /*
       else if ( !empty($real['tab']) &&
         !empty($real['repository']['tabs'][$real['tab']]['extensions'][0]['default'])
@@ -1912,32 +1911,32 @@ class ide {
   /**
    * Gets file's preferences
    *
-   * @param string $url The url file 
+   * @param string $url The url file
    * @return array|null
-   */  
+   */
   public function get_file_preferences(string $url = null): ?array
   {
     if ( !is_null($url) ){
       $real = $this->url_to_real($url, true);
-     
-      if ( !empty($real) ){        
-        $file = substr($real['file'], strpos($real['file'],'src/',1)+4);        
-        if ( 
-          !empty($file) && 
+      if ( !empty($real) ){
+        $file = substr($real['file'], strpos($real['file'],'src/',1)+4);
+        \bbn\x::log([$file, $real], 'vito');
+        if (
+          !empty($file) &&
           !empty($real['repository']['id']) &&
           ($id_option = $this->options->from_code($file, $real['repository']['id']))
         ){
-          $pref = $this->options->option($id_option);          
+          $pref = $this->options->option($id_option);
           if ( !empty($pref) ){
             return [
               'selections' => $pref['selections'] ?: [],
               'marks' => isset($pref['marks']) ? $pref['marks'] : [],
               'line' => (int)$pref['line'] ?: 0,
               'char' => (int)$pref['char'] ?: 0,
-            ];  
-          }        
+            ];
+          }
         }
-      }     
+      }
     }
     return null;
   }
@@ -2614,8 +2613,7 @@ class ide {
         }
       }
       else{
-        //for lib in current temporaney code
-        die(\bbn\x::dump($rep));
+        //for lib in current temporaney code        
         if ( ($rep['bbn_path'] === "BBN_APP_PATH") && (strpos($url,$rep['bbn_path'].'/'.$rep['code']) === 0) ){         
           $url = str_replace($rep['bbn_path'].'/'.$rep['code'], $rep['bbn_path'].'/'.$rep['path'], $url);
         }        

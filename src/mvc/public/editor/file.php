@@ -11,11 +11,12 @@ if ( !empty($ctrl->arguments) ){
   
   if ( $ctrl->baseURL === APPUI_IDE_ROOT.'editor/' ){   
     $ctrl->data['url'] = implode('/', $ctrl->arguments);
-    $ctrl->data['routes'] = $ctrl->get_routes();
-    $ctrl->obj->data = $ctrl->get_model();        
+    $ctrl->data['routes'] = $ctrl->get_routes(); 
+    $ctrl->obj->data = $ctrl->get_model();
     $ctrl->obj->data['root'] = APPUI_IDE_ROOT;
     $ctrl->obj->url = $ctrl->baseURL.'file/'.$ctrl->obj->data['url'];
-    $title = $ctrl->obj->data['title'];    
+    $title = $ctrl->obj->data['title'];
+    
     //case MVC set Tab
     if ( ($ctrl->obj->data['isMVC']) &&
       is_array($ctrl->obj->data['styleTab'])

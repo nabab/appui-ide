@@ -47,19 +47,24 @@
       </div>
       <div></div>
       <div class="bbn-flex-width bbn-middle">
-        <span class="bbn-flex-fill bbn-r bbn-padded"><?=_('Go to Line:')?></span>
-        <bbn-input v-model="currentLine" 
+        <span class="bbn-flex-fill bbn-r bbn-padded" v-if="showGoTOLine"><?=_('Go to Line:')?></span>
+        <bbn-numeric v-model="currentLine" 
                    type="number"
-                   :min="0"
-                   @change="goToLine"
-                   @submit="goToLine"                 
-        ></bbn-input>
-        <bbn-button icon="nf nf-mdi-run_fast"                   
-                    @click="goToLine"
-                    class="bbn-padded"
-        ></bbn-button>
+                   :min="1"
+                   @input="goToLine"
+                   @submit="goToLine"
+                   v-if="showGoTOLine"                 
+        ></bbn-numeric>        
       </div>
-
+      <div></div>
+      <div>
+        <bbn-button :icon = "showGoTOLine ? 'nf nf-fa-eye_slash' : 'nf nf-fa-eye'" 
+                    @click="()=>{
+                      showGoTOLine = !showGoTOLine
+                    }"      
+                    title="<?=_('Click for go to line')?>"
+        ></bbn-button>
+      </div>            
     </bbn-toolbar>
   </bbn-pane>
   <bbn-pane>

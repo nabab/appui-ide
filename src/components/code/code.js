@@ -1,11 +1,10 @@
 (() => {
-  return { 
+  return {
     props: ['source'],
     data(){
       //return $.extend({
-      return bbn.fn.extend({  
+      return bbn.fn.extend({
         ide: null,
-        firstInput: false,
         originalValue: this.source.value,
         initialState: {
           marks: this.source.marks,
@@ -27,7 +26,7 @@
       },
       isFile(){
         return !this.isMVC && !this.isComponent;
-      },      
+      },
       rep(){
         if ( appui.ide.repositories && appui.ide.currentRep ){
           return this.ide.repositories[appui.ide.currentRep];
@@ -39,7 +38,7 @@
           return true;
         }
         return false;
-      }, 
+      },
       isChanged(){
         return this.originalValue !== this.value;
       },
@@ -116,29 +115,33 @@
         return false;
       }
     },
-    methods: {    
-      runTracking(recentFile = true){        
-        if ( !this.firstInput ){          
-          this.firstInput = true;
-          let entity = false,
-              code = this.getRef('editor'),
-              info = code.getState(),
-              path=  this.path.substring(this.path.lastIndexOf('src/'+ this.typeProject)+4, this.path.length);
-          if ( this.isMVC ){
-            entity = this.closest('appui-ide_mvc');
-          }           
-          this.post(this.ide.root + 'actions/tracking',{
-            file: path, 
-            id_repository: this.rep.id,            
-            state: {
-              selections: info.selections !== undefined ? info.selections : false,
-              marks: info.marks !== undefined ? info.marks : false,
-              line: info.line !== undefined ? info.line : false,
-              char: info.char !== undefined ? info.char : false,
-            },
-            set_recent_file: recentFile
-          });
+    methods: {
+      runTracking(recentFile = true){
+        this.firstInput = true;
+        let entity = false,
+            code = this.getRef('editor'),
+            info = code.getState(),
+            path = '';
+        if ( !this.typeProject ){
+          path = this.fullPath.substring(this.fullPath.lastIndexOf('src/')+4, this.fullPath.length);
         }
+        else{
+          path = this.fullPath.substring(this.fullPath.lastIndexOf('src/'+ this.typeProject)+4, this.fullPath.length);
+        }
+        if ( this.isMVC ){
+          entity = this.closest('appui-ide_mvc');
+        }
+        this.post(this.ide.root + 'actions/tracking',{
+          file: path,
+          id_repository: this.rep.id,
+          state: {
+            selections: info.selections !== undefined ? info.selections : false,
+            marks: info.marks !== undefined ? info.marks : false,
+            line: info.line !== undefined ? info.line : false,
+            char: info.char !== undefined ? info.char : false,
+          },
+          set_recent_file: recentFile
+        });
       },
       getReposiotryProject(){
         if ( appui.ide.repositories && appui.ide.currentRep ){
@@ -158,9 +161,7 @@
          (this.initialState !== state) &&
          (state !== false)
         ){
-
           let pathHistory = this.filePath;
-
           if ( this.isProject && this.isMVC ){
             pathHistory = "";
             let arr = this.filePath.split('/'),
@@ -176,7 +177,7 @@
               arr.splice(pos, 1);
               pathHistory = arr.join('/');
             }
-          }          
+          }
           let obj = {
             repository: this.isProject ? this.getReposiotryProject() : this.rep,
             typeProject: this.typeProject,
@@ -192,7 +193,7 @@
             char: state.char,
             code: editor.value,
             filePath : pathHistory,
-            code_file_pref: this.path.substring(this.path.lastIndexOf('src/'+ this.typeProject)+4, this.path.length),            
+            code_file_pref: this.path.substring(this.path.lastIndexOf('src/'+ this.typeProject)+4, this.path.length)
           };
           this.post(this.ide.root + "actions/save", obj , (d) => {
             let tab = this.closest('bbn-container'),
@@ -255,7 +256,7 @@
           return true;
         }
       },
-      test(){        
+      test(){
         if ( this.isMVC ){
           let pathMVC = this.ide.path;
           if ( pathMVC.indexOf('mvc/') === 0 ){
@@ -280,7 +281,7 @@
                   content: d.content,
                   url: 'output' + idx,
                   selected: true
-                });                
+                });
                 this.$nextTick(()=>{
                   tn.router.route('output' + idx);
                 });
@@ -296,7 +297,7 @@
               }
               else {
                 //this.closest("bbn-container").popup($("<div/>").append(document.importNode(oDocument.documentElement, true)).html(), "Problem with SVG");
-                let divElement = document.createElement('div').innerHTML = document.importNode(oDocument.documentElement, true);                
+                let divElement = document.createElement('div').innerHTML = document.importNode(oDocument.documentElement, true);
                 this.closest("bbn-container").popup(divElement.innerHTML, "Problem with SVG");
               }
               break;
@@ -305,48 +306,45 @@
           }
         }
       },
-      getLine(){        
+      getLine(){
         appui.ide.currentLine = this.getRef('editor').widget.getCursor().line;
        // appui.ide.disabledLine = false
-      }, 
-      goLine(lineNum){
-        let code = this.getRef('editor'),   
-            obj = {
-              line: parseInt(lineNum)-1,
-              char: 0
-            };                     
-        code.loadState(obj);                   
       },
-      setState(){        
-        const code = this.getRef('editor');        
+      goLine(lineNum){
+        lineNum = parseInt(lineNum);
+        let code = this.getRef('editor'),
+            obj = {
+              line: lineNum === 0  ? 0 : lineNum - 1,
+              char: 0
+            };
+        bbn.fn.log("DDDEDEDE", obj);
+        code.loadState(obj);
+      },
+      setState(){
+        const code = this.getRef('editor');
         //case for serach a content
         if ( (appui.ide.search.link !== undefined)  && (appui.ide.cursorPosition.line > 0 || appui.ide.cursorPosition.ch > 0) ){
-         /* code.widget.focus();
-          setTimeout(() => {
-            code.cursorPosition(appui.ide.cursorPosition.line, appui.ide.cursorPosition.ch);            
-          }, 800);
-         */
-          code.loadState( {
+          code.loadState({
             line: parseInt(appui.ide.cursorPosition.line),
             char: parseInt(appui.ide.cursorPosition.ch),
           });
-          appui.ide.currentLine = parseInt(appui.ide.cursorPosition.line)+1;     
+          appui.ide.currentLine = parseInt(appui.ide.cursorPosition.line)+1;
         }
-        else{        
+        else{
           setTimeout(() => {
             let state = bbn.fn.extend({}, this.initialState, true);
             state.line = state.line === false ?  parseInt(0) :  parseInt(state.line);
-            state.char = state.char === false ?  parseInt(0) :  parseInt(state.char);            
-            code.loadState(state);  
-            appui.ide.currentLine =  parseInt(state.line)+1;                  
+            state.char = state.char === false ?  parseInt(0) :  parseInt(state.char);
+            bbn.fn.log("STATE", state)
+            code.loadState(state);
+            appui.ide.currentLine =  parseInt(state.line)+1;
           }, 800);
         }
         //for list recent files
         if ( appui.ide.readyMenu ){
           appui.ide.getRecentFiles();
-
           //for  code  first input tracking
-          let codeEle = this.getRef('editor').$el;       
+          let codeEle = this.getRef('editor').$el;
           if ( codeEle !== undefined ){
             codeEle.addEventListener('input', ()=>{
               this.runTracking();
@@ -357,23 +355,22 @@
       }
     },
     beforeMount(){
-      this.ide = this.closest('.appui-ide-source-holder').$data;      
+      this.ide = this.closest('.appui-ide-source-holder').$data;
     },
-    mounted(){     
+    mounted(){
       //for get current editor (computed currentEditor)
-      if ( appui.ide.runGetEditor ){        
+      if ( appui.ide.runGetEditor ){
         appui.ide.$set(appui.ide, 'runGetEditor', false)
       }
       this.$nextTick(()=>{
         appui.ide.$set(appui.ide, 'runGetEditor', true);
-      });  
-    },   
+      });
+    },
     watch: {
       isChanged(isChanged){
         let tabNav = this.closest('bbn-tabnav');
         tabNav.tabs[tabNav.selected].isUnsaved = isChanged;
       }
-    },
-   
+    }
   }
 })();

@@ -9,9 +9,9 @@
  */
 
 if ( !empty($model->data['url']) && isset($model->inc->ide) ){
-  $url = $model->data['url'];
-  $rep = $model->inc->ide->repository_from_url($model->data['url']);
-  $file = $model->inc->ide->url_to_real($model->data['url']);
+  $url = $model->data['url']; 
+  $rep = $model->inc->ide->repository_from_url($model->data['url']); 
+  $file = $model->inc->ide->url_to_real($model->data['url']);  
   $route = '';
   foreach ( $model->data['routes'] as $i => $r ){
     if ( strpos($file, $r['path']) === 0 ){
@@ -20,9 +20,11 @@ if ( !empty($model->data['url']) && isset($model->inc->ide) ){
   }
   $path = str_replace($rep, '' , $url);
   $path = substr($path, 0, strpos($path, '/_end_'));
+ 
   $repos = $model->inc->ide->repositories();
   $repository = $repos[$rep];
   $f = $model->inc->ide->decipher_path($model->data['url']);
+ 
   if ( is_array($repository) &&
     !empty($model->inc->ide->is_project($model->data['url'])) ||
     !empty($repository['project'])
@@ -53,6 +55,7 @@ if ( !empty($model->data['url']) && isset($model->inc->ide) ){
     }
   }
   $arr = explode("/",$model->data['url']);
+  
   if ( is_array($arr) ){
     array_pop($arr);
     array_pop($arr);

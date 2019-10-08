@@ -8,7 +8,7 @@
         });
       }
       //return $.extend({}, this.source, {
-      return bbn.fn.extend({}, this.source, {      
+      return bbn.fn.extend({}, this.source, {
         selected: 0,
         url: this.source.root + 'editor',
         path: '',
@@ -66,9 +66,9 @@
               icon: 'nf nf-fa-times_circle',
               text: bbn._('Close all tabs'),
               command: this.closeTabs
-            }, { 
-              text: bbn._('Recent files'),          
-              icon: 'nf nf-fa-file',          
+            }, {
+              text: bbn._('Recent files'),
+              icon: 'nf nf-fa-file',
               items: []
             }
           ]}, {
@@ -152,23 +152,24 @@
           }
         ],
         type: false,
-        nodeParent: false,        
+        nodeParent: false,
         urlTreeParser: false,
-        sourceTreeParser:{                        
+        sourceTreeParser:{
           error: false,
           treeData: false,
           class: false,
           idElement: false
-        },       
+        },
         runGetEditor: false,
         errorTreeParser: false,
         treeParser: false,
-        readyMenu: false,        
-        currentLine: 0,        
-        disabledLine: true
+        readyMenu: false,
+        currentLine: 0,
+        disabledLine: true,
+        showGoTOLine: false
       })
     },
-    computed: {      
+    computed: {
       listRootProject(){
         let roots = this.source.projects.roots.slice();
         //temporaney disabled
@@ -191,53 +192,53 @@
       tabSelected(){
         return this.getRef('tabstrip').selected;
       },
-      runRepository(){  
+      runRepository(){
         let rep = this.getRef('tabstrip').tabs[this.getRef('tabstrip').selected].source.repository;
         this.currentRep = rep;
         return rep;
       },
       currentURL(){
-        if ( this.getRef('tabstrip') ){          
+        if ( this.getRef('tabstrip') ){
           return this.getRef('tabstrip').currentURL;
         }
-        return '';  
+        return '';
       },
-      isSettings(){        
-        return this.currentURL.indexOf("/_end_/settings") !== -1; 
-      },      
-      currentEditor(){        
+      isSettings(){
+        return this.currentURL.indexOf("/_end_/settings") !== -1;
+      },
+      currentEditor(){
         if ( this.runGetEditor || (this.currentURL !== false) ){
-            let tabnav = this.$refs.tabstrip.getSubTabNav();        
+            let tabnav = this.$refs.tabstrip.getSubTabNav();
             if ( tabnav ){
               let currentTab = tabnav.activeRealTab;
-              if ( currentTab ){              
+              if ( currentTab ){
                 if ( currentTab.find('appui-ide-code') ){
                   /*if ( this.errorTreeParser ){
-                    this.$set(this,'errorTreeParser',false);  
+                    this.$set(this,'errorTreeParser',false);
                   }
                   this.$set(this,'sourceTreeParser',false);*/
                   return currentTab.find('bbn-code')
                 }
-              }            
-            }          
+              }
+            }
         }
-        return false;        
-      },     
+        return false;
+      },
       currentId(){
-        if ( this.currentEditor ){       
+        if ( this.currentEditor ){
           return this.currentEditor.closest('appui-ide-code').source.id;
         }
         return false;
       },
-      //temporanely name 
+      //temporanely name
       possibilityParser(){
-        if ( this.currentEditor ){          
+        if ( this.currentEditor ){
           if ( this.currentEditor.closest('appui-ide-code').isClass ){
             return 'class';
           }
           else if ( this.currentEditor.closest('appui-ide-code').isComponent ){
             return 'component';
-          }          
+          }
         }
         return false;
       },
@@ -303,7 +304,7 @@
         if ( this.legendParser ){
           return "nf nf-fa-eye_slash";
         }
-        return  "nf nf-fa-eye";        
+        return  "nf nf-fa-eye";
       }
     },
     methods: {
@@ -311,11 +312,11 @@
         let lastLine = this.currentEditor.widget.lastLine(),
             line = this.currentLine;
         if ( line > lastLine ){
-          line = lastLine;            
+          line = lastLine;
         }
         this.currentEditor.closest('appui-ide-code').goLine(line);
-      },     
-      selectRecentFile(file, obj){       
+      },
+      selectRecentFile(file, obj){
         this.getRef('tabstrip').load(obj.path);
       },
       setReadyMenu(){
@@ -323,10 +324,10 @@
           this.readyMenu = true;
           this.$nextTick(()=>{
             this.getRecentFiles();
-          });        
+          });
         }
       },
-      getRecentFiles(){        
+      getRecentFiles(){
         this.post(this.root + 'editor/get_recent_files',{}, d=>{
           let menu = this.getRef('mainMenu').currentData[0]['data']['items'];
           if ( d.success ){
@@ -338,39 +339,39 @@
                 path: v.path,
                 command: (v, i) =>{
                   this.selectRecentFile(v, i);
-                }  
+                }
               });
-            });            
+            });
             if ( menu !== undefined ){
               menu[menu.length-1]['items'] = arr;
-            }            
+            }
           }
           else{
             menu[menu.length-1]['items'] = [];
             this.recentFiles = false;
-          } 
-        });        
-      },    
+          }
+        });
+      },
       //for parser tree
-      getTreeParser(){ 
-        this.treeParser = false;               
-        if ( this.possibilityParser === 'class' ){         
+      getTreeParser(){
+        this.treeParser = false;
+        if ( this.possibilityParser === 'class' ){
           this.post(this.source.root + 'parser',{
             cls: this.currentId,
             project: this.isProject
-          }, d =>{ 
+          }, d =>{
             let obj = {
               tree: false,
-              class: false,                                        
-            };           
+              class: false,
+            };
             if ( d.data.success ){
-              if ( this.possibilityParser === 'class' ){                
-                bbn.fn.each(d.data.tree, (val, idx) =>{              
+              if ( this.possibilityParser === 'class' ){
+                bbn.fn.each(d.data.tree, (val, idx) =>{
                   bbn.fn.each(val['items'], (ele,i)=>{
                      ele['items'] =  bbn.fn.order(ele['items'], 'name', 'ASC')
                   });
                 })
-              }              
+              }
               this.sourceTreeParser.treeData = d.data.tree;
               this.sourceTreeParser.class = d.data.class;
               this.sourceTreeParser.error = false;
@@ -383,10 +384,10 @@
               this.sourceTreeParser.error = true;
               this.treeParser = false;
             }
-          });         
+          });
         }
         else if ( this.possibilityParser === 'component' ){
-          this.sourceTreeParser.treeData = this.parserComponent();                    
+          this.sourceTreeParser.treeData = this.parserComponent();
           if ( this.sourceTreeParser.treeData === false ){
             this.sourceTreeParser.error = true;
           }
@@ -394,9 +395,9 @@
             this.sourceTreeParser.idElement = this.currentId;
             this.treeParser = true;
           }
-        }  
-      },      
-      parserComponent(){        
+        }
+      },
+      parserComponent(){
         if ( this.currentEditor &&
           (this.possibilityParser === "component") &&
           ( this.currentEditor.mode === "js")
@@ -405,32 +406,29 @@
               src = [],
               ele = {},
               values = [];
-         
-          bbn.fn.each(obj, (content, prop) => {            
-           
+          bbn.fn.each(obj, (content, prop) => {
             if ( (prop === 'methods') || (prop === 'computed') || (prop === 'watch') ){
-              values = Object.keys(content);             
+              values = Object.keys(content);
             }
             else if ( prop === 'props' ){
               values = content
             }
-            /*else if ( prop === 'data' ){            
-              values = Object.keys(obj.data());                             
+            /*else if ( prop === 'data' ){
+              values = Object.keys(obj.data());
             }*/
             else{
               values = false
             }
-           
             ele = {
               text: prop,
               name: prop,
               num: !values ? 0 : values.length,
-              numChildren: !values ? 0 : values.length,                  
+              numChildren: !values ? 0 : values.length,
               items: []
             };
 
             if( ele.num > 0 ){
-              bbn.fn.each(values, (val, i)=>{               
+              bbn.fn.each(values, (val, i)=>{
                 ele.items.push({
                   text: val,
                   name: val,
@@ -440,8 +438,8 @@
                   component: true,
                   item: []
                 });
-              });  
-            }            
+              });
+            }
             src.push(ele);
           });
           return src;
@@ -449,34 +447,34 @@
         return false;
       },
       //for parser class
-      /*parserClass(){        
-        if ( this.possibilityParser === "class" ){       
+      /*parserClass(){
+        if ( this.possibilityParser === "class" ){
           this.post(this.source.root + 'parser',{
-            cls: this.currentId,            
-          }, d =>{ 
+            cls: this.currentId,
+          }, d =>{
             let obj = {
               tree: false,
               class: false
-            };           
+            };
             if ( d.data.success ){
               if ( this.possibilityParser === 'class' ){
                 bbn.fn.each(d.data.tree, (val, idx) =>{
-                  bbn.fn.each(val['items'], (ele,i)=>{            
+                  bbn.fn.each(val['items'], (ele,i)=>{
                     ele['items'] =  bbn.fn.order(ele['items'], 'name', 'ASC')
                   });
-                })               
+                })
               }
               obj.tree = d.data.tree;
               obj.class = d.data.class;
               bbn.fn.log("aaadededede", obj)
             }
-          });          
+          });
         }
         this.$nextTick(()=>{
-          if ( obj !== undefined ) 
+          if ( obj !== undefined )
           return obj;
         });
-      },*/      
+      },*/
       managerTypeDirectories(){
         this.post(this.source.root + 'directories/data/types', d => {
           if ( d.data.success ){
@@ -701,7 +699,7 @@
        *
        *
        */
-      closeTab(){       
+      closeTab(){
         //this.$nextTick(()=>{
           let ctrlChangeCode = this.getRef('tabstrip').getVue(this.$refs.tabstrip.selected).find('appui-ide-code').isChanged
 
@@ -730,8 +728,7 @@
       closeTabs(){
         //let max= this.getRef('tabstrip').tabs.length;
         this.$refs.tabstrip.closeAll();
-       /* while(max !== 1){          
-               
+       /* while(max !== 1){
           this.closeTab();
             max--;
         }*/
@@ -772,7 +769,7 @@
       treeMapper(a){
         if ( a.folder ){
           //$.extend(a, {
-          bbn.fn.extend(a, {  
+          bbn.fn.extend(a, {
             repository: this.currentRep,
             repository_cfg: this.repositories[this.currentRep],
             onlydirs: false,
@@ -792,20 +789,7 @@
        *
        */
       treeContextMenu(n , i){
-        let objContext = [
-          /*{
-            icon: n.data.type && n.data.type === 'components' ? 'nf nf-fa-vuejs' : 'nf nf-fa-file',
-            text: n.data.type && n.data.type === 'components' ? bbn._('New component') : bbn._('New file'),
-            command: (node) => {
-              this.newElement(node)
-            }
-          }, {
-            icon: 'nf nf-fa-folder',
-            text: n.data.type === 'components' ? bbn._('New directory component') : bbn._('New directory'),
-            command: (node) => {
-              this.newDir(node)
-            }
-          },*/ {
+        let objContext = [{
             icon: 'nf nf-fa-edit',
             text: bbn._('Rename'),
             command: (node) => {
@@ -862,7 +846,7 @@
         }
         if ( n.data.folder ){
           let obj = objContext.slice(),
-              arr = [ {
+              arr = [{
                 icon: 'nf nf-fa-folder',
                 text: n.data.type === 'components' ? bbn._('New directory component') : bbn._('New directory'),
                 command: (node) => {
@@ -881,7 +865,7 @@
                   let comp = n.data.type && n.data.type === 'components'  ? true : false;
                   this.searchOfContext(node, comp, n.data.is_vue);
                 }
-              }];         
+              }];
 
           bbn.fn.each(arr , (item ,id)=>{
             obj.unshift(item);
@@ -938,8 +922,8 @@
             }
           });
           // profiling
-          if ( (n.data.type === 'mvc') && 
-            !n.data.folder && 
+          if ( (n.data.type === 'mvc') &&
+            !n.data.folder &&
             ((n.data.tab === 'php') || (n.data.tab === 'private'))
           ){
             obj.push({
@@ -950,7 +934,7 @@
                 root = root !== undefined ? root+'/' : '';
                 bbn.fn.link('ide/profiler/url/'+ root + node.data.path);
                 bbn.fn.log("PRofiling",'ide/profiler/url/'+ root + node.data.path)
-              }  
+              }
             });
           }
           return obj;
@@ -980,7 +964,7 @@
        * @param d The node data
        * @param n The node
        */
-      treeNodeActivate(d){        
+      treeNodeActivate(d){
         if ( !d.data.folder || (d.data.folder && d.data.is_vue) ){
           if( !this.isProject && !this.isMVC && this.existingTab(d) ){
             bbn.fn.link(
@@ -997,7 +981,6 @@
         }
       },
 
-      
       /** ###### TAB ###### */
       /*
        * check if what we are looking for is in the open tabs
@@ -1030,9 +1013,10 @@
             file.data.name +
             '/_end_' + (tab.indexOf('_') === 0 ? '/' + tab : tab);
         }
+      //  else if ( this.currentRep === )
         else{
           link =  'file/' +  this.currentRep + file.data.path + '/_end_/' + (file.data.tab !== false ? file.data.tab : 'code');
-        }        
+        }
         if ( link ){
           this.getRef('tabstrip').load(link);
         }
@@ -1109,7 +1093,7 @@
        * Sets the font to editors
        * @param font
        * @param font_size
-      
+
       setFont(font, font_size){
         //$("div.CodeMirror", this.$el).css("font-family", font ? font : this.font);
         this.$el.querySelector("div.CodeMirror").style.font_family =  font ? font : this.font;
@@ -1176,23 +1160,23 @@
             }
           }
         }
-        else {  
+        else {
           if ( this.isSettings ){
             let key = this.currentURL.substring(0, this.currentURL.indexOf('_end_/')+5),
-                mvc = this.findByKey(key).find('appui-ide-mvc').$data,            
+                mvc = this.findByKey(key).find('appui-ide-mvc').$data,
                 pathMVC = mvc.path;
             if ( pathMVC.indexOf('mvc/') === 0 ){
               pathMVC = pathMVC.replace("mvc/","");
             }
             let link = (mvc.route ? mvc.route + '/' : '') +
             (pathMVC === 'mvc' ? '' : pathMVC + '/') +  mvc.filename;
-  
-            appui.find('bbn-router').load(link, true);  
+
+            appui.find('bbn-router').load(link, true);
           }
           else{
             let code = this.getActive(true);
             code.test();
-          }          
+          }
         }
       },
 
@@ -1400,16 +1384,13 @@
         else{
           let tab = this.getRef('tabstrip').tabs[this.tabSelected].source,
               path = tab.path.split('/');
-          
-            path.shift();
-          
-         
-          let filename = path.pop();          
+          path.shift();
+          let filename = path.pop();
           path = path.join('/');
           let  tabInfo = {
                 mvc: tab.isMVC,
                 isComponent: this.getActive(true).isComponent,
-                //name: !tab.isMVC ? tab.filename : '',                
+                //name: !tab.isMVC ? tab.filename : '',
                 //path: tab.isMVC ? tab.path : '',
                 path: tab.isMVC ? path : '',
                 name: !tab.isMVC ? tab.filename : filename,
@@ -1477,7 +1458,7 @@
               filename = filename.split('/');
               filename.pop();
             src.nodeData.path = 'components/' + filename.join('/')+'/';
-            src.component_vue =  true;                       
+            src.component_vue =  true;
             if ( onlyComponent ){
               title = title = bbn._('Rename only component vue');
             }
@@ -1489,14 +1470,13 @@
         else{
           title =  node.data.folder ? bbn._('Rename folder') : bbn._('REname');
         }
-        
-        this.getPopup().open({            
+        this.getPopup().open({
           width: 370,
           height: 150,
           title: src.isComponent ? bbn._('Rename component') : bbn._('Rename'),
           component: 'appui-ide-popup-rename',
           source: src
-        });  
+        });
       },
 
       /**
@@ -1903,15 +1883,15 @@
         if ( this.currentEditor ){
           this.currentEditor.foldAll();
         }
-      },  
+      },
     },
     created(){
       appui.ide = this;
-    }, 
-    watch: {     
-      sourceParser(newVal, oldVal){        
+    },
+    watch: {
+      sourceParser(newVal, oldVal){
         if ( (newVal !== oldVal) && (newVal !== false) ){
-          this.showTreeParser = false;          
+          this.showTreeParser = false;
           this.$nextTick(()=>{
             this.showTreeParser = true;
           })
@@ -1919,18 +1899,18 @@
         else{
           this.showTreeParser = false;
         }
-      },     
+      },
       currentRep(newVal, oldVal){
         if ( this.repositories[oldVal] && this.repositories[newVal].alias_code !== this.repositories[oldVal].alias_code ){
           this.typeTree = false;
           this.path = '';
-        }       
+        }
         if ( newVal !== oldVal ){
           this.treeReload();
-        }        
-      },      
+        }
+      },
       typeProject(newVal, oldVal){
-        this.path= newVal;        
+        this.path= newVal;
         this.typeTree = newVal;
         this.$nextTick(()=>{
           this.treeReload();

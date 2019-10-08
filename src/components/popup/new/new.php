@@ -6,18 +6,7 @@
 >
 
   <div class="bbn-padded bbn-flex-height">
-    <div class="bbn-flex-fill bbn-grid-fields">
-
-      <label v-if="isMVC || (source.isFile && isComponent)"><?=_("Type")?></label>
-      <div  v-if="isMVC || (source.isFile && isComponent)">
-        <bbn-dropdown :source="types"
-                      v-model="data.tab"
-                      required="required"
-                      class="bbn-w-100"
-        ></bbn-dropdown>
-      </div>
-
-      <label><?=_("Name")?></label>
+    <div class="bbn-flex-fill bbn-grid-fields"><label><?=_("Name")?></label>
       <div class="bbn-flex-width">
         <div class="bbn-flex-fill">
           <bbn-input v-model="data.name"
@@ -30,6 +19,14 @@
                       v-model="data.extension"
                       required="required"
                       style="width: 100px"
+        ></bbn-dropdown>
+      </div>
+      <label v-if="isMVC || (source.isFile && isComponent)"><?=_("Type")?></label>
+      <div  v-if="isMVC || (source.isFile && isComponent)">
+        <bbn-dropdown :source="types"
+                      v-model="data.tab"
+                      required="required"
+                      class="bbn-w-100"
         ></bbn-dropdown>
       </div>
       <label><?=_("Path")?></label>

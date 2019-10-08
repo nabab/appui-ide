@@ -33,10 +33,8 @@ if ( !empty($model->data['url']) && isset($model->inc->ide) ){
       return $perm;
     }
   }
-  else {  
-    
+  else {
     if ( $ret = $model->inc->ide->load($model->data['url']) ){
-      
       if ( isset($ret['permissions']) ){
         unset($ret['permissions']);
       }
