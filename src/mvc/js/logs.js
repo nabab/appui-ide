@@ -252,9 +252,8 @@
     },
     watch: {
       fileLog: function(val, old){
-        
-        //this.closest("bbn-router").route(this.source.root + 'logs/' + val.toString());
-        
+        this.closest("bbn-router").route(this.source.root + 'logs/' + val.toString());
+
         if ( val && !this.showText ){
           this.showText = true
         }

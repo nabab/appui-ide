@@ -37,7 +37,12 @@ if ( !empty($model->data['url']) && isset($model->inc->ide) ){
         $styleTabType[$type['url']] = [
           'bcolor' => $type['bcolor'],
           'fcolor' => $type['fcolor'],
-          'icon' => $type['icon']
+          'icon' => $type['icon'],
+          'menu' => [
+            'text' => "ded",
+            'icon' => 'nf nf fa-code',
+            'items' => []
+          ]
         ];
         //temporaney
         $typeRep = $type['url'] = $type['url'] === 'lib' ? 'cls' : $type['url'];        

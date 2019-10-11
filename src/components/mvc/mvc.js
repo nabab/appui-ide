@@ -93,7 +93,7 @@
               icon: 'nf nf-fa-cogs',
               text: bbn._('switch to') + ' <strong>' + ext + '</strong>',
               key: ext,
-              command: this.changeExtension
+              action: this.changeExtension
             });
           }
           tabsMenu[i] = exts;
@@ -111,12 +111,13 @@
         tabsMenu: tabsMenu,
         permissions: ide.permFile,
         codesBlock: listCodes,
-        tabsRepository: this.source.repository_content.tabs['mvc'] !== undefined ? this.source.repository_content.tabs['mvc'][0] : this.source.repository_content.tabs
+        tabsRepository: this.source.repository_content.tabs['mvc'] !== undefined ? this.source.repository_content.tabs['mvc'][0] : this.source.repository_content.tabs,
+        //routerSource: []
       });
     },
     computed: {
       routerSource(){
-        if ( this.emptyTabs !== undefined ){
+        if ( (this.tabsRepository !== undefined) && (this.emptyTabs !== undefined) ){
           let ctrlRepo = this.tabsRepository[bbn.fn.search(this.tabsRepository, 'url' ,'_ctrl')];
           let r = [{
             load: true,
@@ -167,11 +168,51 @@
       },
       countCtrl(){
         return "_".repeat(this.sctrl.length) + 'ctrl'
-
+      },
+      tabsReady(){
+        return this.routerSource.length ? true : false;
       }
-    },    
-    methods: {      
-      search: bbn.fn.search,      
+    },
+    methods: {
+      /*setRouterSource(){
+        if ( this.emptyTabs !== undefined ){
+          let ctrlRepo = this.tabsRepository[bbn.fn.search(this.tabsRepository, 'url' ,'_ctrl')];
+          let r = [{
+            load: true,
+            cached: false,
+            title: this.titleTabCtrl,
+            bcolor: ctrlRepo.bcolor,
+            fcolor: ctrlRepo.fcolor,
+            menu: this.listCtrls(),
+            url: this.countCtrl
+          }, {
+            load: true,
+            url: "settings",
+            disabled: !this.source.settings,
+            title: bbn._("Settings"),
+            icon: "nf nf-fa-cogs"
+          }];
+          bbn.fn.each(this.tabsRepository, (tab, idx) => {
+            if ( tab.url !== '_ctrl' ){
+              r.push({
+                static: true,
+                load: true,
+                url: tab.url,
+                title: tab.title,
+                icon: tab.icon,
+                notext: true,
+                bcolor: tab.bcolor ,
+                fcolor: tab.fcolor,
+                cls: this.emptyTabs.indexOf(tab.url) !== -1 ? 'empty-tab' : '',
+                menu: this.getMenu(tab.url)
+              });
+            }
+          });
+          return r;
+        }
+        return [];
+      },*/
+      search: bbn.fn.search,
       listCtrls(){
         let path = "",
             url  = "_ctrl",
@@ -180,7 +221,7 @@
               title: 'CTRL',
               icon: 'nf nf-fa-cogs',
               url: url,
-              command: (a) => {
+              action: (a) => {
                 this.loadCtrl(a);
               }
             }];
@@ -191,7 +232,7 @@
             title: `CTRL${(i + 1)}`,
             icon: 'nf nf-fa-cogs',
             url: "_".repeat(i + 1) + url,
-            command: (a) => {
+            action: (a) => {
               this.loadCtrl(a);
             }
           });
@@ -231,7 +272,7 @@
               addCode.items.push({
                 icon: 'nf nf-fa-code',
                 text: i,
-                command: () => {
+                action: () => {
                   this.addSnippet(this.codesBlock[id].codes[i])
                 }
               });
@@ -242,11 +283,12 @@
         let arr = this.tabsMenu[url] ? this.tabsMenu[url].slice() : [];
         //add reload in menu
         arr.push({
-          icon: 'zmdi zmdi-refresh',
+          icon: 'nf nf-fa-refresh',
           text: bbn._("Refresh code"),
-          command: this.reloadTab
+          action: this.reloadTab
         })
         //add in menu the the possibility of adding the codes
+        bbn.fn.log("MEnuuuuuuuuu", addCode, url)
         arr.push(addCode);
         return arr;
       },//method for add block of code menu sub tab
@@ -308,6 +350,10 @@
           tab.menu.splice(idx, 1);
         }
       }
-    }
+    },
+   /* mounted(){
+      console.log("ddd");
+      this.routerSource = this.setRouterSource();
+    }*/
   }
 })();

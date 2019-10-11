@@ -10,13 +10,14 @@
                       :source="ddRepData"
                       v-model="currentRep"
                       style="width: 250px"
-        ></bbn-dropdown>      
+        ></bbn-dropdown>
       </div>
       <div></div>
       <div>
         <bbn-button title="<?=_('Refresh files list')?>"
                     @click="treeReload()"
                     icon="nf nf-oct-sync"
+                    style="margin-left: 2px"
         ></bbn-button>
       </div>
       <div></div>
@@ -24,47 +25,51 @@
         <bbn-button title="<?=_('Test code!')?>"
                     @click="test"
                     icon="nf nf-fa-magic"
+                    style="margin-left: 2px"
         ></bbn-button>
       </div>
       <div>
         <bbn-button title="<?=_('Show History')?>"
                     @click="history"
                     icon="nf nf-fa-history"
+                    style="margin-left: 2px"
         ></bbn-button>
       </div>
       <div>
         <bbn-button title="<?=_('Show strings and translations')?>"
                     @click="i18n"
                     icon="nf nf-fa-flag"
+                    style="margin-left: 2px"
         ></bbn-button>
       </div>
       <div></div>
       <div>
         <bbn-menu ref="mainMenu"
                   :source="menu"
-                  @ready="setReadyMenu"                
+                  @ready="setReadyMenu"
+                  style="margin-left: 2px"
         ></bbn-menu>
       </div>
       <div></div>
       <div class="bbn-flex-width bbn-middle">
         <span class="bbn-flex-fill bbn-r bbn-padded" v-if="showGoTOLine"><?=_('Go to Line:')?></span>
-        <bbn-numeric v-model="currentLine" 
+        <bbn-numeric v-model="currentLine"
                    type="number"
                    :min="1"
                    @input="goToLine"
                    @submit="goToLine"
-                   v-if="showGoTOLine"                 
-        ></bbn-numeric>        
+                   v-if="showGoTOLine"
+        ></bbn-numeric>
       </div>
       <div></div>
       <div>
-        <bbn-button :icon = "showGoTOLine ? 'nf nf-fa-eye_slash' : 'nf nf-fa-eye'" 
+        <bbn-button :icon = "showGoTOLine ? 'nf nf-fa-eye_slash' : 'nf nf-fa-eye'"
                     @click="()=>{
                       showGoTOLine = !showGoTOLine
-                    }"      
+                    }"
                     title="<?=_('Click for go to line')?>"
         ></bbn-button>
-      </div>            
+      </div>
     </bbn-toolbar>
   </bbn-pane>
   <bbn-pane>
@@ -122,8 +127,8 @@
                         :map="treeMapper"
                         :icon-color="color"
                         :filter-string="searchFile"
-                        :storage-full-name="'appui-ide-tree-' + currentRep"                        
-              ></bbn-tree>              
+                        :storage-full-name="'appui-ide-tree-' + currentRep"
+              ></bbn-tree>
             </div>
           </div>
         </div>
@@ -149,7 +154,7 @@
       <bbn-pane :size="220"
                 :collapsible="true"
                 :collapsed="true"
-                :resizable="true"                
+                :resizable="true"
       >
         <div class="bbn-flex-height">
           <div class="bbn-spadded">
@@ -160,18 +165,18 @@
             ></bbn-button>
           </div>
           <appui-ide-parser v-if="treeParser"
-                            :source="sourceTreeParser"                            
+                            :source="sourceTreeParser"
           ></appui-ide-parser>
           <div v-else
                class="bbn-middle bbn-h-100 bbn-padded"
-          > 
+          >
             <div class="bbn-card bbn-vmiddle bbn-c bbn-lpadded">
-              <span class="bbn-b bbn-xl bbn-c">                    
+              <span class="bbn-b bbn-xl bbn-c">
                 <?=_("Parser class or file js in component")?>
               </span>
             </div>
-          </div>      
-        </div>         
+          </div>
+        </div>
       </bbn-pane>
     </bbn-splitter>
   </bbn-pane>

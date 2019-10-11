@@ -13,17 +13,18 @@ foreach ( $log_files as $lf ){
 }
 ksort($res);
 
+//case delete file  in folder
 if( !empty($model->data['delete_file']) ){
-  $path = BBN_DATA_PATH.'logs/'.$model->data['delete_file'];  
+  $path = BBN_DATA_PATH.'logs/'.$model->data['delete_file'];
   if ( is_file($path) ){
     if ( !empty(\bbn\file\dir::delete($path)) ){
       return ['success' => true];
     }
-  }  
+  }
 }
-else if ( !empty($res[$model->data['log']]) ){  
+else if ( !empty($model->data['log']) && !empty($res[$model->data['log']]) ){
   $output = [];
-  if ( $model->data['clear'] ){    
+  if ( $model->data['clear'] ){
     file_put_contents($res[$model->data['log']], '');
   }
   else{

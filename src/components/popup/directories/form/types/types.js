@@ -448,7 +448,7 @@
               title: "Confirm",
               class: "bbn-primary",
               icon: "nf nf-fa-check_circle",
-              command: this.closeForm
+              action: this.closeForm
             }]
           }
         },

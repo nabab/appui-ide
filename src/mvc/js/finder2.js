@@ -239,25 +239,25 @@
           {
             icon: 'nf nf-fa-copy',
             text: bbn._('Copy'),
-            command: (node) => {
+            action: (node) => {
               this.copy(node)
             }
           },{
             icon: 'nf nf-fa-edit',
             text: bbn._('Modify'),
-            command: (node) => {
+            action: (node) => {
               this.edit(node)
             }
           }, {
             icon: 'nf nf-fa-download',
             text: bbn._('Download'),
-            command: (node) => {
+            action: (node) => {
               this.download(node)
             }
           }, {
             icon: 'nf nf-fa-trash_alt',
             text: bbn._('Delete'),
-            command: (node) => {
+            action: (node) => {
               this.delete(node)
             }
           },  
@@ -266,7 +266,7 @@
           objContext.push({
             icon: 'nf nf-fa-paste',
             text: bbn._('Paste'),
-            command: (node) => {
+            action: (node) => {
               this.paste(node)
             }
           });
@@ -277,7 +277,7 @@
         let objContext = [{
           icon: 'nf nf-fa-paste',
           text: bbn._('Paste'),
-          command: (node) => {
+          action: (node) => {
             this.paste_context(node)
           }
         }];

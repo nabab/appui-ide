@@ -38,34 +38,34 @@
             items: [{
               icon: 'nf nf-fa-file',
               text: bbn._('Element'),
-              command: this.newElement
+              action: this.newElement
             }, {
               icon: 'nf nf-fa-folder',
               text: bbn._('Directory'),
-              command: this.newDir
+              action: this.newDir
             }]
             }, {
               icon: 'nf nf-fa-save',
               text: bbn._('Save'),
-              command: this.save
+              action: this.save
             }, {
               icon: 'nf nf-fa-edit',
               text: bbn._('Rename'),
-              command: () => {
+              action: () => {
                 this.rename(this.getRef('tabstrip')['tabs'][this.getRef('tabstrip').selected], true);
               }
             }, {
               icon: 'nf nf-fa-trash',
               text: bbn._('Delete'),
-              command: this.deleteActive
+              action: this.deleteActive
             }, {
               icon: 'nf nf-fa-times_circle',
               text: bbn._('Close tab'),
-              command: this.closeTab
+              action: this.closeTab
             }, {
               icon: 'nf nf-fa-times_circle',
               text: bbn._('Close all tabs'),
-              command: this.closeTabs
+              action: this.closeTabs
             }, {
               text: bbn._('Recent files'),
               icon: 'nf nf-fa-file',
@@ -76,42 +76,42 @@
             items: [{
               icon: 'nf nf-fa-search',
               text: bbn._('Find') + ' <small>CTRL+F</small>',
-              command: this.codeSearch
+              action: this.codeSearch
             }, {
               icon: 'nf nf-fa-search_plus',
               text: bbn._('Find next') + ' <small>CTRL+G</small>',
-              command: this.codeFindNext
+              action: this.codeFindNext
             }, {
               icon: 'nf nf-fa-search_minus',
               text: bbn._('Find previous') + ' <small>SHIFT+CTRL+G</small>',
-              command: this.codeFindPrev
+              action: this.codeFindPrev
             }, {
               icon: 'nf nf-fa-exchange',
               text: bbn._('Replace') + ' <small>SHIFT+CTRL+F</small>',
-              command: this.codeReplace
+              action: this.codeReplace
             }, {
               icon: 'nf nf-fa-retweet',
               text: bbn._('Replace All') + ' <small>SHIFT+CTRL+R</small>',
-              command: this.codeReplaceAll
+              action: this.codeReplaceAll
             },{
               icon: 'nf nf-fa-level_down',
               text: bbn._('Unfold all'),
-              command: this.codeUnfoldAll
+              action: this.codeUnfoldAll
             },{
               icon: 'nf nf-fa-level_up',
               text: bbn._('Fold all'),
-              command: this.codeFoldAll
+              action: this.codeFoldAll
             }]
           }, {
             text: bbn._('History'),
             items: [{
               icon: 'nf nf-fa-history',
               text: bbn._('Show'),
-              command: this.history
+              action: this.history
             }, {
               icon: 'nf nf-fa-trash',
               text: bbn._('Clear'),
-              command(){
+              action(){
                 if ( bbn.ide ){
                   return bbn.ide.historyClear();
                 }
@@ -119,7 +119,7 @@
             }, {
               icon: 'nf nf-fa-trash',
               text: bbn._('Clear All'),
-              command(){
+              action(){
                 if ( bbn.ide ){
                   return bbn.ide.historyClearAll()
                 }
@@ -139,11 +139,11 @@
             items: [{
               icon: 'nf nf-fa-cog',
               text: bbn._('Manage directories'),
-              command: this.managerTypeDirectories
+              action: this.managerTypeDirectories
             }, {
               icon: 'nf nf-fa-language',
               text: bbn._('IDE style'),
-              command(){
+              action(){
                 if ( bbn.ide ){
                   return bbn.ide.cfgStyle();
                 }
@@ -317,6 +317,7 @@
         this.currentEditor.closest('appui-ide-code').goLine(line);
       },
       selectRecentFile(file, obj){
+        bbn.fn.log("dedede", file, obj)   
         this.getRef('tabstrip').load(obj.path);
       },
       setReadyMenu(){
@@ -337,7 +338,7 @@
                 icon: 'nf nf-fa-file_text',
                 text: v.file,
                 path: v.path,
-                command: (v, i) =>{
+                action: (v, i) =>{
                   this.selectRecentFile(v, i);
                 }
               });
@@ -792,19 +793,19 @@
         let objContext = [{
             icon: 'nf nf-fa-edit',
             text: bbn._('Rename'),
-            command: (node) => {
+            action: (node) => {
               this.rename(node)
             }
           }, {
             icon: 'nf nf-fa-copy',
             text: bbn._('Copy'),
-            command: (node) => {
+            action: (node) => {
               this.copy(node)
             }
           }, {
             icon: 'nf nf-fa-trash',
             text: bbn._('Delete'),
-            command: (node) => {
+            action: (node) => {
               this.deleteElement(node)
             }
           }
@@ -818,28 +819,28 @@
           objContext.push({
             icon: 'nf nf-fa-search',
             text: bbn._('Find in Component vue'),
-            command: node => {
+            action: node => {
               this.searchOfContext(node, true, true);
             }
           });
           objContext.push({
             icon: 'nf nf-fa-edit',
             text:  bbn._('Rename component vue'),
-            command: node => {
+            action: node => {
               this.rename(node, false, true);
             }
           });
           objContext.push({
             icon: 'nf nf-fa-copy',
             text:  bbn._('Copy component vue'),
-            command: node => {
+            action: node => {
               this.copy(node, true);
             }
           });
           objContext.push({
             icon: 'nf nf-fa-trash_alt',
             text:  bbn._('Delete component vue'),
-            command: node => {
+            action: node => {
              this.deleteElement(node, true);
             }
           });
@@ -849,19 +850,19 @@
               arr = [{
                 icon: 'nf nf-fa-folder',
                 text: n.data.type === 'components' ? bbn._('New directory component') : bbn._('New directory'),
-                command: (node) => {
+                action: (node) => {
                   this.newDir(node)
                 }
               }, {
                 icon: n.data.type && n.data.type === 'components' ? 'nf nf-fa-vuejs' : 'nf nf-fa-file',
                 text: n.data.type && n.data.type === 'components' ? bbn._('New component') : bbn._('New file'),
-                command: (node) => {
+                action: (node) => {
                   this.newElement(node)
                 }
               }, {
                 icon: 'nf nf-fa-search',
                 text: n.data.type && n.data.type === 'components' ? bbn._('Find in folder Component vue') : bbn._('Find in Path'),
-                command: node => {
+                action: node => {
                   let comp = n.data.type && n.data.type === 'components'  ? true : false;
                   this.searchOfContext(node, comp, n.data.is_vue);
                 }
@@ -881,31 +882,31 @@
                 icon: 'nf nf-fa-external_link',
                 text: bbn._('Go to') + " CSS",
                 color: "red",
-                command: (node) => {
+                action: (node) => {
                   this.goToTab(node, "css")
                 }
               },{
                 icon: 'nf nf-fa-external_link',
                 text: bbn._('Go to') + " Javascript",
-                command: (node) => {
+                action: (node) => {
                   this.goToTab(node, "js")
                 }
               },{
                 icon: 'nf nf-fa-external_link',
                 text: bbn._('Go to') + " View",
-                command: (node) => {
+                action: (node) => {
                   this.goToTab(node, "html")
                 }
               },{
                 icon: 'nf nf-fa-external_link',
                 text: bbn._('Go to') + " Model",
-                command: (node) => {
+                action: (node) => {
                   this.goToTab(node, "model")
                 }
               },{
                 icon: 'nf nf-fa-external_link',
                 text: bbn._('Go to') + " Controller",
-                command: (node) => {
+                action: (node) => {
                   this.goToTab(node, "php")
                 }
               }
@@ -917,7 +918,7 @@
           obj.unshift({
             icon: 'nf nf-fa-magic',
             text: bbn._('Test code!'),
-            command: ( node )=>{
+            action: ( node )=>{
               this.testNodeOfTree(node)
             }
           });
@@ -929,7 +930,7 @@
             obj.push({
               icon: 'nf nf-fa-cogs',
               text: bbn._('Profiling'),
-              command:  node =>{
+              action:  node =>{
                 let root = appui.plugins[bbn.fn.get_field(this.ddRepData, 'value', this.currentRep,'text')];
                 root = root !== undefined ? root+'/' : '';
                 bbn.fn.link('ide/profiler/url/'+ root + node.data.path);

@@ -5,6 +5,7 @@
       //return $.extend({
       return bbn.fn.extend({
         ide: null,
+        firstInput: false,
         originalValue: this.source.value,
         initialState: {
           marks: this.source.marks,
@@ -117,31 +118,30 @@
     },
     methods: {
       runTracking(recentFile = true){
-        this.firstInput = true;
-        let entity = false,
-            code = this.getRef('editor'),
-            info = code.getState(),
-            path = '';
-        if ( !this.typeProject ){
-          path = this.fullPath.substring(this.fullPath.lastIndexOf('src/')+4, this.fullPath.length);
+        if ( !this.firstInput ){
+          this.firstInput = true;
+
+          let code = this.getRef('editor'),
+              info = code.getState(),
+              path = '';
+          if ( !this.typeProject ){
+            path = this.fullPath.substring(this.fullPath.lastIndexOf('src/')+4, this.fullPath.length);
+          }
+          else{
+            path = this.fullPath.substring(this.path.lastIndexOf('src/'+ this.typeProject)+4, this.path.length);
+          }
+          this.post(this.ide.root + 'actions/tracking',{
+            file: path,
+            id_repository: this.rep.id,
+            state: {
+              selections: info.selections !== undefined ? info.selections : false,
+              marks: info.marks !== undefined ? info.marks : false,
+              line: info.line !== undefined ? info.line : false,
+              char: info.char !== undefined ? info.char : false,
+            },
+            set_recent_file: recentFile
+          });
         }
-        else{
-          path = this.fullPath.substring(this.fullPath.lastIndexOf('src/'+ this.typeProject)+4, this.fullPath.length);
-        }
-        if ( this.isMVC ){
-          entity = this.closest('appui-ide_mvc');
-        }
-        this.post(this.ide.root + 'actions/tracking',{
-          file: path,
-          id_repository: this.rep.id,
-          state: {
-            selections: info.selections !== undefined ? info.selections : false,
-            marks: info.marks !== undefined ? info.marks : false,
-            line: info.line !== undefined ? info.line : false,
-            char: info.char !== undefined ? info.char : false,
-          },
-          set_recent_file: recentFile
-        });
       },
       getReposiotryProject(){
         if ( appui.ide.repositories && appui.ide.currentRep ){
@@ -307,6 +307,7 @@
         }
       },
       getLine(){
+        this.runTracking();
         appui.ide.currentLine = this.getRef('editor').widget.getCursor().line;
        // appui.ide.disabledLine = false
       },
@@ -317,11 +318,10 @@
               line: lineNum === 0  ? 0 : lineNum - 1,
               char: 0
             };
-        bbn.fn.log("DDDEDEDE", obj);
         code.loadState(obj);
       },
       setState(){
-        const code = this.getRef('editor');
+        let code = this.getRef('editor');
         //case for serach a content
         if ( (appui.ide.search.link !== undefined)  && (appui.ide.cursorPosition.line > 0 || appui.ide.cursorPosition.ch > 0) ){
           code.loadState({
@@ -335,8 +335,7 @@
             let state = bbn.fn.extend({}, this.initialState, true);
             state.line = state.line === false ?  parseInt(0) :  parseInt(state.line);
             state.char = state.char === false ?  parseInt(0) :  parseInt(state.char);
-            bbn.fn.log("STATE", state)
-            code.loadState(state);
+            code.loadState({line: state.line, char: state.char});
             appui.ide.currentLine =  parseInt(state.line)+1;
           }, 800);
         }
@@ -344,13 +343,16 @@
         if ( appui.ide.readyMenu ){
           appui.ide.getRecentFiles();
           //for  code  first input tracking
+          /*
           let codeEle = this.getRef('editor').$el;
           if ( codeEle !== undefined ){
+            bbn.fn.log("codeEle", codeEle);
             codeEle.addEventListener('input', ()=>{
               this.runTracking();
               codeEle.removeEventListener('input', this);
             });
           }
+          */
         }
       }
     },

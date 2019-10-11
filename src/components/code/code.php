@@ -8,5 +8,5 @@
           }"
           @ready="setState"
           @input="getLine"
-          ref="editor"    
+          ref="editor"
 ></bbn-code>

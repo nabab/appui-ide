@@ -9,7 +9,7 @@ if ( !empty($ctrl->arguments) ){
     if ( !empty($ctrl->obj->data['error']) ){
       $ctrl->obj->error = $ctrl->obj->data['error'];
     }
-  }  
+  }
   echo $ctrl
     ->set_title($ctrl->arguments[count($ctrl->arguments)-1])
     ->add_js()

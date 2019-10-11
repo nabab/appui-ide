@@ -32,7 +32,7 @@
             icon: 'nf nf-fa-cogs',
             text: extensions[id].ext,
             key: extensions[id].ext,
-            command: this.changeExtension
+            action: this.changeExtension
           });
         }
       }
@@ -54,7 +54,7 @@
         arr.push({
           icon: 'zmdi zmdi-refresh',
           text: bbn._("Refresh code"),
-          command: this.reloadTab
+          action: this.reloadTab
         })
         return arr
       },

@@ -148,7 +148,7 @@ class ide {
   /**
    * Function that returns corresponding bit with option id
    *
-   * @param string $id_option option linked to the bit 
+   * @param string $id_option option linked to the bit
    * @param string $id_user if set user id will return the result for that user otherwise the current one will return
    * @return array|null
    */
@@ -165,13 +165,13 @@ class ide {
       return  $this->db->rselect([
         'table' => $pref_arch['tables']['user_options_bits'],
         'fields' => [],
-        'where' => [          
+        'where' => [
           'conditions' => [[
             'field' => $pref_arch['arch']['user_options_bits']['id_option'],
             'value' => $id_option
           ],[
             'field' => $pref_arch['arch']['user_options_bits']['id_user_option'],
-            'value' => $id_user          
+            'value' => $id_user
           ]]
         ]
       ]);
@@ -192,8 +192,8 @@ class ide {
       return false;
     }
     self::$current_file = $file;
-    
-    $this->set_current_id();   
+
+    $this->set_current_id();
     return self::$current_file;
   }
 
@@ -347,7 +347,6 @@ class ide {
 
       $new .= ($cfg['new_name'] ?? '') .
         (!empty($cfg['is_file']) && !empty($cfg['new_ext']) ? '.' . $cfg['new_ext'] : '');
-    
 
       if ( ($path !== $new) && file_exists($new) ){
         $this->error("The new file|folder exists: $new");
@@ -384,7 +383,7 @@ class ide {
         }
 
         $old = $new = $tmp;
-       
+
         if ( !empty($cfg['path']) &&  ($cfg['path'] !== './') ){
           $old .= $cfg['path'] . (substr($cfg['path'], -1) !== '/' ? '/' : '');
         }
@@ -394,7 +393,7 @@ class ide {
         if ( ($tab['url'] !== '_ctrl') && !empty($tab['extensions']) ){
           $old .= $cfg['name'];
           $new .= $cfg['new_name'] ?? '';
-          $ext_ok = false;          
+          $ext_ok = false;
           if ( !empty($cfg['is_file']) ){
             foreach ( $tab['extensions'] as $k => $ext ){
               if ( $k === 0 ){
@@ -403,8 +402,8 @@ class ide {
                   return false;
                 }
               }
-              
-              if ( is_file($old.'.'.$ext['ext']) ){                
+
+              if ( is_file($old.'.'.$ext['ext']) ){
                 $ext_ok = $ext['ext'];
               }
             }
@@ -427,28 +426,28 @@ class ide {
               'new' => ($new === $tmp) ? false : $new,
               'perms' =>  $tab['url'] === 'php' //$i === 'php'
             ]);
-          }         
+          }
         }
       }
     }
     return $todo;
   }
 
-  
+
   /**
    * Get list files preferences of the repository
    *
    * @param string $id_rep
-   * @param string $get_id 
-   * 
+   * @param string $get_id
+   *
    * @return array|null
    */
   private function get_list_preferences(string $id_rep, $get_id = false): ?array 
-  {     
+  {
     if ( \bbn\str::is_uid($id_rep) && count($preferences = $this->options->full_options_by_id($id_rep)) > 0 ){
       $list = [];
       foreach( $preferences as $file ){
-        if ( !empty($file['id']) && 
+        if ( !empty($file['id']) &&
           !empty($file['code'])
         ){
           if ( $get_id ){
@@ -459,12 +458,12 @@ class ide {
           }
           else{
             $list[]= $file['code'];
-          }          
+          }
         }
       }
       return $list;
     }
-    return null;  
+    return null;
   }
 
   /**
@@ -472,19 +471,19 @@ class ide {
    *
    * @param [type] $id_option
    * @return boolean|null
-   */  
-  private function delete_bits_preferences(string $id_option): ?bool  
+   */
+  private function delete_bits_preferences(string $id_option): ?bool
   {
     if ( \bbn\str::is_uid($id_option) && !empty($bits = $this->pref->get_bits_by_id_option($id_option)) ){
-      $delete_bits = true;      
-      foreach ( $bits as $bit ){          
+      $delete_bits = true;
+      foreach ( $bits as $bit ){
         if ( is_null($this->pref->delete_bit($bit['id'])) ){
           $delete_bits = false;
           break;
-        }         
-      }     
+        }
+      }
       return $delete_bits;
-    }   
+    }
     return null;
   }
 
@@ -498,7 +497,7 @@ class ide {
     if( !empty($cfg) && !empty($cfg['repository']) ){
       $rep = $cfg['repository'];
       $path = $this->decipher_path($rep['bbn_path'] . '/' . $rep['path']);
-      if ( !empty($cfg['path']) && !empty($cfg['is_file']) ){        
+      if ( !empty($cfg['path']) && !empty($cfg['is_file']) ){
         if ( empty(\bbn\file\dir::delete($path.$cfg['path'])) ){
           return false;
         }
@@ -516,7 +515,7 @@ class ide {
               return false;
             }
             else{
-              //delete Preferences             
+              //delete Preferences
               $this->delete_file_preferences($component, $rep, $folder);
               $this->operations_backup_components($cfg, "delete");
             }
@@ -535,7 +534,7 @@ class ide {
                           break;
                         }
                         else{
-                          //delete Preferences                          
+                          //delete Preferences
                           $this->delete_file_preferences($component, $rep, $folder);
                           $this->operations_backup_components($cfg, "delete");
                         }
@@ -586,7 +585,7 @@ class ide {
                     foreach($ele['extensions'] as $a){
                       $old_component = $old_folder_component.'/'.$cfg['name'].'.'.$a['ext'];
                       $new_component = $new_folder_component.'/'.$cfg['new_name'].'.'.$a['ext'];
-                      if( !empty(file_exists($old_component)) && empty(file_exists($new_component)) ){                        
+                      if( !empty(file_exists($old_component)) && empty(file_exists($new_component)) ){
                         if ( empty(\bbn\file\dir::copy($old_component, $new_component)) ){
                           $ctrl_error = true;
                           break;
@@ -666,15 +665,15 @@ class ide {
         $new_folder_component = $path.$cfg['path'].$cfg['new_name'];
         //folder
         if ( empty($cfg['only_component']) ){
-          if ( empty($cfg['component_vue']) ){            
+          if ( empty($cfg['component_vue']) ){
             $this->rename_file_preferences($new_folder_component, $old_folder_component, $cfg['repository'], true);
-          }          
+          }
           if ( empty(\bbn\file\dir::move($old_folder_component, $new_folder_component)) ){
             $ctrl_error = true;
             $this->error("Error during the rename component");
           }
           else{
-            $this->operations_backup_components($cfg, "rename");            
+            $this->operations_backup_components($cfg, "rename");
           }
         }
         else{
@@ -688,15 +687,15 @@ class ide {
           }
         }
 
-        if( empty($ctrl_error) && empty($cfg['is_file']) && !empty($cfg['component_vue'])){          
+        if( empty($ctrl_error) && empty($cfg['is_file']) && !empty($cfg['component_vue'])){
           if ( !empty($rep['tabs']) && is_array($rep['tabs']) ){
             foreach( $rep['tabs'] as $ele ){
               if ( empty($ctrl_error) ){
-                if ( !empty($ele['extensions']) && is_array($ele['extensions']) ){                  
+                if ( !empty($ele['extensions']) && is_array($ele['extensions']) ){
                   foreach($ele['extensions'] as $a){
-                    //for rename component preferences 
+                    //for rename component preferences
                     $old_component_pref = $old_folder_component.'/'.$cfg['name'].'.'.$a['ext'];
-                    $new_component_pref = $new_folder_component.'/'.$cfg['new_name'].'.'.$a['ext'];                    
+                    $new_component_pref = $new_folder_component.'/'.$cfg['new_name'].'.'.$a['ext'];
                     $this->rename_file_preferences($new_component_pref, $old_component_pref, $cfg['repository']);
                     $old_component = (empty($cfg['only_component']) ? $new_folder_component : $old_folder_component) .'/'.$cfg['name'].'.'.$a['ext'];
                     $new_component = $new_folder_component.'/'.$cfg['new_name'].'.'.$a['ext'];
@@ -708,7 +707,7 @@ class ide {
                           return false;
                         }
                         else{
-                          $this->operations_backup_components($cfg, "rename");                       
+                          $this->operations_backup_components($cfg, "rename");
                         }
                       }
                       else{
@@ -718,7 +717,7 @@ class ide {
                           return false;
                         }
                         else{
-                          $this->operations_backup_components($cfg, "rename");                    
+                          $this->operations_backup_components($cfg, "rename");
                         }
                       }
                     }
@@ -773,7 +772,7 @@ class ide {
           }
         }
       }
-      else{        
+      else{
         if ( ($case === 'move') || ($case === 'rename') ){
           $old_folder_component = $backup_path.$cfg['path'].$cfg['name'];
           $new_folder_component = $backup_path.$cfg['new_path'].$cfg['new_name'];
@@ -796,9 +795,9 @@ class ide {
   private function operations_backup(array $path,  array $cfg, string $case ){
     //set path backups temporaney disattivate for check an complete
     $backup_path = self::$backup_path . $cfg['repository']['bbn_path'].
-     ($cfg['repository']['path'] === '/' ? '' : '/'.$cfg['repository']['path']);     
+     ($cfg['repository']['path'] === '/' ? '' : '/'.$cfg['repository']['path']);
 
-    if ( !empty($cfg['repository']['bbn_path']) && 
+    if ( !empty($cfg['repository']['bbn_path']) &&
          !empty($path['old']) &&
          !empty($cfg['path']) &&
          !empty($path['old'])
@@ -817,9 +816,9 @@ class ide {
       //CASE MOVE and RENAME
       if ( (($case === 'move') || ($case === 'rename')) &&
         !empty($path['new'])
-      ){        
+      ){
         $new_backup = $backup_path.'/'.($cfg['is_project'] && $cfg['type'] ? $cfg['type'] .'/' : '');
-        $new_backup .= ($case === 'rename' ? $cfg['path'] : $cfg['new_path'].'/').\bbn\str::file_ext($path['new'], 1)[0]; 
+        $new_backup .= ($case === 'rename' ? $cfg['path'] : $cfg['new_path'].'/').\bbn\str::file_ext($path['new'], 1)[0];
       }
     }    //if exist a backup
     if ( is_dir($old_backup) ){
@@ -873,7 +872,7 @@ class ide {
    * @param string $ope The operation type (rename, copy)
    * @return bool
    */
-  private function operations(array $cfg, string $ope){     
+  private function operations(array $cfg, string $ope){
     if ( is_string($ope) &&
       !empty($cfg['repository']) &&
       !empty($cfg['name']) &&
@@ -895,12 +894,12 @@ class ide {
       )
     ){
       $rep = $cfg['repository'];
-      
+
       $path = $this->decipher_path($rep['bbn_path'] . '/' . $rep['path']);
       if ( $ope === 'rename' ){
         $cfg['new_path'] = $cfg['path'];
       }
-      
+
       // Normal file|folder
       if ( empty($cfg['is_component']) &&
         empty($cfg['is_mvc']) &&
@@ -935,7 +934,7 @@ class ide {
             )
           )
         ){//for rename and move backup
-          $this->operations_backup($f, $cfg, $ope);         
+          $this->operations_backup($f, $cfg, $ope);
           $folder = !empty($cfg['is_file']) ? false : true;
           if ( $ope === 'delete' ){
             return $this->delete_file_preferences($f['old'], $cfg['repository'], $folder);
@@ -961,11 +960,10 @@ class ide {
           }
           return true;
         }
-      
         if ( $todo = $this->check_mvc($cfg, $rep, $path) ){
           foreach ( $todo as $t ){
             // Rename
-            if ( ($ope === 'rename') || ($ope === 'move') ){           
+            if ( ($ope === 'rename') || ($ope === 'move') ){
               if ( !\bbn\file\dir::move($t['old'], $t['new']) ){
                 $this->error("Error during the file|folder move: old -> $t[old] , new -> $t[new]");
                 return false;
@@ -1032,19 +1030,19 @@ class ide {
               // Delete permissions
               if ( !empty($t['perms']) ){
                 $this->delete_perm($t['old']);
-              }             
+              }
               $this->operations_backup($t, $cfg, $ope);
             }
           }
           $folder = !empty($cfg['is_file']) ? false : true;
           if ( $ope === 'delete' ){
-            //delete Preferences            
+            //delete Preferences
             $this->delete_file_preferences($t['old'], $cfg['repository'], $folder);
           }
           if ( ($ope === 'rename') || ( $ope === 'move' ) ){
-            //rename Preferences                        
+            //rename Preferences
             $this->rename_file_preferences($t['new'],$t['old'], $cfg['repository'], $folder);
-          }   
+          }
           return true;
         }
       }
@@ -1072,7 +1070,7 @@ class ide {
         return false;
       }
     }
-    else{     
+    else{
       $this->error("Impossible to $ope the file|folder.");
       return false;
     }
@@ -1189,7 +1187,7 @@ class ide {
     }
     $tabs = $this->tabs_of_type_project($type);
     //$tabs =  $this->options->option($id)['tabs'];
-    if ( is_string($path) && is_array($tabs) ){      
+    if ( is_string($path) && is_array($tabs) ){
       foreach($tabs as $tab){
         $exist= false;
         if ( $type === 'mvc' ){
@@ -1377,7 +1375,7 @@ class ide {
    * @param string $url File's URL
    * @return array|bool
    */
-  public function load(string $url){ 
+  public function load(string $url){
     if ( ($real = $this->url_to_real($url, true)) &&
       !empty($real['file']) &&
       !empty($real['mode']) &&
@@ -1436,7 +1434,7 @@ class ide {
       else {
         $f['value'] = '';
       }
-      $f['id'] = self::$current_id;      
+      $f['id'] = self::$current_id;
       return $f;
     }
     return false;
@@ -1459,7 +1457,7 @@ class ide {
           $backup_path = self::$backup_path . $file['repository'] . $file['path'] . $file['tab'] . '/';
         }
       }
-      else {      
+      else {
         $backup_path = self::$backup_path;
         if ( !isset($file['repository']) ){
           $backup_path .= dirname($file['full_path']);
@@ -1474,7 +1472,7 @@ class ide {
       if ( empty($file['code']) && ($file['tab'] !== '_ctrl') ){
         if ( @unlink(self::$current_file) ){
           // Remove permissions
-          $this->delete_perm();        
+          $this->delete_perm();
           if ( !empty(self::$current_id) ){
             // Remove file's preferences
           //  $this->options->remove($this->options->from_code(self::$current_id, $this->_files_pref()));
@@ -1920,7 +1918,6 @@ class ide {
       $real = $this->url_to_real($url, true);
       if ( !empty($real) ){
         $file = substr($real['file'], strpos($real['file'],'src/',1)+4);
-        \bbn\x::log([$file, $real], 'vito');
         if (
           !empty($file) &&
           !empty($real['repository']['id']) &&
@@ -1957,11 +1954,11 @@ class ide {
       !empty($id_repository) &&
       !empty($this->pref) &&
       !empty($this->options) &&
-      !empty($cfg) 
+      !empty($cfg)
     ){
       if ( !empty($md5) ){
         $val['md5'] = $md5;
-      }   
+      }
       if ( isset($cfg['selections']) ){
         $val['selections'] = $cfg['selections'];
       }
@@ -1974,13 +1971,15 @@ class ide {
       if ( isset($cfg['char']) ){
         $val['char'] = $cfg['char'];
       }
-      
-      $id_option = $this->options->from_code($file_code, $id_repository);      
+
+      $id_option = $this->options->from_code($file_code, $id_repository);
       if ( !empty($id_option) ){
-        if ( $force || ($this->options->get_value($id_option) != $val) && !empty($this->options->set_value($val, $id_option)) ){
-          return $id_option;
+        if ( $force || ($this->options->get_value($id_option) != $val) ){
+          if ( $this->options->set_value($val, $id_option) !== null ){
+           return $id_option;
+          }
         }
-      }  
+      }
       else{
         $id_option = $this->options->add([
           'id_parent' => $id_repository,
@@ -1989,7 +1988,7 @@ class ide {
           'value' => $val
         ]);
         return !empty($id_option) ? $id_option : null;
-      }   
+      }
     }
     return null;
   }
@@ -1997,42 +1996,43 @@ class ide {
   /**
      * Rename preferences for a file.
      *
-     * @param string $path_code for new code file preference
+     * @param string $new_path for new code file preference
+     * @param string $old_path for new code file preference
      * @param array $repository all info repository
-     * @param array $cfg The user's preferences
-     * @param bool $foder if set at trure rename many element who contain
+     * @param bool $parent if set at trure rename many element who contain
      *
      * @return null|bool
      */
     public function rename_file_preferences(string $new_path, string $old_path, array $repository, bool $parent = false): ?bool
     {
+
       if ( !empty($new_path) &&
         !empty($old_path) &&
         !empty($repository) &&
         !empty($this->pref) &&
-        !empty($this->options) 
+        !empty($this->options)
       ){
         $new_path = $this->real_to_id($new_path);
         $old_path = $this->real_to_id($old_path);
-        
+
         //local function to treat a part of the file path
         $transform = function($ele, $add, $type){
           $ele = explode($type, $ele);
           $ele[1] = $add;
-          return \bbn\str::parse_path(implode($type, $ele));   
+          return \bbn\str::parse_path(implode($type, $ele));
         };
 
         if ( !empty($new_path) && !empty($old_path) && (count($files = $this->get_list_preferences($repository['id'], true)) > 0) ){
           //get code of the file preference
-          $new_opt_code =  substr($new_path, strlen($repository['bbn_path'].$repository['code'])+1, strlen($new_path)); 
-          $old_opt_code =  substr($old_path, strlen($repository['bbn_path'].$repository['code'])+1, strlen($old_path)); 
+          $new_opt_code =  substr($new_path, strlen($repository['bbn_path'].$repository['code']), strlen($new_path));
+          $old_opt_code =  substr($old_path, strlen($repository['bbn_path'].$repository['code']), strlen($old_path));
 
           $type =  explode("/", $old_opt_code)[0];
-          
+
           $tabs = [];
           $exts = [];
 
-          //takes tabs and extensions dynamically based on the environment they belong to 
+          //takes tabs and extensions dynamically based on the environment they belong to
           if ( !empty($repository['tabs']) ){
             foreach( $repository['tabs'] as $tab ){
               $tabs[] = $tab['path'];
@@ -2042,15 +2042,15 @@ class ide {
                 }
               }
             }
-          }  
+          }
           else if (  !empty($repository['extensions']) ){
             foreach( $repository['extensions'] as $ext ){
               if ( !in_array($ext['ext'], $exts) ){
                 $exts[] = $ext['ext'];
               }
             }
-          }  
-          
+          }
+
           $check = true;
           //rename elements mvc or not
           if ( !$parent ){
@@ -2059,10 +2059,10 @@ class ide {
               foreach($tabs as $tab){
                 if ( $check ){
                   $old_opt_code = $transform($old_opt_code, $tab, '/');
-                  $new_opt_code = $transform($new_opt_code, $tab, '/');                   
+                  $new_opt_code = $transform($new_opt_code, $tab, '/');
                   foreach( $exts as $ext ){
                     $old_opt_code = $transform($old_opt_code, $ext, '.');
-                    $new_opt_code = $transform($new_opt_code, $ext, '.');                   
+                    $new_opt_code = $transform($new_opt_code, $ext, '.');
                     if ( (($i = \bbn\x::find($files, ['code' => $old_opt_code])) !== false) &&
                       ((\bbn\x::find($files, ['code' => $new_opt_code])) === false)
                     ){
@@ -2072,78 +2072,79 @@ class ide {
                           'code' => $new_opt_code,
                           'text' => $new_opt_code
                         ];
+
                         if ( empty($this->options->set_prop($files[$i]['id'], $props)) ){
                           $check = false;
                           break;
-                        }                      
-                      }                                          
-                    }                    
+                        }
+                      }
+                    }
                   }
-                }   
+                }
                 else{
                   break;
                 }
               }
             }
             //case no mvc
-            else{              
+            else{
               foreach( $exts as $ext ){
                 if ( $check ){
                   $old_opt_code = $transform($old_opt_code, $ext, '.');
-                  $new_opt_code = $transform($new_opt_code, $ext, '.');                  
+                  $new_opt_code = $transform($new_opt_code, $ext, '.');
                   if ( (($i = \bbn\x::find($files, ['code' => $old_opt_code])) !== false) &&
                     ((\bbn\x::find($files, ['code' => $new_opt_code])) === false)
-                  ){                  
-                    //if there is file then change             
+                  ){
+                    //if there is file then change
                     if ( !empty($files[$i]['id']) ){
                       $props = [
                         'code' => $new_opt_code,
                         'text' => $new_opt_code
-                      ];                     
+                      ];
                       if ( empty($this->options->set_prop($files[$i]['id'], $props)) ){
                         $check = false;
                         break;
-                      }                      
-                    }                                        
-                  }                  
-                }
-                else{
-                  break;
-                }      
-              }                
-            }
-            return $check;            
-          }             
-          //case rename foleder who folder that contains elements
-          else {           
-            if ( $type === 'mvc'){
-              foreach($tabs as $tab){
-                if ( $check ){
-                  $folder_pref = $transform($old_opt_code, $tab, '/');
-                  foreach( $files as $file ){
-                    if ( !empty($file['id']) && 
-                      !empty($file['code']) &&
-                      (strpos($file['code'], $folder_pref) === 0)
-                    ){                  
-                      $props = [
-                        'code' => str_replace($folder_pref, $new_opt_code, $file['code']), 
-                        'text' => str_replace($folder_pref, $new_opt_code, $file['code'])
-                      ];                      
-                      if ( empty($this->options->set_prop($file['id'], $props)) ){
-                        $check = false;
-                        break;
-                      }  
+                      }
                     }
                   }
                 }
                 else{
                   break;
-                }                  
+                }
+              }
+            }
+            return $check;
+          }
+          //case rename foleder who folder that contains elements
+          else {
+            if ( $type === 'mvc'){
+              foreach($tabs as $tab){
+                if ( $check ){
+                  $folder_pref = $transform($old_opt_code, $tab, '/');
+                  foreach( $files as $file ){
+                    if ( !empty($file['id']) &&
+                      !empty($file['code']) &&
+                      (strpos($file['code'], $folder_pref) === 0)
+                    ){
+                      $props = [
+                        'code' => str_replace($folder_pref, $new_opt_code, $file['code']),
+                        'text' => str_replace($folder_pref, $new_opt_code, $file['code'])
+                      ];
+                      if ( empty($this->options->set_prop($file['id'], $props)) ){
+                        $check = false;
+                        break;
+                      }
+                    }
+                  }
+                }
+                else{
+                  break;
+                }
               }
             }//case single element
-            else {  
+            else {
               foreach( $files as $file ){
-                if ( !empty($file['id']) && 
+                if ( !empty($file['id']) &&
                   !empty($file['code']) &&
                   (strpos($file['code'],$old_opt_code) === 0)
                 ){
@@ -2154,17 +2155,17 @@ class ide {
                   if ( empty($this->options->set_prop($file['id'], $props)) ){
                     $check = false;
                     break;
-                  }  
-                }                
+                  }
+                }
               }
             }
-          }                    
+          }
           return $check;
         }
-      }  
+      }
       return null;
     }
-  
+
 
   /**
    * Removes a file from preferences
@@ -2172,27 +2173,27 @@ class ide {
    * @param string $path The file's file
    * @param array $repository all info repository
    * @param bool $parent if set at trure rename many element who contain
-   * 
+   *
    * @return null|bool
    */
   public function delete_file_preferences(string $path, array $repository, bool $parent = false): ?bool
   {
-    if ( !empty($path) &&   
+    if ( !empty($path) &&
         !empty($repository) &&
         !empty($this->pref) &&
         !empty($this->options)
     ){
       $check = true;
-      $path = $this->real_to_id($path);      
+      $path = $this->real_to_id($path);
       //get code of the file preference
-      $file_pref =  substr($path, strlen($repository['bbn_path'].$repository['code'])+1, strlen($path)); 
-      
+      $file_pref =  substr($path, strlen($repository['bbn_path'].$repository['code'])+1, strlen($path));
+
       if ( !empty($file_pref) && (count($preferences = $this->get_list_preferences($repository['id'], true)) > 0) ){
         $type =  explode("/", $file_pref)[0];
         $tabs = [];
         $exts = [];
 
-        //takes tabs and extensions dynamically based on the environment they belong to 
+        //takes tabs and extensions dynamically based on the environment they belong to
         if ( !empty($repository['tabs']) ){
           foreach( $repository['tabs'] as $tab ){
             $tabs[] = $tab['path'];
@@ -2202,78 +2203,77 @@ class ide {
               }
             }
           }
-        }  
+        }
         else if (  !empty($repository['extensions']) ){
           foreach( $repository['extensions'] as $ext ){
             if ( !in_array($ext['ext'], $exts) ){
               $exts[] = $ext['ext'];
             }
           }
-        }  
+        }
         //local function to treat a part of the file path
         $transform = function($ele, $add, $type){
           $ele = explode($type, $ele);
           $ele[1] = $add;
-          return \bbn\str::parse_path(implode($type, $ele));   
+          return \bbn\str::parse_path(implode($type, $ele));
         };
 
         //case element mvc or not
         if ( !$parent ){
-          //case mvc 
-          if ( $type === 'mvc' ){          
+          //case mvc
+          if ( $type === 'mvc' ){
             foreach($tabs as $tab){
               if ( $check ){
                 $file_pref = $transform($file_pref, $tab, '/');
                 foreach( $exts as $ext ){
                   $file_pref = $transform($file_pref, $ext, '.');
-                  //get all the pre preference of the repository                  
-                  if ( ($i = \bbn\x::find($preferences, ['code' => $file_pref])) !== false ){  
+                  //get all the pre preference of the repository
+                  if ( ($i = \bbn\x::find($preferences, ['code' => $file_pref])) !== false ){
                     //get id file preference
-                    if ( !empty($preferences[$i]['id']) ){  
+                    if ( !empty($preferences[$i]['id']) ){
                       //After deleting all the reference bits, the preference option will be deleted
-                      //first remove all bits with this option                   
-                      if ( ($this->delete_bits_preferences($preferences[$i]['id']) === false) ){                     
+                      //first remove all bits with this option
+                      if ( ($this->delete_bits_preferences($preferences[$i]['id']) === false) ){
                         $check = false;
                         break;
                       }//after felete option
                       else if ( empty($this->options->remove($preferences[$i]['id'])) ){
                         $check = false;
                         break;
-                      } 
-                    }                
-                  }  
+                      }
+                    }
+                  }
                 }
               }
-              else{                  
+              else{
                 break;
               }
-                  
             }
             return $check;
           }
           else{
             //for component
             if ( $type === 'components' ){
-              $name = '/'.\bbn\str::file_ext($file_pref, 1)[0];                
+              $name = '/'.\bbn\str::file_ext($file_pref, 1)[0];
               $file_pref = explode(".", $file_pref);
               $file_pref[0] .= '/'.$name;
               $file_pref = implode(".", $file_pref);
-            }              
+            }
             foreach( $exts as $ext ){
               if ( $check ){
-                $file_pref = $transform($file_pref, $ext, '.');                
+                $file_pref = $transform($file_pref, $ext, '.');
                 //get id file preference
-                if ( ($i = \bbn\x::find($preferences, ['code' => $file_pref])) !== false ){  
+                if ( ($i = \bbn\x::find($preferences, ['code' => $file_pref])) !== false ){
                   //After deleting all the reference bits, the preference option will be deleted
-                  //first remove all bits with this option                   
-                  if ( ($this->delete_bits_preferences($preferences[$i]['id']) === false) ){                     
+                  //first remove all bits with this option
+                  if ( ($this->delete_bits_preferences($preferences[$i]['id']) === false) ){
                     $check = false;
                     break;
                   }//after felete option
                   else if ( empty($this->options->remove($preferences[$i]['id'])) ){
                     $check = false;
                     break;
-                  }                                      
+                  }
                 }
               }
               else{
@@ -2287,14 +2287,14 @@ class ide {
           if ( $type === 'mvc'){
             foreach($tabs as $tab){
               if ( $check ){
-                $file_pref = $transform($file_pref, $tab, '/');                       
+                $file_pref = $transform($file_pref, $tab, '/');
                 foreach( $preferences as $file ){
-                  if ( !empty($file['id']) && 
+                  if ( !empty($file['id']) &&
                     !empty($file['code']) &&
                     (strpos($file['code'], $file_pref) === 0)
-                  ){                    
-                    //first remove all bits with this option 
-                    if ( ($this->delete_bits_preferences($file['id']) === false) ){                     
+                  ){
+                    //first remove all bits with this option
+                    if ( ($this->delete_bits_preferences($file['id']) === false) ){
                       $check = false;
                       break;
                     }//after felete option
@@ -2307,44 +2307,42 @@ class ide {
               }
               else{
                 break;
-              }  
-            }  
+              }
+            }
             return $check;
           }
           else{
             foreach( $preferences as $file ){
-              if ( !empty($file['id']) && 
+              if ( !empty($file['id']) &&
                 !empty($file['code']) &&
                 (strpos($file['code'], $file_pref) === 0)
               ){
                 //After deleting all the reference bits, the preference option will be deleted
-                //first remove all bits with this option                   
-                if ( ($this->delete_bits_preferences($file['id']) === false) ){                     
+                //first remove all bits with this option
+                if ( ($this->delete_bits_preferences($file['id']) === false) ){
                   $check = false;
                   break;
                 }//after felete option
                 else if ( empty($this->options->remove($file['id'])) ){
                   $check = false;
                   break;
-                }                  
+                }
               }
             }
           }
-                    
+
         }
-      }  
+      }
       return false;
     }
     return null;
   }
-    
- 
- 
+
   /******************** END PREFERENCES ************************/
 
   /******************** OPENED AND RECENT FILES BIT ************************/
 
-  
+
 
 
   /**
@@ -2355,26 +2353,25 @@ class ide {
    * @return bool
    */
   public function set_recent_file(string $file, string $id_link): bool
-  {  
-    //$pref_arch = $this->pref->get_class_cfg(); 
+  {
     $pref = false;
     $project = explode(".", $file)[0];
     $bit = false;
-    if ( !empty($id_link) && 
+    if ( !empty($id_link) &&
       ($id_recent_file =  $this->options->from_code(self::RECENT_FILE, self::IDE_PATH, self::BBN_APPUI))
-    ){   
+    ){
       //search preference and if not exsist preference add a new
       $pref = $this->pref->get_by_option($id_recent_file);
-      $id_pref = !empty($pref) ? $pref['id'] : $this->pref->add($id_recent_file, []);      
-    }    
+      $id_pref = !empty($pref) ? $pref['id'] : $this->pref->add($id_recent_file, []);
+    }
     //search bit in relation at user preference
     $bit_data = $this->get_bit_by_option($id_link, $id_pref);
-    
-    $date = date('Y-m-d H:i:s');      
+
+    $date = date('Y-m-d H:i:s');
     $cfg =[];
     //set bit
-    if ( !empty($id_pref) && ($bit_data !== null) ){    
-      $info= json_decode($bit_data['cfg'], true);      
+    if ( !empty($id_pref) && ($bit_data !== null) ){
+      $info= json_decode($bit_data['cfg'], true);
       $cfg = [
         'id_option' => $id_link,
         'text' => $file,
@@ -2383,9 +2380,9 @@ class ide {
           'last_date' => $date,
           'number' => $info['number'] + 1
         ]
-      ];         
+      ];
       if ( !empty($this->pref->update_bit($bit_data['id'], $cfg, true)) ){
-        $bit = true;        
+        $bit = true;
       }
     }
     //add bit
@@ -2394,17 +2391,17 @@ class ide {
         'bit_creation' => $date,
         'last_date' => $date,
         'number' => 0
-      ];      
+      ];
       if ( !empty($id_pref) && $this->pref->add_bit($id_pref,[
-        'id_option' => $id_link,        
+        'id_option' => $id_link,
         'cfg' =>  json_encode($cfg),
         'text' => $file
         ])
-      ){       
-        $bit = true;        
+      ){
+        $bit = true;
       }
-    }  
-    return !empty($bit) && !empty($id_pref);    
+    }
+    return !empty($bit) && !empty($id_pref);
   }
 
   /**
@@ -2414,36 +2411,36 @@ class ide {
    * @return bool
    */
   public function set_opened_file(string $id_rep, string $file_code, array $info, bool $setRecent = true): bool
-  {   
+  {
     $bit = false;
     //file preference in repository
     $id_pref_file = $this->set_file_preferences($file_code, $id_rep, $info, true);
-    
-    if ( !empty($id_pref_file) && 
+
+    if ( !empty($id_pref_file) &&
       ($id_option_opened =  $this->options->from_code(self::OPENED_FILE,self::IDE_PATH, self::BBN_APPUI))
-    ){         
+    ){
       //search preference and if not exsist preference add a new
       $pref = $this->pref->get_by_option($id_option_opened);
       $id_pref = !empty($pref) ? $pref['id'] : $this->pref->add($id_option_opened, []);
     }
-   
+
     //search bit  for setting or add
     $bit_data = $this->get_bit_by_option($id_pref_file, $id_pref);
 
-    
-    if ( !empty($id_pref) && ($bit_data !== null) ){     
+
+    if ( !empty($id_pref) && ($bit_data !== null) ){
       $cfg = [
         'cfg' =>[
           'last_open' => date('Y-m-d H:i:s')
-        ]        
-      ];   
-      //set bit why exist   
+        ]
+      ];
+      //set bit why exist
       if (!empty($this->pref->update_bit($bit_data['id'], $cfg, true)) ){
-        $bit = true;       
-      }      
+        $bit = true;
+      }
     }//add bit why not exist
     else {
-      $cfg = [          
+      $cfg = [
         'last_open' => date('Y-m-d H:i:s')
       ];
       //TEMPORANEY delete all bits for id_user option with option 'opened file'
@@ -2455,16 +2452,16 @@ class ide {
         };
       }
       $cfg = [
-        'last_open' => date('Y-m-d H:i:s')              
+        'last_open' => date('Y-m-d H:i:s')
       ];*/
-    
+
       if ( !empty($id_pref) && $this->pref->add_bit($id_pref,[
-        'id_option' => $id_pref_file,        
+        'id_option' => $id_pref_file,
         'cfg' => json_encode($cfg),
         'text' => $file_code
         ])
       ){
-        $bit = true;        
+        $bit = true;
       }
     }
     if ( $setRecent ){
@@ -2473,7 +2470,6 @@ class ide {
     else{
       return !empty($bit) && !empty($id_pref_file) && !empty($id_pref);
     }
-    
   }
 
   /**
@@ -2483,10 +2479,10 @@ class ide {
    * @return null|array
    */
   public function get_recent_files( int $limit = 10 ): ?array
-  {    
+  {
     $perm = $this->options->from_code(self::RECENT_FILE, self::IDE_PATH, self::BBN_APPUI);
     $all = [];
-    if ( !empty($perm) ){      
+    if ( !empty($perm) ){
       $pref = $this->pref->get_by_option($perm);
       if ( !empty($pref['id']) ){
         $pref_arch = $this->pref->get_class_cfg();
@@ -2500,8 +2496,8 @@ class ide {
             $pref_arch['arch']['user_options_bits']['text'],
             'date' => 'bbn_users_options_bits.cfg->"$.last_date"',
             'num' => 'bbn_users_options_bits.cfg->"$.number"'
-          ],         
-          'where' => [          
+          ],
+          'where' => [
             'conditions' => [[
               'field' => $pref_arch['arch']['user_options_bits']['id_user_option'],
               'value' => $pref['id']
@@ -2509,39 +2505,40 @@ class ide {
           ],
           'limit' => 10,
           'order' =>['date' => "DESC"]
-        ]);           
+        ]);
         foreach ( $recents as $id => $bit ){
-          $file_pref = $this->options->option($bit['id_option']);        
+          $file_pref = $this->options->option($bit['id_option']);
           $repository = $this->options->option($file_pref['id_parent']);
-
           //path for link
-          $type = explode("/",$file_pref['code'])[0];                   
-          $path_file = explode(".", $bit['text'])[0];          
-          $path_file = explode("/",$path_file);          
-          array_shift($path_file);
+          $type = explode("/",$file_pref['code'])[0];
+          $path_file = explode(".", $bit['text'])[0];
+          $path_file = explode("/",$path_file);
+          $file_code = array_shift($path_file);
           if ( ($type !== 'mvc') && ($type !== 'components') ){
             $tab = 'code';
+            $type = '';
+            $file = $file_code;
           }
           else{
             $tab = array_shift($path_file);
+            $type .= '/';
             $tab = $tab === 'public' ? 'php' : $tab;
+            $file = implode("/",$path_file);
           }
-
-          $file = implode("/",$path_file);
-          $path = \bbn\str::parse_path('file/'.$repository['bbn_path'].'/'.$repository['code'].'/'.$type.'/'.$file.'/_end_/'.$tab);
+          $path = \bbn\str::parse_path('file/'.$repository['bbn_path'].'/'.$repository['code'].'/'.$type.$file.'/_end_/'.$tab);
           $all[] = [
             'cfg' => $bit['cfg'],
             'file' =>  \bbn\str::parse_path($repository['code'].'/'.$file_pref['code']),
             'repository' =>  $repository['code'],
             'path' => $path,
-            'type' => $type
-          ]; 
-        }   
+            'type' => $type === '' ? false : $type
+          ];
+        }
       }
     }
-    return !empty($all) ? $all : null;    
+    return !empty($all) ? $all : null;
   }
-   
+
   /******************** END OPENED AND RECENT FILES ************************/
 
 
@@ -2564,10 +2561,10 @@ class ide {
    * @param string $path
    * @return bool
    */
-  public function is_plugin($path){        
+  public function is_plugin($path){
     $plugin = false;
     if ( is_array($this->routes) ){
-      foreach( $this->routes as $route ){                 
+      foreach( $this->routes as $route ){
         if ( $path === $route['path'].'src/'){
           $plugin = true;
           break;
@@ -2588,12 +2585,12 @@ class ide {
     if ( ($rep = $this->repository_from_url($url, true)) &&
       ($res = $this->get_root_path($rep))
     ){
-      
-      $plugin = $this->is_plugin($res);     
-   
+
+      $plugin = $this->is_plugin($res);
+
       if ( $rep['alias_code'] === 'bbn-project' ){
         $bits = explode('/', substr($url, \strlen($rep['bbn_path'].$rep['path'])));
-        
+
         if ( !empty($this->is_component_from_url($url)) &&
              //!empty($idx = $this->options->from_code('components','PTYPES',$this->_ide_path()))
              !empty($ptype = $this->get_type('components'))
@@ -2613,19 +2610,18 @@ class ide {
         }
       }
       else{
-        //for lib in current temporaney code        
-        if ( ($rep['bbn_path'] === "BBN_APP_PATH") && (strpos($url,$rep['bbn_path'].'/'.$rep['code']) === 0) ){         
+        //for lib in current temporaney code
+        if ( ($rep['bbn_path'] === "BBN_APP_PATH") && (strpos($url,$rep['bbn_path'].'/'.$rep['code']) === 0) ){
           $url = str_replace($rep['bbn_path'].'/'.$rep['code'], $rep['bbn_path'].'/'.$rep['path'], $url);
-        }        
-        $bits = explode('/', substr($url, \strlen($rep['bbn_path'].'/'.$rep['path'])));        
-      }     
+        }
+        $bits = explode('/', substr($url, \strlen($rep['bbn_path'].'/'.$rep['path'])));
+      }
       $o = [
         'mode' => false,
         'repository' => $rep,
         'tab' => false
       ];
-      
-      if ( !empty($bits) ){       
+      if ( !empty($bits) ){
         // Tab's nane
         if ( !empty($rep['tabs']) && (end($bits) !== 'code') ){
 
@@ -2633,8 +2629,7 @@ class ide {
           $tab = array_pop($bits);
           // File's name
           $fn = array_pop($bits);
-          
-         
+
           // File's path
           if ( !$plugin ){
             array_shift($bits);
@@ -2679,7 +2674,6 @@ class ide {
               $o['ssctrl'] = $ssc['ssctrl'];
             }
             else {
-             
               $res .=  $fp . $fn;
               $ext_ok = false;
               foreach ( $tab['extensions'] as $e ){
@@ -2724,9 +2718,7 @@ class ide {
           $res .= implode('/', $bits);
           if( is_array($rep) ){
             //temporaney for lib plugin
-           
             if ( !empty($rep['extensions'] ) ){
-             
               foreach ( $rep['extensions'] as $ext ){
                 if ( is_file("$res.$ext[ext]") ){
                   $res .= ".$ext[ext]";
@@ -2735,12 +2727,11 @@ class ide {
               }
             }
             else{
-              
               if ( is_file($res.'.php') ){
                 $res .= ".php";
                 $o['mode'] = 'php';
               }
-            }            
+            }
           }
           if ( empty($o['mode']) ){
             $res .= '.' . $rep['extensions'][0]['ext'];
@@ -2765,7 +2756,7 @@ class ide {
    * @return bool|string
    */
   public function real_to_id($file){
-    if ( ($rep = $this->repository_from_url($this->real_to_url($file), true)) && \defined($rep['bbn_path']) ){      
+    if ( ($rep = $this->repository_from_url($this->real_to_url($file), true)) && \defined($rep['bbn_path']) ){
       $bbn_p = $rep['bbn_path'] === 'BBN_APP_PATH' ? \bbn\mvc::get_app_path() : constant($rep['bbn_path']);
       if ( strpos($file, $bbn_p) === 0 ){
         $f = substr($file, \strlen($bbn_p));
@@ -2865,7 +2856,7 @@ class ide {
                'items' => [],
                'num_items' => \count(\bbn\file\dir::get_files($ctrl_path))
                //'num_items' => \count(\bbn\file\dir::get_files($files_ctrl))
-             ];            
+             ];
 
              //If we are requesting all files with their contents, this block returns to the "_ctrl" block.
              if ( $all === true ){
@@ -3031,7 +3022,7 @@ class ide {
             $url= $copy_url;
             $path = self::$backup_path . $url;
           }
-          
+
           if ( $files = \bbn\file\dir::get_files($path) ){
 
             if ( !empty($files) ){

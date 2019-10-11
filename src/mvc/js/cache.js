@@ -47,7 +47,7 @@
           {
             icon: 'nf nf-fa-trash',
             text: !n.data.folder ? bbn._('Delete file cache') : bbn._('Delete folder'),
-            command: (node) => {
+            action: (node) => {
               this.post( this.root + 'data_cache',{
                 deleteCache: node.data.path,
                 deleteContent: 1
@@ -91,7 +91,7 @@
             obj.push({
               icon: 'nf nf-fa-trash',
               text: bbn._("Delete folder's contents"),
-              command: (node) => {
+              action: (node) => {
                 this.post( this.root + 'data_cache',{
                   deleteCache: node.data.path,
                   deleteContent: 0

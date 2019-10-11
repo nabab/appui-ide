@@ -6,7 +6,7 @@
              :toolbar="[{
                text: '<?=_('Add Type')?>',
                icon: 'nf nf-fa-plus',
-               command: addType
+               action: addType
              }]"
              :showable="false"
              editor="appui-ide-popup-directories-form-types"
@@ -48,17 +48,17 @@
                  :width="150"
                  :buttons="[{
                    text: '<?=_("Edit")?>',
-                   command: editType,
+                   action: editType,
                    notext: true,
                    icon: 'nf nf-oct-pencil'
                  },{
                    text: '<?=_("Copy")?>',
-                   command: copyType,
+                   action: copyType,
                    notext: true,
                    icon: 'nf nf-fa-copy'
                  },{
                    text: '<?=_("Delete")?>',
-                   command: deleteType,
+                   action: deleteType,
                    icon: 'nf nf-fa-trash',
                    notext: true
                  }]"

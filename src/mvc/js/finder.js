@@ -18,7 +18,7 @@
               return a;
             }).concat([{
               text: bbn._('New connection'),
-              command: () => {
+              action: () => {
                 this.getPopup('That should open a form')
               }
             }])

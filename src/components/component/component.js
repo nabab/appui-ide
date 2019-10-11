@@ -58,7 +58,7 @@
         return [{
           icon: 'nf nf-fa-refresh',
           text: bbn._("Refresh code"),
-          command: this.reloadTab
+          action: this.reloadTab
         }];
       },
       reloadTab(){

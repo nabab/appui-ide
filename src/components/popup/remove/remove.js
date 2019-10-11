@@ -22,7 +22,7 @@
             text: bbn._("Delete"),
             class:"bbn-primary",
             icon: 'nf nf-fa-trash',
-            command: ()=>{
+            action: ()=>{
               this.getRef('form').submit();
             }
         }]
