@@ -34,7 +34,7 @@
       },
       treeMapper(ele){
         return {
-          path: ele.path || [],          
+          path: ele.path || [],
           icon: ele.folder ? 'nf nf-custom-folder' : 'nf nf-fa-file',
           folder: ele.folder,
           text: ele.text + (ele.num ? "&nbsp;&nbsp;<span class='bbn-badge bbn-s bbn-bg-light-grey'>" + ele.num + "</span>" : ''),
@@ -95,10 +95,11 @@
                 this.post( this.root + 'data_cache',{
                   deleteCache: node.data.path,
                   deleteContent: 0
-                  }, d=>{
+                  }, d => {
                   if ( d.data.success ){
                     let treeOfNode = bbn.vue.closest(node, 'bbn-tree');
                     treeOfNode.reload();
+                    this.contentCache = "";
                   }
                 });
               }

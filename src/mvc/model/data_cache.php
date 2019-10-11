@@ -7,9 +7,17 @@ if ( !empty($model->data['path']) ){
   $fullPath .= $model->data['path'];
 }
 
-if ( !empty($model->data['cache']) && \bbn\str::check_path($model->data['path']) ){
+
+/*if ( !empty($model->data['cache']) && \bbn\str::check_path($model->data['path']) ){
+  return [json_encode(unserialize(file_get_contents($folderCache.$model->data['cache'])))];
+}*/
+
+if ( !empty($model->data['cache'])  && \bbn\str::check_path($folderCache.$model->data['cache'])){  
   return [json_encode(unserialize(file_get_contents($folderCache.$model->data['cache'])))];
 }
+
+
+
 //case click button for delte all cache
 else if( !empty($model->data['deleteAll']) ){
   if ( \bbn\file\dir::delete($folderCache, false) ){
