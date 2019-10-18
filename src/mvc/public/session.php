@@ -2,7 +2,7 @@
 if ( isset($ctrl->post['type']) ){
   $ctrl->obj->data = \bbn\x::get_tree(
     $ctrl->post['type'] === 'server' ?
-	    $_SERVER : $ctrl->inc->user->get_session()
+	    $_SERVER : $_SESSION
   );
 }
 else{
