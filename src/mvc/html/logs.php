@@ -77,7 +77,7 @@
                         @select="selectLogFile"
                         ref="listFilesLog"
                         :min-expand-level="1"
-                        v-if="sourceTree.length"                        
+                        v-if="sourceTree.length"
                         @ready="setFileLog"
               ></bbn-tree>
             </div>

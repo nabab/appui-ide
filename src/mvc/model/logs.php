@@ -1,6 +1,5 @@
 <?php
 /** @var $model \bbn\mvc\model */
-
 $log_files = array_filter(\bbn\file\dir::get_files(BBN_DATA_PATH.'logs'), function($a){
   return substr($a, -4) !== '.old';
 });
@@ -13,6 +12,7 @@ foreach ( $log_files as $lf ){
 }
 ksort($res);
 
+//die(var_dump($res));
 //case delete file  in folder
 if( !empty($model->data['delete_file']) ){
   $path = BBN_DATA_PATH.'logs/'.$model->data['delete_file'];

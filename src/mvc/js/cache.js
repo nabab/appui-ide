@@ -54,8 +54,12 @@
               }, d => {
                 if ( d.data.success ){
                   let treeOfNode = bbn.vue.closest(node, 'bbn-tree');
-                  //node.$parent.reload();
-                  treeOfNode.$parent.parent.reload();
+                  if ( node.level !== 0 ){
+                    treeOfNode.$parent.parent.reload();
+                  }
+                  else{
+                    treeOfNode.reload();
+                  }
                   this.$nextTick(()=>{
                     //if delete single file
                     if ( !node.data.folder ){

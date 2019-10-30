@@ -372,7 +372,7 @@ class ide {
       isset($cfg['is_file'], $path)
     ){
       if ( !empty($rep['alias_code']) && ($rep['alias_code'] === 'bbn-project') ){
-        $path .= 'mvc/';
+          $path .= 'mvc/';
       }
       // Each file associated with the structure (MVC case)
       foreach ( $rep['tabs'] as $i => $tab ){
@@ -384,12 +384,13 @@ class ide {
 
         $old = $new = $tmp;
 
-        if ( !empty($cfg['path']) &&  ($cfg['path'] !== './') ){
-          $old .= $cfg['path'] . (substr($cfg['path'], -1) !== '/' ? '/' : '');
+        if ( !empty($cfg['path']) && ($cfg['path'] !== './') ){
+          $old .= (($cfg['path'] === 'mvc/') ?  '' : $cfg['path']) . (substr($cfg['path'], -1) !== '/' ? '/' : '');
         }
-        if ( !empty($cfg['new_path']) && ($cfg['new_path'] !== './') ){
-          $new .= $cfg['new_path'] . (substr($cfg['new_path'], -1) !== '/' ? '/' : '');
+        if ( !empty($cfg['new_path']) &&  ($cfg['new_path'] !== './') ){
+          $new .= (($cfg['new_path'] === 'mvc/') ?  '' : $cfg['new_path']) . (substr($cfg['new_path'], -1) !== '/' ? '/' : '');
         }
+
         if ( ($tab['url'] !== '_ctrl') && !empty($tab['extensions']) ){
           $old .= $cfg['name'];
           $new .= $cfg['new_name'] ?? '';
@@ -430,6 +431,7 @@ class ide {
         }
       }
     }
+
     return $todo;
   }
 
@@ -960,6 +962,7 @@ class ide {
           }
           return true;
         }
+
         if ( $todo = $this->check_mvc($cfg, $rep, $path) ){
           foreach ( $todo as $t ){
             // Rename

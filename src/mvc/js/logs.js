@@ -96,35 +96,36 @@
               }
             });
             d.data[0].items = bbn.fn.order(d.data[0].items, 'mtime', 'desc');
-            this.sourceTree = d.data;           
+            this.sourceTree = d.data;
           }
         });
       },
       onChange(clear, e){
+        bbn.fn.log(this.fileLog, "DEDEDEDEDE");
         if ( this.fileLog.length && this.lignes ){
-          this.post(this.source.root + 'logs', {
+          this.post(this.source.root + 'logs/' + this.fileLog, {
               log: this.fileLog,
               clear: clear ? 1 : "0",
               num_lines: this.lignes,
             },
             (d)=>{
-              this.textContent = d.content;           
+              this.textContent = d.content;
             });
         }
       },
       deleteFile(){
         this.confirm(bbn._('Are you sure you want to delete the file:') + ' ' + this.fileLog , () => {
-          this.post(this.source.root + 'logs', {          
+          this.post(this.source.root + 'logs', {
             delete_file: this.fileLog,
           },
           d => {
             if ( d.success ){
               let path = bbn.env.path;
               if ( path.indexOf(this.source.root + 'logs/') === 0 ){
-                let tmp = path.substr((this.source.root + 'logs/').length);        
+                let tmp = path.substr((this.source.root + 'logs/').length);
                 if ( tmp ){
                   let idx = bbn.fn.search(this.files, {text: tmp});
-                  if ( idx > -1 ){            
+                  if ( idx > -1 ){
                     this.fileLog = this.files[idx].value;
                   }
                 }
@@ -135,13 +136,13 @@
               this.onChange();
               this.getSourceTreeLogs();
               this.setFileLog();
-            }          
+            }
           });
-        });        
+        });
       },
       selectLogFile(log){
         this.fileLog = log.data.fileName;
-        this.onChange();
+       // this.onChange();
       },
       runInterval(){
         let current = bbn.fn.get_row(this.files, {value: this.fileLog});
@@ -149,10 +150,10 @@
         if ( this.md5Current.length ){
           clearInterval(logPoller);
           logPoller = setInterval(() => {
-           
+
             if ( !this.isPolling ){
               this.isPolling = true;
-           
+
               this.post(this.source.root + 'logs', {
                 fileLog: this.fileLog,
                 md5: this.md5Current,
@@ -165,7 +166,7 @@
                   this.md5Current = d.md5
                   let code = this.getRef('code');
                   this.$nextTick(()=>{
-                    if ( code !== undefined ){                   
+                    if ( code !== undefined ){
                       code.widget.setCursor( code.widget.lastLine() , 0);
                     }
                   });
@@ -203,8 +204,15 @@
         })
         //this.getRef('listFilesLog').reload();
       },
-      setFileLog(){       
-        this.fileLog = this.sourceTree[0]['items'][0].fileName
+      setFileLog(){
+        if ( (this.source.file_url !== undefined) &&
+          (bbn.fn.search(this.sourceTree[0]['items'], 'fileName', this.source.file_url) !== -1)
+        ){
+          this.fileLog = this.source.file_url;
+        }
+        else{
+          this.fileLog = this.sourceTree[0]['items'][0].fileName
+        }
       }
     },
     /*created(){
@@ -214,10 +222,10 @@
         bbn.fn.log("sswwssw", tmp);
         if ( tmp ){
           let idx = bbn.fn.search(this.files, {text: tmp});
-          if ( idx > -1 ){            
+          if ( idx > -1 ){
             this.fileLog = this.files[idx].value;
             this.onChange();
-            //this.closest("bbn-router").route(this.source.root + 'logs/' + val.toString());    
+            //this.closest("bbn-router").route(this.source.root + 'logs/' + val.toString());
           }
         }
       }

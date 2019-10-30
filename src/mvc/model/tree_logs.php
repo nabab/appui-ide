@@ -23,6 +23,7 @@
     ];
     $fs = new \bbn\file\system();
     $logs = $fs->get_files($folder_log, false, false, null, 'ms');
+
     if ( !empty($logs) ){
       $tree['num'] = count($logs);
       foreach($logs as $log){
