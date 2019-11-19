@@ -10,8 +10,14 @@ if ( !empty($ctrl->arguments) ){
       $ctrl->obj->error = $ctrl->obj->data['error'];
     }
   }
+
+   $title = $ctrl->arguments[count($ctrl->arguments)-1];
+   if ( strpos($title, '_ctrl') !== false ){
+     $title = "CTRL".($ctrl->obj->data['ssctrl']+1);
+   }
+
   echo $ctrl
-    ->set_title($ctrl->arguments[count($ctrl->arguments)-1])
+    ->set_title($title)
     ->add_js()
     ->get_view();
   if ( (end($ctrl->arguments) === "settings") ||

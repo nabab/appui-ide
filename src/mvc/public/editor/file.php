@@ -17,6 +17,7 @@ if ( !empty($ctrl->arguments) ){
     $ctrl->obj->url = $ctrl->baseURL.'file/'.$ctrl->obj->data['url'];
     $title = $ctrl->obj->data['title'];
 
+
     //case MVC set Tab
     if ( ($ctrl->obj->data['isMVC']) &&
       is_array($ctrl->obj->data['styleTab'])

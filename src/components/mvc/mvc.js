@@ -117,7 +117,7 @@
     },
     computed: {
       routerSource(){
-        if ( (this.tabsRepository !== undefined) && (this.emptyTabs !== undefined) ){
+        if ( (this.tabsRepository !== undefined) && (this.emptyTabs !== undefined) && (this.sctrl.length) ){
           let ctrlRepo = this.tabsRepository[bbn.fn.search(this.tabsRepository, 'url' ,'_ctrl')];
           let r = [{
             load: true,
