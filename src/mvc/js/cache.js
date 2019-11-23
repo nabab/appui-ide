@@ -12,10 +12,12 @@
       getContent(node){
         if ( !node.data.folder ){
           this.post( this.root + 'data_cache',{
-            cache: node.data.path,
+           // cache: node.data.path,
+             cache: node.data.nodePath,
             }, d => {
             if ( d.data ){
-              this.selectedFile = node.data.path;
+              //this.selectedFile = node.data.path;
+              this.selectedFile = node.data.nodePath;
               this.contentCache = d.data[0];
             }
           });
@@ -50,7 +52,8 @@
             text: !n.data.folder ? bbn._('Delete file cache') : bbn._('Delete folder'),
             action: (node) => {
               this.post( this.root + 'data_cache',{
-                deleteCache: node.data.path,
+                //deleteCache: node.data.path,
+                deleteCache: node.data.nodePath,
                 deleteContent: 1
               }, d => {
                 if ( d.data.success ){
@@ -65,13 +68,16 @@
                     //if delete single file
                     if ( !node.data.folder ){
                       //let's check if the file we delete is the one selected
-                      if (this.selectedFile === node.data.path){
+
+                      //if ( this.selectedFile === node.data.path ){
+                      if ( this.selectedFile === node.data.nodePath ){
                         this.contentCache = "";
                       }
                     }//if we delete a folder that contains a selected file then it will be closed
                     else{
                       let folder = this.selectedFile.split("/"),
-                          folderCompare = node.data.path.split("/"),
+                          //folderCompare = node.data.path.split("/"),
+                          folderCompare = node.data.nodePath.split("/"),
                           ctrl= false;
                       folder.shift();
                       folder.pop();
@@ -98,7 +104,8 @@
               text: bbn._("Delete folder's contents"),
               action: (node) => {
                 this.post( this.root + 'data_cache',{
-                  deleteCache: node.data.path,
+                  //deleteCache: node.data.path,
+                  deleteCache: node.data.nodePath,
                   deleteContent: 0
                   }, d => {
                   if ( d.data.success ){
