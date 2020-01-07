@@ -39,8 +39,8 @@ if ( !empty($model->data['repository']) &&
 
   // Get the repository's root path
   $path = $model->inc->ide->get_root_path($rep_cfg);
-  
-   //extensions list not to be considered
+
+  //extensions list not to be considered
   $file_check = [
     'viewables' => [
       'html',
@@ -140,7 +140,7 @@ if ( !empty($model->data['repository']) &&
       if ( is_array($todo) ){
         //we browse the element
         foreach ( $todo as $t ){
-          //we can only enter if it is a component type and there is no other child element with the same name or that is not a component type          
+          //we can only enter if it is a component type and there is no other child element with the same name or that is not a component type
           if ( ((((\bbn\str::file_ext($t, 1)[0] !== basename($cur_path)) && is_dir($t)) && ($type === 'components')) ||  ($type !== 'components')) &&
            (strpos(basename($t),".") !== 0)
           ){
@@ -192,7 +192,7 @@ if ( !empty($model->data['repository']) &&
                       if ( is_array($cnt) ){
                         foreach($cnt as $f){
                           $item = explode(".", basename($f))[0];
-                          if ( $item === basename($t) ){                            
+                          if ( $item === basename($t) ){
                             $arr[] = \bbn\str::file_ext($f);
                             $is_vue = true;
                           }
@@ -214,17 +214,17 @@ if ( !empty($model->data['repository']) &&
 
                       if ( is_array($cnt) ){
                         $num_check = 0;
-                        foreach( $cnt as $f ){                          
+                        foreach( $cnt as $f ){
                           //$name = explode(".", basename($f))[0];
-                          $ele = explode(".", basename($f));                          
+                          $ele = explode(".", basename($f));
                           $item = $ele[0];
-                          $ext = isset($ele[1]) ? $ele[1] : false;                 
+                          $ext = isset($ele[1]) ? $ele[1] : false;
                           //if is folder and component
                           if ( $item === basename($t) ){
                             $folder = false;
                             $arr[] = \bbn\str::file_ext($f);
                             $is_vue = true;
-                            $component = true;                          
+                            $component = true;
                             if ( !empty($ext) && (in_array($ext, $excludeds) === false) ){
                               $num_check++;
                             }
@@ -238,7 +238,7 @@ if ( !empty($model->data['repository']) &&
                             foreach( $cnt as $f ){
                               $ele = explode(".", basename($f));
                               $item = $ele[0];
-                              $ext = isset($ele[1]) ? $ele[1] : false;                            
+                              $ext = isset($ele[1]) ? $ele[1] : false;
                               if ( (is_dir($f) && (strpos(basename($f), '.') === 0)) ||
                                 (is_file($f) && (($item !== basename($t)) || (!empty($ext) && (in_array($ext, $excludeds) === true))))
                               ){
@@ -286,6 +286,7 @@ if ( !empty($model->data['repository']) &&
                   }
                   //object return of a single node
 
+
                   $cfg = [
                     'text' => $name,
                     'name' => $name,
@@ -331,7 +332,8 @@ if ( !empty($model->data['repository']) &&
                     }
                   }
                 }
-                else if ( !$is_file && !empty($component) && isset($folders[$name]) && !$folders[$name]['num'] ){
+                else if ( !$is_file && 
+                  !empty($component) && isset($folders[$name]) && !$folders[$name]['num'] ){
                   $tf = \bbn\file\dir::get_files($t, true);
                   if ( $num = \count($tf) ){
                     $folders[$name]['num'] = $num;
@@ -342,20 +344,15 @@ if ( !empty($model->data['repository']) &&
           }
         }
       }
-
     }
   };
 
-
-  
  //case mvc, only components or normal file but no types (case repository no current)
   if ( (!empty($is_mvc) || !empty($is_component)) ||
     empty($rep_cfg['types']) ||
     !empty($tree_popup) ||
     empty($model->data['type'])
   ){
-    
-   // die(var_dump("sdss",$rep_cfg));
     // Get all files and all folders of each mvc's tabs (_ctrl tab excluded)
     if ( !empty($rep_cfg['tabs']) ){
       foreach ( $rep_cfg['tabs'] as $i => $t ){
@@ -381,22 +378,15 @@ if ( !empty($model->data['repository']) &&
             $path_complete =  $path . $cur_path;
             $type= 'components';
             $t['bcolor'] = '#44b782';
-          }          
-          
+          }
           $get($path_complete, $t['bcolor'], $t['url'], $type);
-          // if ( !empty($tree_popup) ){
-          //   $get($path_complete, $t['bcolor'], $t['url'], $type);
-          // }
-          // else{
-          //   $get($path_complete, $t['bcolor'], $t['url']);
-          // }
         }
       }
     }
     else{
       $get($path . $cur_path, (!isset($rep_cfg['bcolor']) ? "#000000" : $rep_cfg['bcolor']) );
     }
-  }//case root repository  with alias bbn-project and contain types
+  }//case root repository with alias bbn-project and contain types
   else if ( !empty($rep_cfg['types']) && !empty($is_project) && empty($model->data['type']) ){
     $types = [];
    //browse the root elements and assign the type to each of them
@@ -423,7 +413,7 @@ if ( !empty($model->data['repository']) &&
   //else if we are in depth and we already know what types of elements we are opening and dealing with in the tree of the ide
   else if( !empty($model->data['type']) ){
     if ( $model->data['type'] === 'lib' ){
-      // lib      
+      // lib
       $get($path . $cur_path, $rep_cfg['bcolor'], false, $type);
     }
     else{
@@ -441,11 +431,11 @@ if ( !empty($model->data['repository']) &&
             )
           ){
             //case components
-            if ( $model->data['type'] === 'components' ){              
+            if ( $model->data['type'] === 'components' ){
               $get($path.$cur_path , '#44b782', $t['url'], $type);
             }
             //case mvc
-            else if ( $model->data['type'] === 'mvc' ){              
+            else if ( $model->data['type'] === 'mvc' ){
               $get($path.'mvc/'.$t['path'].$cur_path , $t['bcolor'], $t['url'], $type);
             }
           }

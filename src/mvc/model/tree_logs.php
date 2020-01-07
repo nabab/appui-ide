@@ -73,19 +73,24 @@
     if ( !empty($logs) ){
       $tree['num'] = count($logs);
       foreach($logs as $log){
-        if ( is_file($log['path']) && (\bbn\str::file_ext($log['path'], 1)[1] === 'log') ){
+        if ( is_file($log['name']) &&
+         ((\bbn\str::file_ext($log['name'], 1)[1] === 'log') ||
+          (\bbn\str::file_ext($log['name'], 1)[1] === 'json') ||
+          (\bbn\str::file_ext($log['name'], 1)[1] === 'txt'))
+        ){
           $ele = [
-            'folder' => is_dir($log['path']),
-            'file' => is_file($log['path']),
-            'fileName' => basename($log['path']),
-            'extension' =>  \bbn\str::file_ext($log['path'], 1)[1],
-            'nodePath' => $folder_log.'/'. basename($log['path']),
+            'folder' => is_dir($log['name']),
+            'file' => is_file($log['name']),
+            'fileName' => basename($log['name']),
+            'extension' =>  \bbn\str::file_ext($log['name'], 1)[1],
+            'nodePath' => $folder_log.'/'. basename($log['name']),
             'size' => \bbn\str::say_size($log['size']),
-            'text' => basename($log['path']),
+            'text' => basename($log['name']),
             'icon' => 'nf nf-fa-file_text',
             'bcolor' => '#005668',
             'num' => 0,
             'mtime' => $log['mtime'],
+            'title' => date("d-m-Y H:i:s", $log['mtime']),
            // 'path' => []
           ];
           $ele['path'][] = $ele;

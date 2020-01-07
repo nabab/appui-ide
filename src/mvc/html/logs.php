@@ -1,6 +1,6 @@
 <!-- HTML Document -->
 <div class="bbn-flex-height">
-  <div class="bbn-flex-width bbn-w-100  bbn-padded">
+  <div class="bbn-flex-width bbn-w-100 bbn-spadded bbn-header">
     <div>
       <span v-if="fileLog.length"
             class="bbn-b bbn-middle bbn-xl"
@@ -57,9 +57,7 @@
                 :resizable="true"
       >
         <div class="bbn-flex-height">
-          <div style="padding-top: 10px; padding-bottom: 10px;"
-               class="bbn-w-100 bbn-middle"
-          >
+          <div class="bbn-w-100 bbn-middle bbn-vspadded bbn-header">
             <bbn-button title="<?=_('Refresh')?>"
                         @click="treeReload()"
                         text="<?=_('Refresh files list')?>"
