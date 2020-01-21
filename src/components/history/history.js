@@ -30,7 +30,7 @@
       transform(a){
         if ( a ){
           //return $.extend(a, {
-          return bbn.fn.extend(a, {  
+          return bbn.fn.extend(a, {
             text: "name_file" in a ? a.text + ' &nbsp; <span class="bbn-badge bbn-s bbn-bg-lightgrey">' + a.numChildren + '</span>' : a.text,
             num: a.numChildren || 0,
             type: "name_file" in a ? "" : a.text
@@ -79,7 +79,7 @@
         (this.source.path !== undefined) &&
         this.source.filename ){
         this.url = this.source.repositories[this.source.repository].bbn_path + '/' + (
-          this.source.repositories[this.source.repository].path  === '/' ? '' : this.source.repositories[this.source.repository].path  ) +
+          this.source.repositories[this.source.repository].path  === '/' ? 'src/' : this.source.repositories[this.source.repository].path  ) +
           (this.source.path ? this.source.path + '/' : '') +
           this.source.filename + '/__end__';
       }

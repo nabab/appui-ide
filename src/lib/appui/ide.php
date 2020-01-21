@@ -1453,11 +1453,8 @@ class ide {
     if ( $this->set_current_file($this->decipher_path($file['full_path'])) ){
       //if in the case of a rescue of _ctrl
       if ( $file['tab'] === "_ctrl" ){
-        $backup_path = self::$backup_path . $file['repository'] . $file['path'] . $file['tab'] . '/';
-        if ( is_numeric($file['ssctrl']) && ($file['ssctrl'] === 0) ){
-          $backup_path = self::$backup_path . $file['repository'] . $file['tab'] . '/';
-        }else{
-          $backup_path = self::$backup_path . $file['repository'] . $file['path'] . $file['tab'] . '/';
+        if ( isset($file['ssctrl']) && is_numeric($file['ssctrl']) ){
+          $backup_path = self::$backup_path . $file['repository']['bbn_path']. '/' .$file['filePath'].'/'.$file['tab'] . '/';
         }
       }
       else {
@@ -1471,6 +1468,7 @@ class ide {
           $backup_path .= $file['repository']['bbn_path'] . '/' . $file['filePath'] . '/' . $file['filename'] . '/__end__/' . ($file['tab'] ?: $file['extension']) . '/';
         }
       }
+
       // Delete the file if code is empty and if it isn't a super controller
       if ( empty($file['code']) && ($file['tab'] !== '_ctrl') ){
         if ( @unlink(self::$current_file) ){
@@ -1486,6 +1484,7 @@ class ide {
         }
       }
       if ( is_file(self::$current_file) ){
+
         $backup = $backup_path . date('Y-m-d_His') . '.' . $file['extension'];
         \bbn\file\dir::create_path(dirname($backup));
         \bbn\file\dir::copy(self::$current_file, $backup);
@@ -1499,8 +1498,11 @@ class ide {
           return $this->error("Impossible to create the option");
         }
       }
-      file_put_contents(self::$current_file, $file['code']);
-      if( !empty($file['selections']) ||
+      if ( !file_put_contents(self::$current_file, $file['code']) ){
+        return $this->error('Error: Save');
+      };
+
+      if ( !empty($file['selections']) ||
         !empty($file['marks']) ||
         !empty($file['line']) ||
         !empty($file['char'])
@@ -2818,14 +2820,11 @@ class ide {
     $history_ctrl = [];
     // File's backup path
     $path = self::$backup_path . $url;
-
-
     if ( !empty($url) && !empty(self::$backup_path) ){
       $ctrl_path = explode("/", $path);
       for($y=0; $y <2; $y++){
         array_pop($ctrl_path);
       }
-
       //check if there is "_ctrl" in the url as the last step of the "$url"; in that case we tart $url to give the right path to get it to take its own backup files.
       if ( end($copy_url) === "_ctrl" ){
         $url = explode("/", $url);
@@ -2837,10 +2836,7 @@ class ide {
           array_pop($copy_url);
         }
         $copy_url = implode("/", $copy_url)."/"."_ctrl";
-
       }
-
-
 
       //First, check the presence of _ctrl backups.
       $ctrl_path = implode("/", $ctrl_path)."/"."_ctrl";
@@ -2911,7 +2907,7 @@ class ide {
          }
        }
        //taken or not the backup of the "_ctrl" we move on to acquire the date of the project, if set to true then as done before, we will take into consideration all the date including the contents of the files.
-      if( $all === true ){
+      if ( $all === true ){
 
         if ( is_dir($path) ){
           //if we pass a path that contains all the backups
@@ -3001,7 +2997,7 @@ class ide {
           }
         }
       }//otherwise returns the useful information for processing and to make any subsequent postings.
-      else{
+      else {
         //if we want you to return all the backup information useful to process and make other posts
         $listDir = \bbn\file\dir::get_dirs($path);
         if ( !empty($listDir) && !isset($check_ctrl_files) ){

@@ -1,4 +1,4 @@
-(() => {
+(() =>{
   return {
     props: ['source'],
     data(){
@@ -143,15 +143,23 @@
           });
         }
       },
-      getReposiotryProject(){
-        if ( appui.ide.repositories && appui.ide.currentRep ){
-          let repository = appui.ide.repositories[appui.ide.currentRep];
-          if ( this.typeProject ){
-            repository = appui.ide.repositoryProject( this.typeProject );
-          }
-          return repository;
+      getRepositoryProject(){
+        let parent = false;
+        if ( this.isComponent === true ){
+          parent = this.closest('appui-ide-component');
         }
-        return false;
+        else if ( this.isMVC === true ){
+          parent = this.closest('appui-ide-mvc');
+        }
+        else if ( (!this.typeProject || (this.typeProject === 'lib')) &&
+          this.isFile
+        ){
+          parent = this.closest('appui-ide-file');
+        }
+        if ( this.typeProject ){
+          return appui.ide.repositoryProject( this.typeProject , parent.repository_content);
+        }
+        return parent.repository_content
       },
       save(cm){
         const editor = this.getRef('editor'),
@@ -179,7 +187,7 @@
             }
           }
           let obj = {
-            repository: this.isProject ? this.getReposiotryProject() : this.rep,
+            repository: this.isProject ? this.getRepositoryProject() : this.rep,
             typeProject: this.typeProject,
             tab: this.tab,
             ssctrl: this.ssctrl,
@@ -218,7 +226,7 @@
             if ( d.data && d.data.success ) {
               //remove icon plus why there is file in tab
                 if ( !this.isFile ){
-                  tabnav.$set(tabnav.tabs[tab['idx']], 'title', '');
+                  //tabnav.$set(tabnav.tabs[tab['idx']], 'title', '');
                   if ( (parent.emptyTabs !== undefined) &&
                     (parent.emptyTabs.lastIndexOf(tab['url']) > -1)
                   ){

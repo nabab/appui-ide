@@ -1206,9 +1206,8 @@
         }
       },
 
-      repositoryProject( type = false ){
-        //let rep = $.extend({}, this.repositories[this.currentRep]);
-        let rep = bbn.fn.extend({}, this.repositories[this.currentRep]);
+      repositoryProject( type = false, repository = false ){
+        let rep = bbn.fn.extend({}, ( repository === false ?  this.repositories[this.currentRep] : repository));
         if ( !type ){
           type = this.typeTree
         }
@@ -1888,6 +1887,7 @@
     },
     created(){
       appui.ide = this;
+      appui.register('editor', this);
     },
     watch: {
       sourceParser(newVal, oldVal){

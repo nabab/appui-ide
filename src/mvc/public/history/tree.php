@@ -37,7 +37,7 @@ if ( isset($ctrl->inc->ide, $ctrl->post['is_mvc']) && !empty($ctrl->post['path']
   }
   else {
     $error = $ctrl->inc->ide->get_last_error();
-    if ( $error === null ){    
+    if ( $error === null ){
       $ctrl->obj->data = [];
 
     }

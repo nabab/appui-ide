@@ -36,12 +36,12 @@
         return [];
       },
       message(){
-        let text = bbn._('Are you sure you want to delete') + ' ';
-
+        let text = '';
         if ( this.formData.all ){
-          text += bbn._('all') + ' ' + this.source.name + ' ?';
+          text += bbn._('Are you sure you want to delete all') + ' ' + this.source.name + ' ?';
         }
         else{
+          text += bbn._('Are you sure you want to delete') + ' ';
           // files mvc or  files components
           if ( (this.source.is_file) ||
             (this.source.is_component && this.source.data.is_vue && !this.source.only_component)

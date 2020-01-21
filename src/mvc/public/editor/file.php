@@ -58,6 +58,7 @@ if ( !empty($ctrl->arguments) ){
 
 
     if ( !empty($title) && (strlen($title) > 20) ){
+      $ctrl->obj->ftitle = $title;
       $start = strlen($title) - 20;
       $start = ($start + 3);
       $title = '...'.substr($title,$start);
@@ -65,7 +66,6 @@ if ( !empty($ctrl->arguments) ){
 
     echo $ctrl
       ->set_title($title)
-      //->set_ftitle($ctrl->obj->data['title'])
       ->add_js()
       ->get_view();
   }

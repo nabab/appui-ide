@@ -5,6 +5,7 @@
     data(){
       return {
         elements: 'all',
+        className: '',
         showClass: false,
         sections: {
           members: false,
@@ -32,6 +33,13 @@
       }
     },
     methods:{
+      getInfo(){
+        bbn.fn.post('docs', {class : this.className}, d =>{
+          if ( d.success ){
+            this.allInfo = d.infos
+          }
+        });
+      },
       getMembers(){
         let arr = [];
         if ( (this.source.parser.members !== undefined) && this.source.parser.members.length ){

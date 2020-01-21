@@ -17,6 +17,7 @@
       <div class="bbn-overlay" v-if="selected">
         <bbn-code :value="code"
                   :mode="mode"
+                  readonly
         ></bbn-code>
       </div>
       <div v-if="noHistory" class="bbn-h-100 bbn-middle">

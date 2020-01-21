@@ -5,4 +5,4 @@
  **/
 
 /** @var $ctrl \bbn\mvc\controller */
-$ctrl->combo('BBN Documentation');
+$ctrl->set_color('#000', '#FFF')->combo('BBN Documentation');

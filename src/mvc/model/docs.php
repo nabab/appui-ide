@@ -5,8 +5,10 @@
  **/
 
 //case delete file  in folder
+//if ( !empty($model->data['class']) ){
+  $path = BBN_LIB_PATH.'bbn/bbn/build/phpdox/xml/classes/bbn_appui_options.xml';
+//}
 
-$path = BBN_LIB_PATH.'bbn/bbn/build/phpdox/xml/classes/bbn_appui_options.xml';
 if ( is_file($path) ){
   $xml = file_get_contents($path, true);
   $obj = simplexml_load_string($xml);
@@ -50,11 +52,13 @@ if ( is_file($path) ){
   }
 
   return [
+    'success' => true,
     'parser' => $res,
     'class' => $info_class['@attributes']
   ];
 }
 return [
+  'success' => false,
   'parser' => false,
   'class' => false
 ];
