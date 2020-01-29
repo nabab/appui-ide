@@ -15,14 +15,14 @@ if ( !empty($model->data['repository']) &&
 
   //case of a folder and a component we treat the '$current_path' differently
   if ( !empty($model->data['is_vue']) ){
-    $cur_path = explode('/', $model->data['path']);
+    $cur_path = explode('/', $model->data['uid']);
     array_pop($cur_path);
     $cur_path = implode('/', $cur_path);
     $cur_path .= '/';
   }
   else{
-   $cur_path = !empty($model->data['path']) ? $model->data['path'] . '/' : '';
-   //treat the curent path for the initial date
+    $cur_path = !empty($model->data['uid']) ? $model->data['uid'] . '/' : '';
+     //treat the curent path for the initial date
     if ( !empty($model->data['type']) && ($model->data['type'] === 'mvc') ){
       $cur_path = explode('/', $cur_path );
       if ( (count($cur_path) > 0) && ($cur_path[0] === 'mvc') ){
@@ -39,7 +39,6 @@ if ( !empty($model->data['repository']) &&
 
   // Get the repository's root path
   $path = $model->inc->ide->get_root_path($rep_cfg);
-
   //extensions list not to be considered
   $file_check = [
     'viewables' => [
@@ -290,7 +289,8 @@ if ( !empty($model->data['repository']) &&
                   $cfg = [
                     'text' => $name,
                     'name' => $name,
-                    'path' => $component === true  ? $cur_path.$name.'/'.$name : $cur_path . $name,
+                    //Previously the 'uid' property was called 'path'
+                    'uid' => $component === true  ? $cur_path.$name.'/'.$name : $cur_path . $name,
                     'has_index' => empty($is_file) && \bbn\file\dir::has_file($t, 'index.php', 'index.html', 'index.htm'),
                     'is_svg' => !empty($is_file) && ($ext === 'svg'),
                     'is_viewable' => !empty($is_file) && \in_array($ext, $file_check['viewables']) && ($ext !== 'svg'),
@@ -353,6 +353,7 @@ if ( !empty($model->data['repository']) &&
     !empty($tree_popup) ||
     empty($model->data['type'])
   ){
+   
     // Get all files and all folders of each mvc's tabs (_ctrl tab excluded)
     if ( !empty($rep_cfg['tabs']) ){
       foreach ( $rep_cfg['tabs'] as $i => $t ){

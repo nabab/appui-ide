@@ -8,12 +8,12 @@ if ( ($files !== null) && is_array($files) && (count($files) > 0) ){
       'file' => $file['file'],
       'repository' => $file['repository'],
       'path' => $file['path'],
-      'cfg' => $file['cfg'], 
-      'type' => $file['type'] 
-    ];    
+      'cfg' => $file['cfg'],
+      'type' => $file['type']
+    ];
   }
   if ( !empty($res['files']) ){
     $res['success'] = true;
-  }  
+  }
 }
 return $res;

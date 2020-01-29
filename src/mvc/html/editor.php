@@ -82,56 +82,78 @@
                 :collapsible="true"
                 :resizable="true"
       >
-        <div class="bbn-flex-height">
-          <div style="padding-top: 10px; padding-bottom: 10px; padding-left: 5px;">
-            <bbn-input v-if="showSearchContent"
-                       class="ide-tree-search"
-                       v-model="search.searchInRepository"
-                       @keydown.enter="searchingContent"
-                       placeholder="<?=_('Search content')?>"
-            ></bbn-input>
-            <bbn-input  v-else
-                        class="ide-tree-search"
-                        placeholder="<?=_('Search file')?>"
-                        v-model="searchFile"
-            ></bbn-input>
-            <bbn-checkbox name ="searchContent"
-                          label="<?=_('Search content')?>"
-                          v-model="showSearchContent"
-                          :value="!showSearchContent"
-                          style="padding-top: 6px;"
-            ></bbn-checkbox>
-            <bbn-checkbox v-if="showSearchContent"
-                          label="<?=_('Match cases')?>"
-                          v-model="search.caseSensitiveSearch"
-                          :value="!search.caseSensitiveSearch"
-                          style="padding-top: 6px;"
-            ></bbn-checkbox>
-          </div>
-          <div class="bbn-w-100" v-if="isProject">
-            <bbn-dropdown class="bbn-w-100"
-                          :source="listRootProject"
-                          v-model="typeProject"
-            ></bbn-dropdown>
-          </div>
-          <div class="bbn-flex-fill" >
-            <div class="bbn-overlay">
-               <bbn-tree class="tree"
-                        :source="root + 'tree'"
-                        @activate="treeNodeActivate"
-                        :menu="treeContextMenu"
-                        :data="treeInitialData"
-                        ref="filesList"
-                        :draggable="true"
-                        @dragEnd="moveNode"
-                        :map="treeMapper"
-                        :icon-color="color"
-                        :filter-string="searchFile"
-                        :storage-full-name="'appui-ide-tree-' + currentRep"
-              ></bbn-tree>
+        <bbn-splitter orientation="vertical"
+                      ref="treeSplitter"
+                      :collapsible="true"
+                      :resizable="true">
+          <bbn-pane :title="_('Files')">
+            <div class="bbn-flex-height">
+              <div class="bbn-spadded">
+                <bbn-input v-if="showSearchContent"
+                           class="ide-tree-search bbn-w-100"
+                           v-model="search.searchInRepository"
+                           @keydown.enter="searchingContent"
+                           placeholder="<?=_('Search content')?>"
+                ></bbn-input>
+                <bbn-input  v-else
+                            class="ide-tree-search bbn-w-100"
+                            placeholder="<?=_('Search file')?>"
+                            v-model="searchFile"
+                ></bbn-input>
+                <bbn-checkbox name ="searchContent"
+                              label="<?=_('Search content')?>"
+                              v-model="showSearchContent"
+                              :value="!showSearchContent"
+                              style="padding-top: 6px;"
+                ></bbn-checkbox>
+                <bbn-checkbox v-if="showSearchContent"
+                              label="<?=_('Match cases')?>"
+                              v-model="search.caseSensitiveSearch"
+                              :value="!search.caseSensitiveSearch"
+                              style="padding-top: 6px;"
+                ></bbn-checkbox>
+              </div>
+              <div class="bbn-spadded" v-if="isProject">
+                <bbn-dropdown class="bbn-w-100"
+                              :source="listRootProject"
+                              v-model="typeProject"
+                ></bbn-dropdown>
+              </div>
+              <div class="bbn-flex-fill" >
+                <div class="bbn-overlay">
+                   <bbn-tree class="tree"
+                            :source="root + 'tree'"
+                            @activate="treeNodeActivate"
+                            :menu="treeContextMenu"
+                            :data="treeInitialData"
+                            ref="filesList"
+                            :draggable="true"
+                            @dragEnd="moveNode"
+                            :map="treeMapper"
+                            :icon-color="color"
+                            :filter-string="searchFile"
+                            :storage-full-name="'appui-ide-tree-' + currentRep"
+                  ></bbn-tree>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          </bbn-pane>
+          <bbn-pane :collapsed="true" :title="_('Detail')">
+          	<h1>
+              Detail
+            </h1>
+          </bbn-pane>
+          <bbn-pane :collapsed="true" :title="_('Version control')">
+          	<h1>
+              Version control
+            </h1>
+          </bbn-pane>
+          <bbn-pane :collapsed="true" :title="_('Other servers')">
+          	<h1>
+              Other servers
+            </h1>
+          </bbn-pane>
+        </bbn-splitter>
       </bbn-pane>
       <bbn-pane :collapsible="true"
                 :resizable="true"

@@ -23,3 +23,4 @@ echo $ctrl
     ->set_title('I.D.E')
     ->add_js($ctrl->get_model(['routes' => $ctrl->get_routes()]))
     ->get_view();
+

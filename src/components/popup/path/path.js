@@ -39,7 +39,7 @@
           onlydirs: true,
           tree_popup: true,
           tab: this.source.tab || false,
-          path: this.path,
+          uid: this.path,
           type: this.source.type || false
         };
       },
@@ -66,7 +66,7 @@
       },
       treeNodeActivate(d){
         const popup = bbn.vue.closest(this, "bbn-popup");
-        let path_destination = d.data.path.endsWith('/') ? d.data.path : d.data.path + '/';
+        let path_destination = d.data.uid.endsWith('/') ? d.data.uid : d.data.uid + '/';
         if ( ((this.source.rep.alias_code === "bbn-project") && (d.type === 'components')) || this.source.isComponent === true ){
           if ( d.data.is_vue === true ){
             if (  path_destination.indexOf(d.data.name + '/' + d.data.name + '/') > -1 ){
@@ -85,6 +85,7 @@
             break;
           case 'create':{
             this.source.data.path = path_destination;
+
           }
             break;
         }

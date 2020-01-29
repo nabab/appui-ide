@@ -29,7 +29,6 @@
       //method map for component tree
       transform(a){
         if ( a ){
-          //return $.extend(a, {
           return bbn.fn.extend(a, {
             text: "name_file" in a ? a.text + ' &nbsp; <span class="bbn-badge bbn-s bbn-bg-lightgrey">' + a.numChildren + '</span>' : a.text,
             num: a.numChildren || 0,
@@ -45,7 +44,7 @@
         setTimeout(() => {
           if ( node.data.folder === false ){
             this.post(this.source.root + 'history/tree', {
-              url: node.data.path + "/" + node.data.file + "." + node.data.ext,
+              url: node.data.uid + "/" + node.data.file + "." + node.data.ext,
             }, d => {
               if ( d.data.success ){
                 this.selected = true;
@@ -66,7 +65,7 @@
             repository: this.source.repository,
             repository_cfg: this.source.repositories[this.source.repository],
             is_mvc: this.source.isMVC,
-            path: this.url,
+            uid: this.url,
           }
         }
       }

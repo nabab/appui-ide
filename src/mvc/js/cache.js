@@ -18,7 +18,10 @@
             if ( d.data ){
               //this.selectedFile = node.data.path;
               this.selectedFile = node.data.nodePath;
-              this.contentCache = d.data[0];
+              this.selectedFileCreation = bbn.fn.fdate(bbn.fn.date(Math.round(d.data.timestamp*1000)));
+              this.selectedFileExpire = d.data.expire || bbn._('Never');
+              this.selectedFileHash = d.data.hash;
+              this.contentCache = JSON.stringify(d.data.value);
             }
           });
         }

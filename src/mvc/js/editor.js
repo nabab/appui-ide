@@ -275,14 +275,14 @@
           is_mvc: this.isMVC,
           is_component: this.isComponent,
           filter: this.searchFile,
-          path: this.path,
+          uid: this.path,
           onlydirs: false,
           tab: false,
-          is_project: this.isProject
+          is_project: this.isProject,
         };
 
         if (this.isProject && (this.path.length === 0) ){
-          obj.path = 'mvc';
+          obj.uid = 'mvc';
           this.typeTree = 'mvc';
         }
         if ( this.typeTree !== false){
@@ -317,7 +317,6 @@
         this.currentEditor.closest('appui-ide-code').goLine(line);
       },
       selectRecentFile(file, obj){
-        bbn.fn.log("dedede", file, obj)   
         this.getRef('tabstrip').load(obj.path);
       },
       setReadyMenu(){
@@ -495,12 +494,15 @@
         alert("dsds")
       },
       searchOfContext(node, component = false, is_vue = false){
-        let title = bbn._('Search in') + ' : ' + node.data.path,
-            path = node.data.path;
+        //let title = bbn._('Search in') + ' : ' + node.data.path,
+        //    path = node.data.path;
+        let title = bbn._('Search in') + ' : ' + node.data.uid,
+            path = node.data.uid;
         if ( component ){
           title = bbn._('Search in') + ' : ' + node.data.name + ` <i class='nf nf-fa-vuejs'></i>`;
           if ( is_vue ){
-            path = node.data.path.split('/');
+            //path = node.data.path.split('/');
+            path = node.data.uid.split('/');
             path.pop();
             path = path.join('/');
           }
@@ -769,7 +771,6 @@
        */
       treeMapper(a){
         if ( a.folder ){
-          //$.extend(a, {
           bbn.fn.extend(a, {
             repository: this.currentRep,
             repository_cfg: this.repositories[this.currentRep],
@@ -781,7 +782,7 @@
             is_component: this.isComponent,
             is_project: this.isProject,
             filter: this.searchFile
-          });
+          }, true);
         }
         return a;
       },
@@ -933,8 +934,8 @@
               action:  node =>{
                 let root = appui.plugins[bbn.fn.get_field(this.ddRepData, 'value', this.currentRep,'text')];
                 root = root !== undefined ? root+'/' : '';
-                bbn.fn.link('ide/profiler/url/'+ root + node.data.path);
-                bbn.fn.log("PRofiling",'ide/profiler/url/'+ root + node.data.path)
+                //bbn.fn.link('ide/profiler/url/'+ root + node.data.path);
+                bbn.fn.link('ide/profiler/url/'+ root + node.data.uid);
               }
             });
           }
@@ -957,7 +958,6 @@
       treeReload(n, i){
         this.getRef('filesList').reload();
       },
-
       /**
        * Callback function triggered when you click on an item on the files|folders tree
        *
@@ -968,10 +968,11 @@
       treeNodeActivate(d){
         if ( !d.data.folder || (d.data.folder && d.data.is_vue) ){
           if( !this.isProject && !this.isMVC && this.existingTab(d) ){
+            //change d.data.path for d.data.uid
             bbn.fn.link(
               this.root + 'editor/file/' +
               this.currentRep +
-              (d.data.path || '') +
+               (d.data.uid || '') +
               '/_end_/code',
               true
             );
@@ -1016,7 +1017,8 @@
         }
       //  else if ( this.currentRep === )
         else{
-          link =  'file/' +  this.currentRep + file.data.path + '/_end_/' + (file.data.tab !== false ? file.data.tab : 'code');
+          //link =  'file/' +  this.currentRep + file.data.path + '/_end_/' + (file.data.tab !== false ? file.data.tab : 'code');
+          link =  'file/' +  this.currentRep + file.data.uid + '/_end_/' + (file.data.tab !== false ? file.data.tab : 'code');
         }
         if ( link ){
           this.getRef('tabstrip').load(link);
@@ -1184,7 +1186,8 @@
       testNodeOfTree(node){
         if ( this.isProject && (this.typeProject === 'mvc') ){
           let route = this.repositories[this.currentRep].route ? this.repositories[this.currentRep].route + '/' :'' ;
-          bbn.fn.link( route + node.data.path, true );
+          //bbn.fn.link( route + node.data.path, true );
+          bbn.fn.link( route + node.data.uid, true );
         }
         else{
           this.treeNodeActivate(node);
@@ -1280,20 +1283,25 @@
             src.repositoryProject = !this.repositoryProject(node.data.type) ? this.repositories[this.currentRep] : this.repositoryProject(node.data.type);
             //case component
             if ( node.data.type === 'components' ){
-              if (  node.data.path.indexOf(node.data.dir + node.data.name + '/' + node.data.name) > -1 ){
-                src.path = node.data.path.replace( node.data.dir + node.data.name + '/' + node.data.name,  node.data.dir + node.data.name);
+              //if (  node.data.path.indexOf(node.data.dir + node.data.name + '/' + node.data.name) > -1 ){
+              //src.path = node.data.path.replace( node.data.dir + node.data.name + '/' + node.data.name,  node.data.dir + node.data.name);
+              if (  node.data.uid.indexOf(node.data.dir + node.data.name + '/' + node.data.name) > -1 ){
+                src.path = node.data.uid.replace( node.data.dir + node.data.name + '/' + node.data.name,  node.data.dir + node.data.name);
               }
               else{
-                src.path = node.data.path;
+                //src.path = node.data.path;
+                src.path = node.data.uid;
               }
             }//other types
             else{
-              src.path = node.data.path;
+              //src.path = node.data.path;
+              src.path = node.data.uid;
             }
           }
           else{
             if ( node.data.folder ){
-              src.path = node.data.path;
+              //src.path = node.data.path;
+              src.path = node.data.uid;
             }
           }
           src.allData = node.data;
@@ -1359,7 +1367,8 @@
             nodeData: {
               folder: node.data.folder,
               ext: node.data.ext,
-              path: node.data.path,
+              //path: node.data.path,
+              path: node.data.uid,
               name: node.data.name,
               tab: node.data.tab,
               dir: node.data.dir,
@@ -1665,16 +1674,15 @@
        * Function for move node in tree
        */
       moveNode(a, select, dest){
-        bbn.fn.log("DEST", a, select,dest);
         if ( dest.data.folder ){
-          let path = select.data.path.split('/'),
-              new_path = dest.data.path,
+          //let path = select.data.path.split('/'),
+          let path = select.data.uid.split('/'),
+              //new_path = dest.data.path,
+              new_path = dest.data.uid,
               repositoryProject = false,
               isMVC = this.isMVC;
 
           path.pop();
-
-
 
           if ( this.isProject === true ){
             repositoryProject = !this.repositoryProject(this.typeTree) ? this.repositories[this.currentRep] : this.repositoryProject(this.typeTree);
@@ -1692,7 +1700,6 @@
               isMVC = true;
             }
           }
-
 
           path = path.join('/');
 

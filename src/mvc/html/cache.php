@@ -30,9 +30,15 @@
           <div class="bbn-flex-height" v-if="selectedFile.length && contentCache.length">
 						<div class="bbn-w-100">
 							<div class="bbn-card bbn-padded bbn-l bbn-vmargin">
-								<strong>
-									<span v-text="selectedFile"></span>
-								</strong>
+                <div class="bbn-grid-fields" v-if="selectedFile">
+                  <div class="bbn-grid-full bbn-b bbn-c" v-text="selectedFile"></div>
+                  <label class="bbn-b" v-text="_('Creation date') + ' :'"></label>
+                  <div v-text="selectedFileCreation"></div>
+                  <label class="bbn-b" v-text="_('Expires') + ' :'"></label>
+                  <div v-text="selectedFileExpire"></div>
+                  <label class="bbn-b" v-text="_('Hash') + ' :'"></label>
+                  <div v-text="selectedFileHash"></div>
+                </div>
 							</div>
 						</div>
 						<div class="bbn-w-100 bbn-flex-fill">

@@ -125,10 +125,10 @@
               info = code.getState(),
               path = '';
           if ( !this.typeProject ){
-            path = this.fullPath.substring(this.fullPath.lastIndexOf('src/')+4, this.fullPath.length);
+            path = this.fullPath.substring(this.path.length, this.fullPath.length);
           }
           else{
-            path = this.fullPath.substring(this.path.lastIndexOf('src/'+ this.typeProject)+4, this.path.length);
+            path = this.path.substring(this.path.lastIndexOf('src/')+4, this.path.length);
           }
           this.post(this.ide.root + 'actions/tracking',{
             file: path,
@@ -344,7 +344,7 @@
             state.line = state.line === false ?  parseInt(0) :  parseInt(state.line);
             state.char = state.char === false ?  parseInt(0) :  parseInt(state.char);
             code.loadState({line: state.line, char: state.char});
-            appui.ide.currentLine =  parseInt(state.line)+1;
+            appui.ide.currentLine =  state.line+1;
           }, 800);
         }
         //for list recent files

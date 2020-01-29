@@ -83,10 +83,10 @@
                 else if ( this.source.eleComponent === 'methods' ){
                   return 'nf nf-mdi-function';
                 }
-              }              
+              }
               return "nf nf-mdi-vuejs";
             }
-          }          
+          }
         },
         methods:{
           getRow(){
@@ -96,14 +96,13 @@
               appui.ide.cursorPosition.line = this.source.line-1;
               this.$nextTick(()=>{
                 if ( (this.source.type === 'origin') && parserComponent.getCode ){
-                  bbn.fn.log("ssss")
-                  appui.ide.currentEditor.closest('appui-ide-code').setState();    
-                }                            
+                  appui.ide.currentEditor.closest('appui-ide-code').setState();
+                }
               })
             }
           }
-        }       
+        }
       },
    }
-  } 
+  }
 })()

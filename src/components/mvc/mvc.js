@@ -288,7 +288,6 @@
           action: this.reloadTab
         })
         //add in menu the the possibility of adding the codes
-        bbn.fn.log("MEnuuuuuuuuu", addCode, url)
         arr.push(addCode);
         return arr;
       },//method for add block of code menu sub tab
