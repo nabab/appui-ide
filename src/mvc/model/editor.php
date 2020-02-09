@@ -21,6 +21,9 @@ if ( isset($model->data['routes'], $model->inc->ide) ){
         else if ( ($type['url'] === 'cls') && empty($ptype['tabs']) && !empty($ptype['extensions']) ){
           $tabs['lib']['extensions'] = $ptype['extensions'];
         }
+        else if ( ($type['url'] === 'cli') && empty($ptype['tabs']) && !empty($ptype['extensions']) ){
+          $tabs[$type['url']]['extensions'] = $ptype['extensions'];
+        }
       }
     }
 

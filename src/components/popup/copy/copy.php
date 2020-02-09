@@ -13,7 +13,7 @@
          <bbn-input v-model="new_name"
                     class="bbn-flex-fill"
          ></bbn-input>
-         <bbn-dropdown v-if="!source.isMVC && isFile"
+         <bbn-dropdown v-if="!source.isMVC && isFile && extensions.length"
                        style="width: 115px"
                        :source="extensions"
                        v-model="new_ext"

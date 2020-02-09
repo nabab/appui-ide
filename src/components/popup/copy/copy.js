@@ -4,10 +4,6 @@
  * Date: 13/07/2017
  * Time: 17:57
  */
-
-
-
-
 (() => {
   return {
     data(){
@@ -39,13 +35,11 @@
     methods: {
       onSuccess(){
         //const tab = this.closest("bbn-container");
-        
-        
         if ( appui.ide.nodeParent !== false ){
           appui.ide.nodeParent.reload();
           this.$nextTick(()=>{
             appui.ide.$set(appui.ide, 'nodeParent', false);
-          });        
+          });
         }
         else{
           appui.ide.getRef('filesList').reload();
@@ -66,14 +60,12 @@
         bbn.vue.closest(this, ".bbn-popup").close();
       },
       selectDir(){
-        //this.closest("bbn-container").getRef('popup').open({
         this.getPopup().open({
           width: 300,
           height: 400,
           title: bbn._('Path'),
           component: 'appui-ide-popup-path',
-          //source: $.extend(this.$data, {
-          source: bbn.fn.extend(this.$data, {  
+          source: bbn.fn.extend(this.$data, {
             operation: 'copy',
             isComponent: this.source.isComponent,
             isMVC: this.source.isMVC,
@@ -127,7 +119,7 @@
       formData(){
         let obj = {
           path: this.source.data.dir,
-          repository: this.source.repositories[this.source.currentRep],
+          repository: this.source.repository,
           name: this.source.data.name,
           ext: this.source.data.ext,
           is_mvc: this.source.isMVC,
@@ -145,7 +137,6 @@
       if ( this.isFile ){
         this.new_ext = this.source.data.ext === undefined ? '' : this.source.data.ext;
       }
-      bbn.fn.log("mouted copy", this);
     }
   }
 })();

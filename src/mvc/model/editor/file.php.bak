@@ -45,7 +45,7 @@ if ( !empty($model->data['url']) && isset($model->inc->ide) ){
           ]
         ];
         //temporaney
-        $typeRep = $type['url'] = $type['url'] === 'lib' ? 'cls' : $type['url'];
+        $typeRep = $type['url'] = $type['url'] === 'lib' ? 'cls' : $type['url'];        
         // if ( $ptype = $model->inc->options->option($model->inc->options->from_code($typeRep,'PTYPES', 'ide', BBN_APPUI)) ){
         if ( $ptype = $model->inc->ide->get_type($typeRep) ){
           if ( !empty($ptype['tabs']) ){

@@ -5,6 +5,7 @@ if ( isset($ctrl->inc->ide) ){
     $ctrl->obj->success = true;
   }
   else {
-    $ctrl->obj->error = $ctrl->inc->ide->get_last_error();
+    $ctrl->obj->success = false;
+    $ctrl->obj->error = _('Imposssibile rename the element');
   }
 }

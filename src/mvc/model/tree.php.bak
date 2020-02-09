@@ -413,7 +413,7 @@ if ( !empty($model->data['repository']) &&
   }
   //else if we are in depth and we already know what types of elements we are opening and dealing with in the tree of the ide
   else if( !empty($model->data['type']) ){
-    if ( ($model->data['type'] === 'lib') || ($model->data['type'] === 'cli') ){
+    if ( $model->data['type'] === 'lib' ){
       // lib
       $get($path . $cur_path, $rep_cfg['bcolor'], false, $type);
     }

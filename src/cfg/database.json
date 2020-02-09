@@ -1,0 +1,209 @@
+{
+    "bbn_projects": {
+        "keys": {
+            "PRIMARY": {
+                "columns": [
+                    "id"
+                ],
+                "ref_db": null,
+                "ref_table": null,
+                "ref_column": null,
+                "constraint": null,
+                "update": null,
+                "delete": null,
+                "unique": 1
+            },
+            "id_client": {
+                "columns": [
+                    "id_client"
+                ],
+                "ref_db": "apst_app",
+                "ref_table": "bbn_clients",
+                "ref_column": "id",
+                "constraint": "bbn_projects_ibfk_2",
+                "update": "CASCADE",
+                "delete": "CASCADE",
+                "unique": 0
+            }
+        },
+        "cols": {
+            "id": [
+                "PRIMARY"
+            ],
+            "id_client": [
+                "id_client"
+            ]
+        },
+        "fields": {
+            "id": {
+                "position": 1,
+                "type": "binary",
+                "null": 0,
+                "key": "PRI",
+                "extra": "",
+                "signed": true,
+                "virtual": false,
+                "generation": "",
+                "maxlength": 16
+            },
+            "id_client": {
+                "position": 2,
+                "type": "binary",
+                "null": 0,
+                "key": "MUL",
+                "extra": "",
+                "signed": true,
+                "virtual": false,
+                "generation": "",
+                "maxlength": 16
+            },
+            "db": {
+                "position": 3,
+                "type": "varchar",
+                "null": 1,
+                "key": null,
+                "extra": "",
+                "signed": true,
+                "virtual": false,
+                "generation": "",
+                "default": "NULL",
+                "maxlength": 80
+            },
+            "name": {
+                "position": 4,
+                "type": "varchar",
+                "null": 0,
+                "key": null,
+                "extra": "",
+                "signed": true,
+                "virtual": false,
+                "generation": "",
+                "maxlength": 50
+            },
+            "config": {
+                "position": 5,
+                "type": "longtext",
+                "null": 1,
+                "key": null,
+                "extra": "",
+                "signed": true,
+                "virtual": false,
+                "generation": "",
+                "default": "NULL"
+            },
+            "lang": {
+                "position": 6,
+                "type": "varchar",
+                "null": 0,
+                "key": null,
+                "extra": "",
+                "signed": true,
+                "virtual": false,
+                "generation": "",
+                "default": "en",
+                "maxlength": 2
+            }
+        }
+    },
+    "bbn_projects_assets": {
+        "keys": {
+            "PRIMARY": {
+                "columns": [
+                    "id_project",
+                    "id_option"
+                ],
+                "ref_db": null,
+                "ref_table": null,
+                "ref_column": null,
+                "constraint": "bbn_projects_assets_ibfk_1",
+                "update": "CASCADE",
+                "delete": "CASCADE",
+                "unique": 1
+            },
+            "id_project": {
+                "columns": [
+                    "id_project"
+                ],
+                "ref_db": "apst_app",
+                "ref_table": "bbn_projects",
+                "ref_column": "id",
+                "constraint": "bbn_projects_assets_ibfk_1",
+                "update": "CASCADE",
+                "delete": "CASCADE",
+                "unique": 0
+            },
+            "id_option": {
+                "columns": [
+                    "id_option"
+                ],
+                "ref_db": "apst_app",
+                "ref_table": "bbn_options",
+                "ref_column": "id",
+                "constraint": "bbn_projects_assets_ibfk_2",
+                "update": "CASCADE",
+                "delete": "CASCADE",
+                "unique": 0
+            },
+            "asset_type": {
+                "columns": [
+                    "asset_type"
+                ],
+                "ref_db": "apst_app",
+                "ref_table": "bbn_options",
+                "ref_column": "id",
+                "constraint": "bbn_projects_assets_ibfk_3",
+                "update": "CASCADE",
+                "delete": "CASCADE",
+                "unique": 0
+            }
+        },
+        "cols": {
+            "id_project": [
+                "PRIMARY",
+                "id_project"
+            ],
+            "id_option": [
+                "PRIMARY",
+                "id_option"
+            ],
+            "asset_type": [
+                "asset_type"
+            ]
+        },
+        "fields": {
+            "id_project": {
+                "position": 1,
+                "type": "binary",
+                "null": 0,
+                "key": "PRI",
+                "extra": "",
+                "signed": true,
+                "virtual": false,
+                "generation": "",
+                "maxlength": 16
+            },
+            "asset_type": {
+                "position": 2,
+                "type": "binary",
+                "null": 0,
+                "key": "MUL",
+                "extra": "",
+                "signed": true,
+                "virtual": false,
+                "generation": "",
+                "maxlength": 16
+            },
+            "id_option": {
+                "position": 3,
+                "type": "binary",
+                "null": 0,
+                "key": "PRI",
+                "extra": "",
+                "signed": true,
+                "virtual": false,
+                "generation": "",
+                "maxlength": 16
+            }
+        }
+    }
+}

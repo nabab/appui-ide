@@ -12,7 +12,7 @@ if ( !empty($model->data['nodePath']) ){
 }*/
 
 if ( !empty($model->data['cache'])  && \bbn\str::check_path($folderCache.$model->data['cache'])){
-  return [json_encode(unserialize(file_get_contents($folderCache.$model->data['cache'])))];
+  return json_decode(file_get_contents($folderCache.$model->data['cache']));
 }
 //case click button for delte all cache
 else if( !empty($model->data['deleteAll']) ){

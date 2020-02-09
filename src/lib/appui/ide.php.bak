@@ -985,7 +985,7 @@ class ide {
             // Rename
             (($ope === 'rename') &&
               //\bbn\file\dir::move($f['old'], $f['new'])
-              $this->fs->rename($f['old'], $cfg['new_name'].'.'.$cfg['new_ext'])
+              $this->fs->move($f['old'], $f['new'])
             ) ||
             //Move
             (($ope === 'move') &&
@@ -1255,44 +1255,6 @@ class ide {
       }
     }
     return $this->is_component($this->repository_from_url($url));
-  }
-
-   /**
-    * Checks if a repository is a Component from URL
-    *
-    * @param string $url
-    * @return bool
-    */
-  public function is_lib_from_url(string $url){
-    $ele = explode("/",$url);
-    if ( is_array($ele) ){
-      //case plugin
-      if ( ($ele[0] === 'BBN_LIB_PATH') && ($ele[4] === 'lib') ){
-        return true;
-      }
-      else if ( $ele[1] === 'components' ){
-        return true;
-      }
-    }
-  }
-
-   /**
-    * Checks if a repository is a Component from URL
-    *
-    * @param string $url
-    * @return bool
-    */
-  public function is_cli_from_url(string $url){
-    $ele = explode("/",$url);
-    if ( is_array($ele) ){
-      //case plugin
-      if ( ($ele[0] === 'BBN_LIB_PATH') && ($ele[4] === 'cli') ){
-        return true;
-      }
-      else if ( $ele[1] === 'components' ){
-        return true;
-      }
-    }
   }
 
   /**
@@ -1676,7 +1638,6 @@ class ide {
 
       $rep = $cfg['repository'];
       $path = $this->decipher_path($rep['bbn_path'] . '/' . $rep['path']);
-      
       if ( ($rep['alias_code'] === 'bbn-project') && !empty($cfg['type']) ){
         if ( $cfg['type'] === 'components' ){
           $path .= $cfg['path'].$cfg['name'];
@@ -1690,7 +1651,7 @@ class ide {
           }
 
         }
-        if ( ($cfg['type'] === 'lib') || ($cfg['type'] === 'cli') ){
+        if ( $cfg['type'] === 'lib' ){
           $path .= $cfg['path'];
         }
       }
@@ -2719,6 +2680,7 @@ class ide {
             'path' => $path,
             'type' => $type === '' ? false : $type
           ];
+          //die(Var_dump("ddd",$recents,$all));
         }
       }
     }
@@ -2899,7 +2861,7 @@ class ide {
                 $o['tab'] = $tab;
               }
             }
-          
+            die(\bbn\x::dump($o, $res, $rep));
           }
         }*/
         else {

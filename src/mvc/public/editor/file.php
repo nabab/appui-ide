@@ -41,19 +41,17 @@ if ( !empty($ctrl->arguments) ){
       $ctrl->obj->fcolor = $ctrl->obj->data['styleTab']['components']['fcolor'];
     }
 
-    //case Lib set Tab
+    //case Lib or Cli set Tab
     else if ( empty($ctrl->obj->data['isComponent']) &&
-      empty($ctrl->obj->data['isMVC']) &&
-      (($ctrl->obj->data['repository_content']['code'] === "lib/") || ($ctrl->obj->data['type'] === 'lib') || ($ctrl->obj->data['type']['path'] === 'lib/'))  &&
-      is_array($ctrl->obj->data['styleTab'])
+      empty($ctrl->obj->data['isMVC'])
     ){
       if ( $start = stripos($ctrl->obj->data['title'],'/') ){
         $title = substr($ctrl->obj->data['title'],  $start+1);
       }
-      $ctrl->obj->bcolor = $ctrl->obj->data['styleTab']['lib']['bcolor'];
-      $ctrl->obj->icon = $ctrl->obj->data['styleTab']['lib']['icon'];
-      $ctrl->obj->fcolor = $ctrl->obj->data['styleTab']['lib']['fcolor'];
-    }    
+      $ctrl->obj->bcolor = $ctrl->obj->data['styleTab'][$ctrl->obj->data['type']]['bcolor'];
+      $ctrl->obj->icon = $ctrl->obj->data['styleTab'][$ctrl->obj->data['type']]['icon'];
+      $ctrl->obj->fcolor = $ctrl->obj->data['styleTab'][$ctrl->obj->data['type']]['fcolor'];
+    }
     unset($ctrl->obj->data['styleTab']);
 
 

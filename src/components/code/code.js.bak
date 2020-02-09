@@ -23,13 +23,10 @@
         return ((appui.ide.isComponent === true) || (this.rep.alias_code === "components")) || (bbn.vue.closest(this, 'appui-ide-component') !== false);
       },
       isProject(){
-        return this.source.project !== false;
+        return !!appui.ide.isProject;
       },
       isFile(){
         return !this.isMVC && !this.isComponent;
-      },
-      isCli(){
-        return this.isFile && (this.source.project === 'cli');
       },
       rep(){
         if ( appui.ide.repositories && appui.ide.currentRep ){
@@ -38,9 +35,7 @@
         return false;
       },
       isClass(){
-        if ( ((this.isFile && this.isProject) && (this.source.project === 'lib')) ||
-          (this.isFile && (this.rep.alias_code === "cls"))
-        ){
+        if ( (this.isFile && this.isProject) || (this.isFile && (this.rep.alias_code === "cls")) ){
           return true;
         }
         return false;
@@ -77,8 +72,16 @@
         return this.path;
       },
       typeProject(){
-        if ( this.isProject  && this.source.project){
-          return this.source.project;
+        if ( this.isProject ){
+          if ( this.isMVC ){
+            return 'mvc';
+          }
+          else if ( this.isComponent ){
+            return 'components';
+          }
+          else{
+            return 'lib';
+          }
         }
         return false;
       },
@@ -274,17 +277,6 @@
 
           return true;
         }
-        /*if  ( this.isCli ){
-          bbn.fn.post('editor/actions/run_cli', {
-            'file': this.path
-          }, d=>{
-            if ( d.success ){
-              appui.success(bbn._('Executed!'));
-            }
-            else{
-              appui.error(bbn._('Not Executed!'));
-            }
-          });*/
         if ( typeof(this.mode) === 'string' ){
           switch ( this.mode ){
             case "php":

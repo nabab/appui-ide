@@ -1,13 +1,12 @@
 <?php
 /** @var $ctrl \bbn\mvc\controller */
 if ( isset($ctrl->inc->ide) ){
-  // if ( !empty($ctrl->type) && ($ctrl->post['type'] === 'components') ){
-  //   $ctrl->post['path'] .= $ctrl->post['name'].'/';
-  // }
+  \bbn\x::log([$ctrl->post], 'vito');
   if ( !empty($ctrl->inc->ide->create($ctrl->post)) ){
     $ctrl->obj->success = true;
   }
   else {
-    $ctrl->obj->error = $ctrl->inc->ide->get_last_error();
+    $ctrl->obj->success = false;
+    $ctrl->obj->error = _('Impossible to create the element');
   }
 }

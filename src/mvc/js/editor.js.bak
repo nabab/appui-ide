@@ -172,26 +172,14 @@
     computed: {
       listRootProject(){
         let roots = this.source.projects.roots.slice();
-        if ( roots.length ) {
-          return bbn.fn.map(roots, v => {
-            switch (v.text) {
-              case 'mvc':
-                 v.text = '<i class="nf nf-fa-code"></i> '+ v.text;
-                break;
-              case 'components':
-                v.text = '<i class="nf nf-mdi-vuejs"></i> '+ v.text;
-                break;
-              case 'lib':
-                v.text = '<i class="nf nf-mdi-library"></i> '+ v.text;
-                break;
-              case 'cli':
-                v.text = '<i class="nf nf-fa-cogs"></i> '+ v.text;
-                break;
-            }
-            return v;
-          })
-        }
-        return [];
+        //temporaney disabled
+        // if ( this.currentRep.indexOf('BBN_LIB_PATH/bbn') !== -1){
+        //   let i = bbn.fn.search(roots, 'value', 'lib');
+        //   if ( i > -1 ){
+        //     roots.splice(i, 1);
+        //   }
+        // }
+        return roots;
       },
       typeSearch(){
         if( this.caseSensitiveSearch ){
@@ -1226,11 +1214,12 @@
         if ( !type ){
           type = this.typeTree
         }
-        //case mvc and component
-        if ( this.source.projects.tabs_type[type] !== undefined && ((type !== 'lib') && (type !== 'cli')) ){
+        if ( this.source.projects.tabs_type[type] !== undefined && type !== 'lib' ){
+          //return $.extend( rep, {tabs: this.source.projects.tabs_type[type][0]});
           return bbn.fn.extend(rep, {tabs: this.source.projects.tabs_type[type][0]});
         }
-        else if ( this.source.projects.tabs_type[type] !== undefined && ((type === 'lib') || (type === 'cli')) ){
+        else if ( this.source.projects.tabs_type[type] !== undefined && type === 'lib' ){
+          //return $.extend(rep, {extensions: this.source.projects.tabs_type[type]['extensions']});
           return bbn.fn.extend(rep, {extensions: this.source.projects.tabs_type[type]['extensions']});
         }
         else{
@@ -1526,10 +1515,11 @@
         else{
           title =  node.data.folder ? bbn._('Copy folder') : bbn._('Copy');
         }
+
         if ( (node.data.type !== undefined) && this.isProject ){
           src.only_component = onlyComponent;
-          //src.repository = bbn.fn.extend(this.repositories[this.currentRep], {tabs: this.source.projects.tabs_type[node.data.type][0]});
-          src.repository = this.repositoryProject(node.data.type)
+          //src.repository = $.extend(this.repositories[this.currentRep], {tabs: this.source.projects.tabs_type[node.data.type][0]});
+          src.repository = bbn.fn.extend(this.repositories[this.currentRep], {tabs: this.source.projects.tabs_type[node.data.type][0]});
 
           if ( node.data.is_vue === true ){
             src.component_vue = true;
@@ -1539,6 +1529,7 @@
         else{
           title = node.data.folder ? bbn._('Copy folder') : bbn._('Copy');
         }
+
         this.getPopup().open({
           width: 470,
           height: 250,
@@ -1546,8 +1537,8 @@
           component: 'appui-ide-popup-copy',
           source: src
         });
-
       },
+
       /**
        * Function that is activated to the operation done at the node to make it be carried out again.
        *
@@ -1909,9 +1900,6 @@
       appui.unregister('editor');
     },
     watch: {
-      currentURL(newVal, oldVal){
-        bbn.fn.log("URL is changing");
-      },
       sourceParser(newVal, oldVal){
         if ( (newVal !== oldVal) && (newVal !== false) ){
           this.showTreeParser = false;

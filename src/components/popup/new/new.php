@@ -2,7 +2,7 @@
           :data="formData"
           :action="source.root + 'actions/create'"
           @success="onSuccess"
-          @failure="failureActive"         
+          @failure="failureActive"
 >
 
   <div class="bbn-padded bbn-flex-height">
