@@ -7,4 +7,8 @@
  
 /** @var \bbn\mvc\controller $ctrl The current controller */
 
-$ctrl->combo();
+$ctrl->set_color('#000', '#FFF')
+  ->set_icon('nf nf-fa-home')
+  ->combo(_('Help'), [
+    'root' => APPUI_IDE_ROOT
+  ]);

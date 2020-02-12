@@ -49,7 +49,6 @@ else{
 
   
   if ( !empty($content) ){
-    
     foreach( $content as $i => $path ){
       $nodePath = substr($path, strlen($folderCache));
       $arr = explode("/", $path);
@@ -81,5 +80,5 @@ else{
       array_push($all, $ele);
     }
   }
-  return $all;
+  return ['data' => $all];
 }

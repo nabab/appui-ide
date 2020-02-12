@@ -1,4 +1,49 @@
 {
+    "bbn_clients": {
+        "keys": {
+            "PRIMARY": {
+                "columns": [
+                    "id"
+                ],
+                "ref_db": null,
+                "ref_table": null,
+                "ref_column": null,
+                "constraint": null,
+                "update": null,
+                "delete": null,
+                "unique": 1
+            }
+        },
+        "cols": {
+            "id": [
+                "PRIMARY"
+            ]
+        },
+        "fields": {
+            "id": {
+                "position": 1,
+                "type": "binary",
+                "null": 0,
+                "key": "PRI",
+                "extra": "",
+                "signed": true,
+                "virtual": false,
+                "generation": "",
+                "maxlength": 16
+            },
+            "nom": {
+                "position": 2,
+                "type": "varchar",
+                "null": 0,
+                "key": null,
+                "extra": "",
+                "signed": true,
+                "virtual": false,
+                "generation": "",
+                "maxlength": 100
+            }
+        }
+    },
     "bbn_projects": {
         "keys": {
             "PRIMARY": {

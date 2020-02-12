@@ -212,7 +212,7 @@
             else if ( this.isMVC === true ){
               parent = this.closest('appui-ide-mvc');
             }
-            else if ( (!this.typeProject || (this.typeProject === 'lib')) &&
+            else if ( (!this.typeProject || ((this.typeProject === 'lib') || (this.typeProject === 'cli'))) &&
               this.isFile
             ){
               parent = this.closest('appui-ide-file');

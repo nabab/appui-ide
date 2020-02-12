@@ -1750,7 +1750,7 @@ class ide {
         }
         // Add item to options table for permissions
         if ( (empty($cfg['type']) || ($cfg['type'] !== 'components')) &&
-          !empty($cfg['tab']) && ($cfg['tab'] === 'php') && !empty($file)
+          !empty($cfg['tab']) && ($cfg['tab_url'] === 'php') && !empty($file)
         ){
           if ( !$this->create_perm_by_real($file) ){
             return $this->error("Impossible to create the option");
@@ -1883,6 +1883,7 @@ class ide {
         $bits = \bbn\x::remove_empty(explode('/', $f));
         $code = $is_file ? \bbn\str::file_ext(array_pop($bits), 1)[0] : array_pop($bits).'/';
         $id_parent = $this->options->from_code(self::BBN_PAGE, self::BBN_PERMISSIONS, self::BBN_APPUI);
+        \bbn\x::log([$id_parent],'vito');
         foreach ( $bits as $b ){
           if ( !$this->options->from_code($b.'/', $id_parent) ){
             $this->options->add([

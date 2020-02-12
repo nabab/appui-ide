@@ -142,6 +142,7 @@
       formData(){
         return {
           tab_path: this.isMVC && this.rep && this.rep.tabs[this.data.tab] ? this.rep.tabs[this.data.tab].path : '',
+          tab_url: this.isMVC && this.rep && this.rep.tabs[this.data.tab] ? this.rep.tabs[this.data.tab].url : '',
           default_text: this.defaultText,
           repository: this.rep,
           type: this.source.type
