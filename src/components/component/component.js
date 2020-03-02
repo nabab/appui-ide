@@ -53,7 +53,7 @@
           return `<i class='nf nf-plus' style='color:black;'></i>`;
         }
         return '';
-      },*/     
+      },*/
       getMenu(url){
         return [{
           icon: 'nf nf-fa-refresh',
@@ -88,6 +88,9 @@
           tab.menu.splice(idx, 1);
         }
       }
-    }   
+    },
+    mounted(){
+      appui.getRegistered('editor').urlEditor =  this.source.url ;
+    }
   }
 })();

@@ -40,8 +40,8 @@ if ( isset($model->data['routes'], $model->inc->ide) ){
 
   }
 
-  if ( $model->inc->session->has('ide', 'repository') ){
-    $current_rep = $model->inc->session->get('ide', 'repository');
+  if ( $model->inc->session->has('ide2', 'repository') ){
+    $current_rep = $model->inc->session->get('ide2', 'repository');
   }
 
 
@@ -55,6 +55,71 @@ if ( isset($model->data['routes'], $model->inc->ide) ){
   }
 
   $ide_cfg = $model->inc->user->get_cfg('ide');
+  $themes =  [
+    'default',
+    '3024-day',
+    '3024-night',
+    'abcdef',
+    'ambiance',
+    'ayu-dark',
+    'ayu-mirage',
+    'base16-dark',
+    'base16-light',
+    'bespin',
+    'blackboard',
+    'cobalt',
+    'colorforth',
+    'darcula',
+    'dracula',
+    'duotone-dark',
+    'duotone-light',
+    'eclipse',
+    'elegant',
+    'erlang-dark',
+    'gruvbox-dark',
+    'hopscotch',
+    'icecoder',
+    'idea',
+    'isotope',
+    'lesser-dark',
+    'liquibyte',
+    'lucario',
+    'material',
+    'material-darker',
+    'material-palenight',
+    'material-ocean',
+    'mbo',
+    'mdn-like',
+    'midnight',
+    'monokai',
+    'moxer',
+    'neat',
+    'neo',
+    'night',
+    'nord',
+    'oceanic-next',
+    'panda-syntax',
+    'paraiso-dark',
+    'paraiso-light',
+    'pastel-on-dark',
+    'railscasts',
+    'rubyblue',
+    'seti',
+    'shadowfox',
+    'solarized dark',
+    'solarized light',
+    'the-matrix',
+    'tomorrow-night-bright',
+    'tomorrow-night-eighties',
+    'ttcn',
+    'twilight',
+    'vibrant-ink',
+    'xq-dark',
+    'xq-light',
+    'yeti',
+    'yonce',
+    'zenburn'
+  ];
 
   return [
     'staticPath' => BBN_STATIC_PATH,
@@ -64,6 +129,7 @@ if ( isset($model->data['routes'], $model->inc->ide) ){
     'currentRep' => $current_rep,
     'projects' => $projects,
     'theme' => empty($ide_cfg['theme']) ? '' : $ide_cfg['theme'],
+    'themes' => $themes,
     'font' => empty($ide_cfg['font']) ? '' : $ide_cfg['font'],
     'font_size' => empty($ide_cfg['font_size']) ? '' : $ide_cfg['font_size'],
     'default_repository' => 'BBN_APP_PATH/'

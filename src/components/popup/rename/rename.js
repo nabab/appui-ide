@@ -142,7 +142,7 @@
           editor.getRef('tabstrip').close(idx);
         }
 
-        if ( appui.ide.nodeParent ){         
+        if ( appui.ide.nodeParent ){
           appui.ide.nodeParent.reload();
           this.$nextTick(()=>{
             appui.ide.$set(appui.ide, 'nodeParent', false);

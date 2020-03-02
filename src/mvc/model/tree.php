@@ -268,6 +268,25 @@ if ( !empty($model->data['repository']) &&
                   //on the basis of various checks, set the icon
                   //case file but no component
                   if ( !empty($is_file) && empty($component) ){
+/*
+                    switch ($ext) {
+                      case 'js':
+                        $icon = "nf nf-dev-javascript_badge";
+                        break;
+                      case 'php':
+                        $icon =  "bbn-lg nf nf-dev-php";
+                         break;
+                      case 'html':
+                        $icon =  "bbn-xl nf nf-fa-html5";
+                        break;
+                      case 'css':
+                        $icon =  "nf nf-dev-css3";
+                        break;
+                      case 'less':
+                        $icon =  "nf nf-dev-less";
+                        break;
+                    }*/
+
                     if ( $ext === 'js'){
                       $icon = "icon-javascript";
                     }

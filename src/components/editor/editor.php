@@ -122,7 +122,7 @@
               <div class="bbn-flex-fill" >
                 <div class="bbn-overlay">
                    <bbn-tree class="tree"
-                            :source="root + 'tree'"
+                            :source="source.root + 'tree'"
                             @activate="treeNodeActivate"
                             :menu="treeContextMenu"
                             :data="treeInitialData"
@@ -157,7 +157,8 @@
       </bbn-pane>
       <bbn-pane :collapsible="true"
                 :resizable="true"
-                :scrollable="false">
+                :scrollable="false"
+      >
         <bbn-tabnav id="tabstrip_editor"
                     ref="tabstrip"
                     :autoload="true"

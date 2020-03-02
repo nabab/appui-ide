@@ -7,6 +7,8 @@
         ide: null,
         firstInput: false,
         originalValue: this.source.value,
+        theme: appui.getRegistered('editor').themeCode,
+        codeComponent: false,
         initialState: {
           marks: this.source.marks,
           selections: this.source.selections,
@@ -30,10 +32,10 @@
       },
       isCli(){
         return this.isFile && (this.source.project === 'cli');
-      },
+      },//current repository
       rep(){
-        if ( appui.ide.repositories && appui.ide.currentRep ){
-          return this.ide.repositories[appui.ide.currentRep];
+        if ( this.ide.repositories && this.ide.repository ){
+          return this.ide.repositories[this.ide.repository];
         }
         return false;
       },
@@ -50,20 +52,20 @@
       },
       path(){
         let path = this.rep.bbn_path + '/' + (this.rep.path === '/' ? '' : this.rep.path);
-        if ( this.isProject ){
+        //if ( this.isProject ){
           if ( this.isMVC || this.isComponent || this.isFile ){
             path = this.source.id.slice();
             path = path.split('/');
             path.shift();
             path = path.join('/');
           }
-        }
+        /*}
         else if ( !this.isProject && this.isMVC && this.rep.tabs ){
           let idx = bbn.fn.search(this.rep.tabs, "url", this.tab);
           if ( this.rep.tabs[idx] ){
             path += this.rep.tabs[idx].path;
           }
-        }
+        }*/
         return path;
       },
       //
@@ -87,7 +89,7 @@
           let rep = this.isProject ? this.getReposiotryProject() : this.rep,
             idx = bbn.fn.search(rep.tabs, "url", this.tab);
           if ( this.isMVC && rep && rep.tabs && rep.tabs[idx] && rep.tabs[idx].fixed ){
-            return this.ide.repositories[this.ide.repository].tabs[idx].fixed;
+            return this.ide.repositories[this.ide.currentRep].tabs[idx].fixed;
           }
         }
         return false
@@ -111,7 +113,16 @@
          return  this.source.id
         }
         return false;
-      }
+      },
+    /*  currentState(){
+        let obj = bbn.fn.extend(this.$options.computed, {}, true);
+        bbn.fn.each(obj, (v, i)=>{
+          if ( i !== 'currentState' ) {
+            obj[i] = this[i]
+          }
+        });
+        return bbn.fn.extend(this.$options.$data, obj, true);
+      }*/
     },
     methods: {
       runTracking(recentFile = true){
@@ -120,21 +131,52 @@
 
           let code = this.getRef('editor'),
               info = code.getState(),
-              path = '';
+              path = '',
+              pathHistory = this.filePath;
+
           if ( !this.typeProject ){
             path = this.fullPath.substring(this.path.length, this.fullPath.length);
           }
           else{
             path = this.path.substring(this.path.lastIndexOf('src/')+4, this.path.length);
           }
+
+          if ( this.isProject && this.isMVC ){
+            pathHistory = "";
+            let arr = this.filePath.split('/'),
+                pos = 0;
+            bbn.fn.each(arr, (val, i) =>{
+              if ( val === 'mvc' ){
+                pos = i+1;
+                return false;
+              }
+            });
+
+            if ( pos ){
+              arr.splice(pos, 1);
+              pathHistory = arr.join('/');
+            }
+          }
+
           this.post(this.ide.root + 'actions/tracking',{
             file: path,
-            id_repository: this.rep.id,
             state: {
               selections: info.selections !== undefined ? info.selections : false,
               marks: info.marks !== undefined ? info.marks : false,
               line: info.line !== undefined ? info.line : false,
               char: info.char !== undefined ? info.char : false,
+            },
+            info:{
+              repository: this.isProject ? this.getRepositoryProject() : this.rep,
+              typeProject: this.typeProject,
+              tab: this.tab,
+              ssctrl: this.ssctrl,
+              path: this.fixed ? this.filePath : this.ide.path,
+              filename: this.fixed || this.filename,
+              extension: this.extension,
+              full_path: this.id,
+              filePath : pathHistory,
+              code_file_pref: this.path.substring(this.path.lastIndexOf('src/'+ this.typeProject)+4, this.path.length)
             },
             set_recent_file: recentFile
           });
@@ -170,7 +212,7 @@
           if ( this.isProject && this.isMVC ){
             pathHistory = "";
             let arr = this.filePath.split('/'),
-                pos = false;
+                pos = 0;
             bbn.fn.each(arr, (val, i) =>{
               if ( val === 'mvc' ){
                 pos = i+1;
@@ -325,7 +367,7 @@
       getLine(){
         this.runTracking();
         appui.ide.currentLine = this.getRef('editor').widget.getCursor().line;
-       // appui.ide.disabledLine = false
+       // appui.ide2.disabledLine = false
       },
       goLine(lineNum){
         lineNum = parseInt(lineNum);
@@ -338,27 +380,35 @@
       },
       setState(){
         let code = this.getRef('editor');
+        this.codeComponent = !!code;
         //case for serach a content
-        if ( (appui.ide.search.link !== undefined)  && (appui.ide.cursorPosition.line > 0 || appui.ide.cursorPosition.ch > 0) ){
+        if ( (appui.ide.search.link !== false )  && (appui.ide.cursorPosition.line > 0 || appui.ide.cursorPosition.ch > 0) ){
           code.loadState({
             line: parseInt(appui.ide.cursorPosition.line),
             char: parseInt(appui.ide.cursorPosition.ch),
           });
           appui.ide.currentLine = parseInt(appui.ide.cursorPosition.line)+1;
+          appui.getRegistered('editor').currentLine = state.line+1;
         }
         else{
           setTimeout(() => {
             let state = bbn.fn.extend({}, this.initialState, true);
             state.line = state.line === false ?  parseInt(0) :  parseInt(state.line);
             state.char = state.char === false ?  parseInt(0) :  parseInt(state.char);
-            code.loadState({line: state.line, char: state.char});
+            this.$nextTick(()=>{
+              code.loadState({line: state.line, char: state.char});
+            });
             appui.ide.currentLine =  state.line+1;
-          }, 800);
+            appui.getRegistered('editor').currentLine = state.line+1;
+            appui.getRegistered('editor').cursorPosition.line = state.line+1;
+            appui.getRegistered('editor').cursorPosition.ch = state.char;
+          },0);
         }
         //for list recent files
         if ( appui.ide.readyMenu ){
           appui.ide.getRecentFiles();
           //for  code  first input tracking
+
           /*
           let codeEle = this.getRef('editor').$el;
           if ( codeEle !== undefined ){
@@ -383,12 +433,20 @@
       this.$nextTick(()=>{
         appui.ide.$set(appui.ide, 'runGetEditor', true);
       });
+      appui.ide.$set(appui.ide, 'urlEditor', appui.ide.urlEditor+'/'+this.source.tab);
     },
     watch: {
       isChanged(isChanged){
         let tabNav = this.closest('bbn-tabnav');
         tabNav.tabs[tabNav.selected].isUnsaved = isChanged;
-      }
+      },
+      /*currentState: {
+        deep: true,
+        handler(){
+          alert()
+          console.log('The list of colours has changed!');
+        }
+      }*/
     }
   }
 })();

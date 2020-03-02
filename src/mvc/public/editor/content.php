@@ -11,10 +11,11 @@ if ( !empty($ctrl->arguments) ){
     }
   }
 
-   $title = $ctrl->arguments[count($ctrl->arguments)-1];
-   if ( strpos($title, '_ctrl') !== false ){
-     $title = "CTRL".($ctrl->obj->data['ssctrl']+1);
-   }
+  $title = !empty($ctrl->arguments[count($ctrl->arguments)]) ? $ctrl->arguments[count($ctrl->arguments)] : $ctrl->arguments[count($ctrl->arguments)-1];
+
+  if ( strpos($title, '_ctrl') !== false ){
+    $title = "CTRL".($ctrl->obj->data['ssctrl']+1);
+  }
 
   echo $ctrl
     ->set_title($title)

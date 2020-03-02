@@ -1,0 +1,150 @@
+/* CSS Document */
+
+div.CodeMirror {
+  border: none;
+  padding: 0;
+  .cm-js, .cm-php, .cm-html {
+    color: #0ca;
+  }
+  .cm-trailingspace {
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAACCAYAAAB/qH1jAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3QUXCToH00Y1UgAAACFJREFUCNdjPMDBUc/AwNDAAAFMTAwMDA0OP34wQgX/AQBYgwYEx4f9lQAAAABJRU5ErkJggg==);
+    background-position: bottom left;
+    background-repeat: repeat-x;
+  }
+}
+
+.CodeMirror-fullscreen {
+  z-index: 12;
+}
+
+div.bbn-ide-container {
+  .bbn-tabnav-tabs .bbn-tab-text{
+    font-size: em !important;
+  }
+  overflow: hidden;
+  height: 100%;
+  div.bbn-ide-toolbar-container {
+    overflow: visible;
+  }
+  div.bbn-ide {
+    overflow: visible;
+  }
+  ul.menu {
+    overflow: visible;
+  }
+  .ide-rep-select {
+    width: 300px;
+  }
+}
+.bbn-ide-selectdir {
+  overflow: auto !important;
+}
+div.bbn-ide-container, div.bbn-logger, .bbn-ide-selectdir {
+  .treeInlineEdit > input {
+    font-size: 1.5em;
+    min-width: 10em;
+    min-height: 2em;
+    border-radius: 5px 5px 5px 5px;
+    -moz-border-radius: 5px 5px 5px 5px;
+    border: 0px solid #ffffff;
+  }
+  .tree {
+    // ICONS
+    // Icons fonts
+    .fa {
+      font-family: "FontAwesome";
+      font-size: large !important;
+      text-align: center;
+    }
+    .mf {
+      font-family: "FontMfizz";
+      font-size: large !important;
+      text-align: center;
+      display: inline-block;
+    }
+    // Icons types
+    .folder-icon:before {
+      .fa;
+      content: "\f07b";
+      //color: #F4BF75
+    }
+    .default-icon:before {
+      .mf;
+      content: "\f128";
+    }
+    .css-icon:before {
+      .mf;
+      content: "\f10f";
+    }
+    .less-icon:before {
+      .mf;
+      content: "\f10f";
+    }
+    .scss-icon:before {
+      .mf;
+      content: "\f10f";
+    }
+    .html-icon:before {
+      .fa;
+      content: "\f13b";
+    }
+    .js-icon:before {
+      .mf;
+      content: "\f131";
+    }
+    .py-icon:before {
+      .mf;
+      content: "\f156";
+    }
+    .php-icon:before {
+      .mf;
+      content: "\f165";
+    }
+    .sql-icon:before {
+      .mf;
+      content: "\f110";
+    }
+    .svg-icon:before {
+      .mf;
+      content: "\f167";
+    }
+    .txt-icon:before {
+      .fa;
+      content: "\f15c";
+      font-size: medium !important;
+    }
+    .md-icon:before {
+      .fa;
+      content: "\f15c";
+      font-size: medium !important;
+    }
+    .json-icon:before {
+      .mf;
+      content: "\f130";
+    }
+  
+  }
+
+}
+#tabstrip_editor{
+  div.bbn-content{
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+}
+
+ul.bbn-ide-context, ul.menu {
+  i.fa {
+    margin-right: 3px;
+    text-align: center;
+    width: 1.2em;
+  }
+}
+
+div.bbn-ide-history {
+  div.bbn-ide-history-tree {
+    ul {
+      padding: 0 10px;
+    }
+  }
+}

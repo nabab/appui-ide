@@ -99,7 +99,6 @@
           tabsMenu[i] = exts;
         }
       });
-      //return $.extend({}, this.source, {
       return bbn.fn.extend({}, this.source, {
         repositories: ide.repositories,
         font: ide.font,
@@ -350,9 +349,8 @@
         }
       }
     },
-   /* mounted(){
-      console.log("ddd");
-      this.routerSource = this.setRouterSource();
-    }*/
+    mounted(){
+      appui.getRegistered('editor').urlEditor =  this.source.url ;
+    }
   }
 })();

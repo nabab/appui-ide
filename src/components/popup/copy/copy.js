@@ -124,6 +124,7 @@
           ext: this.source.data.ext,
           is_mvc: this.source.isMVC,
           is_file: this.isFile,
+          is_project: this.source.isProject,
           is_component: this.source.isComponent
         }
         if ( this.source.repository['types'] !== undefined ){

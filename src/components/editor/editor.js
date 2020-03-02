@@ -7,15 +7,17 @@
           a.value = i;
         });
       }
-      //return $.extend({}, this.source, {
-      return bbn.fn.extend({}, this.source, {
+      return {
+        repositories: this.source.repositories,
+        currentRep: '',
         selected: 0,
         url: this.source.root + 'editor',
         path: '',
         lastRename: '',
-        urlEditor: '',
         searchFile: '',
+        themeCode: '',
         tempNodeofTree: false,
+        urlEditor: '',
         //for search content
         search:{
           link: false,
@@ -24,7 +26,6 @@
           lastSearchRepository: ''
         },
         typeProject: 'mvc',
-        typeTree: false,
         //for search content
         showSearchContent: false,
         cursorPosition:{
@@ -144,11 +145,7 @@
             }, {
               icon: 'nf nf-fa-language',
               text: bbn._('IDE style'),
-              action(){
-                if ( bbn.ide ){
-                  return bbn.ide.cfgStyle();
-                }
-              }
+              action: this.cfgStyle
             }]
           }
         ],
@@ -169,7 +166,7 @@
         disabledLine: true,
         showGoTOLine: false,
         mountedTabnav: false
-      })
+      }
     },
     computed: {
       listRootProject(){
@@ -222,35 +219,61 @@
       },
       currentEditor(){
         if ( this.runGetEditor || (this.currentURL !== false) ){
-            let tabnav = this.$refs.tabstrip.getSubTabNav();
+          if ( this.getRef('tabstrip') ){
+            let tabnav = this.getRef('tabstrip').getSubTabNav();
             if ( tabnav ){
-              let currentTab = tabnav.activeRealTab;
-              if ( currentTab ){
-                if ( currentTab.find('appui-ide-code') ){
-                  /*if ( this.errorTreeParser ){
-                    this.$set(this,'errorTreeParser',false);
-                  }
-                  this.$set(this,'sourceTreeParser',false);*/
-                  return currentTab.find('bbn-code')
-                }
+              let currentTab = tabnav.activeRealTab,
+                  codeEditor = currentTab.find('appui-ide-code');
+              if ( codeEditor ){
+                return codeEditor;
               }
             }
+          }
+        }
+        return false;
+      },
+      currentCode(){
+        if ( this.currentEditor && this.currentEditor.codeComponent ){
+          let codeEditor = this.currentEditor.find('bbn-code');
+          if ( codeEditor ){
+            return codeEditor;
+          }
         }
         return false;
       },
       currentId(){
-        if ( this.currentEditor ){
-          return this.currentEditor.closest('appui-ide-code').source.id;
+        if ( this.currentCode ){
+          return this.currentEditor.source.id;
+        }
+        return false;
+      },
+      stateCurrent(){
+        if ( this.currentEditor &&
+          this.currentCode &&
+          this.currentId
+        ){
+          let obj = bbn.fn.extend(this.currentEditor.$options.computed, {}, true);
+          bbn.fn.each(obj, (v, i)=>{
+            obj[i] = this.currentEditor[i];
+          });
+          obj.tab = this.currentEditor.$data.tab;
+          obj.value = this.currentEditor.$data.value;
+          obj.ssctrl = this.currentEditor.$data.ssctrl;
+          obj.currentTree = this.typeProject;
+          obj.selectedRunReposiotry = this.runRepository;
+          obj.cursorPosition = this.cursorPosition;
+          delete obj.currentPopup;
+          return obj;
         }
         return false;
       },
       //temporanely name
       possibilityParser(){
         if ( this.currentEditor ){
-          if ( this.currentEditor.closest('appui-ide-code').isClass ){
+          if ( this.currentEditor.isClass ){
             return 'class';
           }
-          else if ( this.currentEditor.closest('appui-ide-code').isComponent ){
+          else if ( this.currentEditor.isComponent ){
             return 'component';
           }
         }
@@ -297,10 +320,10 @@
 
         if (this.isProject && (this.path.length === 0) ){
           obj.uid = 'mvc';
-          this.typeTree = 'mvc';
+          this.typeProject = 'mvc';
         }
-        if ( this.typeTree !== false){
-          obj.type = this.typeTree;
+        if ( this.typeProject !== false){
+          obj.type = this.typeProject;
         }
         return obj;
       },
@@ -322,13 +345,16 @@
       }
     },
     methods: {
+      createTabstrip(){
+        this.mountedTabnav = !this.mountedTabnav;
+      },
       goToLine(){
-        let lastLine = this.currentEditor.widget.lastLine(),
+        let lastLine = this.currentCode.widget.lastLine(),
             line = this.currentLine;
         if ( line > lastLine ){
           line = lastLine;
         }
-        this.currentEditor.closest('appui-ide-code').goLine(line);
+        this.currentEditor.goLine(line);
       },
       selectRecentFile(file, obj){
         this.getRef('tabstrip').load(obj.path);
@@ -342,7 +368,7 @@
         }
       },
       getRecentFiles(){
-        this.post(this.root + 'editor/get_recent_files',{}, d=>{
+        this.post(this.source.root + 'editor/get_recent_files',{}, d=>{
           let menu = this.getRef('mainMenu').currentData[0]['data']['items'];
           if ( d.success ){
             let arr = [];
@@ -504,6 +530,20 @@
           }
         });
       },
+      cfgStyle(){
+        if ( this.source.themes ){
+          this.getPopup().open({
+            width: 400,
+            height: 200,
+            title: bbn._('Select theme'),
+            component: 'appui-ide-popup-style',
+            source:{
+              themeCode: this.themeCode,
+              themes: this.source.themes
+            }
+          });
+        }
+      },
       keydownFunction(event) {
         alert("dsds")
       },
@@ -578,11 +618,10 @@
        * @returns string|boolean
        */
       getBbnPath(){
-        const vm = this;
-        if ( vm.repositories[vm.currentRep] &&
-          vm.repositories[vm.currentRep].bbn_path
+        if ( this.repositories[this.currentRep] &&
+          this.repositories[this.currentRep].bbn_path
         ){
-          return vm.repositories[vm.currentRep].bbn_path;
+          return this.repositories[this.currentRep].bbn_path;
         }
         return false;
       },
@@ -593,11 +632,10 @@
        * @returns string|boolean
        */
       getRepPath(){
-        const vm = this;
-        if ( vm.repositories[vm.currentRep] &&
-          vm.repositories[vm.currentRep].path
+        if ( this.repositories[this.currentRep] &&
+          this.repositories[this.currentRep].path
         ){
-          return vm.repositories[vm.currentRep].path;
+          return this.repositories[this.currentRep].path;
         }
         return false;
       },
@@ -610,15 +648,14 @@
        * @returns string|boolean
        */
       getTabPath(tab, rep){
-        const vm = this;
-        rep = rep || vm.currentRep;
-        if ( tab && vm.repositories[rep] && vm.repositories[rep].tabs ){
+        rep = rep || this.currentRep;
+        if ( tab && this.repositories[rep] && this.repositories[rep].tabs ){
           // Super controller
           if ( tab.indexOf('_ctrl') > -1 ){
             tab = '_ctrl';
           }
-          if ( vm.repositories[rep].tabs[tab] && vm.repositories[rep].tabs[tab].path ){
-            return vm.repositories[rep].tabs[tab].path;
+          if ( this.repositories[rep].tabs[tab] && this.repositories[rep].tabs[tab].path ){
+            return this.repositories[rep].tabs[tab].path;
           }
         }
         return false;
@@ -632,20 +669,19 @@
        * @returns array|boolean
        */
       getExt(rep, tab){
-        const vm = this;
-        if ( vm.repositories[rep] ){
+        if ( this.repositories[rep] ){
           // MVC
-          if ( tab && vm.repositories[rep].tabs ){
+          if ( tab && this.repositories[rep].tabs ){
             // Super controller
             if ( tab.indexOf('_ctrl') > -1 ){
               tab = '_ctrl';
             }
-            if ( vm.repositories[rep].tabs[tab] && vm.repositories[rep].tabs[tab].extensions ){
-              return vm.repositories[rep].tabs[tab].extensions;
+            if ( this.repositories[rep].tabs[tab] && this.repositories[rep].tabs[tab].extensions ){
+              return this.repositories[rep].tabs[tab].extensions;
             }
           }
-          else if ( vm.repositories[rep].extensions ){
-            return vm.repositories[rep].extensions;
+          else if ( this.repositories[rep].extensions ){
+            return this.repositories[rep].extensions;
           }
         }
         return false;
@@ -659,22 +695,19 @@
        * @returns {*}
        */
       getDefaultText(ext, tab){
-        const vm = this;
-        if ( vm.repositories[vm.currentRep] ){
+        if ( this.repositories[this.currentRep] ){
           // MVC
-          if ( tab && vm.repositories[vm.currentRep].tabs ){
+          if ( tab && this.repositories[this.currentRep].tabs ){
             // Super controller
             if ( tab.indexOf('_ctrl') > -1 ){
               tab = '_ctrl';
-
-
             }
-            if ( vm.repositories[vm.currentRep].tabs[tab] && vm.repositories[vm.currentRep].tabs[tab].extensions ){
-              return bbn.fn.get_field(vm.repositories[vm.currentRep].tabs[tab].extensions, 'ext', ext, 'default');
+            if ( this.repositories[this.currentRep].tabs[tab] && this.repositories[this.currentRep].tabs[tab].extensions ){
+              return bbn.fn.get_field(this.repositories[this.currentRep].tabs[tab].extensions, 'ext', ext, 'default');
             }
           }
-          else if ( vm.repositories[vm.currentRep].extensions ){
-            return bbn.fn.get_field(vm.repositories[vm.currentRep].extensions, 'ext', ext, 'default');
+          else if ( this.repositories[this.currentRep].extensions ){
+            return bbn.fn.get_field(this.repositories[this.currentRep].extensions, 'ext', ext, 'default');
           }
         }
         return false;
@@ -758,27 +791,22 @@
        * @returns {*}
        */
       makeActionData(rep, tab){
-        const vm = this;
         if ( rep &&
-          vm.repositories &&
-          vm.repositories[rep] &&
-          vm.repositories[rep].bbn_path &&
-          vm.repositories[rep].path
+          this.repositories &&
+          this.repositories[rep] &&
+          this.repositories[rep].bbn_path &&
+          this.repositories[rep].path
         ){
           return {
             repository: rep,
-            bbn_path: vm.repositories[rep].bbn_path,
-            rep_path: vm.repositories[rep].path,
-            tab_path: tab ? vm.getTabPath(tab, rep) : false,
+            bbn_path: this.repositories[rep].bbn_path,
+            rep_path: this.repositories[rep].path,
+            tab_path: tab ? this.getTabPath(tab, rep) : false,
             tab: tab || false,
-            extensions: vm.getExt(rep, tab)
+            extensions: this.getExt(rep, tab)
           }
         }
         return false;
-      },
-
-      createTabstrip(){
-        this.mountedTabnav = !this.mountedTabnav;
       },
 
       /** ###### TREE ###### */
@@ -974,7 +1002,9 @@
        *
        */
       treeReload(n, i){
-        this.getRef('filesList').reload();
+        if ( this.getRef('filesList') ){
+          this.getRef('filesList').reload();
+        }
       },
       /**
        * Callback function triggered when you click on an item on the files|folders tree
@@ -988,7 +1018,7 @@
           if( !this.isProject && !this.isMVC && this.existingTab(d) ){
             //change d.data.path for d.data.uid
             bbn.fn.link(
-              this.root + 'editor/file/' +
+              this.source.root + 'editor/file/' +
               this.currentRep +
                (d.data.uid || '') +
               '/_end_/code',
@@ -1034,7 +1064,8 @@
             '/_end_' + (tab.indexOf('_') === 0 ? '/' + tab : tab);
         }
       //  else if ( this.currentRep === )
-        else {
+        else{
+          //link =  'file/' +  this.currentRep + file.data.path + '/_end_/' + (file.data.tab !== false ? file.data.tab : 'code');
           link =  'file/' +  this.currentRep + file.data.uid + '/_end_/' + (file.data.tab !== false ? file.data.tab : 'code');
         }
         if ( link ){
@@ -1047,7 +1078,7 @@
           if ( !getCode ){
             return tn.getSubTabNav(tn.selected);
           }
-          return  tn.router.getRealVue().find('appui-ide-code');
+          return tn.router.getRealVue().find('appui-ide-code');
         }
         return false;
       },
@@ -1060,9 +1091,7 @@
        * @returns {string}
        */
       mkMenu(o){
-        const vm = this;
         let st = '';
-
         if (o.text) {
           if (o.text) {
             st += '<li>';
@@ -1079,7 +1108,7 @@
             if (o.items && o.items.length) {
               st += '<ul>';
               bbn.fn.each(o.items, (v, i) => {
-                st += vm.mkMenu(v);
+                st += this.mkMenu(v);
               });
               st += '</ul>';
             }
@@ -1229,7 +1258,7 @@
       repositoryProject( type = false, repository = false ){
         let rep = bbn.fn.extend({}, ( repository === false ?  this.repositories[this.currentRep] : repository));
         if ( !type ){
-          type = this.typeTree
+          type = this.typeProject
         }
         //case mvc and component
         if ( this.source.projects.tabs_type[type] !== undefined && ((type !== 'lib') && (type !== 'cli')) ){
@@ -1260,7 +1289,7 @@
           repositoryProject: false,
           currentRep: this.currentRep,
           repositories: this.repositories,
-          root: this.root,
+          root: this.source.root,
           //parent: false,
           type: false,
           isProject: this.isProject
@@ -1270,13 +1299,12 @@
         if ( !bbn.fn.isObject(node) ){
           src.path = './'
           //case project
-          if ( this.typeTree !== false ){
-            src.type =  this.typeTree;
-            if ( this.source.projects.tabs_type[this.typeTree] !== undefined ){
-              src.repositoryProject = !this.repositoryProject(this.typeTree) ? this.repositories[this.currentRep] : this.repositoryProject(this.typeTree);
+          if ( this.typeProject !== false ){
+            src.type =  this.typeProject;
+            if ( this.source.projects.tabs_type[this.typeProject] !== undefined ){
+              src.repositoryProject = !this.repositoryProject(this.typeProject) ? this.repositories[this.currentRep] : this.repositoryProject(this.typeProject);
             }
-            //src.path = this.typeTree === 'components' ? 'components_test' : this.typeTree;
-            src.path = this.typeTree;
+            src.path = this.typeProject;
           }
         }
         //of context
@@ -1344,12 +1372,12 @@
       newElement(node = false){
         let title = bbn._('New File');
         if ( this.isProject && bbn.fn.isObject(node) &&
-          ((node.data.type !== false) || (this.typeTree !== false))
+          ((node.data.type !== false) || (this.typeProject !== false))
         ){
-          if ( ((node !== false) && (node.data.type === 'components')) || (this.typeTree === 'components') ){
+          if ( ((node !== false) && (node.data.type === 'components')) || (this.typeProject === 'components') ){
             title = bbn._('New Component') +  ` <i class='nf nf-fa-vuejs'></i>`;
           }
-          else if ( ((node !== false) && (node.data.type === 'lib')) || (this.typeTree === 'lib') ){
+          else if ( ((node !== false) && (node.data.type === 'lib')) || (this.typeProject === 'lib') ){
             title = bbn._('New Class');
           }
         }
@@ -1521,7 +1549,7 @@
           isComponent: this.isComponent || node.data.type === 'components',
           config: this.source.config,
           isProject: this.isProject,
-          type: this.typeTree
+          type: this.typeProject
         //  parent: node.parent
         },
         title = '';
@@ -1630,7 +1658,7 @@
             is_mvc: this.isMVC || node.data.type === 'mvc',
             is_component: this.isComponent || node.data.type === 'components',
             data: node.data,
-            root: this.root,
+            root: this.source.root,
             type: false,
             is_project: this.isProject
           },
@@ -1699,8 +1727,8 @@
           path.pop();
 
           if ( this.isProject === true ){
-            repositoryProject = !this.repositoryProject(this.typeTree) ? this.repositories[this.currentRep] : this.repositoryProject(this.typeTree);
-            if ( (this.typeTree === 'components') &&
+            repositoryProject = !this.repositoryProject(this.typeProject) ? this.repositories[this.currentRep] : this.repositoryProject(this.typeProject);
+            if ( (this.typeProject === 'components') &&
              ((select.data.type === 'components') && (dest.data.type === 'components'))
             ){
               path.pop();
@@ -1710,7 +1738,7 @@
                 new_path = new_path.join('/');
               }
             }
-            else if( this.typeTree === 'mvc' ){
+            else if( this.typeProject === 'mvc' ){
               isMVC = true;
             }
           }
@@ -1721,8 +1749,8 @@
             new_name: select.data.name,
             is_file: !select.data.folder,
             is_project: this.isProject,
-            type: this.isProject ? this.typeTree : false,
-            is_component: this.typeTree === 'components' ? true : false,
+            type: this.isProject ? this.typeProject : false,
+            is_component: this.typeProject === 'components' ? true : false,
             ext: select.data.ext,
             path: path + '/',
             new_path: new_path,
@@ -1735,7 +1763,7 @@
           };
 
 
-          this.post(this.root + 'actions/move', obj, (d) =>{
+          this.post(this.source.root + 'actions/move', obj, (d) =>{
             if ( d.success ){
               let tabTitle = obj.path + obj.name,
                 tabs = bbn.vue.findAll(appui.ide, 'bbn-container');
@@ -1800,7 +1828,7 @@
               obj.repository = this.repositoryProject('mvc');
               obj.active_file = true;
             }
-            this.post(this.root + 'actions/delete', obj, (d) => {
+            this.post(this.source.root + 'actions/delete', obj, (d) => {
               if ( d.success ){
                 this.getRef('tabstrip').close(this.tabSelected);
                 appui.success(bbn._("Deleted!"));
@@ -1866,49 +1894,50 @@
         });
       },
       codeSearch(){
-        if ( this.currentEditor ){
-          this.currentEditor.widget.focus();
-          this.currentEditor.widget.execCommand('find');
+        if ( this.currentCode ){
+          this.currentCode.widget.focus();
+          this.currentCode.widget.execCommand('find');
         }
       },
       codeFindPrev(){
-        if ( this.currentEditor ){
-          this.currentEditor.widget.focus();
-          this.currentEditor.widget.execCommand('findPrev');
+        if ( this.currentCode ){
+          this.currentCode.widget.focus();
+          this.currentCode.widget.execCommand('findPrev');
         }
       },
       codeFindNext(){
-        if ( this.currentEditor ){
-          this.currentEditor.widget.focus();
-          this.currentEditor.widget.execCommand('findNext');
+        if ( this.currentCode ){
+          this.currentCode.widget.focus();
+          this.currentCode.widget.execCommand('findNext');
         }
       },
       codeReplace(){
-        if ( this.currentEditor ){
-          this.currentEditor.widget.focus();
-          this.currentEditor.widget.execCommand('replace');
+        if ( this.currentCode ){
+          this.currentCode.widget.focus();
+          this.currentCode.widget.execCommand('replace');
         }
       },
       codeReplaceAll(){
-        if ( this.currentEditor ){
-          this.currentEditor.widget.focus();
-          this.currentEditor.widget.execCommand('replaceAll');
+        if ( this.currentCode ){
+          this.currentCode.widget.focus();
+          this.currentCode.widget.execCommand('replaceAll');
         }
       },
       codeUnfoldAll(){
-        if ( this.currentEditor ){
-          this.currentEditor.unfoldAll();
+        if ( this.currentCode ){
+          this.currentCode.unfoldAll();
         }
       },
       codeFoldAll(){
-        if ( this.currentEditor ){
-          this.currentEditor.foldAll();
+        if ( this.currentCode ){
+          this.currentCode.foldAll();
         }
       },
     },
     created(){
       appui.ide = this;
       appui.register('editor', this);
+      this.$set(this, 'currentRep', this.source.currentRep);
     },
     beforeDestroy(){
       appui.unregister('editor');
@@ -1930,16 +1959,15 @@
       },
       currentRep(newVal, oldVal){
         if ( this.repositories[oldVal] && this.repositories[newVal].alias_code !== this.repositories[oldVal].alias_code ){
-          this.typeTree = false;
+          this.typeProject = false;
           this.path = '';
         }
         if ( newVal !== oldVal ){
           this.treeReload();
         }
       },
-      typeProject(newVal, oldVal){
-        this.path = newVal;
-        this.typeTree = newVal;
+      typeProject(newVal){
+        this.path= newVal;
         this.$nextTick(()=>{
           this.treeReload();
         });
@@ -1949,12 +1977,10 @@
           this.searchFile = "";
         }
       },
-      /*runRepository(newVal){
-        console.log('?kkk?', newVal)
-        if ( this.currentRep !== undefined ){
-          this.currentRep = newVal
-        }
-      }*/
+      stateCurrent(val){
+        appui.ide.$set(appui.ide, 'stateCurrent', val)
+      }
+      
     }
   };
 })();

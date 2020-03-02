@@ -31,8 +31,9 @@
           deleteAll: true,
           deleteContent: 0
           }, d => {
-          if ( d.data.success ){
+          if ( d.success ){
             this.contentCache = "";
+            appui.success(bbn._('All cache deleted'))
             this.getRef('cacheList').reload();
           }
         });
@@ -59,7 +60,7 @@
                 deleteCache: node.data.nodePath,
                 deleteContent: 1
               }, d => {
-                if ( d.data.success ){
+                if ( d.success ){
                   let treeOfNode = bbn.vue.closest(node, 'bbn-tree');
                   if ( node.level !== 0 ){
                     treeOfNode.$parent.parent.reload();
@@ -92,6 +93,7 @@
                       }
                     }
                   });
+                  appui.success(bbn._('Cache file deleted'));
                 }
               });
             }
@@ -111,10 +113,11 @@
                   deleteCache: node.data.nodePath,
                   deleteContent: 0
                   }, d => {
-                  if ( d.data.success ){
+                  if ( d.success ){
                     let treeOfNode = bbn.vue.closest(node, 'bbn-tree');
                     treeOfNode.reload();
                     this.contentCache = "";
+                    appui.success(bbn._('Folder\'s content deleted'))
                   }
                 });
               }
