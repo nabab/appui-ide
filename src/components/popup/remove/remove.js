@@ -75,28 +75,32 @@
       failureRemove(){
         appui.error(bbn._("Error!"));
       },
-      successremoveElement(){        
-        let editor = this.closest("bbn-container").getComponent();
-
-        if ( this.formData.all ){
-          let key = 'file/' + appui.ide.currentRep;
+      successremoveElement(){
+        let editor = this.closest('bbn-container').find('appui-ide-editor');
+       // if ( this.formData.all ){
+          let key = 'file/' + editor.currentRep;
 
           if ( this.source.is_mvc ){
-            key += 'mvc/' + this.source.data.dir + this.source.data.name + '/_end_';
+            key += '/mvc/' + this.source.data.dir + this.source.data.name + '/_end_';
           }
           else if ( this.source.is_component ){
             key += this.source.data.path + '/_end_';
           }
 
-          let idx = editor.getRef('tabstrip').router.getIndex(key);
+          let idx = editor.getRef('tabstrip').getIndex(key);
 
 
           this.$nextTick(()=>{
             if ( idx != false ){
-              editor.getRef('tabstrip').close(idx);
+              if ( this.formData.all ){
+                editor.getRef('tabstrip').close(idx);
+              }// if delete only tab
+              else{
+                editor.getRef('tabstrip').reload(idx);
+              }
             }
           });
-        }
+        //}
 
         this.$nextTick(()=>{
           if ( editor.tempNodeofTree !== false ){

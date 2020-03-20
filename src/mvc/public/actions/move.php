@@ -1,4 +1,6 @@
 <?php
-if ( isset($ctrl->inc->ide) && !empty($ctrl->post) ){
+if ( isset($ctrl->inc->ide) &&
+ !empty($ctrl->post)
+){
   $ctrl->action();
 }

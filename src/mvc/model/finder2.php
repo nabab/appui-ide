@@ -13,14 +13,14 @@ if ( isset($model->data['path']) && (strpos($model->data['path'], '../') === fal
       $fs->cd($fs->get_current().'/'.$model->data['path']);
     }
   }
-  else if ( isset($model->data['host'], $model->data['user'], $model->data['pass']) ){
-    
+  elseif ( isset($model->data['host'], $model->data['user'], $model->data['pass']) ){
+
     $fs = new \bbn\file\system('ftp', [
       'host' => $model->data['host'],
       'user' => $model->data['user'],
       'pass' => $model->data['pass']
     ]);
-    
+
     if ( $model->data['test'] ){
       return ['success' => $fs->check()];
     }

@@ -15,8 +15,7 @@ if ( !empty($model->data['repository']) &&
 
   // Get the repository's root path
   $path = $model->inc->ide->get_root_path($rep_cfg);
-  //die(var_dump($path));
-  //$dirs = \bbn\file\dir::get_dirs($path, true);
+
   return [
     'title' => './',
     'name' => './',

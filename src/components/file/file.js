@@ -8,7 +8,7 @@
 (() => {
   return {
     data(){
-      const ide = this.closest('bbn-splitter').closest('bbn-splitter').$parent.$data;
+      const ide = this.closest('appui-ide-editor');
       let path     = this.source.url.substr(this.source.repository.length).replace('/_end_', '').split('/'),
           filename = path.pop(),
           tab      = ide.repositories[this.source.repository],
@@ -36,15 +36,15 @@
           });
         }
       }
-      return bbn.fn.extend(this.source, {  
+      return bbn.fn.extend(this.source, {
         repositories: ide.repositories,
         font: ide.font,
         font_size: ide.font_size,
         theme: ide.theme,
-        root: ide.root,
+        root: ide.source.root,
         path: path.join('/'),
         filename: filename,
-        tabMenus: exts       
+        tabMenus: exts
       });
     },
     methods: {
@@ -62,7 +62,7 @@
         let tab = this.getRef('tabstrip').getVue(this.getRef('tabstrip').selected);
         if ( tab.getComponent().isChanged ){
           appui.confirm(bbn._("Modified code do you want to refresh anyway?"), () => {
-            this.post(appui.ide.root + 'editor/' + this.getRef('tabstrip').baseURL + tab.url, (d) => {
+            this.post(this.root + 'editor/' + this.getRef('tabstrip').baseURL + tab.url, (d) => {
               if ( d.data.id ){
                 tab.reload();
               }
@@ -70,7 +70,7 @@
           });
         }
         else{
-          this.post(appui.ide.root + 'editor/' + this.getRef('tabstrip').baseURL + tab.url, (d) => {
+          this.post(this.root + 'editor/' + this.getRef('tabstrip').baseURL + tab.url, (d) => {
             if ( d.data.id ){
               tab.reload();
             }
@@ -102,7 +102,7 @@
             appui.error(bbn._('Change error extension'));
           }
         });
-      }     
-    }
+      }
+    },
   }
 })();

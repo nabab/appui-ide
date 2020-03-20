@@ -36,8 +36,9 @@
     },
     methods: {
       onSuccess(){
+        let  componentEditor = this.closest('bbn-container').find('appui-ide-editor');
         if ( this.source.isFile ){
-          let link = this.source.root + 'editor/file/' + this.source.currentRep +
+          let link = this.source.root + 'editor/file/' + this.source.currentRep + '/' +
             (this.isMVC && this.source.type === 'mvc' ? 'mvc/' : '');
           if ( this.data.path.startsWith('./') ){
             link += this.data.path.slice(2);
@@ -58,21 +59,27 @@
           if ( link.indexOf('//') !== -1 ){
             link= link.replace('//', '/');
           }
+          bbn.fn.log("dddd", link,this.data)
           bbn.fn.link(link);
           appui.success(this.isComponent === true ? bbn._("Component created!") : bbn._("File created!"));
         }
         else{
           appui.success(bbn._("Directory created!"));
         }
-        if ( (this.data.path === './')  || (this.source.parent === false) ){
-          //appui.ide.getRef('filesList').reload();
-          appui.ide.treeReload();
+        if ( (this.data.path === './')  ||
+          (this.data.path === 'components/') ||
+          (this.data.path === 'mvc/') ||
+          (this.data.path === 'lib/') ||
+          (this.data.path === 'cli/') ||
+          (this.source.parent === false)
+        ){
+          componentEditor.treeReload();
         }
         else{
-          if ( appui.ide.nodeParent !== false ){
-            appui.ide.nodeParent.reload();
+          if ( componentEditor.nodeParent !== false ){
+            componentEditor.nodeParent.reload();
             this.$nextTick(()=>{
-              appui.ide.$set(appui.ide, 'nodeParent', false);
+              componentEditor.$set(componentEditor, 'nodeParent', false);
             });
           }
           //this.source.parent.reload();

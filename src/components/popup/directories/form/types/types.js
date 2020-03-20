@@ -166,7 +166,7 @@
         return listExts;
       },
       formAction(){
-        return appui.ide.source.root + "directories/actions/types/" + (this.source.row.id ? 'edit' : 'add');
+        return this.closest('bbn-container').find('appui-ide-editor').source.root + "directories/actions/types/" + (this.source.row.id ? 'edit' : 'add');
       },
       cfgEditor(){
         if ( this.isExts ){

@@ -1,21 +1,21 @@
 <?php
 
-
 $res = [
   'list' => [],
   'exts' => []
 ];
 
-if ( !empty($model->data['repository']['bbn_path']) &&
+if ( !empty($model->data['repository']['name']) &&
   !empty($model->data['repository']['path']) &&
   (!empty($model->data['is_mvc']) || !empty($model->data['is_component']))
 ){
-  $path = $model->data['repository']['bbn_path'].$model->data['repository']['path'];
+  $root = $model->inc->ide->get_root_path($model->data['repository']['name']);
+  $path = $root.$model->data['repository']['path'];
 
   if ( $model->data['is_mvc'] ){
     $path .= 'mvc/';
   }
-  else if ( $model->data['is_component'] ){
+  elseif ( $model->data['is_component'] ){
     $path .= 'component/';
   }
 /*
@@ -41,8 +41,8 @@ $e = [];
 foreach( $tabs as $tab => $exts){
   if ( $model->data['is_file'] ){
     foreach( $exts as $val ){
-      $path = $model->inc->ide->decipher_path($model->data['repository']['bbn_path'] . '/' . $model->data['repository']['path']).$model->data['data']['type'].'/'.$tab.$model->data['data']['dir'].$model->data['data']['name'].'.'.$val['ext'];
-      if ( file_exists($path) ){
+      $path = $root.$model->data['data']['type'].'/'.$tab.$model->data['data']['dir'].$model->data['data']['name'].'.'.$val['ext'];
+      if ( $model->inc->fs->exists($path) ){
         $t = [
           'text' => str_replace("/","",$tab),
           'value' => $tab
@@ -60,9 +60,9 @@ foreach( $tabs as $tab => $exts){
       }
     }
   }
-  else if ( empty($model->data['is_file']) && empty($model->data['is_component']) ){
-    $path = $model->inc->ide->decipher_path($model->data['repository']['bbn_path'] . '/' . $model->data['repository']['path']).$model->data['data']['type'].'/'.$tab.$model->data['data']['dir'].$model->data['data']['name'];
-    if ( is_dir($path) ){
+  elseif ( empty($model->data['is_file']) && empty($model->data['is_component']) ){
+    $path = $root.$model->data['data']['type'].'/'.$tab.$model->data['data']['dir'].$model->data['data']['name'];
+    if ( $model->inc->fs->is_dir($path) ){
       $t = [
         'text' => str_replace("/","",$tab),
         'value' => $tab
@@ -73,10 +73,10 @@ foreach( $tabs as $tab => $exts){
       }
     }
   }
-  else if ( !empty($model->data['is_component']) ){
+  elseif ( !empty($model->data['is_component']) ){
       foreach( $exts as $val ){
-        $path = $model->inc->ide->decipher_path($model->data['repository']['bbn_path'] . '/' . $model->data['repository']['path']).$model->data['data']['dir'].$model->data['data']['name'] . '/' . $model->data['data']['name'] . '.' .$val['ext'];
-        if ( file_exists($path) ){
+        $path = $root.$model->data['data']['dir'].$model->data['data']['name'] . '/' . $model->data['data']['name'] . '.' .$val['ext'];
+        if ( $model->inc->fs->exists($path) ){
           $t = [
             'text' => str_replace("/","",$tab),
             'value' => $tab

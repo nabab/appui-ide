@@ -12,7 +12,10 @@
     </div>
   </bbn-toolbar>
   <div class="bbn-flex-fill">
-    <bbn-tabnav :root="source.root + 'finder/'" :base-url="source.root + 'finder/'" :autoload="true">
-    </bbn-tabnav>
+    <bbn-router :nav="true"
+                :root="source.root + 'finder/'"
+                :base-url="source.root + 'finder/'"
+                :autoload="true">
+    </bbn-router>
   </div>
 </div>

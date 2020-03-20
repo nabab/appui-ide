@@ -28,7 +28,7 @@ if ( BBN_IS_DEV || $ctrl->inc->user->is_dev() ){
         }
       }
     }
-    if ( isset($ctrl->post['dir']) && is_dir($ctrl->post['dir']) ){
+    if ( isset($ctrl->post['dir']) && $ctrl->inc->fs->is_dir($ctrl->post['dir']) ){
       chdir($ctrl->post['dir']);
     }
     echo '<p>Current directory: '.getcwd().'</p>';

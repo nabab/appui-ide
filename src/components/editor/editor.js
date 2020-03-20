@@ -12,12 +12,13 @@
         currentRep: '',
         selected: 0,
         url: this.source.root + 'editor',
+        urlEditor: false,
         path: '',
         lastRename: '',
         searchFile: '',
         themeCode: '',
         tempNodeofTree: false,
-        urlEditor: '',
+       // urlEditor: '',
         //for search content
         search:{
           link: false,
@@ -28,10 +29,6 @@
         typeProject: 'mvc',
         //for search content
         showSearchContent: false,
-        cursorPosition:{
-          line: 0,
-          ch: 0
-        },
         menu: [{
           text: bbn._('File'),
           items: [{
@@ -158,7 +155,6 @@
           class: false,
           idElement: false
         },
-        runGetEditor: false,
         errorTreeParser: false,
         treeParser: false,
         readyMenu: false,
@@ -204,7 +200,7 @@
         return this.getRef('tabstrip').selected;
       },
       runRepository(){
-        let rep = this.getRef('tabstrip').tabs[this.getRef('tabstrip').selected].source.repository;
+        let rep = this.getRef('tabstrip').views[this.getRef('tabstrip').selected].source.repository;
         this.currentRep = rep;
         return rep;
       },
@@ -218,11 +214,12 @@
         return this.currentURL.indexOf("/_end_/settings") !== -1;
       },
       currentEditor(){
-        if ( this.runGetEditor || (this.currentURL !== false) ){
+        if ( this.currentURL !== '' ){
+          bbn.fn.log("dedede");
           if ( this.getRef('tabstrip') ){
-            let tabnav = this.getRef('tabstrip').getSubTabNav();
+            let tabnav = this.getRef('tabstrip').getSubRouter();
             if ( tabnav ){
-              let currentTab = tabnav.activeRealTab,
+              let currentTab = tabnav.activeRealContainer,
                   codeEditor = currentTab.find('appui-ide-code');
               if ( codeEditor ){
                 return codeEditor;
@@ -233,7 +230,7 @@
         return false;
       },
       currentCode(){
-        if ( this.currentEditor && this.currentEditor.codeComponent ){
+        if ( this.currentEditor){
           let codeEditor = this.currentEditor.find('bbn-code');
           if ( codeEditor ){
             return codeEditor;
@@ -252,19 +249,22 @@
           this.currentCode &&
           this.currentId
         ){
-          let obj = bbn.fn.extend(this.currentEditor.$options.computed, {}, true);
+          let obj = bbn.fn.extend({},this.currentEditor.$options.computed,  true);
           bbn.fn.each(obj, (v, i)=>{
             obj[i] = this.currentEditor[i];
-          });
+          }),
+
           obj.tab = this.currentEditor.$data.tab;
           obj.value = this.currentEditor.$data.value;
           obj.ssctrl = this.currentEditor.$data.ssctrl;
           obj.currentTree = this.typeProject;
           obj.selectedRunReposiotry = this.runRepository;
-          obj.cursorPosition = this.cursorPosition;
+          obj.cursorPosition = this.currentCode.getState();
           delete obj.currentPopup;
+         // this.abilitationTest(obj.isMVC);
           return obj;
         }
+        //this.abilitationTest(false);
         return false;
       },
       //temporanely name
@@ -332,7 +332,7 @@
         bbn.fn.each(this.repositories, (a, i) => {
           r.push({
             value: i,
-            text: a.text
+            text:  a.text !== 'main' ? a.text : "<label class='bbn-b'>"+a.text+"<label>"
           });
         });
         return bbn.fn.order(r, "text");
@@ -487,7 +487,7 @@
         return false;
       },
       //for parser class
-      /*parserClass(){
+      parserClass(){
         if ( this.possibilityParser === "class" ){
           this.post(this.source.root + 'parser',{
             cls: this.currentId,
@@ -514,7 +514,7 @@
           if ( obj !== undefined )
           return obj;
         });
-      },*/
+      },
       managerTypeDirectories(){
         this.post(this.source.root + 'directories/data/types', d => {
           if ( d.data.success ){
@@ -533,8 +533,8 @@
       cfgStyle(){
         if ( this.source.themes ){
           this.getPopup().open({
-            width: 400,
-            height: 200,
+            width: 550,
+            height: 450,
             title: bbn._('Select theme'),
             component: 'appui-ide-popup-style',
             source:{
@@ -544,18 +544,12 @@
           });
         }
       },
-      keydownFunction(event) {
-        alert("dsds")
-      },
       searchOfContext(node, component = false, is_vue = false){
-        //let title = bbn._('Search in') + ' : ' + node.data.path,
-        //    path = node.data.path;
         let title = bbn._('Search in') + ' : ' + node.data.uid,
             path = node.data.uid;
         if ( component ){
           title = bbn._('Search in') + ' : ' + node.data.name + ` <i class='nf nf-fa-vuejs'></i>`;
           if ( is_vue ){
-            //path = node.data.path.split('/');
             path = node.data.uid.split('/');
             path.pop();
             path = path.join('/');
@@ -580,7 +574,7 @@
       },
       searchingContent(e){
         if( this.search.searchInRepository.length > 0 ){
-          let url = this.url+'/search/'+ this.currentRep,
+          let url = this.url+'/search/'+ this.currentRep +'/',
           //for encode string in base64
           search = btoa(this.search.searchInRepository);
 
@@ -597,8 +591,8 @@
           });
         }
       },
-      /** ###### REPOSITORY ###### */
 
+      /** ###### REPOSITORY ###### */
       /**
        * Returns the items' template for the repositories dropdownlist
        *
@@ -610,20 +604,6 @@
           const cfg = this.repositories[e.value];
           return '<div style="clear: none; background-color: ' + cfg.bcolor +'; color: ' + cfg.fcolor + '" class="bbn-100">' + e.text + '</div>';
         }
-      },
-
-      /**
-       * Gets the bbn_path property from the current repository
-       *
-       * @returns string|boolean
-       */
-      getBbnPath(){
-        if ( this.repositories[this.currentRep] &&
-          this.repositories[this.currentRep].bbn_path
-        ){
-          return this.repositories[this.currentRep].bbn_path;
-        }
-        return false;
       },
 
       /**
@@ -720,9 +700,11 @@
        */
       ctrlCloseTab(idx, ev){
         // check if there are any changes in code
-        let ctrlChangeCode = this.getRef('tabstrip').getVue(this.getRef('tabstrip').selected).getRef('component').changedCode,
+        let tabstrip = this.getRef('tabstrip'),
+            current = tabstrip.getVue(tabstrip.selected),
+            ctrlChangeCode = current.getRef('component').changedCode,
           //method close of the tab selected
-          closeProject =  this.getRef('tabstrip').getVue(this.getRef('tabstrip').selected).$parent.close;
+            closeProject =  current.$parent.close;
         ev.preventDefault();
         if ( ctrlChangeCode ){
           appui.confirm(
@@ -750,38 +732,29 @@
        *
        */
       closeTab(){
-        //this.$nextTick(()=>{
-          let ctrlChangeCode = this.getRef('tabstrip').getVue(this.$refs.tabstrip.selected).find('appui-ide-code').isChanged
-
-          if ( ctrlChangeCode ){
-            appui.confirm(
-              bbn._('Do you want to save the changes before closing the tab?'),
-              () => {
-                this.save( true );
-                this.getRef('tabstrip').close(this.getRef('tabstrip').selected, true);
-              },
-              () => {
-                this.getRef('tabstrip').close(this.getRef('tabstrip').selected, true);
-                //this.afterCtrlChangeCode();
-              }
-            );
-          }
-          else {
-            this.getRef('tabstrip').close(this.getRef('tabstrip').selected, true);
-          }
-        //})
+        let ctrlChangeCode = this.getRef('tabstrip').getVue(this.$refs.tabstrip.selected).find('appui-ide-code').isChanged
+        if ( ctrlChangeCode ){
+          appui.confirm(
+            bbn._('Do you want to save the changes before closing the tab?'),
+            () => {
+              this.save( true );
+              this.getRef('tabstrip').close(this.getRef('tabstrip').selected, true);
+            },
+            () => {
+              this.getRef('tabstrip').close(this.getRef('tabstrip').selected, true);
+            }
+          );
+        }
+        else {
+          this.getRef('tabstrip').close(this.getRef('tabstrip').selected, true);
+        }
       },
       /**
        * Check and close all tabs callback the function closeTab
        *
        */
       closeTabs(){
-        //let max= this.getRef('tabstrip').tabs.length;
         this.$refs.tabstrip.closeAll();
-       /* while(max !== 1){
-          this.closeTab();
-            max--;
-        }*/
       },
       /**
        * Makes a data object necessary on file actions
@@ -794,12 +767,10 @@
         if ( rep &&
           this.repositories &&
           this.repositories[rep] &&
-          this.repositories[rep].bbn_path &&
           this.repositories[rep].path
         ){
           return {
             repository: rep,
-            bbn_path: this.repositories[rep].bbn_path,
             rep_path: this.repositories[rep].path,
             tab_path: tab ? this.getTabPath(tab, rep) : false,
             tab: tab || false,
@@ -1037,7 +1008,7 @@
        */
       existingTab(ele){
         let exist = false;
-        for(let tab of this.getRef('tabstrip').tabs){
+        for(let tab of this.getRef('tabstrip').views){
           if ( tab.title === ele.data.path ){
             exist = true;
             break;
@@ -1058,31 +1029,34 @@
         if ( (file.data.type === 'mvc') ){
           tab = file.data.tab === "php" ? '/settings' :  '/' + file.data.tab
           link = 'file/' +
-            this.currentRep + 'mvc/' +
+            this.currentRep + '/mvc/' +
             (file.data.dir || '') +
             file.data.name +
             '/_end_' + (tab.indexOf('_') === 0 ? '/' + tab : tab);
         }
-      //  else if ( this.currentRep === )
         else{
-          //link =  'file/' +  this.currentRep + file.data.path + '/_end_/' + (file.data.tab !== false ? file.data.tab : 'code');
-          link =  'file/' +  this.currentRep + file.data.uid + '/_end_/' + (file.data.tab !== false ? file.data.tab : 'code');
+         link =  'file/' +  this.currentRep +'/'+ file.data.uid + '/_end_/' + (file.data.tab !== false ? file.data.tab : 'code');
         }
         if ( link ){
           this.getRef('tabstrip').load(link);
         }
       },
+
+      /**
+       * Function who return container of the code active or component code active
+       *
+        * @param getCode
+       */
       getActive(getCode = false){
         let tn = this.getRef('tabstrip');
-        if ( tn && tn.tabs[tn.selected] ){
+        if ( tn && tn.views[tn.selected] ){
           if ( !getCode ){
-            return tn.getSubTabNav(tn.selected);
+            return tn.getSubRouter(tn.selected);
           }
-          return tn.router.getRealVue().find('appui-ide-code');
+          return tn.getRealVue().find('appui-ide-code');
         }
         return false;
       },
-
 
       /**
        * Adds menu to a tab and submenus to sub
@@ -1121,21 +1095,8 @@
 
       /** ###### EDITOR ###### */
 
-
       color(node){
         return node.data.bcolor
-      },
-      /**
-       * Sets the theme to editors
-       * @param theme
-       */
-
-      /*
-      setTheme(theme){
-        //$("div.code", this.$el).each((i, el) => {
-        this.$el.querySelectorAll("div.code").each((i, el) => {
-          el.codemirror("setTheme", theme ? theme : this.theme);
-        });
       },
 
       /**
@@ -1156,9 +1117,7 @@
        *
        */
       test(){
-        //let is_component = this.getActive(true).rep['alias_code'] === 'components';
-
-        let cp = this.getRef('tabstrip').router.getRealVue(),
+        let cp =  this.getActive(true),
             component = cp.closest('appui-ide-component');
 
         if ( component ){
@@ -1223,6 +1182,7 @@
             appui.find('bbn-router').load(link, true);
           }
           else{
+            bbn.fn.log("dddd", this.getActive(true))
             let code = this.getActive(true);
             code.test();
           }
@@ -1400,18 +1360,16 @@
        * @param menuFile for click in menu
        * @param onlyComponent true in case rename component
        */
-      rename(node, menuFile= false, onlyComponent= false){
+      rename(node, menuFile= false, onlyComponent= false) {
         //case of click rename in contextmenu of the tree
-        let src = {},
-            tab = false,
+        let tab = this.getRef('tabstrip').views[this.tabSelected].source,
             title = '';
         //of context menu
         if ( !menuFile ){
-          src = {
+          var src = {
             nodeData: {
               folder: node.data.folder,
               ext: node.data.ext,
-              //path: node.data.path,
               path: node.data.uid,
               name: node.data.name,
               tab: node.data.tab,
@@ -1425,7 +1383,7 @@
             currentRep: this.currentRep,
             repositories: this.repositories,
             repository: this.repositories[this.currentRep],
-            is_project: this.isProject,
+            is_project: this.isProject
           };
           this.nodeParent = node.parent;
           if ( node.data.type === 'lib' ){
@@ -1435,22 +1393,20 @@
           }
         }
         else{
-          let tab = this.getRef('tabstrip').tabs[this.tabSelected].source,
-              path = tab.path.split('/');
+          //let tab = this.getRef('tabstrip').views[this.tabSelected].source,
+          let path = tab.source.path.split('/');
           path.shift();
           let filename = path.pop();
           path = path.join('/');
-          let  tabInfo = {
-                mvc: tab.isMVC,
-                isComponent: this.getActive(true).isComponent,
-                //name: !tab.isMVC ? tab.filename : '',
-                //path: tab.isMVC ? tab.path : '',
-                path: tab.isMVC ? path : '',
-                name: !tab.isMVC ? tab.filename : filename,
-                repository: tab.repository
-              },
-              tabFile = tabInfo.name;
-          src = {
+          let tabInfo = {
+              mvc: tab.source.isMVC,
+              isComponent: tab.source.isComponent,
+              path: tab.source.isMVC ? path : '',
+              name: !tab.source.isMVC ? tab.source.filename : filename,
+              repository: tab.source.repository
+            },
+            tabFile = tabInfo.name;
+          var src = {
             nodeData:{
               folder: false,
               ext: !tabInfo.mvc ? tab.ext : "",
@@ -1461,32 +1417,35 @@
             isMVC: tabInfo.mvc ,
             isComponent: tabInfo.isComponent,
             currentRep: tabInfo.repository,
-            repositories: this.source.repositories,
+            repositories: this.repositories,
             root: this.source.root,
             parent: false,
             repository: this.repositories[this.currentRep],
             is_project: this.isProject,
           };
         }
+
+        // add informations for case project
         if ( this.isProject &&
           (( node.data !== undefined && node.data.type !== undefined && menuFile === false) ||
           (menuFile === true))
         ){
-
           if ( (tab !== false) && menuFile ){
-            if ( tab.isMVC ){
+            if ( tab.source.isMVC ){
               src.nodeData.type = "mvc";
             }
-            else if ( tab.isComponent ){
+            else if ( tab.source.isComponent ){
               src.nodeData.type = 'components';
             }
-            else{
+            else if ( tab.source.isLib ){
               src.nodeData.type = 'lib';
+            }
+            else {
+              src.nodeData.type = 'cli';
             }
           }
 
           src.only_component = onlyComponent;
-          //tree
           if  ( !menuFile ){
             src.repository = this.repositoryProject(node.data.type);
           }//menu
@@ -1497,21 +1456,22 @@
             else if ( this.getActive(true).isComponent ){
               onlyComponent = true;
               src.only_component = onlyComponent;
-              let filename = this.getRef('tabstrip').tabs[this.tabSelected].title;
-              filename = filename.split('/');
-              src.nodeData.name = filename.pop();
-              src.nodeData.path = filename.join('/')+'/';
               src.nodeData.folder = true;
+              let path = tab.title.split('/');
+              if ( path[0] === "" ){
+                path.shifth();
+              }
+              let component = path.pop();
+              src.nodeData.path = path.join('/')+'/'+ component;
               src.repository = this.repositoryProject('components');
             }
           }
+          // case component or rename of the menu or context of the tree
           if ( (node.data !== undefined  && node.data.is_vue === true) ||
-          (menuFile && (this.getActive(true).isComponent)) ){
-            let filename = this.getRef('tabstrip').tabs[this.tabSelected].title;
-              filename = filename.split('/');
-              filename.pop();
-            src.nodeData.path = 'components/' + filename.join('/')+'/';
+            (menuFile && (this.getActive(true).isComponent))
+          ){
             src.component_vue =  true;
+
             if ( onlyComponent ){
               title = title = bbn._('Rename only component vue');
             }
@@ -1521,8 +1481,9 @@
           }
         }
         else{
-          title =  node.data.folder ? bbn._('Rename folder') : bbn._('REname');
+          title =  node.data.folder ? bbn._('Rename folder') : bbn._('Rename');
         }
+        this.tempNodeofTree= node;
         this.getPopup().open({
           width: 370,
           height: 150,
@@ -1542,8 +1503,8 @@
         let src = {
           data: node.data,
           currentRep: this.currentRep,
-          repositories: this.source.repositories,
-          repository: this.source.repositories[this.currentRep],
+          repositories: this.repositories,
+          repository: this.repositories[this.currentRep],
           root: this.source.root,
           isMVC: this.isMVC || node.data.type === 'mvc',
           isComponent: this.isComponent || node.data.type === 'components',
@@ -1553,6 +1514,12 @@
         //  parent: node.parent
         },
         title = '';
+        if ( (node.data.dir !== undefined) &&
+          (node.data.dir === '') &&
+          node.data.type.length
+        ){
+          src.data.dir = node.data.type+'/';
+        }
         if ( node.data.type === 'components' ){
           title = bbn._('Copy component');
         }
@@ -1561,7 +1528,6 @@
         }
         if ( (node.data.type !== undefined) && this.isProject ){
           src.only_component = onlyComponent;
-          //src.repository = bbn.fn.extend(this.repositories[this.currentRep], {tabs: this.source.projects.tabs_type[node.data.type][0]});
           src.repository = this.repositoryProject(node.data.type)
 
           if ( node.data.is_vue === true ){
@@ -1648,6 +1614,7 @@
           (node.data.dir !== undefined) &&
           (node.data.folder || (!node.data.folder && node.data.ext) )
         ){
+          this.tempNodeofTree= node;
           let src = {
             repository: this.repositories[this.currentRep],
             path: node.data.dir,
@@ -1660,7 +1627,7 @@
             data: node.data,
             root: this.source.root,
             type: false,
-            is_project: this.isProject
+            is_project: this.isProject,
           },
           text = "";
           if ( (node.data.type !== undefined) && this.isProject ){
@@ -1716,6 +1683,8 @@
        * Function for move node in tree
        */
       moveNode(a, select, dest){
+        bbn.fn.log("MOVE",a, select,dest)
+        alert();
         if ( dest.data.folder ){
           //let path = select.data.path.split('/'),
           let path = select.data.uid.split('/'),
@@ -1758,6 +1727,7 @@
             tab: select.data.tab,
             dir: select.data.dir,
             is_mvc: isMVC,
+            isComponent: this.isComponent,
             root: this.source.root,
             repository: !repositoryProject ? this.repositories[this.currentRep] : repositoryProject
           };
@@ -1766,7 +1736,7 @@
           this.post(this.source.root + 'actions/move', obj, (d) =>{
             if ( d.success ){
               let tabTitle = obj.path + obj.name,
-                tabs = bbn.vue.findAll(appui.ide, 'bbn-container');
+                tabs = this.findAll('bbn-container');
 
               if ( this.isProject ){
                 tabTitle = obj.type + '/' + tabTitle;
@@ -1776,7 +1746,7 @@
                 let idTab = bbn.fn.search(tabs, 'title', tabTitle);
 
                 if( idTab > -1 ){
-                  bbn.vue.find(appui.ide, 'bbn-tabnav').close(idTab);
+                  this.find('bbn-router').close(idTab);
                 }
               });
               this.$nextTick(()=>{
@@ -1804,7 +1774,7 @@
         appui.confirm(bbn._('Are you sure you want to delete it?'), () => {
           let code = this.getActive(true),
               obj = {
-                repository: code.rep,
+                repository: code.rep, 
                 path: code.path,
                 name: code.filename,
                 ext: code.extension || false,
@@ -1849,7 +1819,7 @@
       history(){
         const tabNav = this.getActive();
         if ( tabNav ){
-          tabNav.router.add({
+          tabNav.add({
             title: bbn._('History'),
             load: false,
             url: 'history',
@@ -1858,15 +1828,15 @@
             source: tabNav.$parent.$data
           });
         }
-        tabNav.selected = tabNav.router.getIndex('history');
+        tabNav.selected = tabNav.getIndex('history');
         this.$nextTick(()=>{
-          tabNav.router.activateIndex(tabNav.selected);
+          tabNav.activateIndex(tabNav.selected);
         });
       },
       /** ###### I18N ###### */
       i18n(){
-        let tabnav = appui.ide.getRef('tabstrip'),
-            tabnavActive = tabnav.activeTabNav,
+        let tabnav = this.getRef('tabstrip'),
+            tabnavActive = tabnav.activeRouter,
             currentIde = tabnavActive.$parent,
             table_data  = [];
 
@@ -1876,7 +1846,6 @@
           currentRep: this.currentRep,
           /** cfg of current repository */
           repository: this.repositories[currentIde.repository],
-          //ext: $.inArray(currentIde.ext, this.repositories[currentIde.repository].extensions) ? currentIde.ext : '',
           ext: bbn.fn.search(this.repositories[currentIde.repository].extensions, 'ext', currentIde.ext) > -1 ? currentIde.ext : '',
           file_name: currentIde.filename,
         }, ( d ) => {
@@ -1933,19 +1902,18 @@
           this.currentCode.foldAll();
         }
       },
+      abilitationTest(val){
+        let btnTest = this.getRef('btnTest');
+        bbn.fn.log("abi",val, btnTest)
+        if ( btnTest ){
+          btnTest.$set(btnTest, 'disabled', !val);
+        }
+      }
     },
     created(){
-      appui.ide = this;
-      appui.register('editor', this);
       this.$set(this, 'currentRep', this.source.currentRep);
     },
-    beforeDestroy(){
-      appui.unregister('editor');
-    },
     watch: {
-      currentURL(newVal, oldVal){
-        bbn.fn.log("URL is changing");
-      },
       sourceParser(newVal, oldVal){
         if ( (newVal !== oldVal) && (newVal !== false) ){
           this.showTreeParser = false;
@@ -1976,11 +1944,7 @@
         if ( newVal === true ){
           this.searchFile = "";
         }
-      },
-      stateCurrent(val){
-        appui.ide.$set(appui.ide, 'stateCurrent', val)
       }
-      
     }
   };
 })();

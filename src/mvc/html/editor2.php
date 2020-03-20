@@ -1,1 +1,0 @@
-<appui-ide-editor :source="source"></appui-ide-editor>

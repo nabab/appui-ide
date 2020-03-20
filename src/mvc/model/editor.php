@@ -3,7 +3,7 @@
 if ( isset($model->data['routes'], $model->inc->ide) ){
   $repos = $model->inc->ide->repositories();
 
-  $current_rep = 'BBN_APP_PATH/';
+  $current_rep = 'app/main';
   $types = [];
   $tabs = [];
   if ( isset($repos[$current_rep]['types']) ){
@@ -13,15 +13,14 @@ if ( isset($model->data['routes'], $model->inc->ide) ){
     foreach($types as $type){
       //temporaney
       $type['url'] = $type['url'] === 'lib' ? 'cls' : $type['url'];
-      // if ( $ptype = $model->inc->options->option($model->inc->options->from_code($type['url'],'PTYPES', 'ide', BBN_APPUI)) ){
       if ( $ptype = $model->inc->ide->get_type($type['url']) ){
         if ( !empty($ptype['tabs']) ){
           $tabs[$type['url']][] = $ptype['tabs'];
         }
-        else if ( ($type['url'] === 'cls') && empty($ptype['tabs']) && !empty($ptype['extensions']) ){
+        elseif ( ($type['url'] === 'cls') && empty($ptype['tabs']) && !empty($ptype['extensions']) ){
           $tabs['lib']['extensions'] = $ptype['extensions'];
         }
-        else if ( ($type['url'] === 'cli') && empty($ptype['tabs']) && !empty($ptype['extensions']) ){
+        elseif ( ($type['url'] === 'cli') && empty($ptype['tabs']) && !empty($ptype['extensions']) ){
           $tabs[$type['url']]['extensions'] = $ptype['extensions'];
         }
       }
@@ -40,19 +39,20 @@ if ( isset($model->data['routes'], $model->inc->ide) ){
 
   }
 
-  if ( $model->inc->session->has('ide2', 'repository') ){
-    $current_rep = $model->inc->session->get('ide2', 'repository');
+  if ( $model->inc->session->has('ide', 'repository') ){
+    $current_rep = $model->inc->session->get('ide', 'repository');
   }
 
-
+  //die(var_dump($repos));
   // Routes
-  foreach ( $repos as $i => $dir ){
+  /*foreach ( $repos as $i => $dir ){
     foreach ( $model->data['routes'] as $k => $r ){
       if ( strpos($model->inc->ide->decipher_path($i), $r['path']) === 0 ){
         $repos[$i]['route'] = $k;
       }
     }
   }
+*/  
 
   $ide_cfg = $model->inc->user->get_cfg('ide');
   $themes =  [
@@ -132,6 +132,6 @@ if ( isset($model->data['routes'], $model->inc->ide) ){
     'themes' => $themes,
     'font' => empty($ide_cfg['font']) ? '' : $ide_cfg['font'],
     'font_size' => empty($ide_cfg['font_size']) ? '' : $ide_cfg['font_size'],
-    'default_repository' => 'BBN_APP_PATH/'
+    'default_repository' => 'app/main'
   ];
 }

@@ -8,17 +8,16 @@
   return{
     props: ['source'],
     data(){
-      const ide = appui.ide;
+      const ide = this.closest('appui-ide-editor');
       let path      = this.source.url.substr(this.source.repository.length).replace('/_end_', '').split('/'),
           filename  = path.pop();
       path = path.join('/');
-      //return $.extend({}, this.source,{
-      return bbn.fn.extend({}, this.source, { 
+      return bbn.fn.extend({}, this.source, {
         repositories: ide.repositories,
         font: ide.font,
         font_size: ide.font_size,
         theme: ide.theme,
-        root: ide.root,
+        root: ide.source.root,
         path: path,
         permissions: ide.permFile,
         tabsList: this.source.tabs !== undefined && this.source.tabs.length ? this.source.tabs : ide.repositories[this.source.repository].tabs,
@@ -66,7 +65,7 @@
         let tab = tn.getVue(tn.selected);
         if ( tab.getComponent().isChanged ){
           appui.confirm( bbn._("Modified code do you want to refresh anyway?"), ()=>{
-            this.post( appui.ide.root + 'editor/' + this.getRef('tabstrip').baseURL + tab.url, (d)=>{
+            this.post( this.root + 'editor/' + this.getRef('tabstrip').baseURL + tab.url, (d)=>{
               if ( d.data.id ){
                 tab.reload();
               }
@@ -74,7 +73,7 @@
           });
         }
         else{
-          this.post( appui.ide.root + 'editor/' + this.getRef('tabstrip').baseURL + tab.url, (d)=>{
+          this.post( this.root + 'editor/' + this.getRef('tabstrip').baseURL + tab.url, (d)=>{
             if ( d.data.id ){
               tab.reload();
             }
@@ -89,8 +88,8 @@
         }
       }
     },
-    mounted(){
-      appui.getRegistered('editor').urlEditor =  this.source.url ;
-    }
+    /*mounted(){
+      this.closest('appui-ide-editor').urlEditor =  this.source.url ;
+    }*/
   }
 })();

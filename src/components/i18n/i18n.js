@@ -74,7 +74,7 @@
           link_ide(){
             /** takes only the part of file name relative to the extension, +1 remove the / */
             let extension = this.source.file.slice(this.source.file.lastIndexOf('/') + 1, this.source.file.length),
-                tabnavActive = bbn.vue.closest(this, 'bbn-tabnav');
+                tabnavActive = bbn.vue.closest(this, 'bbn-router');
             if ( tabnavActive && extension ){
               tabnavActive.activate(extension);
             }

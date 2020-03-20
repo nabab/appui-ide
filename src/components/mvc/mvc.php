@@ -1,11 +1,12 @@
-      <!-- @tabLoaded="loadingTab" -->
+<!-- @tabLoaded="loadingTab" -->
 <div class="bbn-100 component-mvc">
   <div class="bbn-h-100 code">
-    <bbn-tabnav :autoload="false"
+    <bbn-router :autoload="false"
+                :nav="true"
                 :scrollable="false"
                 ref="tabstrip"
                 :source="routerSource"
                 v-if="tabsReady"
-    ></bbn-tabnav>
+    ></bbn-router>
   </div>
 </div>

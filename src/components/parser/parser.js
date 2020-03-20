@@ -8,13 +8,14 @@
         errorParser: this.source.error,
         showTreeParser: false,
         parserClass: this.source.class,
-        showAllParser: false,     
+        showAllParser: false,
       }
     },
-    computed: {     
+    computed: {
       sourceParser(){
+        let componentEditor = this.closest('appui-ide-editor');
         if ( bbn.fn.isArray(this.parser) && this.parser.length ){
-          if ( (appui.ide.possibilityParser === "class") && !this.showAllParser ){
+          if ( (componentEditor.possibilityParser === "class") && !this.showAllParser ){
             let idx = bbn.fn.search(this.parser, 'name', 'methods');
             let sourceTree = bbn.fn.extend([], this.parser, true);
             bbn.fn.each(sourceTree[idx]['items'], (meth,i)=>{
@@ -24,14 +25,14 @@
             });
             return sourceTree;
           }
-          else if ( this.showAllParser || (appui.ide.possibilityParser === "component") ){
+          else if ( this.showAllParser || (componentEditor.possibilityParser === "component") ){
             return this.parser;
           }
         }
         return false;
       },
       getCode(){
-        return appui.ide.currentId === this.source.idElement;
+        return this.closest('appui-ide-editor').currentId === this.source.idElement;
       }
     },
     mounted(){
@@ -45,22 +46,23 @@
               @click="getRow">
           <i :class="classIcon"></i>
           <span v-if="source.file" >File:</span>
-          <span :class="['bbn-spadded',{'bbn-green': source.type === 'parent', 'bbn-red': source.type === 'trait'}]" 
+          <span :class="['bbn-spadded',{'bbn-green': source.type === 'parent', 'bbn-red': source.type === 'trait'}]"
                 :style="{cursor: (source.line !== undefined) && (source.line !== false) ? 'pointer' : 'default'}"
                 v-text="source.name"
           ></span>
           <span v-if="(source.type !== undefined) && (source.type !== false) && (source.line !== false) && (source.file !== true)"
-                :class="['bbn-i', {'bbn-green': source.type === 'parent', 'bbn-red': source.type === 'trait'}]" 
-                :style="{cursor: ((source.line !== undefined) && (source.line !== false) && (source.type === 'origin')) ? 'pointer' : 'default'}" 
+                :class="['bbn-i', {'bbn-green': source.type === 'parent', 'bbn-red': source.type === 'trait'}]"
+                :style="{cursor: ((source.line !== undefined) && (source.line !== false) && (source.type === 'origin')) ? 'pointer' : 'default'}"
                 v-text="' (line: ' + source.line + ')'"
           ></span>
         </div>`,
         computed:{
           colorElement(){
-            return appui.ide.possibilityParser === 'component' ? '#44b782' : "black"
+            return this.closest('appui-ide-editor').possibilityParser === 'component' ? '#44b782' : "black"
           },
           classIcon(){
-            if ( appui.ide.possibilityParser !== 'component' ){
+            let componentEditor = this.closest('appui-ide-editor');
+            if ( componentEditor.possibilityParser !== 'component' ){
               if ( (this.source.type === undefined) ){
                 return 'nf nf-custom-folder_config';
               }
@@ -72,7 +74,7 @@
               }
               return 'nf nf-mdi-function';
             }
-            else if ( appui.ide.possibilityParser === 'component' ){
+            else if ( componentEditor.possibilityParser === 'component' ){
               if ( (this.source.eleComponent !== undefined) ){
                 if ( (this.source.eleComponent === 'props') || (this.source.eleComponent === 'data') ){
                   return "nf nf-dev-code";
@@ -90,13 +92,14 @@
         },
         methods:{
           getRow(){
+            let componentEditor = this.closest('appui-ide-editor');
             if ( ((this.source.line !== undefined) || (this.source.line !== false)) &&
-              (appui.ide.currentEditor !== false )
+              (componentEditor.currentEditor !== false )
             ){
-              appui.ide.cursorPosition.line = this.source.line-1;
+              componentEditor.cursorPosition.line = this.source.line-1;
               this.$nextTick(()=>{
                 if ( (this.source.type === 'origin') && parserComponent.getCode ){
-                  appui.ide.currentEditor.closest('appui-ide-code').setState();
+                  componentEditor.currentEditor.setState();
                 }
               })
             }

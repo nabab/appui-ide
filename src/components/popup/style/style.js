@@ -5,6 +5,7 @@
       return {
         themes: [],
         themePreview: this.source.themeCode,
+        content: '<?php\n/*\n * Describe what it does!\n *\n **/\n\n$content = [\n  "field_one" => "a",\n  "field_two" => 1\n];\nvar_dump($content);',
         btns: [
           'cancel', {
             text: 'Change',
@@ -17,8 +18,8 @@
     },
     methods:{
       changeTheme(){
-        let editor = this.closest('bbn-container').getComponent(),
-            codes = editor.findAll('appui-ide2-code');
+        let editor = this.closest('bbn-container').find('appui-ide-editor'),
+            codes = editor.findAll('appui-ide-code');
         editor.$set(editor, 'themeCode', this.themePreview)
         if ( codes.length ){
           bbn.fn.each(codes, v => {

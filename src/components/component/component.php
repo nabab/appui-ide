@@ -1,10 +1,11 @@
 <!--   @tabLoaded="loadingTab"-->
 <div class="bbn-100">
   <div class="bbn-h-100 code">
-    <bbn-tabnav :autoload="false"
+    <bbn-router :autoload="false"
                 :scrollable="false"
+                :nav="true"
                 :source="routerSource"
-                ref="tabstripComponents"              
-    ></bbn-tabnav>
+                ref="tabstripComponents"
+    ></bbn-router>
   </div>
 </div>

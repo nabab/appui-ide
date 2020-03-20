@@ -1,12 +1,13 @@
 <bbn-code v-model="value"
-          :mode="mode"
+          :mode="source.mode"
           :cfg="{
-            selections: selections,
-            marks: marks,
+            selections: source.selections,
+            marks: source.marks,
             save: save,
             test: test
           }"
           @ready="setState"
           @input="getLine"
           ref="editor"
+          :theme="theme"
 ></bbn-code>

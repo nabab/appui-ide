@@ -65,56 +65,55 @@
               <div v-text="_('Size:')"></div>
               <div v-if="!p.size">
                 <bbn-button icon="nf nf-fa-database"
-                            @click="get_size(p)" 
+                            @click="get_size(p)"
                             title="<?=_("Get dir size")?>"
-                ></bbn-button>         
+                ></bbn-button>
               </div>
               <span v-text="p.size" v-else></span>
               <div class="bbn-grid-full bbn-c@" v-if="(isLoading && i === (numCols - 1) )">
-                <bbn-button icon="nf nf-fa-hand_paper" 
+                <bbn-button icon="nf nf-fa-hand_paper"
                             @click="abortRequest('dir')"
                             text="<?=_('Abort request')?>"
                             title="<?=_('Cancel the current request')?>"
-                ></bbn-button>               
+                ></bbn-button>
               </div>
             </div>
-          </div>          
+          </div>
         </div>
       </div>
       <!-- File detail / Image preview -->
-      <div v-if="currentFile"               
+      <div v-if="currentFile"
            class="info-file-container bbn-flex-height"
       >
         <div class="bbn-grid-fields bbn-header bbn-widget">
-          <span><?=_('Filename:')?></span>             
-          <span v-text="currentFile ? currentFile.node.data.value : ''"></span>             
-          <span v-if="currentFile.info && currentFile.info.size"><?=_('Size:')?></span>   
-          <span v-text="(currentFile.info && currentFile.info.size) ? currentFile.info.size : ''"></span>           
-          <span v-if="(currentFile.info && currentFile.info.width)"><?=_('Width:')?></span>   
-          <span v-if="(currentFile.info && currentFile.info.width)" v-text="currentFile.info.width + 'px'"></span>           
-          <span v-if="(currentFile.info && currentFile.info.height)"><?=_('Height:')?></span>   
-          <span v-if="(currentFile.info && currentFile.info.height)" v-text="currentFile.info.height + 'px'"></span>           
-          <!--span v-if="currentFile.info && currentFile.info.creation"><?=_('Creation:')?></span>   
-          <span-- v-text="(currentFile.info && currentFile.info.creation) ? currentFile.info.creation : ''"></span-->           
-          <span v-if="currentFile.info && currentFile.info.mtime"><?=_('Last modification:')?></span>   
+          <span><?=_('Filename:')?></span>
+          <span v-text="currentFile ? currentFile.node.data.value : ''"></span>
+          <span v-if="currentFile.info && currentFile.info.size"><?=_('Size:')?></span>
+          <span v-text="(currentFile.info && currentFile.info.size) ? currentFile.info.size : ''"></span>
+          <span v-if="(currentFile.info && currentFile.info.width)"><?=_('Width:')?></span>
+          <span v-if="(currentFile.info && currentFile.info.width)" v-text="currentFile.info.width + 'px'"></span>
+          <span v-if="(currentFile.info && currentFile.info.height)"><?=_('Height:')?></span>
+          <span v-if="(currentFile.info && currentFile.info.height)" v-text="currentFile.info.height + 'px'"></span>
+          <!--span v-if="currentFile.info && currentFile.info.creation"><?=_('Creation:')?></span>
+          <span-- v-text="(currentFile.info && currentFile.info.creation) ? currentFile.info.creation : ''"></span-->
+          <span v-if="currentFile.info && currentFile.info.mtime"><?=_('Last modification:')?></span>
           <span v-text="(currentFile.info && currentFile.info.mtime) ? currentFile.info.mtime : ''"></span>
           <div class="bbn-padded">
             <div v-if="isLoading">
-              <bbn-button icon="nf nf-fa-hand_paper" 
+              <bbn-button icon="nf nf-fa-hand_paper"
                           @click="abortRequest('file')"
                           text="<?=_('Abort request')?>"
                           title="<?=_('Cancel the current request')?>"
-                         
               ></bbn-button>
             </div>
-               
-          </div>          
+
+          </div>
         </div>
-        <bbn-code class="bbn-flex-fill" 
+        <bbn-code class="bbn-flex-fill"
                   v-if="currentFile.info && currentFile.info.content && !isImage && !isLoading"
                   :value="currentFile.info.content"
         ></bbn-code>
-        <div v-else-if="isImage && !isLoading" 
+        <div v-else-if="isImage && !isLoading"
              class="bbn-flex-fill bbn-c bbn-padded"
         >
           <img :src="source.root + 'actions/finder/image/' +  encodedURL">
@@ -122,12 +121,12 @@
         <div v-else-if="currentFile.info && !currentFile.info.content && !isImage && !isLoading"
              class="bbn-padded bbn-medium bbn-b"
         >
-          <?=_('The content of this file cannot be shown')?>           
+          <?=_('The content of this file cannot be shown')?>
         </div>
-        <div v-else-if="isLoading" 
+        <div v-else-if="isLoading"
              class="bbn-padded bbn-medium bbn-b"
         >
-          <?=_('Loading file infos..')?>           
+          <?=_('Loading file infos..')?>
         </div>
       </div>
     </bbn-scroll>
@@ -135,14 +134,14 @@
 </bbn-splitter>
 <script type="text/x-template" id="form">
 	<bbn-form :source="source"
-            class="bbn-overlay" 
+            class="bbn-overlay"
             :buttons=[]
             :action="source.root + 'actions/finder2/edit'"
 						@success="success"
   >
     <div class="bbn-vpadded bbn-grid-fields">
-      <span><?=_('Name:')?></span>                 
-  		<bbn-input v-model="source.node.value"></bbn-input>    
+      <span><?=_('Name:')?></span>
+  		<bbn-input v-model="source.node.value"></bbn-input>
   	</div>
   </bbn-form>
 </script>

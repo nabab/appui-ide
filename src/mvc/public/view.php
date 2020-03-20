@@ -5,7 +5,7 @@ if ( \count($ctrl->params) > 2 ){
   $p = \array_slice($ctrl->params, 2);
   $file = implode('/', $p);
   echo $file;
-  if ( file_exists($file) ){
+  if ( $ctrl->inc->fs->exists($file) ){
     global $bbn;
     if ( strpos(basename($file), '.') === false ){
       $ctrl->obj->ext = '';

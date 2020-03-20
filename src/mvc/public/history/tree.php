@@ -1,12 +1,12 @@
 <?php
+/** @var $ctrl \bbn\mvc\controller */
+
 $path = $ctrl->data_path('appui-ide').'backup/'.$ctrl->post['uid'];
 $res = [];
-if ( isset($ctrl->inc->ide, $ctrl->post['is_mvc']) &&
-  !empty($ctrl->post['uid'])
-){
+// for tree
+if ( isset($ctrl->inc->ide, $ctrl->post['is_mvc']) && !empty($ctrl->post['uid']) ){
   if ( !isset($ctrl->post['type']) ){
-    $list = $ctrl->inc->ide->history($ctrl->post['uid']);
-   // die(var_dump($list));
+    $list = $ctrl->inc->ide->history($ctrl->post['uid'], $ctrl->post['repository_cfg']);
     if ( !empty($list) ){
       foreach ( $list as $val ){
         array_push($res, [
@@ -20,7 +20,7 @@ if ( isset($ctrl->inc->ide, $ctrl->post['is_mvc']) &&
     }
   }
   else {
-    $files = $ctrl->inc->ide->history($ctrl->post['uid']);
+    $files = $ctrl->inc->ide->history($ctrl->post['uid'],  $ctrl->post['repository_cfg']);
     if ( !empty($files) ){
       foreach ( $files as $val ){
         array_push($res, [
@@ -47,11 +47,13 @@ if ( isset($ctrl->inc->ide, $ctrl->post['is_mvc']) &&
     }
   }
 }
+// for get content 
 else{
   if ( isset($ctrl->inc->ide, $ctrl->post['url']) && !empty($ctrl->post['url']) ){
-    $path = $ctrl->data_path('appui-ide').'backup/'.$ctrl->post['url'];
-    $code= file_get_contents($path);
-
+    $path = $ctrl->data_path('appui-ide').'backup/'.$ctrl->post['repository_cfg']['root'].'/'.substr($ctrl->post['url'], strpos($ctrl->post['url'],$ctrl->post['repository_cfg']['code'],1));
+    if ( $ctrl->inc->fs->is_file($path) ){
+      $code= $ctrl->inc->fs->get_contents($path);
+    }
     if ( !empty($code) ){
       $ctrl->obj->data =[
         'success' => true,
@@ -61,7 +63,7 @@ else{
     else {
       $error = $ctrl->inc->ide->get_last_error();
       if ( $error === null ){
-        $ctrl->obj->data =[
+        $ctrl->obj->data =[ 
           'success' => false
         ];
       }

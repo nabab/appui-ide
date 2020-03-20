@@ -2,27 +2,27 @@
   return {
     props: ['source'],
     data(){
-      //return $.extend({
-      return bbn.fn.extend({
+      return {
         ide: null,
         firstInput: false,
         originalValue: this.source.value,
-        theme: appui.getRegistered('editor').themeCode,
-        codeComponent: false,
+        value: this.source.value,
+        theme: this.closest('appui-ide-editor').themeCode,
+        codeExist: false,
         initialState: {
           marks: this.source.marks,
           selections: this.source.selections,
           line: this.source.line,
           char: this.source.char
         }
-      }, this.source);
+      }
     },
     computed: {
       isMVC(){
-       return ((appui.ide.isComponent === false) && (this.rep.alias_code === 'mvc')) || (bbn.vue.closest(this, 'appui-ide-mvc') !== false);
+       return ((this.closest('appui-ide-editor').isComponent === false) && (this.rep.alias_code === 'mvc')) || (this.closest('appui-ide-mvc') !== false);
       },
       isComponent(){
-        return ((appui.ide.isComponent === true) || (this.rep.alias_code === "components")) || (bbn.vue.closest(this, 'appui-ide-component') !== false);
+        return ((this.closest('appui-ide-editor').isComponent === true) || (this.rep.alias_code === "components")) || (this.closest('appui-ide-component') !== false);
       },
       isProject(){
         return this.source.project !== false;
@@ -72,6 +72,7 @@
       filePath(){
         let paths = this.path.split('/');
         paths.pop();
+        paths.pop();
         paths = paths.join("/") ;
         if ( paths.length ){
           return  paths
@@ -87,7 +88,7 @@
       fixed(){
         if ( (this.rep.tabs !== undefined) && (this.typeProject === false) ){
           let rep = this.isProject ? this.getReposiotryProject() : this.rep,
-            idx = bbn.fn.search(rep.tabs, "url", this.tab);
+            idx = bbn.fn.search(rep.tabs, "url", this.source.tab);
           if ( this.isMVC && rep && rep.tabs && rep.tabs[idx] && rep.tabs[idx].fixed ){
             return this.ide.repositories[this.ide.currentRep].tabs[idx].fixed;
           }
@@ -102,7 +103,7 @@
       },
       fullPath(){
         if ( this.fixed ){
-          if ( (typeof(this.ssctrl) === "number") && (this.ssctrl > 0) ){
+          if ( (typeof(this.source.ssctrl) === "number") && (this.source.ssctrl > 0) ){
             return this.path + this.filePath + this.fixed;
           }
           else{
@@ -113,16 +114,7 @@
          return  this.source.id
         }
         return false;
-      },
-    /*  currentState(){
-        let obj = bbn.fn.extend(this.$options.computed, {}, true);
-        bbn.fn.each(obj, (v, i)=>{
-          if ( i !== 'currentState' ) {
-            obj[i] = this[i]
-          }
-        });
-        return bbn.fn.extend(this.$options.$data, obj, true);
-      }*/
+      }
     },
     methods: {
       runTracking(recentFile = true){
@@ -169,12 +161,12 @@
             info:{
               repository: this.isProject ? this.getRepositoryProject() : this.rep,
               typeProject: this.typeProject,
-              tab: this.tab,
+              tab: this.source.tab,
               ssctrl: this.ssctrl,
               path: this.fixed ? this.filePath : this.ide.path,
               filename: this.fixed || this.filename,
-              extension: this.extension,
-              full_path: this.id,
+              extension: this.source.extension,
+              full_path: this.source.id,
               filePath : pathHistory,
               code_file_pref: this.path.substring(this.path.lastIndexOf('src/'+ this.typeProject)+4, this.path.length)
             },
@@ -196,7 +188,7 @@
           parent = this.closest('appui-ide-file');
         }
         if ( this.typeProject ){
-          return appui.ide.repositoryProject( this.typeProject , parent.repository_content);
+          return this.closest('appui-ide-editor').repositoryProject( this.typeProject , parent.repository_content);
         }
         return parent.repository_content
       },
@@ -228,16 +220,18 @@
           let obj = {
             repository: this.isProject ? this.getRepositoryProject() : this.rep,
             typeProject: this.typeProject,
-            tab: this.tab,
+            tab: this.source.tab,
             ssctrl: this.ssctrl,
             path: this.fixed ? this.filePath : this.ide.path,
             filename: this.fixed || this.filename,
-            extension: this.extension,
-            full_path: this.id,
-            selections: state.selections,
-            marks: state.marks,
-            line: state.line,
-            char: state.char,
+            extension: this.source.extension,
+            full_path: this.source.id,
+            state: {
+              selections: state.selections,
+              marks: state.marks,
+              line: state.line,
+              char: state.char
+            },
             code: editor.value,
             filePath : pathHistory,
             code_file_pref: this.path.substring(this.path.lastIndexOf('src/'+ this.typeProject)+4, this.path.length)
@@ -245,7 +239,7 @@
           this.post(this.ide.root + "actions/save", obj , (d) => {
             let tab = this.closest('bbn-container'),
                 parent = {},
-                tabnav = bbn.vue.closest(this, 'bbn-tabnav'),
+                tabnav = this.closest('bbn-router'),
                 parentTabNav = {};
 
             if ( this.isComponent === true ){
@@ -260,12 +254,11 @@
               parent = this.closest('appui-ide-file');
             }
 
-            parentTabNav = parent.closest('bbn-tabnav');
+            parentTabNav = parent.closest('bbn-router');
 
-            if ( d.data && d.data.success ) {
+            if ( d.success ) {
               //remove icon plus why there is file in tab
                 if ( !this.isFile ){
-                  //tabnav.$set(tabnav.tabs[tab['idx']], 'title', '');
                   if ( (parent.emptyTabs !== undefined) &&
                     (parent.emptyTabs.lastIndexOf(tab['url']) > -1)
                   ){
@@ -273,22 +266,23 @@
                     parentTabNav.reload(parentTabNav.selected);
                   }
                 }
+
               this.originalValue = this.value;
               appui.success(bbn._("File saved!"));
               if ( this.isMVC ){
                 if ( tabContainer.source.tab === "php" ){
-                  let tabs = bbn.vue.closest(this, 'appui-ide-mvc').getRef('tabstrip').tabs;
+                  let tabs = this.closest('appui-ide-mvc').getRef('tabstrip').views;
                   for( let tab of tabs ){
                     if ( tab.title === "Settings" && (tab.disabled === true) ){
                       tab.disabled = false;
                     }
                   }
-                  bbn.vue.closest(this, "appui-ide-mvc").source.setting = true;
+                  this.closest("appui-ide-mvc").source.setting = true;
                 }
               }
             }
             //Delete the file if code is empty and if it isn't a super controller
-            else if ( d.data && d.data.deleted ){
+            else if ( d.deleted ){
               if ( parent.emptyTabs !== undefined ){
                 parent.emptyTabs.push(tab['url']);
                 parentTabNav.reload(parentTabNav.selected);
@@ -309,6 +303,7 @@
           if ( pathMVC.indexOf('mvc/') === 0 ){
             pathMVC = pathMVC.replace("mvc/","");
           }
+          bbn.fn.log("sssccr", pathMVC, this.ide)
           let link = (this.ide.route ? this.ide.route + '/' : '') +
           (pathMVC === 'mvc' ? '' : pathMVC + '/') +  this.ide.filename;
 
@@ -327,12 +322,12 @@
               appui.error(bbn._('Not Executed!'));
             }
           });*/
-        if ( typeof(this.mode) === 'string' ){
-          switch ( this.mode ){
+        if ( typeof(this.source.mode) === 'string' ){
+          switch ( this.source.mode ){
             case "php":
               this.post(this.ide.root + "test", {code: this.value}, (d) => {
-                const tn = bbn.vue.closest(this, 'bbn-tabnav'),
-                      idx = tn.tabs.length;
+                const tn = this.closest('bbn-router'),
+                      idx = tn.views.length;
                 tn.router.add({
                   title: moment().format('HH:mm:ss'),
                   load: false,
@@ -360,14 +355,13 @@
               }
               break;
             default:
-              appui.alert(this.value, "Test: " + this.mode);
+              appui.alert(this.value, "Test: " + this.source.mode);
           }
         }
       },
       getLine(){
         this.runTracking();
-        appui.ide.currentLine = this.getRef('editor').widget.getCursor().line;
-       // appui.ide2.disabledLine = false
+        this.closest('appui-ide-editor').currentLine = this.getRef('editor').widget.getCursor().line;
       },
       goLine(lineNum){
         lineNum = parseInt(lineNum);
@@ -378,75 +372,32 @@
             };
         code.loadState(obj);
       },
+      //set state code of file preference
       setState(){
-        let code = this.getRef('editor');
-        this.codeComponent = !!code;
-        //case for serach a content
-        if ( (appui.ide.search.link !== false )  && (appui.ide.cursorPosition.line > 0 || appui.ide.cursorPosition.ch > 0) ){
-          code.loadState({
-            line: parseInt(appui.ide.cursorPosition.line),
-            char: parseInt(appui.ide.cursorPosition.ch),
-          });
-          appui.ide.currentLine = parseInt(appui.ide.cursorPosition.line)+1;
-          appui.getRegistered('editor').currentLine = state.line+1;
-        }
-        else{
-          setTimeout(() => {
-            let state = bbn.fn.extend({}, this.initialState, true);
-            state.line = state.line === false ?  parseInt(0) :  parseInt(state.line);
-            state.char = state.char === false ?  parseInt(0) :  parseInt(state.char);
-            this.$nextTick(()=>{
-              code.loadState({line: state.line, char: state.char});
-            });
-            appui.ide.currentLine =  state.line+1;
-            appui.getRegistered('editor').currentLine = state.line+1;
-            appui.getRegistered('editor').cursorPosition.line = state.line+1;
-            appui.getRegistered('editor').cursorPosition.ch = state.char;
-          },0);
-        }
+        let componentEditor = this.closest('appui-ide-editor'),
+            code = this.getRef('editor');
+        this.codeExist = !!code;
+        let state = bbn.fn.extend({}, this.initialState, true);
+        state.line = state.line === false ?  0 :  parseInt(state.line);
+        state.char = state.char === false ?  0 :  parseInt(state.char);
+        this.$nextTick(()=>{
+          code.loadState(state);
+        });
         //for list recent files
-        if ( appui.ide.readyMenu ){
-          appui.ide.getRecentFiles();
-          //for  code  first input tracking
-
-          /*
-          let codeEle = this.getRef('editor').$el;
-          if ( codeEle !== undefined ){
-            bbn.fn.log("codeEle", codeEle);
-            codeEle.addEventListener('input', ()=>{
-              this.runTracking();
-              codeEle.removeEventListener('input', this);
-            });
-          }
-          */
+        if ( componentEditor.readyMenu ){
+          componentEditor.getRecentFiles();
         }
       }
     },
     beforeMount(){
+      //get information data of membership tabnav
       this.ide = this.closest('.appui-ide-source-holder').$data;
-    },
-    mounted(){
-      //for get current editor (computed currentEditor)
-      if ( appui.ide.runGetEditor ){
-        appui.ide.$set(appui.ide, 'runGetEditor', false)
-      }
-      this.$nextTick(()=>{
-        appui.ide.$set(appui.ide, 'runGetEditor', true);
-      });
-      appui.ide.$set(appui.ide, 'urlEditor', appui.ide.urlEditor+'/'+this.source.tab);
     },
     watch: {
       isChanged(isChanged){
-        let tabNav = this.closest('bbn-tabnav');
-        tabNav.tabs[tabNav.selected].isUnsaved = isChanged;
-      },
-      /*currentState: {
-        deep: true,
-        handler(){
-          alert()
-          console.log('The list of colours has changed!');
-        }
-      }*/
+        let container = this.closest('bbn-container');
+        container.dirty = isChanged;
+      }
     }
   }
 })();

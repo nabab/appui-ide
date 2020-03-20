@@ -1,4 +1,4 @@
-<bbn-form :buttons="btns">  
+<bbn-form :buttons="btns">
   <div class="bbn-flex-height bbn-overlay bbn-l bbn-padded">
     <div class="bbn-smargin">
       <label><?=_('Theme')?></label>
@@ -12,7 +12,7 @@
     <div class="bbn-flex-fill bbn-smargin bbn-c">
         <bbn-code class="bbn-h-100"
                   :theme="themePreview"
-                  :value="'theme ' + themePreview"
+                  :value="content"
                   readonly
                   v-if="themes.length > 0"
         ></bbn-code>

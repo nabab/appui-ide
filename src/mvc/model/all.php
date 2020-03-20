@@ -88,7 +88,7 @@ if ( $model->inc->ide ){
       }
 
     }//case from the second level onwards
-    else if ( isset($model->data['path']) ){
+    elseif ( isset($model->data['path']) ){
       $path= explode('/', $model->data['path']);
       $const= $path[0];
       $path[0]= constant($const);
@@ -97,7 +97,7 @@ if ( $model->inc->ide ){
 
     $newPath = str_replace('//','/',$newPath);
 
-    $all = \bbn\file\dir::get_files($newPath, true);
+    $all = $model->inc->fs->get_files($newPath, true);
 
     $arr = [];
 
@@ -109,28 +109,29 @@ if ( $model->inc->ide ){
     };
 
     //first we insert the folders
-    foreach($all as $i=>$ele){
-      if ( is_dir($ele) ){
+    foreach ( $all as $i => $ele ){
+      if ( $model->inc->fs->is_dir($ele) ){
         $el = [
-          'folder' => is_dir($ele),
-          'file' => is_file($ele),
+          'folder' => $model->inc->fs->is_dir($ele),
+          'file' => $model->inc->fs->is_file($ele),
           'path' => isset($model->data['repository']) ? str_replace(constant($rep['bbn_path']), $rep['bbn_path'] . '/', $ele) : str_replace(constant($const), $const . '/', $ele),
           'text' => basename($ele),
           'icon' => 'zmdi zmdi-folder-outline',
-          'num' => 0
+          'num' =>  count($model->inc->fs->get_files($ele, true))
         ];
-        if ( \bbn\file\dir::has_file($ele) ){
-          $el['num'] = count(\bbn\file\dir::get_files($ele, true));
-        };
+        /*$num_files = count($model->inc->fs->get_files($ele, true));
+        if ( $num_files > 0 ){
+          $el['num'] = $nuum_files;
+        };*/
         array_push($arr, $el);
       }
     }
     // after we insert all the files
     foreach($all as $i=>$ele){
-      if ( is_file($ele) ){
+      if ( $model->inc->fs->is_file($ele) ){
         $el = [
-          'folder' => is_dir($ele),
-          'file' => is_file($ele),
+          'folder' => $model->inc->fs->is_dir($ele),
+          'file' => $model->inc->fs->is_file($ele),
           'extension' => $get_ext($ele),
           'path' => isset($model->data['repository']) ? str_replace( constant($rep['bbn_path']), $rep['bbn_path'] .'/', $ele) : str_replace( constant($const), $const.'/', $ele),
           'text' => basename($ele),

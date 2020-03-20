@@ -32,7 +32,9 @@
           return bbn.fn.extend(a, {
             text: "name_file" in a ? a.text + ' &nbsp; <span class="bbn-badge bbn-s bbn-bg-lightgrey">' + a.numChildren + '</span>' : a.text,
             num: a.numChildren || 0,
-            type: "name_file" in a ? "" : a.text
+            type: "name_file" in a ? "" : a.text,
+            repository: this.source.repository,
+            repository_cfg: this.source.repositories[this.source.repository]
           });
         }
       },
@@ -45,6 +47,8 @@
           if ( node.data.folder === false ){
             this.post(this.source.root + 'history/tree', {
               url: node.data.uid + "/" + node.data.file + "." + node.data.ext,
+              repository: this.source.repository,
+              repository_cfg: this.source.repositories[this.source.repository]
             }, d => {
               if ( d.data.success ){
                 this.selected = true;
@@ -73,12 +77,11 @@
     created(){
       if ( this.source.repository &&
         this.source.repositories[this.source.repository] &&
-        this.source.repositories[this.source.repository].bbn_path &&
         this.source.repositories[this.source.repository].path &&
         (this.source.path !== undefined) &&
-        this.source.filename ){
-        this.url = this.source.repositories[this.source.repository].bbn_path + '/' + (
-          this.source.repositories[this.source.repository].path  === '/' ? 'src/' : this.source.repositories[this.source.repository].path  ) +
+        this.source.filename
+      ){
+        this.url = this.source.repositories[this.source.repository].path + '/src/' +
           (this.source.path ? this.source.path + '/' : '') +
           this.source.filename + '/__end__';
       }

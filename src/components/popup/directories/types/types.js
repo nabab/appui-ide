@@ -27,13 +27,7 @@
         if (ele.types ){
           types = JSON.parse(ele.types);
         }
-        return types.length ?
-          '<div class="bbn-c"><i style="color: green" class="nf nf-fa-chevron_down"></i></div>' :
-          '';
-        // if ( (ele.types !== undefined) && ele.types.length ){
-        //   return '<div class="bbn-c"><i style="color: green" class="nf nf-fa-chevron_down"></i></div>';
-        // }
-        // return '';
+        return types.length ? '<div class="bbn-c"><i style="color: green" class="nf nf-fa-chevron_down"></i></div>' : '';
       },
       addType(){
         return this.getRef('types_table').insert({}, {
@@ -64,7 +58,7 @@
         });
       },
       refreshListTypes(){
-        this.post(appui.ide.root + 'directories/data/types', d => {
+        this.post(this.closest('bbn-container').find('appui-ide-editor').source.root + 'directories/data/types', d => {
           if( d.data.success ){
             this.source.types = d.data.types;
             this.$nextTick(()=>{
@@ -75,7 +69,7 @@
       },
       deleteType(row){
         appui.confirm(bbn._("Are you sure you want to delete the") + " " + row.text  + " " + bbn._("type?"), ()=>{
-          this.post(appui.ide.root + 'directories/actions/types/delete', {id_type: row.id}, (d) => {
+          this.post(this.closest('bbn-container').find('appui-ide-editor').source.root + 'directories/actions/types/delete', {id_type: row.id}, d => {
             if ( d.success ){
               this.refreshListTypes();
               appui.success(bbn._('Deleted'));

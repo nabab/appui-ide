@@ -24,9 +24,8 @@ if ( !empty($model->data) &&
     $new_path = $model->inc->ide->decipher_path($model->data['repository'].$model->data['path'].'/'.$model->data['fileName'].'.'.$model->data['newExt']);
   }
 
-  //die(\bbn\x::dump($old_path, $new_path));
-  if ( is_file($old_path) && !is_file($new_path)  ){
-    if ( \bbn\file\dir::move($old_path, $new_path) ){
+  if ( $model->inc->fs->is_file($old_path) && !$model->inc->fs->is_file($new_path)  ){
+    if ($model->inc->fs->move($old_path, $new_path) ){
       $res['success'] = true;
     }
   }

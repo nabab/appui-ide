@@ -23,7 +23,7 @@
       },
       searchInElement(){
         if ( this.search.length > 0 ){
-          let url = this.source.url + '/search/' + this.source.repository ,
+          let url = this.source.url + '/search/' + this.source.repository+'/',
               path = this.source.path.slice();
               //bbn.fn.log('url1', url);
           if ( this.source.is_project ){
@@ -41,7 +41,6 @@
             }
           }
           url += '_end_/' + this.typeSearch + '/_folder_/' + path + '/' + btoa(this.search);
-          bbn.fn.log('url4', url);
           url = url.replace( '//',  '/');
           this.$nextTick(() => {
             bbn.fn.link( url, true);

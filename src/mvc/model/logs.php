@@ -1,6 +1,6 @@
 <?php
 /** @var $model \bbn\mvc\model */
-$log_files = array_filter(\bbn\file\dir::get_files(BBN_DATA_PATH.'logs'), function($a){
+$log_files = array_filter($model->inc->fs->get_files(BBN_DATA_PATH.'logs'), function($a){
   return substr($a, -4) !== '.old';
 });
 if ( ($log_file = ini_get('error_log')) && (strpos($log_file, BBN_DATA_PATH.'logs') === false) ){
@@ -12,17 +12,16 @@ foreach ( $log_files as $lf ){
 }
 ksort($res);
 
-//die(var_dump($res));
 //case delete file  in folder
 if( !empty($model->data['delete_file']) ){
   $path = BBN_DATA_PATH.'logs/'.$model->data['delete_file'];
-  if ( is_file($path) ){
-    if ( !empty(\bbn\file\dir::delete($path)) ){
+  if ( $model->inc->fs->is_file($path) ){
+    if ( !empty($model->inc->fs->delete($path)) ){
       return ['success' => true];
     }
   }
 }
-else if ( !empty($model->data['log']) && !empty($res[$model->data['log']]) ){
+elseif ( !empty($model->data['log']) && !empty($res[$model->data['log']]) ){
   $output = [];
   if ( $model->data['clear'] ){
     file_put_contents($res[$model->data['log']], '');

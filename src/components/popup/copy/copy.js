@@ -34,17 +34,17 @@
     },
     methods: {
       onSuccess(){
+        let componentEditor = this.closest('bbn-container').find('appui-ide-editor');
         //const tab = this.closest("bbn-container");
-        if ( appui.ide.nodeParent !== false ){
-          appui.ide.nodeParent.reload();
+        if ( componentEditor.nodeParent !== false ){
+          componentEditor.nodeParent.reload();
           this.$nextTick(()=>{
-            appui.ide.$set(appui.ide, 'nodeParent', false);
+            componentEditor.$set(componentEditor, 'nodeParent', false);
           });
         }
         else{
-          appui.ide.getRef('filesList').reload();
+          componentEditor.getRef('filesList').reload();
         }
-
         if ( this.isFile && !this.source.isMVC ){
           appui.success(bbn._("Copy file succesfully!"));
         }
@@ -90,20 +90,6 @@
       isFile(){
         return !this.source.data.folder && !this.source.isComponent
       },
-     //  types(){
-     //    let res = [];
-     //    if ( this.source.isMVC || (this.source.isFile && this.isComponent) ){
-     //      bbn.fn.each(this.rep.tabs, (i, v) => {
-     //        if ( !v.fixed ){
-     //          res.push({
-     //            text: v.title,
-     //            value: i
-     //          });
-     //        }
-     //      });
-     //    }
-     //    return res;
-     // },
       extensions(){
         let res = [];
         if ( !this.source.isMVC ){
@@ -118,13 +104,14 @@
       },
       formData(){
         let obj = {
+          is_project: this.source.isProject,
           path: this.source.data.dir,
           repository: this.source.repository,
           name: this.source.data.name,
           ext: this.source.data.ext,
           is_mvc: this.source.isMVC,
+          type: this.source.type,
           is_file: this.isFile,
-          is_project: this.source.isProject,
           is_component: this.source.isComponent
         }
         if ( this.source.repository['types'] !== undefined ){

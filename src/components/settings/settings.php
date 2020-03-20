@@ -1,6 +1,6 @@
 <div class="bbn-100">
   <div class="bbn-h-100 code">
-    <bbn-tabnav :autoload="true"
+    <bbn-router :nav="true"
                 :scrollable="false"
                 ref="tabstrip"
     >
@@ -36,6 +36,6 @@
                      :source="source"
                      component="appui-ide-settings-message"
       ></bbn-container>
-    </bbn-tabnav>
+    </bbn-router>
   </div>
 </div>

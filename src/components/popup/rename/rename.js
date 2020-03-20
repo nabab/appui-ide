@@ -23,16 +23,17 @@
        */
 
       ctrlCloseTab(id){
-        let ctrlChangeCode = appui.ide.getRef('tabstrip').getVue(id).getRef('component').changedCode,
-            tabs           = appui.ide.getRef('tabstrip')['tabs'].slice(),
-            url            = tabs[idx]['url'],
-            current        = tab[idx]['current'];
+        let componentEditor = this.closest('bbn-container').find('appui-ide-editor'),
+            ctrlChangeCode  = componentEditor.getRef('tabstrip').getVue(id).getRef('component').changedCode,
+            tabs            = componentEditor.getRef('tabstrip')['tabs'].slice(),
+            url             = tabs[idx]['url'],
+            current         = tab[idx]['current'];
         if ( ctrlChangeCode ){
           let dirTab = this.formData.path + this.formData.name;
           appui.confirm(
             bbn._('Do you want to save the changes before?'),
             () => {
-              appui.ide.save(true);
+              componentEditor.save(true);
 
               if ( this.isFile ){
                 /*path.pop();
@@ -85,7 +86,6 @@
                           }
                         }
                         newParamsTab.title = stepTitle.join('/');
-                        //appui.ide.getRef('tabstrip[')'tabs'][i]
                       }
                       else{
                         /*      let end      = tabs[i]['title'].lastIndexOf('/'),
@@ -97,23 +97,23 @@
                   }
                 }
               }
-            },
-            () => {
-              appui.ide.afterCtrlChangeCode();
+            }, () => {
+              componentEditor.afterCtrlChangeCode();
             }
           );
         }
         else{
-          appui.ide.getRef('tabstrip').close(this.getRef('tabstrip').selected, true);
+          componentEditor.getRef('tabstrip').close(this.getRef('tabstrip').selected, true);
         }
         return true
       },
       beforeSubmit(){
-        const tabStrip = appui.ide.getRef('tabstrip');
-        let path = this.source.nodeData.path.split('/');
+        let componentEditor = this.closest('bbn-container').find('appui-ide-editor'),
+            tabStrip = componentEditor.getRef('tabstrip'),
+            path = this.source.nodeData.path.split('/');
         //if it is a file, you perform open tab check operations and in case we rename its tab title
         if ( tabStrip ){
-          var idx = tabStrip.router.getIndex('file/' + appui.ide.currentRep + this.source.nodeData.dir + this.source.nodeData.name);
+          let idx = tabStrip.getIndex('file/' + componentEditor.currentRep + '/' + this.source.nodeData.dir + this.source.nodeData.name);
           //if the file we have to rename is open and is also active then we rename it
           if ( Number.isInteger(idx) && idx > -1 ){
             if ( this.ctrlCloseTab(idx) ){
@@ -122,45 +122,35 @@
         }
       },
       onSuccess(){
-
-        let editor = this.closest("bbn-container").getComponent(),
-            key = 'file/' + appui.ide.currentRep;
+        let editor =  this.closest('bbn-container').find('appui-ide-editor'),
+            key = 'file/' + this.source.currentRep + '/';
 
         if ( this.source.isMVC ){
-         // key += 'mvc/' + this.source.nodeData.path + '/_end_';
-          key += 'mvc/' + this.source.nodeData.path + '/' +  this.source.nodeData.name + '/_end_';
+          key += 'mvc/' + this.source.nodeData.path +  '/_end_';
         }
-        else if ( this.source.isCcomponent ){
-          key += this.source.data.path + '/_end_';
+        else if ( this.source.isComponent ){
+          key += this.source.nodeData.path + '/_end_';
         }
 
-        let idx = editor.getRef('tabstrip').router.getIndex(key);
-
-
+        let idx = editor.getRef('tabstrip').getIndex(key);
 
         if ( idx != false ){
           editor.getRef('tabstrip').close(idx);
         }
 
-        if ( appui.ide.nodeParent ){
-          appui.ide.nodeParent.reload();
-          this.$nextTick(()=>{
-            appui.ide.$set(appui.ide, 'nodeParent', false);
-          });
+        if ( editor.tempNodeofTree !== false ){
+          if ( this.source.component_vue ){
+             editor.tempNodeofTree.parent.reload();
+          }
+          else {
+            editor.tempNodeofTree.closest('bbn-tree').reload();
+          }
+
+          editor.tempNodeofTree = false;
         }
         else{
-          // this.$nextTick(() => {
-          //   appui.ide.getRef('tabstrip').close(appui.ide.tabSelected);
-          // });
-          this.$nextTick(() => {
-            let newUrl = appui.ide.getRef('tabstrip').tabs[appui.ide.tabSelected].current;
-            //appui.ide.getRef('tabstrip').currentURL = newUrl;
-            bbn.fn.link('ide/editor/' + newUrl);
-            appui.ide.getRef('tabstrip').load(newUrl);
-          });
-
-          if ( appui.ide.currentRep === this.source.currentRep ){
-            appui.ide.getRef('filesList').reload();
+          if ( editor.currentRep === this.source.currentRep ){
+            editor.getRef('filesList').reload();
           }
         }
         appui.success(bbn._("Renamed!"));

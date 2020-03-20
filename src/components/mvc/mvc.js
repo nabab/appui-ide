@@ -7,8 +7,8 @@
 (() => {
   return {
     data(){
-      const ide = this.closest('bbn-splitter').closest('bbn-splitter').$parent.$data;
-      let path      = this.source.url.substr(this.source.repository.length).replace('/_end_', '').split('/'),
+      const ide = this.closest('appui-ide-editor');
+      let path      = this.source.url.substr(this.source.repository.length+1).replace('/_end_', '').split('/'),
           filename  = path.pop(),
           tabs      = ide.repositories[this.source.repository].tabs,
           exts      = [],
@@ -99,12 +99,13 @@
           tabsMenu[i] = exts;
         }
       });
+      //return $.extend({}, this.source, {
       return bbn.fn.extend({}, this.source, {
         repositories: ide.repositories,
         font: ide.font,
         font_size: ide.font_size,
         theme: ide.theme,
-        root: ide.root,
+        root: ide.source.root,
         path: path.join('/'),
         filename: filename,
         tabsMenu: tabsMenu,
@@ -240,7 +241,7 @@
       },
       loadCtrl(ctrl){
         let i   = this.getRef('tabstrip').selected,
-            tab = this.getRef('tabstrip').tabs.splice(0, 1),
+            tab = this.getRef('tabstrip').views.splice(0, 1),
             val = tab[0].menu[ctrl - 1];
         this.getRef('tabstrip').selected = '';
         this.getRef('tabstrip').add({
@@ -298,7 +299,7 @@
         let tab = this.getRef('tabstrip').getVue(this.getRef('tabstrip').selected);
         if ( tab.getComponent().isChanged ){
           appui.confirm(bbn._("Modified code do you want to refresh anyway?"), () => {
-            this.post(appui.ide.root + 'editor/' + this.getRef('tabstrip').baseURL + tab.url, (d) => {
+            this.post(this.root + 'editor/' + this.getRef('tabstrip').baseURL + tab.url, (d) => {
               if ( d.data.id ){
                 tab.reload();
               }
@@ -306,7 +307,7 @@
           });
         }
         else{
-          this.post(appui.ide.root + 'editor/' + this.getRef('tabstrip').baseURL + tab.url, (d) => {
+          this.post(this.root + 'editor/' + this.getRef('tabstrip').baseURL + tab.url, d => {
             if ( d.data.id ){
               tab.reload();
             }
@@ -349,8 +350,8 @@
         }
       }
     },
-    mounted(){
-      appui.getRegistered('editor').urlEditor =  this.source.url ;
-    }
+    /*mounted(){
+      this.closest('appui-ide-editor').urlEditor =  this.source.url ;
+    }*/
   }
 })();

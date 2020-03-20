@@ -2,7 +2,7 @@
   return {
     props: ['source'],
     data(){
-      return{
+      return {
         titles:{
           permissions: bbn._('Info'),
           subPerm: bbn._('Sub-permissions') + '  (' + this.source.permissions.children.length +')',

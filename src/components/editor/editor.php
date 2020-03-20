@@ -26,6 +26,7 @@
                     @click="test"
                     icon="nf nf-fa-magic"
                     style="margin-left: 2px"
+                    ref="btnTest"
         ></bbn-button>
       </div>
       <div>
@@ -159,9 +160,11 @@
                 :resizable="true"
                 :scrollable="false"
       >
-        <bbn-tabnav id="tabstrip_editor"
+        <bbn-router id="tabstrip_editor"
+                    :nav="true"
+                    :master="true"
+                    :switch-key="false"
                     ref="tabstrip"
-                    :autoload="true"
                     @close="ctrlCloseTab"
                     @ready="createTabstrip"
         >
@@ -172,7 +175,7 @@
                           title="<?=_('Help')?>"
                           icon="nf nf-mdi-help_box"
           ></bbns-container>
-        </bbn-tabnav>
+        </bbn-router>
       </bbn-pane>
       <!-- for parser tree -->
       <bbn-pane :size="220"

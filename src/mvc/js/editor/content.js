@@ -11,12 +11,12 @@
      props: ['source'],
      data(){
        return {
-         rep: appui.ide.repositories[appui.ide.currentRep],
+         rep: this.closest('appui-ide-editor').repositories[this.closest('appui-ide-editor').currentRep],
        }
      },
      computed:{
        isMVC(){
-         return ((appui.ide.isComponent === false) && (this.rep.alias_code === 'mvc')) || (bbn.vue.closest(this, 'appui-ide-mvc') !== false);
+         return ((this.closest('appui-ide-editor').isComponent === false) && (this.rep.alias_code === 'mvc')) || (bbn.vue.closest(this, 'appui-ide-mvc') !== false);
        }
      }
    }

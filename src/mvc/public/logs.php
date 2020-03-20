@@ -9,7 +9,7 @@ if ( isset($ctrl->post['log']) ){
   $ctrl->obj = $ctrl->get_object_model();
 }
 //for delete file
-else if ( isset($ctrl->post['fileLog'], $ctrl->post['md5']) || isset($ctrl->post['delete_file']) ){
+elseif ( isset($ctrl->post['fileLog'], $ctrl->post['md5']) || isset($ctrl->post['delete_file']) ){
   $ctrl->action();
 }
 //info at first call at the file

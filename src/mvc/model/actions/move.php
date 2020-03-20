@@ -10,24 +10,24 @@
 $res['success'] = false;
 if ( isset($model->inc->ide) ){
   $folder = false;
-  if ( !empty($model->data['is_mvc']) ){
-    foreach($model->data['repository']['tabs'] as $i=>$v){
-      $folder= $model->inc->ide->decipher_path($model->data['repository']['value'].($i==='php' ? 'public' : $i).'/'.$model->data['new_path']);
-      $element = $model->inc->ide->decipher_path($model->data['repository']['bbn_path'].'/'.$model->data['repository']['path'].($i==='php' ? 'public' : $i).'/'.$model->data['path'].$model->data['name']);
-      if( is_dir($folder) ){
-        $content= \bbn\file\dir::get_files($folder, true);
+  if ( !empty($model->data['is_project']) ){
+    foreach ( $model->data['repository']['tabs'] as $i => $v ){
+      $folder= $model->inc->ide->decipher_path($model->data['repository']['value'].'/src/'.$model->data['type'].'/'.$v['path'].$model->data['new_path']);
+      $element = $model->inc->ide->decipher_path($model->data['repository']['value'].'/src/mvc/'.$v['path'].$model->data['path'].$model->data['name']);
+      //checks whether an item with the same name as the destination folder exists
+      if( $model->inc->fs->is_dir($folder) ){
+        $content= $model->inc->fs->get_files($folder, true);
         if ( !empty($content) ){
           foreach( $content as $i => $v ){
             //case folder
-            if ( is_dir($v) && empty($model->data['is_file']) && explode('.',basename($v))[0] ===
-              $model->data['name'] ){
+            if ( $model->inc->fs->is_dir($v) && empty($model->data['is_file']) && explode('.',basename($v))[0] === $model->data['name'] ){
               return [
                 'success' => false,
                 'exist' => 'folder'
               ];
             }
             //case file
-            if ( is_file($v) && !empty($model->data['is_file']) && explode('.',basename($v))[0] === $model->data['name'] ){
+            if ( $model->inc->fs->is_file($v) && !empty($model->data['is_file']) && explode('.',basename($v))[0] === $model->data['name'] ){
               return [
                 'success' => false,
                 'exist' => 'file'
@@ -40,10 +40,8 @@ if ( isset($model->inc->ide) ){
   }
   else{
     $folder= $model->inc->ide->decipher_path($model->data['repository']['value'].$model->data['new_path']);
-    if ( !is_dir($folder) ){
-      \bbn\file\dir::create_path($folder);
-    }
-    $content= \bbn\file\dir::get_files($folder, true);
+   
+    $content= $model->inc->fs->get_files($folder, true);
 
 
     if ( !empty($content) && empty($model->data['is_project'])){
@@ -57,7 +55,7 @@ if ( isset($model->inc->ide) ){
       }
     }
   }
-  
+
   if ( !empty($model->inc->ide->move($model->data)) ){
     $res['success'] = true;
   }

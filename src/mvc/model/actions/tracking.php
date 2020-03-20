@@ -5,6 +5,6 @@ if ( isset($model->data['state']) &&
   isset($model->data['set_recent_file']) &&
   !empty($model->data['info'])
 ){
-  $res['success'] = $model->inc->ide->set_opened_file($model->data['info'], $model->data['file'], $model->data['state'], $model->data['set_recent_file']);
+  $res['success'] = $model->inc->ide->tracking($model->data['info'], $model->data['file'], $model->data['state'], $model->data['set_recent_file']);
 }
 return $res;

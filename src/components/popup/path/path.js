@@ -9,7 +9,7 @@
   return {
     data(){
       return {
-        root: appui.ide.root
+        root: this.closest('bbn-container').find('appui-ide-editor').source.root
       }
     },
     computed: {
@@ -32,7 +32,7 @@
       },
       treeInitialData(){
         return {
-          repository: appui.ide.currentRep,
+          repository: this.closest('bbn-container').find('appui-ide-editor').currentRep,
           repository_cfg: this.source.rep,
           is_mvc: this.isMVC,
           is_component: this.source.isComponent,
@@ -44,17 +44,14 @@
         };
       },
       isMVC(){
-        // return ((appui.ide.repositories[appui.ide.currentRep] !== undefined) && (appui.ide.repositories[appui.ide.currentRep].tabs !== undefined)) && (this.source.isMVC === true);
-        // return (appui.ide.repositories[appui.ide.currentRep] !== undefined) &&  (this.source.rep.tabs !== undefined) && (this.source.isMVC === true);
         return this.source.isMvc || this.source.isMVC
       },
     },
     methods: {
       treeMapper(a){
         if ( a.folder ){
-          //$.extend(a, {
-          bbn.fn.extend(a, {  
-            repository: appui.ide.currentRep,
+          bbn.fn.extend(a, {
+            repository: this.closest('bbn-container').find('appui-ide-editor').currentRep,
             repository_cfg: this.source.rep,
             onlydirs: true,
             tab: this.source.tab || false,
@@ -65,8 +62,12 @@
         return a;
       },
       treeNodeActivate(d){
-        const popup = bbn.vue.closest(this, "bbn-popup");
-        let path_destination = d.data.uid.endsWith('/') ? d.data.uid : d.data.uid + '/';
+        let popup = this.closest("bbn-popup"),
+            path_destination = d.data.uid.endsWith('/') ? d.data.uid : d.data.uid + '/';
+        // if the path starts with the backslash it is removed
+        if ( path_destination.indexOf('/') === 0 ){
+          path_destination = path_destination.substring(1);
+        }
         if ( ((this.source.rep.alias_code === "bbn-project") && (d.type === 'components')) || this.source.isComponent === true ){
           if ( d.data.is_vue === true ){
             if (  path_destination.indexOf(d.data.name + '/' + d.data.name + '/') > -1 ){

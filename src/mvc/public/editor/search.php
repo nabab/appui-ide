@@ -2,31 +2,25 @@
 if ( $ctrl->inc->ide && !empty($ctrl->arguments) ){
   $ctrl->data = [
     'repository' => '',
-    'nameRepository' => '',
+    'nameRepository' => $ctrl->arguments[0].'/'.$ctrl->arguments[1],
     'typeSearch' => '',
     'searchFolder' => '',
     'mvc' => false,
-    'isProject' => $ctrl->arguments[1] === '_project_' || $ctrl->arguments[4] === '_project_' ,
-  //  'search' => urldecode($ctrl->arguments[count($ctrl->arguments)-1]),
+    'isProject' => $ctrl->arguments[2] === '_project_' || $ctrl->arguments[4] === '_project_' ,
     'search' => base64_decode($ctrl->arguments[count($ctrl->arguments)-1]),
     'component' => false,
     'type' => '',
     'plugin' => false
   ];
-$ctrl->arguments[count($ctrl->arguments)-1] = $ctrl->data['search'];
 
+  $ctrl->arguments[count($ctrl->arguments)-1] = $ctrl->data['search'];
 
+  // get type project
   if ( $ctrl->data['isProject'] === true ){
-    if  ( $ctrl->arguments[1] === '_project_' ){
-      $ctrl->data['type'] = $ctrl->arguments[2];
-    }
-    else if( $ctrl->arguments[4] === '_project_' ){
-      $ctrl->data['plugin'] = $ctrl->arguments[2];
-      $ctrl->data['type'] = $ctrl->arguments[5];
-    }
+     $ctrl->data['type'] = $ctrl->arguments[3];
   }
 
-//case folder
+  //case folder
   $folder = "";
 
   foreach ($ctrl->arguments as $i => $v){
@@ -46,33 +40,26 @@ $ctrl->arguments[count($ctrl->arguments)-1] = $ctrl->data['search'];
     $ctrl->data['searchFolder'] = $folder;
   }
 
-
-
-
-
   foreach( $ctrl->arguments as $key => $val ){
-    if ( $val === "_end_" ){   
+    if ( $val === "_end_" ){
       $ctrl->data['typeSearch'] = $ctrl->arguments[$key+1];
       break;
     }
   }
 
-  if ( $ctrl->data['isProject'] ){
+  /*if ( $ctrl->data['isProject'] ){
     if ( !empty($ctrl->data['plugin']) ){
       $ctrl->data['nameRepository'] = $ctrl->arguments[0].'/bbn/'.$ctrl->data['plugin'].'/src/';
     }
     else{
       $ctrl->data['nameRepository'] = $ctrl->arguments[0].'/';
-    }    
-  }
-  
+    }
+  }*/
 
-  $ctrl->data['repository'] = $ctrl->inc->ide->repositories($ctrl->data['nameRepository']);  
-  //$ctrl->arguments[count($ctrl->arguments)-1] = urlencode($ctrl->arguments[count($ctrl->arguments)-1]);
+
+  $ctrl->data['repository'] = $ctrl->inc->ide->repositories($ctrl->data['nameRepository']);
   $ctrl->arguments[count($ctrl->arguments)-1] = base64_encode($ctrl->arguments[count($ctrl->arguments)-1]);
   $url = 'search/'.implode('/', $ctrl->arguments);
-
-///  \bbn\x::log([$url],'searchIDe');
 
   if ( !empty($ctrl->data['repository']) &&
     !empty($ctrl->data['typeSearch']) &&
@@ -83,7 +70,7 @@ $ctrl->arguments[count($ctrl->arguments)-1] = $ctrl->data['search'];
     }
     $ctrl->obj->icon = 'nf nf-fa-search';
     $ctrl->obj->url = $url;
-  
+
     $ctrl->combo(\bbn\str::cut($ctrl->data['search'], 12), true);
   }
 }
