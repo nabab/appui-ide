@@ -11,7 +11,10 @@
 if ( !empty($model->data['url']) && isset($model->inc->ide) ){
 
   $url = $model->data['url'];
+ 
+  //die(var_dump($model->data['url']));
   $rep = $model->inc->ide->repository_from_url($model->data['url']);
+  
   $file = $model->inc->ide->url_to_real($model->data['url']);
   $route = '';
 
@@ -19,17 +22,17 @@ if ( !empty($model->data['url']) && isset($model->inc->ide) ){
   foreach ( $model->data['routes'] as $i => $r ){
     if ( strpos($file, $r['path']) === 0 ){
       $route = $i;
-      \bbn\x::log(["3",$file, $r['path']],'file2');
       break;
     }
   }
   $path = str_replace($rep, '' , $url);
   $path = substr($path, 0, strpos($path, '/_end_'));
 
-  $repos = $model->inc->ide->repositories();
+  $repos = $model->inc->ide->get_repositories();
   $repository = $repos[$rep];
 
   $f = $model->inc->ide->decipher_path($model->data['url']);
+  //die(var_dump($f,$file, $model->data['url']));
   if ( is_array($repository) &&
     !empty($model->inc->ide->is_project($model->data['url'])) ||
     !empty($repository['project'])
@@ -65,12 +68,10 @@ if ( !empty($model->data['url']) && isset($model->inc->ide) ){
     }
   }
 
-  $arr = explode("/",$model->data['url']);
-  if ( is_array($arr) ){
-    array_pop($arr);
-   // array_pop($arr);
-    $arr[] = $repository['alias_code'] !== 'components' ? "php" : 'js';
-    $ctrl_file = $model->inc->ide->url_to_real(implode("/", $arr));
+  //model->data['url'] = implode("/", $stepUrl);
+  if ( strpos($model->data['url'],'_end_/settings') !== false ){
+    $url_settings = substr($model->data['url'], 0, strpos($model->data['url'],'_end_/settings')).'_end_/'.($repository['alias_code'] !== 'components' ? "php" : 'js');
+    $ctrl_file = $model->inc->ide->url_to_real($url_settings);
   }
 
   $res = [

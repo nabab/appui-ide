@@ -123,7 +123,7 @@
               <div class="bbn-flex-fill" >
                 <div class="bbn-overlay">
                    <bbn-tree class="tree"
-                            :source="source.root + 'tree'"
+                            source="ide/tree"
                             @activate="treeNodeActivate"
                             :menu="treeContextMenu"
                             :data="treeInitialData"
@@ -163,7 +163,6 @@
         <bbn-router id="tabstrip_editor"
                     :nav="true"
                     :master="true"
-                    :switch-key="false"
                     ref="tabstrip"
                     @close="ctrlCloseTab"
                     @ready="createTabstrip"

@@ -41,7 +41,7 @@
         font: ide.font,
         font_size: ide.font_size,
         theme: ide.theme,
-        root: ide.source.root,
+        root: ide.prefix+'/',
         path: path.join('/'),
         filename: filename,
         tabMenus: exts

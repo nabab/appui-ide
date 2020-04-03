@@ -13,9 +13,9 @@
     },
     computed: {
       sourceParser(){
-        let componentEditor = this.closest('appui-ide-editor');
+        let editor = this.closest('appui-ide-editor');
         if ( bbn.fn.isArray(this.parser) && this.parser.length ){
-          if ( (componentEditor.possibilityParser === "class") && !this.showAllParser ){
+          if ( (editor.possibilityParser === "class") && !this.showAllParser ){
             let idx = bbn.fn.search(this.parser, 'name', 'methods');
             let sourceTree = bbn.fn.extend([], this.parser, true);
             bbn.fn.each(sourceTree[idx]['items'], (meth,i)=>{
@@ -25,7 +25,7 @@
             });
             return sourceTree;
           }
-          else if ( this.showAllParser || (componentEditor.possibilityParser === "component") ){
+          else if ( this.showAllParser || (editor.possibilityParser === "component") ){
             return this.parser;
           }
         }
@@ -61,8 +61,8 @@
             return this.closest('appui-ide-editor').possibilityParser === 'component' ? '#44b782' : "black"
           },
           classIcon(){
-            let componentEditor = this.closest('appui-ide-editor');
-            if ( componentEditor.possibilityParser !== 'component' ){
+            let editor = this.closest('appui-ide-editor');
+            if ( editor.possibilityParser !== 'component' ){
               if ( (this.source.type === undefined) ){
                 return 'nf nf-custom-folder_config';
               }
@@ -74,7 +74,7 @@
               }
               return 'nf nf-mdi-function';
             }
-            else if ( componentEditor.possibilityParser === 'component' ){
+            else if ( editor.possibilityParser === 'component' ){
               if ( (this.source.eleComponent !== undefined) ){
                 if ( (this.source.eleComponent === 'props') || (this.source.eleComponent === 'data') ){
                   return "nf nf-dev-code";
@@ -92,14 +92,13 @@
         },
         methods:{
           getRow(){
-            let componentEditor = this.closest('appui-ide-editor');
+            let editor = this.closest('appui-ide-editor');
             if ( ((this.source.line !== undefined) || (this.source.line !== false)) &&
-              (componentEditor.currentEditor !== false )
+              (editor.currentCode !== false )
             ){
-              componentEditor.cursorPosition.line = this.source.line-1;
               this.$nextTick(()=>{
                 if ( (this.source.type === 'origin') && parserComponent.getCode ){
-                  componentEditor.currentEditor.setState();
+                  editor.currentCode.loadState({line: this.source.line-1, char: 0})
                 }
               })
             }

@@ -2,12 +2,14 @@
   return {
     props: ['source'],
     data(){
+      let editor = this.closest('appui-ide-editor');
       return {
         ide: null,
         firstInput: false,
         originalValue: this.source.value,
         value: this.source.value,
-        theme: this.closest('appui-ide-editor').themeCode,
+        theme: editor.themeCode,
+        root: editor.source.root,
         codeExist: false,
         initialState: {
           marks: this.source.marks,
@@ -150,7 +152,7 @@
             }
           }
 
-          this.post(this.ide.root + 'actions/tracking',{
+          this.post(this.root + '/actions/tracking',{
             file: path,
             state: {
               selections: info.selections !== undefined ? info.selections : false,
@@ -236,7 +238,7 @@
             filePath : pathHistory,
             code_file_pref: this.path.substring(this.path.lastIndexOf('src/'+ this.typeProject)+4, this.path.length)
           };
-          this.post(this.ide.root + "actions/save", obj , (d) => {
+          this.post(this.root + "/actions/save", obj , (d) => {
             let tab = this.closest('bbn-container'),
                 parent = {},
                 tabnav = this.closest('bbn-router'),
@@ -303,7 +305,6 @@
           if ( pathMVC.indexOf('mvc/') === 0 ){
             pathMVC = pathMVC.replace("mvc/","");
           }
-          bbn.fn.log("sssccr", pathMVC, this.ide)
           let link = (this.ide.route ? this.ide.route + '/' : '') +
           (pathMVC === 'mvc' ? '' : pathMVC + '/') +  this.ide.filename;
 
@@ -311,34 +312,32 @@
 
           return true;
         }
-        /*if  ( this.isCli ){
-          bbn.fn.post('editor/actions/run_cli', {
-            'file': this.path
-          }, d=>{
-            if ( d.success ){
-              appui.success(bbn._('Executed!'));
-            }
-            else{
-              appui.error(bbn._('Not Executed!'));
-            }
-          });*/
         if ( typeof(this.source.mode) === 'string' ){
           switch ( this.source.mode ){
             case "php":
-              this.post(this.ide.root + "test", {code: this.value}, (d) => {
-                const tn = this.closest('bbn-router'),
-                      idx = tn.views.length;
-                tn.router.add({
-                  title: moment().format('HH:mm:ss'),
-                  load: false,
-                  content: d.content,
-                  url: 'output' + idx,
-                  selected: true
+              if ( !this.isClass ){
+                this.post(this.root + "test", {
+                  code: this.value,
+                  file: this.fullPath
+                 }, d => {
+                  const tn = this.closest('bbn-router'),
+                        idx = tn.views.length;
+                  tn.add({
+                    title: moment().format('HH:mm:ss'),
+                    icon: 'nf nf-fa-cogs',
+                    load: false,
+                    content: d.content,
+                    url: 'output' + idx,
+                    selected: true
+                  });
+                  this.$nextTick(()=>{
+                    tn.route('output' + idx);
+                  });
                 });
-                this.$nextTick(()=>{
-                  tn.router.route('output' + idx);
-                });
-              });
+              }
+              else{
+                this.alert(bbn._('Unable to test classes!!'));
+              }
               break;
             case "js":
               eval(this.value);
@@ -349,7 +348,6 @@
                 appui.alert("There is an XML error in this SVG");
               }
               else {
-                //this.closest("bbn-container").popup($("<div/>").append(document.importNode(oDocument.documentElement, true)).html(), "Problem with SVG");
                 let divElement = document.createElement('div').innerHTML = document.importNode(oDocument.documentElement, true);
                 this.closest("bbn-container").popup(divElement.innerHTML, "Problem with SVG");
               }
@@ -377,7 +375,7 @@
         let componentEditor = this.closest('appui-ide-editor'),
             code = this.getRef('editor');
         this.codeExist = !!code;
-        let state = bbn.fn.extend({}, this.initialState, true);
+        let state = bbn.fn.extend({},this.initialState, true);
         state.line = state.line === false ?  0 :  parseInt(state.line);
         state.char = state.char === false ?  0 :  parseInt(state.char);
         this.$nextTick(()=>{

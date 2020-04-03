@@ -19,5 +19,5 @@ foreach ( $ctrl->get_routes() as $r ){
     $root = $r['path'];
   }
 }
-$repos = $ctrl->inc->ide->repositories();
+$repos = $ctrl->inc->ide->get_repositories();
 \bbn\x::hdump($req, $root, $repos);

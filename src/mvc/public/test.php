@@ -31,7 +31,7 @@ if ( BBN_IS_DEV || $ctrl->inc->user->is_dev() ){
     if ( isset($ctrl->post['dir']) && $ctrl->inc->fs->is_dir($ctrl->post['dir']) ){
       chdir($ctrl->post['dir']);
     }
-    echo '<p>Current directory: '.getcwd().'</p>';
+    echo '<p>'._("Current:"). ' '.(!empty($ctrl->post['file']) ? $ctrl->post['file'] : getcwd()).'</p>';
     echo '<p><a onclick="bbn.fn.closePopup(); setTimeout(function(){bbn.ide.test()}, 2000);" href="javascript:;">Refresh</a></p>';
     $bbn_timer = new \bbn\util\timer();
     $bbn_timer->start();

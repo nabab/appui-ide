@@ -106,17 +106,18 @@
         font_size: ide.font_size,
         theme: ide.theme,
         root: ide.source.root,
+        //root: ide.prefix+'/',
         path: path.join('/'),
         filename: filename,
         tabsMenu: tabsMenu,
         permissions: ide.permFile,
         codesBlock: listCodes,
         tabsRepository: this.source.repository_content.tabs['mvc'] !== undefined ? this.source.repository_content.tabs['mvc'][0] : this.source.repository_content.tabs,
-        //routerSource: []
+        routerSource: []
       });
     },
     computed: {
-      routerSource(){
+      /*routerSource(){
         if ( (this.tabsRepository !== undefined) && (this.emptyTabs !== undefined) && (this.sctrl.length) ){
           let ctrlRepo = this.tabsRepository[bbn.fn.search(this.tabsRepository, 'url' ,'_ctrl')];
           let r = [{
@@ -153,7 +154,7 @@
           return r;
         }
         return [];
-      },
+      },*/
       sctrl(){
         if ( this.path.length ){
           return this.path.split('/');
@@ -174,9 +175,9 @@
       }
     },
     methods: {
-      /*setRouterSource(){
-        if ( this.emptyTabs !== undefined ){
-          let ctrlRepo = this.tabsRepository[bbn.fn.search(this.tabsRepository, 'url' ,'_ctrl')];
+      setRouterSource(){
+        if ( (this.tabsRepository !== undefined) && (this.emptyTabs !== undefined) && (this.sctrl.length) ){
+          let ctrlRepo =  bbn.fn.get_row(this.tabsRepository, 'url' ,'_ctrl');
           let r = [{
             load: true,
             cached: false,
@@ -211,7 +212,7 @@
           return r;
         }
         return [];
-      },*/
+      },
       search: bbn.fn.search,
       listCtrls(){
         let path = "",
@@ -321,7 +322,7 @@
             oldExt = tab.source.extension,
             newExt = obj.key;
 
-        this.post(this.source.root + 'actions/change_extension', {
+        this.post(this.root + 'actions/change_extension', {
           newExt: newExt,
           oldExt: oldExt,
           repository: this.repositories[this.repository]['bbn_path'] + '/' + this.repositories[this.repository]['path'],
@@ -350,8 +351,9 @@
         }
       }
     },
-    /*mounted(){
-      this.closest('appui-ide-editor').urlEditor =  this.source.url ;
-    }*/
+    mounted(){
+      //this.closest('appui-ide-editor').urlEditor =  this.source.url ;
+      this.routerSource = this.setRouterSource();
+    }
   }
 })();

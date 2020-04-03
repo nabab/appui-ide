@@ -8,7 +8,7 @@
 
 if ( $model->inc->ide ){
   //initially acquire all the repositories
-  $repositories = $model->inc->ide->repositories();
+  $repositories = $model->inc->ide->get_repositories();
   /*case initial return filter date of the repositories for dropdown list and unleashes the call to the tree at the
   first level */
   if ( !isset($model->data['repository']) && empty($model->data['path']) ){

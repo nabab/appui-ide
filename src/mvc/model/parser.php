@@ -14,12 +14,18 @@ if ( !empty($model->data['cls']) ){
 
   $path = dirname($model->data['cls']);
 
-  $start = $model->data['project'] ? strpos($path,'lib/')+4 : strpos($path,'src/')+4;
-
-  //case project
-  $class = substr($path, $start).'\\'.$file;
+  // temporaney for classs bbn i lib
+  if ( !empty($model->data['repository']) && $model->data['repository'] === 'bbn' ){
+    $start = strlen('lib/bbn/src/');
+    $class = 'bbn\\'.substr($path, $start).'\\'.$file;
+  }
+  else {
+    $start = $model->data['project'] ? strpos($path,'lib/')+4 : strpos($path,'src/')+4;
+    $class = substr($path, $start).'\\'.$file;
+  }
   $class = str_replace('/', '\\',$class);
-;
+
+
   $tree = $parser->analyze($class);
 
   if ( !empty($tree) ){

@@ -34,7 +34,7 @@
               bbn.fn.log("ssddds", router.findByKey(link), link)
             }
 
-            bbn.fn.log("sss", a )
+
             /*if ( i !== false ){
               tabStrip.activateIndex(i);
               let st = bbn.vue.find(tabStrip.getVue(i),'bbn-routerv'),

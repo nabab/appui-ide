@@ -120,6 +120,7 @@ if ( !empty($model->data['repository']) &&
       return false;
     }
   };
+
   // function for create the node for tree
   $get = function($real, $color, $tab = false, $type = false, $types =[]) use(&$folders, &$files, $onlydirs, $cur_path, $file_check, $excludeds, $opt, $types_to_include, $is_project, $tree_popup, $dirs, $model){
     if( !empty($real) && !empty(strpos($real,'//')) ){
@@ -382,6 +383,7 @@ if ( !empty($model->data['repository']) &&
   }//case root repository with alias bbn-project and contain types
   elseif ( !empty($rep_cfg['types']) && !empty($is_project) && empty($model->data['type']) ){
     $types = [];
+    
    //browse the root elements and assign the type to each of them
     $todo = !empty($onlydirs) ? $dirs($path.$cur_path) : $model->inc->fs->get_files($path . $cur_path, true);
     foreach ( $todo as $t ){

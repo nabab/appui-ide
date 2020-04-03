@@ -1,9 +1,19 @@
 <?php
 /** @var $model \bbn\mvc\model */
-if ( isset($model->data['routes'], $model->inc->ide) ){
-  $repos = $model->inc->ide->repositories();
 
-  $current_rep = 'app/main';
+if ( isset($model->data['routes'], $model->inc->ide) ){
+
+  $repos = $model->inc->ide->get_repositories();
+  $origin = $model->inc->ide->get_origin();
+  $project = $model->inc->ide->get_name_project();
+
+  $prefix = $model->plugin_url($model->inc->ide->get_origin());
+  if ( $origin !== 'appui-ide' ){
+    $prefix .= '/router/'.$project.'/ide/editor';
+  }
+
+
+  $current_rep =  $model->inc->ide->get_default_repository();
   $types = [];
   $tabs = [];
   if ( isset($repos[$current_rep]['types']) ){
@@ -38,22 +48,10 @@ if ( isset($model->data['routes'], $model->inc->ide) ){
     ];
 
   }
-
-  if ( $model->inc->session->has('ide', 'repository') ){
+ // temporaney disabled
+  /*if ( $model->inc->session->has('ide', 'repository') ){
     $current_rep = $model->inc->session->get('ide', 'repository');
-  }
-
-  //die(var_dump($repos));
-  // Routes
-  /*foreach ( $repos as $i => $dir ){
-    foreach ( $model->data['routes'] as $k => $r ){
-      if ( strpos($model->inc->ide->decipher_path($i), $r['path']) === 0 ){
-        $repos[$i]['route'] = $k;
-      }
-    }
-  }
-*/  
-
+  }*/
   $ide_cfg = $model->inc->user->get_cfg('ide');
   $themes =  [
     'default',
@@ -121,9 +119,12 @@ if ( isset($model->data['routes'], $model->inc->ide) ){
     'zenburn'
   ];
 
+  
   return [
     'staticPath' => BBN_STATIC_PATH,
     'config' => [],
+    'project' => $project,
+    'prefix' => $prefix,
     'repositories' => $repos,
     'root' => APPUI_IDE_ROOT,
     'currentRep' => $current_rep,

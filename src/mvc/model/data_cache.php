@@ -1,4 +1,7 @@
 <?php
+if ( !isset($model->inc->fs) ){
+  $model->add_inc('fs',  new \bbn\file\system());
+}
 
 $folderCache = $model->cache_path();
 $fullPath = $folderCache;
@@ -15,8 +18,8 @@ if ( !empty($model->data['cache'])  && \bbn\str::check_path($folderCache.$model-
   return json_decode(file_get_contents($folderCache.$model->data['cache']));
 }
 //case click button for delte all cache
-else if( !empty($model->data['deleteAll']) ){
-  if ( \bbn\file\dir::delete($folderCache, false) ){
+elseif( !empty($model->data['deleteAll']) ){
+  if ( $model->inc->fs->delete($folderCache, false) ){
     return [
       'success' => true
     ];
@@ -28,9 +31,9 @@ else if( !empty($model->data['deleteAll']) ){
   }
 }
 //case delete a cache or file or folder in tree
-else if ( !empty($model->data['deleteCache']) && \bbn\str::check_path($model->data['deleteCache']) ){
+elseif ( !empty($model->data['deleteCache']) && \bbn\str::check_path($model->data['deleteCache']) ){
   $ele = $folderCache.$model->data['deleteCache'];
-  if ( \bbn\file\dir::delete($ele, $model->data['deleteContent'] ) ){
+  if ( !empty($model->inc->fs->delete($ele, $model->data['deleteCache'])) ){
     return [
       'success' => true
     ];
@@ -42,12 +45,11 @@ else if ( !empty($model->data['deleteCache']) && \bbn\str::check_path($model->da
   }
 }//in this block retur tha data of all cache for tree
 else{
-  $content = \bbn\file\dir::get_files($fullPath, true);
+  $content = $model->inc->fs->get_files($fullPath, true);
   $cache = \bbn\cache::get_engine();
   $all = [];
   $paths = [];
 
-  
   if ( !empty($content) ){
     foreach( $content as $i => $path ){
       $nodePath = substr($path, strlen($folderCache));
@@ -59,12 +61,12 @@ else{
         //'path' => [],
         'nodePath' => $nodePath,
         'items'=> [],
-        'num' => is_dir($path) ? count(\bbn\file\dir::get_files($path, true)) : 0,
-        'folder' => is_dir($path)
+        'num' => $model->inc->fs->is_dir($path) ? count($model->inc->fs->get_files($path, true)) : 0,
+        'folder' => $model->inc->fs->is_dir($path)
       ];
 
 
-      if ( (strpos($path, $fullPath) === 0)  && is_dir($fullPath) ){
+      if ( (strpos($path, $fullPath) === 0)  && $model->inc->fs->is_dir($fullPath) ){
         if ( !empty($model->data['path']) ){
           $paths = $model->data['path'];
         }
@@ -74,7 +76,6 @@ else{
         if ( !in_array($ele, $paths) ){
           $paths[] = $ele;
         }
-  
       }
       $ele['path'] = $paths;
       array_push($all, $ele);

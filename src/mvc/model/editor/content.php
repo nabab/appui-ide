@@ -1,22 +1,28 @@
 <?php
 /** @var $model \bbn\mvc\model */
-
+\bbn\x::log([$model->data['url']],'vitoprj');
 if ( !empty($model->data['url']) && isset($model->inc->ide) ){
    //we convert the string into an array to check whether we need to provide permission information or not
   $stepUrl = explode("/",$model->data['url']);
 
-  //for Router settings
-  if ( $stepUrl[count($stepUrl) - 1 ] === 'settings' ){
-    $url = str_replace('/settings', '/php', $model->data['url']);
-    $ris = $model->inc->ide->url_to_real($url, true);
+  // if we are in the case of the settings tabvnav sub where the last argument is one of the tabs belonging to him
+  $tabnavSettings = ($stepUrl[count($stepUrl) - 1] === 'settings') || ($stepUrl[count($stepUrl) - 2] === 'settings') && ($stepUrl[count($stepUrl) - 3] === '_end_');
 
-    if ( !$model->inc->ide->get_file_permissions($ris['file']) ){
-      if ( !$model->inc->ide->create_perm_by_real($ris['file']) ){
+  //for case settings
+  if ($tabnavSettings ) {
+  //for Router settings
+  
+    $model->data['url'] = implode("/", $stepUrl);
+    $url = substr($model->data['url'], 0, strpos($model->data['url'],'_end_/settings')).'_end_/php';
+    $info = $model->inc->ide->url_to_real($url, true);
+   
+    if ( !$model->inc->ide->get_file_permissions($info['file']) ){
+      if ( !$model->inc->ide->create_perm_by_real($info['file']) ){
         return ['error' => $model->inc->ide->get_last_error()];
       }
     }
 
-    if ( ($perm = $model->inc->ide->get_file_permissions($ris['file'])) &&
+    if ( ($perm = $model->inc->ide->get_file_permissions($info['file'])) &&
       !empty($perm['permissions'])
     ){
       if ( !empty($perm['permissions']['id']) ){
@@ -52,4 +58,3 @@ if ( !empty($model->data['url']) && isset($model->inc->ide) ){
   }
 }
 return ['error' => $model->inc->ide->get_last_error()];
-

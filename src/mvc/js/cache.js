@@ -15,13 +15,13 @@
            // cache: node.data.path,
              cache: node.data.nodePath,
             }, d => {
-            if ( d.data ){
+            if ( d ){
               //this.selectedFile = node.data.path;
               this.selectedFile = node.data.nodePath;
-              this.selectedFileCreation = bbn.fn.fdate(bbn.fn.date(Math.round(d.data.timestamp*1000)));
-              this.selectedFileExpire = d.data.expire || bbn._('Never');
-              this.selectedFileHash = d.data.hash;
-              this.contentCache = JSON.stringify(d.data.value);
+              this.selectedFileCreation = bbn.fn.fdate(bbn.fn.date(Math.round(d.timestamp*1000)));
+              this.selectedFileExpire = d.expire || bbn._('Never');
+              this.selectedFileHash = d.hash;
+              this.contentCache = JSON.stringify(d.value);
             }
           });
         }
@@ -33,7 +33,6 @@
           }, d => {
           if ( d.success ){
             this.contentCache = "";
-            appui.success(bbn._('All cache deleted'))
             this.getRef('cacheList').reload();
           }
         });
@@ -93,7 +92,6 @@
                       }
                     }
                   });
-                  appui.success(bbn._('Cache file deleted'));
                 }
               });
             }
@@ -114,10 +112,9 @@
                   deleteContent: 0
                   }, d => {
                   if ( d.success ){
-                    let treeOfNode = bbn.vue.closest(node, 'bbn-tree');
+                    let treeOfNode = node.closest('bbn-tree');
                     treeOfNode.reload();
                     this.contentCache = "";
-                    appui.success(bbn._('Folder\'s content deleted'))
                   }
                 });
               }

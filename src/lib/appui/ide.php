@@ -42,6 +42,7 @@ class ide {
     /** @var bool|string $current_id */
     $current_id = false;
 
+
   protected
     /** @var \bbn\db $db */
     $db,
@@ -54,7 +55,8 @@ class ide {
     /** @var \bbn\user\preferences $pref */
     $pref,
     /** @var \bbn\appui\project $projects */
-    $projects;
+    $projects,
+    $repositories_list = [];
 
   /**
    * Gets the ID of the development paths option
@@ -808,7 +810,7 @@ class ide {
               }
             }
             else {
-              $this->error("Error during the component backup copy: old -> $old_folder_component");
+              $this->error(_("Error during the component backup copy: old ->"). $old_folder_component);
               return false;
             }
             return true;
@@ -1208,29 +1210,19 @@ class ide {
     $this->routes = $routes;
     $this->pref = $pref;
     $this->_ide_path();
+    $this->repositories = $this->get_repositories();
+    foreach($this->repositories as $i => $v){
+      $this->repositories[$i]['root_path'] = $this->get_root_path($v['name']);
+    }
     $this->projects = new \bbn\appui\project($this->db);
     $this->fs = new \bbn\file\system();
   }
 
 
-  /**
-   * remover oprion of file preference
-   *
-   * @param string $path The path of the file
-   * @return bool
-   */
-  /*public function remove_file_pref($path){
-    return $this->options->remove(
-      $this->options->from_code(
-        $this->real_to_id($path),
-        $this->_files_pref()
-      )
-    );
-  }*/
-
   public function is_project(string $url){
     $rep = $this->repository_from_url($url);
-    $repository = $this->repositories($rep, true);
+    //$repository = $this->repositories($rep);
+    $repository = $this->repository($rep);
     if ( is_array($repository) && !empty($repository) ){
       if ( ($repository['alias_code'] === 'bbn-project') ){
         return true;
@@ -1247,7 +1239,8 @@ class ide {
    * @return bool
    */
   public function is_component(string $rep){
-    $rep = $this->repositories($rep);
+    //$rep = $this->repositories($rep);
+    $rep = $this->repository($rep);
     if ( $rep && isset($rep['tabs']) && ($rep['alias_code']  === "components") ){
       return true;
     }
@@ -1376,14 +1369,14 @@ class ide {
    * @param string $code The repository's name (code)
    * @return array|bool
    */
-  public function repositories(string $rep=''){
+  public function get_repositories(string $rep='', $root = 'apst-app'){
     $cats = [];
     $repositories = [];
     $projects =  $this->options->full_tree($this->options->from_code('projects', 'appui'));
     if ( !empty($projects) && count($projects['items']) ){
       $projects = $projects['items'];
       foreach ( $projects as $i => $project){
-        if ( $project['code'] !== 'assets' ){
+        if ( $project['code'] === 'apst-app' ){
           $paths =  $this->options->full_tree($this->options->from_code('path', $project['code'], 'projects', 'appui'));
           if ( count($paths['items']) ){
             foreach ( $paths['items'] as $path ){
@@ -1400,7 +1393,6 @@ class ide {
                   $repositories[$name]['title'] = $repository['text'];
                   $repositories[$name]['root'] = $path['code'];
                   $repositories[$name]['name'] = $name;
-                  //$repositories[$name]['path'] = $path['code'].'/'.$repository['code'];
                   $repositories[$name]['alias_code'] = $cats[$repository['id_alias']]['code'];
                   if ( !empty($cats[$repository['id_alias']]['tabs']) ){
                     $repositories[$name]['tabs'] = $cats[$repository['id_alias']]['tabs'];
@@ -1431,8 +1423,15 @@ class ide {
    * @param string $code The repository's name (code)
    * @return array|bool
    */
-  public function repository($code){
-    return $this->projects->repository($code);
+  public function repository($name){
+   //return $this->projects->repository($code);
+    if ( is_array($this->repositories) &&
+      count($this->repositories) &&
+      !empty(array_key_exists($name, $this->repositories))
+    ){
+      return $this->repositories[$name];
+    }
+    return false;
   }
 
   /**
@@ -1443,12 +1442,11 @@ class ide {
    * @return bool|int|string
    */
   public function repository_from_url(string $url, bool $obj = false){
-    //get list repositories
-    $repositories = $this->repositories();
-    if ( is_array($repositories) &&
-      count($repositories)
+    //search repository
+    if ( is_array($this->repositories) &&
+      count($this->repositories)
     ){//if in url name of repository break loop
-      foreach ( $repositories as $i => $d ){
+      foreach ( $this->repositories as $i => $d ){
         if ( (strpos($url, $i) === 0) ){
           $repository = $i;
           break;
@@ -1456,7 +1454,7 @@ class ide {
       }
       //if there is name repository or total info
       if ( !empty($repository) ){
-        return empty($obj) ? $repository : $repositories[$repository];
+        return empty($obj) ? $repository : $this->repositories[$repository];
       }
     }
     return false;
@@ -1507,14 +1505,14 @@ class ide {
     //return $this->projects::decipher_path($st);
     $st = \bbn\str::parse_path($st);
     //get root absolute of the file
-    foreach( $this->repositories() as $i => $rep){
+    
+    foreach( $this->repositories as $i => $rep){
       if ( strpos($st, $rep['name']) === 0 ){
-        $root = $this->get_root_path($i);
+        $root = $rep['root_path'];//$this->get_root_path($i);
         $bit_rep = explode('/', $i);
         break;
       }
     }
-
     //the root of the file is removed
     if ( !empty($root) && !empty($bit_rep) ){
       $bits = explode('/', $st);
@@ -1527,6 +1525,40 @@ class ide {
     return false;
   }
 
+  public function get_app_path(){
+    if ( defined('BBN_PROJECT_NAME') &&
+      (constant('BBN_PROJECT_NAME') === 'apst-app')
+    ){
+      return \bbn\mvc::get_app_path();
+    }
+    else{// case bbn-vue
+      $file_envinroment = \bbn\mvc::get_app_path().'cfg/environment.json';
+      if ( $this->fs->file($file_envinroment) ){
+        $content = json_decode($this->fs->get_contents($file_envinroment), true)[0];
+      }
+      if ( !empty($content) && !empty($content['app_path']) ){
+        return $content['app_path'];
+      }
+    }
+  }
+
+  public function get_lib_path(){
+    if ( defined('BBN_PROJECT_NAME') &&
+      (constant('BBN_PROJECT_NAME') === 'apst-app')
+    ){
+      return \bbn\mvc::get_lib_path();
+    }
+    else {// case bbn-vue
+      $file_envinroment = \bbn\mvc::get_app_path().'cfg/environment.json';
+      if ( $this->fs->file($file_envinroment) ){
+        $content = json_decode($this->fs->get_contents($file_envinroment), true)[0];
+      }
+      if ( !empty($content) && !empty($content['app_path']) ){
+        return $content['lib_path'].'bbn\/';
+      }
+    }
+  }
+
   /**
    * Gets the real root path from a repository's id as recorded in the options.
    *
@@ -1537,22 +1569,23 @@ class ide {
     //temporaney disabled
     //return $this->projects->get_root_path($repository);
     //if only name else get info repository
-   $path = '';
-   $repository = \is_string($rep) ? $this->repositories($rep) : $rep;
-   if ( (!empty($repository) && is_array($repository)) &&
-         !empty($repository['path']) &&
-         !empty($repository['root']) &&
-         !empty($repository['code'])
+    $path = '';
+    //$repository = \is_string($rep) ? $this->repositories($rep) : $rep;
+    $repository = \is_string($rep) ? $this->repository($rep) : $rep;
+    if ( (!empty($repository) && is_array($repository)) &&
+      !empty($repository['path']) &&
+      !empty($repository['root']) &&
+      !empty($repository['code'])
     ){
       switch( $repository['root'] ){
         case 'app':
-          $path = \bbn\mvc::get_app_path();
+          $path = $this->get_app_path();
         break;
-       /* case 'cdn':
+      /* case 'cdn':
           die(var_dump('cdn'));
         break;*/
         case 'lib':
-          $path = \bbn\mvc::get_lib_path();
+          $path = $this->get_lib_path();
           $path .= $repository['path'];
           if ( $repository['alias_code'] === 'bbn-project' ){
             $path .= '/src/';
@@ -1667,8 +1700,10 @@ class ide {
    */
   public function save(array $file){
     if ( $this->set_current_file($this->decipher_path($file['full_path'])) ){
+
       // Delete the file if code is empty and if it isn't a super controller
       if ( empty($file['code']) && ($file['tab'] !== '_ctrl') ){
+
         if ( @unlink(self::$current_file) ){
           // Remove permissions
           $this->delete_perm();
@@ -1690,17 +1725,16 @@ class ide {
 
       if ( !empty($file['tab']) && ($file['tab'] === 'php') && !$this->fs->is_file(self::$current_file) ){
         if ( !$this->create_perm_by_real($file['full_path']) ){
-          return $this->error("Impossible to create the option");
+          return $this->error(_("Impossible to create the option"));
         }
       }
-      //die(var_dump(self::$current_file, $file));
+   
       if ( !file_put_contents(self::$current_file, $file['code']) ){
-
-        return $this->error('Error: Save');
+        return $this->error(_('Error: Save'));
       };
       return ['success' => true];
     }
-    return $this->error('Error: Save');
+    return $this->error(_('Error: Save'));
   }
 
   /**
@@ -1749,7 +1783,7 @@ class ide {
       // New folder
       if ( empty($cfg['is_file']) ){
         if ( $this->fs->is_dir($path.$cfg['name']) ){
-          $this->error("Directory exists");
+          $this->error(_("Directory exists"));
           return false;
         }
         if ( (($cfg['repository']['alias_code'] !== 'bbn-project')) ||
@@ -1759,7 +1793,7 @@ class ide {
           $path .= $cfg['name'];
         }
         if ( empty($this->fs->create_path($path)) ){
-          $this->error("Impossible to create the directory");
+          $this->error(_("Impossible to create the directory"));
           return false;
         }
         return true;
@@ -1769,17 +1803,17 @@ class ide {
         $file = $path .'/'. $cfg['name'] . '.' . $cfg['extension'];
         $file = str_replace('//','/', $file);
         if ( !$this->fs->is_dir($path) && empty($this->fs->create_path($path)) ){
-          $this->error("Impossible to create the container directory");
+          $this->error(_("Impossible to create the container directory"));
           return false;
         }
 
         if ( $this->fs->is_dir($path) ){
           if ( $this->fs->is_file($file) ){
-            $this->error("File exists");
+            $this->error(_("File exists"));
             return false;
           }
           if ( !file_put_contents($file, $cfg['default_text']) ){
-            $this->error("Impossible to create the file");
+            $this->error(_("Impossible to create the file"));
             return false;
           }
         }
@@ -1788,7 +1822,7 @@ class ide {
           !empty($cfg['tab']) && ($cfg['tab_url'] === 'php') && !empty($file)
         ){
           if ( !$this->create_perm_by_real($file) ){
-            return $this->error("Impossible to create the option");
+            return $this->error(_("Impossible to create the option"));
           }
         }
         return true;
@@ -2327,8 +2361,9 @@ class ide {
   public function real_to_url(string $file){
    // return $this->projects->real_to_url($file);
    //get root for path
-    foreach ( $this->repositories() as $i => $d ){
-      $root = $this->get_root_path($d['name']);
+    //foreach ( $this->repositories() as $i => $d ){
+    foreach ( $this->repositories as $i => $d ){
+      $root = $d['root_path'];
       if (
         $root &&
         (strpos($file, $root) === 0)
@@ -2362,6 +2397,7 @@ class ide {
       else {
         $res .= implode('/', $bits);
       }
+      \bbn\x::log([$res],'vitooo');
       return \bbn\str::parse_path($res);
     }
     return false;
@@ -2395,7 +2431,7 @@ class ide {
    * @return bool|string|array
    */
   public function url_to_real(string $url, bool $obj = false){
-    //get reposiotry of the url
+     //get reposiotry of the url
     if ( ($rep = $this->repository_from_url($url, true)) &&
       ($res = $this->get_root_path($rep['name']))
     ){

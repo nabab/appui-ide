@@ -137,22 +137,22 @@
         if ( idx != false ){
           editor.getRef('tabstrip').close(idx);
         }
-
-        if ( editor.tempNodeofTree !== false ){
-          if ( this.source.component_vue ){
-             editor.tempNodeofTree.parent.reload();
+        this.$nextTick(()=>{
+          if ( editor.tempNodeofTree !== false ){
+            if ( this.source.component_vue ){
+              editor.tempNodeofTree.parent.reload();
+            }
+            else {
+              editor.tempNodeofTree.closest('bbn-tree').reload();
+            }
+            editor.tempNodeofTree = false;
           }
-          else {
-            editor.tempNodeofTree.closest('bbn-tree').reload();
+          else{
+            if ( editor.currentRep === this.source.currentRep ){
+              editor.getRef('filesList').reload();
+            }
           }
-
-          editor.tempNodeofTree = false;
-        }
-        else{
-          if ( editor.currentRep === this.source.currentRep ){
-            editor.getRef('filesList').reload();
-          }
-        }
+        });
         appui.success(bbn._("Renamed!"));
       },
     },

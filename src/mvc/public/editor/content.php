@@ -1,5 +1,6 @@
 <?php
 /** @var $ctrl \bbn\mvc\controller */
+\bbn\x::log($ctrl->arguments, 'vvv');
 if ( !empty($ctrl->arguments) ){
   $step = $ctrl->arguments;
   $ctrl->data['url'] = implode('/', $ctrl->arguments);
@@ -13,17 +14,19 @@ if ( !empty($ctrl->arguments) ){
     $title = "CTRL".($ctrl->obj->data['ssctrl']+1);
   }
 
-  echo $ctrl
-    ->set_title($title)
-    ->add_js()
-    ->get_view();
+ 
   if ( (end($ctrl->arguments) === "settings") ||
     ($ctrl->arguments[count($ctrl->arguments) - 2]  === "settings")
   ){
+    $title = 'settings';
     //url tabnav settings
     $ctrl->obj->url = $ctrl->baseURL.'settings';
   }
   else{
     $ctrl->obj->url = $ctrl->baseURL.end($ctrl->arguments);
   }
+  echo $ctrl
+  ->set_title($title)
+  ->add_js()
+  ->get_view();
 }

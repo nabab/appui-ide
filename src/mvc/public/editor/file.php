@@ -7,11 +7,12 @@
  *
  * @var $ctrl \bbn\mvc\controller
  */
+//die(var_dump($ctrl->arguments, APPUI_IDE_ROOT.'editor/', $ctrl->baseURL));
 if ( !empty($ctrl->arguments) ){
 
   if ( $ctrl->baseURL === APPUI_IDE_ROOT.'editor/' ){
     $ctrl->data['url'] = implode('/', $ctrl->arguments);
-
+    //$ctrl->data['url'] = $ctrl->inc->ide->set_origin_for_use($ctrl->arguments);
     $ctrl->data['routes'] = $ctrl->get_routes();
 
     $ctrl->obj->data = $ctrl->get_model();
@@ -19,7 +20,6 @@ if ( !empty($ctrl->arguments) ){
     $ctrl->obj->data['root'] = APPUI_IDE_ROOT;
     $ctrl->obj->url = $ctrl->baseURL.'file/'.$ctrl->obj->data['url'];
     $title = $ctrl->obj->data['title'];
-
 
     //case MVC set Tab
     if ( ($ctrl->obj->data['isMVC']) &&
@@ -65,13 +65,15 @@ if ( !empty($ctrl->arguments) ){
       $start = ($start + 3);
       $title = '...'.substr($title,$start);
     }
-
+    
     echo $ctrl
       ->set_title($title)
       ->add_js()
       ->get_view();
   }
   else {
-    $ctrl->reroute(APPUI_IDE_ROOT.'editor/content', $ctrl->post, $ctrl->arguments);
+    \bbn\x::log(['content',APPUI_IDE_ROOT.'editor/content', $ctrl->post, $ctrl->arguments], 'rrr');
+    //$ctrl->reroute(APPUI_IDE_ROOT.'editor/content', $ctrl->post, $ctrl->arguments);
+    $ctrl->reroute('ide/editor/content', $ctrl->post, $ctrl->arguments);
   }
 }

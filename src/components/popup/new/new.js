@@ -59,7 +59,6 @@
           if ( link.indexOf('//') !== -1 ){
             link= link.replace('//', '/');
           }
-          bbn.fn.log("dddd", link,this.data)
           bbn.fn.link(link);
           appui.success(this.isComponent === true ? bbn._("Component created!") : bbn._("File created!"));
         }

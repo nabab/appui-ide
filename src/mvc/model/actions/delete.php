@@ -36,7 +36,7 @@ if ( isset($model->inc->ide) ){
         if ( !empty($model->inc->fs->delete($path)) ){
           if ( $model->data['section'] === 'public/' ){
             if ( $model->inc->ide->delete_perm($path) ){
-              $model->inc->ide->remove_file_pref($path);
+              //$model->inc->ide->remove_file_pref($path);
               return ['success' => true];
             }
             else{

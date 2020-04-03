@@ -1,0 +1,6 @@
+
+ (() =>{
+  return {
+    props:['source']
+  }
+})();

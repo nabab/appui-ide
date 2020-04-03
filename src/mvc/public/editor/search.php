@@ -57,7 +57,7 @@ if ( $ctrl->inc->ide && !empty($ctrl->arguments) ){
   }*/
 
 
-  $ctrl->data['repository'] = $ctrl->inc->ide->repositories($ctrl->data['nameRepository']);
+  $ctrl->data['repository'] = $ctrl->inc->ide->repository($ctrl->data['nameRepository']);
   $ctrl->arguments[count($ctrl->arguments)-1] = base64_encode($ctrl->arguments[count($ctrl->arguments)-1]);
   $url = 'search/'.implode('/', $ctrl->arguments);
 

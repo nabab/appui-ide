@@ -6,7 +6,7 @@
  * Time: 18.24
  */
 $res['success'] = false;
-//die(var_dump($model->data));
+
 if ( isset($model->data) &&
   !empty($model->data['orig']) &&
   !empty($model->data['dest'])
@@ -18,7 +18,7 @@ if ( isset($model->data) &&
   str_replace('//','/',$pathDest);
 
 
-  if ( is_dir($pathDest) ){
+  if ( $model->inc->fs->is_dir($pathDest) ){
     $orig= explode('/', $model->data['orig']);
     $constantOrig= $orig[0];
     $orig[0]= constant($constantOrig);
@@ -26,7 +26,7 @@ if ( isset($model->data) &&
     str_replace('//','/',$pathOrig);
 
     $pathDest = $pathDest.'/'.basename($pathOrig);
-    if ( \bbn\file\dir::move($pathOrig, $pathDest) ){
+    if ( $model->inc->fs->move($pathOrig, $pathDest) ){
       $res['success'] =  true;
     }
   }

@@ -19,7 +19,7 @@
           </bbn-button>
         </div>
         <div class="bbn-flex-fill bbn-hpadded">
-          <bbn-input placeholder="<?=_('Path')?>" 
+          <bbn-input placeholder="<?=_('Path')?>"
                      v-model="currentPath"
                      class="bbn-w-100"
                      :readonly="true">

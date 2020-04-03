@@ -1,6 +1,26 @@
 (() => {
   return {
-    props: ['source'],
+    props: {
+      /**
+       * The component's data.
+       * @prop {Object} source
+       */
+      source: {
+        type: Object
+      },
+      /**
+       * The root for action editor.
+       * @prop {String} [ide] type
+       */
+      prefix: {
+        type: String,
+        default: 'ide',
+      },
+      project: {
+        type: String,
+        default: 'apst-app',
+      },
+ 		},
     data(){
       if ( this.source.repositories ){
         bbn.fn.each(this.source.repositories, (a, i) => {
@@ -316,6 +336,7 @@
           onlydirs: false,
           tab: false,
           is_project: this.isProject,
+          project: this.project
         };
 
         if (this.isProject && (this.path.length === 0) ){
@@ -368,7 +389,7 @@
         }
       },
       getRecentFiles(){
-        this.post(this.source.root + 'editor/get_recent_files',{}, d=>{
+        this.post(this.prefix + '\/editor/get_recent_files',{}, d=>{
           let menu = this.getRef('mainMenu').currentData[0]['data']['items'];
           if ( d.success ){
             let arr = [];
@@ -398,6 +419,7 @@
         if ( this.possibilityParser === 'class' ){
           this.post(this.source.root + 'parser',{
             cls: this.currentId,
+            repository: this.currentEditor.source.repository,
             project: this.isProject
           }, d =>{
             let obj = {
@@ -431,7 +453,7 @@
           if ( this.sourceTreeParser.treeData === false ){
             this.sourceTreeParser.error = true;
           }
-          else{
+          else {
             this.sourceTreeParser.idElement = this.currentId;
             this.treeParser = true;
           }
@@ -440,7 +462,7 @@
       parserComponent(){
         if ( this.currentEditor &&
           (this.possibilityParser === "component") &&
-          ( this.currentEditor.mode === "js")
+          ( this.currentCode.mode === "js")
         ){
           let obj = eval(this.currentEditor.value),
               src = [],
@@ -798,6 +820,7 @@
             is_mvc: this.isMVC,
             is_component: this.isComponent,
             is_project: this.isProject,
+            project: this.project,
             filter: this.searchFile
           }, true);
         }
@@ -1027,7 +1050,7 @@
         let tab = '',
             link = false;
         if ( (file.data.type === 'mvc') ){
-          tab = file.data.tab === "php" ? '/settings' :  '/' + file.data.tab
+          tab = ((file.data.tab === "php") && (this.project === 'apst-app')) ? '/settings' :  '/' + file.data.tab
           link = 'file/' +
             this.currentRep + '/mvc/' +
             (file.data.dir || '') +
@@ -1038,7 +1061,8 @@
          link =  'file/' +  this.currentRep +'/'+ file.data.uid + '/_end_/' + (file.data.tab !== false ? file.data.tab : 'code');
         }
         if ( link ){
-          this.getRef('tabstrip').load(link);
+          //this.getRef('tabstrip').load(link);
+          this.getRef('tabstrip').route(link);
         }
       },
 
@@ -1310,7 +1334,8 @@
           }
           src.allData = node.data;
         }
-
+        //for root
+        //src.prefix = this.prefix;
         if ( !bbn.fn.isObject(node) || node.data.folder ){
           //check path
           src.path = src.path.replace( '//',  '/');

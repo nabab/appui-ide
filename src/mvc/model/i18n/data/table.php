@@ -52,7 +52,7 @@ if (
 
     }
     foreach ( $dir_name as $d => $value){
-      if (is_dir($dir_name[$d].$table_path) && !empty($extensions) ) {
+      if ( $model->inc->fs->is_dir($dir_name[$d].$table_path) && !empty($extensions) ) {
 
         /** @var loop on the extensions of each tab to check if a file exist with this filename and this extension */
         $file = '';
@@ -61,7 +61,7 @@ if (
           /** look for the first extension then exit from the loop */
           /** if the file with this extension exist it put it into an array  */
 
-          if ( file_exists($dir_name[$d] . $table_path . $file_name . '.' . $extensions[$d][$idx]['ext']) ){
+          if ( $model->inc->fs->exists($dir_name[$d] . $table_path . $file_name . '.' . $extensions[$d][$idx]['ext']) ){
             $file = $dir_name[$d] . $table_path . $file_name . '.' . $extensions[$d][$idx]['ext'];
 
             if ( !in_array( $file, $files ) ){
@@ -81,7 +81,7 @@ if (
 
   }
   /** case not MVC */
-  else if ( empty($repository['tabs']) ){
+  elseif ( empty($repository['tabs']) ){
     $files[] = [
       'file' => $partial_path . $model->data['path'] . $table_path . $file_name . '.' . $model->data['ext'],
       'strings' => []
@@ -129,14 +129,8 @@ if (
 
         }
       }
-
-
     }
-
-    /** reconverting the file name to constant */
-    //$files[$idx]['file'] = $model->inc->ide->real_to_url($files[$idx]['file']);
   }
-
   $success = true;
   return [
     'id_option' => $repository['id'],
