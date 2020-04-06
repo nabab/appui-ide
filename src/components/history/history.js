@@ -81,7 +81,7 @@
         (this.source.path !== undefined) &&
         this.source.filename
       ){
-        this.url = this.source.repositories[this.source.repository].path + '/src/' +
+        this.url = this.source.repositories[this.source.repository].name + '/src/' +
           (this.source.path ? this.source.path + '/' : '') +
           this.source.filename + '/__end__';
       }

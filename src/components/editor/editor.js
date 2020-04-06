@@ -389,7 +389,7 @@
         }
       },
       getRecentFiles(){
-        this.post(this.prefix + '\/editor/get_recent_files',{}, d=>{
+        this.post(this.source.root + 'get_recent_files',{}, d=>{
           let menu = this.getRef('mainMenu').currentData[0]['data']['items'];
           if ( d.success ){
             let arr = [];
