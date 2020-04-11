@@ -119,7 +119,8 @@ if ( isset($model->data['routes'], $model->inc->ide) ){
     'zenburn'
   ];
 
-  
+  $current_theme= $model->inc->ide->get_theme();
+
   return [
     'staticPath' => BBN_STATIC_PATH,
     'config' => [],
@@ -129,7 +130,7 @@ if ( isset($model->data['routes'], $model->inc->ide) ){
     'root' => APPUI_IDE_ROOT,
     'currentRep' => $current_rep,
     'projects' => $projects,
-    'theme' => empty($ide_cfg['theme']) ? '' : $ide_cfg['theme'],
+    'theme' => is_null(array_search($current_theme, $themes)) ? '' : $current_theme,
     'themes' => $themes,
     'font' => empty($ide_cfg['font']) ? '' : $ide_cfg['font'],
     'font_size' => empty($ide_cfg['font_size']) ? '' : $ide_cfg['font_size'],

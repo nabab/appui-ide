@@ -36,7 +36,7 @@
         path: '',
         lastRename: '',
         searchFile: '',
-        themeCode: '',
+        themeCode: this.source.theme,
         tempNodeofTree: false,
        // urlEditor: '',
         //for search content
@@ -560,6 +560,7 @@
             title: bbn._('Select theme'),
             component: 'appui-ide-popup-style',
             source:{
+              root: this.source.root,
               themeCode: this.themeCode,
               themes: this.source.themes
             }

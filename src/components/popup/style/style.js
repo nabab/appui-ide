@@ -18,17 +18,23 @@
     },
     methods:{
       changeTheme(){
-        let editor = this.closest('bbn-container').find('appui-ide-editor'),
+        this.post(this.source.root + 'actions/change_theme',{
+          theme: this.themePreview
+        }, d => {
+          if ( d.success ){
+            let editor = this.closest('bbn-container').find('appui-ide-editor'),
             codes = editor.findAll('appui-ide-code');
-        editor.$set(editor, 'themeCode', this.themePreview)
-        if ( codes.length ){
-          bbn.fn.each(codes, v => {
-            v.$set(v, 'theme', this.themePreview)
-          })
-        }
-        appui.success(bbn._('successfully edited'));
-        this.$nextTick(()=>{
-          this.closest('bbn-popup').close();
+            editor.$set(editor, 'themeCode', this.themePreview)
+            if ( codes.length ){
+              bbn.fn.each(codes, v => {
+                v.$set(v, 'theme', this.themePreview)
+              })
+            }
+            appui.success(bbn._('successfully edited'));
+            this.$nextTick(()=>{
+              this.closest('bbn-popup').close();
+            });
+          }
         });
       }
     },

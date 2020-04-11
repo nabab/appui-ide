@@ -6,14 +6,13 @@ $res = [];
 if ( isset($model->inc->ide) && !empty($model->data['uid']) ){
   if ( !isset($model->data['type']) ){
     $list = $model->inc->ide->history($model->data['uid'], $model->data['repository_cfg']);
-
     if ( !empty($list) ){
       foreach ( $list as $val ){
         array_push($res, [
           'text' => $val['text'],
           'numChildren' => $val['num_items'],
           'uid' => $model->data['uid']."/".$val['text'],
-          'is_mvc' => $ctrl->post['is_mvc']
+          'is_mvc' => $model->data['is_mvc']
         ]);
       }
     }
@@ -25,7 +24,7 @@ if ( isset($model->inc->ide) && !empty($model->data['uid']) ){
         array_push($res, [
           'text' => $val['text'],
           'numChildren' => \count($val['items']),
-          'items' => $val['items'],
+          'items' => !empty($val['items']) ? $val['items'] : [],
           'is_mvc' => $model->data['is_mvc'],
           'name_file' => $val['file'],
         ]);
@@ -33,7 +32,6 @@ if ( isset($model->inc->ide) && !empty($model->data['uid']) ){
     }
   }
   if ( !empty($res) ){
-    //$ctrl->obj->data = $res;
     return ['data' => $res];
   }
   else {
@@ -66,4 +64,6 @@ else {
     }
   }
 }
+
+return [];
 
