@@ -28,7 +28,7 @@
                 :source="source.root + 'tree_all'"
                 :data="initialData"
                 :draggable="true"
-                @dragEnd="moveNode"
+                @move="moveNode"
                 ref="allContentTree"
                 :map="mapperTree"
                 class="bbn-fullscreen bbn-flex-fill"

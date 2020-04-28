@@ -12,7 +12,7 @@
       return {
         typeSearch: this.source.typeSearch === 'insensitive' ? 'In' : 'Se',
         list: this.source.list,
-
+        files: this.source.files !== undefined ? this.source.files : []
       }
     },
     mounted(){
@@ -22,50 +22,22 @@
     },
     methods:{
       selectElement(node){
-        let componentEditor =  this.closest('appui-ide-editor');
+        let componentEditor =  this.closest('appui-ide-editor'),
+            tabStrip = componentEditor.getRef('tabstrip'),
+            link = 'file/';
+
         if ( node.data.link ){
-          let link = 'file/' + this.source.nameRepository+'/'+(this.source.isProject === true ? this.source.type +'/' : '' ) + node.data.link + '/_end_',//; + (node.data.tab ? '/' + node.data.tab : ''),
-              tabStrip = componentEditor.getRef('tabstrip');
-
-          if( node.data.code ){
-            let router = this.closest('bbn-router');
-            if ( router ){
-              //var a = router.findByKey(link).findByKey(node.data.uid).find('bbn-router').findByKey(node.data.tab).findByKey(link);
-              bbn.fn.log("ssddds", router.findByKey(link), link)
-            }
-
-
-            /*if ( i !== false ){
-              tabStrip.activateIndex(i);
-              let st = bbn.vue.find(tabStrip.getVue(i),'bbn-routerv'),
-                  idxSubTab = st.router.getIndex(node.data.tab ? node.data.tab : 'code'),
-                  tab = st.getVue(idxSubTab),
-                  code = bbn.vue.find( tab, 'bbn-code');
-              st.activateIndex(idxSubTab);
-              this.$nextTick(()=>{
-                bbn.fn.log("sssss",code)
-                if ( code ){
-                  this.$nextTick(()=>{
-                    code.cursorPosition(node.data.line, node.data.position);
-                    tabStrip.load(link)
-                  });
-                }
-              });
-            }*/
-           /* tabStrip.load(link)
-            //let code = bbn.vue.findAllByKey(node.data.uid);
-            bbn.fn.log("wwww", link, node.data,code)
-              if ( code ){
-                this.$nextTick(()=>{
-                  code.cursorPosition(node.data.line, node.data.position);
-                  tabStrip.load(link)
-                });
-              }*/
-           
+          if ( this.source.all ){
+            link += node.data.link + '/_end_/'
           }
           else{
-            tabStrip.load(link+ (node.data.tab ? '/' + node.data.tab : ''));
+            link += this.source.nameRepository+'/'+(this.source.isProject === true ? this.source.type +'/' : '' ) + node.data.link + '/_end_/';
           }
+
+          if ( node.data.line ){
+            componentEditor.currentLine = node.data.line+1;
+          }
+          tabStrip.load(link+ (node.data.tab ? node.data.tab : 'code'));
         }
       }
     }

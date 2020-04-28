@@ -6,6 +6,10 @@ if ( !isset($model->inc->fs) ){
 $folderCache = $model->cache_path();
 $fullPath = $folderCache;
 
+if ( !empty($model->data['data']) ){
+  $model->data = $model->data['data'];
+}
+
 if ( !empty($model->data['nodePath']) ){
   $fullPath .= $model->data['nodePath'];
 }

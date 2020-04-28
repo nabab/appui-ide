@@ -7,7 +7,7 @@
  */
 
 $ctrl->obj = $ctrl->add_data([
-  'repository' => $ctrl->post['repository'],
-  'path' => $ctrl->post['path']
+  'repository' => $ctrl->post['data']['repository'],
+  'path' => $ctrl->post['data']['path']
 ])->get_model('./all');
 

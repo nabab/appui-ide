@@ -92,6 +92,7 @@
                   :readonly="true"
                   :theme="theme"
                   ref="code"
+                  class="bbn-overlay"
         ></bbn-code>
       </div>
       <div v-else class="bbn-overlay bbn-middle">

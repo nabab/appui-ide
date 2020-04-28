@@ -28,6 +28,7 @@
         });
       }
       return {
+      //  showTest: true,
         repositories: this.source.repositories,
         currentRep: '',
         selected: 0,
@@ -42,7 +43,8 @@
         //for search content
         search:{
           link: false,
-          searchInRepository: '',
+          all: false,
+          searchElement: '',
           caseSensitiveSearch: false,
           lastSearchRepository: ''
         },
@@ -235,14 +237,15 @@
       },
       currentEditor(){
         if ( this.currentURL !== '' ){
-          bbn.fn.log("dedede");
           if ( this.getRef('tabstrip') ){
             let tabnav = this.getRef('tabstrip').getSubRouter();
             if ( tabnav ){
-              let currentTab = tabnav.activeRealContainer,
-                  codeEditor = currentTab.find('appui-ide-code');
-              if ( codeEditor ){
-                return codeEditor;
+              let currentTab = tabnav.activeRealContainer;
+              if ( currentTab ){
+               let codeEditor = currentTab.find('appui-ide-code');
+                if ( codeEditor ){
+                  return codeEditor;
+                }
               }
             }
           }
@@ -257,6 +260,12 @@
           }
         }
         return false;
+      },
+      disabledWork(){
+        bbn.fn.log("ss", this.currentURL ,this.currentURL.indexOf('/__end__/'))
+        return this.currentURL.indexOf('/_end_/') > -1 ? false : true;
+
+        //return this.currentEditor || this.isSettings ? false : true;
       },
       currentId(){
         if ( this.currentCode ){
@@ -528,7 +537,6 @@
               }
               obj.tree = d.data.tree;
               obj.class = d.data.class;
-              bbn.fn.log("aaadededede", obj)
             }
           });
         }
@@ -596,20 +604,23 @@
 
       },
       searchingContent(e){
-        if( this.search.searchInRepository.length > 0 ){
-          let url = this.url+'/search/'+ this.currentRep +'/',
-          //for encode string in base64
-          search = btoa(this.search.searchInRepository);
-
-          //search in a project
-          if ( this.isProject ){
-            url += '_project_/' + this.typeProject + '/';
+        if ( this.search.searchElement.length > 0 ){
+          let url = this.url+'/search/',
+              //for encode string in base64
+              search = btoa(this.search.searchElement);
+          if ( this.search.all ){
+            url += '_all_'+'/' + search;
           }
-
-          url += '_end_/' + this.typeSearch +'/'+ search;
-
-
+          else {
+            url += this.currentRep +'/';
+            //search in a project
+            if ( this.isProject ){
+              url += '_project_/' + this.typeProject + '/';
+            }
+            url += '_end_/' + this.typeSearch +'/'+ search;
+          }
           this.$nextTick(()=>{
+            this.search.all = false;
             bbn.fn.link(url, true);
           });
         }
@@ -706,11 +717,11 @@
               tab = '_ctrl';
             }
             if ( this.repositories[this.currentRep].tabs[tab] && this.repositories[this.currentRep].tabs[tab].extensions ){
-              return bbn.fn.get_field(this.repositories[this.currentRep].tabs[tab].extensions, 'ext', ext, 'default');
+              return bbn.fn.getField(this.repositories[this.currentRep].tabs[tab].extensions, 'default', 'ext', ext);
             }
           }
           else if ( this.repositories[this.currentRep].extensions ){
-            return bbn.fn.get_field(this.repositories[this.currentRep].extensions, 'ext', ext, 'default');
+            return bbn.fn.getField(this.repositories[this.currentRep].extensions, 'default', 'ext', ext);
           }
         }
         return false;
@@ -810,6 +821,7 @@
        *
        */
       treeMapper(a){
+        a.text += a.git === true ?  "  <i class='nf  nf-fa-github'></i>" : ""
         if ( a.folder ){
           bbn.fn.extend(a, {
             repository: this.currentRep,
@@ -819,10 +831,11 @@
             tab_mvc: a.tab,
             root_project: a.root_project,
             is_mvc: this.isMVC,
+            is_vue: a.is_vue,
             is_component: this.isComponent,
             is_project: this.isProject,
             project: this.project,
-            filter: this.searchFile
+            filter: this.searchFile,
           }, true);
         }
         return a;
@@ -973,7 +986,7 @@
               icon: 'nf nf-fa-cogs',
               text: bbn._('Profiling'),
               action:  node =>{
-                let root = appui.plugins[bbn.fn.get_field(this.ddRepData, 'value', this.currentRep,'text')];
+                let root = appui.plugins[bbn.fn.getField(this.ddRepData, 'text', 'value', this.currentRep)];
                 root = root !== undefined ? root+'/' : '';
                 //bbn.fn.link('ide/profiler/url/'+ root + node.data.path);
                 bbn.fn.link('ide/profiler/url/'+ root + node.data.uid);
@@ -1008,7 +1021,8 @@
        * @param d The node data
        * @param n The node
        */
-      treeNodeActivate(d){
+      treeNodeActivate(d, e){
+        e.preventDefault();
         if ( !d.data.folder || (d.data.folder && d.data.is_vue) ){
           if( !this.isProject && !this.isMVC && this.existingTab(d) ){
             //change d.data.path for d.data.uid
@@ -1062,7 +1076,6 @@
          link =  'file/' +  this.currentRep +'/'+ file.data.uid + '/_end_/' + (file.data.tab !== false ? file.data.tab : 'code');
         }
         if ( link ){
-          //this.getRef('tabstrip').load(link);
           this.getRef('tabstrip').route(link);
         }
       },
@@ -1207,7 +1220,6 @@
             appui.find('bbn-router').load(link, true);
           }
           else{
-            bbn.fn.log("dddd", this.getActive(true))
             let code = this.getActive(true);
             code.test();
           }
@@ -1708,9 +1720,7 @@
       /**
        * Function for move node in tree
        */
-      moveNode(a, select, dest){
-        bbn.fn.log("MOVE",a, select,dest)
-        alert();
+      moveNode(select, dest, a){
         if ( dest.data.folder ){
           //let path = select.data.path.split('/'),
           let path = select.data.uid.split('/'),
@@ -1928,13 +1938,6 @@
           this.currentCode.foldAll();
         }
       },
-      abilitationTest(val){
-        let btnTest = this.getRef('btnTest');
-        bbn.fn.log("abi",val, btnTest)
-        if ( btnTest ){
-          btnTest.$set(btnTest, 'disabled', !val);
-        }
-      }
     },
     created(){
       this.$set(this, 'currentRep', this.source.currentRep);
@@ -1952,12 +1955,16 @@
         }
       },
       currentRep(newVal, oldVal){
-        if ( this.repositories[oldVal] && this.repositories[newVal].alias_code !== this.repositories[oldVal].alias_code ){
-          this.typeProject = false;
-          this.path = '';
-        }
-        if ( newVal !== oldVal ){
-          this.treeReload();
+        if ( this.repositories[newVal] !== undefined ){
+          if ( this.repositories[oldVal] && this.repositories[newVal].alias_code !== this.repositories[oldVal].alias_code ){
+            this.typeProject = false;
+            this.path = '';
+          }
+          this.$nextTick(()=>{
+            if ( newVal !== oldVal ){
+              this.treeReload();
+            }
+          });
         }
       },
       typeProject(newVal){

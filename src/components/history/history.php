@@ -8,7 +8,7 @@
                 :source="source.root + 'history/tree'"
                 :data="initialData"
                 :map="transform"
-                @select="treeNodeActivate"
+                @nodeDblclick="treeNodeActivate"
                 @load="loadedTree"
                 ref="treeHistory"
       ></bbn-tree>
@@ -18,6 +18,7 @@
         <bbn-code :value="code"
                   :mode="mode"
                   readonly
+                  class="bbn-overlay"
         ></bbn-code>
       </div>
       <div v-if="noHistory" class="bbn-h-100 bbn-middle">

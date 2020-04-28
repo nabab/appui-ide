@@ -48,7 +48,7 @@
           });
         }
       },// for move mode into the tree
-      moveNode(e, node, overNode){
+      moveNode(node, overNode, e){
         if( overNode.data.folder ){
           let src ={
             orig: node.data.path,

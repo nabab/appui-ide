@@ -12,7 +12,7 @@
         root: bbn.env.plugins['appui-ide'],
         currentNode: '',
         selectedNode: false,
-        isFile: false, 
+        isFile: false,
         fileContent: '',
         extension: '',
         initialContent: ''
@@ -61,7 +61,7 @@
       },
       ready(){
         this.initialContent = this.fileContent
-      }, 
+      },
       select(a){
         this.isFile = false;
         this.$nextTick(() => {
@@ -91,7 +91,7 @@
             this.post(this.root + '/actions/files/save', {
               node: this.selectedNode,
               content: this.fileContent
-            }, (d) => {
+            }, (d) => {
               if(d.success){
                 this.initialContent = this.fileContent;
                 appui.success(bbn._('Saved'))
@@ -108,7 +108,7 @@
       },
       mapper(a) {
         return {
-          num: a.num,
+          numChildren: a.num,
           text: a.name,
           fpath: this.froot,
           file: a.file,

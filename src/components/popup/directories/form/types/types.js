@@ -145,7 +145,7 @@
           (this.listTabs.length > 0) &&
           this.tabSelected
         ){
-          let exts = bbn.fn.get_field(this.listTabs, 'title', this.tabSelected, 'extensions');
+          let exts = bbn.fn.getField(this.listTabs, 'extensions', 'title', this.tabSelected);
           if ( exts.length ){
             listExts = exts.map( obj =>{
               return {
@@ -249,7 +249,7 @@
         ///case tabs
         if( this.isTabs === true ){
           if ( this.listTabs.length && this.tabSelected ){
-            exts = bbn.fn.get_field(this.listTabs, 'title', this.tabSelected, 'extensions');
+            exts = bbn.fn.getField(this.listTabs, 'extensions', 'title', this.tabSelected);
             id = bbn.fn.search(this.listTabs, 'title', this.tabSelected);
             idExtension = bbn.fn.search(this.listTabs[id]['extensions'], 'ext', this.extension);
           }

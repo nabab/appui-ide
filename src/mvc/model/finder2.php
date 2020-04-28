@@ -1,6 +1,8 @@
 <?php
 
-
+if ( !empty($model->data['data']) ){
+  $model->data = $model->data['data'];
+}
 if ( isset($model->data['path']) && (strpos($model->data['path'], '../') === false)){
   if ( 0 ){
     $fs = new \bbn\file\system('ssh', [

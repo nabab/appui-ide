@@ -1,11 +1,10 @@
 <?php
- 
-
 /** @var $model \bbn\mvc\model */
 if ( !empty($model->data['repository']) &&
   !empty($model->data['repository_cfg']) &&
   isset($model->data['onlydirs'], $model->data['tab'])
 ){
+
   $rep_cfg = $model->data['repository_cfg'];
   $is_mvc = !empty($model->data['is_mvc']);
   $is_component = !empty($model->data['is_component']);
@@ -23,7 +22,7 @@ if ( !empty($model->data['repository']) &&
     $cur_path .= '/';
   }
   else{
-    $cur_path = !empty($model->data['uid']) ? $model->data['uid'] . '/' : '';
+    $cur_path = !empty($model->data['uid']) ? $model->data['uid'] . '/' : '';// $model->data['type'];
      //treat the curent path for the initial date
     if ( !empty($model->data['type']) && ($model->data['type'] === 'mvc') ){
       $cur_path = explode('/', $cur_path );
@@ -42,6 +41,10 @@ if ( !empty($model->data['repository']) &&
   // Get the repository's root path
 
   $path = $model->inc->ide->get_root_path($rep_cfg);
+
+
+  $difference_git = $model->get_cached_model('./git', ['path' => dirname($path)], 3600);
+  //$difference_git = $model->get_model('./git', ['path' => dirname($path)]);
 
   //extensions list not to be considered
   $file_check = [
@@ -121,8 +124,22 @@ if ( !empty($model->data['repository']) &&
     }
   };
 
+  // function check git
+  $check_git = function($ele) use($difference_git){
+    $info_git = false;
+    if ( !empty($difference_git['ide']) ){
+      foreach( $difference_git['ide'] as $commit ){
+        $info_git = strpos($commit['ele'], $ele) === 0;
+        if ( !empty($info_git) ){
+          return $info_git;
+        }
+      }
+    }
+    return $info_git;
+  };
+
   // function for create the node for tree
-  $get = function($real, $color, $tab = false, $type = false, $types =[]) use(&$folders, &$files, $onlydirs, $cur_path, $file_check, $excludeds, $opt, $types_to_include, $is_project, $tree_popup, $dirs, $model){
+  $get = function($real, $color, $tab = false, $type = false, $types =[]) use(&$folders, &$files,$check_git ,  $onlydirs,$cur_path, $file_check, $excludeds, $opt, $types_to_include, $is_project, $tree_popup, $dirs, $model){
     if( !empty($real) && !empty(strpos($real,'//')) ){
       $real = str_replace('//','/', $real);
     }
@@ -133,6 +150,7 @@ if ( !empty($model->data['repository']) &&
       if ( is_array($todo) ){
         //we browse the element
         foreach ( $todo as $t ){
+          \bbn\x::log([$check_git($t), $t],'vitodd');
           //we can only enter if it is a component type and there is no other child element with the same name or that is not a component type
           if ( ((((\bbn\str::file_ext($t, 1)[0] !== basename($cur_path)) && $model->inc->fs->is_dir($t)) && ($type === 'components')) ||  ($type !== 'components')) &&
            (strpos(basename($t),".") !== 0)
@@ -140,6 +158,7 @@ if ( !empty($model->data['repository']) &&
             $component = false;
             $is_vue = false;
             $name = basename($t);
+
             //filter any folders that we want to see in the root in case of a project
             if ( empty($is_project) ||
               !empty($tree_popup) ||
@@ -163,7 +182,7 @@ if ( !empty($model->data['repository']) &&
 
                 if (
                   ($is_file && !isset($files[$name]) && !\in_array($ext, $excludeds)) ||
-                  (!$is_file && (!isset($folders[$name]) || $folders[$name]['num'] === 0))
+                  (!$is_file && (!isset($folders[$name]) || $folders[$name]['numChildren'] === 0))
                 ){
                   $num = 0;
                   //case folder
@@ -241,9 +260,6 @@ if ( !empty($model->data['repository']) &&
                           }
                           //check if the files of the component + those that have a different name or have hidden folders is the same as all the content, leaving only the possibility in case of folders not hidden
                           $num = $num - ($num_check + $element_exluded);
-                          // if ( $num === ($num_check + $element_exluded) ){
-                          //   $num = 0;
-                          // }
                         }
 
                       }
@@ -283,8 +299,9 @@ if ( !empty($model->data['repository']) &&
                   $cfg = [
                     'text' => $name,
                     'name' => $name,
+                    'git' =>  $check_git($t),
                     //Previously the 'uid' property was called 'path'
-                    'uid' => $component === true  ? $cur_path.$name.'/'.$name : $cur_path . $name,
+                    'uid' => $component === true  ? $cur_path.'/'.$name.'/'.$name : $cur_path . $name,
                     'has_index' => empty($is_file) && \bbn\file\dir::has_file($t, 'index.php', 'index.html', 'index.htm'),
                     'is_svg' => !empty($is_file) && ($ext === 'svg'),
                     'is_viewable' => !empty($is_file) && \in_array($ext, $file_check['viewables']) && ($ext !== 'svg'),
@@ -295,7 +312,7 @@ if ( !empty($model->data['repository']) &&
                     'bcolor' => !empty($color) ? $color : false,
                     'folder' => !empty($folder) ? $folder : empty($is_file),
                     'lazy' => empty($is_file) && ( (empty($onlydirs) && !empty($model->inc->fs->get_files($t, true))) || (!empty($onlydirs) && !empty($dirs($t)))),
-                    'num' => $num,
+                    'numChildren' => $num,
                     'tab' => $tab,
                     'ext' => !empty($is_file) ? $ext : false
                   ];
@@ -321,16 +338,16 @@ if ( !empty($model->data['repository']) &&
                     if ( empty($folders[$name]) ){
                       $folders[$name] = $cfg;
                     }
-                    elseif ( $cfg['num'] > 0 ){
+                    elseif ( $cfg['numChildren'] > 0 ){
                       $folders[$name] = $cfg;
                     }
                   }
                 }
-                elseif ( !$is_file && 
-                  !empty($component) && isset($folders[$name]) && !$folders[$name]['num'] ){
+                elseif ( !$is_file &&
+                  !empty($component) && isset($folders[$name]) && !$folders[$name]['numChildren'] ){
                   $tf = $model->inc->fs->get_files($t, true);
                   if ( $num = \count($tf) ){
-                    $folders[$name]['num'] = $num;
+                    $folders[$name]['numChildren'] = $num;
                   }
                 }
               }
@@ -373,7 +390,7 @@ if ( !empty($model->data['repository']) &&
             $type= 'components';
             $t['bcolor'] = '#44b782';
           }
-          $get($path_complete, $t['bcolor'], $t['url'], $type);
+          $get($path_complete, $t['bcolor'], $t['url'], $type, );
         }
       }
     }
@@ -383,7 +400,6 @@ if ( !empty($model->data['repository']) &&
   }//case root repository with alias bbn-project and contain types
   elseif ( !empty($rep_cfg['types']) && !empty($is_project) && empty($model->data['type']) ){
     $types = [];
-    
    //browse the root elements and assign the type to each of them
     $todo = !empty($onlydirs) ? $dirs($path.$cur_path) : $model->inc->fs->get_files($path . $cur_path, true);
     foreach ( $todo as $t ){
@@ -425,6 +441,7 @@ if ( !empty($model->data['repository']) &&
           ){
             //case components
             if ( $model->data['type'] === 'components' ){
+             // die(var_dump($path.$cur_path));
               $get($path.$cur_path , '#44b782', $t['url'], $type);
             }
             //case mvc

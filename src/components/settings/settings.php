@@ -1,4 +1,4 @@
-<div class="bbn-100">
+<div class="bbn-overlay">
   <div class="bbn-h-100 code">
     <bbn-router :nav="true"
                 :scrollable="false"

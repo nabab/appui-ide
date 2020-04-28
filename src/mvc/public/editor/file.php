@@ -7,7 +7,7 @@
  *
  * @var $ctrl \bbn\mvc\controller
  */
-//die(var_dump($ctrl->arguments, APPUI_IDE_ROOT.'editor/', $ctrl->baseURL));
+
 if ( !empty($ctrl->arguments) ){
 
   if ( $ctrl->baseURL === APPUI_IDE_ROOT.'editor/' ){

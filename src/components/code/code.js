@@ -152,7 +152,7 @@
             }
           }
 
-          this.post(this.root + '/actions/tracking',{
+          this.post(this.root + 'actions/tracking',{
             file: path,
             state: {
               selections: info.selections !== undefined ? info.selections : false,
@@ -238,7 +238,7 @@
             filePath : pathHistory,
             code_file_pref: this.path.substring(this.path.lastIndexOf('src/'+ this.typeProject)+4, this.path.length)
           };
-          this.post(this.root + "/actions/save", obj , (d) => {
+          this.post(this.root + "actions/save", obj , (d) => {
             let tab = this.closest('bbn-container'),
                 parent = {},
                 tabnav = this.closest('bbn-router'),
@@ -375,22 +375,30 @@
         let componentEditor = this.closest('appui-ide-editor'),
             code = this.getRef('editor');
         this.codeExist = !!code;
-        let state = bbn.fn.extend({},this.initialState, true);
-        state.line = state.line === false ?  0 :  parseInt(state.line);
-        state.char = state.char === false ?  0 :  parseInt(state.char);
-        this.$nextTick(()=>{
-          code.loadState(state);
-        });
-        //for list recent files
-        if ( componentEditor.readyMenu ){
-          componentEditor.getRecentFiles();
+
+        //FOR SEARCH
+        if ( componentEditor.currentLine > 0 ){
+          this.goLine(componentEditor.currentLine);
+          componentEditor.currentLine = 0;
+        }
+        else{
+          let state = bbn.fn.extend({},this.initialState, true);
+          state.line = state.line === false ?  0 :  parseInt(state.line);
+          state.char = state.char === false ?  0 :  parseInt(state.char);
+          this.$nextTick(()=>{
+            code.loadState(state);
+          });
+          //for list recent files
+          if ( componentEditor.readyMenu ){
+            componentEditor.getRecentFiles();
+          }
         }
       }
     },
     beforeMount(){
       //get information data of membership tabnav
       this.ide = this.closest('.appui-ide-source-holder').$data;
-    },
+    },  
     watch: {
       isChanged(isChanged){
         let container = this.closest('bbn-container');

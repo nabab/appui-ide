@@ -5,7 +5,7 @@
  **/
 
 /** @var $this \bbn\mvc\controller */
-if ( isset($ctrl->post['path']) ){
+if ( isset($ctrl->post['data']['path']) ){
   $ctrl->action();
 }
 else{

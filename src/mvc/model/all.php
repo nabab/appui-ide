@@ -117,7 +117,7 @@ if ( $model->inc->ide ){
           'path' => isset($model->data['repository']) ? str_replace(constant($rep['bbn_path']), $rep['bbn_path'] . '/', $ele) : str_replace(constant($const), $const . '/', $ele),
           'text' => basename($ele),
           'icon' => 'zmdi zmdi-folder-outline',
-          'num' =>  count($model->inc->fs->get_files($ele, true))
+          'numChildren' =>  count($model->inc->fs->get_files($ele, true))
         ];
         /*$num_files = count($model->inc->fs->get_files($ele, true));
         if ( $num_files > 0 ){
@@ -136,7 +136,7 @@ if ( $model->inc->ide ){
           'path' => isset($model->data['repository']) ? str_replace( constant($rep['bbn_path']), $rep['bbn_path'] .'/', $ele) : str_replace( constant($const), $const.'/', $ele),
           'text' => basename($ele),
           'icon' => 'nf nf-fa-file',
-          'num' => 0
+          'numChildren' => 0
         ];
         array_push($arr, $el);
       }

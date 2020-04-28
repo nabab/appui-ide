@@ -16,6 +16,9 @@
           }, (d) => {
             if ( d.data ){
               this.items = d.data;
+              this.$nextTick(() => {
+                this.getRef('tree').updateData()
+              })
             }
           })
         }

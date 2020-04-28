@@ -1,12 +1,14 @@
 <?php
 $path = $model->inc->ide->get_data_path('appui-ide').'backup/'.$model->data['uid'];
 $res = [];
-
+//die(var_dump($model->data));
 // for tree
 if ( isset($model->inc->ide) && !empty($model->data['uid']) ){
   if ( !isset($model->data['type']) ){
     $list = $model->inc->ide->history($model->data['uid'], $model->data['repository_cfg']);
+
     if ( !empty($list) ){
+
       foreach ( $list as $val ){
         array_push($res, [
           'text' => $val['text'],
@@ -21,13 +23,20 @@ if ( isset($model->inc->ide) && !empty($model->data['uid']) ){
     $files = $model->inc->ide->history($model->data['uid'],  $model->data['repository_cfg']);
     if ( !empty($files) ){
       foreach ( $files as $val ){
-        array_push($res, [
-          'text' => $val['text'],
-          'numChildren' => \count($val['items']),
-          'items' => !empty($val['items']) ? $val['items'] : [],
-          'is_mvc' => $model->data['is_mvc'],
-          'name_file' => $val['file'],
-        ]);
+        if ( empty($model->data['content_files']) ){
+            array_push($res, [
+              'text' => $val['text'],
+              'numChildren' => \count($val['items']),
+              //'currentData' => !empty($val['items']) ? $val['items'] : [],
+              'is_mvc' => $model->data['is_mvc'],
+              'content_files' => !empty($val['items']),
+              'type' => $model->data['type'],
+              'uid' => $model->data['uid']
+            ]);
+        }
+        else{
+          return ['data' => $val['items']];
+        }
       }
     }
   }
@@ -36,7 +45,9 @@ if ( isset($model->inc->ide) && !empty($model->data['uid']) ){
   }
   else {
     $error = $model->inc->ide->get_last_error();
-    return ($error === null) ? [] : ['error' =>  $error];
+    return ($error === null) ? [
+      'data' => []
+    ] : ['error' =>  $error];
   }
 }
 // for get content
@@ -47,6 +58,7 @@ else {
     $path = $model->inc->ide->get_data_path('appui-ide').'backup/'.
       $model->data['repository_cfg']['root'].'/'.
       substr($model->data['url'], strpos($model->data['url'],$model->data['repository_cfg']['code'],1));
+    
     if ( $model->inc->fs->is_file($path) ){
       $code= $model->inc->fs->get_contents($path);
     }

@@ -1,5 +1,5 @@
 <!--ul class="bbn-ide-context"></ul-->
-<bbn-splitter class="bbn-ide-container" orientation="vertical">
+<bbn-splitter class="bbn-overlay bbn-ide-container" orientation="vertical">
   <bbn-pane class="bbn-ide-toolbar-container"
             :size="40"
             :scrollable="false"
@@ -27,6 +27,7 @@
                     icon="nf nf-fa-magic"
                     style="margin-left: 2px"
                     ref="btnTest"
+                    :disabled="disabledWork"
         ></bbn-button>
       </div>
       <div>
@@ -34,6 +35,7 @@
                     @click="history"
                     icon="nf nf-fa-history"
                     style="margin-left: 2px"
+                    :disabled="disabledWork"
         ></bbn-button>
       </div>
       <div>
@@ -92,7 +94,7 @@
               <div class="bbn-spadded">
                 <bbn-input v-if="showSearchContent"
                            class="ide-tree-search bbn-w-100"
-                           v-model="search.searchInRepository"
+                           v-model="search.searchElement"
                            @keydown.enter="searchingContent"
                            placeholder="<?=_('Search content')?>"
                 ></bbn-input>
@@ -105,6 +107,12 @@
                               label="<?=_('Search content')?>"
                               v-model="showSearchContent"
                               :value="!showSearchContent"
+                              style="padding-top: 6px;"
+                ></bbn-checkbox>
+                <bbn-checkbox v-if="showSearchContent"
+                              label="<?=_('All Repositories')?>"
+                              v-model="search.all"
+                              :value="!search.all"
                               style="padding-top: 6px;"
                 ></bbn-checkbox>
                 <bbn-checkbox v-if="showSearchContent"
@@ -122,18 +130,18 @@
               </div>
               <div class="bbn-flex-fill" >
                 <div class="bbn-overlay">
-                   <bbn-tree class="tree"
+                  <bbn-tree class="tree"
                             source="ide/tree"
-                            @activate="treeNodeActivate"
+                            @nodeDblclick="treeNodeActivate"
                             :menu="treeContextMenu"
                             :data="treeInitialData"
                             ref="filesList"
                             :draggable="true"
-                            @dragEnd="moveNode"
+                            @move="moveNode"
                             :map="treeMapper"
                             :icon-color="color"
-                            :filter-string="searchFile"
-                            :storage-full-name="'appui-ide-tree-' + currentRep"
+                            :quick-filter="searchFile"
+                            :storage-full-name="'appui-ide-tree/' + source.project + '/' + currentRep + (typeProject ? '/' + typeProject : '')"
                   ></bbn-tree>
                 </div>
               </div>

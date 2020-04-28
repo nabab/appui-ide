@@ -16,7 +16,7 @@
       <bbn-pane :scrollable="true">
         <div class="bbn-hpadded bbn-overlay" style="border: 0.5px solid #CCC">
           <bbn-tree class="tree bbn-padded"
-                    source='ide/data_cache'
+                    :source="root + 'data_cache'"
                     @select="getContent"
                     :menu="contextMenu"
                     :scrollable="true"

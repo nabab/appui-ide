@@ -25,7 +25,7 @@
         return this.source.langs.map((v) => {
           return {
             field: v,
-            title: bbn.fn.get_field(this.source.primary, 'code', v, 'text'),
+            title: bbn.fn.getField(this.source.primary, 'text', 'code', v),
             editable: true
           };
         });

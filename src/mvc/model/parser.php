@@ -34,18 +34,18 @@ if ( !empty($model->data['cls']) ){
         'text' => $ele,
         'name' => $ele,
         'numChildren' => count($tree[$ele]),
-        'num' => count($tree[$ele]),
+        //'num' => count($tree[$ele]),
         'items' => [],
         'icon' => "nf nf-fa-folder"
       ];
 
-      if ( $cfg['num'] > 0 ){
+      if ( $cfg['numChildren'] > 0 ){
         foreach( $tree[$ele] as $i => $type ){
           $cfg['items'][] = [
             'text' => $i,
             'name' => $i,
             'numChildren' => count($type),
-            'num' => count($type),
+            //'num' => count($type),
             'items' => [],
             'icon' => "nf nf-fa-folder"
           ];
@@ -57,7 +57,7 @@ if ( !empty($model->data['cls']) ){
               'text' => $ele === 'properties' ? $val : $name,
               'name' =>  $ele === 'properties' ? $val : $name,
               'numChildren' => 0,
-              'num' => 0,
+              //'num' => 0,
               'type' => $ele !== 'properties' ? $val['type'] : false,
               'line' => $ele === 'methods' ? $val['line'] : false,
               'icon' => $ele === 'properties' ? "nf nf-dev-code" : "nf nf-mdi-function",
@@ -70,7 +70,7 @@ if ( !empty($model->data['cls']) ){
                 'name' => $val['file'],
                 'file' => true,
                 'numChildren' => 0,
-                'num' => 0,
+                //'num' => 0,
                 'type' => $val['type'],
                 'items' =>[]
               ];

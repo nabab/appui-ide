@@ -18,7 +18,7 @@
     <bbn-tree v-if="items.length"
               class="bbn-overlay"
               ref="tree"
-              :source="items">
-    </bbn-tree>
+              :source="items"
+    ></bbn-tree>
   </div>
 </div>

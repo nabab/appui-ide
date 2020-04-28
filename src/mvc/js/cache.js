@@ -44,7 +44,6 @@
           folder: ele.folder,
           nodePath: ele.nodePath || '',
           text: ele.text + (ele.num ? "&nbsp;&nbsp;<span class='bbn-badge bbn-s bbn-bg-light-grey'>" + ele.num + "</span>" : ''),
-          num: ele.num || 0,
           numChildren: ele.num || 0
         }
       },

@@ -145,7 +145,7 @@
        // this.onChange();
       },
       runInterval(){
-        let current = bbn.fn.get_row(this.files, {value: this.fileLog});
+        let current = bbn.fn.getRow(this.files, {value: this.fileLog});
         this.md5Current = current ? current.md5 : '';
         if ( this.md5Current.length ){
           clearInterval(logPoller);

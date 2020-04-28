@@ -30,9 +30,9 @@
       transform(a){
         if ( a ){
           return bbn.fn.extend(a, {
-            text: "name_file" in a ? a.text + ' &nbsp; <span class="bbn-badge bbn-s bbn-bg-lightgrey">' + a.numChildren + '</span>' : a.text,
+            text: a.text + ( a.numChildren ? ' &nbsp; <span class="bbn-badge bbn-s bbn-bg-lightgrey">' + a.numChildren + '</span>' : ''),
             num: a.numChildren || 0,
-            type: "name_file" in a ? "" : a.text,
+            type: a.type ? a.type : "",
             repository: this.source.repository,
             repository_cfg: this.source.repositories[this.source.repository]
           });
