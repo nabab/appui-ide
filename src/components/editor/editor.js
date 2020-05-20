@@ -733,32 +733,35 @@
        *
        */
       ctrlCloseTab(idx, ev){
-        // check if there are any changes in code
-        let tabstrip = this.getRef('tabstrip'),
-            current = tabstrip.getVue(tabstrip.selected),
-            ctrlChangeCode = current.getRef('component').changedCode,
-          //method close of the tab selected
-            closeProject =  current.$parent.close;
+        let tabstrip = this.getRef('tabstrip');
         ev.preventDefault();
-        if ( ctrlChangeCode ){
-          appui.confirm(
-            bbn._('Do you want to save the changes before closing the tab?'),
-            () =>{
-              this.save(true);
-              setTimeout(()=>{
-                closeProject(idx, true);
-              }, 800)
-
-            },
-            () => {
-              closeProject(idx, true);
-            }
-          );
+        if ( tabstrip ){
+          let view = bbn.fn.getRow(tabstrip.views, {idx: idx}),
+              cont = view && view.url ? tabstrip.urls[view.url] : false,
+              router = cont ? cont.find('bbn-router') : false,
+              numDirty = router ? router.dirtyContainers.length : false;
+          if ( numDirty ){
+            appui.confirm(bbn._('Do you want to save the changes before closing the tab?'), () => {
+              bbn.fn.each(router.dirtyContainers, c => {
+                let code = router.urls[c.url].find('appui-ide-code');
+                if ( bbn.fn.isVue(code) ){
+                  code.$once('saved', () => {
+                    numDirty--;
+                    if ( !numDirty ){
+                      this.$nextTick(() => {
+                        tabstrip.close(idx, true);
+                      })
+                    }
+                  });
+                  code.save();
+                }
+              })
+            });
+          }
+          else {
+            tabstrip.close(idx, true);
+          }
         }
-        else{
-          closeProject(idx, true);
-        }
-
       },
       /**
        * function to close the tab from the dropdown menu file

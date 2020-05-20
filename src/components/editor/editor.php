@@ -172,7 +172,7 @@
                     :nav="true"
                     :master="true"
                     ref="tabstrip"
-                    @close="ctrlCloseTab"
+                    @beforeClose="ctrlCloseTab"
                     @ready="createTabstrip"
         >
           <bbns-container :static="true"

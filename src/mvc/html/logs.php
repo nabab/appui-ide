@@ -1,5 +1,5 @@
 <!-- HTML Document -->
-<div class="bbn-flex-height">
+<div class="bbn-overlay bbn-flex-height">
   <div class="bbn-flex-width bbn-w-100 bbn-spadded bbn-header">
     <div>
       <span v-if="fileLog.length"

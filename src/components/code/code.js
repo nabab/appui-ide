@@ -268,9 +268,9 @@
                     parentTabNav.reload(parentTabNav.selected);
                   }
                 }
-
               this.originalValue = this.value;
               appui.success(bbn._("File saved!"));
+              this.$emit('saved',{tab: obj.tab, path: this.source.id});
               if ( this.isMVC ){
                 if ( tabContainer.source.tab === "php" ){
                   let tabs = this.closest('appui-ide-mvc').getRef('tabstrip').views;
