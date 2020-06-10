@@ -184,6 +184,7 @@
             title: this.titleTabCtrl,
             bcolor: ctrlRepo.bcolor,
             fcolor: ctrlRepo.fcolor,
+            scrollable: false,
             menu: this.listCtrls(),
             url: this.countCtrl
           }, {
@@ -202,6 +203,7 @@
                 title: tab.title,
                 icon: tab.icon,
                 notext: true,
+                scrollable: false,
                 bcolor: tab.bcolor ,
                 fcolor: tab.fcolor,
                 cls: this.emptyTabs.indexOf(tab.url) !== -1 ? 'empty-tab' : '',
@@ -232,6 +234,7 @@
             text: `CTRL${(i + 1)}:   ${path}`,
             title: `CTRL${(i + 1)}`,
             icon: 'nf nf-fa-cogs',
+            scrollable: false,
             url: "_".repeat(i + 1) + url,
             action: (a) => {
               this.loadCtrl(a);
@@ -252,6 +255,7 @@
           bcolor: tab[0].bcolor,
           fcolor: tab[0].fcolor,
           title: val.title,
+          scrollable: false,
           menu: tab[0].menu.slice()
         }, i);
         this.$nextTick(() => {

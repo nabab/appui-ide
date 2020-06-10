@@ -33,7 +33,7 @@
         postData.data = this.getRef('table').filteredData;
         this.post(appui.plugins['appui-ide'] + '/git/excel', postData, d => {
           if ( d.excel_file ){
-            this.post_out(appui.plugins['appui-ide'] + '/git/excel', {excel_file: d.excel_file});
+            this.postOut(appui.plugins['appui-ide'] + '/git/excel', {excel_file: d.excel_file});
           }
         });
       }
