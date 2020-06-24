@@ -18,6 +18,7 @@
                     @click="treeReload()"
                     icon="nf nf-oct-sync"
                     style="margin-left: 2px"
+                    :notext="true"
         ></bbn-button>
       </div>
       <div></div>
@@ -28,6 +29,7 @@
                     style="margin-left: 2px"
                     ref="btnTest"
                     :disabled="disabledWork"
+                    :notext="true"
         ></bbn-button>
       </div>
       <div>
@@ -36,6 +38,7 @@
                     icon="nf nf-fa-history"
                     style="margin-left: 2px"
                     :disabled="disabledWork"
+                    :notext="true"
         ></bbn-button>
       </div>
       <div>
@@ -43,6 +46,7 @@
                     @click="i18n"
                     icon="nf nf-fa-flag"
                     style="margin-left: 2px"
+                    :notext="true"
         ></bbn-button>
       </div>
       <div></div>
@@ -71,6 +75,7 @@
                       showGoTOLine = !showGoTOLine
                     }"
                     title="<?=_('Click for go to line')?>"
+                    :notext="true"
         ></bbn-button>
       </div>
     </bbn-toolbar>
