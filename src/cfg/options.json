@@ -1,0 +1,385 @@
+{
+  "text": "I.D.E.",
+  "code": "ide",
+  "icon": "nf nf-fa-code",
+  "cfg": {
+      "show_code": 1,
+      "allow_children": 1
+  },
+  "i18n": "en",
+  "items": [
+      {
+          "text": "Opened files",
+          "code": "opened"
+      },
+      {
+          "text": "Paths' types",
+          "code": "PTYPES",
+          "cfg": {
+              "show_code": 1,
+              "show_value": 1
+          },
+          "items": [
+              {
+                  "text": "Project",
+                  "code": "bbn-project",
+                  "types": [
+                      {
+                          "url": "mvc",
+                          "icon": "nf nf-fa-code",
+                          "path": "mvc/",
+                          "type": "mvc",
+                          "bcolor": "#302c2b",
+                          "fcolor": "#86cdea"
+                      },
+                      {
+                          "url": "components",
+                          "icon": "nf nf-mdi-vuejs",
+                          "path": "components/",
+                          "type": "components",
+                          "bcolor": "#302c2b",
+                          "fcolor": "#44b782"
+                      },
+                      {
+                          "url": "lib",
+                          "icon": "nf nf-mdi-library",
+                          "path": "lib/",
+                          "type": "classes",
+                          "bcolor": "#302c2b",
+                          "fcolor": "#ecebeb"
+                      },
+                      {
+                          "url": "cli",
+                          "icon": "nf nf-dev-terminal",
+                          "path": "cli/",
+                          "type": "cli",
+                          "bcolor": "#deb200",
+                          "fcolor": "#000000"
+                      }
+                  ]
+              },
+              {
+                  "text": "Classes",
+                  "code": "cls",
+                  "extensions": [
+                      {
+                          "ext": "php",
+                          "mode": "php",
+                          "default": "<?php\n/*\n * Describe this class or punish yourself!\n *\n **/"
+                      }
+                  ]
+              },
+              {
+                  "text": "Cli",
+                  "code": "cli",
+                  "extensions": [
+                      {
+                          "ext": "php",
+                          "mode": "php",
+                          "default": "<?php\n/*\n * Describe what it does or you're a pussy\n *\n **/\n\n/** @var $ctrl \\bbn\\mvc\\controller */\n"
+                      }
+                  ]
+              },
+              {
+                  "text": "Components",
+                  "code": "components",
+                  "tabs": [
+                      {
+                          "pos": 1,
+                          "url": "js",
+                          "icon": "icon-javascript-alt",
+                          "path": "js/",
+                          "title": "JavaScript",
+                          "bcolor": "#f40505",
+                          "fcolor": "#fdfdfd",
+                          "default": true,
+                          "extensions": [
+                              {
+                                  "ext": "js",
+                                  "mode": "js",
+                                  "default": "// Javascript Document\n(()=>{\n  return{}\n})();"
+                              }
+                          ]
+                      },
+                      {
+                          "pos": 2,
+                          "url": "html",
+                          "icon": "icon-html",
+                          "path": "html/",
+                          "title": "View",
+                          "bcolor": "#58be1d",
+                          "fcolor": "#fdfdfd",
+                          "extensions": [
+                              {
+                                  "ext": "php",
+                                  "mode": "php",
+                                  "default": "<!-- HTML Document -->\n\n"
+                              },
+                              {
+                                  "ext": "html",
+                                  "mode": "html",
+                                  "default": "<!-- HTML Document -->\n\n"
+                              }
+                          ]
+                      },
+                      {
+                          "pos": 3,
+                          "url": "css",
+                          "icon": "icon-css",
+                          "path": "css/",
+                          "title": "CSS",
+                          "bcolor": "#ff9900",
+                          "fcolor": "#fdfdfd",
+                          "extensions": [
+                              {
+                                  "ext": "less",
+                                  "mode": "less",
+                                  "default": "/* LESS Document */\n\n"
+                              }
+                          ]
+                      }
+                  ]
+              },
+              {
+                  "text": "CSS",
+                  "code": "css",
+                  "extensions": [
+                      {
+                          "ext": "less",
+                          "mode": "less",
+                          "default": "/* LESS Document */\n\n"
+                      },
+                      {
+                          "ext": "css",
+                          "mode": "css",
+                          "default": "/* CSS Document */\n\n"
+                      },
+                      {
+                          "ext": "scss",
+                          "mode": "scss",
+                          "default": "/* SCSS Document */\n\n"
+                      }
+                  ]
+              },
+              {
+                  "text": "HTML",
+                  "code": "html",
+                  "extensions": [
+                      {
+                          "ext": "html",
+                          "mode": "html",
+                          "default": "<!-- HTML Document -->\n\n"
+                      }
+                  ]
+              },
+              {
+                  "text": "JavaScript",
+                  "code": "js",
+                  "extensions": [
+                      {
+                          "ext": "js",
+                          "mode": "js",
+                          "default": "// Javascript Document\n"
+                      }
+                  ]
+              },
+              {
+                  "text": "Librairies",
+                  "code": "lib",
+                  "extensions": [
+                      {
+                          "ext": "js",
+                          "mode": "js",
+                          "default": "// Javascript Document\n"
+                      },
+                      {
+                          "ext": "less",
+                          "mode": "less",
+                          "default": "/* LESS Document */\n\n"
+                      },
+                      {
+                          "ext": "css",
+                          "mode": "css",
+                          "default": "/* CSS Document */\n\n"
+                      },
+                      {
+                          "ext": "scss",
+                          "mode": "scss",
+                          "default": "/* SCSS Document */\n\n"
+                      }
+                  ]
+              },
+              {
+                  "text": "MVC",
+                  "code": "mvc",
+                  "tabs": [
+                      {
+                          "ext": "php",
+                          "pos": 1,
+                          "url": "_ctrl",
+                          "path": "public/",
+                          "fixed": "_ctrl.php",
+                          "title": "CTRL",
+                          "bcolor": "#24288f",
+                          "fcolor": "#fdfdfd",
+                          "recursive": 1,
+                          "extensions": [
+                              {
+                                  "ext": "php",
+                                  "mode": "php",
+                                  "default": "<?php\n/*\n * Describe what it does!\n *\n **/\n\n/** @var $this \\bbn\\mvc\\controller */"
+                              }
+                          ]
+                      },
+                      {
+                          "pos": 2,
+                          "url": "php",
+                          "icon": "icon-php",
+                          "path": "public/",
+                          "title": "Controller",
+                          "bcolor": "#5c9fd6",
+                          "fcolor": "#fdfdfd",
+                          "default": true,
+                          "extensions": [
+                              {
+                                  "ext": "php",
+                                  "mode": "php",
+                                  "default": "<?php\n/*\n * Describe what it does!\n *\n * @var $ctrl \\bbn\\mvc\\controller \n *\n */\n"
+                              }
+                          ]
+                      },
+                      {
+                          "pos": 3,
+                          "url": "private",
+                          "icon": "icon-php-alt",
+                          "path": "private/",
+                          "title": "Private",
+                          "bcolor": "#cccccc",
+                          "fcolor": "#fdfdfd",
+                          "default": false,
+                          "extensions": [
+                              {
+                                  "ext": "php",
+                                  "mode": "php",
+                                  "default": "<?php\n/*\n * Describe what it does!\n *\n **/\n\n/** @var $this \\bbn\\mvc\\controller */"
+                              }
+                          ],
+                          "alternative": true
+                      },
+                      {
+                          "pos": 4,
+                          "url": "model",
+                          "icon": "icon-database",
+                          "path": "model/",
+                          "title": "Model",
+                          "bcolor": "#ee05cf",
+                          "fcolor": "#fdfdfd",
+                          "extensions": [
+                              {
+                                  "ext": "php",
+                                  "mode": "php",
+                                  "default": "<?php\n/*\n * Describe what it does!\n *\n **/\n\n/** @var $this \\bbn\\mvc\\model*/"
+                              }
+                          ]
+                      },
+                      {
+                          "pos": 5,
+                          "url": "html",
+                          "icon": "icon-html",
+                          "path": "html/",
+                          "title": "View",
+                          "bcolor": "#58be1d",
+                          "fcolor": "#fdfdfd",
+                          "extensions": [
+                              {
+                                  "ext": "php",
+                                  "mode": "php",
+                                  "default": "<!-- HTML Document -->"
+                              },
+                              {
+                                  "ext": "html",
+                                  "mode": "html",
+                                  "default": "<!-- HTML Document -->"
+                              }
+                          ]
+                      },
+                      {
+                          "pos": 6,
+                          "url": "js",
+                          "icon": "icon-javascript-alt",
+                          "path": "js/",
+                          "title": "JavaScript",
+                          "bcolor": "#f40505",
+                          "fcolor": "#fdfdfd",
+                          "extensions": [
+                              {
+                                  "ext": "js",
+                                  "mode": "js",
+                                  "default": "// Javascript Document"
+                              },
+                              {
+                                  "ext": "coffee",
+                                  "mode": "coffee",
+                                  "default": "// Coffeescript Document"
+                              }
+                          ]
+                      },
+                      {
+                          "pos": 7,
+                          "url": "css",
+                          "icon": "icon-css",
+                          "path": "css/",
+                          "title": "CSS",
+                          "bcolor": "#ff9900",
+                          "fcolor": "#fdfdfd",
+                          "extensions": [
+                              {
+                                  "ext": "less",
+                                  "mode": "less",
+                                  "default": "/* LESS Document */"
+                              },
+                              {
+                                  "ext": "css",
+                                  "mode": "css",
+                                  "default": "/* CSS Document */"
+                              },
+                              {
+                                  "ext": "scss",
+                                  "mode": "scss",
+                                  "default": "/* SCSS Document */"
+                              }
+                          ]
+                      }
+                  ]
+              },
+              {
+                  "text": "PHP",
+                  "code": "php",
+                  "extensions": [
+                      {
+                          "ext": "php",
+                          "mode": "php",
+                          "default": "<?php\n/*\n * Describe what it does or you're a pussy\n *\n **/\n\n/** @var $this \\bbn\\mvc\\controller */\n"
+                      }
+                  ]
+              },
+              {
+                  "text": "Scripts",
+                  "code": "scripts",
+                  "extensions": [
+                      {
+                          "ext": "php",
+                          "mode": "php",
+                          "default": "<?php\n/*\n * Describe what it does or you're as gay as Jaysus\n *\n **/\n\n/** @var $this \\bbn\\mvc\\controller */\n"
+                      },
+                      {
+                          "ext": "js",
+                          "mode": "js",
+                          "default": "// Javascript Document\n"
+                      }
+                  ]
+              }
+          ]
+      }
+  ]
+}

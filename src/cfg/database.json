@@ -62,7 +62,7 @@
                 "columns": [
                     "id_client"
                 ],
-                "ref_db": "apst_app",
+                "ref_db": null,
                 "ref_table": "bbn_clients",
                 "ref_column": "id",
                 "constraint": "bbn_projects_ibfk_2",
@@ -169,7 +169,7 @@
                 "columns": [
                     "id_project"
                 ],
-                "ref_db": "apst_app",
+                "ref_db": null,
                 "ref_table": "bbn_projects",
                 "ref_column": "id",
                 "constraint": "bbn_projects_assets_ibfk_1",
@@ -181,7 +181,7 @@
                 "columns": [
                     "id_option"
                 ],
-                "ref_db": "apst_app",
+                "ref_db": null,
                 "ref_table": "bbn_options",
                 "ref_column": "id",
                 "constraint": "bbn_projects_assets_ibfk_2",
@@ -193,7 +193,7 @@
                 "columns": [
                     "asset_type"
                 ],
-                "ref_db": "apst_app",
+                "ref_db": null,
                 "ref_table": "bbn_options",
                 "ref_column": "id",
                 "constraint": "bbn_projects_assets_ibfk_3",
