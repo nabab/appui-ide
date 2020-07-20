@@ -1,0 +1,33 @@
+{
+  "text": "I.D.E",
+  "icon": "nf nf-dev-netbeans",
+  "items": [{
+    "text": "Editor",
+    "icon": "nf nf-fa-code",
+    "link": "editor"
+  }, {
+    "text": "Logs",
+    "icon": "nf nf-fa-file_text_o",
+    "link": "log"
+  }, {
+    "text": "Error log analyzer",
+    "icon": "nf nf-fa-space_shuttle",
+    "link": "error_log"
+  }, {
+    "text": "Session infos",
+    "icon": "nf nf-fa-user",
+    "link": "session"
+  }, {
+    "text": "Constants",
+    "icon": "nf nf-fa-university",
+    "link": "constants"
+  }, {
+    "text": "Info PHP",
+    "icon": "nf nf-fa-info",
+    "link": "info/php"
+  }, {
+    "text": "Cache system",
+    "icon": "nf nf-fa-table",
+    "link": "icachenfo/php"
+  }]
+}
