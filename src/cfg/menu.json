@@ -8,7 +8,7 @@
   }, {
     "text": "Logs",
     "icon": "nf nf-fa-file_text_o",
-    "link": "log"
+    "link": "logs"
   }, {
     "text": "Error log analyzer",
     "icon": "nf nf-fa-space_shuttle",
@@ -28,6 +28,6 @@
   }, {
     "text": "Cache system",
     "icon": "nf nf-fa-table",
-    "link": "icachenfo/php"
+    "link": "cache"
   }]
 }
