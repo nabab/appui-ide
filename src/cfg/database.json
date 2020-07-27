@@ -31,7 +31,7 @@
                 "generation": "",
                 "maxlength": 16
             },
-            "nom": {
+            "name": {
                 "position": 2,
                 "type": "varchar",
                 "null": 0,
