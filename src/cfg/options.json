@@ -383,4 +383,11 @@
       ]
     }
   ]
+}, {
+  "text": "IDE recent files",
+  "code": "ide_recent_files",
+  "id_parent": ["default","dashboard","appui"],
+  "id_alias": ["ide_recent_files","appui-dashboard","plugins","|*appui-ide*|/","page","permissions","appui"],
+  "value": "{\"limit\":5,\"observe\":false,\"options\":[],\"closable\":true,\"buttonsLeft\":[],\"buttonsRight\":[],\"itemComponent\":\"appui-ide-widget-files-recent\"}",
+  "after": 1
 }]

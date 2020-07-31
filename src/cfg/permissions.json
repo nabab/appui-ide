@@ -1,0 +1,13 @@
+[{
+  "text": "Plugins",
+  "code": "plugins",
+  "id_parent": ["|*appui-ide*|/","page","permissions","appui"],
+  "items": [{
+    "text": "appui-dashboard",
+    "code": "appui-dashboard",
+    "items": [{
+      "text": "IDE recent files",
+      "code": "ide_recent_files"
+    }]
+  }]
+}]
