@@ -1,6 +1,5 @@
 <?php
 /** @var $model \bbn\mvc\model */
-\bbn\x::log([$model->data['url']],'vitoprj');
 if ( !empty($model->data['url']) && isset($model->inc->ide) ){
    //we convert the string into an array to check whether we need to provide permission information or not
   $stepUrl = explode("/",$model->data['url']);

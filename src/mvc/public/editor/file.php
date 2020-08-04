@@ -72,8 +72,7 @@ if ( !empty($ctrl->arguments) ){
       ->get_view();
   }
   else {
-    \bbn\x::log(['content',APPUI_IDE_ROOT.'editor/content', $ctrl->post, $ctrl->arguments], 'rrr');
     //$ctrl->reroute(APPUI_IDE_ROOT.'editor/content', $ctrl->post, $ctrl->arguments);
-    $ctrl->reroute('ide/editor/content', $ctrl->post, $ctrl->arguments);
+    $ctrl->reroute($ctrl->plugin_url('appui-ide').'/editor/content', $ctrl->post, $ctrl->arguments);
   }
 }

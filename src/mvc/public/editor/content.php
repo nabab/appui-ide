@@ -1,6 +1,5 @@
 <?php
 /** @var $ctrl \bbn\mvc\controller */
-\bbn\x::log($ctrl->arguments, 'vvv');
 if ( !empty($ctrl->arguments) ){
   $step = $ctrl->arguments;
   $ctrl->data['url'] = implode('/', $ctrl->arguments);

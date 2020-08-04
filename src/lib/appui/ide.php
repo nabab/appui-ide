@@ -2397,7 +2397,6 @@ class ide {
       else {
         $res .= implode('/', $bits);
       }
-      \bbn\x::log([$res],'vitooo');
       return \bbn\str::parse_path($res);
     }
     return false;
