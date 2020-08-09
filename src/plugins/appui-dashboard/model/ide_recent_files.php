@@ -33,7 +33,7 @@ $grid = new \bbn\appui\grid($model->db, $model->data, [
     'dir' => 'DESC'
   ]]
 ]);
-if ( $grid->check() && defined('BBN_PROJECT_NAME') ){
+if ( $grid->check() && defined('BBN_APP_NAME') ){
   $res = $grid->get_datatable();
   foreach ( $res['data'] as $i => $d ){
     $arr = explode("/", $d['file']);

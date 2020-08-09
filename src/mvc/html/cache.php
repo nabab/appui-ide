@@ -1,4 +1,4 @@
-<div class="bbn-w-100 bbn-flex-height">
+<div class="bbn-overlay bbn-flex-height">
   <div class="bbn-header bbn-flex-width bbn-h-5 bbn-padded bbn-vmiddle">
     <div class="bbn-l bbn-w-10">
       <bbn-button @click="deleteAll"> <?=_('Delete all')?></bbn-button>

@@ -1526,8 +1526,8 @@ class ide {
   }
 
   public function get_app_path(){
-    if ( defined('BBN_PROJECT_NAME') &&
-      (constant('BBN_PROJECT_NAME') === 'apst-app')
+    if ( defined('BBN_APP_NAME') &&
+      (constant('BBN_APP_NAME') === 'apst-app')
     ){
       return \bbn\mvc::get_app_path();
     }
@@ -1543,8 +1543,8 @@ class ide {
   }
 
   public function get_lib_path(){
-    if ( defined('BBN_PROJECT_NAME') &&
-      (constant('BBN_PROJECT_NAME') === 'apst-app')
+    if ( defined('BBN_APP_NAME') &&
+      (constant('BBN_APP_NAME') === 'apst-app')
     ){
       return \bbn\mvc::get_lib_path();
     }
