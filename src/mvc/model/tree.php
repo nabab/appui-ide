@@ -150,7 +150,6 @@ if ( !empty($model->data['repository']) &&
       if ( is_array($todo) ){
         //we browse the element
         foreach ( $todo as $t ){
-          \bbn\x::log([$check_git($t), $t],'vitodd');
           //we can only enter if it is a component type and there is no other child element with the same name or that is not a component type
           if ( ((((\bbn\str::file_ext($t, 1)[0] !== basename($cur_path)) && $model->inc->fs->is_dir($t)) && ($type === 'components')) ||  ($type !== 'components')) &&
            (strpos(basename($t),".") !== 0)
