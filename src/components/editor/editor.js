@@ -1286,6 +1286,7 @@
           isFile: isFile,
           path: './',
           node: false,
+          template: null,
           repositoryProject: false,
           currentRep: this.currentRep,
           repositories: this.repositories,
@@ -1356,9 +1357,8 @@
           //check path
           src.path = src.path.replace( '//',  '/');
           this.closest("bbn-container").getRef('popup').open({
-            width: 500,
-            height: 250,
             title: title,
+            maximizable: true,
             component: 'appui-ide-popup-new',
             source: src,
           });

@@ -27,6 +27,7 @@
                   bbn.fn.search(rep.tabs, 'url', this.source.tab_mvc) :
                   defaultTab,
           name: '',
+          template: null,
           extension: defaultExt,
           is_file: this.source.isFile,
           type: this.source.type || false,

@@ -7,6 +7,9 @@
  */
 namespace appui;
 
+use bbn;
+use bbn\x;
+
 class ide {
 
   use \bbn\models\tts\optional,
@@ -1744,15 +1747,15 @@ class ide {
    * @return bool
    */
   public function create(array $cfg){
-    if ( !empty($cfg['repository']) &&
-      !empty($cfg['repository']['path']) &&
-      !empty($cfg['name']) &&
-      !empty($cfg['path']) &&
-      isset($cfg['is_file'], $cfg['extension'], $cfg['tab'], $cfg['tab_path'], $cfg['type'])
+    if (x::has_deep_prop($cfg, ['repository', 'path'], true)
+        && x::has_props($cfg, ['name', 'path'], true)
+        && x::has_props($cfg, ['is_file', 'extension', 'tab', 'tab_path', 'type'])
     ){
-
+      if (x::has_prop($cfg['template'])) {
+        die(x::dump("YES", $cfg['template']));
+      }
+      die(x::dump("NO"));
       $path = $this->get_root_path($cfg['repository']['name']);
-
       if ( ($cfg['repository']['alias_code'] === 'bbn-project') && !empty($cfg['type']) ){
         if ( $cfg['type'] === 'components' ){
           $path .= $cfg['path'].$cfg['name'];
