@@ -282,8 +282,8 @@ class ide {
         $new .= $cfg['new_path'] . (substr($cfg['new_path'], -1) !== '/' ? '/' : '');
       }
       if ( !empty($cfg['is_file']) &&
-        ( ( !empty($cfg['ext']) && (\bbn\x::find($rep['extensions'], ['ext' => $cfg['ext']]) === false) ) ||
-          ( !empty($cfg['new_ext']) && (\bbn\x::find($rep['extensions'], ['ext' => $cfg['new_ext']]) === false) )
+        ( ( !empty($cfg['ext']) && (\bbn\x::find($rep['extensions'], ['ext' => $cfg['ext']]) === null) ) ||
+          ( !empty($cfg['new_ext']) && (\bbn\x::find($rep['extensions'], ['ext' => $cfg['new_ext']]) === null) )
         )
       ){
         return false;
@@ -1677,7 +1677,7 @@ class ide {
 
       }
       elseif ( !empty($real['tab']) &&
-       ( ($i = \bbn\x::find($real['repository']['tabs'], ['url' => $real['tab']])) !== false )
+       ( ($i = \bbn\x::find($real['repository']['tabs'], ['url' => $real['tab']])) !== null )
       ){
         if( !empty($real['repository']['tabs'][$i]['extensions'][0]['default']) ){
           $f['value'] = $real['repository']['tabs'][$i]['extensions'][0]['default'];
@@ -2481,7 +2481,7 @@ class ide {
           $tab = $ssc['tab'];
           $o['tab'] = $tab;
           $file_path = $ssc['path'].'/';
-          if ( ($i = \bbn\x::find($rep['tabs'], ['url' => $tab])) !== false ){
+          if ( ($i = \bbn\x::find($rep['tabs'], ['url' => $tab])) !== null ){
             $tab = $rep['tabs'][$i];
             if( !empty($this->is_MVC_from_url($url)) ){
               $res .= 'mvc/';
@@ -2673,7 +2673,7 @@ class ide {
                $date = date('d/m/Y', $moment);
                $time = date('H:i:s', $moment);
 
-               if ( ($i = \bbn\x::find($history_ctrl['items'], ['text' => $date])) === false ){
+               if ( ($i = \bbn\x::find($history_ctrl['items'], ['text' => $date])) === null ){
                  array_push($history_ctrl['items'], [
                    'text' => $date,
                    'items'=> [],
@@ -2682,7 +2682,7 @@ class ide {
                  ]);
 
                  $i = \count($history_ctrl['items']) - 1;
-                 if ( ($idx = \bbn\x::find($history_ctrl['items'][$i]['items'], ['text' => $time])) === false ){
+                 if ( ($idx = \bbn\x::find($history_ctrl['items'][$i]['items'], ['text' => $time])) === null ){
                    array_push($history_ctrl['items'][$i]['items'], [
                      'text' => $time,
                      'mode' => basename($ctrl_path),
@@ -2695,7 +2695,7 @@ class ide {
                }
                else {
                  $j = \bbn\x::find($history_ctrl['items'], ['text' => $date]);
-                 if ( ($idx = \bbn\x::find($history_ctrl['items'][$j]['items'], ['text' => $time])) === false ){
+                 if ( ($idx = \bbn\x::find($history_ctrl['items'][$j]['items'], ['text' => $time])) === null ){
                    array_push($history_ctrl['items'][$j]['items'], [
                      'text' => $time,
                      'code' => $this->fs->get_contents($file),
@@ -2730,7 +2730,7 @@ class ide {
                     $moment = strtotime(str_replace('_', ' ', $filename));
                     $date = date('d/m/Y', $moment);
                     $time = date('H:i:s', $moment);
-                    if ( ($i = \bbn\x::find($backups, ['text' => $date])) === false ){
+                    if ( ($i = \bbn\x::find($backups, ['text' => $date])) === null ){
                       array_push($backups, [
                         'text' => $date,
                         'folder' => true,
@@ -2739,7 +2739,7 @@ class ide {
                       ]);
                       $i = \count($backups) - 1;
                     }
-                    if ( ($idx = \bbn\x::find($backups[$i]['items'], ['title' => $d])) === false ){
+                    if ( ($idx = \bbn\x::find($backups[$i]['items'], ['title' => $d])) === null ){
                       array_push($backups[$i]['items'], [
                         'text' => $d,
                         'folder' => true,
@@ -2772,7 +2772,7 @@ class ide {
                   $date = date('d/m/Y', $moment);
                   $time = date('H:i:s', $moment);
 
-                  if ( ($i = \bbn\x::find($backups, ['text' => $date])) === false ){
+                  if ( ($i = \bbn\x::find($backups, ['text' => $date])) === null ){
                     array_push($backups, [
                       'text' => $date,
                       'folder' => true,
@@ -2781,7 +2781,7 @@ class ide {
                     ]);
 
                     $i = \count($backups) - 1;
-                    if ( ($idx = \bbn\x::find($backups[$i]['items'], ['text' => $time])) === false ){
+                    if ( ($idx = \bbn\x::find($backups[$i]['items'], ['text' => $time])) === null ){
                       array_push($backups[$i]['items'], [
                         'text' => $time,
                         'mode' => $mode,
@@ -2791,7 +2791,7 @@ class ide {
                     }
                   } else {
                     $j = \bbn\x::find($backups, ['text' => $date]);
-                    if ( ($idx = \bbn\x::find($backups[$j]['items'], ['text' => $time])) === false ){
+                    if ( ($idx = \bbn\x::find($backups[$j]['items'], ['text' => $time])) === null ){
                       array_push($backups[$j]['items'], [
                         'text' => $time,
                         'mode' => $mode,
@@ -2843,7 +2843,7 @@ class ide {
                   $date = date('d/m/Y', $moment);
                   $time = date('H:i:s', $moment);
   
-                  if ( ($i = \bbn\x::find($backups, ['text' => $date])) === false ){
+                  if ( ($i = \bbn\x::find($backups, ['text' => $date])) === null ){
                     array_push($backups, [
                       'text' => $date,
                       'folder' => true,
@@ -2852,7 +2852,7 @@ class ide {
                     ]);
   
                     $i = \count($backups) - 1;
-                    if ( ($idx = \bbn\x::find($backups[$i]['items'], ['text' => $time])) === false ){
+                    if ( ($idx = \bbn\x::find($backups[$i]['items'], ['text' => $time])) === null ){
                       array_push($backups[$i]['items'], [
                         'text' => $time,
                         'mode' => $mode,
@@ -2865,7 +2865,7 @@ class ide {
                   }
                   else {
                     $j = \bbn\x::find($backups, ['text' => $date]);
-                    if ( ($idx = \bbn\x::find($backups[$j]['items'], ['text' => $time])) === false ){
+                    if ( ($idx = \bbn\x::find($backups[$j]['items'], ['text' => $time])) === null ){
                       array_push($backups[$j]['items'], [
                         'text' => $time,
                         'mode' => $mode,
@@ -2884,7 +2884,7 @@ class ide {
       }
     }
     //If you add the "_ctrl " backup, enter it to the rest of the date.
-    if( !empty($history_ctrl) && !empty($backups) && $all === true && $check_ctrl === false  ){
+    if( !empty($history_ctrl) && !empty($backups) && ($all === true) && ($check_ctrl === false) ){
       array_push($backups, $history_ctrl);
     }//if you have only the backups of the super _ctrl and no other, it has been differentiated because of different paths
     else if( !empty($history_ctrl) && empty($backups) && $check_ctrl === true  ){
