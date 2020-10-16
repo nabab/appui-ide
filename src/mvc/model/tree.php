@@ -389,7 +389,7 @@ if ( !empty($model->data['repository']) &&
             $type= 'components';
             $t['bcolor'] = '#44b782';
           }
-          $get($path_complete, $t['bcolor'], $t['url'], $type, );
+          $get($path_complete, $t['bcolor'], $t['url'], $type);
         }
       }
     }
