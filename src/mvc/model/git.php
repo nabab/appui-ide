@@ -17,7 +17,7 @@ if ($model->has_data('path')) {
       ];
     }, $difference_git);
 
-    $branchs = [
+    $branches = [
       'components' => ['.php','.js','.html', '.less', '.css'],
       'mvc' => [
         'public' => ['.php'],
@@ -38,7 +38,7 @@ if ($model->has_data('path')) {
           $part = explode('.', $relative);
           $relative = array_shift($part);
         }
-        foreach( $branchs['components'] as $ext ){
+        foreach( $branches['components'] as $ext ){
           $info = [
             'ele' => $path.'/src/'.$relative.$ext,
             'state' => $val['state']
@@ -53,7 +53,7 @@ if ($model->has_data('path')) {
         array_shift($relative);
         array_shift($relative);
         $relative_origin = implode('/', $relative);
-        foreach ( $branchs['mvc'] as $folder => $exts ){
+        foreach ( $branches['mvc'] as $folder => $exts ){
           $element = $path.'/src/'. $root. '/'.$folder.'/';
           if ( $model->inc->fs->is_file($val['ele']) ){
             $part = explode('.', $relative_origin);

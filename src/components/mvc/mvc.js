@@ -179,6 +179,7 @@
         if ( (this.tabsRepository !== undefined) && (this.emptyTabs !== undefined) && (this.sctrl.length) ){
           let ctrlRepo =  bbn.fn.getRow(this.tabsRepository, 'url' ,'_ctrl');
           let r = [{
+            static: true,
             load: true,
             cached: false,
             title: this.titleTabCtrl,

@@ -1,40 +1,43 @@
 <?php
-/** @var $model \bbn\mvc\model */
-if ( !empty($model->data['repository']) &&
-  !empty($model->data['repository_cfg']) &&
-  isset($model->data['onlydirs'], $model->data['tab'])
-){
 
-  $rep_cfg = $model->data['repository_cfg'];
-  $is_mvc = !empty($model->data['is_mvc']);
-  $is_component = !empty($model->data['is_component']);
-  $is_project = !empty($model->data['is_project']) && empty($is_mvc) && empty($is_component);
-  $onlydirs = !empty($model->data['onlydirs']);
+use bbn\x;
+
+/** @var $model \bbn\mvc\model */
+if ($model->has_data(['repository', 'repository_cfg'], true)) {
+
+  $rep_cfg      = $model->data['repository_cfg'];
+  $is_mvc       = $model->has_data('is_mvc', true);
+  $is_component = $model->has_data('is_component', true);
+  $is_project   = $model->has_data('is_project', true) && empty($is_mvc) && empty($is_component);
+  $onlydirs     = $model->has_data('onlydirs', true);
 
   //for tree in the popup
-  $tree_popup = !empty($model->data['tree_popup']);
+  $tree_popup = $model->has_data('tree_popup', true);
 
-  //case of a folder and a component we treat the '$current_path' differently
-  if ( !empty($model->data['is_vue']) ){
+
+  // Defining current path
+  //case of a component we treat the '$current_path' differently
+  if ($model->has_data('is_vue', true)) {
     $cur_path = explode('/', $model->data['uid']);
     array_pop($cur_path);
     $cur_path = implode('/', $cur_path);
     $cur_path .= '/';
   }
   else{
-    $cur_path = !empty($model->data['uid']) ? $model->data['uid'] . '/' : '';// $model->data['type'];
+    $cur_path = empty($model->data['uid']) ? '' : $model->data['uid'] . '/';
      //treat the curent path for the initial date
-    if ( !empty($model->data['type']) && ($model->data['type'] === 'mvc') ){
-      $cur_path = explode('/', $cur_path );
-      if ( (count($cur_path) > 0) && ($cur_path[0] === 'mvc') ){
+    if ($model->has_data('type', true) && ($model->data['type'] === 'mvc')) {
+      $cur_path = explode('/', $cur_path);
+      if ((count($cur_path) > 0) && ($cur_path[0] === 'mvc')) {
         array_shift($cur_path);
       }
+
       $cur_path = implode('/', $cur_path);
     }
   }
 
   //check backslash
-  if ( !empty(strpos($cur_path, '//')) ){
+  while (strpos($cur_path, '//') !== false) {
     $cur_path = str_replace('//', '/', $cur_path);
   }
 
@@ -43,6 +46,7 @@ if ( !empty($model->data['repository']) &&
   $path = $model->inc->ide->get_root_path($rep_cfg);
 
 
+  //die(x::dump($cur_path, $rep_cfg, $is_mvc, $is_component, $is_project, $onlydirs, $tree_popup, $model->data));
   $difference_git = $model->get_cached_model('./git', ['path' => dirname($path)], 3600);
   //$difference_git = $model->get_model('./git', ['path' => dirname($path)]);
 
@@ -52,17 +56,16 @@ if ( !empty($model->data['repository']) &&
       'html',
       'htm',
       'php',
-      'php4',
-      'jinja2',
-      'php5',
       'sql',
       'mysql',
       'js',
+      'ts',
       'py',
       'txt',
       'log',
       '',
       'css',
+      'scss',
       'less',
       'htaccess',
       'htpasswd',
