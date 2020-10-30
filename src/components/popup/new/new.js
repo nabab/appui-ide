@@ -124,7 +124,7 @@
       types(){
         let res = [];
         if ( this.isMVC || (this.source.isFile && this.isComponent) ){
-         bbn.fn.each(this.rep.tabs, ( v, i ) => {
+          bbn.fn.each(this.rep.tabs, (v, i) => {
             if ( !v.fixed ){
               res.push({
                 text: v.title,
@@ -137,7 +137,7 @@
       },
       defaultText(){
         if ( this.availableExtensions ){
-          for ( let i  in  this.availableExtensions ){
+          for ( let i in this.availableExtensions ){
             if ( this.availableExtensions[i].ext === this.data.extension ){
               return this.availableExtensions[i].default;
             }

@@ -35,4 +35,4 @@ if ( isset($ctrl->post['project']) ){
 $ctrl->add_inc('fs',  new \bbn\file\system());
 
 
-return 1;
+return true;

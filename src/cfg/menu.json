@@ -1,33 +1,85 @@
 {
-  "text": "I.D.E",
-  "icon": "nf nf-dev-netbeans",
-  "items": [{
-    "text": "Editor",
-    "icon": "nf nf-fa-code",
-    "link": "editor"
-  }, {
-    "text": "Logs",
-    "icon": "nf nf-fa-file_text_o",
-    "link": "logs"
-  }, {
-    "text": "Error log analyzer",
-    "icon": "nf nf-fa-space_shuttle",
-    "link": "error_log"
-  }, {
-    "text": "Session infos",
-    "icon": "nf nf-fa-user",
-    "link": "session"
-  }, {
-    "text": "Constants",
-    "icon": "nf nf-fa-university",
-    "link": "constants"
-  }, {
-    "text": "Info PHP",
-    "icon": "nf nf-fa-info",
-    "link": "info/php"
-  }, {
-    "text": "Cache system",
-    "icon": "nf nf-fa-table",
-    "link": "cache"
-  }]
+  "text": "IDE",
+  "num": 10,
+  "icon": "nf nf-fa-code",
+  "items": [
+    {
+      "text": "Editor",
+      "num": 1,
+      "icon": "nf nf-mdi-code_array",
+      "link": "editor"
+    },
+    {
+      "text": "Cache",
+      "num": 2,
+      "icon": "nf nf-fa-file_text",
+      "link": "cache"
+    },
+    {
+      "text": "Logs",
+      "num": 3,
+      "icon": "nf nf-fa-microchip",
+      "link": "logs"
+    },
+    {
+      "text": "Dev-docs",
+      "num": 4,
+      "icon": "nf nf-fa-book",
+      "link": "devdocs"
+    },
+    {
+      "text": "DNS Checker",
+      "num": 5,
+      "icon": "nf nf-fa-link",
+      "link": "dns"
+    },
+    {
+      "text": "Documentation",
+      "num": 6,
+      "icon": "nf nf-fa-book",
+      "link": "doc"
+    },
+    {
+      "text": "PHP Errors",
+      "num": 7,
+      "icon": "nf nf-fa-warning",
+      "link": "error_log"
+    },
+    {
+      "text": "PHP configuration",
+      "num": 7,
+      "icon": "nf nf-fa-warning",
+      "link": "info/php"
+    },
+    {
+      "text": "File explorer",
+      "num": 8,
+      "icon": "nf nf-fa-cog",
+      "link": "files"
+    },
+    {
+      "text": "Available constants",
+      "num": 10,
+      "icon": "nf nf-fa-building",
+      "link": "constants"
+    },
+    {
+      "text": "Current session",
+      "num": 11,
+      "icon": "nf nf-fa-cog",
+      "link": "session"
+    },
+    {
+      "text": "Finder",
+      "num": 12,
+      "icon": "nf nf-mdi-apple_finder",
+      "link": "finder"
+    },
+    {
+      "text": "Profiler",
+      "num": 13,
+      "icon": "nf nf-mdi-face_profile",
+      "link": "profiler"
+    }
+  ]
 }
