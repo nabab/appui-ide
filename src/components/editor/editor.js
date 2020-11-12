@@ -28,6 +28,7 @@
         });
       }
       return {
+        typeProjectReady: false,
       //  showTest: true,
         repositories: this.source.repositories,
         currentRep: '',
@@ -348,12 +349,14 @@
           project: this.project
         };
 
-        if (this.isProject && (this.path.length === 0) ){
-          obj.uid = 'mvc';
-          this.typeProject = 'mvc';
-        }
         if ( this.typeProject !== false){
           obj.type = this.typeProject;
+        }
+        else {
+          obj.type = 'mvc';
+        }
+        if (this.isProject && (this.path.length === 0) ){
+          obj.uid = obj.type;
         }
         return obj;
       },
@@ -392,9 +395,6 @@
       setReadyMenu(){
         if ( !this.readyMenu ){
           this.readyMenu = true;
-          this.$nextTick(()=>{
-            this.getRecentFiles();
-          });
         }
       },
       getRecentFiles(){

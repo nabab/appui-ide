@@ -18,7 +18,7 @@
     > 
       <bbn-pane size="25%">
         <bbn-tree ref="tree"
-                  :data="{fpath: froot}"
+                  :data="dataTree"
                   :source="root + '/files'"
                   :map="mapper"
                   @beforeLoad="beforeLoad"

@@ -21,5 +21,5 @@ else {
   $ctrl->obj->bcolor = '#333';
   $ctrl->obj->fcolor = '#FFF';
   $ctrl->obj->icon = 'nf nf-fa-file_text';
-  $ctrl->set_url($ctrl->data['root'].'logs')->combo("Log files", true);
+  $ctrl->set_url($ctrl->data['root'].'logs')->combo("Log files", $ctrl->data);
 }

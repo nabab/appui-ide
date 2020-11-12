@@ -283,6 +283,9 @@ if ($model->has_data(['repository', 'repository_cfg'], true)) {
                     if ( $ext === 'js'){
                       $icon = "icon-javascript";
                     }
+                    elseif ($ext === 'less') {
+                      $icon = 'nf nf-dev-less';
+                    }
                     else{
                       $icon =  "icon-$ext";
                     }

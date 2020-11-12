@@ -4,11 +4,15 @@
  * User: Mirko Argentino
  * Date: 04/07/2017
  * Time: 15:04
- *
- * @var $model \bbn\mvc\model
  */
 
+use bbn\x;
+
+/**
+ * @var $model \bbn\mvc\model
+ */
 if ( !empty($model->data['url']) && isset($model->inc->ide) ){
+
 
   $url = $model->data['url'];
  

@@ -1,7 +1,7 @@
 <?php
 $success = false;
 if(
-    !empty($ctrl->post['fpath']) && 
+    !empty($ctrl->post['fpath']) &&
     !empty($ctrl->post['item']) &&
     !empty($ctrl->post['file'])
 ){
@@ -10,7 +10,7 @@ if(
 	$fs = new \bbn\file\system();
 	$fn = 'get_'.$ctrl->post['fpath'].'_path';
 	if (method_exists($project, $fn)
-     && ($root = $project->$fn($ctrl->post['fpath']))
+     && ($root = $project->$fn())
   ) {
 		$full_path  = $root.$ctrl->post['item'];
 		if ( $fs->is_file($full_path) ){

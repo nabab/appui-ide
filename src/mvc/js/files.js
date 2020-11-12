@@ -7,7 +7,9 @@
         menu: [
           {text: bbn._('Application'), value: 'app'},
           {text: bbn._('PHP libraries'), value: 'lib'},
-        	{text: bbn._('Javascript libraries'), value: 'cdn'}
+        	{text: bbn._('Javascript libraries'), value: 'cdn'},
+        	{text: bbn._('Data'), value: 'data'},
+        	{text: bbn._('User data'), value: 'user_data'}
         ],
         root: bbn.env.plugins['appui-ide'],
         currentNode: '',
@@ -19,6 +21,11 @@
       }
     },
     computed: {
+      dataTree(){
+        return {
+          fpath: this.froot
+        };
+      },
       componentTag() {
         if (this.extension) {
           let ext = this.extension.toLowerCase();
@@ -118,7 +125,9 @@
     },
     watch: {
       froot(){
-        this.getRef('tree').reload();
+        this.$nextTick(() => {
+          this.getRef('tree').reload();
+        })
       }
 
     },

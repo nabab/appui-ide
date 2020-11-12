@@ -3,8 +3,8 @@
   let logPoller = null;
   return {
     data(){
-      let lignes = [10, 50, 100, 150, 250, 500, 1000, 2000, 5000],
-        themesCode =[
+      let lignes = [10, 25, 50, 100, 150, 250, 500, 1000, 2000, 5000];
+      let themesCode = [
         '3024-day',
         '3024-night',
         'abcdef',
@@ -53,8 +53,8 @@
         'xq-light',
         'yeti',
         'zenburn'
-      ],
-      themes= [];
+      ];
+      let themes= [];
 
       bbn.fn.each(themesCode, (v)=>{
         themes.push({
@@ -108,8 +108,11 @@
               clear: clear ? 1 : "0",
               num_lines: this.lignes,
             },
-            (d)=>{
+            d => {
               this.textContent = d.content;
+            	this.$nextTick(() => {
+                this.getRef('code').scrollBottom();
+              });
             });
         }
       },

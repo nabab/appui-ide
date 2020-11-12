@@ -7,6 +7,8 @@
     <bbn-toolbar class="bbn-ide bbn-overlay">
       <div>
         <bbn-dropdown class="ide-rep-select"
+                      :storage="true"
+                      :storage-full-name="'appui-ide-rep-select-' + project"
                       :source="ddRepData"
                       v-model="currentRep"
                       style="width: 250px"
@@ -129,19 +131,23 @@
               </div>
               <div class="bbn-spadded" v-if="isProject">
                 <bbn-dropdown class="bbn-w-100"
+                              :storage="true"
+                              :storage-full-name="'appui-ide-root-project-' + project"
                               :source="listRootProject"
                               v-model="typeProject"
+                              @hook:mounted="typeProjectReady = true"
                 ></bbn-dropdown>
               </div>
               <div class="bbn-flex-fill" >
                 <div class="bbn-overlay">
                   <bbn-tree class="tree"
+                            v-if="typeProjectReady"
                             source="ide/tree"
                             @nodeDblclick="treeNodeActivate"
                             :menu="treeContextMenu"
-                            :data="treeInitialData"
                             ref="filesList"
                             :draggable="true"
+                            :data="treeInitialData"
                             @move="moveNode"
                             :map="treeMapper"
                             :icon-color="color"
