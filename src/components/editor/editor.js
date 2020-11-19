@@ -349,13 +349,13 @@
           project: this.project
         };
 
-        if ( this.typeProject !== false){
+        if (this.typeProject !== false) {
           obj.type = this.typeProject;
         }
         else {
           obj.type = 'mvc';
         }
-        if (this.isProject && (this.path.length === 0) ){
+        if (this.isProject && (!this.path || !this.path.length)) {
           obj.uid = obj.type;
         }
         return obj;
