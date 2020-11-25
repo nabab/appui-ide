@@ -1157,17 +1157,16 @@
        *
        *
        */
-      test(){
-        let cp =  this.getActive(true),
-            component = cp.closest('appui-ide-component');
-
-        if ( component ){
-          let url = component.closest('bbn-container').url,
-              root = '',
-              cp = '',
-              foundComponents = false,
+      test() {
+        let cp =  this.getActive(true);
+        let component = cp.closest('appui-ide-component');
+        if (component) {
+          let url = component.closest('bbn-container').url;
+          let root = '';
+          let cp = '';
+          let foundComponents = false;
           // Removing file/ and /_end_
-              bits = url.split('/');
+          let bits = url.split('/');
           bits.splice(0, 1);
           bits.splice(bits.length - 2, 2);
 
@@ -1186,7 +1185,7 @@
             let found = false;
             root = root.substr(0, root.length-1);
             cp = cp.substr(0, cp.length-1);
-            if ( root === 'BBN_APP_PATH' ){
+            if ( root === 'app/main' ){
               found = bbn.env.appPrefix + '-' + cp;
             }
             else if ( root === 'BBN_CDN_PATH/lib/bbn-vue' ){

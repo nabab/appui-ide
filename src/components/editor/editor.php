@@ -213,7 +213,7 @@
                             :source="sourceTreeParser"
           ></appui-ide-parser>
           <div v-else
-               class="bbn-middle bbn-h-100 bbn-padded"
+               class="bbn-h-100 bbn-padded"
           >
             <div class="bbn-card bbn-vmiddle bbn-c bbn-lpadded">
               <span class="bbn-b bbn-xl bbn-c">

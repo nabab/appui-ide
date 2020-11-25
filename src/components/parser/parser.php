@@ -1,12 +1,12 @@
-<div class="bbn-flex-height bbn-h-100 bbn-middle">
-  <div class=" bbn-overlay bbn-padded"
+<div class="bbn-flex-height bbn-h-100">
+  <div class="bbn-overlay bbn-padded"
        v-if="!errorParser"
   >
     <!-- Switch all or not class parser -->
     <div v-if="parserClass !== false">
       <span class="bbn-b bbn-xl bbn-padded"
             v-text="_('Own')"
-            :style="{'color': !showAllParser ? '#ff6b18 ' : '#000000'}"
+            :style="{color: showAllParser ? '#000000' : '#ff6b18'}"
       ></span>
 
       <bbn-switch v-model="showAllParser"
@@ -16,7 +16,7 @@
 
       <span class="bbn-b bbn-xl bbn-padded"
             v-text="_('All')"
-            :style="{'color': showAllParser ? '#ff6b18 ' : '#000000'}"
+            :style="{color: showAllParser ? '#ff6b18 ' : '#000000'}"
       ></span>
     </div>
 
