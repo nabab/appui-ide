@@ -13,8 +13,8 @@
 
   if ( $model->inc->fs->is_dir($folder_log) ){
     $tree = [
-      'folder' => $model->inc->fs->is_dir($folder_log),
-      'file' => $model->inc->fs->is_file($folder_log),
+      'folder' => true,
+      'file' => false,
       'nodePath' => $folder_log,
       'path' => [],
       'text' => basename($folder_log),
