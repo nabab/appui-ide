@@ -191,7 +191,6 @@
           }, {
             load: true,
             url: "settings",
-            disabled: !this.source.settings,
             title: bbn._("Settings"),
             icon: "nf nf-fa-cogs"
           }];

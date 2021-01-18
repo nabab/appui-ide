@@ -32,7 +32,7 @@
     <bbn-finder :source="source.root + 'finder'"
                 :origin="source.origin"
                 @change="updatePath"
-                :path="path"
+                :default-path="path"
                 :root="source.root"
     ></bbn-finder>
   </bbn-pane>

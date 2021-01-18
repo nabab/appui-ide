@@ -1181,10 +1181,11 @@
               cp += a + '-';
             }
           });
-          if ( cp ){
+          if (cp) {
             let found = false;
             root = root.substr(0, root.length-1);
             cp = cp.substr(0, cp.length-1);
+            bbn.fn.log("ROOT", root, "CP", cp, "PREFIX", bbn.env.appPrefix);
             if ( root === 'app/main' ){
               found = bbn.env.appPrefix + '-' + cp;
             }
@@ -1192,9 +1193,10 @@
               found = 'bbn-' + cp;
             }
             else{
-              bbn.fn.iterate(bbn.env.plugins, (a, n) => {
-                if ( root.indexOf(n + '/src') > -1 ){
+              bbn.fn.iterate(appui.plugins, (a, n) => {
+                if (root.indexOf('lib/' + n) === 0) {
                   found = n + '-' + cp;
+                  return false;
                 }
               })
             }
@@ -1802,7 +1804,7 @@
         }
         else{
           alert(bbn._('The recipient node is not a folder'));
-          this.getRef('filesList').reload();
+          this.treeReload();
         }
       },
       /**
@@ -1840,7 +1842,7 @@
               if ( d.success ){
                 this.getRef('tabstrip').close(this.tabSelected);
                 appui.success(bbn._("Deleted!"));
-                 this.getRef('filesList').reload();
+                this.treeReload();
               }
               else {
                 appui.error(bbn._("Error!"));

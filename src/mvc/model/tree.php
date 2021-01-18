@@ -8,7 +8,7 @@ if ($model->has_data(['repository', 'repository_cfg'], true)) {
   $rep_cfg      = $model->data['repository_cfg'];
   $is_mvc       = $model->has_data('is_mvc', true);
   $is_component = $model->has_data('is_component', true);
-  $is_project   = $model->has_data('is_project', true) && empty($is_mvc) && empty($is_component);
+  $is_project   = $model->has_data('is_project', true) && !$is_mvc && !$is_component;
   $onlydirs     = $model->has_data('onlydirs', true);
 
   //for tree in the popup
@@ -24,7 +24,7 @@ if ($model->has_data(['repository', 'repository_cfg'], true)) {
     $cur_path .= '/';
   }
   else{
-    $cur_path = empty($model->data['uid']) ? '' : $model->data['uid'] . '/';
+    $cur_path = empty($model->data['uid']) ? ($model->has_data('type', true) ? $model->data['type'].'/' : '') : $model->data['uid'] . '/';
      //treat the curent path for the initial date
     if ($model->has_data('type', true) && ($model->data['type'] === 'mvc')) {
       $cur_path = explode('/', $cur_path);
@@ -42,8 +42,16 @@ if ($model->has_data(['repository', 'repository_cfg'], true)) {
   }
 
   // Get the repository's root path
-
   $path = $model->inc->ide->get_root_path($rep_cfg);
+  /*
+  if ($model->has_data('type', true)
+      && (strpos('/', $model->data['type']) === false)
+      && (strpos('.', $model->data['type']) === false)
+      && (is_dir($path.$model->data['type']))
+  ) {
+    $path .= $model->data['type'].'/';
+  }
+  */
 
 
   //die(x::dump($cur_path, $rep_cfg, $is_mvc, $is_component, $is_project, $onlydirs, $tree_popup, $model->data));
@@ -364,7 +372,7 @@ if ($model->has_data(['repository', 'repository_cfg'], true)) {
   };
 
   //case mvc, only components or normal file but no types (case repository no current)
-  if ( (!empty($is_mvc) || !empty($is_component)) ||
+  if ( ($is_mvc || $is_component) ||
     empty($rep_cfg['types']) ||
     !empty($tree_popup) ||
     empty($model->data['type'])
@@ -403,7 +411,7 @@ if ($model->has_data(['repository', 'repository_cfg'], true)) {
       $get($path .'/'. $cur_path, (!isset($rep_cfg['bcolor']) ? "#000000" : $rep_cfg['bcolor']) );
     }
   }//case root repository with alias bbn-project and contain types
-  elseif ( !empty($rep_cfg['types']) && !empty($is_project) && empty($model->data['type']) ){
+  elseif (!empty($rep_cfg['types']) && $is_project && empty($model->data['type'])) {
     $types = [];
    //browse the root elements and assign the type to each of them
     $todo = !empty($onlydirs) ? $dirs($path.$cur_path) : $model->inc->fs->get_files($path . $cur_path, true);
@@ -424,8 +432,8 @@ if ($model->has_data(['repository', 'repository_cfg'], true)) {
     $get($path . $cur_path, false, false, false, $types);
   }
   //else if we are in depth and we already know what types of elements we are opening and dealing with in the tree of the ide
-  elseif( !empty($model->data['type']) ){
-    if ( ($model->data['type'] === 'lib') || ($model->data['type'] === 'cli') ){
+  elseif (!empty($model->data['type'])) {
+    if (($model->data['type'] === 'lib') || ($model->data['type'] === 'cli') ){
       // lib
       $get($path . $cur_path, $rep_cfg['bcolor'], false, $type);
     }

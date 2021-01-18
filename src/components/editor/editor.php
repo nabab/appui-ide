@@ -149,6 +149,7 @@
                             :draggable="true"
                             :data="treeInitialData"
                             @move="moveNode"
+                            uid="uid"
                             :map="treeMapper"
                             :icon-color="color"
                             :quick-filter="searchFile"
