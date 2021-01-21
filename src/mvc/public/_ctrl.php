@@ -26,7 +26,7 @@ if (!isset($ctrl->inc->ide)) {
 
 if (!defined('APPUI_IDE_ROOT')) {
   $origin = $ctrl->inc->ide->get_origin();
-  if ($origin === 'appui-projects') {
+  if ($origin === 'appui-project') {
     define(
       'APPUI_IDE_ROOT',
       $ctrl->plugin_url($origin)

@@ -4,7 +4,7 @@ $res = [];
 if (isset($model->data['data']['fpath'])) {
   $fs = new \bbn\file\system();
   $id_project = $model->data['data']['id_project'] ??
-    $model->inc->options->from_code(BBN_APP_NAME, 'projects', 'appui');
+    $model->inc->options->from_code(BBN_APP_NAME, 'list', 'project', 'appui');
   if ($id_project) {
     $project = new \bbn\appui\project($model->db, $id_project);
     $fn = 'get_'.$model->data['data']['fpath'].'_path';

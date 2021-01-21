@@ -49,7 +49,7 @@ class ide {
   protected
     /** @var \bbn\db $db */
     $db,
-    /** @var \bbn\appui\options $options */
+    /** @var \bbn\appui\option $options */
     $options,
     /** @var null|string The last error recorded by the class */
     $last_error,
@@ -1203,11 +1203,11 @@ class ide {
   /**
    * ide constructor.
    *
-   * @param \bbn\appui\options $options
+   * @param \bbn\appui\option $options
    * @param $routes
    * @param \bbn\user\preferences $pref
    */
-  public function __construct(\bbn\db $db, \bbn\appui\options $options, $routes, \bbn\user\preferences $pref){
+  public function __construct(\bbn\db $db, \bbn\appui\option $options, $routes, \bbn\user\preferences $pref){
     $this->db = $db;
     $this->options = $options;
     $this->routes = $routes;
@@ -1375,12 +1375,12 @@ class ide {
   public function get_repositories(string $rep='', $root = 'apst-app'){
     $cats = [];
     $repositories = [];
-    $projects =  $this->options->full_tree($this->options->from_code('projects', 'appui'));
+    $projects =  $this->options->full_tree($this->options->from_code('list', 'project', 'appui'));
     if ( !empty($projects) && count($projects['items']) ){
       $projects = $projects['items'];
       foreach ( $projects as $i => $project){
         if ( $project['code'] === 'apst-app' ){
-          $paths =  $this->options->full_tree($this->options->from_code('path', $project['code'], 'projects', 'appui'));
+          $paths =  $this->options->full_tree($this->options->from_code('path', $project['code'], 'list', 'project', 'appui'));
           if ( count($paths['items']) ){
             foreach ( $paths['items'] as $path ){
               if ( count($path['items']) ){
@@ -2911,7 +2911,7 @@ class ide {
    * @return array|bool
    */
   public function get_types(){
-    //$this->options->option($this->options->from_code(self::PATH_TYPE, 'ide', 'projects', 'appui'));
+    //$this->options->option($this->options->from_code(self::PATH_TYPE, 'ide', 'project', 'appui'));
     return self::get_appui_option(self::PATH_TYPE);
   }
 

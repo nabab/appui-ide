@@ -129,7 +129,7 @@ if ( isset($model->data['routes'], $model->inc->ide) ){
     'repositories' => $repos,
     'root' => APPUI_IDE_ROOT,
     'currentRep' => $current_rep,
-    'projects' => $projects,
+    'projects' => $projects ?? [],
     'theme' => is_null(array_search($current_theme, $themes)) ? '' : $current_theme,
     'themes' => $themes,
     'font' => empty($ide_cfg['font']) ? '' : $ide_cfg['font'],

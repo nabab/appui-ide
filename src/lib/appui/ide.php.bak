@@ -42,7 +42,7 @@ class ide {
   protected
     /** @var \bbn\db $db */
     $db,
-    /** @var \bbn\appui\options $options */
+    /** @var \bbn\appui\option $options */
     $options,
     /** @var null|string The last error recorded by the class */
     $last_error,
@@ -1180,11 +1180,11 @@ class ide {
   /**
    * ide constructor.
    *
-   * @param \bbn\appui\options $options
+   * @param \bbn\appui\option $options
    * @param $routes
    * @param \bbn\user\preferences $pref
    */
-  public function __construct(\bbn\db $db, \bbn\appui\options $options, $routes, \bbn\user\preferences $pref){
+  public function __construct(\bbn\db $db, \bbn\appui\option $options, $routes, \bbn\user\preferences $pref){
     $this->db = $db;
     $this->options = $options;
     $this->routes = $routes;

@@ -5,7 +5,7 @@ if(
     !empty($ctrl->post['item']) &&
     !empty($ctrl->post['file'])
 ){
-	$id_project = $ctrl->post['id_project'] ?? $ctrl->inc->options->from_code('apst-app','projects','appui');
+	$id_project = $ctrl->post['id_project'] ?? $ctrl->inc->options->from_code(BBN_APP_NAME, 'list', 'project', 'appui');
   $project = new \bbn\appui\project($ctrl->db, $id_project);
 	$fs = new \bbn\file\system();
 	$fn = 'get_'.$ctrl->post['fpath'].'_path';

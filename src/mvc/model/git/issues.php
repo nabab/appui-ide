@@ -10,7 +10,7 @@ $tmp = ['issues' => json_decode(<<<'EOD'
 [
     {
         "id": 107,
-        "url": "https:\/\/gitea.bbn.so\/api\/v1\/repos\/bbn-solutions\/appui-emails\/issues\/3",
+        "url": "https:\/\/gitea.bbn.so\/api\/v1\/repos\/bbn-solutions\/appui-email\/issues\/3",
         "number": 3,
         "user": {
             "id": 4,
@@ -37,11 +37,11 @@ $tmp = ['issues' => json_decode(<<<'EOD'
         "closed_at": null,
         "due_date": null,
         "pull_request": null,
-        "repository": "bbn-solutions\/appui-emails"
+        "repository": "bbn-solutions\/appui-email"
     },
     {
         "id": 109,
-        "url": "https:\/\/gitea.bbn.so\/api\/v1\/repos\/bbn-solutions\/appui-emails\/issues\/5",
+        "url": "https:\/\/gitea.bbn.so\/api\/v1\/repos\/bbn-solutions\/appui-email\/issues\/5",
         "number": 5,
         "user": {
             "id": 4,
@@ -68,11 +68,11 @@ $tmp = ['issues' => json_decode(<<<'EOD'
         "closed_at": "2019-09-18T10:53:28+02:00",
         "due_date": null,
         "pull_request": null,
-        "repository": "bbn-solutions\/appui-emails"
+        "repository": "bbn-solutions\/appui-email"
     },
     {
         "id": 108,
-        "url": "https:\/\/gitea.bbn.so\/api\/v1\/repos\/bbn-solutions\/appui-emails\/issues\/4",
+        "url": "https:\/\/gitea.bbn.so\/api\/v1\/repos\/bbn-solutions\/appui-email\/issues\/4",
         "number": 4,
         "user": {
             "id": 4,
@@ -99,11 +99,11 @@ $tmp = ['issues' => json_decode(<<<'EOD'
         "closed_at": "2019-10-03T11:36:20+02:00",
         "due_date": null,
         "pull_request": null,
-        "repository": "bbn-solutions\/appui-emails"
+        "repository": "bbn-solutions\/appui-email"
     },
     {
         "id": 101,
-        "url": "https:\/\/gitea.bbn.so\/api\/v1\/repos\/bbn-solutions\/appui-emails\/issues\/2",
+        "url": "https:\/\/gitea.bbn.so\/api\/v1\/repos\/bbn-solutions\/appui-email\/issues\/2",
         "number": 2,
         "user": {
             "id": 4,
@@ -154,11 +154,11 @@ $tmp = ['issues' => json_decode(<<<'EOD'
         "closed_at": "2019-09-18T10:04:22+02:00",
         "due_date": null,
         "pull_request": null,
-        "repository": "bbn-solutions\/appui-emails"
+        "repository": "bbn-solutions\/appui-email"
     },
     {
         "id": 100,
-        "url": "https:\/\/gitea.bbn.so\/api\/v1\/repos\/bbn-solutions\/appui-emails\/issues\/1",
+        "url": "https:\/\/gitea.bbn.so\/api\/v1\/repos\/bbn-solutions\/appui-email\/issues\/1",
         "number": 1,
         "user": {
             "id": 1,
@@ -233,7 +233,7 @@ $tmp = ['issues' => json_decode(<<<'EOD'
         "closed_at": "2019-09-12T10:44:31+02:00",
         "due_date": null,
         "pull_request": null,
-        "repository": "bbn-solutions\/appui-emails"
+        "repository": "bbn-solutions\/appui-email"
     },
     {
         "id": 122,
@@ -2172,7 +2172,7 @@ $tmp = ['issues' => json_decode(<<<'EOD'
             "username": "loredana"
         },
         "title": "databases: implement the import of columns and keys",
-        "body": "implement the import of columns and keys in appui-databases",
+        "body": "implement the import of columns and keys in appui-database",
         "labels": [],
         "milestone": {
             "id": 2,
@@ -2236,7 +2236,7 @@ $tmp = ['issues' => json_decode(<<<'EOD'
             "username": "loredana"
         },
         "title": "databases: implement the import of columns and keys",
-        "body": "implement the import of columns and keys in appui-databases",
+        "body": "implement the import of columns and keys in appui-database",
         "labels": [],
         "milestone": {
             "id": 2,
@@ -3935,7 +3935,7 @@ $tmp = ['issues' => json_decode(<<<'EOD'
             "username": "loredana"
         },
         "title": "priority for new version release",
-        "body": "- revision of appui-emails\r\n\r\n\r\n- in the array adherent.source.clotures (https:\/\/apstapp2.thomas.lan\/adherent\/fiche\/5729\/infos) there are duplicate date with different values this causes a wrong source for the dropdown fin de l'exercice in the form pad\r\n\r\n",
+        "body": "- revision of appui-email\r\n\r\n\r\n- in the array adherent.source.clotures (https:\/\/apstapp2.thomas.lan\/adherent\/fiche\/5729\/infos) there are duplicate date with different values this causes a wrong source for the dropdown fin de l'exercice in the form pad\r\n\r\n",
         "labels": [],
         "milestone": null,
         "assignee": {
@@ -4375,7 +4375,7 @@ $tmp = ['issues' => json_decode(<<<'EOD'
             "username": "loredana"
         },
         "title": "missing translations in interface",
-        "body": "In many places of the application the language applied is english, examples are the title of shortcut of the menu, or the widget info in appui-\r\ntask. \r\nThe files of translation (and the position of the files) are identical to the ones online in production where the plugin is correctly translated.\r\nThe same for appui-emails, appui-usergroup..\r\n\r\n\r\n",
+        "body": "In many places of the application the language applied is english, examples are the title of shortcut of the menu, or the widget info in appui-\r\ntask. \r\nThe files of translation (and the position of the files) are identical to the ones online in production where the plugin is correctly translated.\r\nThe same for appui-email, appui-usergroup..\r\n\r\n\r\n",
         "labels": [],
         "milestone": null,
         "assignee": {
@@ -4429,8 +4429,8 @@ $tmp = ['issues' => json_decode(<<<'EOD'
             "created": "2019-08-01T17:13:05+02:00",
             "username": "loredana"
         },
-        "title": "new translations appui-emails",
-        "body": "new translations to do from english to french for appui-emails in i18n",
+        "title": "new translations appui-email",
+        "body": "new translations to do from english to french for appui-email in i18n",
         "labels": [],
         "milestone": null,
         "assignee": {
@@ -4563,8 +4563,8 @@ $tmp = ['issues' => json_decode(<<<'EOD'
             "created": "2019-08-01T16:34:55+02:00",
             "username": "mirko"
         },
-        "title": "Value property on appui-options form",
-        "body": "Value property on appui-options form missing.",
+        "title": "Value property on appui-option form",
+        "body": "Value property on appui-option form missing.",
         "labels": [
             {
                 "id": 3,
@@ -5556,7 +5556,7 @@ $tmp = ['issues' => json_decode(<<<'EOD'
             "created": "2019-08-01T17:13:05+02:00",
             "username": "loredana"
         },
-        "title": "dropdown scroll in appui-emails",
+        "title": "dropdown scroll in appui-email",
         "body": "the scroll of the dropdowns destinataires and lettre type in the form 'new mailing' doesn't show the last items of the source. Maybe this happens on all dropdowns with a big source.\r\nSame problem in the form info of the fiche adherent (dropdown 'Nomenclature Altar\u00e8s').\r\nDropdowns with big source that open the floater at the top doesn't have this problem",
         "labels": [
             {
@@ -8424,7 +8424,7 @@ $tmp = ['issues' => json_decode(<<<'EOD'
     },
     {
         "id": 124,
-        "url": "https:\/\/gitea.bbn.so\/api\/v1\/repos\/bbn-solutions\/appui-databases\/issues\/2",
+        "url": "https:\/\/gitea.bbn.so\/api\/v1\/repos\/bbn-solutions\/appui-database\/issues\/2",
         "number": 2,
         "user": {
             "id": 1,
@@ -8475,11 +8475,11 @@ $tmp = ['issues' => json_decode(<<<'EOD'
         "closed_at": "2019-10-02T10:23:22+02:00",
         "due_date": null,
         "pull_request": null,
-        "repository": "bbn-solutions\/appui-databases"
+        "repository": "bbn-solutions\/appui-database"
     },
     {
         "id": 96,
-        "url": "https:\/\/gitea.bbn.so\/api\/v1\/repos\/bbn-solutions\/appui-databases\/issues\/1",
+        "url": "https:\/\/gitea.bbn.so\/api\/v1\/repos\/bbn-solutions\/appui-database\/issues\/1",
         "number": 1,
         "user": {
             "id": 1,
@@ -8530,7 +8530,7 @@ $tmp = ['issues' => json_decode(<<<'EOD'
         "closed_at": "2019-09-11T15:22:01+02:00",
         "due_date": null,
         "pull_request": null,
-        "repository": "bbn-solutions\/appui-databases"
+        "repository": "bbn-solutions\/appui-database"
     },
     {
         "id": 181,

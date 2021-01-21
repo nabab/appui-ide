@@ -1,6 +1,6 @@
 {
   "dependencies": [
-    "appui-options",
+    "appui-option",
     "appui-usergroup"
   ]
 }
