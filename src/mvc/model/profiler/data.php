@@ -4,6 +4,6 @@
  *
  **/
 
-/** @var $model \bbn\mvc\model */
-$profiler = new \bbn\appui\profiler($model->db);
-return $profiler->get_list($model->data);
+/** @var $model \bbn\Mvc\Model */
+$profiler = new \bbn\Appui\Profiler($model->db);
+return $profiler->getList($model->data);

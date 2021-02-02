@@ -9,7 +9,7 @@ if ( !empty($model->data['node']) &&
   $success = false;
   $path = ( $model->data['path'] !== '/')  ? $model->data['path'] : '';
   $oldPath = $model->data['origin'].$path.$model->data['oldValue'];
-  $system = new \bbn\file\system('nextcloud',  [
+  $system = new \bbn\File\System('nextcloud',  [
     'path' => $path,
     'host' => 'cloud.bbn.so',
     'user' => 'bbn',

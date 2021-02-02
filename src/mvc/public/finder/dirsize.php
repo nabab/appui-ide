@@ -4,7 +4,7 @@
  *
  **/
 
-/** @var $this \bbn\mvc\controller */
+/** @var $this \bbn\Mvc\Controller */
 
-$fs = new \bbn\file\system();
-var_dump("HELLO", \bbn\str::say_size($fs->dirsize(BBN_DATA_PATH.'test')));
+$fs = new \bbn\File\System();
+var_dump("HELLO", \bbn\Str::saySize($fs->dirsize(BBN_DATA_PATH.'test')));

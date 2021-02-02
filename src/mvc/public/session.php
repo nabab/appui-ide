@@ -1,6 +1,6 @@
 <?php
 if ( isset($ctrl->post['type']) ){
-  $ctrl->obj->data = \bbn\x::get_tree(
+  $ctrl->obj->data = \bbn\X::getTree(
     $ctrl->post['type'] === 'server' ?
 	    $_SERVER : $_SESSION
   );

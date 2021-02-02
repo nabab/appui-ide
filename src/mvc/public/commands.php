@@ -4,11 +4,11 @@
  *
  **/
 
-/** @var $this \bbn\mvc\controller */
-$db = new \bbn\db([
+/** @var $this \bbn\Mvc\Controller */
+$db = new \bbn\Db([
   'engine' => 'sqlite',
   'db' => BBN_CDN_DB
 ]);
-$lib = new \bbn\cdn\library($db);
+$lib = new \bbn\Cdn\Library($db);
 $lib->add('bbnjs|latest|jeans');
-\bbn\x::hdump($lib->get_config());
+\bbn\X::hdump($lib->getConfig());

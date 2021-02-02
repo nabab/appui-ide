@@ -18,7 +18,7 @@ if ( isset($model->data) &&
   str_replace('//','/',$pathDest);
 
 
-  if ( $model->inc->fs->is_dir($pathDest) ){
+  if ( $model->inc->fs->isDir($pathDest) ){
     $orig= explode('/', $model->data['orig']);
     $constantOrig= $orig[0];
     $orig[0]= constant($constantOrig);

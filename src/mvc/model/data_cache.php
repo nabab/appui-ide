@@ -1,9 +1,9 @@
 <?php
 if ( !isset($model->inc->fs) ){
-  $model->add_inc('fs',  new \bbn\file\system());
+  $model->addInc('fs',  new \bbn\File\System());
 }
 
-$folderCache = $model->cache_path();
+$folderCache = $model->cachePath();
 $fullPath = $folderCache;
 
 if ( !empty($model->data['data']) ){
@@ -14,11 +14,11 @@ if ( !empty($model->data['nodePath']) ){
   $fullPath .= $model->data['nodePath'];
 }
 
-/*if ( !empty($model->data['cache']) && \bbn\str::check_path($model->data['path']) ){
+/*if ( !empty($model->data['cache']) && \bbn\Str::checkPath($model->data['path']) ){
   return [json_encode(unserialize(file_get_contents($folderCache.$model->data['cache'])))];
 }*/
 
-if ( !empty($model->data['cache'])  && \bbn\str::check_path($folderCache.$model->data['cache'])){
+if ( !empty($model->data['cache'])  && \bbn\Str::checkPath($folderCache.$model->data['cache'])){
   return json_decode(file_get_contents($folderCache.$model->data['cache']));
 }
 //case click button for delte all cache
@@ -35,7 +35,7 @@ elseif( !empty($model->data['deleteAll']) ){
   }
 }
 //case delete a cache or file or folder in tree
-elseif ( !empty($model->data['deleteCache']) && \bbn\str::check_path($model->data['deleteCache']) ){
+elseif ( !empty($model->data['deleteCache']) && \bbn\Str::checkPath($model->data['deleteCache']) ){
   $ele = $folderCache.$model->data['deleteCache'];
   if ( !empty($model->inc->fs->delete($ele, $model->data['deleteCache'])) ){
     return [
@@ -49,14 +49,14 @@ elseif ( !empty($model->data['deleteCache']) && \bbn\str::check_path($model->dat
   }
 }//in this block retur tha data of all cache for tree
 else{
-  $content = $model->inc->fs->get_files($fullPath, true);
-  $cache = \bbn\cache::get_engine();
+  $content = $model->inc->fs->getFiles($fullPath, true);
+  $cache = \bbn\Cache::getEngine();
   $all = [];
   $paths = [];
 
   if ( !empty($content) ){
     foreach( $content as $i => $path ){
-      $nodePath = substr($path, strlen($folderCache));
+      $nodePath = substr($path, Strlen($folderCache));
       $arr = explode("/", $path);
       $element = $arr[count($arr)-1];
 
@@ -65,12 +65,12 @@ else{
         //'path' => [],
         'nodePath' => $nodePath,
         'items'=> [],
-        'num' => $model->inc->fs->is_dir($path) ? count($model->inc->fs->get_files($path, true)) : 0,
-        'folder' => $model->inc->fs->is_dir($path)
+        'num' => $model->inc->fs->isDir($path) ? count($model->inc->fs->getFiles($path, true)) : 0,
+        'folder' => $model->inc->fs->isDir($path)
       ];
 
 
-      if ( (strpos($path, $fullPath) === 0)  && $model->inc->fs->is_dir($fullPath) ){
+      if ( (strpos($path, $fullPath) === 0)  && $model->inc->fs->isDir($fullPath) ){
         if ( !empty($model->data['path']) ){
           $paths = $model->data['path'];
         }

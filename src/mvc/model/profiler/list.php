@@ -4,9 +4,9 @@
  *
  **/
 
-/** @var $model \bbn\mvc\model*/
-$profiler = new \bbn\appui\profiler($model->db);
+/** @var $model \bbn\Mvc\Model*/
+$profiler = new \bbn\Appui\Profiler($model->db);
 return [
   'root' => $model->data['root'],
-  'urls' => $profiler->get_urls()
+  'urls' => $profiler->getUrls()
 ];

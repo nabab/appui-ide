@@ -26,12 +26,12 @@ if (
   $success = false;
   $lang = $repository['language'];
   /** instantiate i18n class */
-  $translation = new \bbn\appui\i18n($model->db);
+  $translation = new \bbn\Appui\I18n($model->db);
 
 
 
   /** @var  $partial_path join to the path of the parent the path of the current repository */
-  $partial_path = $repository['bbn_path'] === 'BBN_APP_PATH' ? \bbn\mvc::get_app_path() : constant($repository['bbn_path']);
+  $partial_path = $repository['bbn_path'] === 'BBN_APP_PATH' ? \bbn\Mvc::getAppPath() : constant($repository['bbn_path']);
   $partial_path .= $repository['path'];
 
   /** @var (array) $paths will be fill with the path to explore */
@@ -52,7 +52,7 @@ if (
 
     }
     foreach ( $dir_name as $d => $value){
-      if ( $model->inc->fs->is_dir($dir_name[$d].$table_path) && !empty($extensions) ) {
+      if ( $model->inc->fs->isDir($dir_name[$d].$table_path) && !empty($extensions) ) {
 
         /** @var loop on the extensions of each tab to check if a file exist with this filename and this extension */
         $file = '';
@@ -92,28 +92,28 @@ if (
   $strings  = [];
   $langs = [];
   foreach ( $files as $idx => $f ) {
-    if ( $translation->analyze_file($files[$idx]['file']) ){
+    if ( $translation->analyzeFile($files[$idx]['file']) ){
       /** array of strings in each file */
 
-      $files[$idx]['strings'] = $translation->analyze_file($files[$idx]['file']);
+      $files[$idx]['strings'] = $translation->analyzeFile($files[$idx]['file']);
 
 
       /** @var array $langs will be fill with langs of translations found in db for strings of this file*/
 
 
       foreach ( $files[$idx]['strings'] as $i => $string ){
-        if ( $id = $model->db->select_one('bbn_i18n', 'id', [
+        if ( $id = $model->db->selectOne('bbn_i18n', 'id', [
           'exp' => $string,
           'lang'=> $lang
         ]) ){
           $files[$idx]['strings'][$i] = [
             'original_exp' => $string,
-            'file' => $model->inc->ide->real_to_url($files[$idx]['file']),
+            'file' => $model->inc->ide->realToUrl($files[$idx]['file']),
             'id_exp' => $id,
             'original_lang' => $lang,
           ];
           /** takes the translations from  bbn_i18n_exp */
-          if( $rows = $model->db->rselect_all('bbn_i18n_exp', ['expression', 'lang'], [
+          if( $rows = $model->db->rselectAll('bbn_i18n_exp', ['expression', 'lang'], [
               'id_exp' => $id
             ]
           )){
@@ -134,9 +134,9 @@ if (
   $success = true;
   return [
     'id_option' => $repository['id'],
-    'i18n' => $model->plugin_url('appui-i18n').'/',
+    'i18n' => $model->pluginUrl('appui-i18n').'/',
     'langs' => $langs,
-    'primary' => $translation->get_primaries_langs(),
+    'primary' => $translation->getPrimariesLangs(),
     'files' => $files,
     'data' => $strings,
     'success'=> $success

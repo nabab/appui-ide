@@ -2,9 +2,9 @@
 /*
  * Describe what it does!
  *
- * @var $ctrl \bbn\mvc\controller 
+ * @var $ctrl \bbn\Mvc\Controller 
  *
  */
 if (empty$ctrl->baseURL)) {
-  $ctrl->set_url(APPUI_IDE_ROOT.'debug')->combo(_('Debug'));
+  $ctrl->setUrl(APPUI_IDE_ROOT.'debug')->combo(_('Debug'));
 }

@@ -7,25 +7,25 @@
 die(var_dump(
   $src,
   $fav,
-  $ctrl->inc->pref->get_all($src),
+  $ctrl->inc->pref->getAll($src),
   $ctrl->inc->pref->delete('cc0ac989c3a111e99668366237393031'),
-  $ctrl->inc->pref->make_public('0171f410c37d11e99668366237393031'),
-  ($usr = $ctrl->db->select_one('bbn_users', 'id', [], [], 5)),
-  $ctrl->db->update('bbn_users_options', ['id_user' => $ctrl->inc->user->get_id()], ['id' => '0171f410c37d11e99668366237393031']),
-  $ctrl->inc->pref->get_by_option($src),
-  $ctrl->inc->pref->retrieve_ids($src),
-  $ctrl->inc->pref->retrieve_user_ids($src),
-  $ctrl->inc->pref->retrieve_group_ids($src),
+  $ctrl->inc->pref->makePublic('0171f410c37d11e99668366237393031'),
+  ($usr = $ctrl->db->selectOne('bbn_users', 'id', [], [], 5)),
+  $ctrl->db->update('bbn_users_options', ['id_user' => $ctrl->inc->user->getId()], ['id' => '0171f410c37d11e99668366237393031']),
+  $ctrl->inc->pref->getByOption($src),
+  $ctrl->inc->pref->retrieveIds($src),
+  $ctrl->inc->pref->retrieveUserIds($src),
+  $ctrl->inc->pref->retrieveGroupIds($src),
 ));
 */
 
-/** @var $this \bbn\mvc\controller */
+/** @var $this \bbn\Mvc\Controller */
 if ( !empty($ctrl->post) ){
   $ctrl->action();
 }
 else{
-  $ctrl->set_color('#35BCFA', '#FFF')
-    ->set_url($ctrl->plugin_url('appui-ide').'/files')
-    ->set_icon('nf nf-mdi-apple_finder bbn-large')
+  $ctrl->setColor('#35BCFA', '#FFF')
+    ->setUrl($ctrl->pluginUrl('appui-ide').'/files')
+    ->setIcon('nf nf-mdi-apple_finder bbn-large')
     ->combo('Files');
 }

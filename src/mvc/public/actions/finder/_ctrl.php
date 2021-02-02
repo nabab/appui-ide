@@ -1,10 +1,10 @@
-fs->get_current()<?php
+fs->getCurrent()<?php
 /*
  * Describe what it does!
  *
  **/
 
-/** @var $this \bbn\mvc\controller */
+/** @var $this \bbn\Mvc\Controller */
 
 if ( isset($ctrl->post['origin']) && ($p = $ctrl->inc->pref->get($ctrl->post['origin'])) ){
   $fields = ['path', 'host', 'user', 'pass'];
@@ -15,7 +15,7 @@ if ( isset($ctrl->post['origin']) && ($p = $ctrl->inc->pref->get($ctrl->post['or
     }
   }
   
-	$ctrl->add_inc('fs', new \bbn\file\system($p['type'], $cfg));
+	$ctrl->addInc('fs', new \bbn\File\System($p['type'], $cfg));
   if ( !empty($cfg['path']) ){
     $ctrl->inc->fs->cd($cfg['path']);
   }

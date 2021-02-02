@@ -1,19 +1,19 @@
 <?php
-/** @var $model \bbn\mvc\model */
+/** @var $model \bbn\Mvc\Model */
 
 if ( isset($model->data['routes'], $model->inc->ide) ){
 
-  $repos = $model->inc->ide->get_repositories();
-  $origin = $model->inc->ide->get_origin();
-  $project = $model->inc->ide->get_name_project();
+  $repos = $model->inc->ide->getRepositories();
+  $origin = $model->inc->ide->getOrigin();
+  $project = $model->inc->ide->getNameProject();
 
-  $prefix = $model->plugin_url($model->inc->ide->get_origin());
+  $prefix = $model->pluginUrl($model->inc->ide->getOrigin());
   if ( $origin !== 'appui-ide' ){
     $prefix .= '/router/'.$project.'/ide/editor';
   }
 
 
-  $current_rep =  $model->inc->ide->get_default_repository();
+  $current_rep =  $model->inc->ide->getDefaultRepository();
   $types = [];
   $tabs = [];
   if ( isset($repos[$current_rep]['types']) ){
@@ -23,7 +23,7 @@ if ( isset($model->data['routes'], $model->inc->ide) ){
     foreach($types as $type){
       //temporaney
       $type['url'] = $type['url'] === 'lib' ? 'cls' : $type['url'];
-      if ( $ptype = $model->inc->ide->get_type($type['url']) ){
+      if ( $ptype = $model->inc->ide->getType($type['url']) ){
         if ( !empty($ptype['tabs']) ){
           $tabs[$type['url']][] = $ptype['tabs'];
         }
@@ -52,7 +52,7 @@ if ( isset($model->data['routes'], $model->inc->ide) ){
   /*if ( $model->inc->session->has('ide', 'repository') ){
     $current_rep = $model->inc->session->get('ide', 'repository');
   }*/
-  $ide_cfg = $model->inc->user->get_cfg('ide');
+  $ide_cfg = $model->inc->user->getCfg('ide');
   $themes =  [
     'default',
     '3024-day',
@@ -119,7 +119,7 @@ if ( isset($model->data['routes'], $model->inc->ide) ){
     'zenburn'
   ];
 
-  $current_theme= $model->inc->ide->get_theme();
+  $current_theme= $model->inc->ide->getTheme();
 
   return [
     'staticPath' => BBN_STATIC_PATH,

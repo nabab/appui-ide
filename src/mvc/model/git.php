@@ -5,9 +5,9 @@ $arr = [
   'elements' => []
 ];
 
-if ($model->has_data('path')) {
+if ($model->hasData('path')) {
   $path = $model->data['path'];
-  $git = new bbn\api\git($path);
+  $git = new bbn\Api\Git($path);
   $difference_git = $git->diff();
   if ( !empty($difference_git) ){
     $arr['elements'] = array_map(function($a) use($path){
@@ -34,7 +34,7 @@ if ($model->has_data('path')) {
       $part = explode('/', $relative);
       $root = array_shift($part);
       if ( $root === 'components' ){
-        if ( $model->inc->fs->is_file($val['ele']) ){
+        if ( $model->inc->fs->isFile($val['ele']) ){
           $part = explode('.', $relative);
           $relative = array_shift($part);
         }
@@ -55,7 +55,7 @@ if ($model->has_data('path')) {
         $relative_origin = implode('/', $relative);
         foreach ( $branches['mvc'] as $folder => $exts ){
           $element = $path.'/src/'. $root. '/'.$folder.'/';
-          if ( $model->inc->fs->is_file($val['ele']) ){
+          if ( $model->inc->fs->isFile($val['ele']) ){
             $part = explode('.', $relative_origin);
             $relative = array_shift($part);
             foreach ( $exts as $ext ){

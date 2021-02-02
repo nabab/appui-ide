@@ -1,10 +1,10 @@
 <?php
 /**
- * @var \bbn\mvc\controller $ctrl
- * @var \bbn\ide\directories $ctrl->inc->dir
+ * @var \bbn\Mvc\Controller $ctrl
+ * @var \bbn\Ide\Directories $ctrl->inc->dir
  */
 if ( isset($ctrl->inc->dir, $ctrl->post['dir'], $ctrl->post['url'], $ctrl->post['editors']) ){
-  $ctrl->inc->dir->set_preferences($ctrl->post['dir'], $ctrl->post['editors'], $ctrl->inc->pref);
+  $ctrl->inc->dir->setPreferences($ctrl->post['dir'], $ctrl->post['editors'], $ctrl->inc->pref);
   $list = $ctrl->inc->session->get('ide', 'list');
   $idx = array_search($ctrl->post['url'], $list);
   if ( $idx !== false ){

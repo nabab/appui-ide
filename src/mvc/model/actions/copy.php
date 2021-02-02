@@ -6,7 +6,7 @@ if ( !empty($model->data) ){
   else {
     return [
       'success' => false,
-      'error' => $model->inc->ide->get_last_error()
+      'error' => $model->inc->ide->getLastError()
     ];
   }
 }

@@ -8,7 +8,7 @@ $res = [
 $get_tree = ['properties', 'methods'];
 
 if ( !empty($model->data['cls']) ){
-  $parser = new \bbn\parsers\php();
+  $parser = new \bbn\Parsers\Php();
 
   $file = basename($model->data['cls'],'.php');
 

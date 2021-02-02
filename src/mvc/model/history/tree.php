@@ -1,5 +1,5 @@
 <?php
-$path = $model->inc->ide->get_data_path('appui-ide').'backup/'.$model->data['uid'];
+$path = $model->inc->ide->getDataPath('appui-ide').'backup/'.$model->data['uid'];
 $res = [];
 //die(var_dump($model->data));
 // for tree
@@ -44,7 +44,7 @@ if ( isset($model->inc->ide) && !empty($model->data['uid']) ){
     return ['data' => $res];
   }
   else {
-    $error = $model->inc->ide->get_last_error();
+    $error = $model->inc->ide->getLastError();
     return ($error === null) ? [
       'data' => []
     ] : ['error' =>  $error];
@@ -55,12 +55,12 @@ else {
   if ( isset($model->inc->ide, $model->data['url']) &&
     !empty($model->data['url'])
   ){
-    $path = $model->inc->ide->get_data_path('appui-ide').'backup/'.
+    $path = $model->inc->ide->getDataPath('appui-ide').'backup/'.
       $model->data['repository_cfg']['root'].'/'.
-      substr($model->data['url'], strpos($model->data['url'],$model->data['repository_cfg']['code'],1));
+      substr($model->data['url'], Strpos($model->data['url'],$model->data['repository_cfg']['code'],1));
     
-    if ( $model->inc->fs->is_file($path) ){
-      $code= $model->inc->fs->get_contents($path);
+    if ( $model->inc->fs->isFile($path) ){
+      $code= $model->inc->fs->getContents($path);
     }
     if ( !empty($code) ){
       return [
@@ -71,7 +71,7 @@ else {
       ];
     }
     else {
-      $error = $model->inc->ide->get_last_error();
+      $error = $model->inc->ide->getLastError();
       return ($error === null) ? ['data' => ['success' => false]] : ['data' => ['error' => $error]];
     }
   }

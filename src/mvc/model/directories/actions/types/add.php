@@ -3,7 +3,7 @@
 $res = ['success' => false];
 if ( isset($model->inc->options) ){
   if ( !empty($model->data['text']) &&
-    $id_parent = $model->inc->options->from_code('PTYPES', 'ide', BBN_APPUI)
+    $id_parent = $model->inc->options->fromCode('PTYPES', 'ide', BBN_APPUI)
 ){
     $type = [
       'text' => $model->data['text'],

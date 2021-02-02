@@ -70,5 +70,5 @@ if ( $ctrl->inc->ide && !empty($ctrl->arguments) ){
     $ctrl->obj->url = $url;
     $ctrl->obj->icon = 'nf nf-fa-search';
   }
-  $ctrl->combo(\bbn\str::cut($ctrl->data['search'],12), true);
+  $ctrl->combo(\bbn\Str::cut($ctrl->data['search'],12), true);
 }

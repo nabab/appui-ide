@@ -5,7 +5,7 @@
  * Date: 08/01/2018
  * Time: 12:58
  *
- * @var $ctrl \bbn\mvc\controller
+ * @var $ctrl \bbn\Mvc\Controller
  */
 
 if (
@@ -14,5 +14,5 @@ if (
   !empty($ctrl->post['nameRepository'])
 ){
 
-  $ctrl->obj->data = $ctrl->get_object_model($ctrl->post);
+  $ctrl->obj->data = $ctrl->getObjectModel($ctrl->post);
 }

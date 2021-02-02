@@ -4,5 +4,5 @@
  *
  **/
 
-/** @var $this \bbn\mvc\controller */
-$ctrl->set_icon('nf nf-fa-git_square')->set_color('red', 'white')->combo(_("GIT Issues"), true);
+/** @var $this \bbn\Mvc\Controller */
+$ctrl->setIcon('nf nf-fa-git_square')->setColor('red', 'white')->combo(_("GIT Issues"), true);

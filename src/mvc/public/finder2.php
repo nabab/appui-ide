@@ -4,7 +4,7 @@
  *
  **/
 
-/** @var $this \bbn\mvc\controller */
+/** @var $this \bbn\Mvc\Controller */
 if ( isset($ctrl->post['data']['path']) ){
   $ctrl->action();
 }

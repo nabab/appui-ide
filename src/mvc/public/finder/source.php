@@ -4,9 +4,9 @@
  *
  **/
 
-/** @var $this \bbn\mvc\controller */
+/** @var $this \bbn\Mvc\Controller */
 if ( isset($ctrl->arguments[0]) ){
-  $ctrl->add_data(['id' => $ctrl->arguments[0]])
-    ->set_url($ctrl->plugin_url('appui-ide').'finder/source/'.$ctrl->arguments[0])
+  $ctrl->addData(['id' => $ctrl->arguments[0]])
+    ->setUrl($ctrl->pluginUrl('appui-ide').'finder/source/'.$ctrl->arguments[0])
     ->combo('$text', true);
 }

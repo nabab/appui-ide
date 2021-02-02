@@ -1,14 +1,14 @@
 <?php
 
-/** @var $ctrl \bbn\mvc\controller */
+/** @var $ctrl \bbn\Mvc\Controller */
 
 if ( !empty($dir) ){
-  $res = $dir->history_clear($ctrl->post['url']);
+  $res = $dir->historyClear($ctrl->post['url']);
   if ( !empty($res) ){
     $ctrl->obj->data = $res;
   }
   else {
-    $ctrl->obj->error = $dir->get_last_error();
+    $ctrl->obj->error = $dir->getLastError();
   }
 }
 else {

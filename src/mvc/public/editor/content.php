@@ -1,9 +1,9 @@
 <?php
-/** @var $ctrl \bbn\mvc\controller */
+/** @var $ctrl \bbn\Mvc\Controller */
 if ( !empty($ctrl->arguments) ){
   $step = $ctrl->arguments;
   $ctrl->data['url'] = implode('/', $ctrl->arguments);
-  if ( $ctrl->obj->data = $ctrl->get_model(\bbn\x::merge_arrays($ctrl->data, $ctrl->post)) ){
+  if ( $ctrl->obj->data = $ctrl->getModel(\bbn\X::mergeArrays($ctrl->data, $ctrl->post)) ){
     if ( !empty($ctrl->obj->data['error']) ){
       $ctrl->obj->error = $ctrl->obj->data['error'];
     }
@@ -25,7 +25,7 @@ if ( !empty($ctrl->arguments) ){
     $ctrl->obj->url = $ctrl->baseURL.end($ctrl->arguments);
   }
   echo $ctrl
-  ->set_title($title)
-  ->add_js()
-  ->get_view();
+  ->setTitle($title)
+  ->addJs()
+  ->getView();
 }

@@ -6,7 +6,7 @@ if ( isset($model->data['origin']) &&
     isset($model->data['old_dir'])
   ){
   $success = false;
-  $system = new \bbn\file\system('nextcloud',  [
+  $system = new \bbn\File\System('nextcloud',  [
     'path' => $model->data['path'],
     'host' => 'cloud.bbn.so',
     'user' => 'bbn',

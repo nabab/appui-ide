@@ -8,7 +8,7 @@
 
 if ( $model->inc->ide ){
   //initially acquire all the repositories
-  $repositories = $model->inc->ide->get_repositories();
+  $repositories = $model->inc->ide->getRepositories();
   /*case initial return filter date of the repositories for dropdown list and unleashes the call to the tree at the
   first level */
   if ( !isset($model->data['repository']) && empty($model->data['path']) ){
@@ -97,7 +97,7 @@ if ( $model->inc->ide ){
 
     $newPath = str_replace('//','/',$newPath);
 
-    $all = $model->inc->fs->get_files($newPath, true);
+    $all = $model->inc->fs->getFiles($newPath, true);
 
     $arr = [];
 
@@ -110,16 +110,16 @@ if ( $model->inc->ide ){
 
     //first we insert the folders
     foreach ( $all as $i => $ele ){
-      if ( $model->inc->fs->is_dir($ele) ){
+      if ( $model->inc->fs->isDir($ele) ){
         $el = [
-          'folder' => $model->inc->fs->is_dir($ele),
-          'file' => $model->inc->fs->is_file($ele),
+          'folder' => $model->inc->fs->isDir($ele),
+          'file' => $model->inc->fs->isFile($ele),
           'path' => isset($model->data['repository']) ? str_replace(constant($rep['bbn_path']), $rep['bbn_path'] . '/', $ele) : str_replace(constant($const), $const . '/', $ele),
           'text' => basename($ele),
           'icon' => 'zmdi zmdi-folder-outline',
-          'numChildren' =>  count($model->inc->fs->get_files($ele, true))
+          'numChildren' =>  count($model->inc->fs->getFiles($ele, true))
         ];
-        /*$num_files = count($model->inc->fs->get_files($ele, true));
+        /*$num_files = count($model->inc->fs->getFiles($ele, true));
         if ( $num_files > 0 ){
           $el['num'] = $nuum_files;
         };*/
@@ -128,10 +128,10 @@ if ( $model->inc->ide ){
     }
     // after we insert all the files
     foreach($all as $i=>$ele){
-      if ( $model->inc->fs->is_file($ele) ){
+      if ( $model->inc->fs->isFile($ele) ){
         $el = [
-          'folder' => $model->inc->fs->is_dir($ele),
-          'file' => $model->inc->fs->is_file($ele),
+          'folder' => $model->inc->fs->isDir($ele),
+          'file' => $model->inc->fs->isFile($ele),
           'extension' => $get_ext($ele),
           'path' => isset($model->data['repository']) ? str_replace( constant($rep['bbn_path']), $rep['bbn_path'] .'/', $ele) : str_replace( constant($const), $const.'/', $ele),
           'text' => basename($ele),

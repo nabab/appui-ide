@@ -9,7 +9,7 @@
   $path = BBN_LIB_PATH.'bbn/bbn/build/phpdox/xml/classes/bbn_appui_options.xml';
 //}
 
-if ( $model->inc->fs->is_file($path) ){
+if ( $model->inc->fs->isFile($path) ){
   $xml = file_get_contents($path, true);
   $obj = simplexml_load_string($xml);
   $res = [

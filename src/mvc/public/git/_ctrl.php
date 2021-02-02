@@ -4,4 +4,4 @@
  *
  **/
 
-/** @var $this \bbn\mvc\controllergg */
+/** @var $this \bbn\Mvc\Controllergg */

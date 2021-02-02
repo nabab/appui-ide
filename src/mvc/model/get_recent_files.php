@@ -1,7 +1,7 @@
 <?php
 $res['success'] = false;
 $arr = [];
-$files = $model->inc->ide->get_recent_files();
+$files = $model->inc->ide->getRecentFiles();
 if ( ($files !== null) && is_array($files) && (count($files) > 0) ){
   foreach( $files as $file ){
     $res['files'][] = [

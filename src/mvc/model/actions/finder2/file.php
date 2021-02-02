@@ -9,7 +9,7 @@ if ( !empty($model->data['origin']) && !empty($model->data['node'])){
   
   $path = $model->data['path'].$model->data['node']['value'];
  
-  $system = new \bbn\file\system('nextcloud',  [
+  $system = new \bbn\File\System('nextcloud',  [
     'path' => $path,
     'host' => 'cloud.bbn.so',
     'user' => 'bbn',

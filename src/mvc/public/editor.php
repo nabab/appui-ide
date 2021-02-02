@@ -1,5 +1,5 @@
 <?php
-/** @var $ctrl \bbn\mvc\controller */
+/** @var $ctrl \bbn\Mvc\Controller */
 
 $list = [];
 
@@ -18,13 +18,13 @@ $ctrl->obj->fcolor = '#FFF';
 $ctrl->obj->icon = "nf nf-fa-code";
 
 $title = 'I.D.E';
-if ( $ctrl->inc->ide->get_origin() !== 'appui-ide' ){
-  $title .= ' ('. $ctrl->inc->ide->get_name_project().')';
+if ( $ctrl->inc->ide->getOrigin() !== 'appui-ide' ){
+  $title .= ' ('. $ctrl->inc->ide->getNameProject().')';
   $ctrl->obj->bcolor = '#017a8a';
 }
 
 echo $ctrl
-    ->set_title($title)
-    ->add_js($ctrl->get_model(['routes' => $ctrl->get_routes()]))
-    ->get_view();
+    ->setTitle($title)
+    ->addJs($ctrl->getModel(['routes' => $ctrl->getRoutes()]))
+    ->getView();
 

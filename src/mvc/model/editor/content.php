@@ -1,5 +1,5 @@
 <?php
-/** @var $model \bbn\mvc\model */
+/** @var $model \bbn\Mvc\Model */
 if ( !empty($model->data['url']) && isset($model->inc->ide) ){
    //we convert the string into an array to check whether we need to provide permission information or not
   $stepUrl = explode("/",$model->data['url']);
@@ -12,21 +12,21 @@ if ( !empty($model->data['url']) && isset($model->inc->ide) ){
   //for Router settings
   
     $model->data['url'] = implode("/", $stepUrl);
-    $url = substr($model->data['url'], 0, strpos($model->data['url'],'_end_/settings')).'_end_/php';
-    $info = $model->inc->ide->url_to_real($url, true);
+    $url = substr($model->data['url'], 0, Strpos($model->data['url'],'_end_/settings')).'_end_/php';
+    $info = $model->inc->ide->urlToReal($url, true);
    
-    if ( !$model->inc->ide->get_file_permissions($info['file']) ){
-      if ( !$model->inc->ide->create_perm_by_real($info['file']) ){
-        return ['error' => $model->inc->ide->get_last_error()];
+    if ( !$model->inc->ide->getFilePermissions($info['file']) ){
+      if ( !$model->inc->ide->createPermByReal($info['file']) ){
+        return ['error' => $model->inc->ide->getLastError()];
       }
     }
 
-    if ( ($perm = $model->inc->ide->get_file_permissions($info['file'])) &&
+    if ( ($perm = $model->inc->ide->getFilePermissions($info['file'])) &&
       !empty($perm['permissions'])
     ){
       if ( !empty($perm['permissions']['id']) ){
-        $imess = new \bbn\appui\imessages($model->db);
-        $perm['imessages'] = $imess->get_by_perm($perm['permissions']['id'], false);
+        $imess = new \bbn\Appui\Imessages($model->db);
+        $perm['imessages'] = $imess->getByPerm($perm['permissions']['id'], false);
       }
       return $perm;
     }
@@ -39,21 +39,21 @@ if ( !empty($model->data['url']) && isset($model->inc->ide) ){
       }
     }
     $content['project'] = false;
-    if ( $model->inc->ide->is_project($model->data['url']) ){
-      if ( $model->inc->ide->is_MVC_from_url($model->data['url']) ){
+    if ( $model->inc->ide->isProject($model->data['url']) ){
+      if ( $model->inc->ide->isMVCFromUrl($model->data['url']) ){
         $content['project'] = 'mvc';
       }
-      if ( $model->inc->ide->is_component_from_url($model->data['url']) ){
+      if ( $model->inc->ide->isComponentFromUrl($model->data['url']) ){
         $content['project'] = 'components';
       }
-      if ( $model->inc->ide->is_lib_from_url($model->data['url']) ){
+      if ( $model->inc->ide->isLibFromUrl($model->data['url']) ){
         $content['project'] = 'lib';
       }
-      if ( $model->inc->ide->is_cli_from_url($model->data['url']) ){
+      if ( $model->inc->ide->isCliFromUrl($model->data['url']) ){
         $content['project'] = 'cli';
       }
     }
     return $content;
   }
 }
-return ['error' => $model->inc->ide->get_last_error()];
+return ['error' => $model->inc->ide->getLastError()];

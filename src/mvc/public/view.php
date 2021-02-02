@@ -11,7 +11,7 @@ if ( \count($ctrl->params) > 2 ){
       $ctrl->obj->ext = '';
     }
     else{
-      $ctrl->obj->ext = strtolower(substr($file, strrpos($file, '.') + 1));
+      $ctrl->obj->ext = strtolower(substr($file, Strrpos($file, '.') + 1));
     }
     if ( \in_array($ctrl->obj->ext, $bbn->vars['viewable']) ){
       $ctrl->obj->file = basename($file);

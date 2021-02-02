@@ -1,7 +1,7 @@
 <?php
-/** @var $model \bbn\mvc\model */
+/** @var $model \bbn\Mvc\Model */
 
-$d = new \bbn\ide\directories($model->inc->options);
+$d = new \bbn\Ide\Directories($model->inc->options);
 
 if ( empty($model->data) ){
   $r = $d->get();

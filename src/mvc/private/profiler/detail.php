@@ -2,11 +2,11 @@
 /*
  * Describe what it does!
  *
- * @var $ctrl \bbn\mvc\controller
+ * @var $ctrl \bbn\Mvc\Controller
  *
  */
-if ($ctrl->has_arguments()) {
-  $ctrl->add_data([
+if ($ctrl->hasArguments()) {
+  $ctrl->addData([
     'root' => APPUI_IDE_ROOT,
     'id' => $ctrl->arguments[0]
   ])

@@ -2,7 +2,7 @@
 /*
  * Describe what it does!
  *
- * @var $ctrl bbn\mvc\controller
+ * @var $ctrl bbn\Mvc\Controller
  *
  */
 $pcs =

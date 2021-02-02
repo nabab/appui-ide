@@ -1,5 +1,5 @@
 <?php
-/** @var $model \bbn\mvc\model */
+/** @var $model \bbn\Mvc\Model */
 if ( isset($model->data['name']) ){
   $cs = get_defined_constants();
   $res = [
@@ -10,7 +10,7 @@ if ( isset($model->data['name']) ){
   foreach ( $cs as $k => $c ){
     if ( strpos($k, $prefix) === 0 ){
       array_push($res['constants'], [
-        'constant' => substr($k, strlen($prefix)),
+        'constant' => substr($k, Strlen($prefix)),
         'value' => $c
       ]);
     }

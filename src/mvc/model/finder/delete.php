@@ -4,11 +4,11 @@
  *
  **/
 
-/** @var $this \bbn\mvc\model*/
+/** @var $this \bbn\Mvc\Model*/
 
 if ( !empty($model->data['path']) ){
   $success = false;
-  $system = new \bbn\file\system($model->data['path']);
+  $system = new \bbn\File\System($model->data['path']);
   if ( $system->exists($model->data['path'])){
     $success = $system->delete($model->data['path']); 
   }; 

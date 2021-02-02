@@ -14,7 +14,7 @@ class finder
 
   protected $fs;
 
-  public function __construct(\bbn\file\system $fs)
+  public function __construct(\bbn\File\System $fs)
   {
     $this->fs = $fs;
   }
@@ -25,13 +25,13 @@ class finder
       $path = '.';
     }
     $res = [
-      'is_dir' => $this->fs->is_dir($path),
+      'is_dir' => $this->fs->isDir($path),
       'path' => $path,
       'data' => [],
       'num_files' => 0,
       'num_dirs' => 0
     ];
-    if ($tmp = $this->fs->get_files(!empty($path) ? $path : '.', true, true, null, 't')) {
+    if ($tmp = $this->fs->getFiles(!empty($path) ? $path : '.', true, true, null, 't')) {
       $res['data'] = array_map(function($a){
         return [
           'text' => !empty($a['path']) ? basename($a['path']) : $path,
@@ -55,14 +55,14 @@ class finder
   {
     $num_files = 0;
     $num_dirs = 0;
-    $files = array_filter($this->get_data($path), function($a){
+    $files = array_filter($this->getData($path), function($a){
       return $a['file'] === true;
     });
     if ( !empty($files) ){
       $num_files = count($files);
     };
    
-    $dirs = array_filter($this->get_data($path), function($a){
+    $dirs = array_filter($this->getData($path), function($a){
       return $a['dir'] === true;
     });
     if ( !empty($dirs) ){
@@ -76,7 +76,7 @@ class finder
   }
   public function get_data($path = '')
   {
-    if ( $files = $this->fs->get_files( !empty($path) ? $path : '.', true, true, null, 't') ){
+    if ( $files = $this->fs->getFiles( !empty($path) ? $path : '.', true, true, null, 't') ){
       
       return array_map(function($a){
         return [
@@ -144,26 +144,26 @@ class finder
   
 
   public function get_image_infos($path){
-    $i = new \bbn\file\image($path, $this->fs);
+    $i = new \bbn\File\Image($path, $this->fs);
     $info = [
-      'height' => $i->get_height(),
-      'width' =>  $i->get_width(),
+      'height' => $i->getHeight(),
+      'width' =>  $i->getWidth(),
     ];
     return $info;  
   }
   
   public function get_info($path, $ext)
   {
-    if ( $this->fs->get_mode() === 'nextcloud' ){
-      $path = $this->fs->get_real_path($path);
+    if ( $this->fs->getMode() === 'nextcloud' ){
+      $path = $this->fs->getRealPath($path);
     }
     $info = [];
     if ( $this->fs->exists($path) ){
       
       $size = $this->fs->filesize($path);
-      $info['size'] = \bbn\str::say_size($size);
-      $info['mtime'] = \bbn\date::format($this->fs->filemtime($path));
-      //$info['creation'] = \bbn\date::format(filectime($path));
+      $info['size'] = \bbn\Str::saySize($size);
+      $info['mtime'] = \bbn\Date::format($this->fs->filemtime($path));
+      //$info['creation'] = \bbn\Date::format(filectime($path));
       if ( !empty($ext) ){
         if ( $this->is_img($ext) ){
           $info['is_image'] = true;
@@ -171,12 +171,12 @@ class finder
          
         }
         else if ( $this->is_readable($ext) ){
-          $info['content'] = $this->fs->get_contents($path) ? $this->fs->get_contents($path) : 'Error in getting content';
+          $info['content'] = $this->fs->getContents($path) ? $this->fs->getContents($path) : 'Error in getting content';
           $info['is_image'] = false;
         }
       }
       else if ( $size < 5000 ){
-        $info['content'] = $this->fs->get_contents($path) ? $this->fs->get_contents($path) : 'Error in getting content';
+        $info['content'] = $this->fs->getContents($path) ? $this->fs->getContents($path) : 'Error in getting content';
       }
     }
     return $info;
@@ -184,7 +184,7 @@ class finder
 
   public function get_icon(string $filename)
   {
-    $ext = $filename === 'dir' ? 'dir' : \bbn\str::file_ext($filename);
+    $ext = $filename === 'dir' ? 'dir' : \bbn\Str::fileExt($filename);
     if ( !empty($ext) ){
       switch ( $ext ){
         case 'dir':
@@ -241,7 +241,7 @@ class finder
     }
   }
   public function dirsize($path){
-    return \bbn\str::say_size($this->fs->dirsize($path));
+    return \bbn\Str::saySize($this->fs->dirsize($path));
     //return $this->fs->dirsize($path);
   }
   

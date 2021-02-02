@@ -6,8 +6,8 @@
  * Time: 16.41
  */
 
-$ctrl->obj = $ctrl->add_data([
+$ctrl->obj = $ctrl->addData([
   'repository' => $ctrl->post['data']['repository'],
   'path' => $ctrl->post['data']['path']
-])->get_model('./all');
+])->getModel('./all');
 

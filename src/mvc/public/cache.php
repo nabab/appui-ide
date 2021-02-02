@@ -4,7 +4,7 @@
  *
  **/
 
-/** @var $ctrl \bbn\mvc\controller */
+/** @var $ctrl \bbn\Mvc\Controller */
 
 
-$ctrl->set_color('#391E13', '#FFF')->set_icon('nf nf-mdi-cached')->combo("Cache management");
+$ctrl->setColor('#391E13', '#FFF')->setIcon('nf nf-mdi-cached')->combo("Cache management");

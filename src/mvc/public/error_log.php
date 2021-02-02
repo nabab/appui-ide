@@ -2,9 +2,9 @@
 /*
  * Describe what it does!
  *
- * @var $ctrl \bbn\mvc\controller 
+ * @var $ctrl \bbn\Mvc\Controller 
  *
  */
-$ctrl->set_icon('nf nf-mdi-skull')
-  ->set_color('#000','#FFF')
+$ctrl->setIcon('nf nf-mdi-skull')
+  ->setColor('#000','#FFF')
   ->combo(_('Error log analyzer'), true);

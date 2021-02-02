@@ -7,7 +7,7 @@ if ( !empty($ctrl->inc->ide) ){
     $data = $ctrl->post;
   }
   if ( isset($data) ){
-    $ctrl->obj = $ctrl->get_object_model($data);
+    $ctrl->obj = $ctrl->getObjectModel($data);
   }
 }
 

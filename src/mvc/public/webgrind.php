@@ -1,3 +1,3 @@
 <?php
-/* @var $ctrl \bbn\mvc */
+/* @var $ctrl \bbn\Mvc */
 $ctrl->combo();

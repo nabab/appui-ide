@@ -5,10 +5,10 @@
  * Time: 21:02
  */
  
-/** @var \bbn\mvc\controller $ctrl The current controller */
+/** @var \bbn\Mvc\Controller $ctrl The current controller */
 
-$ctrl->set_color('#000', '#FFF')
-  ->set_icon('nf nf-fa-home')
+$ctrl->setColor('#000', '#FFF')
+  ->setIcon('nf nf-fa-home')
   ->combo(_('Help'), [
     'root' => APPUI_IDE_ROOT
   ]);

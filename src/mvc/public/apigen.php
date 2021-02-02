@@ -1,5 +1,5 @@
 <?php
-/* @var $ctrl \bbn\mvc */
+/* @var $ctrl \bbn\Mvc */
 $ctrl->obj->title = "Doc Apigen";
-echo $ctrl->get_view();
+echo $ctrl->getView();
 ?>

@@ -2,8 +2,8 @@
 /*
  * Describe what it does!
  *
- * @var $ctrl \bbn\mvc\controller 
+ * @var $ctrl \bbn\Mvc\Controller 
  *
  */
-$ctrl->add_data(['root' => APPUI_IDE_ROOT])
+$ctrl->addData(['root' => APPUI_IDE_ROOT])
   ->combo(_('List'), true);

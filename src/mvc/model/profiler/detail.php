@@ -3,11 +3,11 @@
  * Describe what it does!
  *
  **/
-use bbn\x;
+use bbn\X;
 
-/** @var $model \bbn\mvc\model*/
-if ($model->has_data('id', true)) {
-  $profiler = new \bbn\appui\profiler($model->db);
+/** @var $model \bbn\Mvc\Model*/
+if ($model->hasData('id', true)) {
+  $profiler = new \bbn\Appui\Profiler($model->db);
   $data = $profiler->get($model->data['id']);
   return [
     'title' => $data['url'].' - '._('Results'),

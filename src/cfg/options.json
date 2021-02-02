@@ -77,7 +77,7 @@
             {
               "ext": "php",
               "mode": "php",
-              "default": "<?php\n/*\n * Describe what it does or you're a pussy\n *\n **/\n\n/** @var $ctrl \\bbn\\mvc\\controller */\n"
+              "default": "<?php\n/*\n * Describe what it does or you're a pussy\n *\n **/\n\n/** @var $ctrl \\bbn\\Mvc\\Controller */\n"
             }
           ]
         },
@@ -228,7 +228,7 @@
                 {
                   "ext": "php",
                   "mode": "php",
-                  "default": "<?php\n/*\n * Describe what it does!\n *\n **/\n\n/** @var $this \\bbn\\mvc\\controller */"
+                  "default": "<?php\n/*\n * Describe what it does!\n *\n **/\n\n/** @var $this \\bbn\\Mvc\\Controller */"
                 }
               ]
             },
@@ -245,7 +245,7 @@
                 {
                   "ext": "php",
                   "mode": "php",
-                  "default": "<?php\n/*\n * Describe what it does!\n *\n * @var $ctrl \\bbn\\mvc\\controller \n *\n */\n"
+                  "default": "<?php\n/*\n * Describe what it does!\n *\n * @var $ctrl \\bbn\\Mvc\\Controller \n *\n */\n"
                 }
               ]
             },
@@ -262,7 +262,7 @@
                 {
                   "ext": "php",
                   "mode": "php",
-                  "default": "<?php\n/*\n * Describe what it does!\n *\n **/\n\n/** @var $this \\bbn\\mvc\\controller */"
+                  "default": "<?php\n/*\n * Describe what it does!\n *\n **/\n\n/** @var $this \\bbn\\Mvc\\Controller */"
                 }
               ],
               "alternative": true
@@ -279,7 +279,7 @@
                 {
                   "ext": "php",
                   "mode": "php",
-                  "default": "<?php\n/*\n * Describe what it does!\n *\n **/\n\n/** @var $this \\bbn\\mvc\\model*/"
+                  "default": "<?php\n/*\n * Describe what it does!\n *\n **/\n\n/** @var $this \\bbn\\Mvc\\Model*/"
                 }
               ]
             },
@@ -360,7 +360,7 @@
             {
               "ext": "php",
               "mode": "php",
-              "default": "<?php\n/*\n * Describe what it does or you're a pussy\n *\n **/\n\n/** @var $this \\bbn\\mvc\\controller */\n"
+              "default": "<?php\n/*\n * Describe what it does or you're a pussy\n *\n **/\n\n/** @var $this \\bbn\\Mvc\\Controller */\n"
             }
           ]
         },
@@ -371,7 +371,7 @@
             {
               "ext": "php",
               "mode": "php",
-              "default": "<?php\n/*\n * Describe what it does or you're as gay as Jaysus\n *\n **/\n\n/** @var $this \\bbn\\mvc\\controller */\n"
+              "default": "<?php\n/*\n * Describe what it does or you're as gay as Jaysus\n *\n **/\n\n/** @var $this \\bbn\\Mvc\\Controller */\n"
             },
             {
               "ext": "js",

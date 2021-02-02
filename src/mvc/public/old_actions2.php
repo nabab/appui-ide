@@ -1,9 +1,9 @@
 <?php
-/* @var $ctrl \bbn\mvc */
+/* @var $ctrl \bbn\Mvc */
 
-if ( $ctrl->inc->user->is_dev() ){
+if ( $ctrl->inc->user->isDev() ){
   $ctrl->data = $ctrl->post;
-  $model = $ctrl->get_model()['res'];
+  $model = $ctrl->getModel()['res'];
 
   // If present a error show the error
   if ( (\count($model) === 1) && isset($model['error']) ){
@@ -17,12 +17,12 @@ if ( $ctrl->inc->user->is_dev() ){
       }
       else{
         if ( $ctrl->data['act'] === 'save' ){
-          if ( $id_option = $ctrl->inc->options->get_id($ctrl->data['file'], BBN_ID_SCRIPT) ){
+          if ( $id_option = $ctrl->inc->options->getId($ctrl->data['file'], BBN_ID_SCRIPT) ){
             $ctrl->inc->pref->set($id_option, [
               'code' => md5($ctrl->post['code']),
               'selections' => isset($ctrl->post['selections']) ? $ctrl->post['selections'] : [],
               'marks' => isset($ctrl->post['marks']) ? $ctrl->post['marks'] : []
-            ], $ctrl->inc->user->get_id());
+            ], $ctrl->inc->user->getId());
           }
         }
         $ctrl->obj->success = 1;

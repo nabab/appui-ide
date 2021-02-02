@@ -6,18 +6,18 @@
  * Time: 17:43
  */
 
-use bbn\x;
+use bbn\X;
 /**
- * @var $ctrl \bbn\mvc\controller
+ * @var $ctrl \bbn\Mvc\Controller
  */
 if ( !empty($ctrl->arguments) ){
 
   if ( $ctrl->baseURL === APPUI_IDE_ROOT.'editor/' ){
     $ctrl->data['url'] = implode('/', $ctrl->arguments);
     //$ctrl->data['url'] = $ctrl->inc->ide->set_origin_for_use($ctrl->arguments);
-    $ctrl->data['routes'] = $ctrl->get_routes();
+    $ctrl->data['routes'] = $ctrl->getRoutes();
 
-    $ctrl->obj->data = $ctrl->get_model();
+    $ctrl->obj->data = $ctrl->getModel();
 
     $ctrl->obj->data['root'] = APPUI_IDE_ROOT;
     $ctrl->obj->url = $ctrl->baseURL.'file/'.$ctrl->obj->data['url'];
@@ -57,12 +57,12 @@ if ( !empty($ctrl->arguments) ){
     }
 
     echo $ctrl
-      ->set_title($title)
-      ->add_js()
-      ->get_view();
+      ->setTitle($title)
+      ->addJs()
+      ->getView();
     }
   else {
     //$ctrl->reroute(APPUI_IDE_ROOT.'editor/content', $ctrl->post, $ctrl->arguments);
-    $ctrl->reroute($ctrl->plugin_url('appui-ide').'/editor/content', $ctrl->post, $ctrl->arguments);
+    $ctrl->reroute($ctrl->pluginUrl('appui-ide').'/editor/content', $ctrl->post, $ctrl->arguments);
   }
 }

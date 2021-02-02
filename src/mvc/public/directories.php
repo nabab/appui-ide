@@ -1,8 +1,8 @@
 <?php
-/* @var $ctrl \bbn\mvc */
+/* @var $ctrl \bbn\Mvc */
 
 $ctrl->data = $ctrl->post;
-$model = $ctrl->get_model()['ret'];
+$model = $ctrl->getModel()['ret'];
 
 // If present a error show the error
 if ( (\count($model) === 1) && isset($model['error']) ){

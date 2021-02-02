@@ -1,5 +1,5 @@
 <?php
-/** @var $ctrl \bbn\mvc\controller */
+/** @var $ctrl \bbn\Mvc\Controller */
 
 if ( !empty($ctrl->post['id']) &&
   !empty($ctrl->post['code']) &&
@@ -13,9 +13,9 @@ if ( !empty($ctrl->post['id']) &&
     $cfg['help'] = $ctrl->post['help'];
   }
   else {
-    $ctrl->post['id'] = $ctrl->inc->options->from_code($ctrl->post['code'], $ctrl->post['id']);
+    $ctrl->post['id'] = $ctrl->inc->options->fromCode($ctrl->post['code'], $ctrl->post['id']);
   }
-  if ( $ctrl->inc->options->set_prop($ctrl->post['id'], $cfg) ){
+  if ( $ctrl->inc->options->setProp($ctrl->post['id'], $cfg) ){
     $ctrl->obj->data->success = 1;
   }
   else {

@@ -1,8 +1,8 @@
 <?php
-/** @var $ctrl \bbn\mvc\controller */
+/** @var $ctrl \bbn\Mvc\Controller */
 
 // One must be a dev to be here
-if (!$ctrl->inc->user->is_dev()) {
+if (!$ctrl->inc->user->isDev()) {
   die("You aren't an admin user.");
 }
 
@@ -12,12 +12,12 @@ if (!isset($ctrl->inc->pref)) {
 }
 
 if (!isset($ctrl->inc->ide)) {
-  $ctrl->add_inc(
+  $ctrl->addInc(
     'ide',
-    new \bbn\appui\ide(
+    new \bbn\Appui\Ide(
       $ctrl->db,
       $ctrl->inc->options,
-      $ctrl->get_routes(),
+      $ctrl->getRoutes(),
       $ctrl->inc->pref,
       $ctrl->post['project'] ?? ''
     )
@@ -25,21 +25,21 @@ if (!isset($ctrl->inc->ide)) {
 }
 
 if (!defined('APPUI_IDE_ROOT')) {
-  $origin = $ctrl->inc->ide->get_origin();
+  $origin = $ctrl->inc->ide->getOrigin();
   if ($origin === 'appui-project') {
     define(
       'APPUI_IDE_ROOT',
-      $ctrl->plugin_url($origin)
-          .'/router/'.$ctrl->inc->ide->get_name_project()
-          .'/'.$ctrl->plugin_url('appui-ide').'/'
+      $ctrl->pluginUrl($origin)
+          .'/router/'.$ctrl->inc->ide->getNameProject()
+          .'/'.$ctrl->pluginUrl('appui-ide').'/'
     );
   }
   else {
-    define('APPUI_IDE_ROOT', $ctrl->plugin_url('appui-ide').'/');
+    define('APPUI_IDE_ROOT', $ctrl->pluginUrl('appui-ide').'/');
   }
 }
 
-$ctrl->add_inc('fs',  new \bbn\file\system());
+$ctrl->addInc('fs',  new \bbn\File\System());
 
 
 return true;

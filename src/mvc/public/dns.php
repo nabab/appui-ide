@@ -4,8 +4,8 @@
  *
  **/
 
-/** @var $this \bbn\mvc\controller */
-//$ctrl->set_color('orange', 'white')->combo(_('DNS Utilities'));
+/** @var $this \bbn\Mvc\Controller */
+//$ctrl->setColor('orange', 'white')->combo(_('DNS Utilities'));
 
 $types = ['A', 'MX', 'NS', 'SOA', 'PTR', 'CNAME', 'AAAA', 'A6', 'SRV', 'NAPTR', 'TXT', 'ANY'];
 $host = 'bbn.io';

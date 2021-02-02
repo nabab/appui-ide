@@ -2,7 +2,7 @@
 
 if ( isset($model->inc->ide)  ){
   return[
-    'success' =>  $model->inc->ide->set_theme($model->data['theme'])
+    'success' =>  $model->inc->ide->setTheme($model->data['theme'])
   ];
 }
 

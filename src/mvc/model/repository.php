@@ -5,7 +5,7 @@
  * Date: 04/08/2017
  * Time: 18:16
  *
- * @var $model \bbn\mvc\model
+ * @var $model \bbn\Mvc\Model
  */
 if ( !empty($model->data['repository']) &&
   !empty($model->data['repository_cfg']) &&
@@ -14,7 +14,7 @@ if ( !empty($model->data['repository']) &&
   $rep_cfg = $model->data['repository'];
 
   // Get the repository's root path
-  $path = $model->inc->ide->get_root_path($rep_cfg);
+  $path = $model->inc->ide->getRootPath($rep_cfg);
 
   return [
     'title' => './',
@@ -22,6 +22,6 @@ if ( !empty($model->data['repository']) &&
     'lazy' => false,
     'folder' => true,
     'icon' => 'folder-icon',
-    'children' => $model->get_model('./tree', $model->data)
+    'children' => $model->getModel('./tree', $model->data)
   ];
 }

@@ -6,7 +6,7 @@ if ( isset($model->data['origin']) && isset($model->data['path'])){
   
   $path = $model->data['origin'].$model->data['path'];
   
-  $system = new \bbn\file\system('nextcloud',  [
+  $system = new \bbn\File\System('nextcloud',  [
     'path' => $path,
     'host' => 'cloud.bbn.so',
     'user' => 'bbn',

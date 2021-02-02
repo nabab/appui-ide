@@ -1,7 +1,7 @@
 <?php
 $res = ['success' => false];
 if ( isset($model->inc->options) ){
-  $types = $model->inc->options->full_options($model->inc->ide->get_types());
+  $types = $model->inc->options->fullOptions($model->inc->ide->getTypes());
   if ( !empty($types) ){
     $types = array_map(function($t){
       if ( !empty($t['tabs']) ){

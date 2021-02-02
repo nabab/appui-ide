@@ -6,10 +6,10 @@
  * Time: 15:04
  */
 
-use bbn\x;
+use bbn\X;
 
 /**
- * @var $model \bbn\mvc\model
+ * @var $model \bbn\Mvc\Model
  */
 if ( !empty($model->data['url']) && isset($model->inc->ide) ){
 
@@ -17,9 +17,9 @@ if ( !empty($model->data['url']) && isset($model->inc->ide) ){
   $url = $model->data['url'];
  
   //die(var_dump($model->data['url']));
-  $rep = $model->inc->ide->repository_from_url($model->data['url']);
+  $rep = $model->inc->ide->repositoryFromUrl($model->data['url']);
   
-  $file = $model->inc->ide->url_to_real($model->data['url']);
+  $file = $model->inc->ide->urlToReal($model->data['url']);
   $route = '';
 
   //define the route for use in test code
@@ -30,20 +30,20 @@ if ( !empty($model->data['url']) && isset($model->inc->ide) ){
     }
   }
   $path = str_replace($rep, '' , $url);
-  $path = substr($path, 0, strpos($path, '/_end_'));
+  $path = substr($path, 0, Strpos($path, '/_end_'));
 
-  $repos = $model->inc->ide->get_repositories();
+  $repos = $model->inc->ide->getRepositories();
   $repository = $repos[$rep];
 
-  $f = $model->inc->ide->decipher_path($model->data['url']);
+  $f = $model->inc->ide->decipherPath($model->data['url']);
   //die(var_dump($f,$file, $model->data['url']));
   if ( is_array($repository) &&
-    !empty($model->inc->ide->is_project($model->data['url'])) ||
+    !empty($model->inc->ide->isProject($model->data['url'])) ||
     !empty($repository['project'])
   ){
     $tabs = [];
     $styleTabType = [];
-    $project = $model->inc->ide->get_type('bbn-project');
+    $project = $model->inc->ide->getType('bbn-project');
     if ( is_array($project) && (count($project) > 0) ){
       foreach( $project['types'] as $type ){
         $styleTabType[$type['url']] = [
@@ -59,7 +59,7 @@ if ( !empty($model->data['url']) && isset($model->inc->ide) ){
         //temporaney
         $typeRep = $type['url'] = $type['url'] === 'lib' ? 'cls' : $type['url'];
 
-        if ( $ptype = $model->inc->ide->get_type($typeRep) ){
+        if ( $ptype = $model->inc->ide->getType($typeRep) ){
           if ( !empty($ptype['tabs']) ){
             $tabs[$type['url']][] = $ptype['tabs'];
           }
@@ -74,15 +74,15 @@ if ( !empty($model->data['url']) && isset($model->inc->ide) ){
 
   //model->data['url'] = implode("/", $stepUrl);
   if ( strpos($model->data['url'],'_end_/settings') !== false ){
-    $url_settings = substr($model->data['url'], 0, strpos($model->data['url'],'_end_/settings')).'_end_/'.($repository['alias_code'] !== 'components' ? "php" : 'js');
-    $ctrl_file = $model->inc->ide->url_to_real($url_settings);
+    $url_settings = substr($model->data['url'], 0, Strpos($model->data['url'],'_end_/settings')).'_end_/'.($repository['alias_code'] !== 'components' ? "php" : 'js');
+    $ctrl_file = $model->inc->ide->urlToReal($url_settings);
   }
 
   $res = [
-    'isMVC' => $model->inc->ide->is_MVC_from_url(str_replace('/_end_', '', $url)),
-    'isComponent' => $model->inc->ide->is_component_from_url(str_replace('/_end_', '', $url)),
-    'isLib' => $model->inc->ide->is_lib_from_url(str_replace('/_end_', '', $url)),
-    'isCli' => $model->inc->ide->is_cli_from_url(str_replace('/_end_', '', $url)),
+    'isMVC' => $model->inc->ide->isMVCFromUrl(str_replace('/_end_', '', $url)),
+    'isComponent' => $model->inc->ide->isComponentFromUrl(str_replace('/_end_', '', $url)),
+    'isLib' => $model->inc->ide->isLibFromUrl(str_replace('/_end_', '', $url)),
+    'isCli' => $model->inc->ide->isCliFromUrl(str_replace('/_end_', '', $url)),
     //'type' => !empty($type) ? $type : null,
     'title' => $path,
     'path' => $path,
@@ -90,13 +90,13 @@ if ( !empty($model->data['url']) && isset($model->inc->ide) ){
     'repository_content' => $repository,
     'url' => $rep.$path.'/_end_',
     'route' => $route,
-    'settings' => !empty($ctrl_file) ? $model->inc->fs->is_file($ctrl_file) : false,
-    'ext' => \bbn\str::file_ext($file),
+    'settings' => !empty($ctrl_file) ? $model->inc->fs->isFile($ctrl_file) : false,
+    'ext' => \bbn\Str::fileExt($file),
     'styleTab' => isset($styleTabType) ? $styleTabType : []
   ];
 
   if ( $res['isComponent'] && !empty($repository['types']) ){
-    $res['tabs'] = $model->inc->ide->tabs_of_type_project('components');
+    $res['tabs'] = $model->inc->ide->tabsOfTypeProject('components');
     $title = explode("/", $path);
     if ( is_array($title) ){
       array_pop($title);
@@ -104,14 +104,14 @@ if ( !empty($model->data['url']) && isset($model->inc->ide) ){
     }
   }
   if ( $res['isMVC'] && !empty($repository['types']) ){
-    $res['tabs'] = $model->inc->ide->tabs_of_type_project('mvc');
+    $res['tabs'] = $model->inc->ide->tabsOfTypeProject('mvc');
   }
   // we check if some tab of the components or mvc do not contain any files
   if ( $res['isMVC'] === true ){
-    $res['emptyTabs'] = $model->inc->ide->list_tabs_with_file('mvc', $path, $rep);
+    $res['emptyTabs'] = $model->inc->ide->listTabsWithFile('mvc', $path, $rep);
   }
   elseif ( $res['isComponent'] === true ){
-    $res['emptyTabs'] = $model->inc->ide->list_tabs_with_file('components',  $path, $rep);
+    $res['emptyTabs'] = $model->inc->ide->listTabsWithFile('components',  $path, $rep);
   }
 
   return $res;

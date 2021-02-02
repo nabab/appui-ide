@@ -18,19 +18,19 @@ if ( isset($origin) && ( $p = $ctrl->inc->pref->get($origin)) ){
   if ( isset($fs) ){
     $max_width = 450;
     $max_height = 300;
-    if ( $ctrl->inc->fs->get_mode() === 'nextcloud' ){
+    if ( $ctrl->inc->fs->getMode() === 'nextcloud' ){
       //if the mode of file system is nextcloud end the file exists in the file system die on the content of the file (base64)
-      if ( $ctrl->inc->fs->exists($fs->get_real_path($img)) &&  ($content = $fs->get_contents( $fs->get_real_path($img))) ){
+      if ( $ctrl->inc->fs->exists($fs->getRealPath($img)) &&  ($content = $fs->getContents( $fs->getRealPath($img))) ){
         die($content);
       }
     }
     else{
       $file = $cfg['path'].'/'.$img;
-      $obj = new \bbn\file\image($file, $fs);
+      $obj = new \bbn\File\Image($file, $fs);
       $obj->display();
     }
-    /*$height = $obj->get_height();
-    $width = $obj->get_width();
+    /*$height = $obj->getHeight();
+    $width = $obj->getWidth();
     if ( ($width > $height) && ($width > $max_width) ){
       $obj->autoresize($max_width, $max_height);
     }

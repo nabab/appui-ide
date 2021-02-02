@@ -4,7 +4,7 @@
  *
  **/
 
-/** @var $this \bbn\mvc\model*/
+/** @var $this \bbn\Mvc\Model*/
 
 $tmp = ['issues' => json_decode(<<<'EOD'
 [
@@ -2364,7 +2364,7 @@ $tmp = ['issues' => json_decode(<<<'EOD'
             "username": "loredana"
         },
         "title": "php notice function check_demandes",
-        "body": "\r\n[16-Oct-2019 10:45:16 Europe\/Paris] PHP Notice:  Array to string conversion in \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/src\/lib\/apst\/adherent.php on line 934\r\n[16-Oct-2019 10:45:16 Europe\/Paris] PHP Stack trace:\r\n[16-Oct-2019 10:45:16 Europe\/Paris] PHP   1. {main}() \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/src\/router.php:0\r\n[16-Oct-2019 10:45:16 Europe\/Paris] PHP   2. {closure:\/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/src\/router.php:8-265}() \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/src\/router.php:265\r\n[16-Oct-2019 10:45:16 Europe\/Paris] PHP   3. bbn\\mvc->process() \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/src\/router.php:256\r\n[16-Oct-2019 10:45:16 Europe\/Paris] PHP   4. bbn\\mvc\\controller->process() \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/vendor\/bbn\/bbn\/src\/bbn\/mvc.php:744\r\n[16-Oct-2019 10:45:16 Europe\/Paris] PHP   5. bbn\\mvc\\controller->control() \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/vendor\/bbn\/bbn\/src\/bbn\/mvc\/controller.php:419\r\n[16-Oct-2019 10:45:16 Europe\/Paris] PHP   6. bbn\\mvc\\controller->control() \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/vendor\/bbn\/bbn\/src\/bbn\/mvc\/controller.php:398\r\n[16-Oct-2019 10:45:16 Europe\/Paris] PHP   7. bbn\\mvc::include_controller() \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/vendor\/bbn\/bbn\/src\/bbn\/mvc\/controller.php:394\r\n[16-Oct-2019 10:45:16 Europe\/Paris] PHP   8. require() \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/vendor\/bbn\/bbn\/src\/bbn\/mvc.php:299\r\n[16-Oct-2019 10:45:16 Europe\/Paris] PHP   9. apst\\adherent\\data->import() \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/src\/mvc\/cli\/update_liste.php:13\r\n[16-Oct-2019 10:45:16 Europe\/Paris] PHP  10. apst\\adherent->consulte() \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/src\/lib\/apst\/adherent\/data.php:435\r\n[16-Oct-2019 10:45:16 Europe\/Paris] PHP  11. array_diff() \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/src\/lib\/apst\/adherent.php:934",
+        "body": "\r\n[16-Oct-2019 10:45:16 Europe\/Paris] PHP Notice:  Array to string conversion in \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/src\/lib\/apst\/adherent.php on line 934\r\n[16-Oct-2019 10:45:16 Europe\/Paris] PHP Stack trace:\r\n[16-Oct-2019 10:45:16 Europe\/Paris] PHP   1. {main}() \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/src\/router.php:0\r\n[16-Oct-2019 10:45:16 Europe\/Paris] PHP   2. {closure:\/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/src\/router.php:8-265}() \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/src\/router.php:265\r\n[16-Oct-2019 10:45:16 Europe\/Paris] PHP   3. bbn\\Mvc->process() \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/src\/router.php:256\r\n[16-Oct-2019 10:45:16 Europe\/Paris] PHP   4. bbn\\Mvc\\Controller->process() \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/vendor\/bbn\/bbn\/src\/bbn\/mvc.php:744\r\n[16-Oct-2019 10:45:16 Europe\/Paris] PHP   5. bbn\\Mvc\\Controller->control() \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/vendor\/bbn\/bbn\/src\/bbn\/mvc\/controller.php:419\r\n[16-Oct-2019 10:45:16 Europe\/Paris] PHP   6. bbn\\Mvc\\Controller->control() \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/vendor\/bbn\/bbn\/src\/bbn\/mvc\/controller.php:398\r\n[16-Oct-2019 10:45:16 Europe\/Paris] PHP   7. bbn\\Mvc::includeController() \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/vendor\/bbn\/bbn\/src\/bbn\/mvc\/controller.php:394\r\n[16-Oct-2019 10:45:16 Europe\/Paris] PHP   8. require() \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/vendor\/bbn\/bbn\/src\/bbn\/mvc.php:299\r\n[16-Oct-2019 10:45:16 Europe\/Paris] PHP   9. apst\\adherent\\data->import() \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/src\/mvc\/cli\/update_liste.php:13\r\n[16-Oct-2019 10:45:16 Europe\/Paris] PHP  10. apst\\adherent->consulte() \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/src\/lib\/apst\/adherent\/data.php:435\r\n[16-Oct-2019 10:45:16 Europe\/Paris] PHP  11. array_diff() \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/src\/lib\/apst\/adherent.php:934",
         "labels": [],
         "milestone": {
             "id": 2,
@@ -2428,7 +2428,7 @@ $tmp = ['issues' => json_decode(<<<'EOD'
             "username": "vito"
         },
         "title": "Problem for dowload file with post-out",
-        "body": "The problem I identified on the declaration of the function 'iterate_lines' in the class 'bbn\\file' with the return \"Generator\".\r\n\r\nCurrently i commented on this return statement to make it work\r\n",
+        "body": "The problem I identified on the declaration of the function 'iterate_lines' in the class 'bbn\\File' with the return \"Generator\".\r\n\r\nCurrently i commented on this return statement to make it work\r\n",
         "labels": [],
         "milestone": null,
         "assignee": null,
@@ -4375,7 +4375,7 @@ $tmp = ['issues' => json_decode(<<<'EOD'
             "username": "loredana"
         },
         "title": "missing translations in interface",
-        "body": "In many places of the application the language applied is english, examples are the title of shortcut of the menu, or the widget info in appui-\r\ntask. \r\nThe files of translation (and the position of the files) are identical to the ones online in production where the plugin is correctly translated.\r\nThe same for appui-email, appui-usergroup..\r\n\r\n\r\n",
+        "body": "In many places of the application the language applied is english, examples are the title of shortcut of the menu, or the widget info in appui-\r\ntask. \r\nThe files of translation (and the position of the files) are identical to the ones online in production where the plugin is correctly translated.\r\nThe same for appui-email, Appui-usergroup..\r\n\r\n\r\n",
         "labels": [],
         "milestone": null,
         "assignee": {
@@ -4992,8 +4992,8 @@ $tmp = ['issues' => json_decode(<<<'EOD'
             "created": "2019-08-01T16:34:55+02:00",
             "username": "mirko"
         },
-        "title": "\\bbn\\x::merge_arrays() doesn't work in depth",
-        "body": "$ar = [[\r\n  \"name\": \"example_0.pdf\",\r\n  \"size\": 194007,\r\n  \"extension\": \".pdf\"\r\n], [\r\n  \"name\": \"test.pdf\",\r\n  \"size\": 194007,\r\n  \"extension\": \".pdf\"\r\n]];\r\n\r\n\r\nThe result of \\bbn\\x::merge_arrays($ar, $ar) is:\r\n\r\n[[\r\n  \"name\": \"example_0.pdf\",\r\n  \"size\": 194007,\r\n  \"extension\": \".pdf\"\r\n], [\r\n  \"name\": \"test.pdf\",\r\n  \"size\": 194007,\r\n  \"extension\": \".pdf\"\r\n], [\r\n  \"name\": \"example_0.pdf\",\r\n  \"size\": 194007,\r\n  \"extension\": \".pdf\"\r\n], [\r\n  \"name\": \"test.pdf\",\r\n  \"size\": 194007,\r\n  \"extension\": \".pdf\"\r\n]]",
+        "title": "\\bbn\\X::mergeArrays() doesn't work in depth",
+        "body": "$ar = [[\r\n  \"name\": \"example_0.pdf\",\r\n  \"size\": 194007,\r\n  \"extension\": \".pdf\"\r\n], [\r\n  \"name\": \"test.pdf\",\r\n  \"size\": 194007,\r\n  \"extension\": \".pdf\"\r\n]];\r\n\r\n\r\nThe result of \\bbn\\X::mergeArrays($ar, $ar) is:\r\n\r\n[[\r\n  \"name\": \"example_0.pdf\",\r\n  \"size\": 194007,\r\n  \"extension\": \".pdf\"\r\n], [\r\n  \"name\": \"test.pdf\",\r\n  \"size\": 194007,\r\n  \"extension\": \".pdf\"\r\n], [\r\n  \"name\": \"example_0.pdf\",\r\n  \"size\": 194007,\r\n  \"extension\": \".pdf\"\r\n], [\r\n  \"name\": \"test.pdf\",\r\n  \"size\": 194007,\r\n  \"extension\": \".pdf\"\r\n]]",
         "labels": [
             {
                 "id": 3,
@@ -5229,7 +5229,7 @@ $tmp = ['issues' => json_decode(<<<'EOD'
             "username": "loredana"
         },
         "title": "list share with group",
-        "body": "the action to share the list with a group has success, the row is correctly inserted in the db but no users of the same group can see the list shared in the widget. Maybe the error comes from the db request (function preferences->full_options, preferences->get_all) ",
+        "body": "the action to share the list with a group has success, the row is correctly inserted in the db but no users of the same group can see the list shared in the widget. Maybe the error comes from the db request (function preferences->full_options, Preferences->get_all) ",
         "labels": [],
         "milestone": null,
         "assignee": null,
@@ -5260,7 +5260,7 @@ $tmp = ['issues' => json_decode(<<<'EOD'
             "username": "loredana"
         },
         "title": "list share with group",
-        "body": "the action to share the list with a group has success, the row is correctly inserted in the db but no users of the same group can see the list shared in the widget. Maybe the error comes from the db request (function preferences->full_options, preferences->get_all) ",
+        "body": "the action to share the list with a group has success, the row is correctly inserted in the db but no users of the same group can see the list shared in the widget. Maybe the error comes from the db request (function preferences->full_options, Preferences->get_all) ",
         "labels": [],
         "milestone": null,
         "assignee": null,
@@ -7251,7 +7251,7 @@ $tmp = ['issues' => json_decode(<<<'EOD'
             "username": "mirko"
         },
         "title": "Warning on pad class",
-        "body": "[02-Aug-2019 11:44:46 Europe\/Paris] PHP Warning:  array_splice() expects parameter 3 to be int, array given in \/home\/thomas\/domains\/apst.thomas.lan\/_appui\/current\/lib\/apst\/adherent\/__pad.php on line 700\r\n[02-Aug-2019 11:44:46 Europe\/Paris] PHP Stack trace:\r\n[02-Aug-2019 11:44:46 Europe\/Paris] PHP   1. {main}() \/home\/thomas\/domains\/apst.thomas.lan\/public_html\/espace-adherentsv2\/index.php:0\r\n[02-Aug-2019 11:44:46 Europe\/Paris] PHP   2. include_once() \/home\/thomas\/domains\/apst.thomas.lan\/public_html\/espace-adherentsv2\/index.php:2\r\n[02-Aug-2019 11:44:46 Europe\/Paris] PHP   3. {closure:\/home\/thomas\/domains\/apst.thomas.lan\/_appui\/current\/router.php:8-265}() \/home\/thomas\/domains\/apst.thomas.lan\/_appui\/current\/router.php:265\r\n[02-Aug-2019 11:44:46 Europe\/Paris] PHP   4. bbn\\mvc->process() \/home\/thomas\/domains\/apst.thomas.lan\/_appui\/current\/router.php:256\r\n[02-Aug-2019 11:44:46 Europe\/Paris] PHP   5. bbn\\mvc\\controller->process() \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/vendor\/bbn\/bbn\/src\/bbn\/mvc.php:633\r\n[02-Aug-2019 11:44:46 Europe\/Paris] PHP   6. bbn\\mvc\\controller->control() \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/vendor\/bbn\/bbn\/src\/bbn\/mvc\/controller.php:441\r\n[02-Aug-2019 11:44:46 Europe\/Paris] PHP   7. bbn\\mvc::include_controller() \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/vendor\/bbn\/bbn\/src\/bbn\/mvc\/controller.php:419\r\n[02-Aug-2019 11:44:46 Europe\/Paris] PHP   8. require() \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/vendor\/bbn\/bbn\/src\/bbn\/mvc.php:207\r\n[02-Aug-2019 11:44:46 Europe\/Paris] PHP   9. bbn\\mvc\\controller->get_model() \/home\/thomas\/domains\/apst.thomas.lan\/_appui\/current\/plugins\/apst-espace-adherents\/src\/mvc\/public\/fiche.php:5\r\n[02-Aug-2019 11:44:46 Europe\/Paris] PHP  10. bbn\\mvc->get_model() \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/vendor\/bbn\/bbn\/src\/bbn\/mvc\/controller.php:921\r\n[02-Aug-2019 11:44:46 Europe\/Paris] PHP  11. bbn\\mvc\\model->get() \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/vendor\/bbn\/bbn\/src\/bbn\/mvc.php:537\r\n[02-Aug-2019 11:44:46 Europe\/Paris] PHP  12. bbn\\mvc::include_model() \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/vendor\/bbn\/bbn\/src\/bbn\/mvc\/model.php:106\r\n[02-Aug-2019 11:44:46 Europe\/Paris] PHP  13. include() \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/vendor\/bbn\/bbn\/src\/bbn\/mvc.php:124\r\n[02-Aug-2019 11:44:46 Europe\/Paris] PHP  14. bbn\\mvc\\model->get_model() \/home\/thomas\/domains\/apst.thomas.lan\/_appui\/current\/plugins\/apst-espace-adherents\/src\/mvc\/model\/fiche.php:4\r\n[02-Aug-2019 11:44:46 Europe\/Paris] PHP  15. bbn\\mvc\\controller->get_model() \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/vendor\/bbn\/bbn\/src\/bbn\/mvc\/model.php:114\r\n[02-Aug-2019 11:44:46 Europe\/Paris] PHP  16. bbn\\mvc->get_model() \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/vendor\/bbn\/bbn\/src\/bbn\/mvc\/controller.php:921\r\n[02-Aug-2019 11:44:46 Europe\/Paris] PHP  17. bbn\\mvc\\model->get() \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/vendor\/bbn\/bbn\/src\/bbn\/mvc.php:537\r\n[02-Aug-2019 11:44:46 Europe\/Paris] PHP  18. bbn\\mvc::include_model() \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/vendor\/bbn\/bbn\/src\/bbn\/mvc\/model.php:106\r\n[02-Aug-2019 11:44:46 Europe\/Paris] PHP  19. include() \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/vendor\/bbn\/bbn\/src\/bbn\/mvc.php:124\r\n[02-Aug-2019 11:44:46 Europe\/Paris] PHP  20. apst\\adherent->consulte_lite() \/home\/thomas\/domains\/apst.thomas.lan\/_appui\/current\/plugins\/apst-espace-adherents\/src\/mvc\/model\/adherent\/data\/info.php:15\r\n[02-Aug-2019 11:44:46 Europe\/Paris] PHP  21. apst\\adherent->get_info_dva() \/home\/thomas\/domains\/apst.thomas.lan\/_appui\/current\/lib\/apst\/adherent.php:1077\r\n[02-Aug-2019 11:44:46 Europe\/Paris] PHP  22. array_splice() \/home\/thomas\/domains\/apst.thomas.lan\/_appui\/current\/lib\/apst\/adherent\/__pad.php:700",
+        "body": "[02-Aug-2019 11:44:46 Europe\/Paris] PHP Warning:  array_splice() expects parameter 3 to be int, array given in \/home\/thomas\/domains\/apst.thomas.lan\/_appui\/current\/lib\/apst\/adherent\/__pad.php on line 700\r\n[02-Aug-2019 11:44:46 Europe\/Paris] PHP Stack trace:\r\n[02-Aug-2019 11:44:46 Europe\/Paris] PHP   1. {main}() \/home\/thomas\/domains\/apst.thomas.lan\/public_html\/espace-adherentsv2\/index.php:0\r\n[02-Aug-2019 11:44:46 Europe\/Paris] PHP   2. include_once() \/home\/thomas\/domains\/apst.thomas.lan\/public_html\/espace-adherentsv2\/index.php:2\r\n[02-Aug-2019 11:44:46 Europe\/Paris] PHP   3. {closure:\/home\/thomas\/domains\/apst.thomas.lan\/_appui\/current\/router.php:8-265}() \/home\/thomas\/domains\/apst.thomas.lan\/_appui\/current\/router.php:265\r\n[02-Aug-2019 11:44:46 Europe\/Paris] PHP   4. bbn\\Mvc->process() \/home\/thomas\/domains\/apst.thomas.lan\/_appui\/current\/router.php:256\r\n[02-Aug-2019 11:44:46 Europe\/Paris] PHP   5. bbn\\Mvc\\Controller->process() \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/vendor\/bbn\/bbn\/src\/bbn\/mvc.php:633\r\n[02-Aug-2019 11:44:46 Europe\/Paris] PHP   6. bbn\\Mvc\\Controller->control() \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/vendor\/bbn\/bbn\/src\/bbn\/mvc\/controller.php:441\r\n[02-Aug-2019 11:44:46 Europe\/Paris] PHP   7. bbn\\Mvc::includeController() \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/vendor\/bbn\/bbn\/src\/bbn\/mvc\/controller.php:419\r\n[02-Aug-2019 11:44:46 Europe\/Paris] PHP   8. require() \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/vendor\/bbn\/bbn\/src\/bbn\/mvc.php:207\r\n[02-Aug-2019 11:44:46 Europe\/Paris] PHP   9. bbn\\Mvc\\Controller->getModel() \/home\/thomas\/domains\/apst.thomas.lan\/_appui\/current\/plugins\/apst-espace-adherents\/src\/mvc\/public\/fiche.php:5\r\n[02-Aug-2019 11:44:46 Europe\/Paris] PHP  10. bbn\\Mvc->getModel() \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/vendor\/bbn\/bbn\/src\/bbn\/mvc\/controller.php:921\r\n[02-Aug-2019 11:44:46 Europe\/Paris] PHP  11. bbn\\Mvc\\Model->get() \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/vendor\/bbn\/bbn\/src\/bbn\/mvc.php:537\r\n[02-Aug-2019 11:44:46 Europe\/Paris] PHP  12. bbn\\Mvc::includeModel() \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/vendor\/bbn\/bbn\/src\/bbn\/mvc\/model.php:106\r\n[02-Aug-2019 11:44:46 Europe\/Paris] PHP  13. include() \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/vendor\/bbn\/bbn\/src\/bbn\/mvc.php:124\r\n[02-Aug-2019 11:44:46 Europe\/Paris] PHP  14. bbn\\Mvc\\Model->getModel() \/home\/thomas\/domains\/apst.thomas.lan\/_appui\/current\/plugins\/apst-espace-adherents\/src\/mvc\/model\/fiche.php:4\r\n[02-Aug-2019 11:44:46 Europe\/Paris] PHP  15. bbn\\Mvc\\Controller->getModel() \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/vendor\/bbn\/bbn\/src\/bbn\/mvc\/model.php:114\r\n[02-Aug-2019 11:44:46 Europe\/Paris] PHP  16. bbn\\Mvc->getModel() \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/vendor\/bbn\/bbn\/src\/bbn\/mvc\/controller.php:921\r\n[02-Aug-2019 11:44:46 Europe\/Paris] PHP  17. bbn\\Mvc\\Model->get() \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/vendor\/bbn\/bbn\/src\/bbn\/mvc.php:537\r\n[02-Aug-2019 11:44:46 Europe\/Paris] PHP  18. bbn\\Mvc::includeModel() \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/vendor\/bbn\/bbn\/src\/bbn\/mvc\/model.php:106\r\n[02-Aug-2019 11:44:46 Europe\/Paris] PHP  19. include() \/home\/thomas\/domains\/apstapp2.thomas.lan\/_appui\/vendor\/bbn\/bbn\/src\/bbn\/mvc.php:124\r\n[02-Aug-2019 11:44:46 Europe\/Paris] PHP  20. apst\\adherent->consulte_lite() \/home\/thomas\/domains\/apst.thomas.lan\/_appui\/current\/plugins\/apst-espace-adherents\/src\/mvc\/model\/adherent\/data\/info.php:15\r\n[02-Aug-2019 11:44:46 Europe\/Paris] PHP  21. apst\\adherent->get_info_dva() \/home\/thomas\/domains\/apst.thomas.lan\/_appui\/current\/lib\/apst\/adherent.php:1077\r\n[02-Aug-2019 11:44:46 Europe\/Paris] PHP  22. array_splice() \/home\/thomas\/domains\/apst.thomas.lan\/_appui\/current\/lib\/apst\/adherent\/__pad.php:700",
         "labels": [
             {
                 "id": 4,
@@ -8494,7 +8494,7 @@ $tmp = ['issues' => json_decode(<<<'EOD'
             "username": "nabab"
         },
         "title": "Table component",
-        "body": "Table component: make the tabs (columns, keys, data) as static\r\nOn the left, format the number for the records",
+        "body": "Table component: make the tabs (columns, keys, Data) as static\r\nOn the left, Format the number for the records",
         "labels": [],
         "milestone": null,
         "assignee": {
@@ -10225,10 +10225,10 @@ else{
   }
 }
 foreach ($result as $i => $r) {
-  $result[$i]['created_at'] = date('Y-m-d H:i:s', strtotime($r['created_at']));
-  $result[$i]['updated_at'] = date('Y-m-d H:i:s', strtotime($r['updated_at']));
+  $result[$i]['created_at'] = date('Y-m-d H:i:s', Strtotime($r['created_at']));
+  $result[$i]['updated_at'] = date('Y-m-d H:i:s', Strtotime($r['updated_at']));
   if ($r['closed_at']) {
-    $result[$i]['closed_at'] = date('Y-m-d H:i:s', strtotime($r['closed_at']));
+    $result[$i]['closed_at'] = date('Y-m-d H:i:s', Strtotime($r['closed_at']));
   }
 }
 return ['issues' => $result];

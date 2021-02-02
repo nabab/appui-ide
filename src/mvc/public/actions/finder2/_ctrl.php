@@ -4,5 +4,5 @@
  *
  **/
 
-/** @var $this \bbn\mvc\controller */
-$ctrl->add_inc('fs', new \bbn\file\system());
+/** @var $this \bbn\Mvc\Controller */
+$ctrl->addInc('fs', new \bbn\File\System());

@@ -11,7 +11,7 @@ if ( !empty($model->data['node']) &&
   $path = ( $model->data['path'] !== '/')  ? $model->data['path'] : '';
   $oldPath = $model->data['origin'].$path.$model->data['oldValue'];
 //  die(var_dump(file_exists($oldPath), $oldPath));
-  $system = new \bbn\file\system();
+  $system = new \bbn\File\System();
   
   $success = $system->rename($oldPath, $model->data['node']['value']);
 	

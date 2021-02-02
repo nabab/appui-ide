@@ -5,7 +5,7 @@
  * Date: 04/08/2017
  * Time: 18:15
  *
- * @var $ctrl \bbn\mvc\controller
+ * @var $ctrl \bbn\Mvc\Controller
  */
 
-$ctrl->obj->data = $ctrl->get_model($ctrl->post);
+$ctrl->obj->data = $ctrl->getModel($ctrl->post);

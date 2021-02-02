@@ -9,7 +9,7 @@ if ( !empty($model->data['repository']['name']) &&
   !empty($model->data['repository']['path']) &&
   (!empty($model->data['is_mvc']) || !empty($model->data['is_component']))
 ){
-  $root = $model->inc->ide->get_root_path($model->data['repository']['name']);
+  $root = $model->inc->ide->getRootPath($model->data['repository']['name']);
   $path = $root.$model->data['repository']['path'];
 
   if ( $model->data['is_mvc'] ){
@@ -62,7 +62,7 @@ foreach( $tabs as $tab => $exts){
   }
   elseif ( empty($model->data['is_file']) && empty($model->data['is_component']) ){
     $path = $root.$model->data['data']['type'].'/'.$tab.$model->data['data']['dir'].$model->data['data']['name'];
-    if ( $model->inc->fs->is_dir($path) ){
+    if ( $model->inc->fs->isDir($path) ){
       $t = [
         'text' => str_replace("/","",$tab),
         'value' => $tab

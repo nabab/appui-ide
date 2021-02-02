@@ -1,7 +1,7 @@
 <?php
 //$old_path = getcwd();
 //chdir(BBN_ROOT_PATH);
-if ( BBN_IS_DEV || $ctrl->inc->user->is_dev() ){
+if ( BBN_IS_DEV || $ctrl->inc->user->isDev() ){
   if ( isset($ctrl->post['code']) && (\strlen($ctrl->post['code']) > 5) ){
     $bbn_code = $ctrl->post['code'];
     $_SESSION[BBN_APP_NAME]['code'] = $bbn_code;
@@ -28,12 +28,12 @@ if ( BBN_IS_DEV || $ctrl->inc->user->is_dev() ){
         }
       }
     }
-    if ( isset($ctrl->post['dir']) && $ctrl->inc->fs->is_dir($ctrl->post['dir']) ){
+    if ( isset($ctrl->post['dir']) && $ctrl->inc->fs->isDir($ctrl->post['dir']) ){
       chdir($ctrl->post['dir']);
     }
     echo '<p>'._("Current:"). ' '.(!empty($ctrl->post['file']) ? $ctrl->post['file'] : getcwd()).'</p>';
     echo '<p><a onclick="bbn.fn.closePopup(); setTimeout(function(){bbn.ide.test()}, 2000);" href="javascript:;">Refresh</a></p>';
-    $bbn_timer = new \bbn\util\timer();
+    $bbn_timer = new \bbn\Util\Timer();
     $bbn_timer->start();
     ob_start();
     try{
@@ -48,7 +48,7 @@ if ( BBN_IS_DEV || $ctrl->inc->user->is_dev() ){
     ob_end_clean();
     echo '<p>Time for processing: '.$bbn_timer->result()['total'].' sec.</p>';
     echo $bbn_res;
-    $ctrl->set_title("Testing code...");
+    $ctrl->setTitle("Testing code...");
   }
   else{
     echo "Fichier incorrect !";

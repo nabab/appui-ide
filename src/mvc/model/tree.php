@@ -1,32 +1,32 @@
 <?php
 
-use bbn\x;
+use bbn\X;
 
-/** @var $model \bbn\mvc\model */
-if ($model->has_data(['repository', 'repository_cfg'], true)) {
+/** @var $model \bbn\Mvc\Model */
+if ($model->hasData(['repository', 'repository_cfg'], true)) {
 
   $rep_cfg      = $model->data['repository_cfg'];
-  $is_mvc       = $model->has_data('is_mvc', true);
-  $is_component = $model->has_data('is_component', true);
-  $is_project   = $model->has_data('is_project', true) && !$is_mvc && !$is_component;
-  $onlydirs     = $model->has_data('onlydirs', true);
+  $is_mvc       = $model->hasData('is_mvc', true);
+  $is_component = $model->hasData('is_component', true);
+  $is_project   = $model->hasData('is_project', true) && !$is_mvc && !$is_component;
+  $onlydirs     = $model->hasData('onlydirs', true);
 
   //for tree in the popup
-  $tree_popup = $model->has_data('tree_popup', true);
+  $tree_popup = $model->hasData('tree_popup', true);
 
 
   // Defining current path
   //case of a component we treat the '$current_path' differently
-  if ($model->has_data('is_vue', true)) {
+  if ($model->hasData('is_vue', true)) {
     $cur_path = explode('/', $model->data['uid']);
     array_pop($cur_path);
     $cur_path = implode('/', $cur_path);
     $cur_path .= '/';
   }
   else{
-    $cur_path = empty($model->data['uid']) ? ($model->has_data('type', true) ? $model->data['type'].'/' : '') : $model->data['uid'] . '/';
+    $cur_path = empty($model->data['uid']) ? ($model->hasData('type', true) ? $model->data['type'].'/' : '') : $model->data['uid'] . '/';
      //treat the curent path for the initial date
-    if ($model->has_data('type', true) && ($model->data['type'] === 'mvc')) {
+    if ($model->hasData('type', true) && ($model->data['type'] === 'mvc')) {
       $cur_path = explode('/', $cur_path);
       if ((count($cur_path) > 0) && ($cur_path[0] === 'mvc')) {
         array_shift($cur_path);
@@ -42,9 +42,9 @@ if ($model->has_data(['repository', 'repository_cfg'], true)) {
   }
 
   // Get the repository's root path
-  $path = $model->inc->ide->get_root_path($rep_cfg);
+  $path = $model->inc->ide->getRootPath($rep_cfg);
   /*
-  if ($model->has_data('type', true)
+  if ($model->hasData('type', true)
       && (strpos('/', $model->data['type']) === false)
       && (strpos('.', $model->data['type']) === false)
       && (is_dir($path.$model->data['type']))
@@ -55,8 +55,8 @@ if ($model->has_data(['repository', 'repository_cfg'], true)) {
 
 
   //die(x::dump($cur_path, $rep_cfg, $is_mvc, $is_component, $is_project, $onlydirs, $tree_popup, $model->data));
-  $difference_git = $model->get_cached_model('./git', ['path' => dirname($path)], 3600);
-  //$difference_git = $model->get_model('./git', ['path' => dirname($path)]);
+  $difference_git = $model->getCachedModel('./git', ['path' => dirname($path)], 3600);
+  //$difference_git = $model->getModel('./git', ['path' => dirname($path)]);
 
   //extensions list not to be considered
   $file_check = [
@@ -115,7 +115,7 @@ if ($model->has_data(['repository', 'repository_cfg'], true)) {
 
   //function return olny dirs not hidden
   $dirs = function($dir) use($model){
-    if ( !empty($folders = $model->inc->fs->get_dirs($dir)) ){
+    if ( !empty($folders = $model->inc->fs->getDirs($dir)) ){
       if ( is_array($folders) ){
         if( count($folders) > 0 ){
           foreach ($folders as $i => $folder){
@@ -157,12 +157,12 @@ if ($model->has_data(['repository', 'repository_cfg'], true)) {
     //if the element exists
     if ( !empty($real) ){
 
-      $todo = !empty($onlydirs) ? $dirs($real) : $model->inc->fs->get_files($real, true);
+      $todo = !empty($onlydirs) ? $dirs($real) : $model->inc->fs->getFiles($real, true);
       if ( is_array($todo) ){
         //we browse the element
         foreach ( $todo as $t ){
           //we can only enter if it is a component type and there is no other child element with the same name or that is not a component type
-          if ( ((((\bbn\str::file_ext($t, 1)[0] !== basename($cur_path)) && $model->inc->fs->is_dir($t)) && ($type === 'components')) ||  ($type !== 'components')) &&
+          if ( ((((\bbn\Str::fileExt($t, 1)[0] !== basename($cur_path)) && $model->inc->fs->isDir($t)) && ($type === 'components')) ||  ($type !== 'components')) &&
            (strpos(basename($t),".") !== 0)
           ){
             $component = false;
@@ -181,12 +181,12 @@ if ($model->has_data(['repository', 'repository_cfg'], true)) {
               //we take the file name if it is not '_ctrl'
               if ( $name !== '_ctrl.php' ){
                 //take note if it is a file or not the element
-                $is_file = $model->inc->fs->is_file($t);
+                $is_file = $model->inc->fs->isFile($t);
                 //if it's a file we take the name and extension distinctly
                 if ( $is_file ){
                   // File extension
-                  $ext = \bbn\str::file_ext($t);
-                  $name = \bbn\str::file_ext($t, 1)[0];
+                  $ext = \bbn\Str::fileExt($t);
+                  $name = \bbn\Str::fileExt($t, 1)[0];
                 }
                 //we enter only a file not repeating for each extension and that the file we are dealing with does not have the extension in the list of excluded or that we take a folder not taken before
 
@@ -197,7 +197,7 @@ if ($model->has_data(['repository', 'repository_cfg'], true)) {
                   $num = 0;
                   //case folder
                   if ( empty($is_file) ){
-                    if ( (empty($onlydirs) && ($tf = $model->inc->fs->get_files($t, true))) ||
+                    if ( (empty($onlydirs) && ($tf = $model->inc->fs->getFiles($t, true))) ||
                       (!empty($onlydirs) && ($tf = $dirs($t)))
                     ){
 
@@ -207,7 +207,7 @@ if ($model->has_data(['repository', 'repository_cfg'], true)) {
                   //if is type and is components
                   if ( $type === 'components' ){
                     //if is the component
-                    if( empty($dirs($t)) && !empty($cnt = $model->inc->fs->get_files($t)) ){
+                    if( empty($dirs($t)) && !empty($cnt = $model->inc->fs->getFiles($t)) ){
                       $component = true;
                       $num = 0;
                       $folder = false;
@@ -215,19 +215,19 @@ if ($model->has_data(['repository', 'repository_cfg'], true)) {
                         foreach($cnt as $f){
                           $item = explode(".", basename($f))[0];
                           if ( $item === basename($t) ){
-                            $arr[] = \bbn\str::file_ext($f);
+                            $arr[] = \bbn\Str::fileExt($f);
                             $is_vue = true;
                           }
                         }
                       }
                     }
-                    elseif ( empty($model->inc->fs->get_files($t, true)) ){
+                    elseif ( empty($model->inc->fs->getFiles($t, true)) ){
                       $component = false;
                       $num = 0;
                       $folder = true;
                     }
                     //else is folder
-                    elseif ( ($cnt = $model->inc->fs->get_files($t, true, true)) ){
+                    elseif ( ($cnt = $model->inc->fs->getFiles($t, true, true)) ){
                       $num =  \count($cnt);
                       $folder = true;
                       $arr = [];
@@ -244,7 +244,7 @@ if ($model->has_data(['repository', 'repository_cfg'], true)) {
                           //if is folder and component
                           if ( $item === basename($t) ){
                             $folder = false;
-                            $arr[] = \bbn\str::file_ext($f);
+                            $arr[] = \bbn\Str::fileExt($f);
                             $is_vue = true;
                             $component = true;
                             if ( !empty($ext) && (in_array($ext, $excludeds) === false) ){
@@ -261,8 +261,8 @@ if ($model->has_data(['repository', 'repository_cfg'], true)) {
                               $ele = explode(".", basename($f));
                               $item = $ele[0];
                               $ext = isset($ele[1]) ? $ele[1] : false;
-                              if ( ($model->inc->fs->is_dir($f) && (strpos(basename($f), '.') === 0)) ||
-                                ($model->inc->fs->is_file($f) && (($item !== basename($t)) || (!empty($ext) && (in_array($ext, $excludeds) === true))))
+                              if ( ($model->inc->fs->isDir($f) && (strpos(basename($f), '.') === 0)) ||
+                                ($model->inc->fs->isFile($f) && (($item !== basename($t)) || (!empty($ext) && (in_array($ext, $excludeds) === true))))
                               ){
                                 $element_exluded++;
                               }
@@ -315,7 +315,7 @@ if ($model->has_data(['repository', 'repository_cfg'], true)) {
                     'git' =>  $check_git($t),
                     //Previously the 'uid' property was called 'path'
                     'uid' => $component === true  ? $cur_path.'/'.$name.'/'.$name : $cur_path . $name,
-                    'has_index' => empty($is_file) && \bbn\file\dir::has_file($t, 'index.php', 'index.html', 'index.htm'),
+                    'has_index' => empty($is_file) && \bbn\File\Dir::hasFile($t, 'index.php', 'index.html', 'index.htm'),
                     'is_svg' => !empty($is_file) && ($ext === 'svg'),
                     'is_viewable' => !empty($is_file) && \in_array($ext, $file_check['viewables']) && ($ext !== 'svg'),
                     'is_image' => !empty($is_file) && \in_array($ext, $file_check['images']),
@@ -324,7 +324,7 @@ if ($model->has_data(['repository', 'repository_cfg'], true)) {
                     'icon' => $icon,
                     'bcolor' => !empty($color) ? $color : false,
                     'folder' => !empty($folder) ? $folder : empty($is_file),
-                    'lazy' => empty($is_file) && ( (empty($onlydirs) && !empty($model->inc->fs->get_files($t, true))) || (!empty($onlydirs) && !empty($dirs($t)))),
+                    'lazy' => empty($is_file) && ( (empty($onlydirs) && !empty($model->inc->fs->getFiles($t, true))) || (!empty($onlydirs) && !empty($dirs($t)))),
                     'numChildren' => $num,
                     'tab' => $tab,
                     'ext' => !empty($is_file) ? $ext : false
@@ -358,7 +358,7 @@ if ($model->has_data(['repository', 'repository_cfg'], true)) {
                 }
                 elseif ( !$is_file &&
                   !empty($component) && isset($folders[$name]) && !$folders[$name]['numChildren'] ){
-                  $tf = $model->inc->fs->get_files($t, true);
+                  $tf = $model->inc->fs->getFiles($t, true);
                   if ( $num = \count($tf) ){
                     $folders[$name]['numChildren'] = $num;
                   }
@@ -414,7 +414,7 @@ if ($model->has_data(['repository', 'repository_cfg'], true)) {
   elseif (!empty($rep_cfg['types']) && $is_project && empty($model->data['type'])) {
     $types = [];
    //browse the root elements and assign the type to each of them
-    $todo = !empty($onlydirs) ? $dirs($path.$cur_path) : $model->inc->fs->get_files($path . $cur_path, true);
+    $todo = !empty($onlydirs) ? $dirs($path.$cur_path) : $model->inc->fs->getFiles($path . $cur_path, true);
     foreach ( $todo as $t ){
       $ar = explode("/", $t);
       $ele = array_pop($ar);
@@ -440,7 +440,7 @@ if ($model->has_data(['repository', 'repository_cfg'], true)) {
     else{
       //this function re-sends us the tabs since the repository that we are dealing with has the types and does not have direct access to corispective tabs
       //$tabs = $get_tabs_of_type($model->data['type']);
-      $tabs = $model->inc->ide->tabs_of_type_project($type);
+      $tabs = $model->inc->ide->tabsOfTypeProject($type);
       if( !empty($tabs) ){
         foreach ( $tabs as $i => $t ){
 

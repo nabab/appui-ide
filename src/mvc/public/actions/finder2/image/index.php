@@ -8,9 +8,9 @@ $img = base64_decode($ctrl->arguments[0]);
 
 $max_width = 450;
 $max_height = 300;
-$obj = new \bbn\file\image($img);
-$height = $obj->get_height();
-$width = $obj->get_width();
+$obj = new \bbn\File\Image($img);
+$height = $obj->getHeight();
+$width = $obj->getWidth();
 
 if ( $obj->check() ){
   if ( ($width > $height) && ($width > $max_width) ){
