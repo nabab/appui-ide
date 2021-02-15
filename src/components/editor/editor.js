@@ -223,6 +223,7 @@
         return this.getRef('tabstrip').selected;
       },
       runRepository(){
+        return this.currentRep;
         let rep = this.getRef('tabstrip').views[this.getRef('tabstrip').selected].source.repository;
         this.currentRep = rep;
         return rep;
@@ -1943,8 +1944,18 @@
         }
       },
     },
-    created(){
-      this.$set(this, 'currentRep', this.source.currentRep);
+    mounted(){
+      setTimeout(() => {
+        if (!this.currentRep && this.ddRepData.length) {
+          let dd = this.getRef('ddRep');
+          dd.emitInput(this.ddRepData[0].value);
+          this.$nextTick(() => {
+            if (this.listRootProject.length) {
+              this.getRef('ddRoot').emitInput(this.listRootProject[0].value);
+            }
+          })
+        }
+      }, 2000)
     },
     watch: {
       sourceParser(newVal, oldVal){
@@ -1960,9 +1971,13 @@
       },
       currentRep(newVal, oldVal){
         if ( this.repositories[newVal] !== undefined ){
-          if ( this.repositories[oldVal] && this.repositories[newVal].alias_code !== this.repositories[oldVal].alias_code ){
+          if ( this.repositories[oldVal] && (this.repositories[newVal].alias_code !== this.repositories[oldVal].alias_code) ){
             this.typeProject = false;
             this.path = '';
+          }
+
+          if (!this.typeProject && this.listRootProject.length) {
+            this.typeProject = this.listRootProject[0].value;
           }
           this.$nextTick(()=>{
             if ( newVal !== oldVal ){

@@ -21,14 +21,11 @@
                       style="width: 100px"
         ></bbn-dropdown>
       </div>
-      <div class="bbn-grid-full" v-if="isMVC">
-        <bbn-radio :source="[
-          {value: 'mvc_vue', text: _('Page with Vue component')},
-          {value: 'mvc_js', text: _('Page with Javascript function')},
-          {value: 'mvc', text: _('Simple page (combo)')},
-          {value: 'action', text: _('Action')},
-          {value: 'file', text: _('File')}
-        ]" v-model="data.template" :vertical="true"></bbn-radio>
+      <div class="bbn-grid-full" v-if="isMVC && source.isFile">
+        <bbn-radio :required="true"
+                   :source="templates"
+                   v-model="data.template"
+                  :vertical="true"/>
       </div>
       <label v-if="data.template === 'file'"><?=_("Type")?></label>
       <div  v-if="data.template === 'file'">

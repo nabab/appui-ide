@@ -30,6 +30,6 @@
   <bbns-column title="BT"
                :sortable="false"
                :width="50"
-               :buttons="[{text: _('Backtrace'), Notext: true, icon: 'nf nf-mdi-history', action: backtrace}]">
+               :buttons="[{text: _('Backtrace'), notext: true, icon: 'nf nf-mdi-history', action: backtrace}]">
   </bbns-column>
 </bbn-table>

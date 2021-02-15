@@ -152,7 +152,7 @@ class ide {
    * @param string $id_user if set user id will return the result for that user otherwise the current one will return
    * @return array|null
    */
-  private function get_bit_by_option(string $id_option, String $id_user = null): ?array
+  private function get_bit_by_option(string $id_option, string $id_user = null): ?array
   {
     if ( \bbn\Str::isUid($id_option) &&
       !empty($this->db) &&
@@ -204,7 +204,7 @@ class ide {
    * @param string $bbn_path
    * @return string
    */
-  private function set_current_id(string $file = null, String $bbn_path = null){
+  private function set_current_id(string $file = null, string $bbn_path = null){
     self::$current_id = false;
     if ( empty($file) ){
       $file = self::$current_file;
@@ -271,7 +271,7 @@ class ide {
    * @param string $path The file's path from file's URL
    * @return array
    */
-  private function superior_sctrl(string $tab, String $path = ''){
+  private function superior_sctrl(string $tab, string $path = ''){
     if ( ($pos = strpos($tab, '_ctrl')) > -1 ){
       if ( ($pos === 0) ){
         $path = '';
@@ -327,7 +327,7 @@ class ide {
     return $files;
   }
 
-  private function check_normal(array $cfg, array $rep, String $path){
+  private function check_normal(array $cfg, array $rep, string $path){
     if ( !empty($cfg) && !empty($path) && !empty($cfg['name']) ){
 
       $old = $new = $path;
@@ -365,7 +365,7 @@ class ide {
     return false;
   }
 
-  private function check_mvc(array $cfg, array $rep, String $path){
+  private function check_mvc(array $cfg, array $rep, string $path){
     $todo = [];
     if ( !empty($cfg) &&
       !empty($rep) &&
@@ -794,7 +794,7 @@ class ide {
    * @param string $ope The operation type (rename, copy)
    * @return bool
    */
-  private function operations_backup_components(array $cfg, String $case ){
+  private function operations_backup_components(array $cfg, string $case ){
     if ( !empty($cfg['is_component']) ){
       $backup_path = self::$backup_path . $cfg['repository']['bbn_path'] .'/'.($cfg['repository']['path'] === '/' ? '' : $cfg['repository']['path']);
       /*if ( !empty($cfg['is_vue']) ){
@@ -848,7 +848,7 @@ class ide {
    * @param string $ope The operation type (rename, copy)
    * @return bool
    */
-  private function operations_backup(array $path,  array $cfg, String $case ){
+  private function operations_backup(array $path,  array $cfg, string $case ){
     //set path backups temporaney disattivate for check an complete
     $backup_path = self::$backup_path . $cfg['repository']['bbn_path'].
      ($cfg['repository']['path'] === '/' ? '' : '/'.$cfg['repository']['path']);
@@ -934,7 +934,7 @@ class ide {
    * @param string $ope The operation type (rename, copy)
    * @return bool
    */
-  private function operations(array $cfg, String $ope){
+  private function operations(array $cfg, string $ope){
     if ( is_string($ope) &&
       !empty($cfg['repository']) &&
       !empty($cfg['name']) &&
@@ -1264,7 +1264,7 @@ class ide {
    * @param string $path path project
    * @return bool||array list file with property extension and value the path of the file existing or not
    */
-  public function list_tabs_with_file(string $type, String $path, String $repository){
+  public function list_tabs_with_file(string $type, string $path, string $repository){
 
     $list = [];
     $root = $this->getRootPath($repository);
@@ -1812,7 +1812,7 @@ class ide {
    * @param string $type The type of real (file/dir)
    * @return bool
    */
-  public function create_perm_by_real(string $file, String $type = 'file'): bool
+  public function create_perm_by_real(string $file, string $type = 'file'): bool
   {
     if ( !empty($file) &&
    //   \is_dir(\bbn\Mvc::getAppPath()) &&
@@ -1896,7 +1896,7 @@ class ide {
    * @param string $type The type (file/dir)
    * @return bool
    */
-  public function change_perm_by_real(string $old, String $new, String $type = 'file'):  bool
+  public function change_perm_by_real(string $old, string $new, string $type = 'file'):  bool
   {
     $type = strtolower($type);
     if ( !empty($old) &&
@@ -1925,7 +1925,7 @@ class ide {
    * @param string $type The type (file/dir)
    * @return bool
    */
-  public function move_perm_by_real(string $old, String $new, String $type = 'file'): bool
+  public function move_perm_by_real(string $old, string $new, string $type = 'file'): bool
   {
     $type = strtolower($type);
     if ( !empty($old) &&
@@ -2053,7 +2053,7 @@ class ide {
      *
      * @return string|null
      */
-  public function set_file_preferences(string $file_code, String $id_repository, array $cfg = [], bool $force = false, String $md5 = null): ?String
+  public function set_file_preferences(string $file_code, string $id_repository, array $cfg = [], bool $force = false, string $md5 = null): ?String
   {
     if ( !empty($file_code) &&
       !empty($id_repository) &&
@@ -2108,7 +2108,7 @@ class ide {
      *
      * @return null|bool
      */
-    public function rename_file_preferences(string $new_path, String $old_path, array $repository, bool $parent = false): ?bool
+    public function rename_file_preferences(string $new_path, string $old_path, array $repository, bool $parent = false): ?bool
     {
 
       if ( !empty($new_path) &&
@@ -2133,8 +2133,8 @@ class ide {
         if ( !empty($new_path) && !empty($old_path) && (count($files = $this->get_list_preferences($repository['id'], true)) > 0) ){
 
           //get code of the file preference
-          $new_opt_code =  substr($new_path, Strlen($repository['bbn_path'].$repository['code']), Strlen($new_path));
-          $old_opt_code =  substr($old_path, Strlen($repository['bbn_path'].$repository['code']), Strlen($old_path));
+          $new_opt_code =  substr($new_path, strlen($repository['bbn_path'].$repository['code']), strlen($new_path));
+          $old_opt_code =  substr($old_path, strlen($repository['bbn_path'].$repository['code']), strlen($old_path));
 
           $type =  explode("/", $old_opt_code)[1];
 
@@ -2297,7 +2297,7 @@ class ide {
       $check = true;
       $path = $this->realToId($path);
       //get code of the file preference
-      $file_pref =  substr($path, Strlen($repository['bbn_path'].$repository['code'])+1, Strlen($path));
+      $file_pref =  substr($path, strlen($repository['bbn_path'].$repository['code'])+1, strlen($path));
 
       if ( !empty($file_pref) && (count($preferences = $this->get_list_preferences($repository['id'], true)) > 0) ){
         $type =  explode("/", $file_pref)[0];
@@ -2459,7 +2459,7 @@ class ide {
      *
      * @return string|null
      */
-    public function copy_file_preferences(string $file_code, String $new_file_code, String $id_option, String $id_repository): ?String
+    public function copy_file_preferences(string $file_code, string $new_file_code, string $id_option, string $id_repository): ?String
     {
       if ( !empty($file_code) &&
         !empty($new_file_code) &&
@@ -2498,7 +2498,7 @@ class ide {
    * @param string $id_link id option file preference
    * @return bool
    */
-  public function set_recent_file(string $file, String $id_link): bool
+  public function set_recent_file(string $file, string $id_link): bool
   {
     $pref = false;
     $project = explode(".", $file)[0];
@@ -2557,7 +2557,7 @@ class ide {
    * @param string| $id_rep The file's ID
    * @return bool
    */
-  public function set_opened_file(string $id_rep, String $file_code, array $info, bool $setRecent = true): bool
+  public function set_opened_file(string $id_rep, string $file_code, array $info, bool $setRecent = true): bool
   {
     $bit = false;
     //file preference in repository

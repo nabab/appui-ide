@@ -56,7 +56,7 @@ else{
 
   if ( !empty($content) ){
     foreach( $content as $i => $path ){
-      $nodePath = substr($path, Strlen($folderCache));
+      $nodePath = substr($path, strlen($folderCache));
       $arr = explode("/", $path);
       $element = $arr[count($arr)-1];
 

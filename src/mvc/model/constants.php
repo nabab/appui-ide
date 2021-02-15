@@ -10,7 +10,7 @@ if ( isset($model->data['name']) ){
   foreach ( $cs as $k => $c ){
     if ( strpos($k, $prefix) === 0 ){
       array_push($res['constants'], [
-        'constant' => substr($k, Strlen($prefix)),
+        'constant' => substr($k, strlen($prefix)),
         'value' => $c
       ]);
     }

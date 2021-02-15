@@ -138,7 +138,7 @@ class ide {
    * @param string $id_user if set user id will return the result for that user otherwise the current one will return
    * @return array|null
    */
-  private function get_bit_by_file(string $file, String $id_user = null): ?array
+  private function get_bit_by_file(string $file, string $id_user = null): ?array
   {
     if ( !empty($file) &&
       !empty($this->db) &&
@@ -217,7 +217,7 @@ class ide {
    * @param string $path The file's path from file's URL
    * @return array
    */
-  private function superior_sctrl(string $tab, String $path = ''){
+  private function superior_sctrl(string $tab, string $path = ''){
     if ( ($pos = strpos($tab, '_ctrl')) > -1 ){
       if ( ($pos === 0) ){
         $path = '';
@@ -271,7 +271,7 @@ class ide {
     return $files;
   }*/
 
-  private function check_normal(array $cfg, array $rep, String $path){
+  private function check_normal(array $cfg, array $rep, string $path){
     if ( !empty($cfg) && !empty($path) && !empty($cfg['name']) ){
 
       $old = $new = $path;
@@ -309,7 +309,7 @@ class ide {
     return false;
   }
 
-  private function check_mvc(array $cfg, array $rep, String $path){
+  private function check_mvc(array $cfg, array $rep, string $path){
     $todo = [];
     if ( !empty($cfg) &&
       !empty($rep) &&
@@ -467,7 +467,7 @@ class ide {
    * @param string $path
    * @return boolean
    */
-  private function move_component(array $cfg, array $rep, String $path){
+  private function move_component(array $cfg, array $rep, string $path){
     $ele = $this->check_normal($cfg, $rep, $path);
     if ( !empty($ele) && is_array($ele) && empty($this->fs->move($ele['old'], Dirname($ele['new']))) ){
       return false;
@@ -710,7 +710,7 @@ class ide {
    * @param string $type
    * @return string|boolean
    */
-  private function backup_preference_files(array $file, array $state, String $type=''){
+  private function backup_preference_files(array $file, array $state, string $type=''){
     $state = json_encode($state);
     $backup_path = $this->get_path_backup($file);
 
@@ -749,7 +749,7 @@ class ide {
    * @param string $type
    * @return void
    */
-  private function backup_history(array $file, String $type='' ){
+  private function backup_history(array $file, string $type='' ){
     if ( !empty($backup_path = $this->get_path_backup($file)) ){
       $backup = $backup_path['path_history'] . date('Y-m-d_His') . '.' .$file['extension'];
       if ( ($type === 'create')  &&  $this->fs->isFile(self::$current_file) ){
@@ -771,7 +771,7 @@ class ide {
    * @param string $ope The operation type (rename, copy)
    * @return bool
    */
-  private function manager_backup_components(array $cfg, String $case ){
+  private function manager_backup_components(array $cfg, string $case ){
     if ( !empty($cfg['is_component']) ){
       $component_type = $this->getType('components');
       $tabs = $component_type['tabs'];
@@ -863,7 +863,7 @@ class ide {
    * @param string $ope The operation type (rename, copy)
    * @return bool
    */
-  private function manager_backup(array $path,  array $cfg, String $case ){
+  private function manager_backup(array $path,  array $cfg, string $case ){
     //configuration path for backup
     $backup_path = self::$backup_path . $cfg['repository']['path'].'/src';
     // for case of copy the type is included in path and new_path
@@ -985,7 +985,7 @@ class ide {
    * @param string $ope The operation type (rename, copy)
    * @return bool
    */
-  private function operations(array $cfg, String $ope){
+  private function operations(array $cfg, string $ope){
     if ( is_string($ope) &&
       !empty($cfg['repository']) &&
       !empty($cfg['name']) &&
@@ -1305,7 +1305,7 @@ class ide {
    * @param string $path path project
    * @return bool||array list file with property extension and value the path of the file existing or not
    */
-  public function list_tabs_with_file(string $type, String $path, String $repository){
+  public function list_tabs_with_file(string $type, string $path, string $repository){
 
     $list = [];
     $root = $this->getRootPath($repository);
@@ -1639,7 +1639,7 @@ class ide {
 
         $root = $this->getRootPath($real['repository']['name']);
 
-        $file = substr($real['file'], Strlen($root));
+        $file = substr($real['file'], strlen($root));
         $file_name = \bbn\Str::fileExt($real['file'],1)[0];
 
         $file_path = substr($url,  strlen($real['repository']['name'])+1);
@@ -1922,7 +1922,7 @@ class ide {
    * @param string $type The type of real (file/dir)
    * @return bool
    */
-  public function create_perm_by_real(string $file, String $type = 'file'): bool
+  public function create_perm_by_real(string $file, string $type = 'file'): bool
   {
     if ( !empty($file) &&
       $this->fs->isDir(\bbn\Mvc::getAppPath()) &&
@@ -2012,7 +2012,7 @@ class ide {
    * @param string $type The type (file/dir)
    * @return bool
    */
-  public function change_perm_by_real(string $old, String $new, String $type = 'file'):  bool
+  public function change_perm_by_real(string $old, string $new, string $type = 'file'):  bool
   {
     $type = strtolower($type);
     if ( !empty($old) &&
@@ -2041,7 +2041,7 @@ class ide {
    * @param string $type The type (file/dir)
    * @return bool
    */
-  public function move_perm_by_real(string $old, String $new, String $type = 'file'): bool
+  public function move_perm_by_real(string $old, string $new, string $type = 'file'): bool
   {
     $type = strtolower($type);
     if ( !empty($old) &&
@@ -2229,7 +2229,7 @@ class ide {
    * @param string| $id_rep The file's ID
    * @return bool
    */
-  public function tracking(array $file, String $file_code, array $info, bool $setRecent = true): bool
+  public function tracking(array $file, string $file_code, array $info, bool $setRecent = true): bool
   {
     $bit = false;
     if ( ($id_option_opened = $this->options->fromCode(self::OPENED_FILE,self::IDE_PATH, self::BBN_APPUI)) ){
@@ -2992,7 +2992,7 @@ class ide {
                     if ( $typeSearch($this->fs->getContents($val), $info['search'], $info['typeSearch']) !== false ){
                       $path = $base_rep.$part;
                       $path_file= $val;
-                      $link = explode("/", substr($val, Strlen($path)+1, Strlen($val)));
+                      $link = explode("/", substr($val, strlen($path)+1, strlen($val)));
                       if ( (!empty($info['isProject']) && $info['type'] === 'mvc') ||
                         !empty($info['mvc'])
                       ){
@@ -3031,7 +3031,7 @@ class ide {
                         //if we find what we are looking for in this line and that this is not '\ n' then we will take the coirispjective line number with the key function, insert it into the array and the line number
                         if ( ($typeSearch($lineCurrent, $info['search'], $info['typeSearch']) !== false) && (strpos($lineCurrent, '\n') === false) ){
                           $lineNumber = $file->key()+1;
-                          $name_path = $info['repository']['path'].substr(dirname($val), Strlen($base_rep));
+                          $name_path = $info['repository']['path'].substr(dirname($val), strlen($base_rep));
                           $position = $typeSearch($lineCurrent, $info['search'], $info['typeSearch']);
                           $line = "<strong>".'line ' . $lineNumber . ' : '."</strong>";
 
@@ -3050,7 +3050,7 @@ class ide {
                           }
                           $text .= str_replace($info['search'], "<strong><span class='underlineSeach'>".$info['search']."</span></strong>", $lineCurrent);
                           $file_name = basename($path_file);
-                          $path = dirname($base.'/'.substr($path_file, Strlen($base_rep)));
+                          $path = dirname($base.'/'.substr($path_file, strlen($base_rep)));
                           $occourences = $occourences + substr_count($lineCurrent, $info['search']);
                           // info for code
                           $list[] = [
@@ -3079,7 +3079,7 @@ class ide {
                       else{
                         $tab = explode("/",$path_file)[1];
                       }
-                      $link =  explode(".",substr($path_file, Strlen(explode("/",$path_file)[0].'/'.explode("/",$path_file)[1])+1))[0];
+                      $link =  explode(".",substr($path_file, strlen(explode("/",$path_file)[0].'/'.explode("/",$path_file)[1])+1))[0];
                     }
                    //info file
                     $fileData = [
@@ -3136,7 +3136,7 @@ class ide {
                     (strpos($lineCurrent, '\n') === false)
                   ){
                     $lineNumber = $file->key()+1;
-                    $link =  explode(".",substr($path_file, Strlen(explode("/",$path_file)[0].'/'.explode("/",$path_file)[1])+1))[0];
+                    $link =  explode(".",substr($path_file, strlen(explode("/",$path_file)[0].'/'.explode("/",$path_file)[1])+1))[0];
                     $name_path = substr(dirname($v), Strpos($v, $info['repository']['path']));
                     $position = $typeSearch($lineCurrent, $info['search'], $info['typeSearch']);
                     $text = "<strong>".'line ' . $lineNumber . ' : '."</strong>";
@@ -3152,7 +3152,7 @@ class ide {
                       else{
                         $tab = explode("/",$path_file)[1];
                       }
-                      $link =  explode(".",substr($path_file, Strlen(explode("/",$path_file)[0].'/'.explode("/",$path_file)[1])+1))[0];
+                      $link =  explode(".",substr($path_file, strlen(explode("/",$path_file)[0].'/'.explode("/",$path_file)[1])+1))[0];
                     }
                     // info for file
                     $list[] = [
@@ -3162,7 +3162,7 @@ class ide {
                       'code' => true,
                       'uid' =>  $path.'/'.$file_name,
                       'icon' => 'nf nf-fa-code',
-                      'linkPosition' => explode(".",substr($path_file, Strlen(explode("/",$path_file)[0].'/'.explode("/",$path_file)[1])+1))[0],
+                      'linkPosition' => explode(".",substr($path_file, strlen(explode("/",$path_file)[0].'/'.explode("/",$path_file)[1])+1))[0],
                       'tab' =>  !empty($tab) ? $tab : false
                     ];
                   }

@@ -10225,10 +10225,10 @@ else{
   }
 }
 foreach ($result as $i => $r) {
-  $result[$i]['created_at'] = date('Y-m-d H:i:s', Strtotime($r['created_at']));
-  $result[$i]['updated_at'] = date('Y-m-d H:i:s', Strtotime($r['updated_at']));
+  $result[$i]['created_at'] = date('Y-m-d H:i:s', strtotime($r['created_at']));
+  $result[$i]['updated_at'] = date('Y-m-d H:i:s', strtotime($r['updated_at']));
   if ($r['closed_at']) {
-    $result[$i]['closed_at'] = date('Y-m-d H:i:s', Strtotime($r['closed_at']));
+    $result[$i]['closed_at'] = date('Y-m-d H:i:s', strtotime($r['closed_at']));
   }
 }
 return ['issues' => $result];

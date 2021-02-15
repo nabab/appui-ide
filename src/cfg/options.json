@@ -1,4 +1,4 @@
-[{
+{
   "text": "I.D.E.",
   "code": "ide",
   "id_parent": "appui",
@@ -381,13 +381,41 @@
           ]
         }
       ]
+    },
+    {
+      "text": "Permissions",
+      "code": "permissions",
+      "cfg": {
+        "allow_children": 1
+      },
+      "items": [
+        {
+          "text": "Access",
+          "code": "access"
+        }, {
+          "text": "Options",
+          "code": "options"
+        }, {
+          "text": "Plugins",
+          "code": "plugins",
+          "items": [
+            {
+              "text": "Dashboard",
+              "code": "appui-dashboard",
+              "id_alias": ["list", "dashboard", "appui"],
+              "items": [
+                {
+                  "text": "IDE recent files",
+                  "code": "ide_recent_files",
+                  "limit":5,
+                  "closable":true,
+                  "itemComponent": "appui-ide-widget-files-recent"
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
-}, {
-  "text": "IDE recent files",
-  "code": "ide_recent_files",
-  "id_parent": ["default","dashboard","appui"],
-  "id_alias": ["ide_recent_files","appui-dashboard","plugins","|*appui-ide*|/","page","permissions","appui"],
-  "value": "{\"limit\":5,\"observe\":false,\"options\":[],\"closable\":true,\"buttonsLeft\":[],\"buttonsRight\":[],\"itemComponent\":\"appui-ide-widget-files-recent\"}",
-  "after": 1
-}]
+}

@@ -1,9 +1,20 @@
 (() => {
   return {
+    mixins: [bbn.vue.basicComponent, bbn.vue.localStorageComponent],
+    props: {
+      storage: {
+        default: true
+      },
+      storageFullName: {
+        default: 'appui-ide-popup-new'
+      }
+    },
     data(){
-      var rep =  this.source.type !== false ? this.source.repositoryProject : this.source.repositories[this.source.currentRep],
-          defaultTab = '',
-          defaultExt = '';
+      let rep =  this.source.type !== false ? this.source.repositoryProject : this.source.repositories[this.source.currentRep];
+      let defaultTab = '';
+      let defaultExt = '';
+      let storage = this.getStorage();
+      let template = storage.template || 'file';
       if ( rep.tabs ){
         bbn.fn.each(rep.tabs, (a, k) => {
           if ( a.default ){
@@ -22,12 +33,19 @@
         isComponent: ((rep !== undefined) && (rep.tabs !== undefined) && ((rep.alias_code === "components") && (rep.alias_code !== "bbn-project"))) || (this.source.type === "components"),
         rep: rep,
         type:  this.source.type || false,
+        templates: [
+          {value: 'mvc_vue', text: bbn._('Page with Vue component')},
+          {value: 'mvc_js', text: bbn._('Page with Javascript function')},
+          {value: 'mvc', text: bbn._('Simple page (combo)')},
+          {value: 'action', text: bbn._('Action')},
+          {value: 'file', text: bbn._('File')}
+        ],
         data: {
           tab: ((this.source.tab_mvc !== undefined) && this.source.tab_mvc.length && (this.source.type === 'mvc')) ?
                   bbn.fn.search(rep.tabs, 'url', this.source.tab_mvc) :
                   defaultTab,
           name: '',
-          template: null,
+          template: template,
           extension: defaultExt,
           is_file: this.source.isFile,
           type: this.source.type || false,
@@ -164,6 +182,19 @@
           return arr;
         }
         return [];
+      },
+    },
+    watch: {
+      "data.template"(v){
+        let storage = this.getStorage();
+        if (!storage) {
+          storage = {};
+        }
+        bbn.fn.log("TEMPLATE", storage, v);
+        if (v !== storage.template) {
+          storage.template = v;
+          this.setStorage(storage);
+        }
       }
     }
   }

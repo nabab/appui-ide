@@ -2,7 +2,7 @@
 <bbn-table :source="source.root + 'profiler/data'"
            :pageable="true"
            :filterable="true"
-           :order="[{field: 'time', Dir: 'desc'}]"
+           :order="[{field: 'time', dir: 'desc'}]"
            @dataloaded="updateURLs"
            ref="table"
            :sortable="true">

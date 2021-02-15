@@ -4,10 +4,12 @@
             :size="40"
             :scrollable="false"
             overflow="visible">
-    <bbn-toolbar class="bbn-ide bbn-overlay">
+    <bbn-toolbar class="bbn-ide bbn-overlay"
+                 ref="toolbar">
       <div>
         <bbn-dropdown class="ide-rep-select"
                       :storage="true"
+                      ref="ddRep"
                       :storage-full-name="'appui-ide-rep-select-' + project"
                       :source="ddRepData"
                       v-model="currentRep"
@@ -131,15 +133,18 @@
               </div>
               <div class="bbn-spadded" v-if="isProject">
                 <bbn-dropdown class="bbn-w-100"
+                              v-if="listRootProject.length"
                               :storage="true"
                               :storage-full-name="'appui-ide-root-project-' + project"
                               :source="listRootProject"
+                              default="mvc"
                               v-model="typeProject"
+                              ref="ddRoot"
                               @hook:mounted="typeProjectReady = true"
                 ></bbn-dropdown>
               </div>
-              <div class="bbn-flex-fill" >
-                <div class="bbn-overlay">
+              <div class="bbn-flex-fill">
+                <div class="bbn-overlay" v-if="!isProject || typeProject">
                   <bbn-tree class="tree"
                             v-if="typeProjectReady"
                             source="ide/tree"
@@ -153,6 +158,7 @@
                             :map="treeMapper"
                             :icon-color="color"
                             :quick-filter="searchFile"
+                            :storage="true"
                             :storage-full-name="'appui-ide-tree/' + source.project + '/' + currentRep + (typeProject ? '/' + typeProject : '')"
                   ></bbn-tree>
                 </div>
