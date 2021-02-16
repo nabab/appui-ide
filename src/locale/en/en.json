@@ -1,11 +1,11 @@
 {
-    "components\/code\/code": {
+    "components\/code": {
         "File saved!": "File saved!",
         "File deleted!": "File deleted!",
         "Error": "Error",
         "Unable to test classes!!": "Unable to test classes!!"
     },
-    "components\/popup\/directories\/form\/types\/types": {
+    "components\/popup\/directories\/form\/types": {
         "Error": "Error",
         "Extensions": "Extensions",
         "Insert a new extension": "Insert a new extension",
@@ -24,7 +24,7 @@
         "Mode:": "Mode:",
         "Default:": "Default:"
     },
-    "components\/popup\/directories\/types\/types": {
+    "components\/popup\/directories\/types": {
         "Error": "Error",
         "Add new type": "Add new type",
         "Copy type": "Copy type",
@@ -33,30 +33,33 @@
         "Deleted": "Deleted",
         "Modify type": "Modify type"
     },
-    "components\/component\/component": {
+    "components\/component": {
         "Refresh code": "Refresh code",
         "Modified code do you want to refresh anyway?": "Modified code do you want to refresh anyway?"
     },
-    "components\/file\/file": {
+    "components\/file": {
         "Refresh code": "Refresh code",
         "Modified code do you want to refresh anyway?": "Modified code do you want to refresh anyway?",
         "Extension changed successfully": "Extension changed successfully",
         "Change error extension": "Change error extension"
     },
-    "components\/mvc\/mvc": {
+    "components\/mvc": {
         "Refresh code": "Refresh code",
         "Modified code do you want to refresh anyway?": "Modified code do you want to refresh anyway?",
+        "Settings": "Settings",
         "Extension changed successfully": "Extension changed successfully",
         "Change error extension": "Change error extension",
         "switch to": "switch to",
         "Add code": "Add code"
     },
-    "components\/docs\/methods\/methods": {
+    "components\/docs\/methods": {
+        "Name:": "Name:",
         "Description:": "Description:",
         "Type:": "Type:",
         "Code Test:": "Code Test:",
         "Params:": "Params:",
         "Return:": "Return:",
+        "Type": "Type",
         "Name": "Name",
         "Description": "Description"
     },
@@ -64,36 +67,14 @@
         "Type": "Type",
         "Repositories": "Repositories"
     },
-    "mvc\/finder2": {
+    "components\/editor": {
         "File": "File",
-        "Delete": "Delete",
-        "Copy": "Copy",
-        "Are you sure you wanna disconnect?": "Are you sure you wanna disconnect?",
-        "Impossible to connect": "Impossible to connect",
-        "Something went wrong": "Something went wrong",
-        "Something went wrong while loading the file infos": "Something went wrong while loading the file infos",
-        "Modify": "Modify",
-        "Download": "Download",
-        "Paste": "Paste",
-        "the current folder": "the current folder",
-        "Do you want to paste": "Do you want to paste",
-        "into": "into",
-        "Copy something before to paste": "Copy something before to paste",
-        "Success": "success",
-        "Something went wrong when downloading the file": "Something went wrong when downloading the file",
-        "Do you want to delete": "Do you want to delete",
-        "successfully deleted": "Successfully deleted",
-        "Do you want to copy": "Do you want to copy",
-        "Folder": "Folder",
-        "successfully copied": "successfully copied",
-        "successfully modified": "successfully modified"
-    },
-    "components\/editor\/editor": {
         "New": "New",
         "Element": "Element",
         "Directory": "Directory",
         "Save": "Save",
         "Rename": "Rename",
+        "Delete": "Delete",
         "Close tab": "Close tab",
         "Close all tabs": "Close all tabs",
         "Recent files": "Recent files",
@@ -120,6 +101,7 @@
         "Select theme": "Select theme",
         "Search in": "Search in",
         "Do you want to save the changes before closing the tab?": "Do you want to save the changes before closing the tab?",
+        "Copy": "Copy",
         "Find in Component vue": "Find in Component vue",
         "Rename component vue": "Rename component vue",
         "Copy component vue": "Copy component vue",
@@ -162,30 +144,10 @@
         "Deleted!": "Deleted!",
         "i18n": "i18n"
     },
-    "components\/settings\/message\/message": {
-        "Save": "Save",
-        "Add": "Add",
-        "Are you sure you want save this internal message?": "Are you sure you want save this internal message?"
-    },
-    "components\/popup\/search\/search": {
-        "sensitive": "sensitive",
-        "insensitive": "insensitive"
-    },
-    "components\/popup\/remove\/remove": {
-        "Are you sure you want to delete": "Are you sure you want to delete",
+    "components\/popup\/new": {
+        "File": "File",
         "Error!": "Error!",
-        "Deleted!": "Deleted!",
-        "Are you sure you want to delete all": "Are you sure you want to delete all",
-        "file": "File",
-        "the component": "the component"
-    },
-    "components\/popup\/copy\/copy": {
-        "Error!": "Error!",
-        "Copy file succesfully!": "Copy file succesfully!",
-        "Copy succesfully!": "Copy succesfully!"
-    },
-    "components\/popup\/new\/new": {
-        "Error!": "Error!",
+        "Path": "Path",
         "Page with Vue component": "Page with Vue component",
         "Page with Javascript function": "Page with Javascript function",
         "Simple page (combo)": "Simple page (combo)",
@@ -194,13 +156,81 @@
         "File created!": "File created!",
         "Directory created!": "Directory created!"
     },
-    "components\/settings\/help\/help": {
+    "mvc\/finder2": {
+        "File": "File",
+        "Delete": "Delete",
+        "Copy": "Copy",
+        "Are you sure you wanna disconnect?": "Are you sure you wanna disconnect?",
+        "Impossible to connect": "Impossible to connect",
+        "Something went wrong": "Something went wrong",
+        "Something went wrong while loading the file infos": "Something went wrong while loading the file infos",
+        "Modify": "Modify",
+        "Download": "Download",
+        "Paste": "Paste",
+        "the current folder": "the current folder",
+        "Do you want to paste": "Do you want to paste",
+        "into": "into",
+        "Copy something before to paste": "Copy something before to paste",
+        "Success": "success",
+        "Something went wrong when downloading the file": "Something went wrong when downloading the file",
+        "Do you want to delete": "Do you want to delete",
+        "successfully deleted": "Successfully deleted",
+        "Do you want to copy": "Do you want to copy",
+        "Folder": "Folder",
+        "successfully copied": "successfully copied",
+        "successfully modified": "successfully modified"
+    },
+    "components\/settings\/message": {
+        "Save": "Save",
+        "Add": "Add",
+        "Are you sure you want save this internal message?": "Are you sure you want save this internal message?",
+        "Saved": "Saved"
+    },
+    "components\/popup\/remove": {
+        "Delete": "Delete",
+        "Are you sure you want to delete": "Are you sure you want to delete",
+        "Error!": "Error!",
+        "Deleted!": "Deleted!",
+        "Are you sure you want to delete all": "Are you sure you want to delete all",
+        "file": "File",
+        "the component": "the component"
+    },
+    "components\/popup\/search": {
+        "sensitive": "sensitive",
+        "insensitive": "insensitive"
+    },
+    "components\/popup\/copy": {
+        "Error!": "Error!",
+        "Path": "Path",
+        "Copy file succesfully!": "Copy file succesfully!",
+        "Copy succesfully!": "Copy succesfully!"
+    },
+    "components\/settings\/help": {
         "Error!": "Error!",
         "Permission saved!": "Permission saved!"
     },
-    "components\/settings\/permission\/permission": {
+    "components\/settings\/permission": {
         "Error!": "Error!",
         "Permission saved!": "Permission saved!"
+    },
+    "components\/settings": {
+        "Help": "Help",
+        "Info": "Info",
+        "Sub-permissions": "Sub-permissions",
+        "Messages": "Messages"
+    },
+    "components\/explorer": {
+        "Favorites": "Favorites",
+        "Server 1": "Server 1",
+        "Server 2 (read-only)": "Server 2 (read-only)",
+        "Connections": "Connections",
+        "My connections": "My connections",
+        "Public connections": "Public connections",
+        "Settings": "Settings",
+        "Certificates": "Certificates",
+        "Preferences": "Preferences",
+        "Are you sure you wanna disconnect?": "Are you sure you wanna disconnect?",
+        "Impossible to connect": "Impossible to connect"
     },
     "mvc\/finder": {
         "Favorites": "Favorites",
@@ -214,11 +244,7 @@
         "Impossible to connect": "Impossible to connect",
         "New connection": "New connection"
     },
-    "components\/explorer\/explorer": {
-        "My connections": "My connections",
-        "Public connections": "Public connections"
-    },
-    "components\/i18n\/i18n": {
+    "components\/i18n": {
         "Select languages you want to hide from the table": "Select languages you want to hide from the table"
     },
     "mvc\/cache": {
@@ -227,17 +253,12 @@
         "Delete file cache": "Delete file cache",
         "Delete folder's contents": "Delete folder's contents"
     },
-    "components\/popup\/rename\/rename": {
+    "components\/popup\/rename": {
         "Do you want to save the changes before?": "Do you want to save the changes before?",
         "Renamed!": "Renamed!"
     },
-    "components\/popup\/style\/style": {
+    "components\/popup\/style": {
         "successfully edited": "successfully edited"
-    },
-    "components\/settings\/settings": {
-        "Info": "Info",
-        "Sub-permissions": "Sub-permissions",
-        "Messages": "Messages"
     },
     "mvc\/files": {
         "Saved": "Saved",

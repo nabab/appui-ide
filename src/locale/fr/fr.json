@@ -1,11 +1,11 @@
 {
-    "components\/code\/code": {
+    "components\/code": {
         "File saved!": "Fichier sauvegard\u00e9!",
         "File deleted!": "Fichier supprim\u00e9!",
         "Error": "Erreur",
         "Unable to test classes!!": ""
     },
-    "components\/popup\/directories\/form\/types\/types": {
+    "components\/popup\/directories\/form\/types": {
         "Error": "Erreur",
         "Extensions": "Extensions",
         "Insert a new extension": "Ajouter une nouvelle extension",
@@ -24,7 +24,7 @@
         "Mode:": "",
         "Default:": ""
     },
-    "components\/popup\/directories\/types\/types": {
+    "components\/popup\/directories\/types": {
         "Error": "Erreur",
         "Add new type": "Ajouter une nouvelle typologie",
         "Copy type": "Copier la typologie",
@@ -33,30 +33,33 @@
         "Deleted": "Supprim\u00e9",
         "Modify type": "Modifier la typologie"
     },
-    "components\/component\/component": {
+    "components\/component": {
         "Refresh code": "Rafra\u00eechir le code",
         "Modified code do you want to refresh anyway?": "Code modifi\u00e9. Voulez-vous rafra\u00eechir quand m\u00eame?"
     },
-    "components\/file\/file": {
+    "components\/file": {
         "Refresh code": "Rafra\u00eechir le code",
         "Modified code do you want to refresh anyway?": "Code modifi\u00e9. Voulez-vous rafra\u00eechir quand m\u00eame?",
         "Extension changed successfully": "Extension chang\u00e9e correctement",
         "Change error extension": "Erreur pendant le changement d'extension"
     },
-    "components\/mvc\/mvc": {
+    "components\/mvc": {
         "Refresh code": "Rafra\u00eechir le code",
         "Modified code do you want to refresh anyway?": "Code modifi\u00e9. Voulez-vous rafra\u00eechir quand m\u00eame?",
+        "Settings": "Param\u00e8tres",
         "Extension changed successfully": "Extension chang\u00e9e correctement",
         "Change error extension": "Erreur pendant le changement d'extension",
         "switch to": "Passer \u00e0",
         "Add code": "Ajout de code"
     },
-    "components\/docs\/methods\/methods": {
+    "components\/docs\/methods": {
+        "Name:": "",
         "Description:": "",
         "Type:": "",
         "Code Test:": "",
         "Params:": "",
         "Return:": "",
+        "Type": "Type",
         "Name": "Nom",
         "Description": "Description"
     },
@@ -64,36 +67,14 @@
         "Type": "Type",
         "Repositories": ""
     },
-    "mvc\/finder2": {
+    "components\/editor": {
         "File": "Fichier",
-        "Delete": "Supprimer",
-        "Copy": "Copier",
-        "Are you sure you wanna disconnect?": "\u00cates-vous s\u00fbr de vouloir vous d\u00e9connecter?",
-        "Impossible to connect": "Impossible de se connecter",
-        "Something went wrong": "",
-        "Something went wrong while loading the file infos": "",
-        "Modify": "",
-        "Download": "",
-        "Paste": "",
-        "the current folder": "",
-        "Do you want to paste": "",
-        "into": "",
-        "Copy something before to paste": "",
-        "Success": "Succ\u00e8s",
-        "Something went wrong when downloading the file": "",
-        "Do you want to delete": "",
-        "successfully deleted": "Suppression faite avec succ\u00e8s",
-        "Do you want to copy": "",
-        "Folder": "Dossier",
-        "successfully copied": "",
-        "successfully modified": ""
-    },
-    "components\/editor\/editor": {
         "New": "Nouveau",
         "Element": "\u00c9l\u00e9ment",
         "Directory": "",
         "Save": "Sauvegarder",
         "Rename": "Renommer",
+        "Delete": "Supprimer",
         "Close tab": "",
         "Close all tabs": "",
         "Recent files": "",
@@ -120,6 +101,7 @@
         "Select theme": "",
         "Search in": "Chercher dans",
         "Do you want to save the changes before closing the tab?": "",
+        "Copy": "Copier",
         "Find in Component vue": "",
         "Rename component vue": "",
         "Copy component vue": "",
@@ -162,30 +144,10 @@
         "Deleted!": "Supprim\u00e9!",
         "i18n": ""
     },
-    "components\/settings\/message\/message": {
-        "Save": "Sauvegarder",
-        "Add": "Ajouter",
-        "Are you sure you want save this internal message?": ""
-    },
-    "components\/popup\/search\/search": {
-        "sensitive": "",
-        "insensitive": ""
-    },
-    "components\/popup\/remove\/remove": {
-        "Are you sure you want to delete": "",
+    "components\/popup\/new": {
+        "File": "Fichier",
         "Error!": "Erreur!",
-        "Deleted!": "Supprim\u00e9!",
-        "Are you sure you want to delete all": "",
-        "file": "Fichier",
-        "the component": ""
-    },
-    "components\/popup\/copy\/copy": {
-        "Error!": "Erreur!",
-        "Copy file succesfully!": "Fichier copi\u00e9 correctement!",
-        "Copy succesfully!": "Copie r\u00e9ussie!"
-    },
-    "components\/popup\/new\/new": {
-        "Error!": "Erreur!",
+        "Path": "Chemin",
         "Page with Vue component": "",
         "Page with Javascript function": "",
         "Simple page (combo)": "",
@@ -194,13 +156,81 @@
         "File created!": "",
         "Directory created!": ""
     },
-    "components\/settings\/help\/help": {
+    "mvc\/finder2": {
+        "File": "Fichier",
+        "Delete": "Supprimer",
+        "Copy": "Copier",
+        "Are you sure you wanna disconnect?": "\u00cates-vous s\u00fbr de vouloir vous d\u00e9connecter?",
+        "Impossible to connect": "Impossible de se connecter",
+        "Something went wrong": "",
+        "Something went wrong while loading the file infos": "",
+        "Modify": "",
+        "Download": "",
+        "Paste": "",
+        "the current folder": "",
+        "Do you want to paste": "",
+        "into": "",
+        "Copy something before to paste": "",
+        "Success": "Succ\u00e8s",
+        "Something went wrong when downloading the file": "",
+        "Do you want to delete": "",
+        "successfully deleted": "Suppression faite avec succ\u00e8s",
+        "Do you want to copy": "",
+        "Folder": "Dossier",
+        "successfully copied": "",
+        "successfully modified": ""
+    },
+    "components\/settings\/message": {
+        "Save": "Sauvegarder",
+        "Add": "Ajouter",
+        "Are you sure you want save this internal message?": "",
+        "Saved": "Sauvegard\u00e9"
+    },
+    "components\/popup\/remove": {
+        "Delete": "Supprimer",
+        "Are you sure you want to delete": "",
+        "Error!": "Erreur!",
+        "Deleted!": "Supprim\u00e9!",
+        "Are you sure you want to delete all": "",
+        "file": "Fichier",
+        "the component": ""
+    },
+    "components\/popup\/search": {
+        "sensitive": "",
+        "insensitive": ""
+    },
+    "components\/popup\/copy": {
+        "Error!": "Erreur!",
+        "Path": "Chemin",
+        "Copy file succesfully!": "Fichier copi\u00e9 correctement!",
+        "Copy succesfully!": "Copie r\u00e9ussie!"
+    },
+    "components\/settings\/help": {
         "Error!": "Erreur!",
         "Permission saved!": ""
     },
-    "components\/settings\/permission\/permission": {
+    "components\/settings\/permission": {
         "Error!": "Erreur!",
         "Permission saved!": ""
+    },
+    "components\/settings": {
+        "Help": "Aide",
+        "Info": "Info",
+        "Sub-permissions": "",
+        "Messages": "Messages"
+    },
+    "components\/explorer": {
+        "Favorites": "Favoris",
+        "Server 1": "Serveur 1",
+        "Server 2 (read-only)": "Serveur 2 (lecture seule)",
+        "Connections": "Connexions",
+        "My connections": "Mes connexions",
+        "Public connections": "Connexions publiques",
+        "Settings": "Param\u00e8tres",
+        "Certificates": "Certificats",
+        "Preferences": "Pr\u00e9f\u00e9rences",
+        "Are you sure you wanna disconnect?": "\u00cates-vous s\u00fbr de vouloir vous d\u00e9connecter?",
+        "Impossible to connect": "Impossible de se connecter"
     },
     "mvc\/finder": {
         "Favorites": "Favoris",
@@ -214,11 +244,7 @@
         "Impossible to connect": "Impossible de se connecter",
         "New connection": ""
     },
-    "components\/explorer\/explorer": {
-        "My connections": "Mes connexions",
-        "Public connections": "Connexions publiques"
-    },
-    "components\/i18n\/i18n": {
+    "components\/i18n": {
         "Select languages you want to hide from the table": "S\u00e9lectionner les langues que vous souhaitez cacher dans le tableau"
     },
     "mvc\/cache": {
@@ -227,17 +253,12 @@
         "Delete file cache": "",
         "Delete folder's contents": ""
     },
-    "components\/popup\/rename\/rename": {
+    "components\/popup\/rename": {
         "Do you want to save the changes before?": "",
         "Renamed!": ""
     },
-    "components\/popup\/style\/style": {
+    "components\/popup\/style": {
         "successfully edited": ""
-    },
-    "components\/settings\/settings": {
-        "Info": "Info",
-        "Sub-permissions": "",
-        "Messages": "Messages"
     },
     "mvc\/files": {
         "Saved": "Sauvegard\u00e9",
