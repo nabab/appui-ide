@@ -1,1 +1,274 @@
-{"":{"File saved!":"","File deleted!":"","Error":"Errore","Unable to test classes!!":"","Refresh code":"","Modified code do you want to refresh anyway?":"","Description:":"","Type:":"","Code Test:":"","Params:":"","Return:":"","Type":"","Name":"Nome","Description":"Descrizione","File":"","New":"","Element":"","Directory":"","Save":"","Rename":"","Delete":"","Close tab":"","Close all tabs":"","Recent files":"","Edit":"","Find":"","Find next":"","Find previous":"","Replace":"","Replace All":"","Unfold all":"","Fold all":"","History":"","Show":"","Clear":"","Clear All":"","Doc.":"","Generate":"","Pref.":"","Manage directories":"","IDE style":"","sensitive":"","insensitive":"","Manager type directories":"","Select theme":"","Search in":"","Do you want to save the changes before closing the tab?":"","Copy":"","Find in Component vue":"","Rename component vue":"","Copy component vue":"","Delete component vue":"","New directory component":"","New directory":"","New component":"","New file":"","Find in folder Component vue":"","Find in Path":"","Go to":"","Test code!":"","Profiling":"","The component has been deleted":"","Loading a page with this component will redefine it.":"","Impossible to retrieve the name of the component":"","New File":"","New Component":"","New Class":"","New Directory":"","Rename only component vue":"","Rename component vue and your content":"","Rename folder":"","Rename component":"","Copy component":"","Copy folder":"","Are you sure you want to delete the component":"","Are you sure you want to delete the folder":"","Are you sure you want to delete":"","the folder":"","Remove File":"","Remove Folder":"","Remove Component":"","Error!":"Errore!","Successfully moved":"","Impossible to have two items with the same name":"","Error move":"","The recipient node is not a folder":"","Are you sure you want to delete it?":"","Deleted!":"","i18n":"","Favorites":"","Server 1":"","Server 2 (read-only)":"","Connections":"","My connections":"","Public connections":"","Settings":"","Certificates":"","Preferences":"","Are you sure you wanna disconnect?":"","Impossible to connect":"","Extension changed successfully":"","Change error extension":"","Select languages you want to hide from the table":"","switch to":"","Add code":"","Copy file succesfully!":"","Copy succesfully!":"","Extensions":"","Insert a new extension":"","Tab":"","Insert a new tab":"","Insert a title":"","Insert a path":"","Insert a url":"","Types":"","Insert a new type":"","Insert a link to a type":"","Edit Extension":"","Add Extension":"","success":"","Ext:":"","Mode:":"","Default:":"","Add new type":"","Copy type":"","Are you sure you want to delete the":"","type?":"","Deleted":"","Modify type":"","Page with Vue component":"","Page with Javascript function":"","Simple page (combo)":"","Action":"Azione","Component created!":"","File created!":"","Directory created!":"","Are you sure you want to delete all":"","file":"","the component":"","Delete folder":"","Do you want to save the changes before?":"","Renamed!":"","successfully edited":"","Info":"","Sub-permissions":"","Messages":"","Permission saved!":"","Add":"","Are you sure you want save this internal message?":"","Saved":"","successfully moved!":"","Error move!":"","Never":"","Delete file cache":"","Delete folder's contents":"","Backtrace":"","Application":"","PHP libraries":"","Javascript libraries":"","Data":"","User data":"","Be sure to save changes on file":"","Something went wrong":"","You have not changes to save":"","New connection":"","Something went wrong while loading the file infos":"","Modify":"","Download":"","Paste":"","the current folder":"","Do you want to paste":"","into":"","Copy something before to paste":"","Success":"","Something went wrong when downloading the file":"","Do you want to delete":"","successfully deleted":"","Do you want to copy":"","Folder":"","successfully copied":"","successfully modified":"","lines":"","Modified:":"","Are you sure you want to delete the file:":"","Repositories":"","Opened":"","Closed":""}}
+{
+    "components\/code\/code": {
+        "File saved!": "",
+        "File deleted!": "",
+        "Error": "Errore",
+        "Unable to test classes!!": ""
+    },
+    "components\/popup\/directories\/form\/types\/types": {
+        "Error": "Errore",
+        "Extensions": "",
+        "Insert a new extension": "",
+        "Tab": "",
+        "Insert a new tab": "",
+        "Insert a title": "",
+        "Insert a path": "",
+        "Insert a url": "",
+        "Types": "",
+        "Insert a new type": "",
+        "Insert a link to a type": "",
+        "Edit Extension": "",
+        "Add Extension": "",
+        "success": "",
+        "Ext:": "",
+        "Mode:": "",
+        "Default:": ""
+    },
+    "components\/popup\/directories\/types\/types": {
+        "Error": "Errore",
+        "Add new type": "",
+        "Copy type": "",
+        "Are you sure you want to delete the": "",
+        "type?": "",
+        "Deleted": "",
+        "Modify type": ""
+    },
+    "components\/component\/component": {
+        "Refresh code": "",
+        "Modified code do you want to refresh anyway?": ""
+    },
+    "components\/file\/file": {
+        "Refresh code": "",
+        "Modified code do you want to refresh anyway?": "",
+        "Extension changed successfully": "",
+        "Change error extension": ""
+    },
+    "components\/mvc\/mvc": {
+        "Refresh code": "",
+        "Modified code do you want to refresh anyway?": "",
+        "Extension changed successfully": "",
+        "Change error extension": "",
+        "switch to": "",
+        "Add code": ""
+    },
+    "components\/docs\/methods\/methods": {
+        "Description:": "",
+        "Type:": "",
+        "Code Test:": "",
+        "Params:": "",
+        "Return:": "",
+        "Name": "Nome",
+        "Description": "Descrizione"
+    },
+    "mvc\/editor\/directories": {
+        "Type": "",
+        "Repositories": ""
+    },
+    "mvc\/finder2": {
+        "File": "",
+        "Delete": "",
+        "Copy": "",
+        "Are you sure you wanna disconnect?": "",
+        "Impossible to connect": "",
+        "Something went wrong": "",
+        "Something went wrong while loading the file infos": "",
+        "Modify": "",
+        "Download": "",
+        "Paste": "",
+        "the current folder": "",
+        "Do you want to paste": "",
+        "into": "",
+        "Copy something before to paste": "",
+        "Success": "",
+        "Something went wrong when downloading the file": "",
+        "Do you want to delete": "",
+        "successfully deleted": "",
+        "Do you want to copy": "",
+        "Folder": "",
+        "successfully copied": "",
+        "successfully modified": ""
+    },
+    "components\/editor\/editor": {
+        "New": "",
+        "Element": "",
+        "Directory": "",
+        "Save": "",
+        "Rename": "",
+        "Close tab": "",
+        "Close all tabs": "",
+        "Recent files": "",
+        "Edit": "",
+        "Find": "",
+        "Find next": "",
+        "Find previous": "",
+        "Replace": "",
+        "Replace All": "",
+        "Unfold all": "",
+        "Fold all": "",
+        "History": "",
+        "Show": "",
+        "Clear": "",
+        "Clear All": "",
+        "Doc.": "",
+        "Generate": "",
+        "Pref.": "",
+        "Manage directories": "",
+        "IDE style": "",
+        "sensitive": "",
+        "insensitive": "",
+        "Manager type directories": "",
+        "Select theme": "",
+        "Search in": "",
+        "Do you want to save the changes before closing the tab?": "",
+        "Find in Component vue": "",
+        "Rename component vue": "",
+        "Copy component vue": "",
+        "Delete component vue": "",
+        "New directory component": "",
+        "New directory": "",
+        "New component": "",
+        "New file": "",
+        "Find in folder Component vue": "",
+        "Find in Path": "",
+        "Go to": "",
+        "Test code!": "",
+        "Profiling": "",
+        "The component has been deleted": "",
+        "Loading a page with this component will redefine it.": "",
+        "Impossible to retrieve the name of the component": "",
+        "New File": "",
+        "New Component": "",
+        "New Class": "",
+        "New Directory": "",
+        "Rename only component vue": "",
+        "Rename component vue and your content": "",
+        "Rename folder": "",
+        "Rename component": "",
+        "Copy component": "",
+        "Copy folder": "",
+        "Are you sure you want to delete the component": "",
+        "Are you sure you want to delete the folder": "",
+        "Are you sure you want to delete": "",
+        "the folder": "",
+        "Remove File": "",
+        "Remove Folder": "",
+        "Remove Component": "",
+        "Error!": "Errore!",
+        "Successfully moved": "",
+        "Impossible to have two items with the same name": "",
+        "Error move": "",
+        "The recipient node is not a folder": "",
+        "Are you sure you want to delete it?": "",
+        "Deleted!": "",
+        "i18n": ""
+    },
+    "components\/settings\/message\/message": {
+        "Save": "",
+        "Add": "",
+        "Are you sure you want save this internal message?": ""
+    },
+    "components\/popup\/search\/search": {
+        "sensitive": "",
+        "insensitive": ""
+    },
+    "components\/popup\/remove\/remove": {
+        "Are you sure you want to delete": "",
+        "Error!": "Errore!",
+        "Deleted!": "",
+        "Are you sure you want to delete all": "",
+        "file": "",
+        "the component": ""
+    },
+    "components\/popup\/copy\/copy": {
+        "Error!": "Errore!",
+        "Copy file succesfully!": "",
+        "Copy succesfully!": ""
+    },
+    "components\/popup\/new\/new": {
+        "Error!": "Errore!",
+        "Page with Vue component": "",
+        "Page with Javascript function": "",
+        "Simple page (combo)": "",
+        "Action": "Azione",
+        "Component created!": "",
+        "File created!": "",
+        "Directory created!": ""
+    },
+    "components\/settings\/help\/help": {
+        "Error!": "Errore!",
+        "Permission saved!": ""
+    },
+    "components\/settings\/permission\/permission": {
+        "Error!": "Errore!",
+        "Permission saved!": ""
+    },
+    "mvc\/finder": {
+        "Favorites": "",
+        "Server 1": "",
+        "Server 2 (read-only)": "",
+        "Connections": "",
+        "Settings": "",
+        "Certificates": "",
+        "Preferences": "",
+        "Are you sure you wanna disconnect?": "",
+        "Impossible to connect": "",
+        "New connection": ""
+    },
+    "components\/explorer\/explorer": {
+        "My connections": "",
+        "Public connections": ""
+    },
+    "components\/i18n\/i18n": {
+        "Select languages you want to hide from the table": ""
+    },
+    "mvc\/cache": {
+        "Delete folder": "",
+        "Never": "",
+        "Delete file cache": "",
+        "Delete folder's contents": ""
+    },
+    "components\/popup\/rename\/rename": {
+        "Do you want to save the changes before?": "",
+        "Renamed!": ""
+    },
+    "components\/popup\/style\/style": {
+        "successfully edited": ""
+    },
+    "components\/settings\/settings": {
+        "Info": "",
+        "Sub-permissions": "",
+        "Messages": ""
+    },
+    "mvc\/files": {
+        "Saved": "",
+        "Application": "",
+        "PHP libraries": "",
+        "Javascript libraries": "",
+        "Data": "",
+        "User data": "",
+        "Be sure to save changes on file": "",
+        "Something went wrong": "",
+        "You have not changes to save": ""
+    },
+    "mvc\/all": {
+        "successfully moved!": "",
+        "Error move!": ""
+    },
+    "mvc\/error_log": {
+        "Backtrace": ""
+    },
+    "mvc\/logs": {
+        "lines": "",
+        "Modified:": "",
+        "Are you sure you want to delete the file:": ""
+    },
+    "mvc\/debug\/logs\/home": {
+        "lines": "",
+        "Modified:": "",
+        "Are you sure you want to delete the file:": ""
+    },
+    "mvc\/git\/issues": {
+        "Opened": "",
+        "Closed": ""
+    }
+}
