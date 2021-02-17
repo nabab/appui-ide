@@ -993,7 +993,7 @@
                 let root = appui.plugins[bbn.fn.getField(this.ddRepData, 'text', 'value', this.currentRep)];
                 root = root !== undefined ? root+'/' : '';
                 //bbn.fn.link('ide/profiler/url/'+ root + node.data.path);
-                bbn.fn.link('ide/profiler/url/'+ root + node.data.uid);
+                bbn.fn.link(appui.plugins['appui-ide'] + '/profiler/url/'+ root + node.data.uid);
               }
             });
           }

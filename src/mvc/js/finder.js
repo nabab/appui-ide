@@ -54,11 +54,11 @@
         alert( a)
         bbn.fn.log(a, this.dirs)
         if ( a === 'dir' ){
-          bbn.fn.abort('ide/finder')
+          bbn.fn.abort(appui.plugins['appui-ide'] + '/finder')
           /* this.dirs.pop();*/
         }
         else{
-          bbn.fn.abort('ide/actions/finder/file')
+          bbn.fn.abort(appui.plugins['appui-ide'] + '/actions/finder/file')
         }
         this.currentFile = false;
       },

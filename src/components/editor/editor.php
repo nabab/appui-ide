@@ -147,7 +147,7 @@
                 <div class="bbn-overlay" v-if="!isProject || typeProject">
                   <bbn-tree class="tree"
                             v-if="typeProjectReady"
-                            source="ide/tree"
+                            :source="source.root + 'tree'"
                             @nodeDblclick="treeNodeActivate"
                             :menu="treeContextMenu"
                             ref="filesList"
