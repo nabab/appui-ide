@@ -19,8 +19,8 @@ class ide {
         BBN_PERMISSIONS = 'permissions',
         BBN_PAGE = 'page',
         IDE_PATH = 'ide',
-        DEV_PATH = 'PATHS',
-        PATH_TYPE = 'PTYPES',
+        DEV_PATH = 'paths',
+        PATH_TYPE = 'types',
        // FILES_PREF = 'files',
         OPENED_FILE = 'opened',
         RECENT_FILE = 'recent';
