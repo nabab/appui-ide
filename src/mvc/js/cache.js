@@ -3,7 +3,7 @@
   return {
     data(){
       return{
-        root: appui.plugins['appui-ide'],
+        root: appui.plugins['appui-ide'] + '/',
         selectedFile : "",
         contentCache: ""
       }

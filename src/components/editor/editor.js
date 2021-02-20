@@ -18,7 +18,7 @@
       },
       project: {
         type: String,
-        default: 'apst-app',
+        default: bbn.env.appName
       },
  		},
     data(){

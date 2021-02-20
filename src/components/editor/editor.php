@@ -189,6 +189,8 @@
         <bbn-router id="tabstrip_editor"
                     :nav="true"
                     :master="true"
+                    :storage="true"
+                    :storage-full-name="'appui-ide-editor-router-' + project"
                     ref="tabstrip"
                     @beforeClose="ctrlCloseTab"
                     @ready="createTabstrip"
