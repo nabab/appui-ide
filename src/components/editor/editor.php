@@ -214,7 +214,7 @@
           <div class="bbn-spadded">
             <bbn-button @click="getTreeParser"
                         icon="nf nf-mdi-file_tree"
-                        title="<?=_("Structure Element")?>"
+                        title="<?=_("Get object structure")?>"
                         class="bbn-w-100"
             ></bbn-button>
           </div>

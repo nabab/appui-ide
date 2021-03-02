@@ -189,25 +189,31 @@
     },
     computed: {
       listRootProject(){
-        let roots = this.source.projects.roots.slice();
-        if ( roots.length ) {
-          return bbn.fn.map(roots, v => {
-            switch (v.text) {
-              case 'mvc':
-                 v.text = '<i class="nf nf-fa-code"></i> '+ v.text;
-                break;
-              case 'components':
-                v.text = '<i class="nf nf-mdi-vuejs"></i> '+ v.text;
-                break;
-              case 'lib':
-                v.text = '<i class="nf nf-mdi-library"></i> '+ v.text;
-                break;
-              case 'cli':
-                v.text = '<i class="nf nf-fa-cogs"></i> '+ v.text;
-                break;
-            }
-            return v;
-          })
+        if (this.currentRep && this.source.repositories[this.currentRep]) {
+          let roots = bbn.fn.clone(this.source.repositories[this.currentRep].types);
+          if ( roots.length ) {
+            return bbn.fn.map(roots, v => {
+              switch (v.text) {
+                case 'mvc':
+                  v.icon = "nf nf-fa-code";
+                  break;
+                case 'components':
+                  v.icon = "nf nf-mdi-vuejs";
+                  break;
+                case 'lib':
+                  v.icon = "nf nf-mdi-library";
+                  break;
+                case 'cli':
+                  v.icon = "nf nf-fa-cogs";
+                  break;
+              }
+              return {
+                text: bbn.fn.correctCase(v.type),
+                icon: v.icon || "nf nf-fa-cogs",
+                value: v.type
+              };
+            })
+          }
         }
         return [];
       },
@@ -318,11 +324,11 @@
       isMVC(){
         if ( !this.type ){
           return !!(this.repositories[this.currentRep] &&
-            this.repositories[this.currentRep].tabs &&
-            (this.repositories[this.currentRep].alias_code === "mvc"));
+            this.repositories[this.currentRep].types &&
+            ['sandbox', 'mvc'].includes(this.repositories[this.currentRep].alias_code));
         }
         else{
-          return this.type === "mvc";
+          return ['sandbox', 'mvc'].includes(this.type);
         }
       },
       isComponent(){
@@ -500,7 +506,7 @@
             };
 
             if( ele.num > 0 ){
-              bbn.fn.each(values, (val, i)=>{
+              bbn.fn.each(values, (val, i) => {
                 ele.items.push({
                   text: val,
                   name: val,
@@ -508,7 +514,7 @@
                   numChildren: 0,
                   eleComponent: ele.name,
                   component: true,
-                  item: []
+                  items: []
                 });
               });
             }
@@ -1420,7 +1426,7 @@
               type: node.data.type
             },
             //parent: node.parent,
-            isMVC: this.isProject && node.data.type === 'mvc' ? true : this.isMVC,
+            isMVC: this.isProject && ['mvc', 'sandbox'].includes(node.data.type) ? true : this.isMVC,
             isComponent: this.isProject && node.data.type === 'components' ? true : this.isComponent,
             root: this.source.root,
             currentRep: this.currentRep,
@@ -1502,7 +1508,7 @@
               src.nodeData.folder = true;
               let path = tab.title.split('/');
               if ( path[0] === "" ){
-                path.shifth();
+                path.shift();
               }
               let component = path.pop();
               src.nodeData.path = path.join('/')+'/'+ component;
@@ -1549,7 +1555,7 @@
           repositories: this.repositories,
           repository: this.repositories[this.currentRep],
           root: this.source.root,
-          isMVC: this.isMVC || node.data.type === 'mvc',
+          isMVC: this.isMVC || ['mvc', 'sandbox'].includes(node.data.type),
           isComponent: this.isComponent || node.data.type === 'components',
           config: this.source.config,
           isProject: this.isProject,
@@ -1725,7 +1731,7 @@
       /**
        * Function for move node in tree
        */
-      moveNode(select, dest, a){
+      moveNode(select, dest){
         if ( dest.data.folder ){
           //let path = select.data.path.split('/'),
           let path = select.data.uid.split('/'),
@@ -1945,6 +1951,7 @@
       },
     },
     mounted(){
+      /*
       setTimeout(() => {
         if (!this.currentRep && this.ddRepData.length) {
           let dd = this.getRef('ddRep');
@@ -1956,6 +1963,7 @@
           })
         }
       }, 2000)
+      */
     },
     watch: {
       sourceParser(newVal, oldVal){
