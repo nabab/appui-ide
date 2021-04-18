@@ -26,7 +26,8 @@ if ( !empty($model->data['search']) &&
   ){
     $result = $model->inc->ide->search($model->data);
     if( !empty($result) ){
-      return $result;
+      $model->addData($result);
+      return $model->data;
     }
   }
 }
