@@ -369,10 +369,10 @@
       },
       ddRepData(){
         const r = [];
-        bbn.fn.each(this.repositories, (a, i) => {
+        bbn.fn.each(this.repositories, (a, n) => {
           r.push({
-            value: i,
-            text:  a.text !== 'main' ? a.text : "<label class='bbn-b'>"+a.text+"<label>"
+            value: n,
+            text: a.text === 'main' ? '-- ' + bbn._("Application") + ': ' + bbn.env.appName + ' --' : a.text
           });
         });
         return bbn.fn.order(r, "text");
