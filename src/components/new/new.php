@@ -1,6 +1,6 @@
 <bbn-form ref="new_form"
           :source="source"
-          class="bbn-100"
+          class="bbn-overlay"
           :buttons="[]"
 >
   <div class="bbn-padded">

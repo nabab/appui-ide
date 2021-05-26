@@ -24,7 +24,7 @@
       </div>
     </div>
     <div class="bbn-header bbn-w-100 bbn-c bbn-b">
-      <?=_('Children Permissios')?>
+      <?=_('Children Permissions')?>
     </div>
     <ul v-for="perm in source.children"
         style="list-style: none"

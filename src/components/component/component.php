@@ -1,5 +1,5 @@
 <!--   @tabLoaded="loadingTab"-->
-<div class="bbn-100">
+<div class="bbn-overlay">
   <div class="bbn-h-100 code">
     <bbn-router :autoload="false"
                 :scrollable="false"

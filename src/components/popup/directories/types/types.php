@@ -1,7 +1,7 @@
 <div class="bbn-overlay" v-if="source.types.length">
   <bbn-table ref="types_table"
              :source="source.types"
-             class="bbn-100"
+             :scrollable="true"
              :sortable="true"
              :toolbar="[{
                text: '<?=_('Add Type')?>',
