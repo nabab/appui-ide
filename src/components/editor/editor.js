@@ -22,16 +22,20 @@
       },
  		},
     data(){
+      let defaultRep = '';
       if ( this.source.repositories ){
         bbn.fn.each(this.source.repositories, (a, i) => {
           a.value = i;
+          if (!defaultRep) {
+            defaultRep = i;
+          }
         });
       }
       return {
         typeProjectReady: false,
       //  showTest: true,
         repositories: this.source.repositories,
-        currentRep: '',
+        currentRep: localStorage['appui-ide-rep-select-' + this.project] ? '' : defaultRep,
         selected: 0,
         url: this.source.root + 'editor',
         urlEditor: false,
