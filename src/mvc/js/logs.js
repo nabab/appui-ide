@@ -101,7 +101,6 @@
         });
       },
       onChange(clear, e){
-        bbn.fn.log(this.fileLog, "DEDEDEDEDE");
         if ( this.fileLog.length && this.lignes ){
           this.post(this.source.root + 'logs/' + this.fileLog, {
               log: this.fileLog,

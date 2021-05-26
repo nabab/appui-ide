@@ -1,4 +1,4 @@
-<!--div class="bbn-block bbn-block bbn-100">
+<!--div class="bbn-overlay">
   <div class="bbn-header bbn-c"><?=('Permissions setting')?></div>
     <div class="bbn-block bbn-hspadded bbn-100">
     <bbn-scroll>
