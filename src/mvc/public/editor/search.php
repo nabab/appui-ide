@@ -1,26 +1,26 @@
 <?php
+use bbn\Str;
 
 if ( $ctrl->inc->ide && !empty($ctrl->arguments) ){
+  $ctrl->addData([
+    'typeSearch' => '',
+    'searchFolder' => '',
+    'search' => base64_decode($ctrl->arguments[count($ctrl->arguments)-1]),
+    'all' => $ctrl->arguments[0] === '_all_'
+  ]);
   if ( $ctrl->arguments[0] === '_all_' ){
-    $ctrl->data['search'] = base64_decode($ctrl->arguments[count($ctrl->arguments)-1]);
-    $ctrl->data['all'] = true;
-   // $ctrl->data['typeSearch'] = $ctrl->arguments[1];
     $ctrl->obj->icon = 'nf nf-fa-search_plus';
   }
   else {
-    $ctrl->data = [
+    $ctrl->addData([
       'repository' => '',
       'nameRepository' => $ctrl->arguments[0].'/'.$ctrl->arguments[1],
-      'typeSearch' => '',
-      'searchFolder' => '',
       'mvc' => false,
       'isProject' => $ctrl->arguments[2] === '_project_' || $ctrl->arguments[4] === '_project_' ,
-      'search' => base64_decode($ctrl->arguments[count($ctrl->arguments)-1]),
       'component' => false,
       'type' => '',
-      'plugin' => false,
-      'all' => false
-    ];
+      'plugin' => false
+    ]);
 
     $ctrl->arguments[count($ctrl->arguments)-1] = $ctrl->data['search'];
 
@@ -56,7 +56,6 @@ if ( $ctrl->inc->ide && !empty($ctrl->arguments) ){
     }
 
     $ctrl->data['repository'] = $ctrl->inc->ide->repository($ctrl->data['nameRepository']);
-    $ctrl->arguments[count($ctrl->arguments)-1] = base64_encode($ctrl->arguments[count($ctrl->arguments)-1]);
     $url = 'search/'.implode('/', $ctrl->arguments);
 
     if ( !empty($ctrl->data['repository']) &&
@@ -70,5 +69,6 @@ if ( $ctrl->inc->ide && !empty($ctrl->arguments) ){
     $ctrl->obj->url = $url;
     $ctrl->obj->icon = 'nf nf-fa-search';
   }
-  $ctrl->combo(\bbn\Str::cut($ctrl->data['search'],12), true);
+
+  $ctrl->combo(Str::cut($ctrl->data['search'], 12), true);
 }

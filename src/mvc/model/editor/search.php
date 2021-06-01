@@ -16,7 +16,7 @@ if ( !empty($model->data['search']) &&
   if ( $model->data['all'] ){
     $result = $model->inc->ide->searchAll($model->data['search']);
     if( !empty($result) ){
-      return  $result;
+      return $model->addData($result)->data;
     }
   }
   //search in current repository
