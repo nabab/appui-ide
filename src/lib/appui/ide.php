@@ -469,7 +469,7 @@ class ide {
    */
   private function move_component(array $cfg, array $rep, string $path){
     $ele = $this->check_normal($cfg, $rep, $path);
-    if ( !empty($ele) && is_array($ele) && empty($this->fs->move($ele['old'], Dirname($ele['new']))) ){
+    if ( !empty($ele) && is_array($ele) && empty($this->fs->move($ele['old'], dirname($ele['new']))) ){
       return false;
     }
     return true;
@@ -967,7 +967,7 @@ class ide {
         }//case move
         elseif ( ($case === 'move') &&
           $this->fs->isDir(dirname($new_backup)) &&
-          empty($this->fs->move($old_backup, Dirname($new_backup)))
+          empty($this->fs->move($old_backup, dirname($new_backup)))
         ){
           $this->error("Error during the folder backup move: old -> $old_backup" );
           return false;
@@ -1105,7 +1105,7 @@ class ide {
                 }
               }//case move
               else{
-                if ( empty($this->fs->move($t['old'], Dirname($t['new']))) ){
+                if ( empty($this->fs->move($t['old'], dirname($t['new']))) ){
                   $this->error("Error during the file|folder move: old -> $t[old] , new -> $t[new]");
                   return false;
                 }
