@@ -1063,7 +1063,7 @@ class ide {
                 }
               }//case move
               else{
-                if ( empty($this->fs->move($t['old'], Dirname($t['new']))) ){
+                if ( empty($this->fs->move($t['old'], dirname($t['new']))) ){
                   $this->error("Error during the file|folder move: old -> $t[old] , new -> $t[new]");
                   return false;
                 }
@@ -1150,7 +1150,7 @@ class ide {
         else if ( $ope === 'move' ){
           $ele = $this->check_normal($cfg, $rep, $path);
           //if ( !empty($ele) && is_array($ele) && \bbn\File\Dir::move($ele['old'], $ele['new']) ){
-          if ( !empty($ele) && is_array($ele) && $this->fs->move($ele['old'], Dirname($ele['new'])) ){
+          if ( !empty($ele) && is_array($ele) && $this->fs->move($ele['old'], dirname($ele['new'])) ){
             $this->operations_backup_components($cfg, "move");
             return true;
           }
