@@ -9,6 +9,7 @@
 
 $ctrl->setColor('#000', '#FFF')
   ->setIcon('nf nf-fa-home')
-  ->setTitle(_('Help'));
+  ->setTitle(_('Help'))
+  ->addJs();
 $html = $ctrl->customPluginView('editor/help', 'html', [], 'appui-ide');
 echo $html ?: $ctrl->getView();

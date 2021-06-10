@@ -1,4 +1,10 @@
 // Javascript Document
 (() => {
-  return {}
+  return {
+    data(){
+      return {
+        root: appui.plugins['appui-ide'] + '/'
+      };
+    }
+  };
 })();
