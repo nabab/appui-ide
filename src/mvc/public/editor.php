@@ -1,30 +1,30 @@
 <?php
 /** @var $ctrl \bbn\Mvc\Controller */
 
-$list = [];
-
 // We define ide array in session
 if ( !$ctrl->inc->session->has('ide') ){
   $ctrl->inc->session->set([
-    'list' => $list
+    'list' => []
   ], 'ide');
 }
 
 //$ctrl->inc->session->set($sess, 'ide', 'list');
-$ctrl->obj->url = APPUI_IDE_ROOT.'editor';
 
-$ctrl->obj->bcolor = 'black';
-$ctrl->obj->fcolor = '#FFF';
-$ctrl->obj->icon = "nf nf-fa-code";
-
+$isProject = $ctrl->inc->ide->getOrigin() !== 'appui-ide';
 $title = 'I.D.E';
-if ( $ctrl->inc->ide->getOrigin() !== 'appui-ide' ){
+if ($isProject) {
   $title .= ' ('. $ctrl->inc->ide->getNameProject().')';
-  $ctrl->obj->bcolor = '#017a8a';
 }
 
-echo $ctrl
-    ->setTitle($title)
-    ->addJs($ctrl->getModel(['routes' => $ctrl->getRoutes()]))
-    ->getView();
+$ctrl
+  ->setObj([
+    'url' => APPUI_IDE_ROOT.'editor',
+    'bcolor' => $isProject ? '#017a8a' : 'black',
+    'fcolor' => 'white',
+    'icon' => 'nf nf-fa-code'
+  ])
+  ->addData([
+    'routes' => $ctrl->getRoutes()
+  ])
+  ->combo($title, true);
 

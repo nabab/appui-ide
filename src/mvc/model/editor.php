@@ -1,36 +1,35 @@
 <?php
+
 /** @var $model \bbn\Mvc\Model */
 
-if ( isset($model->data['routes'], $model->inc->ide) ){
+if (isset($model->data['routes'], $model->inc->ide)) {
 
   $repos = $model->inc->ide->getRepositories();
   $origin = $model->inc->ide->getOrigin();
   $project = $model->inc->ide->getNameProject();
 
   $prefix = $model->pluginUrl($model->inc->ide->getOrigin());
-  if ( $origin !== 'appui-ide' ){
-    $prefix .= '/router/'.$project.'/ide/editor';
+  if ($origin !== 'appui-ide') {
+    $prefix .= '/router/' . $project . '/ide/editor';
   }
 
 
   $current_rep =  $model->inc->ide->getDefaultRepository();
   $types = [];
   $tabs = [];
-  if ( isset($repos[$current_rep]['types']) ){
+  if (isset($repos[$current_rep]['types'])) {
     $types = $repos[$current_rep]['types'];
   }
-  if ( !empty($types) && is_array($types) ){
-    foreach($types as $type){
+  if (!empty($types) && is_array($types)) {
+    foreach ($types as $type) {
       //temporaney
       $type['url'] = $type['url'] === 'lib' ? 'cls' : $type['url'];
-      if ( $ptype = $model->inc->ide->getType($type['url']) ){
-        if ( !empty($ptype['tabs']) ){
+      if ($ptype = $model->inc->ide->getType($type['url'])) {
+        if (!empty($ptype['tabs'])) {
           $tabs[$type['url']][] = $ptype['tabs'];
-        }
-        elseif ( ($type['url'] === 'cls') && empty($ptype['tabs']) && !empty($ptype['extensions']) ){
+        } elseif (($type['url'] === 'cls') && empty($ptype['tabs']) && !empty($ptype['extensions'])) {
           $tabs['lib']['extensions'] = $ptype['extensions'];
-        }
-        elseif ( ($type['url'] === 'cli') && empty($ptype['tabs']) && !empty($ptype['extensions']) ){
+        } elseif (($type['url'] === 'cli') && empty($ptype['tabs']) && !empty($ptype['extensions'])) {
           $tabs[$type['url']]['extensions'] = $ptype['extensions'];
         }
       }
@@ -39,16 +38,15 @@ if ( isset($model->data['routes'], $model->inc->ide) ){
 
     $projects = [
       'tabs_type' => $tabs,
-      'roots' => array_map( function($val){
+      'roots' => array_map(function ($val) {
         return [
           'text' => $val['url'],
           'value' => $val['url']
         ];
-      },$types)
+      }, $types)
     ];
-
   }
- // temporaney disabled
+  // temporaney disabled
   /*if ( $model->inc->session->has('ide', 'repository') ){
     $current_rep = $model->inc->session->get('ide', 'repository');
   }*/
@@ -119,7 +117,7 @@ if ( isset($model->data['routes'], $model->inc->ide) ){
     'zenburn'
   ];
 
-  $current_theme= $model->inc->ide->getTheme();
+  $current_theme = $model->inc->ide->getTheme();
 
   return [
     'staticPath' => BBN_STATIC_PATH,
