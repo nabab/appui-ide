@@ -23,10 +23,14 @@ if ($model->hasData(['repository', 'repository_cfg'], true)) {
     $cur_path .= '/';
   }
   else{
-    $cur_path = (
-      empty($model->data['uid']) ? ($model->hasData('type', true) ? $model->data['type'] : '') : $model->data['uid']
-    ).'/';
-     //treat the curent path for the initial date
+    if ($model->hasData('uid', true)) {
+      $cur_path = $model->data['uid'].'/';
+    }
+    elseif ($model->hasData('type', true) && ($type = X::getField($rep_cfg['types'], ['type' => $model->data['type']], 'path'))) {
+      $cur_path = $type;
+    }
+
+    //treat the curent path for the initial date
     if ($model->hasData('type', true)) {
       if (in_array($model->data['type'], ['mvc', 'sandbox'])) {
         $cur_path = explode('/', $cur_path);
@@ -449,7 +453,7 @@ if ($model->hasData(['repository', 'repository_cfg'], true)) {
   }
   //else if we are in depth and we already know what types of elements we are opening and dealing with in the tree of the ide
   elseif (!empty($model->data['type'])) {
-    if (($model->data['type'] === 'lib') || ($model->data['type'] === 'cli')) {
+    if (($model->data['type'] === 'classes') || ($model->data['type'] === 'cli')) {
       // lib
       $get($path . $cur_path, $rep_cfg['bcolor'], false, $type);
     }

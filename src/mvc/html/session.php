@@ -1,5 +1,5 @@
 <!-- HTML Document -->
-<div class="bbn-hpadded bbn-flex-height">
+<div class="bbn-hpadded bbn-overlay bbn-flex-height">
   <div>
     <div class="bbn-w-100 bbn-vpadded">
       <bbn-button icon="nf nf-fa-user_secret"

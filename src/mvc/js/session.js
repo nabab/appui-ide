@@ -17,7 +17,7 @@
             if ( d.data ){
               this.items = d.data;
               this.$nextTick(() => {
-                this.getRef('tree').updateData()
+                this.getRef('tree').updateData(true)
               })
             }
           })

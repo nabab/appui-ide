@@ -17,7 +17,7 @@
         font: ide.font,
         font_size: ide.font_size,
         theme: ide.theme,
-        root: ide.prefix+'/',
+        root: ide.source.root,
         path: path,
         permissions: ide.permFile,
         tabsList: this.source.tabs !== undefined && this.source.tabs.length ? this.source.tabs : ide.repositories[this.source.repository].tabs,

@@ -1869,6 +1869,7 @@
       /** ###### HISTORY ###### */
       history(){
         const tabNav = this.getActive();
+        bbn.fn.log("HISTORY", tabNav.$parent);
         if ( tabNav ){
           tabNav.add({
             title: bbn._('History'),
