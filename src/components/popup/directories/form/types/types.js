@@ -243,9 +243,10 @@
     },
     methods:{
       openFormExtensions(action){
-        let exts = [],
-            id = -1,
-            idExtension = -1;
+        let exts = [];
+        let id = -1;
+        let src;
+        let idExtension = -1;
         ///case tabs
         if( this.isTabs === true ){
           if ( this.listTabs.length && this.tabSelected ){
@@ -254,7 +255,7 @@
             idExtension = bbn.fn.search(this.listTabs[id]['extensions'], 'ext', this.extension);
           }
           if ( (exts.length > 0) && (id > -1) ){
-            var src = {
+            src = {
               action: action,
               type: this.show,
               tab: this.tabSelected,
@@ -279,7 +280,7 @@
             id = 0;
           }
           if ( id > -1 ){
-            var src = {
+            src = {
               action: action,
               type: this.show,
               extesionsTab: this.extensions,
@@ -293,12 +294,12 @@
           }
         }
 
-        if ( src !== undefined ){
+        if (src) {
           this.getPopup().open({
             width: 800,
             height: 600,
             title: action === 'edit' ? bbn._('Edit Extension') : bbn._('Add Extension'),
-            component: this.$options.components.formExtension,
+            component: 'appui-ide-form-extension',
             source: src
           });
         }
@@ -321,7 +322,10 @@
                   let tabs = this.listTabs.slice();
                   tabs[id]['extensions'].splice(idExtension, 1);
                   this.$set(this.source.row, 'tabs' , JSON.stringify(tabs));
-                  this.getRef('jsonEditor').reinit();
+                  let jsonEditor = this.getRef('jsonEditor');
+                  if (jsonEditor) {
+                    jsonEditor.reinit();
+                  }
                 }
               }
             }
@@ -404,83 +408,6 @@
            this.getRef('jsonEditor').reinit();
           }
         });
-      }
-    },
-    components:{
-      'formExtension':{
-        props: ['source'],
-        template: `
-        <bbn-form
-                  :buttons="btns"
-                  :source="source"
-                  ref="form"
-        >
-          <div class="bbn-grid-fields bbn-l">
-            <label>` + bbn._('Ext:') + `</label>
-            <bbn-input v-model="extension.ext"
-                       required="required"
-            ></bbn-input>
-
-            <label>` + bbn._('Mode:') + `</label>
-            <bbn-input v-model="extension.mode"></bbn-input>
-
-            <label> ` + bbn._("Default:") +` </label>
-            <div style="height: 420px">
-              <bbn-code ref="codeDefault"
-                        theme="pastel-on-dark"
-                        mode="text"
-                        v-model="extension.default"
-              ></bbn-code>
-            </div>
-          </div>
-        </bbn-form>`,
-        data(){
-          return{
-            //disabled: true,
-            extension:{
-              default: this.source.extension.default,
-              ext: this.source.extension.ext,
-              mode: this.source.extension.mode
-            },
-            btns: [
-              'cancel', {
-              text: "Confirm",
-              title: "Confirm",
-              class: "bbn-primary",
-              icon: "nf nf-fa-check_circle",
-              action: this.closeForm
-            }]
-          }
-        },
-        methods:{
-          closeForm(){
-            let popup = bbn.vue.closest(this, "bbn-popup"),
-                form = bbn.vue.find(this.closest('bbn-container'), 'appui-ide-popup-directories-form-types');
-            if ( this.source.type === "tabs" ){
-              if ( this.source.action === 'edit' ){
-                this.source.listTabs[this.source.idTab]['extensions'][this.source.idExt] = this.extension;
-                form.$set(form.source.row, 'tabs' , JSON.stringify(this.source.listTabs));
-              }
-              else if ( this.source.action === 'create' ){
-                this.source.listTabs[this.source.idTab]['extensions'].push(this.extension);
-                form.$set(form.source.row, 'tabs' , JSON.stringify(this.source.listTabs));
-              }
-            }
-            if ( this.source.type === "exts" ){
-              if ( this.source.action === 'edit' ){
-                this.source.extesionsTab[this.source.idExt] = this.extension;
-                form.$set(form.source.row, 'extensions' , JSON.stringify(this.source.extesionsTab));
-
-              }
-              else if ( this.source.action === 'create' ){
-                this.source.extesionsTab.push(this.extension);
-                form.$set(form.source.row, 'extensions' , JSON.stringify(this.source.extesionsTab));
-              }
-            }
-            form.getRef('jsonEditor').reinit();
-            popup.close();
-          }
-        }
       }
     }
   }

@@ -38,20 +38,92 @@
           {value: 'mvc_js', text: bbn._('Page with Javascript function')},
           {value: 'mvc', text: bbn._('Simple page (combo)')},
           {value: 'action', text: bbn._('Action')},
-          {value: 'file', text: bbn._('File')}
+          {value: 'file', text: bbn._('Single MVC file')}
         ],
         data: {
           tab: ((this.source.tab_mvc !== undefined) && this.source.tab_mvc.length && (this.source.type === 'mvc')) ?
                   bbn.fn.search(rep.tabs, 'url', this.source.tab_mvc) :
                   defaultTab,
           name: '',
+          controller: '',
+          model: '',
+          html: '',
+          js: '',
+          css: '',
+          container: '',
+          class: '',
           template: template,
           extension: defaultExt,
           is_file: this.source.isFile,
           type: this.source.type || false,
           path: (this.source.path === './') ? './' : this.source.path + '/'
-        }
+        },
+        window: null
       }
+    },
+    computed: {
+      availableExtensions(){
+        if ( this.rep && this.source.isFile ){
+          if ( this.rep.tabs ){
+            this.data.extension = this.rep.tabs[this.data.tab].extensions[0].ext;
+            return this.rep.tabs[this.data.tab].extensions
+          }
+          else{
+            this.numExt = 0;
+            this.numExt = this.rep.extensions.length;
+            return this.rep.extensions
+          }
+        }
+        return [];
+      },
+      types(){
+        let res = [];
+        if ( this.isMVC || (this.source.isFile && this.isComponent) ){
+          bbn.fn.each(this.rep.tabs, (v, i) => {
+            if ( !v.fixed ){
+              res.push({
+                text: v.title,
+                value: i
+              });
+            }
+          });
+        }
+        bbn.fn.log("TYPES", res);
+        return res;
+      },
+      defaultText(){
+        if ( this.availableExtensions ){
+          for ( let i in this.availableExtensions ){
+            if ( this.availableExtensions[i].ext === this.data.extension ){
+              return this.availableExtensions[i].default;
+            }
+          }
+          ;
+        }
+        return false
+      },
+      formData(){
+        return {
+          tab_path: this.isMVC && this.rep && this.rep.tabs[this.data.tab] ? this.rep.tabs[this.data.tab].path : '',
+          tab_url: this.isMVC && this.rep && this.rep.tabs[this.data.tab] ? this.rep.tabs[this.data.tab].url : '',
+          default_text: this.defaultText,
+          repository: this.rep,
+          type: this.source.type
+        }
+      },
+      extensions(){
+        if ( this.availableExtensions ){
+          let arr = [];
+          for ( let obj of this.availableExtensions ){
+            arr.push({text: obj.ext, value: obj.ext});
+          }
+          return arr;
+        }
+        return [];
+      },
+      hasFileDetails(){
+        return this.data.template && !['file', 'action'].includes(this.data.template);
+      },
     },
     methods: {
       onSuccess(){
@@ -124,68 +196,19 @@
         }
       }
     },
-    computed: {
-      availableExtensions(){
-        if ( this.rep && this.source.isFile ){
-          if ( this.rep.tabs ){
-            this.data.extension = this.rep.tabs[this.data.tab].extensions[0].ext;
-            return this.rep.tabs[this.data.tab].extensions
-          }
-          else{
-            this.numExt = 0;
-            this.numExt = this.rep.extensions.length;
-            return this.rep.extensions
-          }
-        }
-        return [];
-      },
-      types(){
-        let res = [];
-        if ( this.isMVC || (this.source.isFile && this.isComponent) ){
-          bbn.fn.each(this.rep.tabs, (v, i) => {
-            if ( !v.fixed ){
-              res.push({
-                text: v.title,
-                value: i
-              });
-            }
-          });
-        }
-        return res;
-      },
-      defaultText(){
-        if ( this.availableExtensions ){
-          for ( let i in this.availableExtensions ){
-            if ( this.availableExtensions[i].ext === this.data.extension ){
-              return this.availableExtensions[i].default;
-            }
-          }
-          ;
-        }
-        return false
-      },
-      formData(){
-        return {
-          tab_path: this.isMVC && this.rep && this.rep.tabs[this.data.tab] ? this.rep.tabs[this.data.tab].path : '',
-          tab_url: this.isMVC && this.rep && this.rep.tabs[this.data.tab] ? this.rep.tabs[this.data.tab].url : '',
-          default_text: this.defaultText,
-          repository: this.rep,
-          type: this.source.type
-        }
-      },
-      extensions(){
-        if ( this.availableExtensions ){
-          let arr = [];
-          for ( let obj of this.availableExtensions ){
-            arr.push({text: obj.ext, value: obj.ext});
-          }
-          return arr;
-        }
-        return [];
-      },
+    mounted(){
+      this.window = this.closest('bbn-floater');
     },
     watch: {
       "data.template"(v){
+        if (this.window) {
+          this.window.onResize(true)
+        }
+
+        if (!this.data.name) {
+          this.$refs.filename.focus();
+        }
+
         let storage = this.getStorage();
         if (!storage) {
           storage = {};

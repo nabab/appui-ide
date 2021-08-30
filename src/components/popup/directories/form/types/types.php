@@ -33,13 +33,6 @@
                        ref="jsonEditor"
       ></bbn-json-editor>
     </div>
-    <label v-if="isExts"><?=_('Extensions')?></label>
-    <div style="height: 400px" v-if="isExts">
-      <bbn-json-editor v-model="source.row.extensions"
-                       :cfg="cfgEditor"
-                       ref="jsonEditor"
-      ></bbn-json-editor>
-    </div>
     <label v-if="isProject"><?=_('Project')?></label>
     <div style="height: 400px" v-if="isProject">
       <bbn-json-editor v-model="source.row.types"
@@ -48,25 +41,46 @@
       ></bbn-json-editor>
     </div>
     <label v-if="isExts"><?=_('Extensions')?></label>
-    <label v-if="isTabs && (listTabs.length > 0)"><?=_('Extensions in Tabs')?></label>
-    <div v-if="isExts || isTabs">
-      <bbn-dropdown v-if="listTabs.length > 0"
-                    :source="tabs"
-                    v-model="tabSelected"
-      ></bbn-dropdown>
-      <bbn-dropdown v-if="listExtensions.length > 0"
+    <div v-if="isExts">
+      <bbn-dropdown v-if="listExtensions.length"
                     :source="listExtensions"
+                    class="bbn-narrow bbn-right-space"
+                    placeholder="<?= _("Pick an existing extension") ?>"
                     v-model="extension"
       ></bbn-dropdown>
-      <bbn-button v-if="listExtensions.length > 0"
+      <bbn-button @click="createExtension"
+                  icon="nf nf-fa-plus"
+      ><?=_('Add Extension')?></bbn-button>
+      <br>
+      <bbn-button v-if="extension"
                   @click="editExtension"
                   icon="nf nf-fa-edit"
       ><?=_('Edit Extension')?></bbn-button>
-      <bbn-button v-if="(listTabs.length > 0 && isTabs)|| isExts"
-                  @click="createExtension"
-                  icon="nf nf-fa-plus"
-      ><?=_('Add Extension')?></bbn-button>
-      <bbn-button v-if="listExtensions.length > 0"
+      <bbn-button v-if="extension"
+                  @click="deleteExtension"
+                  icon="nf nf-fa-trash"
+      ><?=_('Delete Extension')?></bbn-button>
+    </div>
+
+    <label v-if="isTabs"><?=_('Extensions in Tabs')?></label>
+    <div v-if="isTabs">
+      <bbn-dropdown v-if="listTabs.length"
+                    :source="tabs"
+                    v-model="tabSelected"
+                    class="bbn-right-space bbn-narrow"
+      ></bbn-dropdown>
+      <bbn-dropdown v-if="listExtensions.length"
+                    :source="listExtensions"
+                    v-model="extension"
+                    class="bbn-right-space bbn-narrow"
+      ></bbn-dropdown>
+      <bbn-button @click="createExtension"><?=_('Add Extension')?></bbn-button>
+      <br>
+      <bbn-button v-if="listExtensions.length"
+                  @click="editExtension"
+                  icon="nf nf-fa-edit"
+      ><?=_('Edit Extension')?></bbn-button>
+      <bbn-button v-if="listExtensions.length"
                   @click="deleteExtension"
                   icon="nf nf-fa-trash"
       ><?=_('Delete Extension')?></bbn-button>

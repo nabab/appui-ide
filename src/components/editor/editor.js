@@ -23,14 +23,10 @@
  		},
     data(){
       let defaultRep = '';
-      if ( this.source.repositories ){
-        bbn.fn.each(this.source.repositories, (a, i) => {
-          a.value = i;
-          if (!defaultRep) {
-            defaultRep = i;
-          }
-        });
+      if (this.source.repositories) {
+        defaultRep = Object.keys(this.source.repositories)[0];
       }
+
       return {
         typeProjectReady: false,
       //  showTest: true,
@@ -165,7 +161,11 @@
             items: [{
               icon: 'nf nf-fa-cog',
               text: bbn._('Manage directories'),
-              action: this.managerTypeDirectories
+              action: this.directoriesManager
+            }, {
+              icon: 'nf nf-fa-cog',
+              text: bbn._("Types of directories"),
+              action: this.directoriesTypes
             }, {
               icon: 'nf nf-fa-language',
               text: bbn._('IDE style'),
@@ -193,8 +193,8 @@
     },
     computed: {
       listRootProject(){
-        if (this.currentRep && this.source.repositories[this.currentRep]) {
-          let roots = bbn.fn.clone(this.source.repositories[this.currentRep].types);
+        if (this.currentRep && this.repositories[this.currentRep]) {
+          let roots = bbn.fn.clone(this.repositories[this.currentRep].types);
           if ( roots.length ) {
             return bbn.fn.map(roots, v => {
               switch (v.text) {
@@ -556,7 +556,7 @@
           return obj;
         });
       },
-      managerTypeDirectories(){
+      directoriesTypes(){
         this.post(this.source.root + 'directories/data/types', d => {
           if ( d.data.success ){
             this.getPopup().open({
@@ -569,6 +569,21 @@
               }
             });
           }
+        });
+      },
+      directoriesManager() {
+        this.getPopup().open({
+          maxWidth: '80%',
+          minWidth: 600,
+          width: '60%',
+          minHeight: 400,
+          maxHeight: '80%',
+          height: '60%',
+          title: bbn._('Manager type directories'),
+          component: 'appui-ide-popup-directories-manager',
+          source: this.source,
+          closable: true,
+          maximizable: true
         });
       },
       cfgStyle(){
@@ -1292,7 +1307,7 @@
        * @param bool isFile A boolean value to identify if you want create a file or a folder
        * @param string path The current path
        */
-      new(title, isFile, node = false){
+      openNew(title, isFile, node = false){
         let src = {
           allData: false,
           isFile: isFile,
@@ -1394,7 +1409,7 @@
             title = bbn._('New Class');
           }
         }
-        this.new(title, true, node);
+        this.openNew(title, true, node);
       },
 
       /**
@@ -1403,7 +1418,7 @@
        * @param node  set at false if click of the context node is data of the node tree
        */
       newDir(node){
-        this.new(bbn._('New Directory'), false, node != undefined && node ? node : false);
+        this.openNew(bbn._('New Directory'), false, node != undefined && node ? node : false);
       },
 
       /**
