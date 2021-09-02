@@ -88,7 +88,7 @@
             }
           });
         }
-        bbn.fn.log("TYPES", res);
+
         return res;
       },
       defaultText(){
@@ -112,12 +112,16 @@
         }
       },
       extensions(){
-        if ( this.availableExtensions ){
-          let arr = [];
-          for ( let obj of this.availableExtensions ){
-            arr.push({text: obj.ext, value: obj.ext});
+        if ( this.rep && this.source.isFile ){
+          if ( this.rep.tabs ){
+            this.data.extension = this.rep.tabs[this.data.tab].extensions[0].ext;
+            return this.rep.tabs[this.data.tab].extensions
           }
-          return arr;
+          else{
+            this.numExt = 0;
+            this.numExt = this.rep.extensions.length;
+            return this.rep.extensions
+          }
         }
         return [];
       },

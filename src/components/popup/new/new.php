@@ -5,7 +5,7 @@
             @success="onSuccess"
             @failure="failureActive">
     <div class="bbn-padded bbn-flex-height">
-      <div class="bbn-flex-fill bbn-grid-fields"><label><?=_("Name of the file")?></label>
+      <div class="bbn-flex-fill bbn-grid-fields"><label><?=_("Name")?></label>
         <div class="bbn-flex-width">
           <div class="bbn-flex-fill">
             <bbn-input v-model="data.name"
@@ -33,10 +33,10 @@
                     :vertical="true"/>
         </div>
 
-        <label v-if="data.template === 'file'">
+        <label v-if="data.template === 'file' && types.length">
           <?=_("Type")?>
         </label>
-        <div  v-if="data.template === 'file'">
+        <div  v-if="(data.template === 'file') && types.length">
           <bbn-dropdown :source="types"
                         v-model="data.tab"
                         required="required"
