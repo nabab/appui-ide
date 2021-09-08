@@ -1,9 +1,13 @@
 <?php
+if (!isset($model->inc->ide)) {
+  throw new \Exception(_("No IDE object!"));
+}
+
 $path = $model->inc->ide->getDataPath('appui-ide').'backup/'.$model->data['uid'];
-$res = [];
+$res = ['success' => false];
 //die(var_dump($model->data));
 // for tree
-if ( isset($model->inc->ide) && !empty($model->data['uid']) ){
+if (!empty($model->data['uid']) ){
   if ( !isset($model->data['type']) ){
     $list = $model->inc->ide->history($model->data['uid'], $model->data['repository_cfg']);
 
@@ -51,31 +55,28 @@ if ( isset($model->inc->ide) && !empty($model->data['uid']) ){
   }
 }
 // for get content
-else {
-  if ( isset($model->inc->ide, $model->data['url']) &&
-    !empty($model->data['url'])
-  ){
-    $path = $model->inc->ide->getDataPath('appui-ide').'backup/'.
-      $model->data['repository_cfg']['root'].'/'.
-      substr($model->data['url'], Strpos($model->data['url'],$model->data['repository_cfg']['code'],1));
-    
-    if ( $model->inc->fs->isFile($path) ){
-      $code= $model->inc->fs->getContents($path);
-    }
-    if ( !empty($code) ){
-      return [
-        'data' => [
-          'success' => true,
-          'code' => $code
-        ]
-      ];
-    }
-    else {
-      $error = $model->inc->ide->getLastError();
-      return ($error === null) ? ['data' => ['success' => false]] : ['data' => ['error' => $error]];
-    }
+elseif (isset($model->data['url'])
+        && !empty($model->data['url'])
+){
+  $path = $model->inc->ide->getDataPath('appui-ide').'backup/'.
+    $model->data['repository_cfg']['root'].'/'.
+    substr($model->data['url'], Strpos($model->data['url'],$model->data['repository_cfg']['code'],1));
+  
+  if ( $model->inc->fs->isFile($path) ){
+    $code= $model->inc->fs->getContents($path);
+  }
+  if ( !empty($code) ){
+    return [
+      'data' => [
+        'success' => true,
+        'code' => $code
+      ]
+    ];
+  }
+  else {
+    $error = $model->inc->ide->getLastError();
+    return ($error === null) ? ['data' => ['success' => false]] : ['data' => ['error' => $error]];
   }
 }
 
-return [];
-
+return $res;

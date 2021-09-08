@@ -29,10 +29,11 @@
       //method map for component tree
       transform(a){
         if ( a ){
+          bbn.fn.log(a);
           return bbn.fn.extend(a, {
             text: a.text + ( a.numChildren ? ' &nbsp; <span class="bbn-badge bbn-s bbn-bg-lightgrey">' + a.numChildren + '</span>' : ''),
             num: a.numChildren || 0,
-            type: a.type ? a.type : "",
+            type: a.type || "",
             repository: this.source.repository,
             repository_cfg: this.source.repositories[this.source.repository]
           });
