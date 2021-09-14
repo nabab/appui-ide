@@ -8,7 +8,7 @@ $grid = new \bbn\Appui\Grid($model->db, $model->data, [
   'table' => $pref_cfg['tables']['user_options_bits'],
   'fields' => [
     'file' => $model->db->colFullName($pref_cfg['arch']['user_options_bits']['text'], $pref_cfg['tables']['user_options_bits']),
-    'moment' => $model->db->colFullName($pref_cfg['arch']['user_options_bits']['cfg'], $pref_cfg['tables']['user_options_bits']) . '->>"$.last_date"'
+    'moment' => 'JSON_UNQUOTE(JSON_EXTRACT('.$model->db->colFullName($pref_cfg['arch']['user_options_bits']['cfg'], $pref_cfg['tables']['user_options_bits']).', "$.last_date"))'
   ],
   'join' => [[
     'table' => $pref_cfg['table'],

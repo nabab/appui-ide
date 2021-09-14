@@ -75,7 +75,7 @@ elseif (isset($model->data['url'])
   }
   else {
     $error = $model->inc->ide->getLastError();
-    return ($error === null) ? ['data' => ['success' => false]] : ['data' => ['error' => $error]];
+    return ($error === null) ? ['success' => false, 'data' => []] : ['error' => $error, 'data' => []];
   }
 }
 

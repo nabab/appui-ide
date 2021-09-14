@@ -2298,8 +2298,8 @@ class ide {
             $pref_arch['arch']['user_options_bits']['id_option'],
             $pref_arch['arch']['user_options_bits']['cfg'],
             $pref_arch['arch']['user_options_bits']['text'],
-            'date' => 'bbn_users_options_bits.cfg->"$.last_date"',
-            'num' => 'bbn_users_options_bits.cfg->"$.number"'
+            'date' => 'JSON_UNQUOTE(JSON_EXTRACT('.$this->db->csn($pref_arch['arch']['user_options_bits']['cfg'], true).', "$.last_date"))',
+            'num' => 'JSON_UNQUOTE(JSON_EXTRACT('.$this->db->csn($pref_arch['arch']['user_options_bits']['cfg'], true).', "$.number"))'
           ],
           'where' => [
             'conditions' => [[
