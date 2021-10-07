@@ -31,14 +31,13 @@ if (
     }
   }
   else if ( isset($model->data['host'], $model->data['user'], $model->data['pass']) ){
-    
-    $fs = new \bbn\File\System('ftp', [
+  	$fs = new \bbn\File\System('ftp', [
       'host' => $model->data['host'],
       'user' => $model->data['user'],
       'pass' => $model->data['pass']
     ]);
-    
-    if ( $model->data['test'] ){
+
+		if ( $model->data['test'] ){
       return ['success' => $fs->check()];
     }
     if ( !empty($model->data['path']) ){

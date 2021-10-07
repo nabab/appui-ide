@@ -26,7 +26,7 @@ if ($model->hasData(['repository', 'repository_cfg'], true)) {
     if ($model->hasData('uid', true)) {
       $cur_path = $model->data['uid'].'/';
     }
-    elseif ($model->hasData('type', true) && ($type = X::getField($rep_cfg['types'], ['type' => $model->data['type']], 'path'))) {
+    elseif ($rep_cfg['types'] && $model->hasData('type', true) && ($type = X::getField($rep_cfg['types'], ['type' => $model->data['type']], 'path'))) {
       $cur_path = $type;
     }
 

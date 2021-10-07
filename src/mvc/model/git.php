@@ -8,7 +8,13 @@ $arr = [
 if ($model->hasData('path')) {
   $path = $model->data['path'];
   $git = new bbn\Api\Git($path);
-  $difference_git = $git->diff();
+  try {
+    $difference_git = $git->diff();
+  }
+  catch (\Exception) {
+    $difference_git = false;
+  }
+
   if ( !empty($difference_git) ){
     $arr['elements'] = array_map(function($a) use($path){
       return [

@@ -88,7 +88,7 @@
           return;
         }
         if ( this.host && this.user && this.pass ){
-          this.post(this.source.root + 'finder2', {
+          this.post(this.source.root + 'finder', {
             path: '',
             user: this.user,
             host: this.host,
