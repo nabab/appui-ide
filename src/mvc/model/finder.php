@@ -7,14 +7,16 @@ if (
   (strpos($model->data['path'], '../') === false) &&
   ($p = $model->inc->pref->get($model->data['origin']))
 ){
-  $fields = ['path', 'host', 'user', 'pass'];
+  $fields = ['path', 'host', 'user'];
   $cfg = [];
   foreach ( $fields as $f ){
     if ( isset($p[$f]) ){
       $cfg[$f] = $p[$f];
     }
   }
-  $fs = new \bbn\File\System($p['type'], $cfg);
+  $pwd = new bbn\Appui\Passwords($model->db);
+  $cfg['pass'] = $pwd->userGet($p['id'], $model->inc->user);
+  $fs = new \bbn\File\System('ssh', $cfg);
   if ( !empty($cfg['path']) ){
     $fs->cd($cfg['path']);
   }

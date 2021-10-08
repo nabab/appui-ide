@@ -295,7 +295,6 @@
         }
       },
       mapTree(node){
-        bbn.fn.log("heho", node, node.text);
         let bits = node.text.split('.');
         let ext = bits[bits.length-1];
         if ( node.dir) {

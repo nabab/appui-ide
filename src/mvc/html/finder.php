@@ -8,7 +8,7 @@
     <div>
     </div>
     <div>
-  		<bbn-menu :source="menu"></bbn-menu>
+  		<bbn-menu :source="menuData"></bbn-menu>
     </div>
   </bbn-toolbar>
   <div class="bbn-flex-fill">

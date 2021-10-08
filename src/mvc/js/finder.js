@@ -4,32 +4,14 @@
   return {
     data(){
       return {
-        menu: [
-          {
-            text: bbn._('Favorites'),
-            items: [
-              {text: bbn._('Server 1'), url: 't1'},
-              {text: bbn._('Server 2 (read-only)'), url: 't2'}
-            ]
-          }, {
-            text: bbn._('Connections'),
-            items: this.source.connections.map(a => {
-              a.url = this.source.root + 'finder/source/' + a.value;
-              return a;
-            }).concat([{
-              text: bbn._('New connection'),
-              action: () => {
-                this.getPopup('That should open a form')
-              }
-            }])
-          }, {
-            text: bbn._('Settings'),
-            items: [
-              {text: bbn._('Certificates'), url: 't1'},
-              {text: bbn._('Preferences'), url: 't2'}
-            ]
-          }
-        ],
+        formSource: {
+          path: "",
+          host: "",
+          user: "",
+          pass: "",
+          text: ""
+        },
+        menu: [],
         connection: this.source.connection,
         path: '',
         isConnected: false,
@@ -49,7 +31,43 @@
         }],
       }
     },
+    computed: {
+      menuData() {
+        return [
+          {
+            text: bbn._('Favorites'),
+            items: [
+              {text: bbn._('Server 1'), url: 't1'},
+              {text: bbn._('Server 2 (read-only)'), url: 't2'}
+            ]
+          }, {
+            text: bbn._('Connections'),
+            items: this.source.connections.map(a => {
+              a.url = this.source.root + 'finder/source/' + a.value;
+              return a;
+            }).concat([{
+              text: bbn._('New connection'),
+              action: () => {
+                this.getPopup({
+                  title: bbn._('New connection configuration'),
+                  component: 'appui-ide-popup-connection'
+                })
+              }
+            }])
+          }, {
+            text: bbn._('Settings'),
+            items: [
+              {text: bbn._('Certificates'), url: 't1'},
+              {text: bbn._('Preferences'), url: 't2'}
+            ]
+          }
+        ]
+      }
+    },
     methods: {
+      updateMenu() {
+        this.menu = this.menuData;
+      },
       abortRequest(a){
         alert( a)
         bbn.fn.log(a, this.dirs)
@@ -105,6 +123,9 @@
           })
         }
       },
+    },
+    beforeMount() {
+      this.updateMenu();
     },
     mounted(){
       bbn.fn.log(this.menu);
