@@ -11,7 +11,7 @@ if ($model->hasData('path')) {
   try {
     $difference_git = $git->diff();
   }
-  catch (\Exception) {
+  catch (\Exception $e) {
     $difference_git = false;
   }
 
