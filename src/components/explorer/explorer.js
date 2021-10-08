@@ -43,9 +43,10 @@
           num_dirs: 0,
           num_files: 0,
           size: 0,
-        
         }],
       }
+    },
+    mounted() {
     },
     methods: {
       updatePath(path){
@@ -75,7 +76,7 @@
       },
       getData(p){
         //return $.extend({
-        return bbn.fn.extend({  
+        return bbn.fn.extend({
           name: p.name,
           path: p.path
         }, this.isConnected ? {
@@ -97,6 +98,7 @@
             pass: this.pass,
             test: 1
           }, (d) => {
+            bbn.fn.log('ok', d);
             if ( d.success ){
               this.isConnected = true;
             }

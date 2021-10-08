@@ -88,13 +88,14 @@
           return;
         }
         if ( this.host && this.user && this.pass ){
-          this.post(this.source.root + 'finder', {
+          this.post(this.source.root + 'finder2', {
             path: '',
             user: this.user,
             host: this.host,
             pass: this.pass,
             test: 1
           }, (d) => {
+            bbn.fn.log(d);
             if ( d.success ){
               this.isConnected = true;
             }
@@ -106,7 +107,7 @@
       },
     },
     mounted(){
-      
+      bbn.fn.log(this.menu);
     },
     watch: {
       isLoading(val){

@@ -29,11 +29,11 @@
     </div>
   </bbn-pane>
   <bbn-pane :scrollable="false">
-    <bbn-finder :source="source.root + 'finder'"
+    <appui-ide-finder :source="source.root + 'finder'"
                 :origin="source.origin"
                 @change="updatePath"
                 :default-path="path"
                 :root="source.root"
-    ></bbn-finder>
+    ></appui-ide-finder>
   </bbn-pane>
 </bbn-splitter>

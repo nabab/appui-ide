@@ -20,8 +20,8 @@ die(var_dump(
 */
 
 /** @var $this \bbn\Mvc\Controller */
-if ( isset($ctrl->post['path']) ){
-  $ctrl->action();
+if ( isset($ctrl->post['data'], $ctrl->post['data']['path'])) {
+  $ctrl->addData($ctrl->post['data'])->action();
 }
 else{
   $ctrl->setColor('#35BCFA', '#FFF')

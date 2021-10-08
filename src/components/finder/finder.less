@@ -1,0 +1,26 @@
+/* LESS Document */
+.appui-ide-finder{
+  > .bbn-scroll-container > .bbn-scroll-content{
+    display: flex;
+  }
+  .appui-ide-finder-info-dirs{
+    > div:nth-child(odd){
+      text-align: right;
+    }
+    > div:nth-child(even){
+      text-align: center;
+    }
+  }
+  .appui-ide-finder-info-file-container{
+    width: 60em;
+    float: left;
+    .CodeMirror{
+      font-size: 10px!important;
+    }
+  }
+  .appui-ide-finder-pane{
+    width: 25em;
+    border-right: 2px dotted;
+    float: left;
+  }
+}

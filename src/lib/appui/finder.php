@@ -34,8 +34,8 @@ class finder
     if ($tmp = $this->fs->getFiles(!empty($path) ? $path : '.', true, true, null, 't')) {
       $res['data'] = array_map(function($a){
         return [
-          'text' => !empty($a['path']) ? basename($a['path']) : $path,
-          'value' =>  !empty($a['path']) ? basename($a['path']) : $path,
+          'text' => !empty($a['name']) ? basename($a['name']) : $path,
+          'value' =>  !empty($a['name']) ? basename($a['name']) : $path,
           'dir' => $a['dir'],
           'file' => $a['file']
         ];

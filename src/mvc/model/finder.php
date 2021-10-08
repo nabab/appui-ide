@@ -1,5 +1,6 @@
 <?php
 
+use bbn\X;
 
 if (
   isset($model->data['path'], $model->data['origin']) &&
@@ -31,13 +32,14 @@ if (
     }
   }
   else if ( isset($model->data['host'], $model->data['user'], $model->data['pass']) ){
-  	$fs = new \bbn\File\System('ftp', [
+    
+    $fs = new \bbn\File\System('ftp', [
       'host' => $model->data['host'],
       'user' => $model->data['user'],
       'pass' => $model->data['pass']
     ]);
-
-		if ( $model->data['test'] ){
+    
+    if ( $model->data['test'] ){
       return ['success' => $fs->check()];
     }
     if ( !empty($model->data['path']) ){
@@ -48,17 +50,17 @@ if (
     $fs = new \bbn\File\System();
     $fs->cd(BBN_DATA_PATH);//.'users/'.$model->inc->user->getId());
   }
-  /*
-  $fs = new \bbn\File\System('nextcloud', [
-    'path' => $model->data['path'],
-    'host' => 'cloud.bbn.so',
-    'user' => 'bbn',
-    'pass' => 'bbnsolutionstest'
+    $fs = new \bbn\File\System('nextcloud', [
+    'path' => $model->data['path'] ?? '/',
+    'host' => 'qr.dev.bbn.io',
+    'user' => 'root',
+    'pass' => 'B_QdU0/UfR2M1Apb'
   ]);
   */
+  
   $finder = new \appui\finder($fs);
   $res = $finder->explore($model->data['path']);
-  $cur = $fs->getCurrent();
+  $cur = $fs->getCurrent();	
   $res['current'] = $cur;
   return $res;
 }
