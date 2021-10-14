@@ -7,14 +7,18 @@ if (
   (strpos($model->data['path'], '../') === false) &&
   ($p = $model->inc->pref->get($model->data['origin']))
 ){
-  $fields = ['path', 'host', 'user', 'pass'];
+  $fields = ['path', 'host', 'user', 'type'];
   $cfg = [];
   foreach ( $fields as $f ){
     if ( isset($p[$f]) ){
       $cfg[$f] = $p[$f];
     }
   }
-  $fs = new \bbn\File\System($p['type'], $cfg);
+  if ($cfg['type'] !== 'local') {
+  	$pwd = new bbn\Appui\Passwords($model->db);
+  	$cfg['pass'] = $pwd->userGet($p['id'], $model->inc->user);
+  }
+  $fs = new \bbn\File\System($cfg['type'], $cfg);
   if ( !empty($cfg['path']) ){
     $fs->cd($cfg['path']);
   }
@@ -59,13 +63,13 @@ if (
   */
   
   $finder = new \appui\finder($fs);
-  $res = $finder->explore($model->data['path']);
-  $cur = $fs->getCurrent();	
+  $res = $finder->explore($model->data['path'] ?? '.');
+  $cur = $fs->getCurrent();
   $res['current'] = $cur;
   return $res;
 }
 else{
-  $conn = $model->inc->pref->textValue($model->inc->options->fromCode('sources', 'finder', 'appui'));
+  $conn = $model->inc->pref->getAll($model->inc->options->fromCode('sources', 'finder', 'appui'));
   $connection = isset($conn[0], $conn[0]['value']) ? $conn[0]['value'] : '';
   $fav = $model->inc->pref->textValue($model->inc->options->fromCode('favourites', 'finder', 'appui'));
   return [

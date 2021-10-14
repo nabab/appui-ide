@@ -3,8 +3,8 @@
 
   let app;
   /**
-     * Classic input with normalized appearance
-     */
+                   * Classic input with normalized appearance
+                   */
 
   let fields = ['host', 'user', 'pass'],
 
@@ -72,6 +72,7 @@
         user: '',
         pass: '',
         copied: false,
+        cut: false,
         oldDir: '',
         dirs: [],
         currentFile: false,
@@ -153,10 +154,10 @@
 
       },
       /**
-         * get the size of the current tree (the selected folder of the previous tree)
-         * 
-         * @param {*} p 
-         */
+                       * get the size of the current tree (the selected folder of the previous tree)
+                       * 
+                       * @param {*} p 
+                       */
       get_size(p){
         let idx = bbn.fn.search(this.dirs, 'name', p.name);
         this.post(this.root + 'actions/finder/dirsize', {
@@ -188,10 +189,10 @@
         this.dirs.pop();
       },
       /**
-         * method at @load of bbn - rtee
-         * 
-         * @param {*} res 
-         */
+                       * method at @load of bbn - rtee
+                       * 
+                       * @param {*} res 
+                       */
       updateInfo(res){
         if ( res && res.path ){
           setTimeout( () => {
@@ -205,10 +206,10 @@
         }
       },
       /**
-         * method at @select of bbn - tree, defines currentFile and makes the post to take the infos of the file
-         * 
-         * @param {*} node 
-         */
+                       * method at @select of bbn - tree, defines currentFile and makes the post to take the infos of the file
+                       * 
+                       * @param {*} node 
+                       */
       select(node){
         // Reinit
         this.isImage = false;
@@ -295,7 +296,6 @@
         }
       },
       mapTree(node){
-        bbn.fn.log("heho", node, node.text);
         let bits = node.text.split('.');
         let ext = bits[bits.length-1];
         if ( node.dir) {
@@ -337,21 +337,30 @@
         }];
       },
       /**
-         * returns the array of buttons of the context menu
-         * 
-         * @param {*} n the node 
-         * @param {*} i the index of the node
-         * @return array
-         */
+                       * returns the array of buttons of the context menu
+                       * 
+                       * @param {*} n the node 
+                       * @param {*} i the index of the node
+                       * @return array
+                       */
       itemsContextMenu(n, i) {
         let objContext = [
           {
             icon: 'nf nf-fa-copy',
             text: bbn._('Copy'),
             action: (node) => {
+              this.cut = false;
               this.copy(node)
             }
-          }  
+          },
+          {
+            icon: 'nf nf-fa-cut',
+            text: bbn._('Cut'),
+            action: (node) => {
+              this.cut = true;
+              this.copy(node);
+            }
+          }
         ]
         if ( n.data.dir ) {
           objContext.push({
@@ -361,14 +370,14 @@
               this.newFolder(node)
             }
           });
-          if ( this.copied !== false ){
+          if ( this.copied !== false || this.cut !== false){
             objContext.push({
               icon: 'nf nf-fa-paste',
               text: bbn._('Paste'),
               action: (node) => {
                 this.paste(node)
               }
-            });  
+            });
           }
         }
         else{
@@ -380,21 +389,19 @@
             }
           })
         }
-        if ( this.closest('appui-ide-explorer').source.type === 'nextcloud' ){
-          objContext.push({
-            icon: 'nf nf-fa-edit',
-            text: bbn._('Rename'),
-            action: (node) => {
-              this.edit(node)
-            }
-          },{
-            icon: 'nf nf-fa-trash_alt',
-            text: bbn._('Delete'),
-            action: (node) => {
-              this.delete(node)
-            }
-          })
-        }
+        objContext.push({
+          icon: 'nf nf-fa-edit',
+          text: bbn._('Rename'),
+          action: (node) => {
+            this.edit(node)
+          }
+        },{
+          icon: 'nf nf-fa-trash',
+          text: bbn._('Delete'),
+          action: (node) => {
+            this.delete(node)
+          }
+        })
         return objContext;
       },
       uploadFile(path){
@@ -483,10 +490,10 @@
 
       },
       /**
-         * paste the node previously copied in the property this.copied in the current selected dir
-         * 
-         * @param {*} n the node
-         */
+                       * paste the node previously copied in the property this.copied in the current selected dir
+                       * 
+                       * @param {*} n the node
+                       */
       paste(n){
         n.isSelected = true;
         bbn.fn.log('PASTE', n, typeof(n))
@@ -498,9 +505,9 @@
         else {
           value = n.data.value;
         }
-        if ( (typeof(n) === 'string' || n.data.dir ) && this.copied ) {
+        if ( (typeof(n) === 'string' || n.data.dir ) && (this.copied || this.cut)) {
           let st = bbn._('Do you want to paste') + ' ' + this.copied.data.value + ' ' + bbn._('into') + ' ' + value + '?';
-          let trees = this.findAll('bbn-tree'), 
+          let trees = this.findAll('bbn-tree'),
               path = '';
           this.confirm(bbn._(st), () => {
             this.post(this.root + 'actions/finder/paste', {
@@ -509,6 +516,7 @@
               old_dir: this.oldDir,
               new_dir: this.currentPath
             }, (d) => {
+              bbn.fn.log("zeubi", this.copied && this.copied.data);
               if ( d.success ){
                 bbn.fn.happy('pasted')
                 bbn.fn.log(n.tree.items)
@@ -519,19 +527,50 @@
                     v.reload();
                   }  
                 });
-                appui.success(this.copied.data.value + ' ' + bbn._('successfully pasted into ' + n.data.value));
+                if (!this.cut) {
+                  appui.success(this.copied.data.value + ' ' + bbn._('successfully pasted into ' + n.data.value));
+                }
               }
               else{
                 appui.error(bbn._('Something went wrong'));
               }
-              this.copied = false;
-              this.oldDir = '';
+              if (!this.cut) {
+                this.copied = false;
+                this.oldDir = '';
+              } else {
+                this.cut_(n);
+              }
             })
           });
         }
-        else if ( !this.copied ){
+        else if ( !this.copied && !this.cut){
           this.alert(bbn._('The clipboard is empty!'));
         }
+      },
+      cut_(n) {
+        let trees = this.findAll('bbn-tree');
+        this.post(this.root + 'actions/finder/delete', {
+          path: this.oldDir, 
+          name: this.copied.data.value,
+          origin: this.origin
+        }, (d) => {
+          if ( d.success ){
+            bbn.fn.each(trees, (v, i) => {
+              bbn.fn.log(n,( v.data.name === n.data.value ), v.data.name ,n.data.value )
+              if ( v.data.name === n.data.value ){
+                bbn.fn.log(v.source)
+                v.reload();
+              }
+            });
+            appui.success(this.copied.data.value + ' ' + bbn._('successfully cut'));
+            this.currentFile = false;
+            this.oldDir = '';
+            this.cut = false;
+          }
+          else {
+            appui.error(bbn._('Something went wrong while deleting ' + this.copied.data.value));
+          }
+        })
       },
       //download the file
       download(n){
@@ -544,9 +583,9 @@
         })
       },
       /**
-         * edits the name of the current selected node
-         * @param {*} node 
-         */
+                       * edits the name of the current selected node
+                       * @param {*} node 
+                       */
       edit(node){
         this.editingNode = false;
         let oldValue = node.data.value,
@@ -578,30 +617,29 @@
         })
       },
       /**
-         * Deletes the current selected node
-         * @param {*} node 
-         */
+                       * Deletes the current selected node
+                       * @param {*} node 
+                       */
       delete(node){
         this.confirm(bbn._('Do you want to delete') + ' ' + node.data.value + '?', () => {
           let st = node.tree.data.path,
               //st = ( (this.mode === 'ftp') || (this.mode === 'ssh')) ? this.origin + this.currentPath : this.currentPath,
               name = node.data.value;
           /*if ( node.data.dir && ( this.currentPath === '' ) ){
-              st += node.data.value;
-            }
-            if ( node.data.file ){
-              st += node.data.value;
-            }
-            */
-
+                            st += node.data.value;
+                          }
+                          if ( node.data.file ){
+                            st += node.data.value;
+                          }
+                          */
           this.post(this.root + 'actions/finder/delete', {
             path: st, 
             name: name,
             origin: this.origin
           }, (d) => {
-            if ( d.success ){       
+            if ( d.success ){
               let items = node.tree.items;
-              if ( items.length ){
+              if (items && items.length !== undefined && items.length){
                 items.splice(node.idx, 1);
               }
               if ( node.data.dir && this.dirs.length ){
@@ -630,32 +668,33 @@
         bbn.fn.log('END', arguments)
       },
       /**
-         * Insert the current selected node in the property this.copied 
-         * @param n the node
-         */
+                       * Insert the current selected node in the property this.copied 
+                       * @param n the node
+                       */
       copy(n){
-        bbn.fn.happy('copy')
+        let keyword = (this.cut === true) ? "cut":"copy";
+        bbn.fn.happy(keyword)
         bbn.fn.log(arguments)
         this.copied = false;
-        this.confirm(bbn._('Do you want to copy') + ' ' + n.data.value + '?', () => {
+        this.confirm(bbn._('Do you want to ' + keyword) + ' ' + n.data.value + '?', () => {
           this.copied = n;
           /*if ( n.data.dir && this.dirs.length > 2){
-              let st = this.currentPath.slice(0,-1),
-              idx = st.lastIndexOf('/');
-              if ( idx > -1 ){
-                st = st.substring(0, idx);
-              }
-              this.oldDir = st + '/';
-            }
-            else if ( n.data.dir && this.dirs.length <= 2 ){
-              this.oldDir = '';
-            }
-            else {
-              this.oldDir = this.currentPath;
-            }*/
+                            let st = this.currentPath.slice(0,-1),
+                            idx = st.lastIndexOf('/');
+                            if ( idx > -1 ){
+                              st = st.substring(0, idx);
+                            }
+                            this.oldDir = st + '/';
+                          }
+                          else if ( n.data.dir && this.dirs.length <= 2 ){
+                            this.oldDir = '';
+                          }
+                          else {
+                            this.oldDir = this.currentPath;
+                          }*/
           this.oldDir = n.tree.data.path;
           let st = n.data.file ? bbn._('File') : bbn._('Folder');
-          st += ' ' + bbn._('successfully copied');
+          st += ' ' + bbn._('successfully ' + keyword);
           appui.success(st)
         })
       },
@@ -671,7 +710,7 @@
             });
           }
         })
-      }
+      },
     },
     mounted(){
       if ( this.path ){
@@ -724,27 +763,27 @@
       form:{
         name: 'form',
         template: `
-          <bbn-form class="bbn-flex-height"
-                    :source="source" 
-                    @success="success" 
-                    :action="source.root + 'actions/finder/' + (!source.new ? 'rename' : 'new_dir')"
-                    >
-            <div class="bbn-grid-fields bbn-l bbn-padded">
-              <label>`+ bbn._('Name') +`</label>
-              <div>
-                <bbn-input v-if="!source.new" 
-                           class="bbn-w-100" 
-                           v-model="source.node.value"
+                        <bbn-form class="bbn-flex-height"
+                                  :source="source" 
+                                  @success="success" 
+                                  :action="source.root + 'actions/finder/' + (!source.new ? 'rename' : 'new_dir')"
+                                  >
+                          <div class="bbn-grid-fields bbn-l bbn-padded">
+                            <label>`+ bbn._('Name') +`</label>
+                            <div>
+                              <bbn-input v-if="!source.new" 
+                                         class="bbn-w-100" 
+                                         v-model="source.node.value"
 
-                ></bbn-input>
-                <bbn-input v-else 
-                           class="bbn-w-100" 
-                           v-model="source.newDir"
-                >
-                </bbn-input>
-              </div>
-            </div>
-          </bbn-form>`,
+                              ></bbn-input>
+                              <bbn-input v-else 
+                                         class="bbn-w-100" 
+                                         v-model="source.newDir"
+                              >
+                              </bbn-input>
+                            </div>
+                          </div>
+                        </bbn-form>`,
         props: ['source', 'data'],
         data(){
           return {

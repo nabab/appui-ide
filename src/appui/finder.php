@@ -139,7 +139,7 @@ class finder
       case '.zip':
       case '.pdf':
         $res =  false;
-	break;
+        break;
     }
   return $res;  
   }

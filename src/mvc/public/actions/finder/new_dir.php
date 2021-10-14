@@ -11,8 +11,8 @@ if ( isset($ctrl->post['path'], $ctrl->post['new'], $ctrl->post['node']['value']
   }
   $finalPath = $path . $ctrl->post['node']['value'].'/'.$ctrl->post['newDir'];
   //before to create the new folder check if it exists 
-  if ( !$ctrl->inc->fs->exists($finalPath) ){
-    $success = $ctrl->inc->fs->mkdir($finalPath);
+  if ( !$ctrl->inc->finderfs->exists($finalPath) ){
+    $success = $ctrl->inc->finderfs->mkdir($finalPath);
     $ctrl->obj->success = $success;
     $ctrl->obj->data['new_dir'] = $ctrl->post['newDir'];
   }
