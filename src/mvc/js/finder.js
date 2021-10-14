@@ -43,14 +43,17 @@
           }, {
             text: bbn._('Connections'),
             items: this.source.connections.map(a => {
-              a.url = this.source.root + 'finder/source/' + a.value;
+              a.url = this.source.root + 'finder/source/' + a.id;
               return a;
             }).concat([{
-              text: bbn._('New connection'),
+              text: bbn._('Edit connections'),
               action: () => {
                 this.getPopup({
-                  title: bbn._('New connection configuration'),
-                  component: 'appui-ide-popup-connection'
+                  title: bbn._('Edit connections configuration'),
+                  component: 'appui-ide-popup-connections',
+                  componentOptions: {
+                    source: this.source.connections
+                  }
                 })
               }
             }])
@@ -66,7 +69,11 @@
     },
     methods: {
       updateMenu() {
-        this.menu = this.menuData;
+        let menu = this.getRef('menu');
+        bbn.fn.log("JJRJZLJLK3", menu);
+        if (menu) {
+          menu.updateData();
+        }
       },
       abortRequest(a){
         alert( a)
