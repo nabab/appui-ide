@@ -1,4 +1,4 @@
-fs->getCurrent()<?php
+<?php
 /*
  * Describe what it does!
  *
@@ -15,8 +15,9 @@ if ( isset($ctrl->post['origin']) && ($p = $ctrl->inc->pref->get($ctrl->post['or
     }
   }
   
-	$ctrl->addInc('fs', new \bbn\File\System($p['type'], $cfg));
+	$ctrl->addInc('finderfs', new \bbn\File\System($p['type'], $cfg));
   if ( !empty($cfg['path']) ){
+    $ctrl->inc->finderfs->cd($cfg['path']);
     $ctrl->inc->fs->cd($cfg['path']);
   }
 }

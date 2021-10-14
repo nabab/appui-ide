@@ -1,4 +1,6 @@
 <?php
+
+use bbn\X;
 if ( isset($ctrl->post['value']) &&
     isset($ctrl->post['path'])
   ){
@@ -6,9 +8,11 @@ if ( isset($ctrl->post['value']) &&
   $success = false;
   
   $path = $ctrl->post['path'].$ctrl->post['value'];
-  $file = $ctrl->inc->fs->download($path);
+  
+  $file = $ctrl->inc->finderfs->download($path);
+  die(var_dump($file));
   $ctrl->obj->file = $file;
-  if ( $ctrl->inc->fs->getMode() === 'nextcloud'){
+  if ( $ctrl->inc->finderfs->getMode() === 'nextcloud'){
     
   }
 }

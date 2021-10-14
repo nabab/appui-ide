@@ -7,16 +7,24 @@
      <bbn-input :required="true"
                 v-model="formSource.text"
                 :readonly="isTested"/>
-     <label>Host</label>
-     <bbn-input :required="true"
+    <label>Connection type</label>
+    <bbn-dropdown :source="types"
+                  v-model="type"
+                  :readonly="isTested"
+                  :required="true"/>
+     <label v-if="formSource.type !== 'local'">Host</label>
+     <bbn-input v-if="formSource.type !== 'local'"
+                :required="true"
                 v-model="formSource.host"
                 :readonly="isTested"/>
-     <label>User</label>
-     <bbn-input :required="true"
+     <label v-if="formSource.type !== 'local'">User</label>
+     <bbn-input v-if="formSource.type !== 'local'"
+                :required="true"
                 v-model="formSource.user"
                 :readonly="isTested"/>
-     <label>Password</label>
-     <bbn-input :required="true"
+     <label v-if="formSource.type !== 'local'">Password</label>
+     <bbn-input v-if="formSource.type !== 'local'"
+                :required="true"
                 type="password"
                 v-model="formSource.pass"
                 :readonly="isTested"/>
