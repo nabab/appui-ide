@@ -6,19 +6,12 @@
                     "id_project",
                     "id_option"
                 ],
-                "ref_db": null,
-                "ref_table": null,
-                "ref_column": null,
-                "constraint": "bbn_projects_assets_ibfk_1",
-                "update": "CASCADE",
-                "delete": "CASCADE",
                 "unique": 1
             },
             "id_project": {
                 "columns": [
                     "id_project"
                 ],
-                "ref_db": null,
                 "ref_table": "bbn_projects",
                 "ref_column": "id",
                 "constraint": "bbn_projects_assets_ibfk_1",
@@ -30,10 +23,8 @@
                 "columns": [
                     "id_option"
                 ],
-                "ref_db": null,
                 "ref_table": "bbn_options",
                 "ref_column": "id",
-                "constraint": "bbn_projects_assets_ibfk_2",
                 "update": "CASCADE",
                 "delete": "CASCADE",
                 "unique": 0
@@ -42,7 +33,6 @@
                 "columns": [
                     "asset_type"
                 ],
-                "ref_db": null,
                 "ref_table": "bbn_options",
                 "ref_column": "id",
                 "constraint": "bbn_projects_assets_ibfk_3",
@@ -70,10 +60,7 @@
                 "type": "binary",
                 "null": 0,
                 "key": "PRI",
-                "extra": "",
                 "signed": true,
-                "virtual": false,
-                "generation": "",
                 "maxlength": 16
             },
             "asset_type": {
@@ -81,10 +68,7 @@
                 "type": "binary",
                 "null": 0,
                 "key": "MUL",
-                "extra": "",
                 "signed": true,
-                "virtual": false,
-                "generation": "",
                 "maxlength": 16
             },
             "id_option": {
@@ -92,10 +76,7 @@
                 "type": "binary",
                 "null": 0,
                 "key": "PRI",
-                "extra": "",
                 "signed": true,
-                "virtual": false,
-                "generation": "",
                 "maxlength": 16
             }
         }
