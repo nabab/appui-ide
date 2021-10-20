@@ -3,7 +3,7 @@
   <bbn-pane :size="40" class="bbn-bordered-bottom">
     <div class="bbn-overlay bbn-middle">
 
-      <div class="bbn-flex-width">
+      <bbn-toolbar>
         <!--div class="bbn-hpadded">
           <bbn-dropdown placeholder="<?=_('Connection')?>"
                         v-model="connection"
@@ -12,20 +12,35 @@
                         ref="connection">
           </bbn-dropdown>
         </div-->
-        <div class="bbn-hpadded">
+        <div class="bbn-left-sspace">
           <bbn-button ftitle="<?=_('Is connected')?>"
                       :icon="'nf nf-fa-lightbulb_o bbn-' + (isConnected ? 'green' : 'red')"
-                      @click="connect">
+                      @click="connect"
+                      :notext="true">
           </bbn-button>
         </div>
-        <div class="bbn-flex-fill bbn-hpadded">
+        <div class="bbn-left-sspace">
+          <bbn-button ftitle="<?=_('View choice')?>"
+                      icon="nf nf-fa-eye"
+                      :notext="true"
+                      @click="viewMode = viewMode == 'dual' ? 'columns': 'dual'">
+          </bbn-button>
+        </div>
+        <div class="bbn-left-sspace">
+          <bbn-button ftitle="<?=_('Element size')?>"
+                      icon="nf nf-mdi-move_resize_variant"
+                      :notext="true">
+          </bbn-button>
+        </div>
+        <div class="bbn-hpadded">
           <bbn-input placeholder="<?=_('Path')?>"
                      v-model="currentPath"
-                     class="bbn-w-100"
-                     :readonly="true">
+                     class="bbn-wider"
+                     :readonly="true"
+                     :notext="true">
           </bbn-input>
         </div>
-      </div>
+      </bbn-toolbar>
     </div>
   </bbn-pane>
   <bbn-pane :scrollable="false">
@@ -34,6 +49,7 @@
                 @change="updatePath"
                 :default-path="path"
                 :root="source.root"
+                :mode="viewMode"
     ></appui-ide-finder>
   </bbn-pane>
 </bbn-splitter>

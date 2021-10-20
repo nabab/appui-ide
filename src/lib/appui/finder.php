@@ -108,23 +108,8 @@ class finder
 
   public function is_readable($ext)
   {
-    $res = false;
+    $res = true;
     switch ( $ext ){
-      case '.csv':
-      case '.html':
-      case '.xml':
-      case '.js':
-      case '.php':
-      case '.css':
-      case '.json':
-      case '.less':
-      case '.txt':
-      case '.log':
-      case '.cert':
-      case '.cer':
-        $res =  true;
-      break;
-      
       case '.xlsx':
       case '.ods':
       case '.xsl':
@@ -156,9 +141,6 @@ class finder
   
   public function get_info($path, $ext)
   {
-    if ( $this->fs->getMode() === 'nextcloud' ){
-      $path = $this->fs->getRealPath($path);
-    }
     $info = [];
     if ( $this->fs->exists($path) ){
       

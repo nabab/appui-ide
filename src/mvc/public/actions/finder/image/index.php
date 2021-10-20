@@ -7,20 +7,28 @@ $img = base64_decode($ctrl->arguments[0]);
 $origin = $ctrl->arguments[1];
 
 if ( isset($origin) && ( $p = $ctrl->inc->pref->get($origin)) ){
-  $fields = ['path', 'host', 'user', 'pass'];
+  $fields = ['path', 'host', 'user', 'type'];
   $cfg = [];
   foreach ( $fields as $f ){
     if ( isset($p[$f]) ){
       $cfg[$f] = $p[$f];
     }
   }
+  if ($cfg['type'] !== 'local') {
+  	$pwd = new bbn\Appui\Passwords($ctrl->db);
+  	$cfg['pass'] = $pwd->userGet($p['id'], $ctrl->inc->user);
+  }
+  $fs = new \bbn\File\System($cfg['type'], $cfg);
+  if ( !empty($cfg['path']) ){
+    $fs->cd($cfg['path']);
+  }
 
   if ( isset($fs) ){
     $max_width = 450;
     $max_height = 300;
-    if ( $ctrl->inc->fs->getMode() === 'nextcloud' ){
+    if ( $fs->getMode() === 'nextcloud' ){
       //if the mode of file system is nextcloud end the file exists in the file system die on the content of the file (base64)
-      if ( $ctrl->inc->fs->exists($fs->getRealPath($img)) &&  ($content = $fs->getContents( $fs->getRealPath($img))) ){
+      if ($content = $fs->getContents($img)){
         die($content);
       }
     }

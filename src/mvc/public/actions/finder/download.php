@@ -10,7 +10,6 @@ if ( isset($ctrl->post['value']) &&
   $path = $ctrl->post['path'].$ctrl->post['value'];
   
   $file = $ctrl->inc->finderfs->download($path);
-  die(var_dump($file));
   $ctrl->obj->file = $file;
   if ( $ctrl->inc->finderfs->getMode() === 'nextcloud'){
     

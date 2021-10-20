@@ -3,8 +3,8 @@
 
   let app;
   /**
-                   * Classic input with normalized appearance
-                   */
+                       * Classic input with normalized appearance
+                       */
 
   let fields = ['host', 'user', 'pass'],
 
@@ -38,6 +38,10 @@
   return {
     mixins: [bbn.vue.basicComponent, bbn.vue.localStorageComponent],
     props: {
+      mode: {
+        type: String,
+        default: 'columns'
+      },
       path: {
         type: String,
         default: '.'
@@ -67,6 +71,7 @@
         //defined when the button new folder/file is clicked on the bottom of the tree
         currentContextPath: '',
         isConnected: false,
+        sizeInfo: 0,
         data: [],
         host: '',
         user: '',
@@ -105,13 +110,19 @@
       encodedURL() {
         if ( this.currentFile && this.isImage ){
           //return btoa(this.origin + this.currentPath + this.currentFile.node.data.value)
-          bbn.fn.log(btoa(this.currentPath + this.currentFile.node.data.value));
+          bbn.fn.log(this.currentPath, this.currentFile.node.data.value, btoa(this.currentPath + this.currentFile.node.data.value));
           return btoa(this.currentPath + this.currentFile.node.data.value)
         }
       },
     },
     methods: {
-
+			fileErrorText() {
+        if (this.sizeInfo > 2000000) {
+          return bbn._('The content of the file exceeds the authorized limit (2mb)');
+        } else {
+          return bbn._('The content of this file cannot be shown');
+        }
+      },
       //abort the current request
       abortRequest(i){
         bbn.fn.happy(i)
@@ -153,11 +164,27 @@
         }
 
       },
+      saveFile(p) {
+        bbn.fn.log(p, this.currentFile, this.currentPath);
+        this.post( this.root + 'actions/finder/save', {
+          path: this.currentPath + this.currentFile.node.data.value,
+          origin: this.origin,
+          content: this.currentFile.info.content
+        }, d => {
+          bbn.fn.log(d);
+          if (d.success) {
+            appui.success(this.currentFile.node.data.value + ' ' + bbn._('successfully saved'));
+            bbn.fn.happy('SAVED');
+          } else {
+            appui.error(bbn._('An error occured: ' + d.error));
+          }
+        })
+      },
       /**
-                       * get the size of the current tree (the selected folder of the previous tree)
-                       * 
-                       * @param {*} p 
-                       */
+                           * get the size of the current tree (the selected folder of the previous tree)
+                           * 
+                           * @param {*} p 
+                           */
       get_size(p){
         let idx = bbn.fn.search(this.dirs, 'name', p.name);
         this.post(this.root + 'actions/finder/dirsize', {
@@ -173,26 +200,43 @@
         });
       },
       add(path){
+        bbn.fn.log(this.dirs, this.mode);
         let fpath = path;
         if ( this.dirs.length > 1 ){
           fpath = this.currentPath + path;
         }
-        this.dirs.push({
-          name: path,
-          path: fpath,
-          empty_dirs: 0,
-          num_dirs: 0,
-          size: 0
-        });
+        if (this.dirs.length > 1 && this.mode === 'dual') {
+          fpath = this.currentPath + path;
+          this.dirs[1] = {
+            name: path,
+            path: fpath,
+            empty_dirs: 0,
+            num_dirs: 0,
+            size: 0
+          };
+          let trees = this.findAll('bbn-tree')
+          if (trees.length > 1) {
+            trees[2].reload();
+          }
+        }
+        else {
+          this.dirs.push({
+            name: path,
+            path: fpath,
+            empty_dirs: 0,
+            num_dirs: 0,
+            size: 0
+          });
+        }
       },
       remove(){
         this.dirs.pop();
       },
       /**
-                       * method at @load of bbn - rtee
-                       * 
-                       * @param {*} res 
-                       */
+                           * method at @load of bbn - rtee
+                           * 
+                           * @param {*} res 
+                           */
       updateInfo(res){
         if ( res && res.path ){
           setTimeout( () => {
@@ -206,10 +250,10 @@
         }
       },
       /**
-                       * method at @select of bbn - tree, defines currentFile and makes the post to take the infos of the file
-                       * 
-                       * @param {*} node 
-                       */
+                           * method at @select of bbn - tree, defines currentFile and makes the post to take the infos of the file
+                           * 
+                           * @param {*} node 
+                           */
       select(node){
         // Reinit
         this.isImage = false;
@@ -262,9 +306,15 @@
                       height: d.info.height ? d.info.height : '',
                       width: d.info.width ? d.info.width : '',
                       info: d.info,
-                      ext: ext, 
+                      ext: ext,
+                      owner: d.owner.name,
+                      gowner: d.groupOwner.name
                     }
-
+                    this.sizeInfo = parseInt(d.info.size.split()[0]);
+                    if (this.sizeInfo > 200000000) {
+                      this.currentFile.info.content = false;
+                   		bbn.fn.log(parseInt(d.info.size.split()[0]));
+                    }
                     if ( d.info.is_image ){
                       this.isImage = true;
                     } else {
@@ -294,6 +344,7 @@
             }
           }
         }
+        bbn.fn.log(this.preview, this.currentFile, this.preview && this.currentFile);
       },
       mapTree(node){
         let bits = node.text.split('.');
@@ -307,6 +358,7 @@
         return node;
       },
       getData(p){
+        bbn.fn.log(p);
         //return $.extend({
         return bbn.fn.extend({
           name: p.name,
@@ -337,12 +389,12 @@
         }];
       },
       /**
-                       * returns the array of buttons of the context menu
-                       * 
-                       * @param {*} n the node 
-                       * @param {*} i the index of the node
-                       * @return array
-                       */
+                           * returns the array of buttons of the context menu
+                           * 
+                           * @param {*} n the node 
+                           * @param {*} i the index of the node
+                           * @return array
+                           */
       itemsContextMenu(n, i) {
         let objContext = [
           {
@@ -490,10 +542,10 @@
 
       },
       /**
-                       * paste the node previously copied in the property this.copied in the current selected dir
-                       * 
-                       * @param {*} n the node
-                       */
+                           * paste the node previously copied in the property this.copied in the current selected dir
+                           * 
+                           * @param {*} n the node
+                           */
       paste(n){
         n.isSelected = true;
         bbn.fn.log('PASTE', n, typeof(n))
@@ -516,7 +568,6 @@
               old_dir: this.oldDir,
               new_dir: this.currentPath
             }, (d) => {
-              bbn.fn.log("zeubi", this.copied && this.copied.data);
               if ( d.success ){
                 bbn.fn.happy('pasted')
                 bbn.fn.log(n.tree.items)
@@ -583,9 +634,9 @@
         })
       },
       /**
-                       * edits the name of the current selected node
-                       * @param {*} node 
-                       */
+                           * edits the name of the current selected node
+                           * @param {*} node 
+                           */
       edit(node){
         this.editingNode = false;
         let oldValue = node.data.value,
@@ -617,21 +668,21 @@
         })
       },
       /**
-                       * Deletes the current selected node
-                       * @param {*} node 
-                       */
+                           * Deletes the current selected node
+                           * @param {*} node 
+                           */
       delete(node){
         this.confirm(bbn._('Do you want to delete') + ' ' + node.data.value + '?', () => {
           let st = node.tree.data.path,
               //st = ( (this.mode === 'ftp') || (this.mode === 'ssh')) ? this.origin + this.currentPath : this.currentPath,
               name = node.data.value;
           /*if ( node.data.dir && ( this.currentPath === '' ) ){
-                            st += node.data.value;
-                          }
-                          if ( node.data.file ){
-                            st += node.data.value;
-                          }
-                          */
+                                st += node.data.value;
+                              }
+                              if ( node.data.file ){
+                                st += node.data.value;
+                              }
+                              */
           this.post(this.root + 'actions/finder/delete', {
             path: st, 
             name: name,
@@ -668,9 +719,9 @@
         bbn.fn.log('END', arguments)
       },
       /**
-                       * Insert the current selected node in the property this.copied 
-                       * @param n the node
-                       */
+                           * Insert the current selected node in the property this.copied 
+                           * @param n the node
+                           */
       copy(n){
         let keyword = (this.cut === true) ? "cut":"copy";
         bbn.fn.happy(keyword)
@@ -679,19 +730,19 @@
         this.confirm(bbn._('Do you want to ' + keyword) + ' ' + n.data.value + '?', () => {
           this.copied = n;
           /*if ( n.data.dir && this.dirs.length > 2){
-                            let st = this.currentPath.slice(0,-1),
-                            idx = st.lastIndexOf('/');
-                            if ( idx > -1 ){
-                              st = st.substring(0, idx);
-                            }
-                            this.oldDir = st + '/';
-                          }
-                          else if ( n.data.dir && this.dirs.length <= 2 ){
-                            this.oldDir = '';
-                          }
-                          else {
-                            this.oldDir = this.currentPath;
-                          }*/
+                                let st = this.currentPath.slice(0,-1),
+                                idx = st.lastIndexOf('/');
+                                if ( idx > -1 ){
+                                  st = st.substring(0, idx);
+                                }
+                                this.oldDir = st + '/';
+                              }
+                              else if ( n.data.dir && this.dirs.length <= 2 ){
+                                this.oldDir = '';
+                              }
+                              else {
+                                this.oldDir = this.currentPath;
+                              }*/
           this.oldDir = n.tree.data.path;
           let st = n.data.file ? bbn._('File') : bbn._('Folder');
           st += ' ' + bbn._('successfully ' + keyword);
@@ -763,27 +814,27 @@
       form:{
         name: 'form',
         template: `
-                        <bbn-form class="bbn-flex-height"
-                                  :source="source" 
-                                  @success="success" 
-                                  :action="source.root + 'actions/finder/' + (!source.new ? 'rename' : 'new_dir')"
-                                  >
-                          <div class="bbn-grid-fields bbn-l bbn-padded">
-                            <label>`+ bbn._('Name') +`</label>
-                            <div>
-                              <bbn-input v-if="!source.new" 
-                                         class="bbn-w-100" 
-                                         v-model="source.node.value"
+                            <bbn-form class="bbn-flex-height"
+                                      :source="source" 
+                                      @success="success" 
+                                      :action="source.root + 'actions/finder/' + (!source.new ? 'rename' : 'new_dir')"
+                                      >
+                              <div class="bbn-grid-fields bbn-l bbn-padded">
+                                <label>`+ bbn._('Name') +`</label>
+                                <div>
+                                  <bbn-input v-if="!source.new" 
+                                             class="bbn-w-100" 
+                                             v-model="source.node.value"
 
-                              ></bbn-input>
-                              <bbn-input v-else 
-                                         class="bbn-w-100" 
-                                         v-model="source.newDir"
-                              >
-                              </bbn-input>
-                            </div>
-                          </div>
-                        </bbn-form>`,
+                                  ></bbn-input>
+                                  <bbn-input v-else 
+                                             class="bbn-w-100" 
+                                             v-model="source.newDir"
+                                  >
+                                  </bbn-input>
+                                </div>
+                              </div>
+                            </bbn-form>`,
         props: ['source', 'data'],
         data(){
           return {
