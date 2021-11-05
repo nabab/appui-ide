@@ -21,6 +21,9 @@ die(var_dump(
 
 /** @var $this \bbn\Mvc\Controller */
 if ( isset($ctrl->post['data'], $ctrl->post['data']['path'])) {
+  if (isset($ctrl->post['data']['fpath']) && ($ctrl->post['data']['fpath'] !== $ctrl->post['data']['path'])) {
+		 $ctrl->post['data']['path'] = $ctrl->post['data']['fpath'];
+  }
   $ctrl->addData($ctrl->post['data'])->action();
 }
 else{

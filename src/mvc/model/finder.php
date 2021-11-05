@@ -61,9 +61,24 @@ if (
     'pass' => 'B_QdU0/UfR2M1Apb'
   ]);
   */
-  
+  $path = $model->data['path'] ?? '.';
   $finder = new \appui\finder($fs);
-  $res = $finder->explore($model->data['path'] ?? '.');
+  $res = $finder->explore($path);
+  for ($i=0; $i < count($res['data']); $i++) {
+    if ($res['data'][$i]['dir']) {
+      if (($tmp_exp = $finder->explore($res['path'] . '/' . $res['data'][$i]['value'])) != null) {
+      	if ($tmp_exp['data'] && ($c = count($tmp_exp['data'])) > 0){
+        	$res['data'][$i]['empty'] = false;
+          $res['data'][$i]['numChildren'] = $c;
+          $res['data'][$i]['items'] = $tmp_exp['data'];
+      	} else {
+        	$res['data'][$i]['empty'] = true;
+      	}
+      }
+    }
+    $res['data'][$i]['fpath'] = $path . '/' . $res['data'][$i]['value'];
+    $res['data'][$i]['dirPath'] = $path . '/';
+  }
   $cur = $fs->getCurrent();
   $res['current'] = $cur;
   return $res;

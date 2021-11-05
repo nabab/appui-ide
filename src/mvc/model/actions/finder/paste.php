@@ -9,7 +9,7 @@ if (!empty($model->data['node']) &&
   ){
   $success = false;
 
-  $source = (($model->data['old_dir'] !== '.') ? $model->data['old_dir'].'/' : '' ) .$model->data['node']['value'];
+  $source = (($model->data['old_dir'] !== '.') ? $model->data['old_dir']. ((substr($model->data['old_dir'], -1) !== '/') ? '/': '') : '' ) .$model->data['node']['value'];
   $dest = $model->data['new_dir'].$model->data['node']['value'];
   $tmp = X::pathinfo($dest);
   $i = 1;
@@ -24,6 +24,7 @@ if (!empty($model->data['node']) &&
   return [
     'success' => $success,
     'dest' => $dest,
+    'source' => $source,
   ];
 }
 

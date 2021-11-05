@@ -5,27 +5,16 @@
                   :collapsible="true">
       <bbn-pane :collapsible="true"
                 :resizable="true">
-        <bbn-tree v-if="dirs[0]"
-                  :source="source"
-                  :data="getData(dirs[0])"
-                  :map="mapTree"
-                  :menu="itemsContextMenu"
-                  :key="'/' + dirs[0].path"
-                  @load="updateInfo"
-                  @select="select">
-        </bbn-tree>
-      </bbn-pane>
-      <bbn-pane :collapsible="true"
-                :resizable="true">
-        <bbn-tree v-if="dirs[1]"
-                  :source="source"
-                  :data="getData(dirs[1])"
-                  :map="mapTree"
-                  :menu="itemsContextMenu"
-                  :key="'/' + dirs[1].path"
-                  @load="updateInfo"
-                  @select="select">
-        </bbn-tree>
+          <bbn-tree v-if="dirs[0]"
+                    :source="source"
+                    :data="getData(dirs[0])"
+                    :map="mapTree"
+                    :menu="itemsContextMenu"
+                    :key="'/' + dirs[0].path"
+                    @load="updateInfo"
+                    @select="select"
+                    >
+          </bbn-tree>
       </bbn-pane>
     </bbn-splitter>
   </div>

@@ -3,8 +3,8 @@
 
   let app;
   /**
-                       * Classic input with normalized appearance
-                       */
+                                                         * Classic input with normalized appearance
+                                                         */
 
   let fields = ['host', 'user', 'pass'],
 
@@ -40,7 +40,7 @@
     props: {
       mode: {
         type: String,
-        default: 'columns'
+        default: 'dual'
       },
       path: {
         type: String,
@@ -81,6 +81,7 @@
         oldDir: '',
         dirs: [],
         currentFile: false,
+        copiedNode: false,
         dirInfo: null,
         editingNode: false,
         isImage: false,
@@ -116,7 +117,7 @@
       },
     },
     methods: {
-			fileErrorText() {
+      fileErrorText() {
         if (this.sizeInfo > 2000000) {
           return bbn._('The content of the file exceeds the authorized limit (2mb)');
         } else {
@@ -181,10 +182,10 @@
         })
       },
       /**
-                           * get the size of the current tree (the selected folder of the previous tree)
-                           * 
-                           * @param {*} p 
-                           */
+                                                             * get the size of the current tree (the selected folder of the previous tree)
+                                                             * 
+                                                             * @param {*} p 
+                                                             */
       get_size(p){
         let idx = bbn.fn.search(this.dirs, 'name', p.name);
         this.post(this.root + 'actions/finder/dirsize', {
@@ -233,11 +234,12 @@
         this.dirs.pop();
       },
       /**
-                           * method at @load of bbn - rtee
-                           * 
-                           * @param {*} res 
-                           */
+                                                             * method at @load of bbn - rtee
+                                                             * 
+                                                             * @param {*} res 
+                                                             */
       updateInfo(res){
+        bbn.fn.log("RES", res);
         if ( res && res.path ){
           setTimeout( () => {
             let idx = bbn.fn.search(this.dirs, {path: res.path});
@@ -250,12 +252,14 @@
         }
       },
       /**
-                           * method at @select of bbn - tree, defines currentFile and makes the post to take the infos of the file
-                           * 
-                           * @param {*} node 
-                           */
+                                                             * method at @select of bbn - tree, defines currentFile and makes the post to take the infos of the file
+                                                             * 
+                                                             * @param {*} node 
+                                                             */
       select(node){
         // Reinit
+        bbn.fn.log("NODE", node);
+        bbn.fn.log("REEL NODE", node);
         this.isImage = false;
         this.isJson = false;
         this.isText = false;
@@ -264,9 +268,13 @@
         this.currentFile = {
           node: node
         };
+        bbn.fn.log(this.currentFile);
         if ( node.data.value ){
           let path = '';
           let num = 2;
+          if (this.mode === 'dual') {
+            node.tree.data.path = node.data.fpath;
+          }
           if ( node.tree.data.path && (node.tree.data.path !== '.') ){
             path += node.tree.data.path;
             num += path.split('/').length;
@@ -294,7 +302,7 @@
 
                 this.post( this.root + 'actions/finder/file', {
                   node: node.data,
-                  path: this.currentPath,
+                  path: (this.mode === "dual") ? node.data.dirPath : this.currentPath,
                   origin: this.origin,
                   ext: ext,
                   width: 450,
@@ -313,7 +321,7 @@
                     this.sizeInfo = parseInt(d.info.size.split()[0]);
                     if (this.sizeInfo > 200000000) {
                       this.currentFile.info.content = false;
-                   		bbn.fn.log(parseInt(d.info.size.split()[0]));
+                      bbn.fn.log(parseInt(d.info.size.split()[0]));
                     }
                     if ( d.info.is_image ){
                       this.isImage = true;
@@ -349,6 +357,11 @@
       mapTree(node){
         let bits = node.text.split('.');
         let ext = bits[bits.length-1];
+        bbn.fn.log(node);
+        if (this.mode !== 'dual') {
+          node.items = undefined;
+          node.numChildren = undefined;
+        }
         if ( node.dir) {
           node.icon = this.folderIcon;
         }
@@ -357,8 +370,10 @@
         }
         return node;
       },
+      getTreeData() {
+        return {};
+      },
       getData(p){
-        bbn.fn.log(p);
         //return $.extend({
         return bbn.fn.extend({
           name: p.name,
@@ -389,12 +404,12 @@
         }];
       },
       /**
-                           * returns the array of buttons of the context menu
-                           * 
-                           * @param {*} n the node 
-                           * @param {*} i the index of the node
-                           * @return array
-                           */
+                                                             * returns the array of buttons of the context menu
+                                                             * 
+                                                             * @param {*} n the node 
+                                                             * @param {*} i the index of the node
+                                                             * @return array
+                                                             */
       itemsContextMenu(n, i) {
         let objContext = [
           {
@@ -461,7 +476,6 @@
       },
       uploadSuccess(a, b, d){
         bbn.fn.happy('now')
-        bbn.fn.log(d.data, arguments,'args')
         if ( d.data.success ){
           if ( d.data.name ){
             appui.success(bbn._(d.data.name + ' ' +'successfully uploaded'));
@@ -480,7 +494,7 @@
       },
       newFolder(node){
         if ( node ){
-          let tmp = node.tree.data.path, 
+          let tmp = (this.mode === 'dual') ? node.data.fpath : node.tree.data.path,
               path = '';
           if ( tmp.indexOf('/') === 0 ){
             path = tmp.substr(1, tmp.length);
@@ -505,10 +519,17 @@
             },
             component: this.$options.components.form
           })
+          if (this.mode === 'dual') {
+            if (node.$parent.is('bbn-tree')) {
+              node.$parent.reload();
+            } else {
+              node.reload();
+            }
+          }
         }
         else { 
           if ( this.currentContextPath.length ){
-            let idx = bbn.fn.search( this.findAll('bbn-tree'),  'data.path', this.currentContextPath),
+            let idx = bbn.fn.search( this.findAll('bbn-tree'),  (this.mode === 'dual') ? 'data.fpath':'data.path', this.currentContextPath),
                 treeUid,
                 tree;
             if ( idx > -1 ){
@@ -542,17 +563,17 @@
 
       },
       /**
-                           * paste the node previously copied in the property this.copied in the current selected dir
-                           * 
-                           * @param {*} n the node
-                           */
+                                                             * paste the node previously copied in the property this.copied in the current selected dir
+                                                             * 
+                                                             * @param {*} n the node
+                                                             */
       paste(n){
         n.isSelected = true;
-        bbn.fn.log('PASTE', n, typeof(n))
+        bbn.fn.log('PASTE', n, typeof(n), (this.mode === 'dual') ? n.data.fpath : this.currentPath);
         //case of paste called from context menu and not from nodes of the tree
         let value = '';
         if ( typeof(n) === 'string' ){
-          value = bbn._('the current folder');  
+          value = bbn._('the current folder');
         }
         else {
           value = n.data.value;
@@ -566,7 +587,7 @@
               node: this.copied.data,
               origin: this.origin,
               old_dir: this.oldDir,
-              new_dir: this.currentPath
+              new_dir: (this.mode === 'dual') ? n.data.fpath + '/': this.currentPath
             }, (d) => {
               if ( d.success ){
                 bbn.fn.happy('pasted')
@@ -576,7 +597,14 @@
                   if ( v.data.name === n.data.value ){
                     bbn.fn.log(v.source)
                     v.reload();
-                  }  
+                  }
+                  if (this.mode === 'dual') {
+                    if (n.$parent.is('bbn-tree')) {
+                      n.$parent.reload();
+                    } else {
+                      n.reload();
+                    }
+                  }
                 });
                 if (!this.cut) {
                   appui.success(this.copied.data.value + ' ' + bbn._('successfully pasted into ' + n.data.value));
@@ -600,6 +628,8 @@
       },
       cut_(n) {
         let trees = this.findAll('bbn-tree');
+        bbn.fn.log("CUT", n, this.copiedNode);
+        bbn.fn.log("TREE", trees);
         this.post(this.root + 'actions/finder/delete', {
           path: this.oldDir, 
           name: this.copied.data.value,
@@ -611,6 +641,12 @@
               if ( v.data.name === n.data.value ){
                 bbn.fn.log(v.source)
                 v.reload();
+              }
+              if (this.mode === 'dual') {
+                if (this.copiedNode !== false) {
+                  this.copiedNode.$parent.reload();
+                  this.copiedNode = false;
+                }
               }
             });
             appui.success(this.copied.data.value + ' ' + bbn._('successfully cut'));
@@ -634,22 +670,30 @@
         })
       },
       /**
-                           * edits the name of the current selected node
-                           * @param {*} node 
-                           */
+                                                             * edits the name of the current selected node
+                                                             * @param {*} node 
+                                                             */
       edit(node){
         this.editingNode = false;
         let oldValue = node.data.value,
-            tmp = node.closest('bbn-tree').data.path,
+            tmp,
             path = '';
-
+        if (this.mode === "dual") {
+          tmp = node.data.dirPath;
+          if (tmp.substr(0, 2) === './') {
+            tmp = tmp.substr(2);
+          }
+        } else {
+          tmp = node.closest('bbn-tree').data.path
+        }
         if ( tmp.indexOf('/') === 0 ){
           path = tmp.substr(1, tmp.length);
         }  
         else {
-          path = tmp + '/';
+          path = tmp + ((this.mode === 'dual') ? '':'/');
         }
         let currentPath = path;
+        bbn.fn.happy(currentPath, path, tmp);
         this.editingNode = node;
         node.getPopup({
           title: bbn._('Rename'),
@@ -668,21 +712,21 @@
         })
       },
       /**
-                           * Deletes the current selected node
-                           * @param {*} node 
-                           */
+                                                             * Deletes the current selected node
+                                                             * @param {*} node 
+                                                             */
       delete(node){
         this.confirm(bbn._('Do you want to delete') + ' ' + node.data.value + '?', () => {
-          let st = node.tree.data.path,
+          let st = (this.mode === 'dual') ? node.data.dirPath : node.tree.data.path,
               //st = ( (this.mode === 'ftp') || (this.mode === 'ssh')) ? this.origin + this.currentPath : this.currentPath,
               name = node.data.value;
           /*if ( node.data.dir && ( this.currentPath === '' ) ){
-                                st += node.data.value;
-                              }
-                              if ( node.data.file ){
-                                st += node.data.value;
-                              }
-                              */
+                                                                  st += node.data.value;
+                                                                }
+                                                                if ( node.data.file ){
+                                                                  st += node.data.value;
+                                                                }
+                                                                */
           this.post(this.root + 'actions/finder/delete', {
             path: st, 
             name: name,
@@ -694,7 +738,7 @@
                 items.splice(node.idx, 1);
               }
               if ( node.data.dir && this.dirs.length ){
-                let idx = bbn.fn.search(this.dirs, 'path', node.tree.data.path + '/' + node.data.value )
+                let idx = bbn.fn.search(this.dirs, 'path', (this.mode === 'dual') ? node.data.dirPath : node.tree.data.path + '/' + node.data.value )
                 if ( idx > -1 ){
                   this.dirs.splice(idx)
                 }
@@ -702,6 +746,13 @@
               //destroy the next tree in the case of elimination of a folder
               if ( node.data.dir && ( this.dirs.length > 1 ) ){
                 this.dirs.pop();
+              }
+              if (this.mode === 'dual') {
+                if (node.$parent.is('bbn-tree')) {
+                  node.$parent.reload();
+                } else {
+                  node.reload();
+                }
               }
               appui.success(name + ' ' + bbn._('successfully deleted'));
               this.currentFile = false;
@@ -719,35 +770,37 @@
         bbn.fn.log('END', arguments)
       },
       /**
-                           * Insert the current selected node in the property this.copied 
-                           * @param n the node
-                           */
+                                                             * Insert the current selected node in the property this.copied 
+                                                             * @param n the node
+                                                             */
       copy(n){
         let keyword = (this.cut === true) ? "cut":"copy";
-        bbn.fn.happy(keyword)
-        bbn.fn.log(arguments)
+        bbn.fn.happy(keyword);
+        bbn.fn.log(arguments);
         this.copied = false;
         this.confirm(bbn._('Do you want to ' + keyword) + ' ' + n.data.value + '?', () => {
           this.copied = n;
           /*if ( n.data.dir && this.dirs.length > 2){
-                                let st = this.currentPath.slice(0,-1),
-                                idx = st.lastIndexOf('/');
-                                if ( idx > -1 ){
-                                  st = st.substring(0, idx);
-                                }
-                                this.oldDir = st + '/';
-                              }
-                              else if ( n.data.dir && this.dirs.length <= 2 ){
-                                this.oldDir = '';
-                              }
-                              else {
-                                this.oldDir = this.currentPath;
-                              }*/
-          this.oldDir = n.tree.data.path;
+                                                                  let st = this.currentPath.slice(0,-1),
+                                                                  idx = st.lastIndexOf('/');
+                                                                  if ( idx > -1 ){
+                                                                    st = st.substring(0, idx);
+                                                                  }
+                                                                  this.oldDir = st + '/';
+                                                                }
+                                                                else if ( n.data.dir && this.dirs.length <= 2 ){
+                                                                  this.oldDir = '';
+                                                                }
+                                                                else {
+                                                                  this.oldDir = this.currentPath;
+                                                                }*/
+          this.oldDir = (this.mode === 'dual') ? n.data.dirPath : n.tree.data.path;
+          this.copiedNode = n;
+          bbn.fn.log("OLD DIR", this.oldDir);
           let st = n.data.file ? bbn._('File') : bbn._('Folder');
           st += ' ' + bbn._('successfully ' + keyword);
           appui.success(st)
-        })
+        });
       },
       updateScroll(){
         this.$nextTick(() => {
@@ -755,23 +808,22 @@
           if (sc) {
             sc.onResize().then(() => {
               setTimeout(() => {
-                bbn.fn.log("IT SHOULD GO TO THE END OF THE SCROLL")
+                bbn.fn.log("IT SHOULD GO TO THE END OF THE SCROLL");
                 sc.scrollEndX(true);
               }, 250);
             });
           }
-        })
+        });
       },
     },
     mounted(){
       if ( this.path ){
         bbn.fn.each(this.path.split('/'), (a) => {
           if ( a ){
-            this.add(a)
+            this.add(a);
           }
         });
       }
-
     },
     watch: {
       isLoading(val){
@@ -779,22 +831,22 @@
       },
       host(newVal, oldVal){
         if ( this.isConnected ){
-          this.checkDisconnect(this.getRef('host'), oldVal)
+          this.checkDisconnect(this.getRef('host'), oldVal);
         }
       },
       user(newVal, oldVal){
         if ( this.isConnected ){
-          this.checkDisconnect(this.getRef('user'), oldVal)
+          this.checkDisconnect(this.getRef('user'), oldVal);
         }
       },
       pass(newVal, oldVal){
         if ( this.isConnected ){
-          this.checkDisconnect(this.getRef('pass'), oldVal)
+          this.checkDisconnect(this.getRef('pass'), oldVal);
         }
       },
       isConnected(){
         while ( this.numCols ){
-          this.remove()
+          this.remove();
         }
         setTimeout(() => {
           this.add('');
@@ -814,27 +866,27 @@
       form:{
         name: 'form',
         template: `
-                            <bbn-form class="bbn-flex-height"
-                                      :source="source" 
-                                      @success="success" 
-                                      :action="source.root + 'actions/finder/' + (!source.new ? 'rename' : 'new_dir')"
-                                      >
-                              <div class="bbn-grid-fields bbn-l bbn-padded">
-                                <label>`+ bbn._('Name') +`</label>
-                                <div>
-                                  <bbn-input v-if="!source.new" 
-                                             class="bbn-w-100" 
-                                             v-model="source.node.value"
+                                                              <bbn-form class="bbn-flex-height"
+                                                                        :source="source" 
+                                                                        @success="success" 
+                                                                        :action="source.root + 'actions/finder/' + (!source.new ? 'rename' : 'new_dir')"
+                                                                        >
+                                                                <div class="bbn-grid-fields bbn-l bbn-padded">
+                                                                  <label>`+ bbn._('Name') +`</label>
+                                                                  <div>
+                                                                    <bbn-input v-if="!source.new" 
+                                                                               class="bbn-w-100" 
+                                                                               v-model="source.node.value"
 
-                                  ></bbn-input>
-                                  <bbn-input v-else 
-                                             class="bbn-w-100" 
-                                             v-model="source.newDir"
-                                  >
-                                  </bbn-input>
-                                </div>
-                              </div>
-                            </bbn-form>`,
+                                                                    ></bbn-input>
+                                                                    <bbn-input v-else 
+                                                                               class="bbn-w-100" 
+                                                                               v-model="source.newDir"
+                                                                    >
+                                                                    </bbn-input>
+                                                                  </div>
+                                                                </div>
+                                                              </bbn-form>`,
         props: ['source', 'data'],
         data(){
           return {
@@ -877,10 +929,11 @@
               }
               //editing an existing folder
               else { 
+                bbn.fn.log("FORM SOURCE", this.source)
                 bbn.fn.each(trees, (v, i) => {
-                  if ( v._uid === this.source.treeUid ){
-                    v.items[this.source.idx].value = this.source.node.value;
-                    v.items[this.source.idx].text = this.source.node.value;
+                  if ((trees.length === 1) || v._uid === this.source.treeUid ){
+                    v.currentData[this.source.idx].value = this.source.node.value;
+                    v.currentData[this.source.idx].text = this.source.node.value;
                   }
                 })
                 appui.success((this.source.node.dir ? bbn._('Folder') : bbn._('File')) + ' ' + bbn._('successfully modified'))

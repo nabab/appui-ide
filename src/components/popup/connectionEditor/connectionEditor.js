@@ -5,14 +5,7 @@
     data() {
       return {
         root: appui.plugins['appui-ide'] + '/',
-        formSource: {
-          path: this.source.path ? this.source.path : "",
-          host: this.source.host ? this.source.host : "",
-          user: this.source.user ? this.source.user : "",
-          pass: this.source.pass ? this.source.pass : "",
-          text: this.source.text ? this.source.text : "",
-          type: this.source.type ? this.source.type : "local",
-        },
+        formSource: this.source,
         type: this.source.type ? this.source.type : "local",
         types: [{text: 'Local', value: 'local'},{text:'SSH', value:'ssh'}, {text: 'FTP', value: 'ftp'}, {text: 'FTPS', value: 'ftps'}, {text: 'NextCloud', value:'nextcloud'}],
         isTested: false,
@@ -50,12 +43,12 @@
     },
     methods: {
       onSuccess(d) {
+        let container = this.closest('bbn-container');
+        let cp = container.getComponent();
         if (d.success && d.data) {
-          let container = this.closest('bbn-container');
-          let cp = container.getComponent();
           cp.source.connections.push(d.data);
-          cp.updateMenu();
         }
+        cp.updateMenu();
       }
     },
     watch: {
