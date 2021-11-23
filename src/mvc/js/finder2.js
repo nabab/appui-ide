@@ -340,7 +340,7 @@
           value: n.data.value,
           file: n.data.file,
           path: this.currentPath !== n.data.value + '/' ? this.currentPath : '',
-          destination: this.source.origin + 'download/' + moment().format('x') + '/'
+          destination: this.source.origin + 'download/' + dayjs().format('x') + '/'
         }, (d) => {
           if ( d.success ){
             this.alert(n.data.value + ' ' + bbn._('has been correctly downloaded in the folder' + ' ' + d.dest))
