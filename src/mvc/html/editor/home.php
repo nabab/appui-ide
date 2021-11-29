@@ -10,5 +10,6 @@
   	<li><a :href="root + 'logs'" v-text="_('The log viewer')"></a></li>
   	<li><a :href="root + 'finder'" v-text="_('The finder')"></a></li>
   	<li><a :href="root + 'profiler'" v-text="_('The profiler')"></a></li>
+    <li><a :href="root + 'git/list'" v-text="_('Last commits')"></a></li>
   </ul>
 </div>
