@@ -1,6 +1,9 @@
 <?php
 /** @var $ctrl \bbn\Mvc\Controller */
 
+define('GITLAB_TOKEN', 'Jo_yJKL1XZZdyB8VduXy');
+define('GITLAB_URL', 'https://git.bbn.so/api/v4/');
+
 // One must be a dev to be here
 if (!$ctrl->inc->user->isDev()) {
   die("You aren't an admin user.");
