@@ -308,7 +308,13 @@
           let link = (this.ide.route ? this.ide.route + '/' : '') +
           (pathMVC === 'mvc' ? '' : pathMVC + '/') +  this.ide.filename;
 
-          appui.find('bbn-router').load(link, true);
+          bbn.fn.log("BEFORE THE LINK", bbn.fn.baseName(link));
+          if (bbn.fn.baseName(link) === 'index') {
+            window.open(bbn.env.host + '/' + link);
+          }
+          else {
+	          appui.find('bbn-router').load(link, true);
+          }
 
           return true;
         }
@@ -316,24 +322,28 @@
           switch ( this.source.mode ){
             case "php":
               if ( !this.isClass ){
-                this.post(this.root + "test", {
-                  code: this.value,
-                  file: this.fullPath
-                 }, d => {
-                  const tn = this.closest('bbn-router'),
-                        idx = tn.views.length;
-                  tn.add({
-                    title: dayjs().format('HH:mm:ss'),
-                    icon: 'nf nf-fa-cogs',
-                    load: false,
-                    content: d.content,
-                    url: 'output' + idx,
-                    selected: true
-                  });
-                  this.$nextTick(()=>{
-                    tn.route('output' + idx);
-                  });
-                });
+                this.post(
+                  this.root + "test",
+                  {
+                    code: this.value,
+                    file: this.fullPath
+                  },
+                  d => {
+                    const tn = this.closest('bbn-router'),
+                          idx = tn.views.length;
+                    tn.add({
+                      title: dayjs().format('HH:mm:ss'),
+                      icon: 'nf nf-fa-cogs',
+                      load: false,
+                      content: d.content,
+                      url: 'output' + idx,
+                      selected: true
+                    });
+                    this.$nextTick(()=>{
+                      tn.route('output' + idx);
+                    });
+                  }
+                );
               }
               else{
                 this.alert(bbn._('Unable to test classes!!'));

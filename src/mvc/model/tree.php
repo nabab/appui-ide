@@ -170,7 +170,8 @@ if ($model->hasData(['repository', 'repository_cfg'], true)) {
   };
 
   // function for create the node for tree
-  $get = function ($real, $color, $tab = false, $type = false, $types =[]) use (&$folders, &$files,$check_git ,  $onlydirs,$cur_path, $file_check, $excludeds, $opt, $types_to_include, $is_project, $tree_popup, $dirs, $model) {
+  $get = function ($real, $color, $tab = false, $type = false, $types =[]) use (&$folders, &$files,$check_git ,  $onlydirs,$cur_path, $file_check, $excludeds, $opt, $types_to_include, $is_project, $tree_popup, $dirs, $model)
+  {
     if(!empty($real) && !empty(strpos($real,'//'))) {
       $real = str_replace('//','/', $real);
     }
@@ -401,12 +402,18 @@ if ($model->hasData(['repository', 'repository_cfg'], true)) {
     // Get all files and all folders of each mvc's tabs (_ctrl tab excluded)
     if (!empty($rep_cfg['tabs'])) {
       foreach ($rep_cfg['tabs'] as $i => $t){
-        if (($t['url'] !== '_ctrl')
-            && !empty($t['path'])
-            && ( empty($model->data['tab'])
-            || ( !empty($model->data['tab'])
-            && ($model->data['tab'] === $t['url'])            )            )
-        ) {//type mvc
+        if (
+          ($t['url'] !== '_ctrl')
+          && !empty($t['path'])
+          && (
+            empty($model->data['tab'])
+            || (
+              !empty($model->data['tab'])
+              && ($model->data['tab'] === $t['url'])
+            )
+          )
+        ) {
+          //type mvc
           if(!empty($is_mvc)) {
             if (!empty($tree_popup)) {
               $path_complete = $path . 'mvc/'. $t['path'] . $cur_path;

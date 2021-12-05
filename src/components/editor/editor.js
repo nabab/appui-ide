@@ -328,7 +328,7 @@
       isMVC(){
         if ( !this.type ){
           return !!(this.repositories[this.currentRep] &&
-            this.repositories[this.currentRep].types &&
+            //this.repositories[this.currentRep].types &&
             ['sandbox', 'mvc'].includes(this.repositories[this.currentRep].alias_code));
         }
         else{
@@ -1238,6 +1238,8 @@
         }
         else {
           if ( this.isSettings ){
+            /** @todo All this part doesmn't work */
+            bbn.fn.log("THIS IS IN SETTINGS, CHECK IT IN components/editor");
             let key = this.currentURL.substring(0, this.currentURL.indexOf('_end_/')+5),
                 mvc = this.findByKey(key).find('appui-ide-mvc').$data,
                 pathMVC = mvc.path;
@@ -1246,8 +1248,13 @@
             }
             let link = (mvc.route ? mvc.route + '/' : '') +
             (pathMVC === 'mvc' ? '' : pathMVC + '/') +  mvc.filename;
-
-            appui.find('bbn-router').load(link, true);
+            bbn.fn.log("BEFORE THE LINK", bbn.fn.baseName(link));
+            if (bbn.fn.baseName(link) === 'index') {
+              window.open(bbn.env.host + '/' + link);
+            }
+            else {
+              appui.find('bbn-router').load(link, true);
+            }
           }
           else{
             let code = this.getActive(true);
