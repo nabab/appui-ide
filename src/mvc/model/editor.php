@@ -1,19 +1,18 @@
 <?php
 
+use bbn\X;
 /** @var $model \bbn\Mvc\Model */
 
+// Routes must be sent and IDE object must exist
 if (isset($model->data['routes'], $model->inc->ide)) {
-
+  $types = $model->inc->options->fullOptionsByCode($model->inc->ide->getTypes());
   $repos = $model->inc->ide->getRepositories();
   $origin = $model->inc->ide->getOrigin();
   $project = $model->inc->ide->getNameProject();
-
   $prefix = $model->pluginUrl($model->inc->ide->getOrigin());
   if ($origin !== 'appui-ide') {
     $prefix .= '/router/' . $project . '/ide/editor';
   }
-
-
   $current_rep =  $model->inc->ide->getDefaultRepository();
   $types = [];
   $tabs = [];

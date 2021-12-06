@@ -1,9 +1,6 @@
 <?php
 /** @var $ctrl \bbn\Mvc\Controller */
 
-define('GITLAB_TOKEN', 'Jo_yJKL1XZZdyB8VduXy');
-define('GITLAB_URL', 'https://git.bbn.so/api/v4/');
-
 // One must be a dev to be here
 if (!$ctrl->inc->user->isDev()) {
   die("You aren't an admin user.");
@@ -13,6 +10,7 @@ if (!$ctrl->inc->user->isDev()) {
 if (!isset($ctrl->inc->pref)) {
   die("Preferences must be set up for the IDE module to load.");
 }
+
 
 if (!isset($ctrl->inc->ide)) {
   $ctrl->addInc(
@@ -42,7 +40,10 @@ if (!defined('APPUI_IDE_ROOT')) {
   }
 }
 
-$ctrl->addInc('fs',  new \bbn\File\System());
+if (!isset($ctrl->inc->fs)) {
+  $ctrl->addInc('fs',  new \bbn\File\System());
+}
+
 
 
 return true;

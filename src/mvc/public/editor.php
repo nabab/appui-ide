@@ -10,7 +10,7 @@ if ( !$ctrl->inc->session->has('ide') ){
 
 //$ctrl->inc->session->set($sess, 'ide', 'list');
 
-$isProject = $ctrl->inc->ide->getOrigin() !== 'appui-ide';
+$isProject = $ctrl->inc->ide->getOrigin() === 'appui-project';
 $title = 'I.D.E';
 if ($isProject) {
   $title .= ' ('. $ctrl->inc->ide->getNameProject().')';

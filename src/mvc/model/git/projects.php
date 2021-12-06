@@ -9,7 +9,7 @@
 use bbn\X;
 
 
-$res = X::curl(GITLAB_URL.'projects', ['access_token' => GITLAB_TOKEN, 'per_page' => 100], []);
+$res = X::curl(BBN_GITLAB_URL.'projects', ['access_token' => BBN_GITLAB_TOKEN, 'per_page' => 100], []);
 //$res = X::curl($url.'projects/117/repository/branches', ['access_token' => $tok], []);
 $projectList = json_decode($res, true);
 /*
