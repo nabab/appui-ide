@@ -1,9 +1,5 @@
 <?php
 /*
- * Describe what it does!
- *
- **/
-/*
 die(var_dump(
   $src,
   $fav,

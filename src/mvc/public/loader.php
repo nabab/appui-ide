@@ -1,8 +1,4 @@
 <?php
-/*
- * Describe what it does!
- *
- **/
 
 $cfg = [
   'host' => 'cloud.bbn.so',

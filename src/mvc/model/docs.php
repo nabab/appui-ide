@@ -1,8 +1,4 @@
 <?php
-/*
- * Describe what it does!
- *
- **/
 
 //case delete file  in folder
 //if ( !empty($model->data['class']) ){

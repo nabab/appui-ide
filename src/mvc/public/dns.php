@@ -1,8 +1,4 @@
 <?php
-/*
- * Describe what it does!
- *
- **/
 
 /** @var $this \bbn\Mvc\Controller */
 //$ctrl->setColor('orange', 'white')->combo(_('DNS Utilities'));
