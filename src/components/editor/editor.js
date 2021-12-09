@@ -193,32 +193,30 @@
     },
     computed: {
       listRootProject(){
-        if (this.currentRep && this.repositories[this.currentRep]) {
-          let roots = bbn.fn.clone(this.repositories[this.currentRep].types);
-          if ( roots.length ) {
-            return bbn.fn.map(roots, v => {
-              switch (v.text) {
-                case 'mvc':
-                  v.icon = "nf nf-fa-code";
-                  break;
-                case 'components':
-                  v.icon = "nf nf-mdi-vuejs";
-                  break;
-                case 'lib':
-                  v.icon = "nf nf-mdi-library";
-                  break;
-                case 'cli':
-                  v.icon = "nf nf-fa-cogs";
-                  break;
-              }
-              return {
-                text: bbn.fn.correctCase(v.type),
-                icon: v.icon || "nf nf-fa-cogs",
-                value: v.type
-              };
-            })
-          }
+        if (this.currentRep && this.repositories[this.currentRep] && this.repositories[this.currentRep].types) {
+          return bbn.fn.map(this.repositories[this.currentRep].types, v => {
+            switch (v.text) {
+              case 'mvc':
+                v.icon = "nf nf-fa-code";
+                break;
+              case 'components':
+                v.icon = "nf nf-mdi-vuejs";
+                break;
+              case 'lib':
+                v.icon = "nf nf-mdi-library";
+                break;
+              case 'cli':
+                v.icon = "nf nf-fa-cogs";
+                break;
+            }
+            return {
+              text: bbn.fn.correctCase(v.type),
+              icon: v.icon || "nf nf-fa-cogs",
+              value: v.type
+            };
+          });
         }
+
         return [];
       },
       typeSearch(){
@@ -328,7 +326,7 @@
       isMVC(){
         if ( !this.type ){
           return !!(this.repositories[this.currentRep] &&
-            //this.repositories[this.currentRep].types &&
+            this.repositories[this.currentRep].types &&
             ['sandbox', 'mvc'].includes(this.repositories[this.currentRep].alias_code));
         }
         else{
