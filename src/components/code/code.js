@@ -170,7 +170,7 @@
               extension: this.source.extension,
               full_path: this.source.id,
               filePath : pathHistory,
-              code_file_pref: this.path.substring(this.path.lastIndexOf('src/'+ this.typeProject)+4, this.path.length)
+              code_file_pref: this.source.id
             },
             set_recent_file: recentFile
           });
@@ -194,7 +194,7 @@
         }
         return parent.repository_content
       },
-      save(cm){
+      save() {
         const editor = this.getRef('editor'),
               state = editor.getState(),
               tabContainer = this.$parent;

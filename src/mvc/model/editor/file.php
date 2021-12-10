@@ -81,7 +81,9 @@ if ( !empty($model->data['url']) && isset($model->inc->ide) ){
 
   $res = [
     'isMVC' => $model->inc->ide->isMVCFromUrl(str_replace('/_end_', '', $url)),
-    'isComponent' => $model->inc->ide->isComponentFromUrl(str_replace('/_end_', '', $url)),
+    // isComponent is understood by a single repo with components 
+    // while isComponentByUrl is understood by the BBN project
+    'isComponent' => $model->inc->ide->isComponent($repository) || $model->inc->ide->isComponentFromUrl(str_replace('/_end_', '', $url)),
     'isLib' => $model->inc->ide->isLibFromUrl(str_replace('/_end_', '', $url)),
     'isCli' => $model->inc->ide->isCliFromUrl(str_replace('/_end_', '', $url)),
     //'type' => !empty($type) ? $type : null,
