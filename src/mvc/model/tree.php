@@ -3,11 +3,11 @@
 use bbn\X;
 
 /** @var $model \bbn\Mvc\Model */
-if ($model->hasData(['repository', 'repository_cfg'], true)) {
-  $rep_cfg      = $model->data['repository_cfg'];
-  $is_mvc       = $model->hasData('is_mvc', true);
-  $is_component = $model->hasData('is_component', true);
-  $is_project   = $model->hasData('is_project', true) && !$is_mvc && !$is_component;
+if ($model->hasData(['repository'], true)) {
+  $rep_cfg      = $model->inc->ide->repository($model->data['repository']);
+  $is_mvc       = in_array($rep_cfg['alias_code'], ['mvc', 'sandbox']);
+  $is_component = $rep_cfg['alias_code'] === 'component';
+  $is_project   = !empty($rep_cfg['types']) && !$is_mvc && !$is_component;
   $onlydirs     = $model->hasData('onlydirs', true);
 
   //for tree in the popup
@@ -61,6 +61,7 @@ if ($model->hasData(['repository', 'repository_cfg'], true)) {
 
   // Get the repository's root path
   $path = $model->inc->ide->getRootPath($rep_cfg);
+
   /*
   if ($model->hasData('type', true)
       && (strpos('/', $model->data['type']) === false)
@@ -414,7 +415,7 @@ if ($model->hasData(['repository', 'repository_cfg'], true)) {
           )
         ) {
           //type mvc
-          if(!empty($is_mvc)) {
+          if($is_mvc) {
             if (!empty($tree_popup)) {
               $path_complete = $path . 'mvc/'. $t['path'] . $cur_path;
               $type          = 'mvc';

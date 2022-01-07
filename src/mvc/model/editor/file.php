@@ -7,6 +7,7 @@
  */
 
 use bbn\X;
+use bbn\Str;
 
 /**
  * @var $model \bbn\Mvc\Model
@@ -33,8 +34,7 @@ if ( !empty($model->data['url']) && isset($model->inc->ide) ){
   $path = str_replace($rep, '' , $url);
   $path = substr($path, 0, Strpos($path, '/_end_'));
 
-  $repos = $model->inc->ide->getRepositories();
-  $repository = $repos[$rep];
+  $repository = $model->inc->ide->repository($rep);
 
   $f = $model->inc->ide->decipherPath($model->data['url']);
   //die(var_dump($f,$file, $model->data['url']));
@@ -94,8 +94,9 @@ if ( !empty($model->data['url']) && isset($model->inc->ide) ){
     'url' => $rep.$path.'/_end_',
     'route' => $route,
     'settings' => !empty($ctrl_file) ? $model->inc->fs->isFile($ctrl_file) : false,
-    'ext' => \bbn\Str::fileExt($file),
-    'styleTab' => isset($styleTabType) ? $styleTabType : []
+    'ext' => Str::fileExt($file),
+    'styleTab' => isset($styleTabType) ? $styleTabType : [],
+    'emptyTabs' => []
   ];
 
   if ( $res['isComponent'] && !empty($repository['types']) ){
@@ -110,10 +111,10 @@ if ( !empty($model->data['url']) && isset($model->inc->ide) ){
     $res['tabs'] = $model->inc->ide->tabsOfTypeProject('mvc');
   }
   // we check if some tab of the components or mvc do not contain any files
-  if ( $res['isMVC'] === true ){
+  if ($res['isMVC']) {
     $res['emptyTabs'] = $model->inc->ide->listTabsWithFile('mvc', $path, $rep);
   }
-  elseif ( $res['isComponent'] === true ){
+  elseif ($res['isComponent']) {
     $res['emptyTabs'] = $model->inc->ide->listTabsWithFile('components',  $path, $rep);
   }
 
