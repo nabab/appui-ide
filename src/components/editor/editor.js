@@ -757,6 +757,7 @@
        *
        */
       ctrlCloseTab(idx, ev){
+        /*
         let tabstrip = this.getRef('tabstrip');
         ev.preventDefault();
         if ( tabstrip ){
@@ -786,6 +787,7 @@
             tabstrip.close(idx, true);
           }
         }
+        */
       },
       /**
        * function to close the tab from the dropdown menu file
