@@ -3,7 +3,6 @@
   <div class="bbn-h-100 code">
     <bbn-router :autoload="false"
                 :nav="true"
-                :scrollable="false"
                 ref="tabstrip"
                 :source="routerSource"
                 v-if="tabsReady"

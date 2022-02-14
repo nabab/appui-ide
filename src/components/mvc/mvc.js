@@ -185,7 +185,6 @@
             title: this.titleTabCtrl,
             bcolor: ctrlRepo.bcolor,
             fcolor: ctrlRepo.fcolor,
-            scrollable: false,
             menu: this.listCtrls(),
             url: this.countCtrl
           }, {
@@ -203,7 +202,6 @@
                 title: tab.title,
                 icon: tab.icon,
                 notext: true,
-                scrollable: false,
                 bcolor: tab.bcolor ,
                 fcolor: tab.fcolor,
                 cls: this.emptyTabs.indexOf(tab.url) !== -1 ? 'empty-tab' : '',
