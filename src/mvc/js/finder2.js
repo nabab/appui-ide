@@ -363,7 +363,7 @@
           path = '';
 
         if ( tmp.indexOf('/') === 0 ){
-          path = tmp.substr(1, tmp.length);
+          path = tmp.substring(1);
         }  
         else {
           path = tmp + '/';

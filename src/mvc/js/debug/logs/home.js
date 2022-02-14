@@ -128,7 +128,7 @@
             if ( d.success ){
               let path = bbn.env.path;
               if ( path.indexOf(this.source.root + 'logs/') === 0 ){
-                let tmp = path.substr((this.source.root + 'logs/').length);
+                let tmp = path.substring((this.source.root + 'logs/').length);
                 if ( tmp ){
                   let idx = bbn.fn.search(this.files, {text: tmp});
                   if ( idx > -1 ){
@@ -224,7 +224,7 @@
     /*created(){
       let path = bbn.env.path;
       if ( path.indexOf(this.source.root + 'logs') === 0 ){
-        let tmp = path.substr((this.source.root + 'logs').length+1);
+        let tmp = path.substring((this.source.root + 'logs').length+1);
         bbn.fn.log("sswwssw", tmp);
         if ( tmp ){
           let idx = bbn.fn.search(this.files, {text: tmp});

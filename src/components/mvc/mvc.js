@@ -8,7 +8,7 @@
   return {
     data(){
       const ide = this.closest('appui-ide-editor');
-      let path      = this.source.url.substr(this.source.repository.length+1).replace('/_end_', '').split('/'),
+      let path      = this.source.url.substring(this.source.repository.length+1).replace('/_end_', '').split('/'),
           filename  = path.pop(),
           tabs      = ide.repositories[this.source.repository].tabs,
           exts      = [],

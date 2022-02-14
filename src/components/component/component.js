@@ -9,7 +9,7 @@
     props: ['source'],
     data(){
       const ide = this.closest('appui-ide-editor');
-      let path      = this.source.url.substr(this.source.repository.length).replace('/_end_', '').split('/'),
+      let path      = bbn.fn.substr(this.source.url, this.source.repository.length).replace('/_end_', '').split('/'),
           filename  = path.pop();
       path = path.join('/');
       return bbn.fn.extend({}, this.source, {

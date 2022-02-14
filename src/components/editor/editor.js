@@ -1209,8 +1209,8 @@
           });
           if (cp) {
             let found = false;
-            root = root.substr(0, root.length-1);
-            cp = cp.substr(0, cp.length-1);
+            root = root.substring(0, root.length-1);
+            cp = cp.substring(0, cp.length-1);
             bbn.fn.log("ROOT", root, "CP", cp, "PREFIX", bbn.env.appPrefix);
             if ( root === 'app/main' ){
               found = bbn.env.appPrefix + '-' + cp;
