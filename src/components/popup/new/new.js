@@ -57,8 +57,7 @@
           is_file: this.source.isFile,
           type: this.source.type || false,
           path: (this.source.path === './') ? './' : this.source.path + '/'
-        },
-        window: null
+        }
       }
     },
     computed: {
@@ -183,12 +182,13 @@
         appui.error(bbn._("Error!"));
       },
       selectDir(){
+        let data = bbn.fn.extend({}, this.$data, {operation: 'create'});
         this.closest("bbn-container").getPopup({
           width: 300,
           height: 400,
           title: bbn._('Path'),
           component: 'appui-ide-popup-path',
-          source: bbn.fn.extend(this.$data, {operation: 'create'})
+          source: data
         });
       },
       getRoot(){
