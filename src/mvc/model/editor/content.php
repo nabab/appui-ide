@@ -10,25 +10,30 @@ if ( !empty($model->data['url']) && isset($model->inc->ide) ){
   //for case settings
   if ($tabnavSettings ) {
   //for Router settings
-  
-    $model->data['url'] = implode("/", $stepUrl);
-    $url = substr($model->data['url'], 0, Strpos($model->data['url'],'_end_/settings')).'_end_/php';
-    $info = $model->inc->ide->urlToReal($url, true);
-   
-    if ( !$model->inc->ide->getFilePermissions($info['file']) ){
-      if ( !$model->inc->ide->createPermByReal($info['file']) ){
-        return ['error' => $model->inc->ide->getLastError()];
+  	if (defined('BBN_PROJECT') && ($model->inc->ide->getProject() === BBN_PROJECT)) {
+      $model->data['url'] = implode("/", $stepUrl);
+      $url = substr($model->data['url'], 0, Strpos($model->data['url'],'_end_/settings')).'_end_/php';
+      $info = $model->inc->ide->urlToReal($url, true);
+      if (!$model->inc->ide->getFilePermissions($info['file'])) {
+        if ( !$model->inc->ide->createPermByReal($info['file']) ){
+          return ['error' => $model->inc->ide->getLastError()];
+        }
+      }
+
+      if ( ($perm = $model->inc->ide->getFilePermissions($info['file'])) &&
+        !empty($perm['permissions'])
+      ){
+        if ( !empty($perm['permissions']['id']) ){
+          $imess = new \bbn\Appui\Imessages($model->db);
+          $perm['imessages'] = $imess->getByPerm($perm['permissions']['id'], false);
+        }
+        return $perm;
       }
     }
-
-    if ( ($perm = $model->inc->ide->getFilePermissions($info['file'])) &&
-      !empty($perm['permissions'])
-    ){
-      if ( !empty($perm['permissions']['id']) ){
-        $imess = new \bbn\Appui\Imessages($model->db);
-        $perm['imessages'] = $imess->getByPerm($perm['permissions']['id'], false);
-      }
-      return $perm;
+    else {
+      return [
+        'error' => _("No settings")
+      ];
     }
   }
   else {
