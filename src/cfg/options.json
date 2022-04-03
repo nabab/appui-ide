@@ -1,95 +1,145 @@
 {
-  "text": "I.D.E.",
-  "code": "ide",
-  "id_parent": "appui",
-  "icon": "nf nf-fa-code",
   "cfg": {
     "show_code": 1,
-    "allow_children": 1
+    "show_value": 1,
+    "allow_children": 1,
+    "show_icon": 1,
+    "i18n": "en"
   },
-  "i18n": "en",
+  "id_parent": ["appui"],
+  "text": "I.D.E.",
+  "code": "ide",
+  "id_alias": ["plugin", "list", "templates", "option", "appui"],
+  "icon": "nf nf-fa-code",
+  "plugin": true,
   "items": [
     {
-      "text": "Opened files",
-      "code": "opened"
+      "cfg": {
+        "show_code": 1,
+        "show_value": 1,
+        "show_alias": 1,
+        "allow_children": 1,
+        "inheritance": "cascade"
+      },
+      "text": "Development paths",
+      "code": "paths",
+      "icon": "nf nf-custom-folder_git_branch",
+      "items": [
+        {
+          "text": "Main application",
+          "code": "BBN_APP_PATH",
+          "icon": "nf nf-mdi-folder_star"
+        },
+        {
+          "text": "Static directory",
+          "code": "BBN_CDN_PATH",
+          "icon": "nf nf-custom-folder_npm"
+        },
+        {
+          "text": "Library (vendor)",
+          "code": "BBN_LIB_PATH",
+          "icon": "nf nf-custom-folder_config"
+        },
+        {
+          "text": "Data directory",
+          "code": "BBN_DATA_PATH",
+          "icon": "nf nf-mdi-folder_account"
+        }
+      ]
     },
     {
-      "text": "Paths' types",
-      "code": "PTYPES",
       "cfg": {
         "show_code": 1,
         "show_value": 1
       },
+      "text": "Paths' types",
+      "code": "types",
+      "icon": "nf nf-mdi-shape_outline",
       "items": [
         {
-          "text": "Project",
+          "text": "Projects BBN",
           "code": "bbn-project",
+          "icon": "nf nf-fa-cubes",
           "types": [
             {
               "url": "mvc",
-              "icon": "nf nf-fa-code",
-              "path": "mvc/",
+              "icon": "nf nf-fa-code\n",
+              "path": "mvc\/",
               "type": "mvc",
               "bcolor": "#302c2b",
-              "fcolor": "#86cdea"
+              "fcolor": "#86cdea",
+              "bbn_path": "BBN_APP_PATH",
+              "language": "en"
             },
             {
               "url": "components",
-              "icon": "nf nf-mdi-vuejs",
-              "path": "components/",
+              "icon": "nf nf-mdi-vuejs\n",
+              "path": "components\/",
               "type": "components",
               "bcolor": "#302c2b",
-              "fcolor": "#44b782"
+              "fcolor": "#44b782",
+              "bbn_path": "BBN_APP_PATH",
+              "language": "en"
             },
             {
               "url": "lib",
               "icon": "nf nf-mdi-library",
-              "path": "lib/",
+              "path": "lib\/",
               "type": "classes",
               "bcolor": "#302c2b",
-              "fcolor": "#ecebeb"
+              "fcolor": "#ecebeb",
+              "bbn_path": "BBN_APP_PATH",
+              "language": "en"
             },
             {
               "url": "cli",
-              "icon": "nf nf-dev-terminal",
-              "path": "cli/",
+              "icon": "nf nf-fa-cogs",
+              "path": "cli\/",
               "type": "cli",
-              "bcolor": "#deb200",
-              "fcolor": "#000000"
+              "bcolor": "#ced62b",
+              "fcolor": "#000000",
+              "bbn_path": "BBN_APP_PATH",
+              "language": "en"
             }
           ]
         },
         {
-          "text": "Classes",
+          "text": "PHP Classes",
           "code": "cls",
+          "icon": "nf nf-fa-object_group",
           "extensions": [
             {
               "ext": "php",
               "mode": "php",
-              "default": "<?php\n/*\n * Describe this class or punish yourself!\n *\n **/"
+              "default": "<?php\n\/*\n * Describe this class or punish yourself!\n *\n **\/"
             }
           ]
         },
         {
+          "cfg": {
+            "show_code": 1
+          },
           "text": "Cli",
           "code": "cli",
+          "icon": "nf nf-oct-terminal",
           "extensions": [
             {
               "ext": "php",
               "mode": "php",
-              "default": "<?php\n/*\n * Describe what it does or you're a pussy\n *\n **/\n\n/** @var $ctrl \\bbn\\Mvc\\Controller */\n"
+              "default": "<?php\n\/*\n *  Describe what it does\n *\n **\/"
             }
           ]
         },
         {
           "text": "Components",
           "code": "components",
+          "icon": "nf nf-mdi-vuejs",
           "tabs": [
             {
               "pos": 1,
               "url": "js",
               "icon": "icon-javascript-alt",
-              "path": "js/",
+              "path": "js\/",
               "title": "JavaScript",
               "bcolor": "#f40505",
               "fcolor": "#fdfdfd",
@@ -98,7 +148,7 @@
                 {
                   "ext": "js",
                   "mode": "js",
-                  "default": "// Javascript Document\n(()=>{\n  return{}\n})();"
+                  "default": "\/\/ Javascript Document\n\n(() => {\n  return {\n    \n  }\n})();"
                 }
               ]
             },
@@ -106,7 +156,7 @@
               "pos": 2,
               "url": "html",
               "icon": "icon-html",
-              "path": "html/",
+              "path": "html\/",
               "title": "View",
               "bcolor": "#58be1d",
               "fcolor": "#fdfdfd",
@@ -127,7 +177,7 @@
               "pos": 3,
               "url": "css",
               "icon": "icon-css",
-              "path": "css/",
+              "path": "css\/",
               "title": "CSS",
               "bcolor": "#ff9900",
               "fcolor": "#fdfdfd",
@@ -135,7 +185,12 @@
                 {
                   "ext": "less",
                   "mode": "less",
-                  "default": "/* LESS Document */\n\n"
+                  "default": "\/* LESS Document *\/\n\n"
+                },
+                {
+                  "ext": "css",
+                  "mode": "css",
+                  "default": "\/* CSS Document *\/\n\n"
                 }
               ]
             }
@@ -144,27 +199,29 @@
         {
           "text": "CSS",
           "code": "css",
+          "icon": "nf nf-fa-css3",
           "extensions": [
             {
               "ext": "less",
               "mode": "less",
-              "default": "/* LESS Document */\n\n"
+              "default": "\/* LESS Document *\/\n\n"
             },
             {
               "ext": "css",
               "mode": "css",
-              "default": "/* CSS Document */\n\n"
+              "default": "\/* CSS Document *\/\n\n"
             },
             {
               "ext": "scss",
               "mode": "scss",
-              "default": "/* SCSS Document */\n\n"
+              "default": "\/* SCSS Document *\/\n\n"
             }
           ]
         },
         {
           "text": "HTML",
           "code": "html",
+          "icon": "nf nf-fa-html5",
           "extensions": [
             {
               "ext": "html",
@@ -176,49 +233,52 @@
         {
           "text": "JavaScript",
           "code": "js",
+          "icon": "nf nf-mdi-language_javascript",
           "extensions": [
             {
               "ext": "js",
               "mode": "js",
-              "default": "// Javascript Document\n"
+              "default": "\/\/ Javascript Document\n\n"
             }
           ]
         },
         {
           "text": "Librairies",
           "code": "lib",
+          "icon": "nf nf-fa-book",
           "extensions": [
             {
               "ext": "js",
               "mode": "js",
-              "default": "// Javascript Document\n"
+              "default": "\/\/ Javascript Document\n\n"
             },
             {
               "ext": "less",
               "mode": "less",
-              "default": "/* LESS Document */\n\n"
+              "default": "\/* LESS Document *\/\n\n"
             },
             {
               "ext": "css",
               "mode": "css",
-              "default": "/* CSS Document */\n\n"
+              "default": "\/* CSS Document *\/\n\n"
             },
             {
               "ext": "scss",
               "mode": "scss",
-              "default": "/* SCSS Document */\n\n"
+              "default": "\/* SCSS Document *\/\n\n"
             }
           ]
         },
         {
           "text": "MVC",
           "code": "mvc",
+          "icon": "nf nf-dev-netbeans",
           "tabs": [
             {
               "ext": "php",
               "pos": 1,
               "url": "_ctrl",
-              "path": "public/",
+              "path": "public\/",
               "fixed": "_ctrl.php",
               "title": "CTRL",
               "bcolor": "#24288f",
@@ -228,7 +288,7 @@
                 {
                   "ext": "php",
                   "mode": "php",
-                  "default": "<?php\n/*\n * Describe what it does!\n *\n **/\n\n/** @var $this \\bbn\\Mvc\\Controller */"
+                  "default": "<?php\n\nuse bbn\\X;\nuse bbn\\Str;\n\/** @var $ctrl \\bbn\\Mvc\\Controller *\/\n\n"
                 }
               ]
             },
@@ -236,7 +296,7 @@
               "pos": 2,
               "url": "php",
               "icon": "icon-php",
-              "path": "public/",
+              "path": "public\/",
               "title": "Controller",
               "bcolor": "#5c9fd6",
               "fcolor": "#fdfdfd",
@@ -245,7 +305,7 @@
                 {
                   "ext": "php",
                   "mode": "php",
-                  "default": "<?php\n/*\n * Describe what it does!\n *\n * @var $ctrl \\bbn\\Mvc\\Controller \n *\n */\n"
+                  "default": "<?php\n\nuse bbn\\X;\nuse bbn\\Str;\n\/** @var $ctrl \\bbn\\Mvc\\Controller *\/\n\n"
                 }
               ]
             },
@@ -253,7 +313,7 @@
               "pos": 3,
               "url": "private",
               "icon": "icon-php-alt",
-              "path": "private/",
+              "path": "private\/",
               "title": "Private",
               "bcolor": "#cccccc",
               "fcolor": "#fdfdfd",
@@ -262,7 +322,7 @@
                 {
                   "ext": "php",
                   "mode": "php",
-                  "default": "<?php\n/*\n * Describe what it does!\n *\n **/\n\n/** @var $this \\bbn\\Mvc\\Controller */"
+                  "default": "<?php\n\/**\n * What is my purpose?\n *\n **\/\n\nuse bbn\\X;\nuse bbn\\Str;\n\/** @var $ctrl \\bbn\\Mvc\\Controller *\/\n\n"
                 }
               ],
               "alternative": true
@@ -271,7 +331,7 @@
               "pos": 4,
               "url": "model",
               "icon": "icon-database",
-              "path": "model/",
+              "path": "model\/",
               "title": "Model",
               "bcolor": "#ee05cf",
               "fcolor": "#fdfdfd",
@@ -279,7 +339,7 @@
                 {
                   "ext": "php",
                   "mode": "php",
-                  "default": "<?php\n/*\n * Describe what it does!\n *\n **/\n\n/** @var $this \\bbn\\Mvc\\Model*/"
+                  "default": "<?php\n\/**\n * What is my purpose?\n *\n **\/\n\nuse bbn\\X;\nuse bbn\\Str;\n\/** @var $model \\bbn\\Mvc\\Model*\/\n\n"
                 }
               ]
             },
@@ -287,7 +347,7 @@
               "pos": 5,
               "url": "html",
               "icon": "icon-html",
-              "path": "html/",
+              "path": "html\/",
               "title": "View",
               "bcolor": "#58be1d",
               "fcolor": "#fdfdfd",
@@ -295,12 +355,12 @@
                 {
                   "ext": "php",
                   "mode": "php",
-                  "default": "<!-- HTML Document -->"
+                  "default": "<!-- HTML Document -->\n\n<?php\n\/* Static classes xx and st are available as aliases of bbn\\X and bbn\\Str respectively *\/\n?>\n\n"
                 },
                 {
                   "ext": "html",
                   "mode": "html",
-                  "default": "<!-- HTML Document -->"
+                  "default": "<!-- HTML Document -->\n\n"
                 }
               ]
             },
@@ -308,7 +368,7 @@
               "pos": 6,
               "url": "js",
               "icon": "icon-javascript-alt",
-              "path": "js/",
+              "path": "js\/",
               "title": "JavaScript",
               "bcolor": "#f40505",
               "fcolor": "#fdfdfd",
@@ -316,12 +376,12 @@
                 {
                   "ext": "js",
                   "mode": "js",
-                  "default": "// Javascript Document"
+                  "default": "\/\/ Javascript Document\n\n"
                 },
                 {
-                  "ext": "coffee",
-                  "mode": "coffee",
-                  "default": "// Coffeescript Document"
+                  "ext": "ts",
+                  "mode": "typescript",
+                  "default": "\/\/ Typescript Document\n\n"
                 }
               ]
             },
@@ -329,7 +389,7 @@
               "pos": 7,
               "url": "css",
               "icon": "icon-css",
-              "path": "css/",
+              "path": "css\/",
               "title": "CSS",
               "bcolor": "#ff9900",
               "fcolor": "#fdfdfd",
@@ -337,17 +397,121 @@
                 {
                   "ext": "less",
                   "mode": "less",
-                  "default": "/* LESS Document */"
+                  "default": "\/* LESS Document *\/\n\n"
                 },
                 {
                   "ext": "css",
                   "mode": "css",
-                  "default": "/* CSS Document */"
+                  "default": "\/* CSS Document *\/\n\n"
                 },
                 {
                   "ext": "scss",
                   "mode": "scss",
-                  "default": "/* SCSS Document */"
+                  "default": "\/* SCSS Document *\/\n\n"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "text": "Sandbox",
+          "code": "sandbox",
+          "icon": "nf nf-dev-netbeans",
+          "tabs": [
+            {
+              "pos": 1,
+              "url": "private",
+              "icon": "icon-php-alt",
+              "path": "private\/",
+              "title": "Private",
+              "bcolor": "#cccccc",
+              "fcolor": "#fdfdfd",
+              "default": false,
+              "extensions": [
+                {
+                  "ext": "php",
+                  "mode": "php",
+                  "default": "<?php\n\/**\n * What is my purpose?\n *\n **\/\n\n\/** @var $ctrl \\bbn\\Mvc\\Controller *\/\n\n"
+                }
+              ],
+              "alternative": true
+            },
+            {
+              "pos": 2,
+              "url": "model",
+              "icon": "icon-database",
+              "path": "model\/",
+              "title": "Model",
+              "bcolor": "#ee05cf",
+              "fcolor": "#fdfdfd",
+              "extensions": [
+                {
+                  "ext": "php",
+                  "mode": "php",
+                  "default": "<?php\n\/**\n * What is my purpose?\n *\n **\/\n\n\/** @var $model \\bbn\\Mvc\\Model*\/\n\n"
+                }
+              ]
+            },
+            {
+              "pos": 3,
+              "url": "html",
+              "icon": "icon-html",
+              "path": "html\/",
+              "title": "View",
+              "bcolor": "#58be1d",
+              "fcolor": "#fdfdfd",
+              "extensions": [
+                {
+                  "ext": "php",
+                  "mode": "php",
+                  "default": "<!-- HTML Document -->\n\n"
+                },
+                {
+                  "ext": "html",
+                  "mode": "html",
+                  "default": "<!-- HTML Document -->\n\n"
+                }
+              ]
+            },
+            {
+              "pos": 4,
+              "url": "js",
+              "icon": "icon-javascript-alt",
+              "path": "js\/",
+              "title": "JavaScript",
+              "bcolor": "#f40505",
+              "fcolor": "#fdfdfd",
+              "extensions": [
+                {
+                  "ext": "js",
+                  "mode": "js",
+                  "default": "\/\/ Javascript Document\n\n"
+                },
+                {
+                  "ext": "ts",
+                  "mode": "typescript",
+                  "default": "\/\/ Typescript Document\n\n"
+                }
+              ]
+            },
+            {
+              "pos": 5,
+              "url": "css",
+              "icon": "icon-css",
+              "path": "css\/",
+              "title": "CSS",
+              "bcolor": "#ff9900",
+              "fcolor": "#fdfdfd",
+              "extensions": [
+                {
+                  "ext": "less",
+                  "mode": "less",
+                  "default": "\/* LESS Document *\/\n\n"
+                },
+                {
+                  "ext": "css",
+                  "mode": "css",
+                  "default": "\/* CSS Document *\/\n\n"
                 }
               ]
             }
@@ -356,53 +520,72 @@
         {
           "text": "PHP",
           "code": "php",
+          "icon": "nf nf-mdi-language_php",
           "extensions": [
             {
               "ext": "php",
               "mode": "php",
-              "default": "<?php\n/*\n * Describe what it does or you're a pussy\n *\n **/\n\n/** @var $this \\bbn\\Mvc\\Controller */\n"
+              "default": "<?php\n\/**\n * What is my purpose?\n *\n **\/\n\n\/** @var $ctrl \\bbn\\Mvc\\Controller *\/\n\n"
             }
           ]
         },
         {
           "text": "Scripts",
           "code": "scripts",
+          "icon": "nf nf-mdi-language_javascript",
           "extensions": [
             {
               "ext": "php",
               "mode": "php",
-              "default": "<?php\n/*\n * Describe what it does or you're as gay as Jaysus\n *\n **/\n\n/** @var $this \\bbn\\Mvc\\Controller */\n"
+              "default": "<?php\n\/**\n * What is my purpose?\n *\n **\/\n\n\/** @var $ctrl \\bbn\\Mvc\\Controller *\/\n\n"
             },
             {
               "ext": "js",
               "mode": "js",
-              "default": "// Javascript Document\n"
+              "default": "\/\/ Javascript Document\n\n"
             }
           ]
         }
       ]
     },
     {
-      "text": "Permissions",
-      "code": "permissions",
+      "text": "Recent files",
+      "code": "recent",
+      "icon": "nf nf-fa-file_code_o"
+    },
+    {
+      "text": "File preferences",
+      "code": "files",
+      "icon": "nf nf-mdi-folder_account"
+    },
+    {
+      "text": "Opened files",
+      "code": "opened",
+      "icon": "nf nf-fa-folder_open_o"
+    },
+    {
       "cfg": {
-        "allow_children": 1
+        "show_code": 1
       },
+      "text": "Theme",
+      "code": "theme",
+      "icon": "nf nf-fae-palette_color",
+      "theme": "default"
+    },
+    {
+      "text": "Plugins",
+      "code": "plugins",
       "items": [
         {
-          "text": "Access",
-          "code": "access"
-        }, {
-          "text": "Options",
-          "code": "options"
-        }, {
-          "text": "Plugins",
-          "code": "plugins",
+          "text": "Dashboard",
+          "code": "appui-dashboard",
+          "id_alias": ["dashboard", "appui"],
           "items": [
             {
-              "text": "Dashboard",
-              "code": "appui-dashboard",
-              "id_alias": ["list", "dashboard", "appui"],
+              "text": "Widgets",
+              "code": "widgets",
+              "id_alias": ["widgets", "dashboard", "appui"],
+              "icon": "nf nf-mdi-widgets",
               "items": [
                 {
                   "text": "IDE recent files",

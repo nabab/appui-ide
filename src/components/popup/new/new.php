@@ -10,6 +10,7 @@
           <div class="bbn-flex-fill">
             <bbn-input v-model="data.name"
                        required="required"
+                       :focused="true"
                        ref="filename"
                        class="bbn-w-100"/>
           </div>
