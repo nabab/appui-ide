@@ -1,4 +1,5 @@
 <?php
+use bbn\X;
 //$old_path = getcwd();
 //chdir(BBN_ROOT_PATH);
 if ( BBN_IS_DEV || $ctrl->inc->user->isDev() ){
@@ -40,8 +41,8 @@ if ( BBN_IS_DEV || $ctrl->inc->user->isDev() ){
       eval($bbn_code);
     }
     catch ( Exception $e ){
-      die(var_dump($e));
-      echo 'Error!';
+      var_dump($e, $e->getMessage(), $bbn_code);
+      die();
     }
     $bbn_timer->stop();
     $bbn_res = ob_get_contents();
