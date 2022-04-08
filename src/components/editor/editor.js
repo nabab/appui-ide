@@ -397,6 +397,7 @@
           line = lastLine;
         }
         this.currentEditor.goLine(line);
+        this.showGoTOLine = false;
       },
       selectRecentFile(file, obj){
         this.getRef('tabstrip').load(obj.path);
