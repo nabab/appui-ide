@@ -19,8 +19,8 @@ class finder
   {
     $this->fs = $fs;
   }
-  
-  public function explore($path = ''): ?array
+
+  public function explore(string $path = '', bool $onlyDir = false): ?array
   {
     if (!$path) {
       $path = '.';
@@ -32,15 +32,32 @@ class finder
       'num_files' => 0,
       'num_dirs' => 0
     ];
-    if ($tmp = $this->fs->getFiles(!empty($path) ? $path : '.', true, true, null, 't')) {
-      $res['data'] = array_map(function($a){
-        X::log(["LOOP", $a]);
-        return [
+    if ($onlyDir) {
+      $tmp = $this->fs->getDirs($path ?: '.', true, 't');
+    }
+    else {
+      $tmp = $this->fs->getFiles($path ?: '.', true, true, null, 't');
+    }
+    if ($tmp) {
+      $fs =& $this->fs;
+      $res['data'] = array_map(function($a) use ($onlyDir, $fs, $path){
+        $arr = [
           'text' => !empty($a['name']) ? X::basename($a['name']) : $path,
           'value' =>  !empty($a['name']) ? X::basename($a['name']) : $path,
           'dir' => $a['dir'],
           'file' => $a['file']
         ];
+        if ($onlyDir) {
+          if (!empty($a['text'])) {
+            $path .= '/'.$a['text'];
+          }
+          else {
+	          $path = $a['name'];
+          }
+          $arr['numChildren'] = count($fs->getDirs($path, true));
+					X::log([$path, $a]);
+        }
+        return $arr;
       }, $tmp);
       $res['num_files'] = count(array_filter($res['data'], function($a){
         return $a['file'] === true;
@@ -50,9 +67,8 @@ class finder
       }));
     }
     return $res;
-    
   }
-  
+
   public function get_info_dir($path = '')
   {
     $num_files = 0;
@@ -63,23 +79,24 @@ class finder
     if ( !empty($files) ){
       $num_files = count($files);
     };
-   
+
     $dirs = array_filter($this->getData($path), function($a){
       return $a['dir'] === true;
     });
     if ( !empty($dirs) ){
       $num_dirs = count($dirs);
     };
-    $info_dir = [ 
+    $info_dir = [
       'num_files' => $num_files,
       'num_dirs' => $num_dirs
     ];
     return $info_dir;
   }
+
   public function get_data($path = '')
   {
     if ( $files = $this->fs->getFiles( !empty($path) ? $path : '.', true, true, null, 't') ){
-      
+
       return array_map(function($a){
         return [
           'icon' => $this->get_icon($a['file'] ? $a['path'] : 'dir'),
@@ -92,6 +109,7 @@ class finder
     }
     return [];
   }
+
   public function is_img(string $ext)
   {
     $res = false;
@@ -124,11 +142,11 @@ class finder
       case '.zip':
       case '.pdf':
         $res =  false;
-	break;
+        break;
     }
-  return $res;  
+    return $res;
   }
-  
+
 
   public function get_image_infos($path){
     $i = new \bbn\File\Image($path, $this->fs);
@@ -136,14 +154,14 @@ class finder
       'height' => $i->getHeight(),
       'width' =>  $i->getWidth(),
     ];
-    return $info;  
+    return $info;
   }
-  
+
   public function get_info($path, $ext)
   {
     $info = [];
     if ( $this->fs->exists($path) ){
-      
+
       $size = $this->fs->filesize($path);
       $info['size'] = \bbn\Str::saySize($size);
       $info['mtime'] = \bbn\Date::format($this->fs->filemtime($path));
@@ -152,7 +170,7 @@ class finder
         if ( $this->is_img($ext) ){
           $info['is_image'] = true;
           $info['image'] = $this->get_image_infos($path);
-         
+
         }
         else if ( $this->is_readable($ext) ){
           $info['content'] = $this->fs->getContents($path) ? $this->fs->getContents($path) : 'Error in getting content';
@@ -224,19 +242,14 @@ class finder
       }
     }
   }
+
   public function dirsize($path){
     return \bbn\Str::saySize($this->fs->dirsize($path));
     //return $this->fs->dirsize($path);
   }
-  
 
   public function preview($filename)
   {
 
   }
-
-
 }
-
-
-
