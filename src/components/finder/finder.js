@@ -114,9 +114,12 @@
           return btoa(this.currentPath + this.currentFile.node.data.value)
         }
       },
+      dirTreeData() {
+        return bbn.fn.extend({mode: "dir"}, this.getData(this.dirs[0]));
+      }
     },
     methods: {
-			fileErrorText() {
+      fileErrorText() {
         if (this.sizeInfo > 2000000) {
           return bbn._('The content of the file exceeds the authorized limit (2mb)');
         } else {
@@ -269,6 +272,9 @@
           let num = 2;
           if ( node.tree.data.path && (node.tree.data.path !== '.') ){
             path += node.tree.data.path;
+            if (path.indexOf("./") == 0) {
+              path = bbn.fn.substr(path, 2);
+            }
             num += path.split('/').length;
           }
           path += node.data.value;
@@ -282,7 +288,7 @@
               this.add(node.data.value);
             }
             else if ( node.data.file ){
-              let idx = node.data.value.lastIndexOf('.'), 
+              let idx = node.data.value.lastIndexOf('.'),
                   ext = '';
               if ( idx > -1 ){
                 let val = node.data.value.length - idx;
@@ -313,7 +319,7 @@
                     this.sizeInfo = parseInt(d.info.size.split()[0]);
                     if (this.sizeInfo > 200000000) {
                       this.currentFile.info.content = false;
-                   		bbn.fn.log(parseInt(d.info.size.split()[0]));
+                      bbn.fn.log(parseInt(d.info.size.split()[0]));
                     }
                     if ( d.info.is_image ){
                       this.isImage = true;
@@ -346,6 +352,29 @@
         }
         bbn.fn.log(this.preview, this.currentFile, this.preview && this.currentFile);
       },
+      selectDirNode(node) {
+        this.currentFile = false;
+        this.isLoading = true;
+        this.currentFile = {
+          node: node
+        };
+        if ( node.data.value ){
+          let path = '';
+          let num = 2;
+          if ( node.tree.data.path && (node.tree.data.path !== '.') ){
+            path += node.tree.data.path;
+            if (path.indexOf("./") == 0) {
+              path = bbn.fn.substr(path, 2);
+            }
+            num += path.split('/').length;
+          }
+          path += node.data.value;
+          if ( this.currentPath !== path ){
+            this.dirInfo = node.data;
+          }
+        }
+        bbn.fn.log(this.preview, this.currentFile, this.preview && this.currentFile);
+      },
       mapTree(node){
         let bits = node.text.split('.');
         let ext = bits[bits.length-1];
@@ -355,7 +384,14 @@
         else if (filesRules[ext]) {
           node.icon = filesRules[ext];
         }
+        if (!node.dir && (this.mode === "dual")) {
+          node.hidden = true;
+        }
         return node;
+      },
+      filterTree(node) {
+        bbn.fn.log("execute filterTree");
+        return true;
       },
       getData(p){
         bbn.fn.log(p);
@@ -750,17 +786,16 @@
         })
       },
       updateScroll(){
-        this.$nextTick(() => {
-          let sc = this.getRef('scroll');
-          if (sc) {
+        let sc = this.getRef('scroll');
+        if (sc) {
+          bbn.fn.log("before then");
+          setTimeout(() => {
             sc.onResize().then(() => {
-              setTimeout(() => {
-                bbn.fn.log("IT SHOULD GO TO THE END OF THE SCROLL")
-                sc.scrollEndX(true);
-              }, 250);
-            });
-          }
-        })
+              bbn.fn.log("after then");
+              sc.scrollEndX(true);
+            })
+          }, 250);
+        }
       },
     },
     mounted(){
@@ -800,12 +835,6 @@
           this.add('');
         }, 250);
       },
-      dirs(){
-        this.updateScroll();
-      },
-      currentFile(){
-        this.updateScroll();
-      },
       currentPath(v){
         this.$emit('change', v);
       }
@@ -815,20 +844,20 @@
         name: 'form',
         template: `
                             <bbn-form class="bbn-flex-height"
-                                      :source="source" 
-                                      @success="success" 
+                                      :source="source"
+                                      @success="success"
                                       :action="source.root + 'actions/finder/' + (!source.new ? 'rename' : 'new_dir')"
                                       >
                               <div class="bbn-grid-fields bbn-l bbn-padded">
                                 <label>`+ bbn._('Name') +`</label>
                                 <div>
-                                  <bbn-input v-if="!source.new" 
-                                             class="bbn-w-100" 
+                                  <bbn-input v-if="!source.new"
+                                             class="bbn-w-100"
                                              v-model="source.node.value"
 
                                   ></bbn-input>
-                                  <bbn-input v-else 
-                                             class="bbn-w-100" 
+                                  <bbn-input v-else
+                                             class="bbn-w-100"
                                              v-model="source.newDir"
                                   >
                                   </bbn-input>
@@ -876,7 +905,7 @@
                 appui.success(d.data.new_dir + ' ' + bbn._('successfully created'))
               }
               //editing an existing folder
-              else { 
+              else {
                 bbn.fn.each(trees, (v, i) => {
                   if ( v._uid === this.source.treeUid ){
                     v.items[this.source.idx].value = this.source.node.value;
@@ -893,6 +922,6 @@
         },
 
       }
-    }  
+    }
   };
 })();

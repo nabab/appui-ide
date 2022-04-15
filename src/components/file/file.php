@@ -2,13 +2,11 @@
   <bbn-router :autoload="false"
               :nav="true"
               :scrollable="false"
-              ref="tabstrip"
-  >
+              ref="tabstrip">
     <bbns-container :static="true"
                     :load="true"
                     url="code"
                     :menu="getMenu()"
-                    icon="nf nf-fa-code"
-    ></bbns-container>
+                    icon="nf nf-fa-code"/>
   </bbn-router>
 </div>

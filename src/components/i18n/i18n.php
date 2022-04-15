@@ -9,11 +9,9 @@
              @change="insert_translation"
              ref="table"
              :expander="$options.components['file_linker']"
-             :toolbar="$options.components['toolbar']"
-  >
+             :toolbar="$options.components['toolbar']">
     <bbns-column field="original_exp"
-                :editable="false"
-                title="<?=_("Original Expression")?>"
-    ></bbns-column>
+                 :editable="false"
+                 title="<?=_("Original Expression")?>"/>
   </bbn-table>
 </div>

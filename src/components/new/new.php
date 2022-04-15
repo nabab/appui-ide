@@ -1,8 +1,7 @@
 <bbn-form ref="new_form"
           :source="source"
           class="bbn-overlay"
-          :buttons="[]"
->
+          :buttons="[]">
   <div class="bbn-padded">
     <div class="bbn-form-label mvc-ele" v-if="isMVC"><?=_("Type")?></div>
     <div class="bbn-form-field mvc-ele" v-if="isMVC">
@@ -10,24 +9,21 @@
                     :source="types"
                     v-model="selectedType"
                     name="tab"
-                    required="required"
-      ></bbn-dropdown>
+                    required="required"/>
     </div>
     <div class="bbn-form-label"><?=_("Name")?></div>
     <div class="bbn-form-field">
       <bbn-input type="text"
                  name="name"
                  v-model="name"
-                 required="required"
-      ></bbn-input>
+                 required="required"/>
       <bbn-dropdown ref="ext"
                     :source="extensions"
                     v-model="selectedExt"
                     name="ext"
                     required="required"
                     style="width: 100px"
-                    v-if="isFile"
-      ></bbn-dropdown>
+                    v-if="isFile"/>
     </div>
     <div class="bbn-form-label"><?=_("Path")?></div>
     <div class="bbn-form-field">
@@ -35,8 +31,7 @@
                  name="path"
                  v-model="path"
                  readonly="readonly"
-                 required="required"
-     ></bbn-input>
+                 required="required"/>
       <div style="float: left">
         <bbn-button @click="selectDir"><?=_("Browse")?></bbn-button>
         <bbn-button @click="setRoot"><?=_("Root")?></bbn-button>

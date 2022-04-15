@@ -2,14 +2,14 @@
 <div class="bbn-overlay bbn-flex-height appui-finder">
   <bbn-toolbar>
     <div class="bbn-xl bbn-hpadded bbn-vspadded">
-      <i class="nf nf-mdi-apple_finder bbn-large"></i> &nbsp;
+      <i class="nf nf-mdi-apple_finder bbn-large"/> &nbsp;
       File finder
     </div>
     <div>
     </div>
     <div>
   		<bbn-menu :source="menuData"
-                ref="menu"></bbn-menu>
+                ref="menu"/>
     </div>
   </bbn-toolbar>
   <div class="bbn-flex-fill">

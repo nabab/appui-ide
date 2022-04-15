@@ -2,6 +2,8 @@
 
 use bbn\X;
 
+//X::ddump($model->inc->pref->get($model->data['origin']));
+
 if (
   isset($model->data['path'], $model->data['origin']) &&
   (strpos($model->data['path'], '../') === false) &&
@@ -15,8 +17,8 @@ if (
     }
   }
   if ($cfg['type'] !== 'local') {
-  	$pwd = new bbn\Appui\Passwords($model->db);
-  	$cfg['pass'] = $pwd->userGet($p['id'], $model->inc->user);
+    $pwd = new bbn\Appui\Passwords($model->db);
+    $cfg['pass'] = $pwd->userGet($p['id'], $model->inc->user);
   }
   $fs = new \bbn\File\System($cfg['type'], $cfg);
   if ( !empty($cfg['path']) ){
@@ -36,13 +38,13 @@ if (
     }
   }
   else if ( isset($model->data['host'], $model->data['user'], $model->data['pass']) ){
-    
+
     $fs = new \bbn\File\System('ftp', [
       'host' => $model->data['host'],
       'user' => $model->data['user'],
       'pass' => $model->data['pass']
     ]);
-    
+
     if ( $model->data['test'] ){
       return ['success' => $fs->check()];
     }
@@ -61,9 +63,13 @@ if (
     'pass' => 'B_QdU0/UfR2M1Apb'
   ]);
   */
-  
+
   $finder = new \appui\finder($fs);
-  $res = $finder->explore($model->data['path'] ?? '.');
+  $path = $model->data['path'] ?: '.';
+  if (($model->data['mode'] === 'dir') && !empty($model->data['value'])) {
+    $path = $model->data['value'];
+  }
+  $res = $finder->explore($path, $model->data['mode'] === 'dir' ? true : false);
   $cur = $fs->getCurrent();
   $res['current'] = $cur;
   return $res;

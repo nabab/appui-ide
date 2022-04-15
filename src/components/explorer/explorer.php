@@ -16,40 +16,35 @@
           <bbn-button ftitle="<?=_('Is connected')?>"
                       :icon="'nf nf-fa-lightbulb_o bbn-' + (isConnected ? 'green' : 'red')"
                       @click="connect"
-                      :notext="true">
-          </bbn-button>
+                      :notext="true"/>
         </div>
         <div class="bbn-left-sspace">
           <bbn-button ftitle="<?=_('View choice')?>"
                       icon="nf nf-fa-eye"
                       :notext="true"
-                      @click="viewMode = viewMode == 'dual' ? 'columns': 'dual'">
-          </bbn-button>
+                      @click="viewMode = viewMode == 'dual' ? 'columns': 'dual'"/>
         </div>
         <div class="bbn-left-sspace">
           <bbn-button ftitle="<?=_('Element size')?>"
                       icon="nf nf-mdi-move_resize_variant"
-                      :notext="true">
-          </bbn-button>
+                      :notext="true"/>
         </div>
         <div class="bbn-hpadded">
           <bbn-input placeholder="<?=_('Path')?>"
                      v-model="currentPath"
                      class="bbn-wider"
                      :readonly="true"
-                     :notext="true">
-          </bbn-input>
+                     :notext="true"/>
         </div>
       </bbn-toolbar>
     </div>
   </bbn-pane>
   <bbn-pane :scrollable="false">
     <appui-ide-finder :source="source.root + 'finder'"
-                :origin="source.origin"
-                @change="updatePath"
-                :default-path="path"
-                :root="source.root"
-                :mode="viewMode"
-    ></appui-ide-finder>
+                      :origin="source.origin"
+                      @change="updatePath"
+                      :default-path="path"
+                      :root="source.root"
+                      :mode="viewMode"/>
   </bbn-pane>
 </bbn-splitter>

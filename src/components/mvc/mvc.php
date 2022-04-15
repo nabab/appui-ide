@@ -5,7 +5,6 @@
                 :nav="true"
                 ref="tabstrip"
                 :source="routerSource"
-                v-if="tabsReady"
-    ></bbn-router>
+                v-if="tabsReady"/>
   </div>
 </div>

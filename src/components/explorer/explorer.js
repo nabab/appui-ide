@@ -27,7 +27,7 @@
             ]
           }
         ],
-        viewMode: 'columns', 
+        viewMode: 'columns',
         connection: this.source.connection,
         currentPath: '',
         path: '',

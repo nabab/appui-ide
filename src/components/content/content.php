@@ -3,5 +3,4 @@
                 'appui-ide-code'"
            :source="source"
            ref="content"
-           :key="source.id"
-></component>
+           :key="source.id"/>
