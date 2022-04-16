@@ -66,9 +66,6 @@ if (
 
   $finder = new \appui\finder($fs);
   $path = $model->data['path'] ?: '.';
-  if (($model->data['mode'] === 'dir') && !empty($model->data['value'])) {
-    $path = $model->data['value'];
-  }
   $res = $finder->explore($path, $model->data['mode'] === 'dir' ? true : false);
   $cur = $fs->getCurrent();
   $res['current'] = $cur;

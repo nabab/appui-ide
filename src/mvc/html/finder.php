@@ -9,14 +9,13 @@
     </div>
     <div>
   		<bbn-menu :source="menuData"
-                ref="menu"></bbn-menu>
+                ref="menu"/>
     </div>
   </bbn-toolbar>
   <div class="bbn-flex-fill">
     <bbn-router :nav="true"
                 :root="source.root + 'finder/'"
                 :base-url="source.root + 'finder/'"
-                :autoload="true">
-    </bbn-router>
+                :autoload="true"/>
   </div>
 </div>

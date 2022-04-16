@@ -11,6 +11,7 @@
                   :map="mapTree"
                   :menu="itemsContextMenu"
                   :key="'/' + dirs[0].path"
+                  @beforeUnfold="onUnfold"
                   @load="updateInfo"
                   @select="select">
         </bbn-tree>

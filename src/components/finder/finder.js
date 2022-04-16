@@ -89,6 +89,8 @@
         isJson: false,
         isMarkdown: false,
         currentTitle: false,
+        unfoldedPath: '',
+        dirTreeData: {fullpath: '', origin: this.origin, value: '.', name: '.', path: '.', mode: 'dir'},
       }
     },
     computed: {
@@ -113,9 +115,6 @@
           bbn.fn.log(this.currentPath, this.currentFile.node.data.value, btoa(this.currentPath + this.currentFile.node.data.value));
           return btoa(this.currentPath + this.currentFile.node.data.value)
         }
-      },
-      dirTreeData() {
-        return bbn.fn.extend({mode: "dir"}, this.getData(this.dirs[0]));
       }
     },
     methods: {
@@ -251,6 +250,17 @@
             }
           }, 300)
         }
+      },
+      onUnfold(node) {
+        let path = node.source.data.value;
+        while (node.parent.node) {
+          node = node.parent.node;
+          path = node.source.data.value + "/" + path;
+          bbn.fn.log(path);
+        }
+        this.dirTreeData.path = path;
+        this.dirTreeData.value = path;
+        this.$forceUpdate();
       },
       /**
                            * method at @select of bbn - tree, defines currentFile and makes the post to take the infos of the file
@@ -802,11 +812,10 @@
       if ( this.path ){
         bbn.fn.each(this.path.split('/'), (a) => {
           if ( a ){
-            this.add(a)
+            this.add(a);
           }
         });
       }
-
     },
     watch: {
       isLoading(val){
