@@ -2,6 +2,22 @@
 
 (() => {
   return {
+    data() {
+      return {
+        root: appui.plugins["appui-ide"] + "/",
+        menu: [{
+          action: "edit",
+          icon: 'nf nf-fa-edit',
+          text: bbn._("Edit"),
+          key: 'a'
+        }, {
+          action: "delete" ,
+          text: bbn._("Delete"),
+          icon: 'nf nf-fa-trash_o',
+          key: 'e'
+        }]
+      };
+    },
     methods: {
       getToolbarButtons() {
         return [{
@@ -45,7 +61,7 @@
               key: 'a'
             }, {
               action: () => {
-               // this.cp.deleteNote(this.source);
+                // this.cp.deleteNote(this.source);
               },
               text: bbn._("Delete"),
               icon: 'nf nf-fa-trash_o',

@@ -25,8 +25,9 @@
       this.cp = this.closest("appui-ide-finder")
     },
     mounted() {
-      this.cp.updateScroll();
-      bbn.fn.log("Scroll Me");
+      this.closest("bbn-scroll").onResize(true).then(() => {
+        this.cp.updateScroll();
+      });
     }
   }
 })();

@@ -27,7 +27,6 @@
           num_dirs: 0,
           num_files: 0,
           size: 0,
-        
         }],
       }
     },
