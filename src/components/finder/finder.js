@@ -91,6 +91,7 @@
         currentTitle: false,
         unfoldedPath: '',
         dirTreeData: {fullpath: '', origin: this.origin, value: '.', name: '.', path: '.', mode: 'dir'},
+        currentMode: this.mode,
       }
     },
     computed: {
@@ -274,9 +275,7 @@
         this.isText = false;
         this.isMarkdown = false;
         this.isLoading = true;
-        this.currentFile = {
-          node: node
-        };
+
         if ( node.data.value ){
           let path = '';
           let num = 2;
@@ -305,7 +304,7 @@
                 ext = node.data.value.slice(- val);
               }
 
-              //isImage
+              //isNotImage
               if ( !imageExt.includes(ext) ){
 
                 this.post( this.root + 'actions/finder/file', {
@@ -355,6 +354,9 @@
                 });
               }
               else {
+                this.currentFile = {
+                  node: node
+                };
                 return bbn.fn.postOut(this.root + 'actions/finder/image/' + this.encodedURL)
               }
             }
@@ -797,16 +799,19 @@
       },
       updateScroll(){
         let sc = this.getRef('scroll');
-        if (sc) {
-          bbn.fn.log("before then");
-          setTimeout(() => {
-            sc.onResize().then(() => {
-              bbn.fn.log("after then");
-              sc.scrollEndX(true);
-            })
-          }, 250);
-        }
+        sc.onResize(true).then(() => {
+          sc.scrollEndX(true);
+        });
+        bbn.fn.log("Scroll !");
       },
+    },
+    created() {
+      if (this.storage) {
+        let cfg = this.getStorage(this.storageFullName, true);
+        if (cfg && cfg.mode) {
+          this.viewMode = cfg.mode;
+        }
+      }
     },
     mounted(){
       if ( this.path ){
@@ -818,6 +823,12 @@
       }
     },
     watch: {
+      viewMode(value) {
+        if (this.storage) {
+          bbn.fn.log("watch viewMode")
+          this.setStorage({mode: value}, this.storageFullName, true);
+        }
+      },
       isLoading(val){
         //bbn.fn.log('isloading->>>>', val, new Date())
       },
@@ -846,6 +857,11 @@
       },
       currentPath(v){
         this.$emit('change', v);
+      },
+      currentFile(value) {
+        if (value) {
+            this.updateScroll();
+        }
       }
     },
     components: {

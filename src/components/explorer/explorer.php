@@ -37,8 +37,7 @@
                      v-model="currentPath"
                      class="bbn-wider"
                      :readonly="true"
-                     :notext="true">
-          </bbn-input>
+                     :notext="true"/>
         </div>
       </bbn-toolbar>
     </div>
@@ -50,6 +49,7 @@
                 :default-path="path"
                 :root="source.root"
                 :mode="viewMode"
-    ></appui-ide-finder>
+                :storage="true"
+                :storage-full-name="'appui-ide-explorer-' + source.origin"/>
   </bbn-pane>
 </bbn-splitter>
