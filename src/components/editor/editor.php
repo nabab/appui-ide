@@ -146,6 +146,7 @@
                             :icon-color="color"
                             :quick-filter="searchFile"
                             :storage="true"
+                            :key="'appui-ide-tree/' + source.project + '/' + currentRep + (typeProject ? '/' + typeProject : '')"
                             :storage-full-name="'appui-ide-tree/' + source.project + '/' + currentRep + (typeProject ? '/' + typeProject : '')"/>
                 </div>
               </div>
@@ -153,17 +154,17 @@
           </bbn-pane>
           <bbn-pane :collapsed="true" :title="_('Detail')">
             <h1>
-              Detail
+              <?= _("Detail") ?>
             </h1>
           </bbn-pane>
           <bbn-pane :collapsed="true" :title="_('Version control')">
             <h1>
-              Version control
+              <?= _("Version control") ?>
             </h1>
           </bbn-pane>
           <bbn-pane :collapsed="true" :title="_('Other servers')">
             <h1>
-              Other servers
+              <?= _("Other servers") ?>
             </h1>
           </bbn-pane>
         </bbn-splitter>
