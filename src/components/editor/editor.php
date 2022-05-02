@@ -12,6 +12,7 @@
                       ref="ddRep"
                       :storage-full-name="'appui-ide-rep-select-' + project"
                       :source="ddRepData"
+                      :disabled="isTreeLoading"
                       v-model="currentRep"
                       style="width: 250px"/>
       </div>
@@ -122,6 +123,7 @@
               <div class="bbn-spadded" v-if="isProject">
                 <bbn-dropdown class="bbn-w-100"
                               v-if="listRootProject.length"
+                              :disabled="isTreeLoading"
                               :storage="true"
                               :storage-full-name="'appui-ide-root-project-' + project"
                               :source="listRootProject"
@@ -136,6 +138,8 @@
                             v-if="typeProjectReady"
                             :source="source.root + 'tree'"
                             @nodeDblclick="treeNodeActivate"
+                            @beforeload="isTreeLoading = true"
+                            @afterload="isTreeLoading = false"
                             :menu="treeContextMenu"
                             ref="filesList"
                             :draggable="true"

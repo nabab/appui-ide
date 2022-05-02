@@ -188,7 +188,8 @@
         currentLine: 0,
         disabledLine: true,
         showGoTOLine: false,
-        mountedTabnav: false
+        mountedTabnav: false,
+        isTreeLoading: false
       }
     },
     computed: {
@@ -2023,7 +2024,7 @@
         }
       },
       typeProject(newVal){
-        this.path= newVal;
+        this.path = newVal;
         this.$nextTick(()=>{
           this.treeReload();
         });
