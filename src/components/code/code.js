@@ -265,7 +265,7 @@
                     (parent.emptyTabs.lastIndexOf(tab['url']) > -1)
                   ){
                     parent.emptyTabs.splice(parent.emptyTabs.lastIndexOf(tab['url']), 1);
-                    parentTabNav.reload(parentTabNav.selected);
+                    parentTabNav.reload(parentTabNav.selected, true);
                   }
                 }
               this.originalValue = this.value;
@@ -287,7 +287,7 @@
             else if ( d.deleted ){
               if ( parent.emptyTabs !== undefined ){
                 parent.emptyTabs.push(tab['url']);
-                parentTabNav.reload(parentTabNav.selected);
+                parentTabNav.reload(parentTabNav.selected, true);
               }
               this.originalValue = this.value;
               appui.success(bbn._("File deleted!"));
