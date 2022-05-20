@@ -156,17 +156,23 @@
               </div>
             </div>
           </bbn-pane>
-          <bbn-pane :collapsed="true" :title="_('Detail')">
+          <bbn-pane :collapsed="true"
+                    :title="_('Detail')"
+                    :hidden="true">
             <h1>
               <?= _("Detail") ?>
             </h1>
           </bbn-pane>
-          <bbn-pane :collapsed="true" :title="_('Version control')">
+          <bbn-pane :collapsed="true"
+                    :title="_('Version control')"
+                    :hidden="true">
             <h1>
               <?= _("Version control") ?>
             </h1>
           </bbn-pane>
-          <bbn-pane :collapsed="true" :title="_('Other servers')">
+          <bbn-pane :collapsed="true"
+                    :title="_('Other servers')"
+                    :hidden="true">
             <h1>
               <?= _("Other servers") ?>
             </h1>
@@ -180,6 +186,7 @@
                     :nav="true"
                     :master="true"
                     :storage="true"
+                    :splittable="true"
                     :storage-full-name="'appui-ide-editor-router-' + project"
                     ref="tabstrip"
                     @beforeClose="ctrlCloseTab"
