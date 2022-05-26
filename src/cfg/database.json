@@ -59,22 +59,19 @@
                 "type": "binary",
                 "null": 0,
                 "key": "PRI",
-                "signed": true,
-                "maxlength": 16
+                        "maxlength": 16
             },
             "asset_type": {
                 "type": "binary",
                 "null": 0,
                 "key": "MUL",
-                "signed": true,
-                "maxlength": 16
+                        "maxlength": 16
             },
             "id_option": {
                 "type": "binary",
                 "null": 0,
                 "key": "PRI",
-                "signed": true,
-                "maxlength": 16
+                        "maxlength": 16
             }
         }
     }
