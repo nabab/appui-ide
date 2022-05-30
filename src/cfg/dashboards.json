@@ -2,7 +2,6 @@
   {
     "text": "Plugins dashboard",
     "code": "plugins",
-    "id_option": ["list", "dashboard", "appui"],
     "items": [
       {
         "code": "ide_recent_files",
