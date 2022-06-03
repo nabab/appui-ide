@@ -16,7 +16,7 @@ if ( !empty($model->data['cls']) ){
 
   // temporaney for classs bbn i lib
   if ( !empty($model->data['repository']) && $model->data['repository'] === 'bbn' ){
-    $start = strlen('lib/bbn/src/');
+    $start = strlen('lib/bbn/');
     $class = 'bbn\\'.substr($path, $start).'\\'.$file;
   }
   else {

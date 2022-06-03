@@ -21,9 +21,11 @@ if (
     $cfg['pass'] = $pwd->userGet($p['id'], $model->inc->user);
   }
   $fs = new \bbn\File\System($cfg['type'], $cfg);
+  /*
   if ( !empty($cfg['path']) ){
     $fs->cd($cfg['path']);
   }
+  */
 
   /*
   if ( 0 ){
@@ -65,7 +67,8 @@ if (
   */
 
   $finder = new \appui\finder($fs);
-  $path = $model->data['path'] ?: '.';
+  $path = ($cfg['path'] ? $cfg['path'] . '/' : './') . ($model->data['path'] ?: '');
+  die($path);
   $res = $finder->explore($path, $model->data['mode'] === 'dir' ? true : false);
   $cur = $fs->getCurrent();
   $res['current'] = $cur;
