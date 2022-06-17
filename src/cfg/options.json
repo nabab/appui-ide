@@ -24,7 +24,6 @@
         {
           "cfg": {
             "show_code": 1,
-            "allow_children": 1,
             "schema": [
               {
                 "title": "URL",
@@ -2590,7 +2589,6 @@
         {
           "cfg": {
             "show_code": 1,
-            "allow_children": 1,
             "schema": [
               {
                 "title": "URL",
@@ -2987,7 +2985,6 @@
         {
           "cfg": {
             "show_code": 1,
-            "allow_children": 1,
             "schema": [
               {
                 "title": "URL",
@@ -3564,7 +3561,6 @@
         {
           "cfg": {
             "show_code": 1,
-            "allow_children": 1,
             "schema": [
               {
                 "title": "URL",
