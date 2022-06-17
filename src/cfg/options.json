@@ -16,6 +16,3706 @@
     {
       "cfg": {
         "show_code": 1,
+        "allow_children": 1,
+        "inheritance": "cascade",
+        "help": ""
+      },
+      "text": "CSS",
+      "code": "css",
+      "items": [
+        {
+          "text": "Properties",
+          "code": "props",
+          "items": [
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/accent-color",
+              "text": "accent-color",
+              "code": "accent-color",
+              "cat": "color"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/align-content",
+              "text": "align-content",
+              "code": "align-content",
+              "cat": "positioning"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/align-items",
+              "text": "align-items",
+              "code": "align-items",
+              "cat": "positioning"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/align-self",
+              "text": "align-self",
+              "code": "align-self",
+              "cat": "positioning"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/align-tracks",
+              "text": "align-tracks",
+              "code": "align-tracks",
+              "cat": "positioning"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/all",
+              "text": "all",
+              "code": "all",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/animation",
+              "text": "animation",
+              "code": "animation",
+              "cat": "animation"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/animation-delay",
+              "text": "animation-delay",
+              "code": "animation-delay",
+              "cat": "animation"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/animation-direction",
+              "text": "animation-direction",
+              "code": "animation-direction",
+              "cat": "animation"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/animation-duration",
+              "text": "animation-duration",
+              "code": "animation-duration",
+              "cat": "animation"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/animation-fill-mode",
+              "text": "animation-fill-mode",
+              "code": "animation-fill-mode",
+              "cat": "animation"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/animation-iteration-count",
+              "text": "animation-iteration-count",
+              "code": "animation-iteration-count",
+              "cat": "animation"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/animation-name",
+              "text": "animation-name",
+              "code": "animation-name",
+              "cat": "animation"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/animation-play-state",
+              "text": "animation-play-state",
+              "code": "animation-play-state",
+              "cat": "animation"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/animation-timeline",
+              "text": "animation-timeline",
+              "code": "animation-timeline",
+              "cat": "animation"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/animation-timing-function",
+              "text": "animation-timing-function",
+              "code": "animation-timing-function",
+              "cat": "animation"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/appearance",
+              "text": "appearance",
+              "code": "appearance",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/aspect-ratio",
+              "text": "aspect-ratio",
+              "code": "aspect-ratio",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/backdrop-filter",
+              "text": "backdrop-filter",
+              "code": "backdrop-filter",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/backface-visibility",
+              "text": "backface-visibility",
+              "code": "backface-visibility",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/background",
+              "text": "background",
+              "code": "background",
+              "cat": "background"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/background-attachment",
+              "text": "background-attachment",
+              "code": "background-attachment",
+              "cat": "background"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/background-blend-mode",
+              "text": "background-blend-mode",
+              "code": "background-blend-mode",
+              "cat": "background"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/background-clip",
+              "text": "background-clip",
+              "code": "background-clip",
+              "cat": "background"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/background-color",
+              "text": "background-color",
+              "code": "background-color",
+              "cat": "background"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/background-image",
+              "text": "background-image",
+              "code": "background-image",
+              "cat": "background"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/background-origin",
+              "text": "background-origin",
+              "code": "background-origin",
+              "cat": "background"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/background-position",
+              "text": "background-position",
+              "code": "background-position",
+              "cat": "background"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/background-position-x",
+              "text": "background-position-x",
+              "code": "background-position-x",
+              "cat": "background"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/background-position-y",
+              "text": "background-position-y",
+              "code": "background-position-y",
+              "cat": "background"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/background-repeat",
+              "text": "background-repeat",
+              "code": "background-repeat",
+              "cat": "background"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/background-size",
+              "text": "background-size",
+              "code": "background-size",
+              "cat": "background"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/block-size",
+              "text": "block-size",
+              "code": "block-size",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border",
+              "text": "border",
+              "code": "border",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-block",
+              "text": "border-block",
+              "code": "border-block",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-block-color",
+              "text": "border-block-color",
+              "code": "border-block-color",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-block-end",
+              "text": "border-block-end",
+              "code": "border-block-end",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-block-end-color",
+              "text": "border-block-end-color",
+              "code": "border-block-end-color",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-block-end-style",
+              "text": "border-block-end-style",
+              "code": "border-block-end-style",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-block-end-width",
+              "text": "border-block-end-width",
+              "code": "border-block-end-width",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-block-start",
+              "text": "border-block-start",
+              "code": "border-block-start",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-block-start-color",
+              "text": "border-block-start-color",
+              "code": "border-block-start-color",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-block-start-style",
+              "text": "border-block-start-style",
+              "code": "border-block-start-style",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-block-start-width",
+              "text": "border-block-start-width",
+              "code": "border-block-start-width",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-block-style",
+              "text": "border-block-style",
+              "code": "border-block-style",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-block-width",
+              "text": "border-block-width",
+              "code": "border-block-width",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-bottom",
+              "text": "border-bottom",
+              "code": "border-bottom",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-bottom-color",
+              "text": "border-bottom-color",
+              "code": "border-bottom-color",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-bottom-left-radius",
+              "text": "border-bottom-left-radius",
+              "code": "border-bottom-left-radius",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-bottom-right-radius",
+              "text": "border-bottom-right-radius",
+              "code": "border-bottom-right-radius",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-bottom-style",
+              "text": "border-bottom-style",
+              "code": "border-bottom-style",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-bottom-width",
+              "text": "border-bottom-width",
+              "code": "border-bottom-width",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-collapse",
+              "text": "border-collapse",
+              "code": "border-collapse",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-color",
+              "text": "border-color",
+              "code": "border-color",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-end-end-radius",
+              "text": "border-end-end-radius",
+              "code": "border-end-end-radius",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-end-start-radius",
+              "text": "border-end-start-radius",
+              "code": "border-end-start-radius",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-image",
+              "text": "border-image",
+              "code": "border-image",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-image-outset",
+              "text": "border-image-outset",
+              "code": "border-image-outset",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-image-repeat",
+              "text": "border-image-repeat",
+              "code": "border-image-repeat",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-image-slice",
+              "text": "border-image-slice",
+              "code": "border-image-slice",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-image-source",
+              "text": "border-image-source",
+              "code": "border-image-source",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-image-width",
+              "text": "border-image-width",
+              "code": "border-image-width",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-inline",
+              "text": "border-inline",
+              "code": "border-inline",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-inline-color",
+              "text": "border-inline-color",
+              "code": "border-inline-color",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-inline-end",
+              "text": "border-inline-end",
+              "code": "border-inline-end",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-inline-end-color",
+              "text": "border-inline-end-color",
+              "code": "border-inline-end-color",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-inline-end-style",
+              "text": "border-inline-end-style",
+              "code": "border-inline-end-style",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-inline-end-width",
+              "text": "border-inline-end-width",
+              "code": "border-inline-end-width",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-inline-start",
+              "text": "border-inline-start",
+              "code": "border-inline-start",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-inline-start-color",
+              "text": "border-inline-start-color",
+              "code": "border-inline-start-color",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-inline-start-style",
+              "text": "border-inline-start-style",
+              "code": "border-inline-start-style",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-inline-start-width",
+              "text": "border-inline-start-width",
+              "code": "border-inline-start-width",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-inline-style",
+              "text": "border-inline-style",
+              "code": "border-inline-style",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-inline-width",
+              "text": "border-inline-width",
+              "code": "border-inline-width",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-left",
+              "text": "border-left",
+              "code": "border-left",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-left-color",
+              "text": "border-left-color",
+              "code": "border-left-color",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-left-style",
+              "text": "border-left-style",
+              "code": "border-left-style",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-left-width",
+              "text": "border-left-width",
+              "code": "border-left-width",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-radius",
+              "text": "border-radius",
+              "code": "border-radius",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-right",
+              "text": "border-right",
+              "code": "border-right",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-right-color",
+              "text": "border-right-color",
+              "code": "border-right-color",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-right-style",
+              "text": "border-right-style",
+              "code": "border-right-style",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-right-width",
+              "text": "border-right-width",
+              "code": "border-right-width",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-spacing",
+              "text": "border-spacing",
+              "code": "border-spacing",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-start-end-radius",
+              "text": "border-start-end-radius",
+              "code": "border-start-end-radius",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-start-start-radius",
+              "text": "border-start-start-radius",
+              "code": "border-start-start-radius",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-style",
+              "text": "border-style",
+              "code": "border-style",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-top",
+              "text": "border-top",
+              "code": "border-top",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-top-color",
+              "text": "border-top-color",
+              "code": "border-top-color",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-top-left-radius",
+              "text": "border-top-left-radius",
+              "code": "border-top-left-radius",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-top-right-radius",
+              "text": "border-top-right-radius",
+              "code": "border-top-right-radius",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-top-style",
+              "text": "border-top-style",
+              "code": "border-top-style",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-top-width",
+              "text": "border-top-width",
+              "code": "border-top-width",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/border-width",
+              "text": "border-width",
+              "code": "border-width",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/bottom",
+              "text": "bottom",
+              "code": "bottom",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/box-decoration-break",
+              "text": "box-decoration-break",
+              "code": "box-decoration-break",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/box-shadow",
+              "text": "box-shadow",
+              "code": "box-shadow",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/box-sizing",
+              "text": "box-sizing",
+              "code": "box-sizing",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/break-after",
+              "text": "break-after",
+              "code": "break-after",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/break-before",
+              "text": "break-before",
+              "code": "break-before",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/break-inside",
+              "text": "break-inside",
+              "code": "break-inside",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/caption-side",
+              "text": "caption-side",
+              "code": "caption-side",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/caret-color",
+              "text": "caret-color",
+              "code": "caret-color",
+              "cat": "color"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/clear",
+              "text": "clear",
+              "code": "clear",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/clip",
+              "text": "clip",
+              "code": "clip",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/clip-path",
+              "text": "clip-path",
+              "code": "clip-path",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/color",
+              "text": "color",
+              "code": "color",
+              "cat": "color"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/color-scheme",
+              "text": "color-scheme",
+              "code": "color-scheme",
+              "cat": "color"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/column-count",
+              "text": "column-count",
+              "code": "column-count",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/column-fill",
+              "text": "column-fill",
+              "code": "column-fill",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/column-gap",
+              "text": "column-gap",
+              "code": "column-gap",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/column-rule",
+              "text": "column-rule",
+              "code": "column-rule",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/column-rule-color",
+              "text": "column-rule-color",
+              "code": "column-rule-color",
+              "cat": "color"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/column-rule-style",
+              "text": "column-rule-style",
+              "code": "column-rule-style",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/column-rule-width",
+              "text": "column-rule-width",
+              "code": "column-rule-width",
+              "cat": "dimensions"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/column-span",
+              "text": "column-span",
+              "code": "column-span",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/column-width",
+              "text": "column-width",
+              "code": "column-width",
+              "cat": "dimensions"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/columns",
+              "text": "columns",
+              "code": "columns",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/contain",
+              "text": "contain",
+              "code": "contain",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/content",
+              "text": "content",
+              "code": "content",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/content-visibility",
+              "text": "content-visibility",
+              "code": "content-visibility",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/counter-increment",
+              "text": "counter-increment",
+              "code": "counter-increment",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/counter-reset",
+              "text": "counter-reset",
+              "code": "counter-reset",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/counter-set",
+              "text": "counter-set",
+              "code": "counter-set",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/cursor",
+              "text": "cursor",
+              "code": "cursor",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/length#cap",
+              "text": "length#cap",
+              "code": "length#cap",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/length#ch",
+              "text": "length#ch",
+              "code": "length#ch",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/length#cm",
+              "text": "length#cm",
+              "code": "length#cm",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/angle#deg",
+              "text": "angle#deg",
+              "code": "angle#deg",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/direction",
+              "text": "direction",
+              "code": "direction",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/display",
+              "text": "display",
+              "code": "display",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/resolution#dpcm",
+              "text": "resolution#dpcm",
+              "code": "resolution#dpcm",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/resolution#dpi",
+              "text": "resolution#dpi",
+              "code": "resolution#dpi",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/resolution#dppx",
+              "text": "resolution#dppx",
+              "code": "resolution#dppx",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/empty-cells",
+              "text": "empty-cells",
+              "code": "empty-cells",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/length#em",
+              "text": "length#em",
+              "code": "length#em",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/length#ex",
+              "text": "length#ex",
+              "code": "length#ex",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/filter",
+              "text": "filter",
+              "code": "filter",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/flex",
+              "text": "flex",
+              "code": "flex",
+              "cat": "positioning"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/flex-basis",
+              "text": "flex-basis",
+              "code": "flex-basis",
+              "cat": "positioning"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/flex-direction",
+              "text": "flex-direction",
+              "code": "flex-direction",
+              "cat": "positioning"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/flex-flow",
+              "text": "flex-flow",
+              "code": "flex-flow",
+              "cat": "positioning"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/flex-grow",
+              "text": "flex-grow",
+              "code": "flex-grow",
+              "cat": "positioning"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/flex-shrink",
+              "text": "flex-shrink",
+              "code": "flex-shrink",
+              "cat": "positioning"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/flex-wrap",
+              "text": "flex-wrap",
+              "code": "flex-wrap",
+              "cat": "positioning"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/flex_value#fr",
+              "text": "flex_value#fr",
+              "code": "flex_value#fr",
+              "cat": "positioning"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/float",
+              "text": "float",
+              "code": "float",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/font",
+              "text": "font",
+              "code": "font",
+              "cat": "text"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/font-family",
+              "text": "font-family",
+              "code": "font-family",
+              "cat": "text"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/font-feature-settings",
+              "text": "font-feature-settings",
+              "code": "font-feature-settings",
+              "cat": "text"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/font-kerning",
+              "text": "font-kerning",
+              "code": "font-kerning",
+              "cat": "text"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/font-language-override",
+              "text": "font-language-override",
+              "code": "font-language-override",
+              "cat": "text"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/font-optical-sizing",
+              "text": "font-optical-sizing",
+              "code": "font-optical-sizing",
+              "cat": "text"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/font-size",
+              "text": "font-size",
+              "code": "font-size",
+              "cat": "text"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/font-size-adjust",
+              "text": "font-size-adjust",
+              "code": "font-size-adjust",
+              "cat": "text"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/font-stretch",
+              "text": "font-stretch",
+              "code": "font-stretch",
+              "cat": "text"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/font-style",
+              "text": "font-style",
+              "code": "font-style",
+              "cat": "text"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/font-synthesis",
+              "text": "font-synthesis",
+              "code": "font-synthesis",
+              "cat": "text"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/font-variant",
+              "text": "font-variant",
+              "code": "font-variant",
+              "cat": "text"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/font-variant-alternates",
+              "text": "font-variant-alternates",
+              "code": "font-variant-alternates",
+              "cat": "text"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/font-variant-caps",
+              "text": "font-variant-caps",
+              "code": "font-variant-caps",
+              "cat": "text"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/font-variant-east-asian",
+              "text": "font-variant-east-asian",
+              "code": "font-variant-east-asian",
+              "cat": "text"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/font-variant-ligatures",
+              "text": "font-variant-ligatures",
+              "code": "font-variant-ligatures",
+              "cat": "text"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/font-variant-numeric",
+              "text": "font-variant-numeric",
+              "code": "font-variant-numeric",
+              "cat": "text"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/font-variant-position",
+              "text": "font-variant-position",
+              "code": "font-variant-position",
+              "cat": "text"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/font-variation-settings",
+              "text": "font-variation-settings",
+              "code": "font-variation-settings",
+              "cat": "text"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/font-weight",
+              "text": "font-weight",
+              "code": "font-weight",
+              "cat": "text"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/forced-color-adjust",
+              "text": "forced-color-adjust",
+              "code": "forced-color-adjust",
+              "cat": "color"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/angle#grad",
+              "text": "angle#grad",
+              "code": "angle#grad",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/gap",
+              "text": "gap",
+              "code": "gap",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/grid",
+              "text": "grid",
+              "code": "grid",
+              "cat": "positioning"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/grid-area",
+              "text": "grid-area",
+              "code": "grid-area",
+              "cat": "positioning"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/grid-auto-columns",
+              "text": "grid-auto-columns",
+              "code": "grid-auto-columns",
+              "cat": "positioning"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/grid-auto-flow",
+              "text": "grid-auto-flow",
+              "code": "grid-auto-flow",
+              "cat": "positioning"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/grid-auto-rows",
+              "text": "grid-auto-rows",
+              "code": "grid-auto-rows",
+              "cat": "positioning"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/grid-column",
+              "text": "grid-column",
+              "code": "grid-column",
+              "cat": "positioning"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/grid-column-end",
+              "text": "grid-column-end",
+              "code": "grid-column-end",
+              "cat": "positioning"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/grid-column-start",
+              "text": "grid-column-start",
+              "code": "grid-column-start",
+              "cat": "positioning"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/grid-row",
+              "text": "grid-row",
+              "code": "grid-row",
+              "cat": "positioning"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/grid-row-end",
+              "text": "grid-row-end",
+              "code": "grid-row-end",
+              "cat": "positioning"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/grid-row-start",
+              "text": "grid-row-start",
+              "code": "grid-row-start",
+              "cat": "positioning"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template",
+              "text": "grid-template",
+              "code": "grid-template",
+              "cat": "positioning"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-areas",
+              "text": "grid-template-areas",
+              "code": "grid-template-areas",
+              "cat": "positioning"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns",
+              "text": "grid-template-columns",
+              "code": "grid-template-columns",
+              "cat": "positioning"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-rows",
+              "text": "grid-template-rows",
+              "code": "grid-template-rows",
+              "cat": "positioning"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/frequency#hz",
+              "text": "frequency#Hz",
+              "code": "frequency#Hz",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/hanging-punctuation",
+              "text": "hanging-punctuation",
+              "code": "hanging-punctuation",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/height",
+              "text": "height",
+              "code": "height",
+              "cat": "dimensions"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/hyphenate-character",
+              "text": "hyphenate-character",
+              "code": "hyphenate-character",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/hyphens",
+              "text": "hyphens",
+              "code": "hyphens",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/image-orientation",
+              "text": "image-orientation",
+              "code": "image-orientation",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/image-rendering",
+              "text": "image-rendering",
+              "code": "image-rendering",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/image-resolution",
+              "text": "image-resolution",
+              "code": "image-resolution",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/inherit",
+              "text": "inherit",
+              "code": "inherit",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/initial",
+              "text": "initial",
+              "code": "initial",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/initial-letter",
+              "text": "initial-letter",
+              "code": "initial-letter",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/initial-letter-align",
+              "text": "initial-letter-align",
+              "code": "initial-letter-align",
+              "cat": "positioning"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/inline-size",
+              "text": "inline-size",
+              "code": "inline-size",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/inset",
+              "text": "inset",
+              "code": "inset",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/inset-block",
+              "text": "inset-block",
+              "code": "inset-block",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/inset-block-end",
+              "text": "inset-block-end",
+              "code": "inset-block-end",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/inset-block-start",
+              "text": "inset-block-start",
+              "code": "inset-block-start",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/inset-inline",
+              "text": "inset-inline",
+              "code": "inset-inline",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/inset-inline-end",
+              "text": "inset-inline-end",
+              "code": "inset-inline-end",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/inset-inline-start",
+              "text": "inset-inline-start",
+              "code": "inset-inline-start",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/isolation",
+              "text": "isolation",
+              "code": "isolation",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/length#ic",
+              "text": "length#ic",
+              "code": "length#ic",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/length#in",
+              "text": "length#in",
+              "code": "length#in",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/justify-content",
+              "text": "justify-content",
+              "code": "justify-content",
+              "cat": "positioning"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/justify-items",
+              "text": "justify-items",
+              "code": "justify-items",
+              "cat": "positioning"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/justify-self",
+              "text": "justify-self",
+              "code": "justify-self",
+              "cat": "positioning"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/justify-tracks",
+              "text": "justify-tracks",
+              "code": "justify-tracks",
+              "cat": "positioning"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/frequency#khz",
+              "text": "frequency#kHz",
+              "code": "frequency#kHz",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/left",
+              "text": "left",
+              "code": "left",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/letter-spacing",
+              "text": "letter-spacing",
+              "code": "letter-spacing",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/line-break",
+              "text": "line-break",
+              "code": "line-break",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/line-height",
+              "text": "line-height",
+              "code": "line-height",
+              "cat": "dimensions"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/line-height-step",
+              "text": "line-height-step",
+              "code": "line-height-step",
+              "cat": "dimensions"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/list-style",
+              "text": "list-style",
+              "code": "list-style",
+              "cat": "list"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/list-style-image",
+              "text": "list-style-image",
+              "code": "list-style-image",
+              "cat": "list"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/list-style-position",
+              "text": "list-style-position",
+              "code": "list-style-position",
+              "cat": "list"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/list-style-type",
+              "text": "list-style-type",
+              "code": "list-style-type",
+              "cat": "list"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/length#mm",
+              "text": "length#mm",
+              "code": "length#mm",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/margin",
+              "text": "margin",
+              "code": "margin",
+              "cat": "spacing"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/margin-block",
+              "text": "margin-block",
+              "code": "margin-block",
+              "cat": "spacing"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/margin-block-end",
+              "text": "margin-block-end",
+              "code": "margin-block-end",
+              "cat": "spacing"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/margin-block-start",
+              "text": "margin-block-start",
+              "code": "margin-block-start",
+              "cat": "spacing"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/margin-bottom",
+              "text": "margin-bottom",
+              "code": "margin-bottom",
+              "cat": "spacing"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/margin-inline",
+              "text": "margin-inline",
+              "code": "margin-inline",
+              "cat": "spacing"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/margin-inline-end",
+              "text": "margin-inline-end",
+              "code": "margin-inline-end",
+              "cat": "spacing"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/margin-inline-start",
+              "text": "margin-inline-start",
+              "code": "margin-inline-start",
+              "cat": "spacing"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/margin-left",
+              "text": "margin-left",
+              "code": "margin-left",
+              "cat": "spacing"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/margin-right",
+              "text": "margin-right",
+              "code": "margin-right",
+              "cat": "spacing"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/margin-top",
+              "text": "margin-top",
+              "code": "margin-top",
+              "cat": "spacing"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/margin-trim",
+              "text": "margin-trim",
+              "code": "margin-trim",
+              "cat": "spacing"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/mask",
+              "text": "mask",
+              "code": "mask",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/mask-border",
+              "text": "mask-border",
+              "code": "mask-border",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/mask-border-mode",
+              "text": "mask-border-mode",
+              "code": "mask-border-mode",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/mask-border-outset",
+              "text": "mask-border-outset",
+              "code": "mask-border-outset",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/mask-border-repeat",
+              "text": "mask-border-repeat",
+              "code": "mask-border-repeat",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/mask-border-slice",
+              "text": "mask-border-slice",
+              "code": "mask-border-slice",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/mask-border-source",
+              "text": "mask-border-source",
+              "code": "mask-border-source",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/mask-border-width",
+              "text": "mask-border-width",
+              "code": "mask-border-width",
+              "cat": "border"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/mask-clip",
+              "text": "mask-clip",
+              "code": "mask-clip",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/mask-composite",
+              "text": "mask-composite",
+              "code": "mask-composite",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/mask-image",
+              "text": "mask-image",
+              "code": "mask-image",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/mask-mode",
+              "text": "mask-mode",
+              "code": "mask-mode",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/mask-origin",
+              "text": "mask-origin",
+              "code": "mask-origin",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/mask-position",
+              "text": "mask-position",
+              "code": "mask-position",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/mask-repeat",
+              "text": "mask-repeat",
+              "code": "mask-repeat",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/mask-size",
+              "text": "mask-size",
+              "code": "mask-size",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/mask-type",
+              "text": "mask-type",
+              "code": "mask-type",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/masonry-auto-flow",
+              "text": "masonry-auto-flow",
+              "code": "masonry-auto-flow",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/math-style",
+              "text": "math-style",
+              "code": "math-style",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/max-block-size",
+              "text": "max-block-size",
+              "code": "max-block-size",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/max-height",
+              "text": "max-height",
+              "code": "max-height",
+              "cat": "dimensions"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/max-inline-size",
+              "text": "max-inline-size",
+              "code": "max-inline-size",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/max-width",
+              "text": "max-width",
+              "code": "max-width",
+              "cat": "dimensions"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/min-block-size",
+              "text": "min-block-size",
+              "code": "min-block-size",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/min-height",
+              "text": "min-height",
+              "code": "min-height",
+              "cat": "dimensions"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/min-inline-size",
+              "text": "min-inline-size",
+              "code": "min-inline-size",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/min-width",
+              "text": "min-width",
+              "code": "min-width",
+              "cat": "dimensions"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/mix-blend-mode",
+              "text": "mix-blend-mode",
+              "code": "mix-blend-mode",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/time#ms",
+              "text": "time#ms",
+              "code": "time#ms",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit",
+              "text": "object-fit",
+              "code": "object-fit",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/object-position",
+              "text": "object-position",
+              "code": "object-position",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/offset",
+              "text": "offset",
+              "code": "offset",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/offset-anchor",
+              "text": "offset-anchor",
+              "code": "offset-anchor",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/offset-distance",
+              "text": "offset-distance",
+              "code": "offset-distance",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/offset-path",
+              "text": "offset-path",
+              "code": "offset-path",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/offset-position",
+              "text": "offset-position",
+              "code": "offset-position",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/offset-rotate",
+              "text": "offset-rotate",
+              "code": "offset-rotate",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/opacity",
+              "text": "opacity",
+              "code": "opacity",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/order",
+              "text": "order",
+              "code": "order",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/orphans",
+              "text": "orphans",
+              "code": "orphans",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/outline",
+              "text": "outline",
+              "code": "outline",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/outline-color",
+              "text": "outline-color",
+              "code": "outline-color",
+              "cat": "color"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/outline-offset",
+              "text": "outline-offset",
+              "code": "outline-offset",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/outline-style",
+              "text": "outline-style",
+              "code": "outline-style",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/outline-width",
+              "text": "outline-width",
+              "code": "outline-width",
+              "cat": "dimensions"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/overflow",
+              "text": "overflow",
+              "code": "overflow",
+              "cat": "scroll"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/overflow-anchor",
+              "text": "overflow-anchor",
+              "code": "overflow-anchor",
+              "cat": "scroll"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/overflow-block",
+              "text": "overflow-block",
+              "code": "overflow-block",
+              "cat": "scroll"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/overflow-clip-margin",
+              "text": "overflow-clip-margin",
+              "code": "overflow-clip-margin",
+              "cat": "scroll"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/overflow-inline",
+              "text": "overflow-inline",
+              "code": "overflow-inline",
+              "cat": "scroll"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/overflow-wrap",
+              "text": "overflow-wrap",
+              "code": "overflow-wrap",
+              "cat": "scroll"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/overflow-x",
+              "text": "overflow-x",
+              "code": "overflow-x",
+              "cat": "scroll"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/overflow-y",
+              "text": "overflow-y",
+              "code": "overflow-y",
+              "cat": "scroll"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/overscroll-behavior",
+              "text": "overscroll-behavior",
+              "code": "overscroll-behavior",
+              "cat": "scroll"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/overscroll-behavior-block",
+              "text": "overscroll-behavior-block",
+              "code": "overscroll-behavior-block",
+              "cat": "scroll"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/overscroll-behavior-inline",
+              "text": "overscroll-behavior-inline",
+              "code": "overscroll-behavior-inline",
+              "cat": "scroll"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/overscroll-behavior-x",
+              "text": "overscroll-behavior-x",
+              "code": "overscroll-behavior-x",
+              "cat": "scroll"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/overscroll-behavior-y",
+              "text": "overscroll-behavior-y",
+              "code": "overscroll-behavior-y",
+              "cat": "scroll"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes",
+              "text": "Pseudo-classes",
+              "code": "Pseudo-classes",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-elements",
+              "text": "Pseudo-elements",
+              "code": "Pseudo-elements",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/length#pc",
+              "text": "length#pc",
+              "code": "length#pc",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/length#pt",
+              "text": "length#pt",
+              "code": "length#pt",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/length#px",
+              "text": "length#px",
+              "code": "length#px",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/padding",
+              "text": "padding",
+              "code": "padding",
+              "cat": "spacing"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/padding-block",
+              "text": "padding-block",
+              "code": "padding-block",
+              "cat": "spacing"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/padding-block-end",
+              "text": "padding-block-end",
+              "code": "padding-block-end",
+              "cat": "spacing"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/padding-block-start",
+              "text": "padding-block-start",
+              "code": "padding-block-start",
+              "cat": "spacing"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/padding-bottom",
+              "text": "padding-bottom",
+              "code": "padding-bottom",
+              "cat": "spacing"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/padding-inline",
+              "text": "padding-inline",
+              "code": "padding-inline",
+              "cat": "spacing"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/padding-inline-end",
+              "text": "padding-inline-end",
+              "code": "padding-inline-end",
+              "cat": "spacing"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/padding-inline-start",
+              "text": "padding-inline-start",
+              "code": "padding-inline-start",
+              "cat": "spacing"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/padding-left",
+              "text": "padding-left",
+              "code": "padding-left",
+              "cat": "spacing"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/padding-right",
+              "text": "padding-right",
+              "code": "padding-right",
+              "cat": "spacing"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/padding-top",
+              "text": "padding-top",
+              "code": "padding-top",
+              "cat": "spacing"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/page-break-after",
+              "text": "page-break-after",
+              "code": "page-break-after",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/page-break-before",
+              "text": "page-break-before",
+              "code": "page-break-before",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/page-break-inside",
+              "text": "page-break-inside",
+              "code": "page-break-inside",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/paint-order",
+              "text": "paint-order",
+              "code": "paint-order",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/perspective",
+              "text": "perspective",
+              "code": "perspective",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/perspective-origin",
+              "text": "perspective-origin",
+              "code": "perspective-origin",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/place-content",
+              "text": "place-content",
+              "code": "place-content",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/place-items",
+              "text": "place-items",
+              "code": "place-items",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/place-self",
+              "text": "place-self",
+              "code": "place-self",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/pointer-events",
+              "text": "pointer-events",
+              "code": "pointer-events",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/position",
+              "text": "position",
+              "code": "position",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/print-color-adjust",
+              "text": "print-color-adjust",
+              "code": "print-color-adjust",
+              "cat": "color"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/length#q",
+              "text": "length#Q",
+              "code": "length#Q",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/quotes",
+              "text": "quotes",
+              "code": "quotes",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/angle#rad",
+              "text": "angle#rad",
+              "code": "angle#rad",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/length#rem",
+              "text": "length#rem",
+              "code": "length#rem",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/resize",
+              "text": "resize",
+              "code": "resize",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/revert",
+              "text": "revert",
+              "code": "revert",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/right",
+              "text": "right",
+              "code": "right",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/rotate",
+              "text": "rotate",
+              "code": "rotate",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/row-gap",
+              "text": "row-gap",
+              "code": "row-gap",
+              "cat": "positioning"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/ruby-align",
+              "text": "ruby-align",
+              "code": "ruby-align",
+              "cat": "positioning"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/ruby-position",
+              "text": "ruby-position",
+              "code": "ruby-position",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/scale",
+              "text": "scale",
+              "code": "scale",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-behavior",
+              "text": "scroll-behavior",
+              "code": "scroll-behavior",
+              "cat": "scroll"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-margin",
+              "text": "scroll-margin",
+              "code": "scroll-margin",
+              "cat": "scroll"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-margin-block",
+              "text": "scroll-margin-block",
+              "code": "scroll-margin-block",
+              "cat": "scroll"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-margin-block-end",
+              "text": "scroll-margin-block-end",
+              "code": "scroll-margin-block-end",
+              "cat": "scroll"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-margin-block-start",
+              "text": "scroll-margin-block-start",
+              "code": "scroll-margin-block-start",
+              "cat": "scroll"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-margin-bottom",
+              "text": "scroll-margin-bottom",
+              "code": "scroll-margin-bottom",
+              "cat": "scroll"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-margin-inline",
+              "text": "scroll-margin-inline",
+              "code": "scroll-margin-inline",
+              "cat": "scroll"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-margin-inline-end",
+              "text": "scroll-margin-inline-end",
+              "code": "scroll-margin-inline-end",
+              "cat": "scroll"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-margin-inline-start",
+              "text": "scroll-margin-inline-start",
+              "code": "scroll-margin-inline-start",
+              "cat": "scroll"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-margin-left",
+              "text": "scroll-margin-left",
+              "code": "scroll-margin-left",
+              "cat": "scroll"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-margin-right",
+              "text": "scroll-margin-right",
+              "code": "scroll-margin-right",
+              "cat": "scroll"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-margin-top",
+              "text": "scroll-margin-top",
+              "code": "scroll-margin-top",
+              "cat": "scroll"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-padding",
+              "text": "scroll-padding",
+              "code": "scroll-padding",
+              "cat": "scroll"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-padding-block",
+              "text": "scroll-padding-block",
+              "code": "scroll-padding-block",
+              "cat": "scroll"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-padding-block-end",
+              "text": "scroll-padding-block-end",
+              "code": "scroll-padding-block-end",
+              "cat": "scroll"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-padding-block-start",
+              "text": "scroll-padding-block-start",
+              "code": "scroll-padding-block-start",
+              "cat": "scroll"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-padding-bottom",
+              "text": "scroll-padding-bottom",
+              "code": "scroll-padding-bottom",
+              "cat": "scroll"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-padding-inline",
+              "text": "scroll-padding-inline",
+              "code": "scroll-padding-inline",
+              "cat": "scroll"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-padding-inline-end",
+              "text": "scroll-padding-inline-end",
+              "code": "scroll-padding-inline-end",
+              "cat": "scroll"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-padding-inline-start",
+              "text": "scroll-padding-inline-start",
+              "code": "scroll-padding-inline-start",
+              "cat": "scroll"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-padding-left",
+              "text": "scroll-padding-left",
+              "code": "scroll-padding-left",
+              "cat": "scroll"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-padding-right",
+              "text": "scroll-padding-right",
+              "code": "scroll-padding-right",
+              "cat": "scroll"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-padding-top",
+              "text": "scroll-padding-top",
+              "code": "scroll-padding-top",
+              "cat": "scroll"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-snap-align",
+              "text": "scroll-snap-align",
+              "code": "scroll-snap-align",
+              "cat": "scroll"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-snap-stop",
+              "text": "scroll-snap-stop",
+              "code": "scroll-snap-stop",
+              "cat": "scroll"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-snap-type",
+              "text": "scroll-snap-type",
+              "code": "scroll-snap-type",
+              "cat": "scroll"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/scrollbar-color",
+              "text": "scrollbar-color",
+              "code": "scrollbar-color",
+              "cat": "scroll"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/scrollbar-gutter",
+              "text": "scrollbar-gutter",
+              "code": "scrollbar-gutter",
+              "cat": "scroll"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/scrollbar-width",
+              "text": "scrollbar-width",
+              "code": "scrollbar-width",
+              "cat": "scroll"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/shape-image-threshold",
+              "text": "shape-image-threshold",
+              "code": "shape-image-threshold",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/shape-margin",
+              "text": "shape-margin",
+              "code": "shape-margin",
+              "cat": "spacing"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/shape-outside",
+              "text": "shape-outside",
+              "code": "shape-outside",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/time#s",
+              "text": "time#s",
+              "code": "time#s",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/angle#turn",
+              "text": "angle#turn",
+              "code": "angle#turn",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/tab-size",
+              "text": "tab-size",
+              "code": "tab-size",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/table-layout",
+              "text": "table-layout",
+              "code": "table-layout",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/text-align",
+              "text": "text-align",
+              "code": "text-align",
+              "cat": "positioning"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/text-align-last",
+              "text": "text-align-last",
+              "code": "text-align-last",
+              "cat": "positioning"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/text-combine-upright",
+              "text": "text-combine-upright",
+              "code": "text-combine-upright",
+              "cat": "text"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/text-decoration",
+              "text": "text-decoration",
+              "code": "text-decoration",
+              "cat": "text"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/text-decoration-color",
+              "text": "text-decoration-color",
+              "code": "text-decoration-color",
+              "cat": "text"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/text-decoration-line",
+              "text": "text-decoration-line",
+              "code": "text-decoration-line",
+              "cat": "text"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/text-decoration-skip",
+              "text": "text-decoration-skip",
+              "code": "text-decoration-skip",
+              "cat": "text"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/text-decoration-skip-ink",
+              "text": "text-decoration-skip-ink",
+              "code": "text-decoration-skip-ink",
+              "cat": "text"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/text-decoration-style",
+              "text": "text-decoration-style",
+              "code": "text-decoration-style",
+              "cat": "text"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/text-decoration-thickness",
+              "text": "text-decoration-thickness",
+              "code": "text-decoration-thickness",
+              "cat": "text"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/text-emphasis",
+              "text": "text-emphasis",
+              "code": "text-emphasis",
+              "cat": "text"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/text-emphasis-color",
+              "text": "text-emphasis-color",
+              "code": "text-emphasis-color",
+              "cat": "text"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/text-emphasis-position",
+              "text": "text-emphasis-position",
+              "code": "text-emphasis-position",
+              "cat": "text"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/text-emphasis-style",
+              "text": "text-emphasis-style",
+              "code": "text-emphasis-style",
+              "cat": "text"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/text-indent",
+              "text": "text-indent",
+              "code": "text-indent",
+              "cat": "text"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/text-justify",
+              "text": "text-justify",
+              "code": "text-justify",
+              "cat": "positioning"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/text-orientation",
+              "text": "text-orientation",
+              "code": "text-orientation",
+              "cat": "text"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/text-overflow",
+              "text": "text-overflow",
+              "code": "text-overflow",
+              "cat": "scroll"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/text-rendering",
+              "text": "text-rendering",
+              "code": "text-rendering",
+              "cat": "text"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/text-shadow",
+              "text": "text-shadow",
+              "code": "text-shadow",
+              "cat": "text"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/text-size-adjust",
+              "text": "text-size-adjust",
+              "code": "text-size-adjust",
+              "cat": "text"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/text-transform",
+              "text": "text-transform",
+              "code": "text-transform",
+              "cat": "text"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/text-underline-offset",
+              "text": "text-underline-offset",
+              "code": "text-underline-offset",
+              "cat": "text"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/text-underline-position",
+              "text": "text-underline-position",
+              "code": "text-underline-position",
+              "cat": "text"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/top",
+              "text": "top",
+              "code": "top",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/touch-action",
+              "text": "touch-action",
+              "code": "touch-action",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/transform",
+              "text": "transform",
+              "code": "transform",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/transform-box",
+              "text": "transform-box",
+              "code": "transform-box",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/transform-origin",
+              "text": "transform-origin",
+              "code": "transform-origin",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/transform-style",
+              "text": "transform-style",
+              "code": "transform-style",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/transition",
+              "text": "transition",
+              "code": "transition",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/transition-delay",
+              "text": "transition-delay",
+              "code": "transition-delay",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/transition-duration",
+              "text": "transition-duration",
+              "code": "transition-duration",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/transition-property",
+              "text": "transition-property",
+              "code": "transition-property",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/transition-timing-function",
+              "text": "transition-timing-function",
+              "code": "transition-timing-function",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/translate",
+              "text": "translate",
+              "code": "translate",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/unicode-bidi",
+              "text": "unicode-bidi",
+              "code": "unicode-bidi",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/unset",
+              "text": "unset",
+              "code": "unset",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/user-select",
+              "text": "user-select",
+              "code": "user-select",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/length#vh",
+              "text": "length#vh",
+              "code": "length#vh",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/length#vmax",
+              "text": "length#vmax",
+              "code": "length#vmax",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/length#vmin",
+              "text": "length#vmin",
+              "code": "length#vmin",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/length#vw",
+              "text": "length#vw",
+              "code": "length#vw",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/vertical-align",
+              "text": "vertical-align",
+              "code": "vertical-align",
+              "cat": "positioning"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/visibility",
+              "text": "visibility",
+              "code": "visibility",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/white-space",
+              "text": "white-space",
+              "code": "white-space",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/widows",
+              "text": "widows",
+              "code": "widows",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/width",
+              "text": "width",
+              "code": "width",
+              "cat": "dimensions"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/will-change",
+              "text": "will-change",
+              "code": "will-change",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/word-break",
+              "text": "word-break",
+              "code": "word-break",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/word-spacing",
+              "text": "word-spacing",
+              "code": "word-spacing",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/overflow-wrap",
+              "text": "word-wrap",
+              "code": "word-wrap",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/writing-mode",
+              "text": "writing-mode",
+              "code": "writing-mode",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/resolution#x",
+              "text": "resolution#x",
+              "code": "resolution#x",
+              "cat": ""
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/z-index",
+              "text": "z-index",
+              "code": "z-index",
+              "cat": ""
+            }
+          ]
+        },
+        {
+          "text": "Pseudo classes",
+          "code": "pseudos",
+          "items": [
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:active",
+              "text": ":active",
+              "code": ":active"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/::after",
+              "text": "::after (:after)",
+              "code": "::after (:after)"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:any-link",
+              "text": ":any-link",
+              "code": ":any-link"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/::backdrop",
+              "text": "::backdrop",
+              "code": "::backdrop"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/::before",
+              "text": "::before (:before)",
+              "code": "::before (:before)"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:blank",
+              "text": ":blank",
+              "code": ":blank"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:checked",
+              "text": ":checked",
+              "code": ":checked"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/::cue",
+              "text": "::cue",
+              "code": "::cue"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/::cue-region",
+              "text": "::cue-region",
+              "code": "::cue-region"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/API/WebVTT_API",
+              "text": ":current",
+              "code": ":current"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:default",
+              "text": ":default",
+              "code": ":default"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:defined",
+              "text": ":defined",
+              "code": ":defined"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:dir",
+              "text": ":dir",
+              "code": ":dir"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:disabled",
+              "text": ":disabled",
+              "code": ":disabled"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:empty",
+              "text": ":empty",
+              "code": ":empty"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:enabled",
+              "text": ":enabled",
+              "code": ":enabled"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:first",
+              "text": ":first",
+              "code": ":first"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:first-child",
+              "text": ":first-child",
+              "code": ":first-child"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/::first-letter",
+              "text": "::first-letter (:first-letter)",
+              "code": "::first-letter (:first-letter)"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/::first-line",
+              "text": "::first-line (:first-line)",
+              "code": "::first-line (:first-line)"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:first-of-type",
+              "text": ":first-of-type",
+              "code": ":first-of-type"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:focus",
+              "text": ":focus",
+              "code": ":focus"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:focus-visible",
+              "text": ":focus-visible",
+              "code": ":focus-visible"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:focus-within",
+              "text": ":focus-within",
+              "code": ":focus-within"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:fullscreen",
+              "text": ":fullscreen",
+              "code": ":fullscreen"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:future",
+              "text": ":future",
+              "code": ":future"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/::grammar-error",
+              "text": "::grammar-error",
+              "code": "::grammar-error"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:has",
+              "text": ":has",
+              "code": ":has"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:host_function",
+              "text": ":host()",
+              "code": ":host()"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:hover",
+              "text": ":hover",
+              "code": ":hover"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:in-range",
+              "text": ":in-range",
+              "code": ":in-range"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:indeterminate",
+              "text": ":indeterminate",
+              "code": ":indeterminate"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:invalid",
+              "text": ":invalid",
+              "code": ":invalid"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:is",
+              "text": ":is",
+              "code": ":is"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:lang",
+              "text": ":lang",
+              "code": ":lang"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:last-child",
+              "text": ":last-child",
+              "code": ":last-child"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:last-of-type",
+              "text": ":last-of-type",
+              "code": ":last-of-type"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:left",
+              "text": ":left",
+              "code": ":left"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:link",
+              "text": ":link",
+              "code": ":link"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:local-link",
+              "text": ":local-link",
+              "code": ":local-link"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/::marker",
+              "text": "::marker",
+              "code": "::marker"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:not",
+              "text": ":not",
+              "code": ":not"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:nth-child",
+              "text": ":nth-child",
+              "code": ":nth-child"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:nth-col",
+              "text": ":nth-col",
+              "code": ":nth-col"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:nth-last-child",
+              "text": ":nth-last-child",
+              "code": ":nth-last-child"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:nth-last-col",
+              "text": ":nth-last-col",
+              "code": ":nth-last-col"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:nth-last-of-type",
+              "text": ":nth-last-of-type",
+              "code": ":nth-last-of-type"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:nth-of-type",
+              "text": ":nth-of-type",
+              "code": ":nth-of-type"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:only-child",
+              "text": ":only-child",
+              "code": ":only-child"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:only-of-type",
+              "text": ":only-of-type",
+              "code": ":only-of-type"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:optional",
+              "text": ":optional",
+              "code": ":optional"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:out-of-range",
+              "text": ":out-of-range",
+              "code": ":out-of-range"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/::part",
+              "text": "::part",
+              "code": "::part"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:past",
+              "text": ":past",
+              "code": ":past"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:paused",
+              "text": ":paused",
+              "code": ":paused"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:picture-in-picture",
+              "text": ":picture-in-picture",
+              "code": ":picture-in-picture"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/::placeholder",
+              "text": "::placeholder",
+              "code": "::placeholder"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:placeholder-shown",
+              "text": ":placeholder-shown",
+              "code": ":placeholder-shown"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:playing",
+              "text": ":playing",
+              "code": ":playing"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:read-only",
+              "text": ":read-only",
+              "code": ":read-only"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:read-write",
+              "text": ":read-write",
+              "code": ":read-write"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:required",
+              "text": ":required",
+              "code": ":required"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:right",
+              "text": ":right",
+              "code": ":right"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:root",
+              "text": ":root",
+              "code": ":root"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:scope",
+              "text": ":scope",
+              "code": ":scope"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/::selection",
+              "text": "::selection",
+              "code": "::selection"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/::slotted",
+              "text": "::slotted",
+              "code": "::slotted"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/::spelling-error",
+              "text": "::spelling-error",
+              "code": "::spelling-error"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:target",
+              "text": ":target",
+              "code": ":target"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/::target-text",
+              "text": "::target-text",
+              "code": "::target-text"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:target-within",
+              "text": ":target-within",
+              "code": ":target-within"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:user-invalid",
+              "text": ":user-invalid",
+              "code": ":user-invalid"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/web/css/:user-valid",
+              "text": ":user-valid",
+              "code": ":user-valid"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:valid",
+              "text": ":valid",
+              "code": ":valid"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:visited",
+              "text": ":visited",
+              "code": ":visited"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/:where",
+              "text": ":where",
+              "code": ":where"
+            }
+          ]
+        },
+        {
+          "text": "Functions",
+          "code": "fns",
+          "items": [
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/@counter-style/additive-symbols",
+              "text": "additive-symbols ",
+              "code": "additive-symbols "
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/font-variant-alternates#annotation()",
+              "text": "annotation",
+              "code": "annotation"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/ascent-override",
+              "text": "ascent-override ",
+              "code": "ascent-override "
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/attr",
+              "text": "attr",
+              "code": "attr"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/filter-function/blur",
+              "text": "blur",
+              "code": "blur"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/filter-function/brightness",
+              "text": "brightness",
+              "code": "brightness"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/calc",
+              "text": "calc",
+              "code": "calc"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/font-variant-alternates#character-variant()",
+              "text": "character-variant",
+              "code": "character-variant"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/basic-shape#circle()",
+              "text": "circle",
+              "code": "circle"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/clamp",
+              "text": "clamp",
+              "code": "clamp"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/gradient/conic-gradient",
+              "text": "conic-gradient",
+              "code": "conic-gradient"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/filter-function/contrast",
+              "text": "contrast",
+              "code": "contrast"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/counters",
+              "text": "counters",
+              "code": "counters"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/cross-fade",
+              "text": "cross-fade",
+              "code": "cross-fade"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/easing-function#cubic-bezier()",
+              "text": "cubic-bezier",
+              "code": "cubic-bezier"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/descent-override",
+              "text": "descent-override ",
+              "code": "descent-override "
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/filter-function/drop-shadow",
+              "text": "drop-shadow",
+              "code": "drop-shadow"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/element",
+              "text": "element",
+              "code": "element"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/basic-shape#ellipse()",
+              "text": "ellipse",
+              "code": "ellipse"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/env",
+              "text": "env",
+              "code": "env"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/@counter-style/fallback",
+              "text": "fallback ",
+              "code": "fallback "
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/fit-content",
+              "text": "fit-content",
+              "code": "fit-content"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display",
+              "text": "font-display ",
+              "code": "font-display "
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-family",
+              "text": "font-family ",
+              "code": "font-family "
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-stretch",
+              "text": "font-stretch ",
+              "code": "font-stretch "
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-style",
+              "text": "font-style ",
+              "code": "font-style "
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-variant",
+              "text": "font-variant ",
+              "code": "font-variant "
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-variation-settings",
+              "text": "font-variation-settings ",
+              "code": "font-variation-settings "
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-weight",
+              "text": "font-weight ",
+              "code": "font-weight "
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/src#format()",
+              "text": "format",
+              "code": "format"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/filter-function/grayscale",
+              "text": "grayscale",
+              "code": "grayscale"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/@viewport",
+              "text": "height ",
+              "code": "height "
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/color_value#hsl()",
+              "text": "hsl",
+              "code": "hsl"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/color_value#hsla()",
+              "text": "hsla",
+              "code": "hsla"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/filter-function/hue-rotate",
+              "text": "hue-rotate",
+              "code": "hue-rotate"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/image#the_image()_functional_notation",
+              "text": "image",
+              "code": "image"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/image/image-set",
+              "text": "image-set",
+              "code": "image-set"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/@property/inherits",
+              "text": "inherits ",
+              "code": "inherits "
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/@property/initial-value",
+              "text": "initial-value ",
+              "code": "initial-value "
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/basic-shape#inset()",
+              "text": "inset",
+              "code": "inset"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/filter-function/invert",
+              "text": "invert",
+              "code": "invert"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/line-gap-override",
+              "text": "line-gap-override ",
+              "code": "line-gap-override "
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/gradient/linear-gradient",
+              "text": "linear-gradient",
+              "code": "linear-gradient"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/src#local()",
+              "text": "local",
+              "code": "local"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function/matrix",
+              "text": "matrix",
+              "code": "matrix"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function/matrix3d",
+              "text": "matrix3d",
+              "code": "matrix3d"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/max",
+              "text": "max",
+              "code": "max"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/@viewport",
+              "text": "max-height ",
+              "code": "max-height "
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/@viewport",
+              "text": "max-width ",
+              "code": "max-width "
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/@viewport",
+              "text": "max-zoom ",
+              "code": "max-zoom "
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/min",
+              "text": "min",
+              "code": "min"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/@viewport",
+              "text": "min-height ",
+              "code": "min-height "
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/@viewport",
+              "text": "min-width ",
+              "code": "min-width "
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/@viewport",
+              "text": "min-zoom ",
+              "code": "min-zoom "
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/minmax",
+              "text": "minmax",
+              "code": "minmax"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/@counter-style/negative",
+              "text": "negative ",
+              "code": "negative "
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/filter-function/opacity",
+              "text": "opacity",
+              "code": "opacity"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/@viewport",
+              "text": "orientation ",
+              "code": "orientation "
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/font-variant-alternates#ornaments()",
+              "text": "ornaments",
+              "code": "ornaments"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/@counter-style/pad",
+              "text": "pad ",
+              "code": "pad "
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/image/paint",
+              "text": "paint",
+              "code": "paint"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/path",
+              "text": "path",
+              "code": "path"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function/perspective",
+              "text": "perspective",
+              "code": "perspective"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/basic-shape#polygon()",
+              "text": "polygon",
+              "code": "polygon"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/@counter-style/prefix",
+              "text": "prefix ",
+              "code": "prefix "
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/gradient/radial-gradient",
+              "text": "radial-gradient",
+              "code": "radial-gradient"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/@counter-style/range",
+              "text": "range ",
+              "code": "range "
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/shape#rect()",
+              "text": "rect",
+              "code": "rect"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/repeat",
+              "text": "repeat",
+              "code": "repeat"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/gradient/repeating-linear-gradient",
+              "text": "repeating-linear-gradient",
+              "code": "repeating-linear-gradient"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/gradient/repeating-radial-gradient",
+              "text": "repeating-radial-gradient",
+              "code": "repeating-radial-gradient"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/color_value#rgb()",
+              "text": "rgb",
+              "code": "rgb"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/color_value#rgba()",
+              "text": "rgba",
+              "code": "rgba"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function/rotate",
+              "text": "rotate",
+              "code": "rotate"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function/rotate3d",
+              "text": "rotate3d",
+              "code": "rotate3d"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function/rotateX",
+              "text": "rotateX",
+              "code": "rotateX"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function/rotateY",
+              "text": "rotateY",
+              "code": "rotateY"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function/rotateZ",
+              "text": "rotateZ",
+              "code": "rotateZ"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/filter-function/saturate",
+              "text": "saturate",
+              "code": "saturate"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function/scale",
+              "text": "scale",
+              "code": "scale"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function/scale3d",
+              "text": "scale3d",
+              "code": "scale3d"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function/scaleX",
+              "text": "scaleX",
+              "code": "scaleX"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function/scaleY",
+              "text": "scaleY",
+              "code": "scaleY"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function/scaleZ",
+              "text": "scaleZ",
+              "code": "scaleZ"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/filter-function/sepia",
+              "text": "sepia",
+              "code": "sepia"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/@page/size",
+              "text": "size ",
+              "code": "size "
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/size-adjust",
+              "text": "size-adjust ",
+              "code": "size-adjust "
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function/skew",
+              "text": "skew",
+              "code": "skew"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function/skewX",
+              "text": "skewX",
+              "code": "skewX"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function/skewY",
+              "text": "skewY",
+              "code": "skewY"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/@counter-style/speak-as",
+              "text": "speak-as ",
+              "code": "speak-as "
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/src",
+              "text": "src ",
+              "code": "src "
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/easing-function#steps()",
+              "text": "steps",
+              "code": "steps"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/font-variant-alternates#styleset()",
+              "text": "styleset",
+              "code": "styleset"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/font-variant-alternates#stylistic()",
+              "text": "stylistic",
+              "code": "stylistic"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/@counter-style/suffix",
+              "text": "suffix ",
+              "code": "suffix "
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/font-variant-alternates#swash()",
+              "text": "swash",
+              "code": "swash"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/symbols",
+              "text": "symbols",
+              "code": "symbols"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/@property/syntax",
+              "text": "syntax ",
+              "code": "syntax "
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/@counter-style/system",
+              "text": "system ",
+              "code": "system "
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function/translate",
+              "text": "translate",
+              "code": "translate"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function/translate3d",
+              "text": "translate3d",
+              "code": "translate3d"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function/translateX",
+              "text": "translateX",
+              "code": "translateX"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function/translateY",
+              "text": "translateY",
+              "code": "translateY"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function/translateZ",
+              "text": "translateZ",
+              "code": "translateZ"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/unicode-range",
+              "text": "unicode-range ",
+              "code": "unicode-range "
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/url#the_url()_functional_notation",
+              "text": "url",
+              "code": "url"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/@viewport",
+              "text": "user-zoom ",
+              "code": "user-zoom "
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/var",
+              "text": "var",
+              "code": "var"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/@viewport",
+              "text": "viewport-fit ",
+              "code": "viewport-fit "
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/@viewport",
+              "text": "width ",
+              "code": "width "
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/@viewport",
+              "text": "zoom ",
+              "code": "zoom "
+            }
+          ]
+        },
+        {
+          "text": "Data types",
+          "code": "data",
+          "items": [
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/angle",
+              "text": "angle",
+              "code": "angle"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/angle-percentage",
+              "text": "angle-percentage",
+              "code": "angle-percentage"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/basic-shape",
+              "text": "basic-shape",
+              "code": "basic-shape"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/blend-mode",
+              "text": "blend-mode",
+              "code": "blend-mode"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/color_value",
+              "text": "color",
+              "code": "color"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/counter",
+              "text": "counter",
+              "code": "counter"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/custom-ident",
+              "text": "custom-ident",
+              "code": "custom-ident"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/dimension",
+              "text": "dimension",
+              "code": "dimension"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/display-box",
+              "text": "display-box",
+              "code": "display-box"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/display-inside",
+              "text": "display-inside",
+              "code": "display-inside"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/display-internal",
+              "text": "display-internal",
+              "code": "display-internal"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/display-legacy",
+              "text": "display-legacy",
+              "code": "display-legacy"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/display-listitem",
+              "text": "display-listitem",
+              "code": "display-listitem"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/display-outside",
+              "text": "display-outside",
+              "code": "display-outside"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/filter-function",
+              "text": "filter-function",
+              "code": "filter-function"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/flex_value",
+              "text": "flex",
+              "code": "flex"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/frequency",
+              "text": "frequency",
+              "code": "frequency"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/frequency-percentage",
+              "text": "frequency-percentage",
+              "code": "frequency-percentage"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/gradient",
+              "text": "gradient",
+              "code": "gradient"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/ident",
+              "text": "ident",
+              "code": "ident"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/image",
+              "text": "image",
+              "code": "image"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/integer",
+              "text": "integer",
+              "code": "integer"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/length",
+              "text": "length",
+              "code": "length"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/length-percentage",
+              "text": "length-percentage",
+              "code": "length-percentage"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/number",
+              "text": "number",
+              "code": "number"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/percentage",
+              "text": "percentage",
+              "code": "percentage"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/position_value",
+              "text": "position",
+              "code": "position"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/ratio",
+              "text": "ratio",
+              "code": "ratio"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/resolution",
+              "text": "resolution",
+              "code": "resolution"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/shape",
+              "text": "shape",
+              "code": "shape"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/string",
+              "text": "string",
+              "code": "string"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/time",
+              "text": "time",
+              "code": "time"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/time-percentage",
+              "text": "time-percentage",
+              "code": "time-percentage"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/easing-function",
+              "text": "timing-function",
+              "code": "timing-function"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function",
+              "text": "transform-function",
+              "code": "transform-function"
+            },
+            {
+              "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/url",
+              "text": "url",
+              "code": "url"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cfg": {
+        "show_code": 1,
         "show_value": 1,
         "show_alias": 1,
         "allow_children": 1,
