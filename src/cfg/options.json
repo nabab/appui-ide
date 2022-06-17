@@ -17,13 +17,27 @@
       "cfg": {
         "show_code": 1,
         "allow_children": 1,
-        "inheritance": "cascade",
-        "help": ""
       },
       "text": "CSS",
       "code": "css",
       "items": [
         {
+          "cfg": {
+            "show_code": 1,
+            "allow_children": 1,
+            "schema": [
+              {
+                "title": "URL",
+                "field": "url",
+                "type": "url"
+              },
+              {
+                "field": "cat",
+                "title": "Category",
+                "type": "string"
+              }
+            ]
+          },
           "text": "Properties",
           "code": "props",
           "items": [
@@ -2574,6 +2588,17 @@
           ]
         },
         {
+          "cfg": {
+            "show_code": 1,
+            "allow_children": 1,
+            "schema": [
+              {
+                "title": "URL",
+                "field": "url",
+                "type": "url"
+              }
+            ]
+          },
           "text": "Pseudo classes",
           "code": "pseudos",
           "items": [
@@ -2960,6 +2985,17 @@
           ]
         },
         {
+          "cfg": {
+            "show_code": 1,
+            "allow_children": 1,
+            "schema": [
+              {
+                "title": "URL",
+                "field": "url",
+                "type": "url"
+              }
+            ]
+          },
           "text": "Functions",
           "code": "fns",
           "items": [
@@ -3526,6 +3562,17 @@
           ]
         },
         {
+          "cfg": {
+            "show_code": 1,
+            "allow_children": 1,
+            "schema": [
+              {
+                "title": "URL",
+                "field": "url",
+                "type": "url"
+              }
+            ]
+          },
           "text": "Data types",
           "code": "data",
           "items": [
