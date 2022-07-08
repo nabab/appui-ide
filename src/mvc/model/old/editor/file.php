@@ -13,10 +13,13 @@ use bbn\Str;
  * @var $model \bbn\Mvc\Model
  */
 if ( !empty($model->data['url']) && isset($model->inc->ide) ){
+
+
   $url = $model->data['url'];
+ 
   //die(var_dump($model->data['url']));
   $rep = $model->inc->ide->repositoryFromUrl($model->data['url']);
-
+  
   $file = $model->inc->ide->urlToReal($model->data['url']);
   $route = '';
   //X::ddump("FILE", $file, $model->data['url'], $rep);
@@ -36,9 +39,9 @@ if ( !empty($model->data['url']) && isset($model->inc->ide) ){
   $f = $model->inc->ide->decipherPath($model->data['url']);
   //die(var_dump($f,$file, $model->data['url']));
   if ( is_array($repository) &&
-      !empty($model->inc->ide->isProject($model->data['url'])) ||
-      !empty($repository['project'])
-     ){
+    !empty($model->inc->ide->isProject($model->data['url'])) ||
+    !empty($repository['project'])
+  ){
     $tabs = [];
     $styleTabType = [];
     $project = $model->inc->ide->getType('bbn-project');
@@ -78,7 +81,7 @@ if ( !empty($model->data['url']) && isset($model->inc->ide) ){
 
   $res = [
     'isMVC' => $model->inc->ide->isMVCFromUrl(str_replace('/_end_', '', $url)),
-    // isComponent is understood by a single repo with components
+    // isComponent is understood by a single repo with components 
     // while isComponentByUrl is understood by the BBN project
     'isComponent' => $model->inc->ide->isComponent($repository) || $model->inc->ide->isComponentFromUrl(str_replace('/_end_', '', $url)),
     'isLib' => $model->inc->ide->isLibFromUrl(str_replace('/_end_', '', $url)),
@@ -115,37 +118,6 @@ if ( !empty($model->data['url']) && isset($model->inc->ide) ){
     $res['emptyTabs'] = $model->inc->ide->listTabsWithFile('components',  $path, $rep);
   }
 
-  $res['url'] = $model->data['baseURL'].'file/'.$model->data['url'];
-  $res['title'] = $model->data['title'];
-  if (!empty($model->data['styleTab'])) {
-    $idx = null;
-    if (!empty($model->data['isMVC'])) {
-      $idx = 'mvc';
-    }
-    elseif (!empty($model->data['isComponent'])) {
-      $idx = 'components';
-    }
-    elseif (!empty($model->data['isLib'])) {
-      $idx = 'lib';
-    }
-    elseif (empty($model->data['isMVC']) && empty($model->data['isComponent'])) {
-      $idx = 'cli';
-    }
-    if ($idx && $model->data['styleTab'][$idx]) {
-      if ($start = stripos($model->data['title'], '/')) {
-        $title = substr($model->data['title'],  $start+1);
-      }
-      //die(var_dump($idx,$ctrl->obj->data['styleTab']));
-      $fcolor = $model->data['styleTab'][$idx]['bcolor'];
-      $bcolor = $model->data['styleTab'][$idx]['icon'];
-      $icon = $model->data['styleTab'][$idx]['fcolor'];
-    }
-    unset($ctrl->obj->data['styleTab']);
-  }
-
-  return array_merge($res, [
-    'fcolor' => $fcolor,
-    'bcolor' => $bcolor,
-    'icon' => $icon
-  ]);
+  return $res;
 }
+return false;

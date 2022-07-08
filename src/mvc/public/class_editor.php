@@ -1,11 +1,7 @@
 <?php
-/**
- * What is my purpose?
- *
- **/
 
 use bbn\X;
 use bbn\Str;
 /** @var $ctrl \bbn\Mvc\Controller */
 
-$ctrl->combo('$url', true);
+$ctrl->combo(_("Class Editor"), true);

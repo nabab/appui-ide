@@ -10,46 +10,34 @@ use bbn\X;
 /**
  * @var $ctrl \bbn\Mvc\Controller
  */
+
 if ( !empty($ctrl->arguments) ){
-
-  if ( $ctrl->baseURL === APPUI_IDE_ROOT.'editor/' ){
-    $ctrl->data['url'] = implode('/', $ctrl->arguments);
-    //$ctrl->data['url'] = $ctrl->inc->ide->set_origin_for_use($ctrl->arguments);
-    $ctrl->data['routes'] = $ctrl->getRoutes();
-
-    $ctrl->obj->data = $ctrl->getModel();
-
-    $ctrl->obj->data['root'] = APPUI_IDE_ROOT;
-    $ctrl->obj->url = $ctrl->baseURL.'file/'.$ctrl->obj->data['url'];
-    $title = $ctrl->obj->data['title'];
-    if (!empty($ctrl->obj->data['styleTab'])) {
-      $idx = null;
-      if (!empty($ctrl->obj->data['isMVC'])) {
-        $idx = 'mvc';
-      }
-      elseif (!empty($ctrl->obj->data['isComponent'])) {
-        $idx = 'components';
-      }
-      elseif (!empty($ctrl->obj->data['isLib'])) {
-        $idx = 'lib';
-      }
-      elseif (empty($ctrl->obj->data['isMVC']) && empty($ctrl->obj->data['isComponent'])) {
-        $idx = 'cli';
-      }
-      if ($idx && $ctrl->obj->data['styleTab'][$idx]) {
-        if ($start = stripos($ctrl->obj->data['title'], '/')) {
-          $title = substr($ctrl->obj->data['title'],  $start+1);
-        }
-        //die(var_dump($idx,$ctrl->obj->data['styleTab']));
-        $ctrl->obj->bcolor = $ctrl->obj->data['styleTab'][$idx]['bcolor'];
-        $ctrl->obj->icon = $ctrl->obj->data['styleTab'][$idx]['icon'];
-        $ctrl->obj->fcolor = $ctrl->obj->data['styleTab'][$idx]['fcolor'];
-      }
-      unset($ctrl->obj->data['styleTab']);
+  if (substr($ctrl->baseURL, -7) === '/_end_/') {
+		$ctrl->addToObj({
+      // todo : call componenet coder with data
+    })
+  }
+  else {
+    // in this case a file is selected and we will show the router
+    $url = 'newide/editor/';
+    if ($ctrl->hasData('id_project')) {
+      $url = $ctrl->pluginUrl('appui-project').'/ui/'.$ctrl->data['id_project'].'/ide/';
     }
+    $ctrl->addData([
+      'url' => implode('/', $ctrl->arguments),
+      'routes' => $ctrl->getRoutes(),
+      'root' => 'newide/',
+      'baseURL' => $ctrl->baseURL
+    ]);
+    //$ctrl->data['url'] = $ctrl->inc->ide->set_origin_for_use($ctrl->arguments);
+    $ctrl->combo('$url', true);
+    if ($idx = array_search('_end_', $ctrl->arguments)) {
+      $url = X::join(array_slice($ctrl->arguments, 0, $idx+1), '/');
+      $ctrl->setUrl($ctrl->baseUrl.$url);
+    }
+  }
 
-
-    if ( !empty($title) && (strlen($title) > 20) ){
+  /*if ( !empty($title) && (strlen($title) > 20) ){
       $ctrl->obj->ftitle = $title;
       $start = strlen($title) - 20;
       $start = ($start + 3);
@@ -59,10 +47,5 @@ if ( !empty($ctrl->arguments) ){
     echo $ctrl
       ->setTitle($title)
       ->addJs()
-      ->getView();
-    }
-  else {
-    //$ctrl->reroute(APPUI_IDE_ROOT.'editor/content', $ctrl->post, $ctrl->arguments);
-    $ctrl->reroute($ctrl->pluginUrl('appui-ide').'/editor/content', $ctrl->post, $ctrl->arguments);
-  }
+      ->getView();*/
 }

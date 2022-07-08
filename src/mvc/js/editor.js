@@ -1,3 +1,6 @@
-(()=>{
-  return{}
+// Javascript Document
+
+(() => {
+  return {
+  };
 })();

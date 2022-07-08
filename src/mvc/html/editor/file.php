@@ -1,1 +1,2 @@
-<appui-ide-router :source="source"></appui-ide-router>
+<!--   @tabLoaded="loadingTab"-->
+<appui-newide-editor-router :source="source"></appui-newide-editor-router>
