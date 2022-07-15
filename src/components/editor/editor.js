@@ -147,7 +147,7 @@
         let tab = '',
             link = '';
             //prefix = this.container.currentView.url + '/';
-        //bbn.fn.log("prefix  = " + prefix);
+        bbn.fn.log("currentRoot = " + this.currentRoot);
         if ((file.data.type === 'mvc')) {
           tab = ((file.data.tab === "php") && (this.project === 'apst-app')) ? '/settings' :  '/' + file.data.tab;
           link = 'file/' +
@@ -160,7 +160,7 @@
           link = 'file/' +  this.currentRoot + file.data.uid + '/_end_/' + (file.data.tab || 'code');
         }
         if ( link ){
-          bbn.fn.log(link);
+          bbn.fn.log("link = " + link);
           this.getRef('router').route(link);
         }
       },

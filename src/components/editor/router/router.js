@@ -29,17 +29,16 @@
             this.source.tabs.forEach(tab => {
               let tmp_array = tab.url.split();
               tmp_array.pop();
-              let url = tmp_array.join('/') + '/' + tab.url;
               this.routerSource.push({
                 load: true,
-                url: url,
+                url: tab.url,
                 static: true,
                 icon: null,
                 notext: true,
                 bcolor: tab.bcolor,
                 fcolor: tab.fcolor,
                 menu: () => {
-                  this.getMenu(url);
+                  this.getMenu(tab.url);
                 }
               });
             });
@@ -47,7 +46,7 @@
           else {
             this.routerSource.push({
               load: true,
-              url: this.source.url,
+              url: 'code',
               static: true,
               icon: null,
               notext: true,

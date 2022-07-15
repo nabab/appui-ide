@@ -12,10 +12,14 @@ use bbn\X;
  */
 
 if ( !empty($ctrl->arguments) ){
+  $ctrl->addData([
+    'url' => implode('/', $ctrl->arguments),
+    'routes' => $ctrl->getRoutes(),
+    'root' => 'newide/',
+    'baseURL' => $ctrl->baseURL
+  ]);
   if (substr($ctrl->baseURL, -7) === '/_end_/') {
-		$ctrl->addToObj({
-      // todo : call componenet coder with data
-    })
+    $ctrl->addToObj('newide/editor/code', $ctrl->data, true);
   }
   else {
     // in this case a file is selected and we will show the router
@@ -23,17 +27,11 @@ if ( !empty($ctrl->arguments) ){
     if ($ctrl->hasData('id_project')) {
       $url = $ctrl->pluginUrl('appui-project').'/ui/'.$ctrl->data['id_project'].'/ide/';
     }
-    $ctrl->addData([
-      'url' => implode('/', $ctrl->arguments),
-      'routes' => $ctrl->getRoutes(),
-      'root' => 'newide/',
-      'baseURL' => $ctrl->baseURL
-    ]);
     //$ctrl->data['url'] = $ctrl->inc->ide->set_origin_for_use($ctrl->arguments);
     $ctrl->combo('$url', true);
     if ($idx = array_search('_end_', $ctrl->arguments)) {
       $url = X::join(array_slice($ctrl->arguments, 0, $idx+1), '/');
-      $ctrl->setUrl($ctrl->baseUrl.$url);
+      $ctrl->setUrl($url);
     }
   }
 
