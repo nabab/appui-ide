@@ -1,6 +1,5 @@
 // Javascript Document
 
 (() => {
-  return {
-  };
+  return {};
 })();

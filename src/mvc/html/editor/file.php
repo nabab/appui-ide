@@ -1,1 +1,3 @@
-<appui-ide-router :source="source"></appui-ide-router>
+<div class="bbn-overlay">
+  <appui-newide-editor-router :source="source"></appui-newide-editor-router>
+</div>

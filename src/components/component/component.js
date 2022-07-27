@@ -23,7 +23,7 @@
         tabsList: this.source.tabs !== undefined && this.source.tabs.length ? this.source.tabs : ide.repositories[this.source.repository].tabs,
         emptyTabs: this.source.emptyTabs,
         filename: filename
-      })
+      });
     },
     computed: {
       routerSource(){
@@ -38,9 +38,9 @@
             fcolor: a.fcolor,
             cls: this.source.emptyTabs.indexOf(a.url) !== -1 ? 'empty-tab' : '',
             menu: () => {
-              this.getMenu(a.url)
+              this.getMenu(a.url);
             }
-          }
+          };
         });
       }
     },
