@@ -4,19 +4,17 @@
   return {
     data() {
       return {
-        url: "",
-        name: ""
+        url: ""
       };
     },
     methods: {
-      rename() {
-        bbn.fn.post(appui.plugins['appui-newide'] + "/editor/actions/rename", {
+      delete() {
+        bbn.fn.post(appui.plugins['appui-newide'] + "/editor/actions/delete", {
           url: this.url,
-          name: this.name,
           id_project: '8fe6e755b72611ecbc5952540000cfbe'
         }, d => {
           if (d.success) {
-            appui.success(bbn._('Rename Successfully'));
+            appui.success(bbn._('Delete Successfully'));
           }
         });
       }

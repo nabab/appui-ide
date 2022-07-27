@@ -6,6 +6,4 @@
 
 <bbn-input v-model="url"
            placeholder="url"/>
-<bbn-input v-model="name"
-           placeholder="name"/>
-<bbn-button @click="rename"/>
+<bbn-button @click="delete"/>

@@ -9,7 +9,7 @@ use bbn\Str;
 use bbn\File\System;
 /** @var $model \bbn\Mvc\Model*/
 
-if ($model->hasData(['url']['name']['id_project'])) {
+if ($model->hasData(['url']['id_project'])) {
   $project = new luk\Project($model->db, $model->data['id_project']);
   $fs = new System();
   $cfg = $project->urlToConfig($model->data['url']);
@@ -20,7 +20,7 @@ if ($model->hasData(['url']['name']['id_project'])) {
     foreach($tab['extensions'] as $extension) {
       $check = $path.'/'.$tab['path'].$file.'.'.$extension['ext'];
       if ($fs->isFile($check)) {
-        $fs->rename($check, $model->data['name'].'.'.$extension['ext']);
+        $fs->delete($check);
       }
     }
   }

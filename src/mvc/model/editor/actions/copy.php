@@ -9,10 +9,10 @@ use bbn\Str;
 use bbn\File\System;
 /** @var $model \bbn\Mvc\Model*/
 
-if ($model->hasData(['url']['name']['id_project'])) {
+if ($model->hasData(['src']['dest']['name']['id_project'])) {
   $project = new luk\Project($model->db, $model->data['id_project']);
   $fs = new System();
-  $cfg = $project->urlToConfig($model->data['url']);
+  $cfg = $project->urlToConfig($model->data['src']);
   $arr_path = X::split($cfg['file'], '/');
   $file = array_pop($arr_path);
   $path = X::join($arr_path, '/');
@@ -20,7 +20,7 @@ if ($model->hasData(['url']['name']['id_project'])) {
     foreach($tab['extensions'] as $extension) {
       $check = $path.'/'.$tab['path'].$file.'.'.$extension['ext'];
       if ($fs->isFile($check)) {
-        $fs->rename($check, $model->data['name'].'.'.$extension['ext']);
+        // TODO : copy file with src dest and name and make error case
       }
     }
   }
