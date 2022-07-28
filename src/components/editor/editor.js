@@ -182,9 +182,16 @@
         let obj = [{
           icon: 'nf nf-fa-edit',
           text: bbn._('Rename'),
-          action: (node) => {
-            this.rename(node);
-          }
+            action: () => {
+              bbn.fn.log(node);
+              this.getPopup({
+                component: "appui-newide-form-rename",
+                componentOptions: {
+                  source: node
+                },
+                title: bbn._("Rename")
+              });
+            }
         }];
         return obj;
       },
@@ -202,7 +209,6 @@
         bbn.fn.log(file, url);
       },
       renameComponent(node) {
-        
       }
     },
     /**

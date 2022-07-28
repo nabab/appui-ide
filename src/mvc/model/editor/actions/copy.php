@@ -20,6 +20,7 @@ if ($model->hasData(['src']['dest']['name']['id_project'])) {
     foreach($tab['extensions'] as $extension) {
       $check = $path.'/'.$tab['path'].$file.'.'.$extension['ext'];
       if ($fs->isFile($check)) {
+        $fs->copy($model->data['src'], $model->data['dest']);
         // TODO : copy file with src dest and name and make error case
       }
     }

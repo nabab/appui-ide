@@ -6,4 +6,4 @@
 
 <bbn-input v-model="url"
            placeholder="url"/>
-<bbn-button @click="delete"/>
+<bbn-button @click="deletefile"/>
