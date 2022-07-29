@@ -1,7 +1,7 @@
 <!-- HTML Document -->
 
 <div class="bbn-w-100 bbn-h-100">
-  <bbn-form :action="root + 'editor/actions/rename'"
+  <bbn-form :action="root + 'editor/actions/copy'"
             :source="renameSource"
             @success="onSuccess"
             class="bbn-m">
@@ -10,6 +10,13 @@
       <div style="min-width: 30em;">
         <div class="bbn-flex-width">
           <bbn-input v-model="name"
+                     class="bbn-flex-fill bbn-right-space"></bbn-input>
+        </div>
+      </div>
+      <label><?=_("Destination")?></label>
+      <div style="min-width: 30em;">
+        <div class="bbn-flex-width">
+          <bbn-input v-model="dest"
                      class="bbn-flex-fill bbn-right-space"></bbn-input>
         </div>
       </div>

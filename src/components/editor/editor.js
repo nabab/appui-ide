@@ -54,22 +54,29 @@
          * @data {Vue} [null] container
          */
         container: null,
-        menu: [{
-          text: bbn._('File'),
-          items: [{
-            icon: 'nf nf-fa-plus',
-            text: bbn._('New'),
+        menu: [
+          {
+            text: bbn._('File'),
             items: [{
-              icon: 'nf nf-fa-file',
-              text: bbn._('Element'),
-              action: this.newElement
-            }, {
-              icon: 'nf nf-fa-folder',
-              text: bbn._('Directory'),
-              action: this.newDir
+              icon: 'nf nf-fa-plus',
+              text: bbn._('New'),
+              items: [{
+                icon: 'nf nf-fa-file',
+                text: bbn._('Element'),
+                action: this.newElement
+              }, {
+                icon: 'nf nf-fa-folder',
+                text: bbn._('Directory'),
+                action: this.newDir
+              }]
             }]
-          }]
-        }]
+          },
+          {
+            icon: 'nf nf-fa-save',
+            text: bbn._('Save'),
+            action: this.save
+          }
+        ]
       };
     },
     computed: {
@@ -178,37 +185,50 @@
         }
       },
       treeMenu(node) {
-        bbn.fn.log();
-        let obj = [{
-          icon: 'nf nf-fa-edit',
-          text: bbn._('Rename'),
+        let obj = [
+          {
+            icon: 'nf nf-fa-edit',
+            text: bbn._('Rename'),
             action: () => {
-              bbn.fn.log(node);
               this.getPopup({
                 component: "appui-newide-form-rename",
                 componentOptions: {
-                  source: node
+                  source: node.data
                 },
                 title: bbn._("Rename")
               });
             }
-        }];
+          },
+          {
+            icon: 'nf nf-fa-trash_o',
+            text: bbn._('Delete'),
+            action: () => {
+              bbn.fn.log(node);
+              this.getPopup({
+                component: "appui-newide-form-delete",
+                componentOptions: {
+                  source: node.data
+                },
+                title: bbn._("Delete")
+              });
+            }
+          },
+          {
+            icon: 'nf nf-mdi-content_copy',
+            text: bbn._('Copy'),
+            action: () => {
+              bbn.fn.log(node);
+              this.getPopup({
+                component: "appui-newide-form-copy",
+                componentOptions: {
+                  source: node.data
+                },
+                title: bbn._("Copy")
+              });
+            }
+          }
+        ];
         return obj;
-      },
-      rename(node) {
-        if (this.currentType.type === "mvc") {
-          this.renameMVC(node);
-        }
-        else if (this.currentType.type === "component") {
-          this.renameComponent(node);
-        }
-      },
-      renameMVC(node) {
-        let file = node.data.uid.charAt(0) === '/' ? node.data.text : node.data.uid;
-        let url = this.currentRoot + file;
-        bbn.fn.log(file, url);
-      },
-      renameComponent(node) {
       }
     },
     /**

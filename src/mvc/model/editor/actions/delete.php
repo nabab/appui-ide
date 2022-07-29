@@ -9,8 +9,10 @@ use bbn\Str;
 use bbn\File\System;
 /** @var $model \bbn\Mvc\Model*/
 
-if ($model->hasData(['url']['id_project'])) {
-  $project = new luk\Project($model->db, $model->data['id_project']);  
+// example of url : lib/appui-newide/mvc/editor/actions/rename
+
+if ($model->hasData(['url', 'id_project'])) {
+  $project = new luk\Project($model->db, $model->data['id_project']);
   $fs = new System();
   $cfg = $project->urlToConfig($model->data['url']);
   $arr_path = X::split($cfg['file'], '/');

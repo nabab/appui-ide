@@ -13,8 +13,11 @@
           </bbn-dropdown>
         </div>
         <div/>
-        <bbn-button>
-        </bbn-button>
+        <bbn-button title="<?=_('Refresh files list')?>"
+                    @click="treeReload()"
+                    icon="nf nf-oct-sync"
+                    style="margin-left: 2px"
+                    :notext="true"/>
         <div/>
         <div class="bbn-xspadding">
           <bbn-button>
@@ -74,4 +77,5 @@
       </bbn-splitter>
     </bbn-pane>
   </bbn-splitter>
+  <bbn-popup ref="popup"></bbn-popup>
 </div>
