@@ -92,6 +92,12 @@
         }
         return null;
       },
+      currentTab() {
+        if (this.currentTypeCode && this.typeOptions) {
+          return bbn.fn.getRow(this.typeOptions, {code: this.currentTypeCode});
+        }
+        return null;
+      },
       /**
        * Type of the current path
        *
@@ -183,6 +189,12 @@
           alert(bbn._('The recipient node is not a folder'));
           this.treeReload();
         }
+      },
+      mapTree(data) {
+				if (this.currentTab.tabs && data.tab) {
+          data.bcolor = bbn.fn.getField(this.currentTab.tabs, 'bcolor', {url: data.tab}) || data.bcolor;
+        }
+        return data;
       },
       treeMenu(node) {
         let obj = [

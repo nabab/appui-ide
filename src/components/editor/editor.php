@@ -50,6 +50,7 @@
                         :storage="true"
                         :storage-full-name="'appui-newide-type-dd-' + source.project.id + '-' + currentPathId"/>
           <bbn-tree :source="root + 'data/tree'"
+                    :map="mapTree"
                     :data="{
                            id_project: source.project.id,
                            type: currentTypeCode,
