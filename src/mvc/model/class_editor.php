@@ -12,5 +12,5 @@ use bbn\Parsers\Php;
 
 $parser = new Php();
 return [
-  'data' => $parser->analyzeClass('luk\Project')
+  'data' => $parser->analyzeClass('appui\Project')
 ];

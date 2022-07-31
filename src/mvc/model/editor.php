@@ -11,7 +11,7 @@ use bbn\Str;
 $res = ['success' => false];
 
 if ($model->hasData('id_project')) {
-  $project = new luk\Project($model->db, $model->data['id_project']);
+  $project = new appui\Project($model->db, $model->data['id_project']);
   $action = array_shift($model->data['arguments']);
   switch ($action) {
     case 'content':

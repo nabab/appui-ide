@@ -10,7 +10,7 @@ use Exception;
 /** @var $model \bbn\Mvc\Model*/
 
 if ($model->hasData('id_project')) {
-  $project = new luk\Project($model->db, $model->data['id_project']);
+  $project = new appui\Project($model->db, $model->data['id_project']);
   $file = $project->urlToReal($model->data['url']);
   if (!empty($file)) {
     $ext = Str::fileExt($file);

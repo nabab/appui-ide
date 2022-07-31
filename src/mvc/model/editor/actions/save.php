@@ -11,7 +11,7 @@ use bbn\File\System;
 
 if ($model->hasData(['url']['id_project'])) {
   $delete = false;
-  $project = new luk\Project($model->db, $model->data['id_project']);
+  $project = new appui\Project($model->db, $model->data['id_project']);
   $fs = new System();
   $file = $project->urlToReal($model->data['url']);
   if (!empty($file)) {

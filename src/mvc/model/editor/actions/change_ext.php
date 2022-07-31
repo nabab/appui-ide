@@ -11,7 +11,7 @@ use bbn\File\System;
 
 if ($model->hasData(['url', 'ext', 'id_project'])) {
   $fs = new System();
-  $project = new luk\Project($model->db, $model->data['id_project']);
+  $project = new appui\Project($model->db, $model->data['id_project']);
   $file = $project->urlToReal($model->data['url']);
   $new_path = X::split($file, '/');
   $new_file = X::split(array_pop($new_path), '.');

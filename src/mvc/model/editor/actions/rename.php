@@ -13,7 +13,7 @@ use bbn\File\System;
 // example of name : Hello_world
 
 if ($model->hasData(['url', 'name', 'id_project'])) {
-  $project = new luk\Project($model->db, $model->data['id_project']);
+  $project = new appui\Project($model->db, $model->data['id_project']);
   $fs = new System();
   $cfg = $project->urlToConfig($model->data['url']);
   $arr_path = X::split($cfg['file'], '/');

@@ -115,7 +115,6 @@
         }
         extensions.push(cm.languageExtensions[modeCode[this.currentMode]]);
         extensions.push(cm.themeExtensions[this.currentTheme]);
-        extensions.push(cm.autocomplete.autocompletion({override: [this.completionSource]}));
         switch (this.currentMode) {
           case "javascript":
             extensions.push(cm.javascript.javascript());
@@ -124,7 +123,9 @@
             extensions.push(cm.html.html());
             break;
           case "php":
-            extensions.push(cm.php.php());
+            extensions.push(cm.php.php({
+              baseLanguage: cm.languageExtensions.html
+            }));
             break;
           case "css":
             extensions.push(cm.css.css());
@@ -139,6 +140,8 @@
             extensions.push(cm.markdown.markdown());
             break;
         }
+        extensions.push(cm.autocomplete.autocompletion({override: [this.completionSource]}));
+        bbn.fn.log(this.currentMode, extensions);
         return extensions;
       },
       /**
@@ -149,10 +152,13 @@
 		  	* @return {Object}
 		  	*/
       completionSource(context) {
-        let fn = this.getWidgetCompletion();
-        let res = fn(context);
-        let lineIndex = 0;
-        let totalChar = 0;
+        let word = context.matchBefore(/\w*/);
+        let fn          = this.getWidgetCompletion();
+        let res         = fn(context);
+        let lineIndex   = 0;
+        let totalChar   = 0;
+        let currentNode = codemirror6.language.syntaxTree(context.state).resolveInner(context.pos, -1);
+        let currentType =  currentNode.name;
         while (lineIndex < context.state.doc.text.length) {
           totalChar += context.state.doc.text[lineIndex].length + 1;
           if (totalChar + 1 > context.pos) {
@@ -163,38 +169,57 @@
           }
         }
         let charPos = context.state.doc.text[lineIndex].length - (totalChar - context.pos);
-        bbn.fn.log('line length : ' + context.state.doc.text[lineIndex].length, 'totalChar : ' + totalChar, 'context.pos : ' + context.pos, 'lineIndex : ' + lineIndex, 'charPos : ' + charPos);
-        if (res && res.options) {
-          res.options.unshift(...[
-            {label: "match", type: "keyword"},
-            {label: "hello", type: "variable", info: "Hello<br>World"},
-            {label: "baba", type: "function", info() {
-              return new Promise((resolve, reject) => {
-                bbn.fn.log('baba');
-                let div = document.createElement('p');
-                div.className = 'bbn-no-padding bbn-no-margin';
-                div.innerHTML = "Hello<br>World";
-                resolve(div);
-              });
-            }},
-            {label: "caca", type: "function", info() {
-              return new Promise((resolve, reject) => {
-                bbn.fn.log('caca');
-                let div = document.createElement('p');
-                div.className = 'bbn-no-padding bbn-no-margin';
-                div.innerHTML = "Hello<br>World2";
-                resolve(div);
-              });
-            }},
-            {label: "magic", type: "text", apply: "⠁⭒*.✩.*⭒⠁", detail: "Hello World"}
-          ]);
+        let node = {parent: currentNode};
+        let i = 0;
+        while (node.parent) {
+          i++;
+          node = node.parent;
+          bbn.fn.log("LEVEL " + i, node.name, bbn.fn.substr(this.value, node.from, node.to - node.from));
         }
-        return res || [];
+        switch (currentType) {
+          case '(':
+            bbn.fn.log("A parenthese opens");
+            if (currentNode.parent && (currentNode.parent.name === 'ArgList')) {
+              bbn.fn.log("And we are in the arguments of a function, so let's find out");
+            }
+        }
+        bbn.fn.log(res, 'line length : ' + context.state.doc.text[lineIndex].length, 'totalChar : ' + totalChar, 'context.pos : ' + context.pos, 'lineIndex : ' + lineIndex, 'charPos : ' + charPos, context, word, currentType);
+        if (!res || !res.options) {
+          res = {options: []};
+        }
+        res.options.unshift(...[
+          {label: "match", type: "keyword"},
+          {label: "hello", type: "variable", info: "Hello<br>World"},
+          {label: "baba", type: "function", info() {
+            return new Promise((resolve, reject) => {
+              bbn.fn.log('baba');
+              let div = document.createElement('p');
+              div.className = 'bbn-padding bbn-no-margin';
+              div.innerHTML = "Hello<br>World";
+              resolve(div);
+            });
+          }},
+          {label: "caca", type: "function", info() {
+            return new Promise((resolve, reject) => {
+              bbn.fn.log('caca');
+              let div = document.createElement('p');
+              div.className = 'bbn-no-padding bbn-no-margin';
+              div.innerHTML = "Hello<br>World2";
+              resolve(div);
+            });
+          }},
+          {label: "magic", type: "text", apply: "⠁⭒*.✩.*⭒⠁", detail: "Hello World"}
+        ]);
+
+        return res;
       },
       getWidgetCompletion() {
         let res = null;
         switch (this.currentMode) {
           case 'html':
+            res = window.codemirror6.html.htmlCompletionSource;
+            break;
+          case 'php':
             res = window.codemirror6.html.htmlCompletionSource;
             break;
           case 'js':
