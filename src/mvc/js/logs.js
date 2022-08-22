@@ -3,7 +3,8 @@
   let logPoller = null;
   return {
     data(){
-      let lignes = [10, 25, 50, 100, 150, 250, 500, 1000, 2000, 5000];
+      let lignes     = [10, 25, 50, 100, 150, 250, 500, 1000, 2000, 5000];
+      let themes     = [];
       let themesCode = [
         '3024-day',
         '3024-night',
@@ -54,8 +55,6 @@
         'yeti',
         'zenburn'
       ];
-      let themes= [];
-
       bbn.fn.each(themesCode, (v)=>{
         themes.push({
           text: v,
@@ -72,7 +71,7 @@
           return {
             value: a,
             text: a + ' ' + bbn._('lines')
-          }
+          };
         }),
         lignes: lignes[2],
         textContent: '',
@@ -84,15 +83,23 @@
         themes:themes,
         theme: 'pastel-on-dark',
         sourceTree: []
-      }
+      };
     },
     methods:{
+      treeClass(data, tree, parent) {
+        bbn.fn.log("TREE CLASS" , arguments);
+        return parent.isRoot? 'bbn-xl' : '';
+      },
       getSourceTreeLogs(){
         this.post(this.source.root + 'tree_logs',{}, d => {
           if ( d.data && d.data[0].items.length ){
             bbn.fn.each(d.data[0].items, (v, i)=>{
               if ( v.size !== undefined ){
-                d.data[0].items[i].text = '<span class="bbn-lg" title="'+bbn._('Modified:') + ' ' + v.title +'">' + d.data[0].items[i]['text'] +'</span> <span class="bbn-i bbn-light">' + v.size + '</span>' 
+                d.data[0].items[i].text = '<span title="' +
+                  bbn._('Modified:') + ' ' + v.title +'">' +
+                  d.data[0].items[i].text +
+                  '</span> <span class="bbn-i bbn-light">' +
+                  bbn.fn.formatBytes(v.size) + '</span>';
               }
             });
             d.data[0].items = bbn.fn.order(d.data[0].items, 'mtime', 'desc');
@@ -168,7 +175,7 @@
                 this.isPolling = false;
                 if ( d.change ){
                   this.textContent = d.content;
-                  this.md5Current = d.md5
+                  this.md5Current = d.md5;
                   let code = this.getRef('code');
                   this.$nextTick(()=>{
                     if ( code !== undefined ){
@@ -206,17 +213,17 @@
         this.sourceTree = [];
         this.$nextTick(()=>{
           this.getSourceTreeLogs();
-        })
+        });
         //this.getRef('listFilesLog').reload();
       },
       setFileLog(){
         if ( (this.source.file_url !== undefined) &&
-          (bbn.fn.search(this.sourceTree[0]['items'], 'fileName', this.source.file_url) !== -1)
+          (bbn.fn.search(this.sourceTree[0].items, 'fileName', this.source.file_url) !== -1)
         ){
           this.fileLog = this.source.file_url;
         }
         else{
-          this.fileLog = this.sourceTree[0]['items'][0].fileName
+          this.fileLog = this.sourceTree[0].items[0].fileName;
         }
       }
     },
@@ -268,7 +275,7 @@
         this.closest("bbn-router").route(this.source.root + 'logs/' + val.toString());
 
         if ( val && !this.showText ){
-          this.showText = true
+          this.showText = true;
         }
         if ( (val !== old) && (this.autoRefreshFile) ){
           this.md5Current = "";
@@ -277,13 +284,13 @@
       },
       lignes: function(val, old){
         if ( val && !this.showText ){
-          this.showText = true
+          this.showText = true;
         }
       },
       showText: function(val, oldVal){
         if ( val ){
           this.onChange();
-          this.showText = false
+          this.showText = false;
         }
       },
       autoRefreshFile: function(newVal){
@@ -296,5 +303,5 @@
         }
       }
     }
-  }
+  };
 })();
