@@ -12,7 +12,7 @@ use bbn\X;
  */
 if ( !empty($ctrl->arguments) ){
 
-  if ( $ctrl->baseURL === APPUI_IDE_ROOT.'editor/' ){
+  if ( BBN_BASEURL === APPUI_IDE_ROOT.'editor/' ){
     $ctrl->data['url'] = implode('/', $ctrl->arguments);
     //$ctrl->data['url'] = $ctrl->inc->ide->set_origin_for_use($ctrl->arguments);
     $ctrl->data['routes'] = $ctrl->getRoutes();
@@ -20,7 +20,7 @@ if ( !empty($ctrl->arguments) ){
     $ctrl->obj->data = $ctrl->getModel();
 
     $ctrl->obj->data['root'] = APPUI_IDE_ROOT;
-    $ctrl->obj->url = $ctrl->baseURL.'file/'.$ctrl->obj->data['url'];
+    $ctrl->obj->url = BBN_BASEURL.'file/'.$ctrl->obj->data['url'];
     $title = $ctrl->obj->data['title'];
     if (!empty($ctrl->obj->data['styleTab'])) {
       $idx = null;

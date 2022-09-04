@@ -9,9 +9,9 @@ if ( !empty($ctrl->arguments) ){
     'url' => implode('/', $ctrl->arguments),
     'routes' => $ctrl->getRoutes(),
     'root' => 'newide/',
-    'baseURL' => $ctrl->baseURL
+    'baseURL' => BBN_BASEURL
   ]);
-  if (substr($ctrl->baseURL, -7) === '/_end_/') {
+  if (substr(BBN_BASEURL, -7) === '/_end_/') {
     $ctrl->addToObj('newide/editor/code', $ctrl->data, true);
   }
   else {

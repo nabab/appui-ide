@@ -19,10 +19,10 @@ if ( !empty($ctrl->arguments) ){
   ){
     $title = 'settings';
     //url tabnav settings
-    $ctrl->obj->url = $ctrl->baseURL.'settings';
+    $ctrl->obj->url = BBN_BASEURL.'settings';
   }
   else{
-    $ctrl->obj->url = $ctrl->baseURL.end($ctrl->arguments);
+    $ctrl->obj->url = BBN_BASEURL.end($ctrl->arguments);
   }
   echo $ctrl
   ->setTitle($title)
