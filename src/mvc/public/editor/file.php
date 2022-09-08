@@ -4,7 +4,7 @@ use bbn\X;
  * @var $ctrl \bbn\Mvc\Controller
  */
 
-if ( !empty($ctrl->arguments) ){
+if (defined('BBN_BASEURL') && !empty($ctrl->arguments)) {
   $ctrl->addData([
     'url' => implode('/', $ctrl->arguments),
     'routes' => $ctrl->getRoutes(),

@@ -1,7 +1,7 @@
 <?php
 
-if (empty(BBN_BASEURL) && $ctrl->hasData('baseURL')) {
-  BBN_BASEURL = $ctrl->data['baseURL'];
+if (!defined('BBN_BASEURL') && $ctrl->hasData('baseURL')) {
+  define('BBN_BASEURL', $ctrl->data['baseURL']);
 }
 
 if (!isset($ctrl->inc->ide)) {
