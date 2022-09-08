@@ -10,7 +10,7 @@ use bbn\X;
 /**
  * @var $ctrl \bbn\Mvc\Controller
  */
-if ( !empty($ctrl->arguments) ){
+if (defined('BBN_BASEURL') && !empty($ctrl->arguments)) {
 
   if ( BBN_BASEURL === APPUI_IDE_ROOT.'editor/' ){
     $ctrl->data['url'] = implode('/', $ctrl->arguments);

@@ -3,7 +3,7 @@
 use bbn\X;
 
 /** @var $this \bbn\Mvc\Controller */
-if ( empty(BBN_BASEURL) ){
+if (defined('BBN_BASEURL') && empty(BBN_BASEURL) ){
   $url = APPUI_IDE_ROOT.'profiler';
   $title = _("Databases");
   $ctrl->setUrl(APPUI_IDE_ROOT.'profiler')

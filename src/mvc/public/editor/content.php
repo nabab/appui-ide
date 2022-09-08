@@ -1,6 +1,6 @@
 <?php
 /** @var $ctrl \bbn\Mvc\Controller */
-if ( !empty($ctrl->arguments) ){
+if (defined('BBN_BASEURL') && !empty($ctrl->arguments)) {
   $step = $ctrl->arguments;
   $ctrl->data['url'] = implode('/', $ctrl->arguments);
   if ( $ctrl->obj->data = $ctrl->getModel(\bbn\X::mergeArrays($ctrl->data, $ctrl->post)) ){
