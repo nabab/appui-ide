@@ -8,4 +8,3 @@ foreach ( $prefs as $i => $p ){
 }
 echo $ctrl->getView().$ctrl->getLess();
 
-?>
