@@ -196,18 +196,18 @@
       listRootProject(){
         if (this.currentRep && this.repositories[this.currentRep] && this.repositories[this.currentRep].types) {
           return bbn.fn.map(this.repositories[this.currentRep].types, v => {
-            switch (v.text) {
+            switch (v.type) {
               case 'mvc':
                 v.icon = "nf nf-fa-code";
                 break;
               case 'components':
-                v.icon = "nf nf-mdi-vuejs";
+                v.icon = "nf nf-ple-lego_separator_thin";
                 break;
               case 'lib':
-                v.icon = "nf nf-mdi-library";
+                v.icon = "nf nf-cod-symbol_class";
                 break;
               case 'cli':
-                v.icon = "nf nf-fa-cogs";
+                v.icon = "nf nf-dev-terminal";
                 break;
             }
             return {
