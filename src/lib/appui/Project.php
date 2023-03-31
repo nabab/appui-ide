@@ -121,7 +121,7 @@ class Project extends modelDb {
       // case of folder is a component or a mvc
       $path_info = $path_info['alias'];
       $source_path = $path_info['sourcePath'] ?? '';
-      $real .= $source_path;
+      $real .= $source_path . 'src/';
       if (!empty($path_info['types'])) {
         /** @var string $path_type type found in the url (mvc, component, lib cli) */
         $path_type = array_shift($bits);
@@ -135,13 +135,15 @@ class Project extends modelDb {
         if ($force && !$type) {
           if (!empty($res['typology']['tabs'])) {
             if ($row = X::getRow($res['typology']['tabs'], ['default' => true])) {
-              $type = $row['url'];
+              $type = $row['path'];
             }
           }
         }
+
         $path_info = X::getRow($res['typology']['tabs'], ['url' => $type]);
         // add directly what remain in the url
-        if (empty($res['typology']['directories'])) {
+
+        if (!empty($res['typology']['directories'])) {
           $real .= X::join($bits, '/');
         }
         // add the directory to explore if 'directories' value is true (public, private, html, ...)

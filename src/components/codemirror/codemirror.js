@@ -76,6 +76,7 @@
   		* @event mounted
   		*/
     mounted() {
+      bbn.fn.log("COMPONENTS/CODEMIRROR THEME/MODE", this.theme, this.mode);
       if (!window.codemirror6) {
         let ele = document.createElement('script');  // temporary
         ele.src = '/cm.js';

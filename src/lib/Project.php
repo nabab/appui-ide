@@ -30,6 +30,7 @@ class Project extends modelDb {
    */
   public function __construct(Db $db, string $id)
   {
+    die("constryct");
     parent::__construct($db);
     self::optionalInit();
     $this->id = $id;
@@ -82,6 +83,7 @@ class Project extends modelDb {
    */
   public function urlToConfig(string $url, bool $force = false) : array
   {
+    X::ddump("ezkrkemazrzemkrmzlm");
     // a typical url : lib/appui-api/js/test/_end_/code
     /** @var array $bits each substring of the url */
     $bits = X::split($url, '/');
@@ -93,6 +95,7 @@ class Project extends modelDb {
     $info = $this->getProjectInfo();
     /** @var array $path_info full option for the current path */
     $path_info = X::getRow($info['path'], ['parent_code' => $root, 'code' => $path]);
+    X::log(["lol" => $path_info], 'urlToConfig');
     /** @var string $type the last part of the url after _end_ */
     $type = false;
     if (in_array('_end_', $bits)) {
@@ -129,6 +132,7 @@ class Project extends modelDb {
         if (!$path_row) {
           throw new Exception(X::_('Impossible to find the type %s', $path_type));
         }
+        X::log($path_type, 'path_type');
         $res['typology'] = $this->getType($path_type);
         $real .= $path_type.'/';
         if ($force && !$type) {
@@ -175,6 +179,7 @@ class Project extends modelDb {
    */
   public function urlToReal(string $url) : ?string
   {
+    X::log($url, 'urlToReal');
     $res = $this->urlToConfig($url);
     if ($url) {
       foreach($res['extensions'] as $e) {
@@ -206,7 +211,7 @@ class Project extends modelDb {
       }
     }
     if (isset($rep)) {
-      X::log([561, $file, $rep, $root], 'real');
+      X::log([5612, $file, $rep, $root], 'real');
       $res = $rep . '/';
       $bits = explode('/', substr($file, \strlen($root)));
       $filename  = array_pop($bits);

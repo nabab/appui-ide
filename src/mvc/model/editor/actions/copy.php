@@ -7,6 +7,8 @@
 use bbn\X;
 use bbn\Str;
 use bbn\File\System;
+use bbn\Appui\Project;
+
 /** @var $model \bbn\Mvc\Model*/
 
 // example of src : lib/appui-newide/mvc/editor/actions/rename
@@ -14,7 +16,7 @@ use bbn\File\System;
 // example of name : Hello_world
 
 if ($model->hasData(['src', 'dest', 'name', 'id_project'])) {
-  $project = new luk\Project($model->db, $model->data['id_project']);
+  $project = new Project($model->db, $model->data['id_project']);
   $fs = new System();
   $cfg_src = $project->urlToConfig($model->data['src']);
   $cfg_dest = $project->urlToConfig($model->data['dest'], true);

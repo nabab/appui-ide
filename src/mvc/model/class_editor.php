@@ -1,8 +1,4 @@
 <?php
-/**
- * What is my purpose?
- *
- **/
 
 use bbn\X;
 use bbn\Str;
@@ -12,5 +8,7 @@ use bbn\Parsers\Php;
 
 $parser = new Php();
 return [
-  'data' => $parser->analyzeClass('appui\Project')
+  'data' => $parser->analyzeClass('bbn\Appui\Project')
 ];
+
+//test

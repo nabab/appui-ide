@@ -2,13 +2,16 @@
 use bbn\X;
 use bbn\Str;
 use bbn\File\System;
+use bbn\Appui\Project;
 /**
  * @var $model \bbn\Mvc\Model
  */
+
+
 if (!empty($model->data['url']) && isset($model->inc->ide)) {
   $fs = new System();
   $id_project = $model->inc->options->fromCode(BBN_APP_NAME, "list", "project", "appui");
-  $project = new appui\Project($model->db, $id_project);
+  $project = new Project($model->db, $id_project);
   $url = $model->data['url'];
   //die(var_dump($model->data['url']));
   $rep = $model->inc->ide->repositoryFromUrl($model->data['url']);
@@ -74,6 +77,7 @@ if (!empty($model->data['url']) && isset($model->inc->ide)) {
 
   $paths = $project->urlToPaths($model->data['url']);
   $title = array_pop(X::split($path, '/'));
+  X::log(["ext", Str::fileExt($file)], "newidefile");
   $res = [
     'isMVC' => $model->inc->ide->isMVCFromUrl(str_replace('/_end_', '', $url)),
     // isComponent is understood by a single repo with components
@@ -109,7 +113,7 @@ if (!empty($model->data['url']) && isset($model->inc->ide)) {
   // we check if some tab of the components or mvc do not contain any files
 
   $cfg = $project->urlToPaths($model->data['url']);
-  $real = $project->urlToReal($model->data['url']);
+  $real = $model->data['url'];
   $arr_real = X::split($real, '/');
   array_pop($arr_real);
   array_pop($arr_real);
@@ -130,7 +134,7 @@ if (!empty($model->data['url']) && isset($model->inc->ide)) {
 
   $res['files'] = $cfg['files'];
 
-  $res['url'] = $model->data['baseURL'].'file/'.$model->data['url'];
+  $res['url'] = $path;
   if (!empty($model->data['styleTab'])) {
     $idx = null;
     if (!empty($model->data['isMVC'])) {
@@ -151,5 +155,6 @@ if (!empty($model->data['url']) && isset($model->inc->ide)) {
       }
     }
   };
+
   return $res;
 }

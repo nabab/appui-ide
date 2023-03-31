@@ -6,12 +6,13 @@
 
 use bbn\X;
 use bbn\Str;
+use bbn\Appui\Project;
 /** @var $model \bbn\Mvc\Model*/
 
 $res = ['success' => false];
 
 if ($model->hasData('id_project')) {
-  $project = new appui\Project($model->db, $model->data['id_project']);
+  $project = new Project($model->db, $model->data['id_project']);
   $action = array_shift($model->data['arguments']);
   switch ($action) {
     case 'content':
@@ -25,9 +26,9 @@ if ($model->hasData('id_project')) {
       $res['success'] = true;
       break;
     case 'file':
+
       return $model->getModel('newide/editor/file', $model->data);
       break;
   }
 }
-
 return $res;

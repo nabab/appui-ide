@@ -146,6 +146,125 @@
       }
     },
     methods: {
+      /**
+       * New file|directory dialog
+       *
+       * @param string title The dialog's title
+       * @param bool isFile A boolean value to identify if you want create a file or a folder
+       * @param string path The current path
+       */
+      openNew(title, isFile, node = false){
+        let src = {
+          allData: false,
+          isFile: isFile,
+          path: './',
+          node: false,
+          template: null,
+          repositoryProject: false,
+          currentRep: this.currentRep,
+          repositories: this.repositories,
+          root: this.source.root,
+          //parent: false,
+          type: false,
+          isProject: this.isProject
+        };
+        //case top menu
+
+        if ( !bbn.fn.isObject(node) ){
+          src.path = './'
+          //case project
+          if ( this.typeProject !== false ){
+            src.type =  this.typeProject;
+            if ( this.source.projects.tabs_type[this.typeProject] !== undefined ){
+              src.repositoryProject = !this.repositoryProject(this.typeProject) ? this.repositories[this.currentRep] : this.repositoryProject(this.typeProject);
+            }
+            src.path = this.typeProject;
+          }
+        }
+        //of context
+        else {
+          src.tab_mvc = node.data.tab_mvc;
+          if ( node.num > 0 ){
+            if( !node.isExpanded ){
+              node.isExpanded = true;
+            }
+            //src.parent = bbn.vue.find(node, 'bbn-tree');
+            this.nodeParent = bbn.vue.find(node, 'bbn-tree');
+          }
+          else{
+            //src.parent= node.parent;
+            this.nodeParent = node.parent;
+          }
+          //caseproject
+          if ( node.data.type !== false ){
+            src.type =  node.data.type;
+            src.repositoryProject = !this.repositoryProject(node.data.type) ? this.repositories[this.currentRep] : this.repositoryProject(node.data.type);
+            //case component
+            if ( node.data.type === 'components' ){
+              //if (  node.data.path.indexOf(node.data.dir + node.data.name + '/' + node.data.name) > -1 ){
+              //src.path = node.data.path.replace( node.data.dir + node.data.name + '/' + node.data.name,  node.data.dir + node.data.name);
+              if (  node.data.uid.indexOf(node.data.dir + node.data.name + '/' + node.data.name) > -1 ){
+                src.path = node.data.uid.replace( node.data.dir + node.data.name + '/' + node.data.name,  node.data.dir + node.data.name);
+              }
+              else{
+                //src.path = node.data.path;
+                src.path = node.data.uid;
+              }
+            }//other types
+            else{
+              //src.path = node.data.path;
+              src.path = node.data.uid;
+            }
+          }
+          else{
+            if ( node.data.folder ){
+              //src.path = node.data.path;
+              src.path = node.data.uid;
+            }
+          }
+          src.allData = node.data;
+        }
+        //for root
+        //src.prefix = this.prefix;
+        if ( !bbn.fn.isObject(node) || node.data.folder ){
+          //check path
+          src.path = src.path.replace( '//',  '/');
+          this.closest("bbn-container").getRef('popup').open({
+            title: title,
+            maximizable: true,
+            component: 'appui-newide-popup-new',
+            source: src,
+          });
+        }
+      },
+      /**
+       * Opens a dialog for create a new file
+       *
+       * @param node  set at false if click of the context node is data of the node tree
+       */
+      newElement(node = false){
+        let title = bbn._('New File');
+        if ( this.isProject && bbn.fn.isObject(node) &&
+          ((node.data.type !== false) || (this.typeProject !== false))
+        ){
+          if ( ((node !== false) && (node.data.type === 'components')) || (this.typeProject === 'components') ){
+            title = bbn._('New Component') +  ` <i class='nf nf-fa-vuejs'></i>`;
+          }
+          else if ( ((node !== false) && (node.data.type === 'lib')) || (this.typeProject === 'lib') ){
+            title = bbn._('New Class');
+          }
+        }
+        this.openNew(title, true, node);
+      },
+
+      /**
+       * Opens a dialog for create a new directory
+       *
+       * @param node  set at false if click of the context node is data of the node tree
+       */
+      newDir(node){
+        this.openNew(bbn._('New Directory'), false, node != undefined && node ? node : false);
+      },
       iconColor(node){
         return node.data.bcolor;
       },
@@ -154,7 +273,7 @@
       },
       treeNodeActivate(d, e){
         e.preventDefault();
-        bbn.fn.log("file = " + d);
+        bbn.fn.log("file = ", d);
         this.openFile(d);
       },
       openFile(file) {
@@ -169,12 +288,17 @@
             file.data.name +
             '/_end_' + (tab.indexOf('_') === 0 ? '/' + tab : tab);
         }
+        else if ((file.data.type === 'component')) {
+          link = 'file/' +  this.currentRoot + file.data.uid + '/_end_/' + (file.data.tab || 'js');
+        }
         else{
           link = 'file/' +  this.currentRoot + file.data.uid + '/_end_/' + (file.data.tab || 'code');
         }
         if ( link ){
+          link = link.replace(/\/\//g, '/');
           bbn.fn.log("link = " + link);
           this.getRef('router').route(link);
+          bbn.fn.log("router", this.getRef('router'));
         }
       },
       treeReload() {
@@ -197,6 +321,7 @@
         return data;
       },
       treeMenu(node) {
+        bbn.fn.log("NODE", node);
         let obj = [
           {
             icon: 'nf nf-fa-edit',

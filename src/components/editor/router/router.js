@@ -8,6 +8,9 @@
         editor: null,
       };
     },
+    mounted() {
+
+    },
     computed: {
       editorCfg() {
         if (this.editor) {

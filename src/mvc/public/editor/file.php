@@ -13,9 +13,11 @@ if (defined('BBN_BASEURL') && !empty($ctrl->arguments)) {
   ]);
   if (substr(BBN_BASEURL, -7) === '/_end_/') {
     $ctrl->addToObj('newide/editor/code', $ctrl->data, true);
+    X::log("lol", 'newidefile');
   }
   else {
     // in this case a file is selected and we will show the router
+    X::log("lol2", 'newidefile');
     $url = 'newide/editor/';
     if ($ctrl->hasData('id_project')) {
       $url = $ctrl->pluginUrl('appui-project').'/ui/'.$ctrl->data['id_project'].'/ide/';

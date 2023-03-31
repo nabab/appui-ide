@@ -11,6 +11,7 @@
       const ide = this.closest('appui-ide-editor');
       let path      = bbn.fn.substr(this.source.url, this.source.repository.length).replace('/_end_', '').split('/'),
           filename  = path.pop();
+      bbn.fn.log("IDE", ide)
       path = path.join('/');
       return bbn.fn.extend({}, this.source, {
         repositories: ide.repositories,
@@ -24,6 +25,9 @@
         emptyTabs: this.source.emptyTabs,
         filename: filename
       });
+    },
+    mounted() {
+
     },
     computed: {
       routerSource(){
