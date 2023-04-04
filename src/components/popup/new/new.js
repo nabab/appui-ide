@@ -10,8 +10,9 @@
       }
     },
     data(){
-      let rep =  this.source.type !== false ? this.source.repositoryProject : this.source.repositories[this.source.currentRep];
-      let defaultTab = '';
+      bbn.fn.log("SOURCE", this.source);
+      let rep =  this.source.currentRep;
+      let defaultTab = 0;
       let defaultExt = '';
       let storage = this.getStorage();
       let template = storage.template || 'file';

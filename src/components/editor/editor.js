@@ -154,31 +154,60 @@
        * @param string path The current path
        */
       openNew(title, isFile, node = false){
+        let router = this.find('appui-newide-editor-router').source
+        let repositories = {};
+        let selected = this.source.project.path[0];
+        for (let repository of this.source.project.path) {
+          if (repository.id === this.currentPathId) {
+            selected = repository;
+            bbn.fn.log("SELECTED", selected);
+          }
+          let name = repository.parent_code + '/' + repository.code;
+          repositories[name] = bbn.fn.extend({}, {
+            alias_code: repository.alias.code,
+            bcolor: repository.bcolor,
+            code: repository.code,
+            default: true,
+            fcolor: repository.fcolor,
+            id: repository.id,
+            id_alias: repository.id_alias,
+            id_parent: repository.id_parent ?? null,
+            language: repository.language,
+            name: name,
+            num: repository.alias.num,
+            num_children: repository.alias.num_children,
+            path: repository.path,
+            root: repository.parent_code,
+            text: repository.text,
+            title: repository.code,
+            types: repository.alias.types
+          })
+        }
+     		bbn.fn.log('type', this.currentTypeCode)
+        bbn.fn.log("node", node.data);
+        bbn.fn.log("router", router)
+       	bbn.fn.log("ssrouce", this.source);
         let src = {
           allData: false,
           isFile: isFile,
           path: './',
           node: false,
           template: null,
-          repositoryProject: false,
-          currentRep: this.currentRep,
-          repositories: this.repositories,
-          root: this.source.root,
+          repositoryProject: selected,
+          currentRep: bbn.fn.extend(router.repository_content, {tabs: Array.isArray(router.repository_content.tabs) ? router.repository_content.tabs : router.repository_content.tabs[this.currentTypeCode][0]}),
+          repositories: repositories,
+          root: this.root,
           //parent: false,
           type: false,
-          isProject: this.isProject
+          isProject: true
         };
         //case top menu
-
+				bbn.fn.log("SRC", src);
         if ( !bbn.fn.isObject(node) ){
           src.path = './'
           //case project
-          if ( this.typeProject !== false ){
-            src.type =  this.typeProject;
-            if ( this.source.projects.tabs_type[this.typeProject] !== undefined ){
-              src.repositoryProject = !this.repositoryProject(this.typeProject) ? this.repositories[this.currentRep] : this.repositoryProject(this.typeProject);
-            }
-            src.path = this.typeProject;
+          if ( this.currentTypeCode !== false ){
+            src.type =  this.currentTypeCode;
           }
         }
         //of context
@@ -197,19 +226,10 @@
           }
           //caseproject
           if ( node.data.type !== false ){
-            src.type =  node.data.type;
-            src.repositoryProject = !this.repositoryProject(node.data.type) ? this.repositories[this.currentRep] : this.repositoryProject(node.data.type);
-            //case component
-            if ( node.data.type === 'components' ){
-              //if (  node.data.path.indexOf(node.data.dir + node.data.name + '/' + node.data.name) > -1 ){
-              //src.path = node.data.path.replace( node.data.dir + node.data.name + '/' + node.data.name,  node.data.dir + node.data.name);
-              if (  node.data.uid.indexOf(node.data.dir + node.data.name + '/' + node.data.name) > -1 ){
-                src.path = node.data.uid.replace( node.data.dir + node.data.name + '/' + node.data.name,  node.data.dir + node.data.name);
-              }
-              else{
-                //src.path = node.data.path;
-                src.path = node.data.uid;
-              }
+            src.type =  this.currentTypeCode;
+
+            if ( node.data.is_vue ){
+              src.path = node.data.uid.replace(node.data.name  + '/' + node.data.name, node.data.name);
             }//other types
             else{
               //src.path = node.data.path;
@@ -323,6 +343,13 @@
       treeMenu(node) {
         bbn.fn.log("NODE", node);
         let obj = [
+          {
+            icon: 'nf nf-fa-create',
+            text: bbn._('New file'),
+            action: () => {
+              this.openNew(bbn._('New file'), true, node);
+            }
+          },
           {
             icon: 'nf nf-fa-edit',
             text: bbn._('Rename'),
