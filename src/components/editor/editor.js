@@ -1,58 +1,58 @@
 /**
-  * @file editor component
-  *
-  * @description Component use to initiate ide with useful options
-  *
-  * @copyright BBN Solutions
-  *
-  * @author Lucas Courteaud
-  */
+          * @file editor component
+          *
+          * @description Component use to initiate ide with useful options
+          *
+          * @copyright BBN Solutions
+          *
+          * @author Lucas Courteaud
+          */
 
 (() => {
   return {
     data() {
       return {
         /**
-         * Root of the component
-         *
-         * @data {String} [appui.plugins['appui-newide'] + '/'] root
-         */
+                 * Root of the component
+                 *
+                 * @data {String} [appui.plugins['appui-newide'] + '/'] root
+                 */
         root: appui.plugins['appui-newide'] + '/',
         /**
-         * Options of all paths types
-         *
-         * @data {Array} [null] typeOptions
-         */
+                 * Options of all paths types
+                 *
+                 * @data {Array} [null] typeOptions
+                 */
         typeOptions: null,
         /**
-         * Id of the selected path
-         *
-         * @data {String} [''] currentPathId
-         */
+                 * Id of the selected path
+                 *
+                 * @data {String} [''] currentPathId
+                 */
         currentPathId: this.source.project.path ? this.source.project.path[0].id_option : '',
         /**
-         * Enable / Disable the dropdown to select path
-         *
-         * @data {Boolean} [false] isDropdownPathDisabled
-         */
+                 * Enable / Disable the dropdown to select path
+                 *
+                 * @data {Boolean} [false] isDropdownPathDisabled
+                 */
         isDropdownPathDisabled: false,
         /**
-         * Id type of the selected path
-         *
-         * @data {String} [''] currentTypeCode
-         */
+                 * Id type of the selected path
+                 *
+                 * @data {String} [''] currentTypeCode
+                 */
         currentTypeCode: '',
         /**
-         * Name of the selected file/folder
-         *
-         * @data {String} [''] nameSelectedElem
-         */
+                 * Name of the selected file/folder
+                 *
+                 * @data {String} [''] nameSelectedElem
+                 */
         nameSelectedElem: '',
         /**
-         * Vue object of this component's container
-         *
-         * @data {Vue} [null] container
-         */
+                 * Vue object of this component's container
+                 *
+                 * @data {Vue} [null] container
+                 */
         container: null,
         menu: [
           {
@@ -81,11 +81,11 @@
     },
     computed: {
       /**
-       * Type of the current path
-       *
-       * @computed currentPathType
-       * @return {Object}
-       */
+               * Type of the current path
+               *
+               * @computed currentPathType
+               * @return {Object}
+               */
       currentType() {
         if (this.currentTypeCode && this.currentPathType.types) {
           return bbn.fn.getRow(this.currentPathType.types, {type: this.currentTypeCode});
@@ -99,11 +99,11 @@
         return null;
       },
       /**
-       * Type of the current path
-       *
-       * @computed currentPathType
-       * @return {Object}
-       */
+               * Type of the current path
+               *
+               * @computed currentPathType
+               * @return {Object}
+               */
       currentPathType() {
         if (this.currentPath) {
           return bbn.fn.getRow(this.typeOptions, {id: this.currentPath.id_alias});
@@ -111,11 +111,11 @@
         return null;
       },
       /**
-       * The current path
-       *
-       * @computed currentPath
-       * @return {Object}
-       */
+               * The current path
+               *
+               * @computed currentPath
+               * @return {Object}
+               */
       currentPath() {
         if (this.currentPathId) {
           return bbn.fn.getRow(this.source.project.path, {id: this.currentPathId});
@@ -123,20 +123,20 @@
         return null;
       },
       /**
-       * Name of the current path
-       *
-       * @computed currentPathName
-       * @return {String}
-       */
+               * Name of the current path
+               *
+               * @computed currentPathName
+               * @return {String}
+               */
       currentPathName() {
         return this.currentPath ? this.currentPath.text : "";
       },
       /**
-       * Current root of the selected file
-       *
-       * @computed currentRoot
-       * @return {String}
-       */
+               * Current root of the selected file
+               *
+               * @computed currentRoot
+               * @return {String}
+               */
       currentRoot() {
         let st = this.currentPath.parent_code + '/' + this.currentPath.code + '/';
         if (this.currentType) {
@@ -147,21 +147,19 @@
     },
     methods: {
       /**
-       * New file|directory dialog
-       *
-       * @param string title The dialog's title
-       * @param bool isFile A boolean value to identify if you want create a file or a folder
-       * @param string path The current path
-       */
+               * New file|directory dialog
+               *
+               * @param string title The dialog's title
+               * @param bool isFile A boolean value to identify if you want create a file or a folder
+               * @param string path The current path
+               */
       openNew(title, isFile, node = false){
-        let router = this.find('appui-newide-editor-router').source
+        let editor = this.source
+        bbn.fn.log("lol" ,editor);
         let repositories = {};
         let selected = this.source.project.path[0];
+        bbn.fn.log("HAAAAAAAAAAAAAAAAAAAAA", editor.types[this.currentTypeCode === 'classes' ? 'cls' : this.currentTypeCode]);
         for (let repository of this.source.project.path) {
-          if (repository.id === this.currentPathId) {
-            selected = repository;
-            bbn.fn.log("SELECTED", selected);
-          }
           let name = repository.parent_code + '/' + repository.code;
           repositories[name] = bbn.fn.extend({}, {
             alias_code: repository.alias.code,
@@ -180,40 +178,43 @@
             root: repository.parent_code,
             text: repository.text,
             title: repository.code,
-            types: repository.alias.types
+            types: repository.alias.types,
+            tabs: editor.types[this.currentTypeCode === 'classes' ? 'cls' : this.currentTypeCode].tabs
           })
+          if (repository.id === this.currentPathId) {
+            selected = repositories[name];
+            bbn.fn.log("SELECTED", selected);
+          }
         }
-     		bbn.fn.log('type', this.currentTypeCode)
-        bbn.fn.log("node", node.data);
-        bbn.fn.log("router", router)
-       	bbn.fn.log("ssrouce", this.source);
         let src = {
           allData: false,
           isFile: isFile,
-          path: './',
-          node: false,
+          path: '',
+          node: node,
           template: null,
           repositoryProject: selected,
-          currentRep: bbn.fn.extend(router.repository_content, {tabs: Array.isArray(router.repository_content.tabs) ? router.repository_content.tabs : router.repository_content.tabs[this.currentTypeCode][0]}),
+          currentRep: selected.name,
           repositories: repositories,
           root: this.root,
+          project: editor.project,
           //parent: false,
           type: false,
           isProject: true
         };
         //case top menu
-				bbn.fn.log("SRC", src);
-        if ( !bbn.fn.isObject(node) ){
-          src.path = './'
-          //case project
-          if ( this.currentTypeCode !== false ){
-            src.type =  this.currentTypeCode;
+
+        bbn.fn.log("NEWIDE NODE", node);
+        if ( this.currentTypeCode !== false ){
+          src.type =  this.currentTypeCode;
+          if (src.type !== 'mvc') {
+            src.path = selected.types.find(type => type.type === src.type).path
           }
         }
-        //of context
-        else {
-          src.tab_mvc = node.data.tab_mvc;
-          if ( node.num > 0 ){
+
+        if (  bbn.fn.isObject(node) ) {
+          bbn.fn.log("node in")
+          if ( node.numChildren > 0 ){
+            bbn.fn.log("node in in")
             if( !node.isExpanded ){
               node.isExpanded = true;
             }
@@ -225,30 +226,23 @@
             this.nodeParent = node.parent;
           }
           //caseproject
-          if ( node.data.type !== false ){
-            src.type =  this.currentTypeCode;
 
-            if ( node.data.is_vue ){
-              src.path = node.data.uid.replace(node.data.name  + '/' + node.data.name, node.data.name);
-            }//other types
-            else{
-              //src.path = node.data.path;
-              src.path = node.data.uid;
-            }
-          }
+          if ( node.data.is_vue ){
+            src.path += node.data.uid.replace(node.data.name  + '/' + node.data.name, node.data.name);
+          }//other types
           else{
-            if ( node.data.folder ){
-              //src.path = node.data.path;
-              src.path = node.data.uid;
-            }
+            //src.path = node.data.path;
+            src.path += node.data.uid;
           }
+
           src.allData = node.data;
         }
-        //for root
+        bbn.fn.log("SRC", src);
+        //check path
+        src.path = src.path.replace( '//',  '/');
         //src.prefix = this.prefix;
         if ( !bbn.fn.isObject(node) || node.data.folder ){
-          //check path
-          src.path = src.path.replace( '//',  '/');
+          bbn.fn.log("ERJEJALJZRLJLKJRLEJZKL0");
           this.closest("bbn-container").getRef('popup').open({
             title: title,
             maximizable: true,
@@ -258,15 +252,15 @@
         }
       },
       /**
-       * Opens a dialog for create a new file
-       *
-       * @param node  set at false if click of the context node is data of the node tree
-       */
+               * Opens a dialog for create a new file
+               *
+               * @param node  set at false if click of the context node is data of the node tree
+               */
       newElement(node = false){
         let title = bbn._('New File');
         if ( this.isProject && bbn.fn.isObject(node) &&
-          ((node.data.type !== false) || (this.typeProject !== false))
-        ){
+            ((node.data.type !== false) || (this.typeProject !== false))
+           ){
           if ( ((node !== false) && (node.data.type === 'components')) || (this.typeProject === 'components') ){
             title = bbn._('New Component') +  ` <i class='nf nf-fa-vuejs'></i>`;
           }
@@ -274,14 +268,15 @@
             title = bbn._('New Class');
           }
         }
+        bbn.fn.log("NODE", node);
         this.openNew(title, true, node);
       },
 
       /**
-       * Opens a dialog for create a new directory
-       *
-       * @param node  set at false if click of the context node is data of the node tree
-       */
+               * Opens a dialog for create a new directory
+               *
+               * @param node  set at false if click of the context node is data of the node tree
+               */
       newDir(node){
         this.openNew(bbn._('New Directory'), false, node != undefined && node ? node : false);
       },
@@ -335,7 +330,7 @@
         }
       },
       mapTree(data) {
-				if (this.currentTab.tabs && data.tab) {
+        if (this.currentTab.tabs && data.tab) {
           data.bcolor = bbn.fn.getField(this.currentTab.tabs, 'bcolor', {url: data.tab}) || data.bcolor;
         }
         return data;
@@ -396,9 +391,9 @@
       }
     },
     /**
-     * @event created
-     * @fires fn.post
-     */
+             * @event created
+             * @fires fn.post
+             */
     created() {
       if (!appui.projects.options.ide) {
         bbn.fn.post(appui.plugins['appui-newide'] + "/data/types", d => {

@@ -45,7 +45,7 @@
                         :source="currentPathType.types"
                         source-value="type"
                         source-url=""
-                        source-text="type"
+                        source-text="url"
                         v-model="currentTypeCode"
                         :storage="true"
                         :storage-full-name="'appui-newide-type-dd-' + source.project.id + '-' + currentPathId"/>

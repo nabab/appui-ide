@@ -1,8 +1,8 @@
 <?php
 /**
- * What is my purpose?
- *
- **/
+   * What is my purpose?
+   *
+   **/
 
 use bbn\X;
 use bbn\Str;
@@ -13,6 +13,9 @@ use bbn\Appui\Project;
 if ($model->hasData('id_project')) {
   $project = new Project($model->db, $model->data['id_project']);
   $file = $project->urlToReal($model->data['url']);
+  $config = $project->urlToConfig($model->data['url']);
+  $type = array_pop(X::split($model->data['url'], '/'));
+
   if (!empty($file)) {
     $ext = Str::fileExt($file);
     $content = file_get_contents($file);
@@ -20,9 +23,18 @@ if ($model->hasData('id_project')) {
   else {
     $cfg = $project->urlToConfig($model->data['url']);
     $type = array_pop(X::split($model->data['url'], '/'));
-    $row = X::getRow($cfg['typology']['tabs'], ['url' => $type]);
-    $ext = $row['extensions'][0]['ext'];
-    $content = $row['extensions'][0]['default'];
+    if ($type === 'code') {
+      $ext = $cfg['typology']['extensions'][0]['ext'];
+      $content =$cfg['typology']['extensions'][0]['default'];
+    } else {
+      $row = X::getRow($cfg['typology']['tabs'], ['url' => $type]);
+      $ext = $row['extensions'][0]['ext'];
+      $content = $row['extensions'][0]['default'];
+    }
+  }
+
+  if ($type === 'html') {
+    $ext = 'html';
   }
   $title = basename($model->data['url']);
   return [

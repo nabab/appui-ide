@@ -1,4 +1,7 @@
 <?php
+
+use bbn\X;
+
 if ( isset($model->inc->ide) &&
   !empty($model->inc->ide->create($model->data))
 ){

@@ -11,9 +11,15 @@
     },
     computed: {
       deleteSource() {
+        let editor = this.closest('bbn-container').find('appui-newide-editor');
+        let url = this.source.uid;
+        if (editor && editor.currentTypeCode && editor.currentTypeCode === 'components') {
+          url = this.source.uid.replace(this.source.name  + '/' + this.source.name, this.source.name);
+        }
         return {
-          url: this.urlRoot + this.source.name,
-          id_project: this.closest('appui-project-ui').source.project.id
+          url: this.urlRoot + url,
+          id_project: this.closest('appui-project-ui').source.project.id,
+          data: this.source
         };
       }
     },
