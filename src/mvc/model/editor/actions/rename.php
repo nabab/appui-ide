@@ -42,9 +42,8 @@ if ($model->hasData(['url', 'name', 'id_project'])) {
             $check = $check .'/'. $tab['path'] . $model->data['data']['uid'] . '.' . $extension['ext'];
           }
           $check = str_replace('//', '/', $check);
-          $res[] = $check;
           if ($fs->isFile($check)) {
-						$fs->rename($check, $model->data['name']);
+						$fs->rename($check, $model->data['name'] . '.' . $extension['ext']);
           }
         }
       }
@@ -63,8 +62,14 @@ if ($model->hasData(['url', 'name', 'id_project'])) {
           }
           $check = str_replace('//', '/', $check);
           if ($fs->isFile($check)) {
-            $fs->rename($check, $model->data['name']);
+            $res[] = $check;
+            $fs->rename($check, $model->data['name'] . '.' . $extension['ext']);
           }
+        }
+      }
+      if ($model->data['data']['folder'] && $model->data['data']['is_vue']) {
+        if ($fs->isDir($cfg['file'])) {
+          $fs->rename($cfg['file'], $model->data['name']);
         }
       }
     }
@@ -72,6 +77,7 @@ if ($model->hasData(['url', 'name', 'id_project'])) {
   }
 
   return [
+    'files' => $res,
     'success' => true
   ];
 }

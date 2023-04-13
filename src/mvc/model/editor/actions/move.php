@@ -1,8 +1,8 @@
 <?php
 /**
-                             * What is my purpose?
-                             *
-                             **/
+                               * What is my purpose?
+                               *
+                               **/
 
 use bbn\X;
 use bbn\Str;
@@ -15,7 +15,7 @@ use bbn\Appui\Project;
 // example of dest : lib/appui-newide/mvc
 // example of name : Hello_world
 
-if ($model->hasData(['url_src', 'url_dest', 'id_project', 'data_src', 'data_dest', 'name'])) {
+if ($model->hasData(['url_src', 'url_dest', 'id_project', 'data_src', 'data_dest'])) {
   $project = new Project($model->db, $model->data['id_project']);
   $fs = new System();
   $cfg_src = $project->urlToConfig($model->data['url_src']);
@@ -38,12 +38,13 @@ if ($model->hasData(['url_src', 'url_dest', 'id_project', 'data_src', 'data_dest
         $check_src = str_replace($model->data['data_src']['uid'], "", $cfg_src['file']);
         $check_src = $check . '/' .  $tab['path'] . $model->data['data_src']['name'];
         $check_dest = str_replace($model->data['data_dest']['uid'], "", $cfg_src['file']);
-        $check_dest = $check . '/' .  $tab['path'] . $model->data['data_dest']['uid'] . '/' . $model->data["name"];
-        if ($fs->isDir($path_src . $check_src)) {
-          $fs->copy($path_src.$check_src, $path_dest .$check_dest);
-        }
+        $check_dest = $check . '/' .  $tab['path'] . $model->data['data_dest']['uid'];
+        $check_dest = str_replace('//', '/', $check_dest);
+        $check_src = str_replace('//', '/', $check_src);
+        X::ddump($path_src . $check_src, $path_dest . $check_dest);
       }
     } else {
+      return;
       foreach($cfg_src['typology']['tabs'] as $tab) {
         foreach($tab['extensions'] as $extension) {
           $check_src = str_replace($model->data['data_src']['uid'], "", $cfg_src['file']);
@@ -67,6 +68,7 @@ if ($model->hasData(['url_src', 'url_dest', 'id_project', 'data_src', 'data_dest
       }
     }
   } else {
+    return;
     if ($model->data['data_src']['folder'] && !$model->data['data_src']['is_vue']) {
       $check_dest = $cfg_dest['file'] . '/' . $model->data['name'];
       $check_dest = str_replace('//', '/', $check_dest);

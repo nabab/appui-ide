@@ -30,7 +30,7 @@
           </bbn-button>
         </div>
         <div/>
-        <bbn-menu :source="menu">
+        <bbn-menu :source="toolbarMenu">
         </bbn-menu>
       </bbn-toolbar>
     </bbn-pane>

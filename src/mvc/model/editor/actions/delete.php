@@ -1,8 +1,8 @@
 <?php
 /**
-         * What is my purpose?
-         *
-         **/
+             * What is my purpose?
+             *
+             **/
 
 use bbn\X;
 use bbn\Str;
@@ -22,19 +22,27 @@ if ($model->hasData(['url', 'id_project'])) {
 
   if ($cfg['typology'] && $cfg['typology']['code'] === 'mvc') {
     foreach($cfg['typology']['tabs'] as $tab) {
-      foreach($tab['extensions'] as $extension) {
+      if ($model->data['data']['folder']) {
         $check = str_replace($model->data['data']['uid'], "", $cfg['file']);
-
-        if (!empty($tab['fixed'])) {
-          continue;
-          $check = $check . $tab['path'] . str_replace($model->data['data']['name'], "", $model->data['data']['uid']) . $tab['fixed'];
-          
-        } else {
-          $check = $check . $tab['path'] . $model->data['data']['uid'] . '.' . $extension['ext'];
+        $check = $check .  $tab['path'] . $model->data['data']['uid'];
+        if ($fs->isDir($check)) {
+          $fs->delete($check);
         }
-				
-        if ($fs->isFile($check)) {
-					$fs->delete($check);
+      } else {
+        foreach($tab['extensions'] as $extension) {
+          $check = str_replace($model->data['data']['uid'], "", $cfg['file']);
+
+          if (!empty($tab['fixed'])) {
+            continue;
+            $check = $check . $tab['path'] . str_replace($model->data['data']['name'], "", $model->data['data']['uid']) . $tab['fixed'];
+
+          } else {
+            $check = $check . $tab['path'] . $model->data['data']['uid'] . '.' . $extension['ext'];
+          }
+
+          if ($fs->isFile($check)) {
+            $fs->delete($check);
+          }
         }
       }
     }
