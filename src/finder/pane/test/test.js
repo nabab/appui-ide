@@ -1,7 +1,0 @@
-// Javascript Document
-
-(() => {
-  return {
-    
-  }
-})();

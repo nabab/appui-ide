@@ -1,58 +1,58 @@
 /**
-                                * @file editor component
-                                *
-                                * @description Component use to initiate ide with useful options
-                                *
-                                * @copyright BBN Solutions
-                                *
-                                * @author Lucas Courteaud
-                                */
+                                          * @file editor component
+                                          *
+                                          * @description Component use to initiate ide with useful options
+                                          *
+                                          * @copyright BBN Solutions
+                                          *
+                                          * @author Lucas Courteaud
+                                          */
 
 (() => {
   return {
     data() {
       return {
         /**
-                                       * Root of the component
-                                       *
-                                       * @data {String} [appui.plugins['appui-newide'] + '/'] root
-                                       */
+                                                 * Root of the component
+                                                 *
+                                                 * @data {String} [appui.plugins['appui-newide'] + '/'] root
+                                                 */
         root: appui.plugins['appui-newide'] + '/',
         /**
-                                       * Options of all paths types
-                                       *
-                                       * @data {Array} [null] typeOptions
-                                       */
+                                                 * Options of all paths types
+                                                 *
+                                                 * @data {Array} [null] typeOptions
+                                                 */
         typeOptions: null,
         /**
-                                       * Id of the selected path
-                                       *
-                                       * @data {String} [''] currentPathId
-                                       */
+                                                 * Id of the selected path
+                                                 *
+                                                 * @data {String} [''] currentPathId
+                                                 */
         currentPathId: this.source.project.path ? this.source.project.path[0].id_option : '',
         /**
-                                       * Enable / Disable the dropdown to select path
-                                       *
-                                       * @data {Boolean} [false] isDropdownPathDisabled
-                                       */
+                                                 * Enable / Disable the dropdown to select path
+                                                 *
+                                                 * @data {Boolean} [false] isDropdownPathDisabled
+                                                 */
         isDropdownPathDisabled: false,
         /**
-                                       * Id type of the selected path
-                                       *
-                                       * @data {String} [''] currentTypeCode
-                                       */
+                                                 * Id type of the selected path
+                                                 *
+                                                 * @data {String} [''] currentTypeCode
+                                                 */
         currentTypeCode: '',
         /**
-                                       * Name of the selected file/folder
-                                       *
-                                       * @data {String} [''] nameSelectedElem
-                                       */
+                                                 * Name of the selected file/folder
+                                                 *
+                                                 * @data {String} [''] nameSelectedElem
+                                                 */
         nameSelectedElem: '',
         /**
-                                       * Vue object of this component's container
-                                       *
-                                       * @data {Vue} [null] container
-                                       */
+                                                 * Vue object of this component's container
+                                                 *
+                                                 * @data {Vue} [null] container
+                                                 */
         container: null,
         menu: [
           {
@@ -83,36 +83,132 @@
     },
     computed: {
       toolbarMenu() {
-        return [
+        let menu = [
           {
             text: bbn._('File'),
-            items: [{
-              icon: 'nf nf-fa-plus',
-              text: bbn._('New'),
-              items: [{
-                icon: 'nf nf-fa-file',
-                text: bbn._('Element'),
-                action: this.newElement
-              }, {
-                icon: 'nf nf-fa-folder',
-                text: bbn._('Directory'),
-                action: this.newDir
-              }]
-            }]
+            items: [
+              {
+                icon: 'nf nf-fa-plus',
+                text: bbn._('New'),
+                items: [{
+                  icon: 'nf nf-fa-file',
+                  text: bbn._('Element'),
+                  action: this.newElement
+                }, {
+                  icon: 'nf nf-fa-folder',
+                  text: bbn._('Directory'),
+                  action: this.newDir
+                }]
+              },
+              {
+                icon: "nf nf-mdi-content_paste",
+                text: bbn._('Paste'),
+                action: () => {
+                  if (this.copiedNode) {
+                    if (this.isCut) {
+                      bbn.fn.post(this.root + 'editor/actions/move', {
+                        url_src: this.getPathByNode(this.copiedNode),
+                        url_dest: this.currentRoot,
+                        data_src: this.copiedNode.data,
+                        data_dest: {uid: "/"},
+                        id_project: this.closest('appui-project-ui').source.project.id
+                      }, (d) => {
+                        if (d.success) {
+                          appui.success(bbn._('Success'));
+                          this.treeReload();
+                          this.isCut = false;
+                          this.copiedNode = null;
+                        } else {
+                          appui.error(bbn._('Error'));
+                        }
+                      })
+                      return;
+                    }
+                    this.getPopup({
+                      component: "appui-newide-form-copy",
+                      componentOptions: {
+                        source: {
+                          name: this.copiedNode.data.name,
+                          url_src: this.getPathByNode(this.copiedNode),
+                          url_dest:  this.currentRoot,
+                          data_src: this.copiedNode.data,
+                          data_dest: {uid: "/"},
+                          id_project: this.closest('appui-project-ui').source.project.id
+                        }
+                      },
+                      title: bbn._('Copy')
+                    });
+                  } else {
+                    appui.error(bbn._('Nothing to paste'));
+                  }
+
+                }
+              },
+              {
+                icon: 'nf nf-fa-save',
+                text: bbn._('Save'),
+                action: this.save
+              },
+            ]
           },
           {
-            icon: 'nf nf-fa-save',
-            text: bbn._('Save'),
-            action: this.save
+            text: bbn._('Search'),
+            items: [
+              {
+                icon: 'nf nf-fa-search',
+                text: bbn._('Find'),
+                action: () => {
+                  this.find('appui-newide-codemirror').openSearchPanel();
+                }
+              },
+              {
+                icon: 'nf nf-fa-search_minus',
+                text: bbn._('Find previous'),
+                action: () => {
+                  this.find('appui-newide-codemirror').findPrevious();
+                }
+              },
+              {
+                icon: 'nf nf-fa-search_plus',
+                text: bbn._('Find next'),
+                action: () => {
+                  this.find('appui-newide-codemirror').findNext();
+                }
+              },
+              {
+                icon: 'nf nf-mdi-find_replace',
+                text: bbn._('replace all'),
+                action: () => {
+                  this.find('appui-newide-codemirror').replaceAll();
+                }
+              },
+              {
+                icon: 'nf nf-cod-fold_up',
+                text: bbn._('Fold all'),
+                action: () => {
+                  this.find('appui-newide-codemirror').foldAll();
+                }
+              },
+              {
+                icon: 'nf nf-cod-fold_down',
+                text: bbn._('Unfold all'),
+                action: () => {
+                  this.find('appui-newide-codemirror').unfoldAll();
+                }
+              }
+            ]
           }
         ];
+
+        return menu;
       },
+
       /**
-                                     * Type of the current path
-                                     *
-                                     * @computed currentPathType
-                                     * @return {Object}
-                                     */
+                                               * Type of the current path
+                                               *
+                                               * @computed currentPathType
+                                               * @return {Object}
+                                               */
       currentType() {
         if (this.currentTypeCode && this.currentPathType.types) {
           return bbn.fn.getRow(this.currentPathType.types, {type: this.currentTypeCode});
@@ -126,11 +222,11 @@
         return null;
       },
       /**
-                                     * Type of the current path
-                                     *
-                                     * @computed currentPathType
-                                     * @return {Object}
-                                     */
+                                               * Type of the current path
+                                               *
+                                               * @computed currentPathType
+                                               * @return {Object}
+                                               */
       currentPathType() {
         if (this.currentPath) {
           return bbn.fn.getRow(this.typeOptions, {id: this.currentPath.id_alias});
@@ -138,11 +234,11 @@
         return null;
       },
       /**
-                                     * The current path
-                                     *
-                                     * @computed currentPath
-                                     * @return {Object}
-                                     */
+                                               * The current path
+                                               *
+                                               * @computed currentPath
+                                               * @return {Object}
+                                               */
       currentPath() {
         if (this.currentPathId) {
           return bbn.fn.getRow(this.source.project.path, {id: this.currentPathId});
@@ -150,20 +246,20 @@
         return null;
       },
       /**
-                                     * Name of the current path
-                                     *
-                                     * @computed currentPathName
-                                     * @return {String}
-                                     */
+                                               * Name of the current path
+                                               *
+                                               * @computed currentPathName
+                                               * @return {String}
+                                               */
       currentPathName() {
         return this.currentPath ? this.currentPath.text : "";
       },
       /**
-                                     * Current root of the selected file
-                                     *
-                                     * @computed currentRoot
-                                     * @return {String}
-                                     */
+                                               * Current root of the selected file
+                                               *
+                                               * @computed currentRoot
+                                               * @return {String}
+                                               */
       currentRoot() {
         let st = this.currentPath.parent_code + '/' + this.currentPath.code + '/';
         if (this.currentType) {
@@ -174,12 +270,12 @@
     },
     methods: {
       /**
-                                     * New file|directory dialog
-                                     *
-                                     * @param string title The dialog's title
-                                     * @param bool isFile A boolean value to identify if you want create a file or a folder
-                                     * @param string path The current path
-                                     */
+                                               * New file|directory dialog
+                                               *
+                                               * @param string title The dialog's title
+                                               * @param bool isFile A boolean value to identify if you want create a file or a folder
+                                               * @param string path The current path
+                                               */
       openNew(title, isFile, node = false){
         let editor = this.source
         bbn.fn.log("lol" ,editor);
@@ -279,10 +375,10 @@
         }
       },
       /**
-                                     * Opens a dialog for create a new file
-                                     *
-                                     * @param node  set at false if click of the context node is data of the node tree
-                                     */
+                                               * Opens a dialog for create a new file
+                                               *
+                                               * @param node  set at false if click of the context node is data of the node tree
+                                               */
       newElement(node = false){
         let title = bbn._('New File');
         if ( this.isProject && bbn.fn.isObject(node) &&
@@ -300,10 +396,10 @@
       },
 
       /**
-                                     * Opens a dialog for create a new directory
-                                     *
-                                     * @param node  set at false if click of the context node is data of the node tree
-                                     */
+                                               * Opens a dialog for create a new directory
+                                               *
+                                               * @param node  set at false if click of the context node is data of the node tree
+                                               */
       newDir(node){
         this.openNew(bbn._('New Directory'), false, node != undefined && node ? node : false);
       },
@@ -490,7 +586,11 @@
         })
 
         if (this.copiedNode && node.data.folder) {
-          this.nodeParent = bbn.vue.find(node, 'bbn-tree');
+          if (node.data.numChildren > 0) {
+            this.nodeParent = bbn.vue.find(node, 'bbn-tree');
+          } else {
+            this.nodeParent = bbn.vue.find(node.parent.$parent, 'bbn-tree');
+          }
           res.push({
             icon: 'nf nf-mdi-content_paste',
             text: bbn._('Paste'),
@@ -503,7 +603,12 @@
                   data_dest: node.data,
                   id_project: this.closest('appui-project-ui').source.project.id
                 }, (d) => {
-                  bbn.fn.log(d);
+                  if (d.success) {
+                    appui.success(bbn._('Success'));
+                    this.nodeParent.reload();
+                  } else {
+                    appui.error(bbn._('Error'));
+                  }
                 })
                 return;
               }
@@ -529,6 +634,7 @@
           icon: 'nf nf-fa-edit',
           text: bbn._('Rename'),
           action: () => {
+            this.nodeParent = bbn.vue.find(node.parent.$parent, 'bbn-tree');
             this.getPopup({
               component: "appui-newide-form-rename",
               componentOptions: {
@@ -544,6 +650,12 @@
           icon: 'nf nf-fa-trash_o',
           text: bbn._('Delete'),
           action: () => {
+            this.nodeParent = bbn.vue.find(node.parent.$parent, 'bbn-tree');
+            bbn.fn.log("CHOICE", node);
+            bbn.fn.log("CHOICE NODE PARENT", this.nodeParent);
+            if (this.nodeParent && this.nodeParent.data.numChildren === 1) {
+              this.nodeParent = bbn.vue.find(node.$parent.$parent, 'bbn-tree');
+            }
             bbn.fn.log(node);
             this.getPopup({
               component: "appui-newide-form-delete",
@@ -559,9 +671,9 @@
       }
     },
     /**
-                                   * @event created
-                                   * @fires fn.post
-                                   */
+                                             * @event created
+                                             * @fires fn.post
+                                             */
     created() {
       if (!appui.projects.options.ide) {
         bbn.fn.post(appui.plugins['appui-newide'] + "/data/types", d => {

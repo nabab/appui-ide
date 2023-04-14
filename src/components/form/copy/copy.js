@@ -21,7 +21,16 @@
     methods: {
       onSuccess(data) {
         appui.success(bbn._('Rename Successfully'));
-        this.closest('appui-newide-editor').nodeParent.reload();
+        let editor = this.closest('appui-newide-editor');
+        if (editor.nodeParent && editor.nodeParent.reload) {
+          editor.nodeParent.reload();
+          editor.nodeParent = null;
+        } else {
+          editor.treeReload();
+        }
+      },
+      onFailure(data) {
+        appui.error(bbn._('Rename failure'));
       }
     }
   };

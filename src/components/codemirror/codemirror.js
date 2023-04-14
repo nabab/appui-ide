@@ -91,6 +91,28 @@
       }
     },
     methods: {
+      foldAll() {
+      	window.codemirror6.language.foldAll(this.widget);
+       	 //window.codemirror6.language.foldInside(window.codemirror6.language.syntaxTree(this.widget));
+      },
+      unfoldAll() {
+        window.codemirror6.language.unfoldAll(this.widget);
+      },
+      openSearchPanel() {
+        window.codemirror6.search.openSearchPanel(this.widget);
+      },
+      closeSearchPanel() {
+        window.codemirror6.search.closeSearchPanel(this.widget);
+      },
+      findNext() {
+        window.codemirror6.search.findNext(this.widget);
+      },
+      findPrevious() {
+        window.codemirror6.search.findPrevious(this.widget);
+      },
+      replaceAll() {
+        window.codemirror6.search.replaceAll(this.widget);
+      },
       /**
   			* Return an array with extensions give in cfg
 		 	  *

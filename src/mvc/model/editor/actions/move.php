@@ -1,8 +1,8 @@
 <?php
 /**
-                               * What is my purpose?
-                               *
-                               **/
+                                   * What is my purpose?
+                                   *
+                                   **/
 
 use bbn\X;
 use bbn\Str;
@@ -36,15 +36,18 @@ if ($model->hasData(['url_src', 'url_dest', 'id_project', 'data_src', 'data_dest
     if ($model->data['data_src']['folder']) {
       foreach($cfg_src['typology']['tabs'] as $tab) {
         $check_src = str_replace($model->data['data_src']['uid'], "", $cfg_src['file']);
-        $check_src = $check . '/' .  $tab['path'] . $model->data['data_src']['name'];
+        $check_src = $check . '/' .  $tab['path'] . $model->data['data_src']['uid'];
         $check_dest = str_replace($model->data['data_dest']['uid'], "", $cfg_src['file']);
         $check_dest = $check . '/' .  $tab['path'] . $model->data['data_dest']['uid'];
         $check_dest = str_replace('//', '/', $check_dest);
         $check_src = str_replace('//', '/', $check_src);
-        X::ddump($path_src . $check_src, $path_dest . $check_dest);
+        if ($fs->isDir($path_src . $check_src)) {
+          return [
+            'success' => $fs->move($path_src . $check_src, $path_dest . $check_dest)
+          ];
+        }
       }
     } else {
-      return;
       foreach($cfg_src['typology']['tabs'] as $tab) {
         foreach($tab['extensions'] as $extension) {
           $check_src = str_replace($model->data['data_src']['uid'], "", $cfg_src['file']);
@@ -57,61 +60,46 @@ if ($model->hasData(['url_src', 'url_dest', 'id_project', 'data_src', 'data_dest
             $check_dest = $check . $tab['path'] . str_replace($model->data['data_dest']['name'], "", $model->data['data_dest']['uid']) . $tab['fixed'];
           } else {
             $check_src = $check_src .'/'. $tab['path'] . $model->data['data_src']['uid'] . '.' . $extension['ext'];
-            $check_dest = $check_dest .'/'. $tab['path'] . $model->data['data_dest']['uid'] . '/' . $model->data['name'] . '.' . $extension['ext'];
+            $check_dest = $check_dest .'/'. $tab['path'] . $model->data['data_dest']['uid'];
           }
           $check_dest = str_replace('//', '/', $check_dest);
           $check_src = str_replace('//', '/', $check_src);
+          $res[] = [
+            $check_src,
+            $check_dest
+          ];
           if ($fs->isFile($check_src)) {
-            $fs->copy($check_src, $check_dest);
+            $fs->move($check_src, $check_dest);
           }
         }
       }
     }
   } else {
-    return;
-    if ($model->data['data_src']['folder'] && !$model->data['data_src']['is_vue']) {
-      $check_dest = $cfg_dest['file'] . '/' . $model->data['name'];
-      $check_dest = str_replace('//', '/', $check_dest);
+    if ($model->data['data_src']['folder']) {
       if ($fs->isDir($cfg_src['file'])) {
-        $fs->copy($cfg_src['file'], $check_dest);
+        $fs->move($cfg_src['file'], $cfg_dest['file']);
       }
     } else {
-      if ($model->data['data_src']['folder'] && $model->data['data_src']['is_vue']) {
-        $check_dest = $cfg_dest['file'] . '/' . $model->data['name'];
-        $check_dest = str_replace('//', '/', $check_dest);
-        if ($fs->isDir($cfg_src['file'])) {
-          $fs->copy($cfg_src['file'], $check_dest);
-        }
-        foreach($cfg_src['typology']['tabs'] as $tab) {
-          foreach($tab['extensions'] as $extension) {
-            $check_src = $cfg_dest['file'] . '/' . $model->data['name'] . '/' . $model->data['data_src']['name'] . '.' .  $extension['ext'];
-            $new_name = $model->data['name'] . '.' . $extension['ext'];
-            $check_src = str_replace('//', '/', $check_src);
-            if ($fs->isFile($check_src)) {
-              $fs->rename($check_src, $new_name);
-            }
+
+      foreach($cfg_src['typology']['tabs'] as $tab) {
+        foreach($tab['extensions'] as $extension) {
+          if ($model->data['data_src']['is_vue']) {
+            $check_src = $cfg_src['file'] . '/' . $model->data['data_src']['name'] . '.' .  $extension['ext'];
+            $check_dest = $cfg_dest['file'];
           }
-        }
-      } else {
-        foreach($cfg_src['typology']['tabs'] as $tab) {
-          foreach($tab['extensions'] as $extension) {
-            if ($model->data['data_src']['is_vue']) {
-              $check_src = $cfg_src['file'] . '/' . $model->data['data_src']['name'] . '.' .  $extension['ext'];
-              $check_dest = $cfg_dest['file'] . '/' . $model->data['name'] . '.' .  $extension['ext'];
-            }
-            $check_src = $path_src.'/'.$file_src.'.'.$extension['ext'];
-            $check_dest = $cfg_dest['file'] . '/' . $model->data['name'] . '.' . $extension['ext'];
-            $check_src = str_replace('//', '/', $check_src);
-            $check_dest = str_replace('//', '/', $check_dest);
-            if ($fs->isFile($check_src)) {
-              $fs->copy($check_src, $check_dest);
-            }
+          $check_src = $path_src.'/'.$file_src.'.'.$extension['ext'];
+          $check_dest = $cfg_dest['file'];
+          $check_src = str_replace('//', '/', $check_src);
+          $check_dest = str_replace('//', '/', $check_dest);
+          if ($fs->isFile($check_src)) {
+            $fs->move($check_src, $check_dest);
           }
         }
       }
     }
   }
   return [
-    'success'=> true
+    'success'=> true,
+    'test' => $res
   ];
 }

@@ -4,6 +4,7 @@
   <bbn-form :action="root + 'editor/actions/copy'"
             :source="formData"
             @success="onSuccess"
+            @failure="onFailure"
             class="bbn-m"
             :prefilled="true">
     <div class="bbn-padded bbn-grid-fields" >

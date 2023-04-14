@@ -26,7 +26,14 @@
     methods: {
       onSuccess(data) {
         appui.success(bbn._('Delete Successfully'));
-        this.closest('appui-newide-editor').getRef('tree').reload();
+        let editor = this.closest('appui-newide-editor')
+        bbn.fn.log("NODE PARENT", editor.nodeParent);
+        if (editor.nodeParent && editor.nodeParent.reload) {
+          editor.nodeParent.reload();
+          editor.nodeParent = null;
+        } else {
+          editor.treeReload();
+        }
       }
     }
   };

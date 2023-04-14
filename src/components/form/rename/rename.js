@@ -27,7 +27,7 @@
     methods: {
       onSuccess(data) {
         appui.success(bbn._('Rename Successfully'));
-        this.closest('appui-newide-editor').getRef('tree').reload();
+        this.closest('appui-newide-editor').nodeParent.reload();
       }
     }
   };

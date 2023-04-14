@@ -36,7 +36,7 @@ if ($model->hasData(['url_src', 'url_dest', 'id_project', 'data_src', 'data_dest
     if ($model->data['data_src']['folder']) {
       foreach($cfg_src['typology']['tabs'] as $tab) {
         $check_src = str_replace($model->data['data_src']['uid'], "", $cfg_src['file']);
-        $check_src = $check . '/' .  $tab['path'] . $model->data['data_src']['name'];
+        $check_src = $check . '/' .  $tab['path'] . $model->data['data_src']['uid'];
         $check_dest = str_replace($model->data['data_dest']['uid'], "", $cfg_src['file']);
         $check_dest = $check . '/' .  $tab['path'] . $model->data['data_dest']['uid'] . '/' . $model->data["name"];
         if ($fs->isDir($path_src . $check_src)) {
