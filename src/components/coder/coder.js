@@ -6,11 +6,23 @@
       return {
         myCode: this.source.content,
         myTheme: "basicDark",
-        myMode: this.source.ext
+        myMode: this.source.ext,
+        ready: false
       };
     },
     mounted() {
       bbn.fn.log("COMPONENTS/CODER SOURCE", this.source);
+      if (!window.codemirror6) {
+        bbn.fn.post(appui.plugins['appui-newide'] + '/cm6', d => {
+          if (d.script) {
+            eval(d.script);
+            this.ready = true;
+          }
+        })
+      }
+      else {
+        this.ready = true;
+      }
     },
     methods: {
       keydown(e) {
