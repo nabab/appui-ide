@@ -16,6 +16,7 @@ if ($model->hasData(['url']['id_project'])) {
   $project = new Project($model->db, $model->data['id_project']);
   $fs = new System();
   $file = $project->urlToReal($model->data['url']);
+  
   if (!empty($file)) {
     if (empty($model->data['content'])) {
       $fs->delete($file);
@@ -29,6 +30,9 @@ if ($model->hasData(['url']['id_project'])) {
     $file = $cfg['file'].'.'.$cfg['extensions'][0]['ext'];
     $fs->putContents($file, $model->data['content']);
   }
+  if (!$fs->exists($model->dataPath('appui-newide') . '/backup')) {
+    $fs->createPath($model->dataPath('appui-newide') . '/backup');
+  } 
   return [
     'file' => basename($file),
     'content' => $model->data['content'],

@@ -1,6 +1,6 @@
 <component :is="source.permissions !== undefined ?
-                'appui-ide-settings' :
-                'appui-ide-code'"
+                'appui-newide-settings' :
+                'appui-newide-code'"
            :source="source"
            ref="content"
            :key="source.id"

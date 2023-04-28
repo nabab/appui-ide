@@ -269,6 +269,12 @@
       }
     },
     methods: {
+      test() {
+        let cp = this.find('appui-newide-editor-router');
+        if (cp) {
+          cp.test();
+        }
+      },
       /**
                                                * New file|directory dialog
                                                *

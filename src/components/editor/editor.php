@@ -5,7 +5,7 @@
       <bbn-toolbar :button-space="true">
         <div class="bbn-left-spadding">
           <bbn-dropdown :source="source.project.path"
-                        source-value="id"
+                        source-value="id_option"
                         v-model="currentPathId"
                         :storage="true"
                         :storage-full-name="'appui-newide-path-dd-' + source.project.id"
@@ -20,8 +20,12 @@
                     :notext="true"/>
         <div/>
         <div class="bbn-xspadding">
-          <bbn-button>
-          </bbn-button>
+          <bbn-button title="<?=_('Testeeeee code!')?>"
+                      @click="test"
+                      icon="nf nf-fa-magic"
+                      style="margin-left: 2px"
+                      ref="btnTest"
+                      :notext="true"/>
           <bbn-button>
           </bbn-button>
           <bbn-button>
@@ -64,7 +68,7 @@
                     :menu="treeMenu"/>
         </bbn-pane>
         <bbn-pane>
-					<bbn-router :autoload="true"
+          <bbn-router :autoload="true"
                       ref="router"
                       :nav="true"
                       :root="'newide/' + source.project.id + '/ide/'">
