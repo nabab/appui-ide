@@ -8,7 +8,7 @@ use bbn\Parsers\Php;
 
 $parser = new Php();
 return [
-  'data' => $parser->analyzeClass('bbn\Appui\Project')
+  'data' => $parser->analyzeClass('\\bbn\\Appui\\Option')
 ];
 
 //test

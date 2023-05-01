@@ -5,12 +5,11 @@
       <bbn-toolbar :button-space="true">
         <div class="bbn-left-spadding">
           <bbn-dropdown :source="source.project.path"
-                        source-value="id_option"
+                        source-value="id"
                         v-model="currentPathId"
                         :storage="true"
                         :storage-full-name="'appui-newide-path-dd-' + source.project.id"
-                        :disabled="isDropdownPathDisabled">
-          </bbn-dropdown>
+                        :disabled="isDropdownPathDisabled"/>
         </div>
         <div/>
         <bbn-button title="<?=_('Refresh files list')?>"
