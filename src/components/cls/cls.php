@@ -4,23 +4,6 @@
                 :collapsible="true">
     <bbn-pane :size="220">
       <div class="bbn-overlay bbn-flex-height">
-        <bbn-toolbar>
-          <div>
-            <bbn-button :notext="true"
-                        text="_('Select Class')"
-                        icon='nf nf-fa-folder'/>
-          </div>
-          <div>
-          </div>
-          <div>
-            <bbn-context :source="addActions">
-              <bbn-button :notext="true"
-                          text="_('Add ...')"
-                          icon="nf nf-fa-plus">
-              </bbn-button>
-            </bbn-context>
-          </div>
-        </bbn-toolbar>
         <bbn-tabs :source="tabs"
                   v-model="tabSelected"
                   :fill="true"/>

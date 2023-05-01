@@ -7,8 +7,15 @@ use bbn\Str;
 use bbn\Parsers\Php;
 
 $parser = new Php();
-return [
-  'data' => $parser->analyzeClass('\\bbn\\Appui\\Option')
-];
+if ($model->hasData('class')) {
+  return [
+    'data' => $parser->analyzeClass($model->data['class'])
+  ];
+}
+else {
+  return [
+    'library' => $parser->getLibraryClasses($model->libPath() . 'bbn/bbn/src/bbn', 'bbn'),
+  ];
+}
 
 //test

@@ -4,4 +4,9 @@ use bbn\X;
 use bbn\Str;
 /** @var $ctrl \bbn\Mvc\Controller */
 
-$ctrl->combo(_("Class Editor"), true);
+if (!empty($ctrl->post)) {
+  $ctrl->action();
+}
+else {
+  $ctrl->combo(_("Class Editor"), true);
+}

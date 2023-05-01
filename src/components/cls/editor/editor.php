@@ -9,8 +9,14 @@
         <?= _("Class") ?> <bbn-editable v-model="source.name"/>
       </h1>
       <div class="bbn-w-100">
-        <bbn-markdown v-model="source.description"
+        <bbn-markdown v-model="source.doc.description"
                       placeholder="<?= _("Write a description for your class here") ?>"/>
+      </div>
+      <div class="bbn-grid-fields bbn-top-margin">
+        <template v-for="(val, tag) in source.doc.tags">
+          <label v-text="tag"/>
+          <bbn-input v-model="source.doc.tags[tag]"/>
+        </template>
       </div>
     </div>
   </bbn-form>
