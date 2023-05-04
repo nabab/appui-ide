@@ -227,8 +227,8 @@
             config.extraTags[cpName].attrs = {}
 
             bbn.fn.iterate(cp.options.props, (prop, propName) => {
-              config.extraTags[cpName].attrs[propName] = null;
-              config.extraTags[cpName].attrs[":" + propName] = null;
+              config.extraTags[cpName].attrs[bbn.fn.camelToCss(propName)] = null;
+              config.extraTags[cpName].attrs[":" + bbn.fn.camelToCss(propName)] = null;
               bbn.fn.log(propName, prop.type);
             })
           }
