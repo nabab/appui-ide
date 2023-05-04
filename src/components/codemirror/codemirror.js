@@ -15,10 +15,10 @@
   };
   return {
     /**
-     * @mixin bbn.vue.basicComponent
-     * @mixin bbn.vue.inputComponent
-     * @mixin bbn.vue.eventsComponent
-     */
+                   * @mixin bbn.vue.basicComponent
+                   * @mixin bbn.vue.inputComponent
+                   * @mixin bbn.vue.eventsComponent
+                   */
     mixins:
     [
       bbn.vue.basicComponent,
@@ -27,10 +27,10 @@
     ],
     props: {
       /**
-  			* Language passed in props of the component
-  			*
-			  * @prop {String} [php] mode
-  			*/
+                      * Language passed in props of the component
+                      *
+                      * @prop {String} [php] mode
+                      */
       mode: {
         type: String,
         default: 'js',
@@ -39,10 +39,10 @@
         }
       },
       /**
-  			* Theme passed in props of the component
-  			*
-			  * @prop {String} [basicLight] theme
-  			*/
+                      * Theme passed in props of the component
+                      *
+                      * @prop {String} [basicLight] theme
+                      */
       theme: {
         type: String,
         default: 'basicLight'
@@ -51,30 +51,30 @@
     data() {
       return {
         /**
-				  * Widget containing the codemirror instance
-				  *
-  				* @data {Object} [null] widget
-  				*/
+                        * Widget containing the codemirror instance
+                        *
+                        * @data {Object} [null] widget
+                        */
         widget: null,
         /**
-				  * Mode use to display the content of file
-				  *
-  				* @data {Object} [null] currentMode
-  				*/
+                        * Mode use to display the content of file
+                        *
+                        * @data {Object} [null] currentMode
+                        */
         currentMode: this.mode,
         /**
-				  * Current theme use
-				  *
-  				* @data {Object} [null] currentTheme
-  				*/
+                        * Current theme use
+                        *
+                        * @data {Object} [null] currentTheme
+                        */
         currentTheme: this.theme,
         state: null,
         lastKeyDown: null
       };
     },
     /**
-  		* @event mounted
-  		*/
+                    * @event mounted
+                    */
     mounted() {
       bbn.fn.log("COMPONENTS/CODEMIRROR THEME/MODE", this.theme, this.mode);
       if (!window.codemirror6) {
@@ -92,8 +92,8 @@
     },
     methods: {
       foldAll() {
-      	window.codemirror6.language.foldAll(this.widget);
-       	 //window.codemirror6.language.foldInside(window.codemirror6.language.syntaxTree(this.widget));
+        window.codemirror6.language.foldAll(this.widget);
+        //window.codemirror6.language.foldInside(window.codemirror6.language.syntaxTree(this.widget));
       },
       unfoldAll() {
         window.codemirror6.language.unfoldAll(this.widget);
@@ -114,12 +114,12 @@
         window.codemirror6.search.replaceAll(this.widget);
       },
       /**
-  			* Return an array with extensions give in cfg
-		 	  *
-		  	* @method getExtensions
-		  	* @param {Object} cfg Configue of extensions
-		  	* @return {Array}
-		  	*/
+                      * Return an array with extensions give in cfg
+                      *
+                      * @method getExtensions
+                      * @param {Object} cfg Configue of extensions
+                      * @return {Array}
+                      */
       getExtensions() {
         let cm = window.codemirror6;
         cm.getBasicExtensions();
@@ -168,48 +168,25 @@
         return extensions;
       },
       /**
-  			* Return an array with options of autocompletions
-		 	  *
-		  	* @method completionSource
-		  	* @param {String} context Text in text-area of the instance codemirror
-		  	* @return {Object}
-		  	*/
+                      * Return an array with options of autocompletions
+                      *
+                      * @method completionSource
+                      * @param {String} context Text in text-area of the instance codemirror
+                      * @return {Object}
+                      */
       completionSource(context) {
         let word = context.matchBefore(/\w*/);
         let fn          = this.getWidgetCompletion();
         let res         = fn(context);
-        let lineIndex   = 0;
-        let totalChar   = 0;
-        let currentNode = codemirror6.language.syntaxTree(context.state).resolveInner(context.pos, -1);
-        let currentType =  currentNode.name;
-        while (lineIndex < context.state.doc.text.length) {
-          totalChar += context.state.doc.text[lineIndex].length + 1;
-          if (totalChar + 1 > context.pos) {
-            break;
-          }
-          else {
-            lineIndex++;
-          }
-        }
-        let charPos = context.state.doc.text[lineIndex].length - (totalChar - context.pos);
-        let node = {parent: currentNode};
-        let i = 0;
-        while (node.parent) {
-          i++;
-          node = node.parent;
-          bbn.fn.log("LEVEL " + i, node.name, bbn.fn.substr(this.value, node.from, node.to - node.from));
-        }
-        switch (currentType) {
-          case '(':
-            bbn.fn.log("A parenthese opens");
-            if (currentNode.parent && (currentNode.parent.name === 'ArgList')) {
-              bbn.fn.log("And we are in the arguments of a function, so let's find out");
-            }
-        }
-        bbn.fn.log(res, 'line length : ' + context.state.doc.text[lineIndex].length, 'totalChar : ' + totalChar, 'context.pos : ' + context.pos, 'lineIndex : ' + lineIndex, 'charPos : ' + charPos, context, word, currentType);
+
+
+        bbn.fn.log("RES", res);
+
         if (!res || !res.options) {
           res = {options: []};
         }
+
+
         res.options.unshift(...[
           {label: "match", type: "keyword"},
           {label: "hello", type: "variable", info: "Hello<br>World"},
@@ -222,9 +199,9 @@
               resolve(div);
             });
           }},
-          {label: "caca", type: "function", info() {
+          {label: "dada", type: "function", info() {
             return new Promise((resolve, reject) => {
-              bbn.fn.log('caca');
+              bbn.fn.log('dada');
               let div = document.createElement('p');
               div.className = 'bbn-no-padding bbn-no-margin';
               div.innerHTML = "Hello<br>World2";
@@ -236,11 +213,38 @@
 
         return res;
       },
+
+      createVueConfiguration() {
+        const config = {
+          extraTags: {},
+          extraGlobalAttributes: {},
+        }
+        let components = Object.keys(Vue.options.components).sort();
+        bbn.fn.iterate(Vue.options.components, (cp, cpName) => {
+          bbn.fn.log(cpName);
+          config.extraTags[cpName] = {};
+          if (cp.options && cp.options.props) {
+            config.extraTags[cpName].attrs = {}
+
+            bbn.fn.iterate(cp.options.props, (prop, propName) => {
+              config.extraTags[cpName].attrs[propName] = null;
+              config.extraTags[cpName].attrs[":" + propName] = null;
+              bbn.fn.log(propName, prop.type);
+            })
+          }
+        });
+
+				return config;
+      },
+
       getWidgetCompletion() {
+
+        const Myconfig = this.createVueConfiguration();
+
         let res = null;
         switch (this.currentMode) {
           case 'html':
-            res = window.codemirror6.html.htmlCompletionSource;
+            res = window.codemirror6.html.htmlCompletionSourceWith(Myconfig);
             break;
           case 'php':
             res = window.codemirror6.html.htmlCompletionSource;
@@ -252,6 +256,7 @@
             res = window.codemirror6.css.cssCompletionSource;
             break;
         }
+        bbn.fn.log("HAAAAAAAAAAAAAA", res);
         if (!res) {
           res = () => {
             return {
@@ -262,12 +267,12 @@
         return res;
       },
       /**
-  			* Update code in editor and do an emitInput
-		 	  *
-		  	* @method onChange
-		  	* @param {String} tr Text in text-area of the instance codemirror
-		  	* @return {Object}
-		  	*/
+                      * Update code in editor and do an emitInput
+                      *
+                      * @method onChange
+                      * @param {String} tr Text in text-area of the instance codemirror
+                      * @return {Object}
+                      */
       onChange(tr) {
         this.widget.update([tr]);
         let value = this.widget.state.doc.toString();
@@ -276,11 +281,11 @@
         }
       },
       /**
-  			* Initialize a new instance of codemirror in this.widget
-		 	  *
-		  	* @method init
-		  	* @return {Object}
-		  	*/
+                      * Initialize a new instance of codemirror in this.widget
+                      *
+                      * @method init
+                      * @return {Object}
+                      */
       init() {
         let cm = window.codemirror6;
         let extensions = this.getExtensions();
