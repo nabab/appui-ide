@@ -26,6 +26,11 @@
       }
     },
     methods: {
+      openHistory() {
+        let component = this.closest('bbn-router');
+        let url = component.views[component.selected].current;
+				this.getRef('tabstrip').load('history/' + url.split('/').pop(), false);
+      },
       getActive(getCode = false){
         let tn = this.getRef('tabstrip');
         bbn.fn.log("TN changed 1", tn);

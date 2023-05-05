@@ -33,7 +33,7 @@
            * Id type of the selected path
            * @data {String} [''] currentTypeCode
            */
-        currentTypeCode: '',
+        currentTypeCode: 'components',
         /**
            * Name of the selected file/folder
            * @data {String} [''] nameSelectedElem
@@ -259,6 +259,9 @@
       }
     },
     methods: {
+      openHistory() {
+        this.find('appui-newide-editor-router').openHistory();
+      },
       test() {
         let cp = this.find('appui-newide-editor-router');
         if (cp) {

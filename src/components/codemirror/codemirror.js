@@ -179,9 +179,6 @@
         let fn          = this.getWidgetCompletion();
         let res         = fn(context);
 
-
-        bbn.fn.log("RES", res);
-
         if (!res || !res.options) {
           res = {options: []};
         }
@@ -221,7 +218,6 @@
         }
         let components = Object.keys(Vue.options.components).sort();
         bbn.fn.iterate(Vue.options.components, (cp, cpName) => {
-          bbn.fn.log(cpName);
           config.extraTags[cpName] = {};
           if (cp.options && cp.options.props) {
             config.extraTags[cpName].attrs = {}
@@ -229,7 +225,6 @@
             bbn.fn.iterate(cp.options.props, (prop, propName) => {
               config.extraTags[cpName].attrs[bbn.fn.camelToCss(propName)] = null;
               config.extraTags[cpName].attrs[":" + bbn.fn.camelToCss(propName)] = null;
-              bbn.fn.log(propName, prop.type);
             })
           }
         });
@@ -256,7 +251,6 @@
             res = window.codemirror6.css.cssCompletionSource;
             break;
         }
-        bbn.fn.log("HAAAAAAAAAAAAAA", res);
         if (!res) {
           res = () => {
             return {

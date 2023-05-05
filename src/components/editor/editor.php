@@ -17,7 +17,6 @@
                     icon="nf nf-oct-sync"
                     style="margin-left: 2px"
                     :notext="true"/>
-        <div/>
         <div class="bbn-xspadding">
           <bbn-button title="<?=_('Testeeeee code!')?>"
                       @click="test"
@@ -25,11 +24,11 @@
                       style="margin-left: 2px"
                       ref="btnTest"
                       :notext="true"/>
-          <bbn-button>
-          </bbn-button>
-          <bbn-button>
-          </bbn-button>
-          <bbn-button>
+          <bbn-button title="<?=('Show history')?>"
+                      @click="openHistory"
+                      icon="nf nf-mdi-history"
+                      style="margin-left: 2px"
+                      :notext="true">
           </bbn-button>
         </div>
         <div/>
