@@ -5,7 +5,7 @@
     data() {
       return {
         root: appui.plugins['appui-ide'] + '/',
-        formSource: {
+        formSource: this.source?.row || {
           path: "",
           host: "",
           user: "",
@@ -13,9 +13,26 @@
           text: "",
           type: "local"
         },
-        type: "local",
-        types: [{text: 'Local', value: 'local'},{text:'SSH', value:'ssh'}, {text: 'FTP', value: 'ftp'}, {text: 'FTPS', value: 'ftps'}, {text: 'NextCloud', value:'nextcloud'}],
-        isTested: false,
+        types: [{
+          text: bbn._('Local'),
+          value: 'local'
+        }, {
+          text: bbn._('SSH'),
+          value:'ssh'
+        }, {
+          text: bbn._('FTP'),
+          value: 'ftp'
+        }, {
+          text: bbn._('FTPS'),
+          value: 'ftps'
+        }, {
+          text: bbn._('NextCloud'),
+          value:'nextcloud'
+        }, {
+          text: bbn._('Google Drive'),
+          value:'googledrive'
+        }],
+        isTested: false
       }
     },
     computed: {
@@ -38,7 +55,7 @@
           text: bbn._("Test"),
           action: () => {
             if (this.$refs.form.isValid()) {
-            	bbn.fn.post(this.root + 'finder/test', this.formSource, d => {
+            	this.post(this.root + 'finder/test', this.formSource, d => {
               	if (d.success !== undefined) {
                   this.isTested = d.success;
                 }
@@ -47,6 +64,33 @@
           }
         }]
       },
+      hostFieldVisible(){
+        switch (this.formSource.type) {
+          case 'local':
+          case 'googledrive':
+            return false;
+          default:
+            return true;
+        }
+      },
+      userFieldVisible(){
+        switch (this.formSource.type) {
+          case 'local':
+          case 'googledrive':
+            return false;
+          default:
+            return true;
+        }
+      },
+      passFieldVisible(){
+        switch (this.formSource.type) {
+          case 'local':
+          case 'googledrive':
+            return false;
+          default:
+            return true;
+        }
+      }
     },
     methods: {
       onSuccess(d) {
@@ -55,6 +99,23 @@
           let cp = container.getComponent();
           cp.source.connections.push(d.data);
           cp.updateMenu();
+        }
+      },
+      generateGoogleDriveToken(){
+        if ((this.formSource.type === 'googledrive')
+          && (this.formSource.user.length)
+        ) {
+          this.post(this.root + 'finder/googledrive/token/generate', {
+            credentials: this.formSource.user
+          }, d => {
+            if (d.success && d.url) {
+              this.getPopup({
+                content: `<iframe src="${d.url}&output=embed" referrerpolicy="no-referrer"/>`,
+                width: '60%',
+                height: '60%'
+              })
+            }
+          })
         }
       }
     },

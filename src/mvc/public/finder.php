@@ -23,5 +23,5 @@ else{
   $ctrl->setColor('#35BCFA', '#FFF')
     ->setUrl($ctrl->pluginUrl('appui-ide').'/finder')
     ->setIcon('nf nf-mdi-apple_finder bbn-large')
-    ->combo('Finder', true);
+    ->combo(_('Finder'), true);
 }

@@ -52,7 +52,9 @@
                   component: 'appui-ide-popup-connections',
                   componentOptions: {
                     source: this.source.connections
-                  }
+                  },
+                  width: '90%',
+                  height: '90%'
                 })
               }
             }])
@@ -69,7 +71,6 @@
     methods: {
       updateMenu() {
         let menu = this.getRef('menu');
-        bbn.fn.log("JJRJZLJLK3", menu);
         if (menu) {
           menu.updateData();
         }

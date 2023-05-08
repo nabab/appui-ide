@@ -6,15 +6,13 @@
       return {
         root: appui.plugins["appui-ide"] + "/",
         menu: [{
-          action: "edit",
+          action: this.edit,
           icon: 'nf nf-fa-edit',
-          text: bbn._("Edit"),
-          key: 'a'
+          text: bbn._("Edit")
         }, {
           action: "delete" ,
           text: bbn._("Delete"),
-          icon: 'nf nf-fa-trash_o',
-          key: 'e'
+          icon: 'nf nf-fa-trash_o'
         }]
       };
     },
@@ -23,12 +21,17 @@
         return [{
           text: bbn._('New connection'),
           action: () => {
-            this.getPopup({
+            this.getRef('table').insert({}, {
               title: bbn._('New connection configuration'),
-              component: 'appui-ide-popup-connection'
+              width: '60%'
             })
           }
         }]
+      },
+      edit(row, obj, key){
+        return this.getRef('table').edit(row, {
+          width: '60%'
+        }, key)
       }
     },
     components: {

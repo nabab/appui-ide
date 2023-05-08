@@ -1,0 +1,2 @@
+<?php
+$ctrl->action();
