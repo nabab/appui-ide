@@ -56,8 +56,11 @@
           action: () => {
             if (this.$refs.form.isValid()) {
             	this.post(this.root + 'finder/test', this.formSource, d => {
-              	if (d.success !== undefined) {
+              	if (!!d.success) {
                   this.isTested = d.success;
+                  if (!!d.pass && (d.pass !== this.formSource.pass)) {
+                    this.formSource.pass = d.pass;
+                  }
                 }
             	})
             }
@@ -109,11 +112,23 @@
             credentials: this.formSource.user
           }, d => {
             if (d.success && d.url) {
-              this.getPopup({
-                content: `<iframe src="${d.url}&output=embed" referrerpolicy="no-referrer"/>`,
-                width: '60%',
-                height: '60%'
-              })
+              let width = 600;
+              let height = 600;
+              let left = parseInt((screen.availWidth/2) - (width/2));
+              let top = parseInt((screen.availHeight/2) - (height/2));
+              let opt = `width=${width},height=${height},location=no,menubar=no,status=no,toolbar=no,left=${left},top=${top}`;
+              let w = window.open(d.url, "", opt);
+              let f = e => {
+                if (!!e.data
+                  && (e.data.type === 'googledrivecode')
+                  && !!e.data.code
+                ) {
+                  this.$set(this.formSource, 'pass', e.data.code);
+                  window.removeEventListener('message', f);
+                  w.close();
+                }
+              }
+              window.addEventListener('message', f)
             }
           })
         }

@@ -1,7 +1,8 @@
 <bbn-form :source="formSource"
           :buttons="buttons"
           :action="root + 'finder/save'"
-          ref="form">
+          ref="form"
+          @sucess="onSuccess">
 	<div class="bbn-flex-fill bbn-grid-fields bbn-padded">
     <label class="bbn-label">
       <?=_('Connection name')?>
@@ -60,7 +61,8 @@
                       class="bbn-flex-fill"/>
         <bbn-button class="bbn-left-space"
                     v-text="_('Generate')"
-                    @click="generateGoogleDriveToken"/>
+                    @click="generateGoogleDriveToken"
+                    :disabled="!formSource.user"/>
       </div>
     </template>
     <label class="bbn-label">

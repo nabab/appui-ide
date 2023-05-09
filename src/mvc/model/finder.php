@@ -16,9 +16,17 @@ if (
       $cfg[$f] = $p[$f];
     }
   }
+  $isGoogleDrive = $cfg['type'] === 'googledrive';
   if ($cfg['type'] !== 'local') {
     $pwd = new bbn\Appui\Passwords($model->db);
     $cfg['pass'] = $pwd->userGet($p['id'], $model->inc->user);
+    if ($isGoogleDrive
+      && !empty($cfg['pass'])
+    ) {
+      $tmp = json_decode($cfg['pass'], true);
+      $cfg['user'] = $tmp['credentials'];
+      $cfg['pass'] = $tmp['token'];
+    }
   }
   $fs = new \bbn\File\System($cfg['type'], $cfg);
   if ( !empty($cfg['path']) ){
