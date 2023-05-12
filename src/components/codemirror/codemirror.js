@@ -1,6 +1,7 @@
 // Javascript Document
 
 (() => {
+
   let modeCode = {
     js: 'javascript',
     php: 'php',
@@ -12,13 +13,14 @@
     md: 'md',
     sql: 'sql',
     scss: 'css'
+
   };
   return {
     /**
-                   * @mixin bbn.vue.basicComponent
-                   * @mixin bbn.vue.inputComponent
-                   * @mixin bbn.vue.eventsComponent
-                   */
+                               * @mixin bbn.vue.basicComponent
+                               * @mixin bbn.vue.inputComponent
+                               * @mixin bbn.vue.eventsComponent
+                               */
     mixins:
     [
       bbn.vue.basicComponent,
@@ -27,10 +29,10 @@
     ],
     props: {
       /**
-                      * Language passed in props of the component
-                      *
-                      * @prop {String} [php] mode
-                      */
+                                  * Language passed in props of the component
+                                  *
+                                  * @prop {String} [php] mode
+                                  */
       mode: {
         type: String,
         default: 'js',
@@ -39,10 +41,10 @@
         }
       },
       /**
-                      * Theme passed in props of the component
-                      *
-                      * @prop {String} [basicLight] theme
-                      */
+                                  * Theme passed in props of the component
+                                  *
+                                  * @prop {String} [basicLight] theme
+                                  */
       theme: {
         type: String,
         default: 'basicLight'
@@ -51,30 +53,32 @@
     data() {
       return {
         /**
-                        * Widget containing the codemirror instance
-                        *
-                        * @data {Object} [null] widget
-                        */
+                                    * Widget containing the codemirror instance
+                                    *
+                                    * @data {Object} [null] widget
+                                    */
         widget: null,
         /**
-                        * Mode use to display the content of file
-                        *
-                        * @data {Object} [null] currentMode
-                        */
+                                    * Mode use to display the content of file
+                                    *
+                                    * @data {Object} [null] currentMode
+                                    */
         currentMode: this.mode,
         /**
-                        * Current theme use
-                        *
-                        * @data {Object} [null] currentTheme
-                        */
+                                    * Current theme use
+                                    *
+                                    * @data {Object} [null] currentTheme
+                                    */
         currentTheme: this.theme,
         state: null,
-        lastKeyDown: null
+        lastKeyDown: null,
+        lastValidVueObject: this.getVueObject(),
+        jscompletion: []
       };
     },
     /**
-                    * @event mounted
-                    */
+                                * @event mounted
+                                */
     mounted() {
       bbn.fn.log("COMPONENTS/CODEMIRROR THEME/MODE", this.theme, this.mode);
       if (!window.codemirror6) {
@@ -91,12 +95,14 @@
       }
     },
     methods: {
+      
       foldAll() {
         window.codemirror6.language.foldAll(this.widget);
         //window.codemirror6.language.foldInside(window.codemirror6.language.syntaxTree(this.widget));
       },
       unfoldAll() {
         window.codemirror6.language.unfoldAll(this.widget);
+        
       },
       openSearchPanel() {
         window.codemirror6.search.openSearchPanel(this.widget);
@@ -114,12 +120,12 @@
         window.codemirror6.search.replaceAll(this.widget);
       },
       /**
-                      * Return an array with extensions give in cfg
-                      *
-                      * @method getExtensions
-                      * @param {Object} cfg Configue of extensions
-                      * @return {Array}
-                      */
+                                  * Return an array with extensions give in cfg
+                                  *
+                                  * @method getExtensions
+                                  * @param {Object} cfg Configue of extensions
+                                  * @return {Array}
+                                  */
       getExtensions() {
         let cm = window.codemirror6;
         cm.getBasicExtensions();
@@ -164,49 +170,43 @@
             break;
         }
         extensions.push(cm.autocomplete.autocompletion({override: [this.completionSource]}));
+
         bbn.fn.log(this.currentMode, extensions);
         return extensions;
       },
       /**
-                      * Return an array with options of autocompletions
-                      *
-                      * @method completionSource
-                      * @param {String} context Text in text-area of the instance codemirror
-                      * @return {Object}
-                      */
+                                  * Return an array with options of autocompletions
+                                  *
+                                  * @method completionSource
+                                  * @param {String} context Text in text-area of the instance codemirror
+                                  * @return {Object}
+                                  */
       completionSource(context) {
-        let word = context.matchBefore(/\w*/);
+        let word = context.matchBefore(/(this\.\w*)|\w+/);
+        let node = codemirror6.language.syntaxTree(context.state).resolveInner(context.pos, -1)
         let fn          = this.getWidgetCompletion();
         let res         = fn(context);
 
+        bbn.fn.log("AUTOCOMPLETE", node, res);
         if (!res || !res.options) {
-          res = {options: []};
+          res = {options: [
+
+          ]};
         }
 
 
-        res.options.unshift(...[
-          {label: "match", type: "keyword"},
-          {label: "hello", type: "variable", info: "Hello<br>World"},
-          {label: "baba", type: "function", info() {
-            return new Promise((resolve, reject) => {
-              bbn.fn.log('baba');
-              let div = document.createElement('p');
-              div.className = 'bbn-padding bbn-no-margin';
-              div.innerHTML = "Hello<br>World";
-              resolve(div);
-            });
-          }},
-          {label: "dada", type: "function", info() {
-            return new Promise((resolve, reject) => {
-              bbn.fn.log('dada');
-              let div = document.createElement('p');
-              div.className = 'bbn-no-padding bbn-no-margin';
-              div.innerHTML = "Hello<br>World2";
-              resolve(div);
-            });
-          }},
-          {label: "magic", type: "text", apply: "⠁⭒*.✩.*⭒⠁", detail: "Hello World"}
-        ]);
+        if (this.currentMode === 'js') {
+          let js = this.getJavascriptCompletion(context, node);
+          res.validFor = /^(?:[\w$\xa1-\uffff][\w$\d\xa1-\uffff]*|this\..*?)$/;
+          bbn.fn.log("AUTOCOMPLETE JS", js);
+          res.options.unshift(...js);
+        }
+
+        bbn.fn.log(res);
+
+        if (node.name === '.') {
+          bbn.fn.log("ICI");
+        }
 
         return res;
       },
@@ -229,9 +229,84 @@
           }
         });
 
-				return config;
+        return config;
       },
+      getVueObject() {
+        try {
+          let vueObject = eval(this.value);
+          this.lastValidVueObject = vueObject;
+          return vueObject;
+        } catch (error) {
+          return this.lastValidVueObject;
+        }
+      },
+      beforeDotIs(node, word, context) {
+        bbn.fn.log("MON REUF", node);
+        let previous = node.prevSibling;
+        if (previous) {
+          previous =  context.state.sliceDoc(previous.from, previous.to) === word;
+        }
+        bbn.fn.log(previous);
+        if ((node.name === '.' && node.prevSibling?.name === word) || previous)
+          return true;
+        return false;
+      },
+      getJavascriptCompletion(context, node) {
+        let res = [
 
+        ];
+        if (this.beforeDotIs(node, "this", context)) {
+          let vueObject = this.getVueObject();
+
+
+          const keyRegex = /([a-zA-Z_$][a-zA-Z0-9_$]*):/g;
+          let match;
+
+          while ((match = keyRegex.exec(vueObject.data.toString())) !== null) {
+            res.push({ label: match[1], type: "variable" });
+          }
+
+          for (let prop in vueObject.props) {
+            res.push({label: prop, type: "variable"});
+          }
+
+          for (let method in vueObject.methods) {
+            res.push({label: method, type: "function"})
+          }
+        } else if (this.beforeDotIs(node, "bbn", context)) {
+          bbn.fn.log("mon reuf ?????");
+          
+        } else {
+          let defaultLabel = [
+            {label: "this", type: "variable"},
+            {label: "bbn", type: "variable"}
+          ];
+
+          res.unshift(...defaultLabel);
+        }
+        bbn
+
+
+        return res;
+      },
+      jsCompletionSource(context) {
+        let validFor = /^(?:[\w$\xa1-\uffff][\w$\d\xa1-\uffff]*|this\..*?)$/;
+        let inner = codemirror6.language.syntaxTree(context.state).resolve(context.pos, -1);
+        if (inner.name == "TemplateString" || inner.name == "String" ||
+            inner.name == "LineComment" || inner.name == "BlockComment")
+          return null;
+        let isWord = inner.to - inner.from < 20 && validFor.test(context.state.sliceDoc(inner.from, inner.to));
+        console.log("CODEMIRROR6", !isWord && !context.explicit);
+        if (!isWord && !context.explicit)
+          if (inner.name !== '.')
+            return null;
+        let options = [];
+        return {
+          options,
+          from: isWord ? inner.from : context.pos,
+          validFor: validFor
+        };
+      },
       getWidgetCompletion() {
 
         const Myconfig = this.createVueConfiguration();
@@ -245,7 +320,7 @@
             res = window.codemirror6.html.htmlCompletionSource;
             break;
           case 'js':
-            res = window.codemirror6.javascript.localCompletionSource;
+            res = this.jsCompletionSource;
             break;
           case 'css':
             res = window.codemirror6.css.cssCompletionSource;
@@ -261,12 +336,12 @@
         return res;
       },
       /**
-                      * Update code in editor and do an emitInput
-                      *
-                      * @method onChange
-                      * @param {String} tr Text in text-area of the instance codemirror
-                      * @return {Object}
-                      */
+                                  * Update code in editor and do an emitInput
+                                  *
+                                  * @method onChange
+                                  * @param {String} tr Text in text-area of the instance codemirror
+                                  * @return {Object}
+                                  */
       onChange(tr) {
         this.widget.update([tr]);
         let value = this.widget.state.doc.toString();
@@ -275,11 +350,11 @@
         }
       },
       /**
-                      * Initialize a new instance of codemirror in this.widget
-                      *
-                      * @method init
-                      * @return {Object}
-                      */
+                                  * Initialize a new instance of codemirror in this.widget
+                                  *
+                                  * @method init
+                                  * @return {Object}
+                                  */
       init() {
         let cm = window.codemirror6;
         let extensions = this.getExtensions();
@@ -301,6 +376,9 @@
       },
       onKeyDown(event) {
         this.lastKeyDown = event;
+        if (event.key === ".") {
+          codemirror6.autocomplete.startCompletion(this.widget)
+        }
         this.$emit('keydown', event);
       }
     },
