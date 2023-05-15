@@ -9,6 +9,7 @@
   return {
     data() {
       return {
+        types: bbn.ide,
         /**
            * Root of the component
            * @data {String} [appui.plugins['appui-newide'] + '/'] root
@@ -278,6 +279,7 @@
       openNew(title, isFile, node = false){
         let editor = this.source
         bbn.fn.log("lol" ,editor);
+        editor.types = this.types;
         let repositories = {};
         let selected = this.source.project.path[0];
         bbn.fn.log("HAAAAAAAAAAAAAAAAAAAAA", editor.types[this.currentTypeCode === 'classes' ? 'cls' : this.currentTypeCode]);
@@ -688,6 +690,12 @@
     },
     mounted() {
       this.container = this.closest('bbn-container');
+      if (!this.types) {
+        bbn.fn.post(this.root + 'data/types', {}, (d) => {
+          this.types = d.types;
+          bbn.ide = d.types;
+        });
+      }
     },
     watch: {
       currentTypeCode(v) {

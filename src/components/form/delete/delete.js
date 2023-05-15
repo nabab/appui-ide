@@ -6,7 +6,7 @@
       return {
         root: appui.plugins['appui-newide'] + '/',
         name: this.source.name,
-        urlRoot: this.closest('appui-newide-editor').currentRoot
+        urlRoot: this.closest('bbn-container').find('appui-newide-editor').currentRoot
       };
     },
     computed: {

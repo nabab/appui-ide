@@ -1,5 +1,5 @@
 <div class="bbn-overlay"
-     v-if="typeOptions">
+     v-if="typeOptions && types">
   <bbn-splitter orientation="vertical">
     <bbn-pane :size="43">
       <bbn-toolbar :button-space="true">
@@ -82,3 +82,4 @@
   </bbn-splitter>
   <bbn-popup ref="popup"></bbn-popup>
 </div>
+<bbn-loader v-else></bbn-loader>
