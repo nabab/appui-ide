@@ -8,9 +8,11 @@ use bbn\X;
 use bbn\Str;
 use bbn\Appui\Project;
 /** @var $model \bbn\Mvc\Model*/
-$types = $model->inc->options->option('appui', 'ide', 'types');
-var_dump(X::ddump($types));
+$types =  $model->inc->options->fullOptionsByCode('types', 'ide', 'appui');
 
+return [
+  "types" => $types
+];
 $res = ['success' => false];
 
 if ($model->hasData('id_project')) {

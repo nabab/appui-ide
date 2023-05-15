@@ -19,7 +19,6 @@ if ($model->hasData(['repository', 'path', 'name', 'type', 'id_project', 'is_fil
 
 
   if ($model->data['type'] === 'mvc') {
-
     //check if file exist
     foreach($cfg['typology']['tabs'] as $tab) {
       foreach($tab['extensions'] as $ext) {
@@ -31,7 +30,10 @@ if ($model->hasData(['repository', 'path', 'name', 'type', 'id_project', 'is_fil
           $file_path = $path . $tab['path'] . ($model->data['path'] !== "/" ? $model->data['path'] : '') . $model->data['name'];
           $file_path = str_replace('//', '/', $file_path);
         }
-        if ($fs->exists($file_path)) {
+        if ($fs->exists($file_path) && $model->data['is_file']) {
+          $exist = true;
+          break;
+        } else if ($fs->isDir($file_path)){
           $exist = true;
           break;
         }
