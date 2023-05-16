@@ -28,6 +28,7 @@ if ($model->hasData('id_project')) {
       $res['extension'] = $ext;
       $res['content'] = $content;
       $res['success'] = true;
+      X::ddump($content);
       break;
     case 'file':
 

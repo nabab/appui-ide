@@ -16,8 +16,9 @@
         if (editor && editor.currentTypeCode && editor.currentTypeCode === 'components') {
           url = this.source.uid.replace(this.source.name  + '/' + this.source.name, this.source.name);
         }
+        url = this.urlRoot + url
         return {
-          url: this.urlRoot + url,
+          url: url.replace("//", "/"),
           id_project: this.closest('appui-project-ui').source.project.id,
           data: this.source
         };

@@ -25,10 +25,12 @@ if ($model->hasData('id_project')) {
     if (!empty($file)) {
       $ext = Str::fileExt($file);
       $content = file_get_contents($file);
+      $isEmpty = false;
     }
     else {
       $cfg = $project->urlToConfig($model->data['url']);
       $type = array_pop(X::split($model->data['url'], '/'));
+      $isEmpty = true;
       if ($type === 'code') {
         $ext = $cfg['typology']['extensions'][0]['ext'];
         $content =$cfg['typology']['extensions'][0]['default'];
@@ -50,6 +52,7 @@ if ($model->hasData('id_project')) {
       "title" => $title,
       "url" => $model->data['url'],
       "id_project" => $model->data['id_project'],
+      "isEmpty" => $isEmpty
     ];
   } else {
     $fs = new System();

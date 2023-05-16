@@ -13,6 +13,8 @@ use bbn\Appui\Project;
 // example of url : lib/appui-newide/mvc/editor/actions/rename
 
 if ($model->hasData(['url', 'id_project'])) {
+
+  $count = 0;
   $project = new Project($model->db, $model->data['id_project']);
   $fs = new System();
   $cfg = $project->urlToConfig($model->data['url']);
@@ -24,9 +26,11 @@ if ($model->hasData(['url', 'id_project'])) {
     foreach($cfg['typology']['tabs'] as $tab) {
       if ($model->data['data']['folder']) {
         $check = str_replace($model->data['data']['uid'], "", $cfg['file']);
-        $check = $check .  $tab['path'] . $model->data['data']['uid'];
+        $check = $check . '/' .  $tab['path'] . $model->data['data']['uid'];
+        $check = str_replace('//', '/', $check);
         if ($fs->isDir($check)) {
           $fs->delete($check);
+          $count++;
         }
       } else {
         foreach($tab['extensions'] as $extension) {
@@ -34,14 +38,15 @@ if ($model->hasData(['url', 'id_project'])) {
 
           if (!empty($tab['fixed'])) {
             continue;
-            $check = $check . $tab['path'] . str_replace($model->data['data']['name'], "", $model->data['data']['uid']) . $tab['fixed'];
+            $check = $check . '/' . $tab['path'] . str_replace($model->data['data']['name'], "", $model->data['data']['uid']) . $tab['fixed'];
 
           } else {
-            $check = $check . $tab['path'] . $model->data['data']['uid'] . '.' . $extension['ext'];
+            $check = $check . '/' . $tab['path'] . $model->data['data']['uid'] . '.' . $extension['ext'];
           }
-
+          $check = str_replace('//', '/', $check);
           if ($fs->isFile($check)) {
             $fs->delete($check);
+            $count++;
           }
         }
       }
@@ -50,19 +55,22 @@ if ($model->hasData(['url', 'id_project'])) {
     if ($model->data['data']['folder']) {
       if ($fs->isDir($cfg['file'])) {
         $fs->delete($cfg['file']);
+        $count++;
       }
     } else {
       foreach($cfg['typology']['tabs'] as $tab) {
         foreach($tab['extensions'] as $extension) {
           $check = $path.'/'.$file.'.'.$extension['ext'];
+          $check = str_replace('//', '/', $check);
           if ($fs->isFile($check)) {
             $fs->delete($check);
+            $count++;
           }
         }
       }
     }
   }
   return [
-    'success' => true
+    'success' => $count > 0
   ];
 }

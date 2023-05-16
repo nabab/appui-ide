@@ -12,6 +12,13 @@
     },
     mounted() {
       bbn.fn.log("COMPONENTS/CODER SOURCE", this.source);
+      if (!this.source.isEmpty) {
+        let pane = this.closest('bbn-pane')
+        if (pane) {
+          let tabs = this.find('bbn-tabs');
+          // change color ?
+        }
+      }
       if (!window.codemirror6) {
         bbn.fn.post(appui.plugins['appui-newide'] + '/cm6', d => {
           if (d.script) {

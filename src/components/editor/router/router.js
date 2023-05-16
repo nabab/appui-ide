@@ -207,6 +207,7 @@
       initRouterSource() {
         if (this.editorCfg) {
           if (this.source.tabs) {
+            bbn.fn.log("TABS", this.source.tabs);
             this.source.tabs.forEach(tab => {
               bbn.fn.log(tab);
               this.routerSource.push({
