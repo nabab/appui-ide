@@ -218,7 +218,7 @@
                 notext: true,
                 bcolor: tab.bcolor,
                 fcolor: tab.fcolor,
-                cls: (this.source.files[tab.url].file === null) ? 'empty-tab' : '',
+                cls: tab.file ? '' : 'empty-tab',
                 menu: () => {
                   return this.getMenu(tab);
                 }
