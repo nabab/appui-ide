@@ -21,7 +21,6 @@ if ($model->hasData(['url', 'id_project'])) {
   $arr_path = X::split($cfg['file'], '/');
   $file = array_pop($arr_path);
   $path = X::join($arr_path, '/');
-  X::ddump($file, $model->data['url'], $path);
 
   if ($cfg['typology'] && $cfg['typology']['code'] === 'mvc') {
     foreach($cfg['typology']['tabs'] as $tab) {
