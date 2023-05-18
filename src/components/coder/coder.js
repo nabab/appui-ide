@@ -12,7 +12,10 @@
     },
     mounted() {
       bbn.fn.log("COMPONENTS/CODER SOURCE", this.source);
+      if (this.closest('appui-newide-editor')) {
+        this.closest('appui-newide-editor').getRecentFiles();
 
+      }
       if (!window.codemirror6) {
         bbn.fn.post(appui.plugins['appui-newide'] + '/cm6', d => {
           if (d.script) {
@@ -40,7 +43,7 @@
             bbn.fn.log(d);
             if (d.success) {
               if (d.delete) {
-								appui.success(bbn._("Delete successfully"));
+                appui.success(bbn._("Delete successfully"));
               }
               else {
                 appui.success(bbn._("Save successfully"));

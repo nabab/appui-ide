@@ -1,8 +1,8 @@
 <?php
 /**
-       * What is my purpose?
-       *
-       **/
+         * What is my purpose?
+         *
+         **/
 
 use bbn\X;
 use bbn\Str;
@@ -20,6 +20,7 @@ if ($model->hasData('id_project')) {
     $project = new Project($model->db, $model->data['id_project']);
     $file = $project->urlToReal($model->data['url']);
     $config = $project->urlToConfig($model->data['url']);
+    $model->inc->ide->setRecentFile($model->data['url']);
 
 
     if (!empty($file)) {
@@ -76,7 +77,7 @@ if ($model->hasData('id_project')) {
         // File was created on a different day, so get the date + hour
         $output = $fileDate->format('Y-m-d H:i:s');
       }
-      
+
       $info['time'] = $output;
 
       $res[] = $info;

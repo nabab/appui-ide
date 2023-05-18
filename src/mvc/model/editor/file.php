@@ -13,7 +13,7 @@ if (!empty($model->data['url']) && isset($model->inc->ide)) {
   $id_project = $model->inc->options->fromCode(BBN_APP_NAME, "list", "project", "appui");
   $project = new Project($model->db, $id_project);
   $url = $model->data['url'];
-  $model->inc->ide->setRecentFile($model->data['url']);
+
   //die(var_dump($model->data['url']));
   $rep = $model->inc->ide->repositoryFromUrl($model->data['url']);
 
