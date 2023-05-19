@@ -17,10 +17,10 @@
   };
   return {
     /**
-                               * @mixin bbn.vue.basicComponent
-                               * @mixin bbn.vue.inputComponent
-                               * @mixin bbn.vue.eventsComponent
-                               */
+                                         * @mixin bbn.vue.basicComponent
+                                         * @mixin bbn.vue.inputComponent
+                                         * @mixin bbn.vue.eventsComponent
+                                         */
     mixins:
     [
       bbn.vue.basicComponent,
@@ -29,10 +29,10 @@
     ],
     props: {
       /**
-                                  * Language passed in props of the component
-                                  *
-                                  * @prop {String} [php] mode
-                                  */
+                                            * Language passed in props of the component
+                                            *
+                                            * @prop {String} [php] mode
+                                            */
       mode: {
         type: String,
         default: 'js',
@@ -41,10 +41,10 @@
         }
       },
       /**
-                                  * Theme passed in props of the component
-                                  *
-                                  * @prop {String} [basicLight] theme
-                                  */
+                                            * Theme passed in props of the component
+                                            *
+                                            * @prop {String} [basicLight] theme
+                                            */
       theme: {
         type: String,
         default: 'basicLight'
@@ -53,22 +53,22 @@
     data() {
       return {
         /**
-                                    * Widget containing the codemirror instance
-                                    *
-                                    * @data {Object} [null] widget
-                                    */
+                                              * Widget containing the codemirror instance
+                                              *
+                                              * @data {Object} [null] widget
+                                              */
         widget: null,
         /**
-                                    * Mode use to display the content of file
-                                    *
-                                    * @data {Object} [null] currentMode
-                                    */
+                                              * Mode use to display the content of file
+                                              *
+                                              * @data {Object} [null] currentMode
+                                              */
         currentMode: this.mode,
         /**
-                                    * Current theme use
-                                    *
-                                    * @data {Object} [null] currentTheme
-                                    */
+                                              * Current theme use
+                                              *
+                                              * @data {Object} [null] currentTheme
+                                              */
         currentTheme: this.theme,
         state: null,
         lastKeyDown: null,
@@ -77,9 +77,20 @@
       };
     },
     /**
-                                * @event mounted
-                                */
+                                          * @event mounted
+                                          */
     mounted() {
+      bbn.fn.log(this.currentMode);
+      if (!bbn.doc) {
+        bbn.doc = {};
+        
+      }
+      if (this.currentMode === 'js' && !bbn.doc['bbn-js']) {
+        bbn.fn.ajax("https://raw.githubusercontent.com/nabab/bbn-js/master/doc/tern.json", "json", null, (d) => {
+          bbn.fn.log("AJAX DATA", d);
+          bbn.doc['bbn-js'] = d;
+        });
+      }
       bbn.fn.log("COMPONENTS/CODEMIRROR THEME/MODE", this.theme, this.mode);
       if (!window.codemirror6) {
         let ele = document.createElement('script');  // temporary
@@ -95,14 +106,14 @@
       }
     },
     methods: {
-      
+
       foldAll() {
         window.codemirror6.language.foldAll(this.widget);
         //window.codemirror6.language.foldInside(window.codemirror6.language.syntaxTree(this.widget));
       },
       unfoldAll() {
         window.codemirror6.language.unfoldAll(this.widget);
-        
+
       },
       openSearchPanel() {
         window.codemirror6.search.openSearchPanel(this.widget);
@@ -120,12 +131,12 @@
         window.codemirror6.search.replaceAll(this.widget);
       },
       /**
-                                  * Return an array with extensions give in cfg
-                                  *
-                                  * @method getExtensions
-                                  * @param {Object} cfg Configue of extensions
-                                  * @return {Array}
-                                  */
+                                            * Return an array with extensions give in cfg
+                                            *
+                                            * @method getExtensions
+                                            * @param {Object} cfg Configue of extensions
+                                            * @return {Array}
+                                            */
       getExtensions() {
         let cm = window.codemirror6;
         cm.getBasicExtensions();
@@ -175,12 +186,12 @@
         return extensions;
       },
       /**
-                                  * Return an array with options of autocompletions
-                                  *
-                                  * @method completionSource
-                                  * @param {String} context Text in text-area of the instance codemirror
-                                  * @return {Object}
-                                  */
+                                            * Return an array with options of autocompletions
+                                            *
+                                            * @method completionSource
+                                            * @param {String} context Text in text-area of the instance codemirror
+                                            * @return {Object}
+                                            */
       completionSource(context) {
         let word = context.matchBefore(/(this\.\w*)|\w+/);
         let node = codemirror6.language.syntaxTree(context.state).resolveInner(context.pos, -1)
@@ -231,6 +242,40 @@
 
         return config;
       },
+      getFirstNode(node, context) {
+        bbn.fn.log(node);
+        while (node.prevSibling) {
+          node = node.prevSibling;
+        }
+        return context.state.sliceDoc(node.from, node.to);
+      },
+      getNestedProp(obj, propString) {
+        let propPath = propString.replace('this.', '').split('.');
+        let currentProp = obj;
+
+        for (let i = 0; i < propPath.length; i++) {
+          let accessor = propPath[i];
+
+          // Check if we're accessing an array
+          if (accessor.includes('[') && accessor.includes(']')) {
+            let [key, index] = accessor.split(/\[|\]/).filter(x => x); // Filter is used to remove empty strings from the array
+
+            if (currentProp[key] && typeof currentProp[key] === 'object' && Array.isArray(currentProp[key])) {
+              currentProp = currentProp[key][parseInt(index)];
+            } else {
+              return undefined;
+            }
+          } else {
+            if (currentProp[accessor]) {
+              currentProp = currentProp[accessor];
+            } else {
+              return undefined;
+            }
+          }
+        }
+
+        return currentProp;
+      },
       getVueObject() {
         try {
           let vueObject = eval(this.value);
@@ -252,30 +297,66 @@
         return false;
       },
       getJavascriptCompletion(context, node) {
-        let res = [
+        let res = [];
+        let first = this.getFirstNode(node, context);
+        bbn.fn.log("first", first);
 
-        ];
-        if (this.beforeDotIs(node, "this", context)) {
-          let vueObject = this.getVueObject();
-
-
-          const keyRegex = /([a-zA-Z_$][a-zA-Z0-9_$]*):/g;
-          let match;
-
-          while ((match = keyRegex.exec(vueObject.data.toString())) !== null) {
-            res.push({ label: match[1], type: "variable" });
+        if (first && first.startsWith('this')) {
+          bbn.fn.log("LOL", this.getVueObject());
+          let vueObject = new Vue(this.getVueObject());
+          if (first === "this") {
+            bbn.fn.log("ICI No", vueObject);
+            for (let key in vueObject) {
+              bbn.fn.log(key);
+              let type = "variable";
+              try {
+                if (typeof vueObject[key] === 'function') {
+                  type = "function";
+                }
+              } catch (error) {
+                bbn.fn.log("Just for debug, you can ignore this error", error);
+              }
+              res.push({label: key, type: type})
+            }
+          } else {
+            try {
+              let prop = this.getNestedProp(vueObject, first)
+              bbn.fn.log("PROP", prop);
+              if (bbn.fn.isObject(prop)) {
+                for (let key in prop) {
+                  let type = "variable";
+                  try {
+                    if (typeof prop[key] === 'function') {
+                      type = "function";
+                    }
+                  } catch (error) {
+                    bbn.fn.log("Just for debug, you can ignore this error", error);
+                  }
+                  res.push({label: key, type: type});
+                }
+              }
+            } catch (error) {
+              bbn.fn.log("Just for debug, you can ignore this error", error);
+            }
+          }
+          bbn.fn.log(res);
+        } else if (first && first.startsWith('bbn')) {
+          try {
+            let bbnObject = eval(first);
+            bbn.fn.log("FIRST", first);
+            if (bbn.fn.isObject(bbnObject)) {
+              for (let key in bbnObject) {
+                let type = "variable";
+                if (bbn.fn.isFunction(bbnObject[key])) {
+                  type = "function";
+                }
+                res.push({label: key, type: type})
+              }
+            }
+          } catch (error) {
+            bbn.fn.log(error);
           }
 
-          for (let prop in vueObject.props) {
-            res.push({label: prop, type: "variable"});
-          }
-
-          for (let method in vueObject.methods) {
-            res.push({label: method, type: "function"})
-          }
-        } else if (this.beforeDotIs(node, "bbn", context)) {
-          bbn.fn.log("mon reuf ?????");
-          
         } else {
           let defaultLabel = [
             {label: "this", type: "variable"},
@@ -284,8 +365,6 @@
 
           res.unshift(...defaultLabel);
         }
-        bbn
-
 
         return res;
       },
@@ -336,12 +415,12 @@
         return res;
       },
       /**
-                                  * Update code in editor and do an emitInput
-                                  *
-                                  * @method onChange
-                                  * @param {String} tr Text in text-area of the instance codemirror
-                                  * @return {Object}
-                                  */
+                                            * Update code in editor and do an emitInput
+                                            *
+                                            * @method onChange
+                                            * @param {String} tr Text in text-area of the instance codemirror
+                                            * @return {Object}
+                                            */
       onChange(tr) {
         this.widget.update([tr]);
         let value = this.widget.state.doc.toString();
@@ -350,11 +429,11 @@
         }
       },
       /**
-                                  * Initialize a new instance of codemirror in this.widget
-                                  *
-                                  * @method init
-                                  * @return {Object}
-                                  */
+                                            * Initialize a new instance of codemirror in this.widget
+                                            *
+                                            * @method init
+                                            * @return {Object}
+                                            */
       init() {
         let cm = window.codemirror6;
         let extensions = this.getExtensions();

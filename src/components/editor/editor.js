@@ -25,7 +25,7 @@
                * Id of the selected path
                * @data {String} [''] currentPathId
                */
-        currentPathId: this.source.project.path ? this.source.project.path[0].id : '',
+        currentPathId: this.source?.project?.path ? this.source?.project?.path[0]?.id : '',
         /**
                * Enable / Disable the dropdown to select path
                * @data {Boolean} [false] isDropdownPathDisabled
@@ -289,7 +289,7 @@
             } else {
               setTimeout(() => {
                 this.getRecentFiles();
-              }, 5000); 
+              }, 5000);
             }
           }
         })
@@ -727,6 +727,9 @@
       }
     },
     mounted() {
+      if (!bbn.doc) {
+        bbn.doc = {};
+      }
       this.getRecentFiles();
       this.container = this.closest('bbn-container');
       if (!this.types) {
