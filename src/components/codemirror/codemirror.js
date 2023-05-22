@@ -13,14 +13,13 @@
     md: 'md',
     sql: 'sql',
     scss: 'css'
-
   };
   return {
     /**
-                                         * @mixin bbn.vue.basicComponent
-                                         * @mixin bbn.vue.inputComponent
-                                         * @mixin bbn.vue.eventsComponent
-                                         */
+                                             * @mixin bbn.vue.basicComponent
+                                             * @mixin bbn.vue.inputComponent
+                                             * @mixin bbn.vue.eventsComponent
+                                             */
     mixins:
     [
       bbn.vue.basicComponent,
@@ -29,10 +28,10 @@
     ],
     props: {
       /**
-                                            * Language passed in props of the component
-                                            *
-                                            * @prop {String} [php] mode
-                                            */
+                                                * Language passed in props of the component
+                                                *
+                                                * @prop {String} [php] mode
+                                                */
       mode: {
         type: String,
         default: 'js',
@@ -41,10 +40,10 @@
         }
       },
       /**
-                                            * Theme passed in props of the component
-                                            *
-                                            * @prop {String} [basicLight] theme
-                                            */
+                                                * Theme passed in props of the component
+                                                *
+                                                * @prop {String} [basicLight] theme
+                                                */
       theme: {
         type: String,
         default: 'basicLight'
@@ -53,22 +52,22 @@
     data() {
       return {
         /**
-                                              * Widget containing the codemirror instance
-                                              *
-                                              * @data {Object} [null] widget
-                                              */
+                                                  * Widget containing the codemirror instance
+                                                  *
+                                                  * @data {Object} [null] widget
+                                                  */
         widget: null,
         /**
-                                              * Mode use to display the content of file
-                                              *
-                                              * @data {Object} [null] currentMode
-                                              */
+                                                  * Mode use to display the content of file
+                                                  *
+                                                  * @data {Object} [null] currentMode
+                                                  */
         currentMode: this.mode,
         /**
-                                              * Current theme use
-                                              *
-                                              * @data {Object} [null] currentTheme
-                                              */
+                                                  * Current theme use
+                                                  *
+                                                  * @data {Object} [null] currentTheme
+                                                  */
         currentTheme: this.theme,
         state: null,
         lastKeyDown: null,
@@ -77,17 +76,16 @@
       };
     },
     /**
-                                          * @event mounted
-                                          */
+                                              * @event mounted
+                                              */
     mounted() {
       bbn.fn.log(this.currentMode);
       if (!bbn.doc) {
         bbn.doc = {};
-        
+
       }
       if (this.currentMode === 'js' && !bbn.doc['bbn-js']) {
         bbn.fn.ajax("https://raw.githubusercontent.com/nabab/bbn-js/master/doc/tern.json", "json", null, (d) => {
-          bbn.fn.log("AJAX DATA", d);
           bbn.doc['bbn-js'] = d;
         });
       }
@@ -131,15 +129,16 @@
         window.codemirror6.search.replaceAll(this.widget);
       },
       /**
-                                            * Return an array with extensions give in cfg
-                                            *
-                                            * @method getExtensions
-                                            * @param {Object} cfg Configue of extensions
-                                            * @return {Array}
-                                            */
+                                                * Return an array with extensions give in cfg
+                                                *
+                                                * @method getExtensions
+                                                * @param {Object} cfg Configue of extensions
+                                                * @return {Array}
+                                                */
       getExtensions() {
         let cm = window.codemirror6;
         cm.getBasicExtensions();
+        bbn.fn.log("MODE", this.currentMode)
         if (!this.currentMode || !this.currentTheme) {
           throw new Error("You must provide a language and a theme");
         }
@@ -159,6 +158,9 @@
           case "javascript":
             extensions.push(cm.javascript.javascript());
             break;
+          case "js":
+            extensions.push(cm.javascript.javascript());
+            break;
           case "html":
             extensions.push(cm.html.html());
             break;
@@ -168,6 +170,9 @@
             }));
             break;
           case "css":
+            extensions.push(cm.css.css());
+            break;
+          case "less":
             extensions.push(cm.css.css());
             break;
           case "json":
@@ -180,18 +185,18 @@
             extensions.push(cm.markdown.markdown());
             break;
         }
-        extensions.push(cm.autocomplete.autocompletion({override: [this.completionSource]}));
-
+        extensions.push(cm.lint.lintGutter());
+        extensions.push(cm.autocomplete.autocompletion({closeOnBlur: false, override: [this.completionSource]}));
         bbn.fn.log(this.currentMode, extensions);
         return extensions;
       },
       /**
-                                            * Return an array with options of autocompletions
-                                            *
-                                            * @method completionSource
-                                            * @param {String} context Text in text-area of the instance codemirror
-                                            * @return {Object}
-                                            */
+                                                * Return an array with options of autocompletions
+                                                *
+                                                * @method completionSource
+                                                * @param {String} context Text in text-area of the instance codemirror
+                                                * @return {Object}
+                                                */
       completionSource(context) {
         let word = context.matchBefore(/(this\.\w*)|\w+/);
         let node = codemirror6.language.syntaxTree(context.state).resolveInner(context.pos, -1)
@@ -214,7 +219,6 @@
         }
 
         bbn.fn.log(res);
-
         if (node.name === '.') {
           bbn.fn.log("ICI");
         }
@@ -346,11 +350,46 @@
             bbn.fn.log("FIRST", first);
             if (bbn.fn.isObject(bbnObject)) {
               for (let key in bbnObject) {
+                let final = {};
+                final.label = key;
+                let documentation = "";
+                let doc = this.getNestedProp(bbn.doc['bbn-js'], first + '.' + key);
                 let type = "variable";
                 if (bbn.fn.isFunction(bbnObject[key])) {
                   type = "function";
                 }
-                res.push({label: key, type: type})
+                if (doc) {
+                  final.doc = doc;
+                  final.info = (completionNode) => {
+                    return new Promise((resolve, reject) => {
+                      let div = document.createElement('div');
+                      div.className = "bbn-xspadding bbn-no-margin"
+                      if (completionNode.doc['!type']) {
+                        let htype = document.createElement('h5');
+                        htype.innerText = completionNode.doc['!type'];
+                        div.appendChild(htype);
+                        div.appendChild(document.createElement('hr'))
+                      }
+                      if (completionNode.doc['!url']) {
+                        let url = document.createElement('a');
+                        url.href = completionNode.doc['!url'];
+                        url.innerText = "bbn.io/js/" + completionNode.label
+                        div.appendChild(url);
+                        div.appendChild(document.createElement('br'));
+                      }
+
+                      if (completionNode.doc['!doc']) {
+                        let htmldoc = document.createElement('span');
+                        htmldoc.innerText = completionNode.doc['!doc'];
+                        div.appendChild(htmldoc);
+                      }
+                      resolve(div);
+                    })
+                  }
+                }
+                final.type = type;
+                bbn.fn.log("FINAL", final);
+                res.push(final);
               }
             }
           } catch (error) {
@@ -366,6 +405,7 @@
           res.unshift(...defaultLabel);
         }
 
+      
         return res;
       },
       jsCompletionSource(context) {
@@ -404,6 +444,9 @@
           case 'css':
             res = window.codemirror6.css.cssCompletionSource;
             break;
+          case 'less':
+            res = window.codemirror6.css.cssCompletionSource;
+            break;
         }
         if (!res) {
           res = () => {
@@ -415,12 +458,12 @@
         return res;
       },
       /**
-                                            * Update code in editor and do an emitInput
-                                            *
-                                            * @method onChange
-                                            * @param {String} tr Text in text-area of the instance codemirror
-                                            * @return {Object}
-                                            */
+                                                * Update code in editor and do an emitInput
+                                                *
+                                                * @method onChange
+                                                * @param {String} tr Text in text-area of the instance codemirror
+                                                * @return {Object}
+                                                */
       onChange(tr) {
         this.widget.update([tr]);
         let value = this.widget.state.doc.toString();
@@ -429,11 +472,11 @@
         }
       },
       /**
-                                            * Initialize a new instance of codemirror in this.widget
-                                            *
-                                            * @method init
-                                            * @return {Object}
-                                            */
+                                                * Initialize a new instance of codemirror in this.widget
+                                                *
+                                                * @method init
+                                                * @return {Object}
+                                                */
       init() {
         let cm = window.codemirror6;
         let extensions = this.getExtensions();

@@ -70,7 +70,9 @@
           <bbn-router :autoload="true"
                       ref="router"
                       :nav="true"
-                      :root="'newide/' + source.project.id + '/ide/'">
+                      :root="'newide/' + source.project.id + '/ide/'"
+                      :storage="true"
+                      :storage-full-name="'appui-newide-editor-' + source.project.id">
           </bbn-router>
         </bbn-pane>
         <bbn-pane :size="200"
