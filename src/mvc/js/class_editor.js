@@ -6,6 +6,8 @@
       return {
         isLoading: false,
         currentClass: '',
+        currentLibrary: '',
+        root: appui.plugins['appui-newide'] + '/',
         addActions: [
           {
             text: bbn._("New class"),

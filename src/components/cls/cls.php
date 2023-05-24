@@ -75,13 +75,17 @@
     <bbn-pane>
       <div class="bbn-overlay">
         <appui-newide-cls-editor v-if="!currentSelected"
-                                 :source="source"/>
+                                 :source="source"
+                                 :mode="mode"/>
         <appui-newide-cls-method v-else-if="currentSelected.mode === 'method'"
-                                 :source="source.methods[currentSelected.value]"/>
+                                 :source="source.methods[currentSelected.value]"
+                                 :mode="mode"/>
         <appui-newide-cls-property v-else-if="currentSelected.mode === 'prop'"
-                                   :source="source.properties[currentSelected.value]"/>
+                                   :source="source.properties[currentSelected.value]"
+                                   :mode="mode"/>
         <appui-newide-cls-constant v-else-if="currentSelected.mode === 'constant'"
-                                   :source="source.constants[currentSelected.value]"/>
+                                   :source="source.constants[currentSelected.value]"
+                                   :mode="mode"/>
       </div>
     </bbn-pane>
   </bbn-splitter>

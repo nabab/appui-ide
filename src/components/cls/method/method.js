@@ -2,9 +2,16 @@
 
 (() => {
   return {
+    props: {
+      mode: {
+        type: String,
+        default: "read",
+      }
+    },
     data() {
       return {
-        ready: false
+        ready: false,
+      	root: appui.plugins['appui-newide'] + '/',
       }
     },
     computed: {
@@ -13,6 +20,15 @@
       },
       types() {
         return this.closest('appui-newide-cls').types
+      },
+      logContent (str) {
+        bbn.fn.log(str)
+      },
+      formData() {
+        let method = this.closest('appui-newide-cls');
+        let data = method.source;
+        data.methods[this.source.name] = this.source;
+        return {data: data};
       }
     },
     methods: {
@@ -21,7 +37,15 @@
       },
       renderArgType(row) {
         return '<span class="bbn-mono">' + row.type + '</span>';
-      }
+      },
+      renderArgDefault(row) {
+        return '<span class="bbn-mono">' + row.default + '<span/>';
+      },
+      onSuccess(data) {
+        if (data.success) {
+          appui.success("Class Successfully Updated");
+        }
+      },
     },
     mounted() {
       this.$nextTick(() => this.ready = true);
