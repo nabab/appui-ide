@@ -13,9 +13,5 @@ if ($model->hasData('class')) {
   ];
 }
 else {
-  return [
-    'library' => $parser->getLibraryClasses($model->libPath() . 'bbn/bbn/src/bbn', 'bbn'),
-  ];
+  return $model->getModel("./data/available-libraries");
 }
-
-//test
