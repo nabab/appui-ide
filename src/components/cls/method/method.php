@@ -1,10 +1,13 @@
 <!-- HTML Document -->
 
 <div class="appui-ide-cls-method bbn-overlay">
-	<bbn-form :source="source"
+  <bbn-form :source="formData"
             :scrollable="true"
             v-if="ready"
-            mode="big">
+            mode="big"
+            :action="root + 'generating'"
+            @success="onSuccess"
+            :prefilled="true">
     <div class="bbn-padding">
       <h1>
         <?= _("Method") ?> <bbn-editable v-model="source.name"/>
@@ -33,7 +36,8 @@
                        type="bool"/>
           <bbns-column title="<?= _("Default") ?>"
                        :width="150"
-                       field="default"/>
+                       field="default"
+                       :render="renderArgDefault"/>
           <bbns-column title="<?= _("Description") ?>"
                        field="default"/>
         </bbn-table>
@@ -44,8 +48,8 @@
                    :source="visibilities"/>
 
         <label><?= _("Description") ?></label>
-        <bbn-markdown v-model="source.description"/>
-
+        <bbn-markdown v-model="source.description"
+                      :autosize="true"/>
         <label><?= _("Code") ?></label>
         <div>
           <bbn-code v-model="source.code"
@@ -57,14 +61,19 @@
         <bbn-combo v-model="source.returns"
                    :source="types"/-->
 
-        <label v-if="source.examples"><?= _("Examples") ?></label>
+        <!--label><?= _("Examples") ?></label>
         <div v-if="source.examples">
           <div v-for="ex in source.examples"
                class="bbn-w-100 bbn-vspadding">
             <bbn-code v-model="ex.code"
                       :fill="false"
-                      mode="purephp"/>
-          </div>
+                      mode="purephp"/-->
+
+        <label v-if="source.example" ><?= _("Example:") ?></label>
+        <div>
+          <bbn-code v-model="source.example"
+                    :fill="false"
+                    mode="purephp"/>
         </div>
 
       </div>
