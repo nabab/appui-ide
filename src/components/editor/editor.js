@@ -159,6 +159,7 @@
                 }
               },
               {
+                // just a comment for a test //
                 icon: 'nf nf-fa-search_minus',
                 text: bbn._('Find previous'),
                 action: () => {
@@ -493,6 +494,7 @@
         }
       },
       mapTree(data) {
+        data.text += data.git === true ?  "  <i class='nf  nf-fa-github'></i>" : ""
         if (this.currentTab.tabs && data.tab) {
           data.bcolor = bbn.fn.getField(this.currentTab.tabs, 'bcolor', {url: data.tab}) || data.bcolor;
         }

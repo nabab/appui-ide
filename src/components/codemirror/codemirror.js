@@ -12,14 +12,15 @@
     xml: 'xml',
     md: 'md',
     sql: 'sql',
-    scss: 'css'
+    scss: 'css',
+    test: 'test',
   };
   return {
     /**
-                                             * @mixin bbn.vue.basicComponent
-                                             * @mixin bbn.vue.inputComponent
-                                             * @mixin bbn.vue.eventsComponent
-                                             */
+                                                               * @mixin bbn.vue.basicComponent
+                                                               * @mixin bbn.vue.inputComponent
+                                                               * @mixin bbn.vue.eventsComponent
+                                                               */
     mixins:
     [
       bbn.vue.basicComponent,
@@ -28,10 +29,10 @@
     ],
     props: {
       /**
-                                                * Language passed in props of the component
-                                                *
-                                                * @prop {String} [php] mode
-                                                */
+                                                                  * Language passed in props of the component
+                                                                  *
+                                                                  * @prop {String} [php] mode
+                                                                  */
       mode: {
         type: String,
         default: 'js',
@@ -40,10 +41,10 @@
         }
       },
       /**
-                                                * Theme passed in props of the component
-                                                *
-                                                * @prop {String} [basicLight] theme
-                                                */
+                                                                  * Theme passed in props of the component
+                                                                  *
+                                                                  * @prop {String} [basicLight] theme
+                                                                  */
       theme: {
         type: String,
         default: 'basicLight'
@@ -52,22 +53,22 @@
     data() {
       return {
         /**
-                                                  * Widget containing the codemirror instance
-                                                  *
-                                                  * @data {Object} [null] widget
-                                                  */
+                                                                    * Widget containing the codemirror instance
+                                                                    *
+                                                                    * @data {Object} [null] widget
+                                                                    */
         widget: null,
         /**
-                                                  * Mode use to display the content of file
-                                                  *
-                                                  * @data {Object} [null] currentMode
-                                                  */
+                                                                    * Mode use to display the content of file
+                                                                    *
+                                                                    * @data {Object} [null] currentMode
+                                                                    */
         currentMode: this.mode,
         /**
-                                                  * Current theme use
-                                                  *
-                                                  * @data {Object} [null] currentTheme
-                                                  */
+                                                                    * Current theme use
+                                                                    *
+                                                                    * @data {Object} [null] currentTheme
+                                                                    */
         currentTheme: this.theme,
         state: null,
         lastKeyDown: null,
@@ -76,8 +77,8 @@
       };
     },
     /**
-                                              * @event mounted
-                                              */
+                                                                * @event mounted
+                                                                */
     mounted() {
       bbn.fn.log(this.currentMode);
       if (!bbn.doc) {
@@ -90,18 +91,29 @@
         });
       }
       bbn.fn.log("COMPONENTS/CODEMIRROR THEME/MODE", this.theme, this.mode);
+      if (!window.codemirrorVue) {
+        let eslintScript = document.createElement('script');
+        eslintScript.src = 'codemirror-vue.js';
+        document.getElementsByTagName('head')[0].appendChild(eslintScript);
+
+      }
+      if (!window.eslint4b) {
+        let eslintScript = document.createElement('script');
+        eslintScript.src = 'eslint4b.js';
+        document.getElementsByTagName('head')[0].appendChild(eslintScript);
+
+      }
       if (!window.codemirror6) {
-        let ele = document.createElement('script');  // temporary
-        ele.src = '/cm.js';
-        ele.onload = () => {
-          bbn.fn.log(ele);
+        let cmScript = document.createElement('script');
+        cmScript.src = '/cm.js';
+        cmScript.onload = () => {
+          // Both ESLint and CodeMirror scripts have been loaded
           this.init();
         };
-        document.getElementsByTagName("head")[0].appendChild(ele);
+        document.getElementsByTagName('head')[0].appendChild(cmScript);
       }
-      else {
-        this.init();
-      }
+      this.init();
+
     },
     methods: {
 
@@ -111,7 +123,7 @@
       },
       unfoldAll() {
         window.codemirror6.language.unfoldAll(this.widget);
-
+        
       },
       openSearchPanel() {
         window.codemirror6.search.openSearchPanel(this.widget);
@@ -129,12 +141,12 @@
         window.codemirror6.search.replaceAll(this.widget);
       },
       /**
-                                                * Return an array with extensions give in cfg
-                                                *
-                                                * @method getExtensions
-                                                * @param {Object} cfg Configue of extensions
-                                                * @return {Array}
-                                                */
+                                                                  * Return an array with extensions give in cfg
+                                                                  *
+                                                                  * @method getExtensions
+                                                                  * @param {Object} cfg Configue of extensions
+                                                                  * @return {Array}
+                                                                  */
       getExtensions() {
         let cm = window.codemirror6;
         cm.getBasicExtensions();
@@ -157,9 +169,41 @@
         switch (this.currentMode) {
           case "javascript":
             extensions.push(cm.javascript.javascript());
+            extensions.push(cm.lint.linter(cm.javascript.esLint(new window.eslint4b(), {
+              parseOptions: {
+                ecmaVersion: 2019,
+                sourceType: 'script'
+              },
+              env: {
+                browser: true
+              },
+              rules: {
+                semi: ['error', 'never'],
+              },
+              globals: {
+                bbn: 'readonly'
+              }
+            })));
+
             break;
           case "js":
             extensions.push(cm.javascript.javascript());
+            extensions.push(cm.lint.linter(cm.javascript.esLint(new window.eslint4b(), {
+              parseOptions: {
+                ecmaVersion: 2019,
+                sourceType: 'script'
+              },
+              env: {
+                browser: true
+              },
+              rules: {
+                semi: ['error', 'never'],
+              },
+              globals: {
+                bbn: 'readonly'
+              }
+            })));
+
             break;
           case "html":
             extensions.push(cm.html.html());
@@ -185,23 +229,23 @@
             extensions.push(cm.markdown.markdown());
             break;
         }
-        extensions.push(cm.lint.lintGutter());
         extensions.push(cm.autocomplete.autocompletion({closeOnBlur: false, override: [this.completionSource]}));
         bbn.fn.log(this.currentMode, extensions);
         return extensions;
       },
       /**
-                                                * Return an array with options of autocompletions
-                                                *
-                                                * @method completionSource
-                                                * @param {String} context Text in text-area of the instance codemirror
-                                                * @return {Object}
-                                                */
+                                                                  * Return an array with options of autocompletions
+                                                                  *
+                                                                  * @method completionSource
+                                                                  * @param {String} context Text in text-area of the instance codemirror
+                                                                  * @return {Object}
+                                                                  */
       completionSource(context) {
         let word = context.matchBefore(/(this\.\w*)|\w+/);
         let node = codemirror6.language.syntaxTree(context.state).resolveInner(context.pos, -1)
         let fn          = this.getWidgetCompletion();
         let res         = fn(context);
+        
 
         bbn.fn.log("AUTOCOMPLETE", node, res);
         if (!res || !res.options) {
@@ -296,7 +340,7 @@
           previous =  context.state.sliceDoc(previous.from, previous.to) === word;
         }
         bbn.fn.log(previous);
-        if ((node.name === '.' && node.prevSibling?.name === word) || previous)
+        if ((node.name === '.' && node.prevSibling.name === word) || previous)
           return true;
         return false;
       },
@@ -405,7 +449,7 @@
           res.unshift(...defaultLabel);
         }
 
-      
+
         return res;
       },
       jsCompletionSource(context) {
@@ -458,12 +502,12 @@
         return res;
       },
       /**
-                                                * Update code in editor and do an emitInput
-                                                *
-                                                * @method onChange
-                                                * @param {String} tr Text in text-area of the instance codemirror
-                                                * @return {Object}
-                                                */
+                                                                  * Update code in editor and do an emitInput
+                                                                  *
+                                                                  * @method onChange
+                                                                  * @param {String} tr Text in text-area of the instance codemirror
+                                                                  * @return {Object}
+                                                                  */
       onChange(tr) {
         this.widget.update([tr]);
         let value = this.widget.state.doc.toString();
@@ -472,11 +516,11 @@
         }
       },
       /**
-                                                * Initialize a new instance of codemirror in this.widget
-                                                *
-                                                * @method init
-                                                * @return {Object}
-                                                */
+                                                                  * Initialize a new instance of codemirror in this.widget
+                                                                  *
+                                                                  * @method init
+                                                                  * @return {Object}
+                                                                  */
       init() {
         let cm = window.codemirror6;
         let extensions = this.getExtensions();

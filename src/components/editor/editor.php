@@ -59,6 +59,8 @@
                            type: currentTypeCode,
                            id_path: currentPathId
                            }"
+                    :storage="true"
+                    :storage-full-name="'appui-newide-type-th-' + source.project.id + '-' + currentRoot"
                     ref="tree"
                     @nodeDblclick="treeNodeActivate"
                     :icon-color="iconColor"
