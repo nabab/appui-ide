@@ -13,5 +13,6 @@ if ($model->hasData('class')) {
   ];
 }
 else {
-  return $model->getModel("./data/available-libraries");
+  $res = $model->getModel("./data/available-libraries");
+  return $res;
 }

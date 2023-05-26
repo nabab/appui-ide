@@ -16,11 +16,13 @@ $composers = $fs->scan(".", function($a) {
 $res = [
   'success' => false,
 ];
-
 if ($composers) {
   $res['success'] = true;
   $res['libraries'] = [];
   foreach($composers as $c) {
+		if (!$fs->isDir(dirname($c).'/.git')) {
+      continue;
+    }
     $content = $fs->decodeContents($c, null, true);
     if (isset($content['autoload'])) {
       $bits = X::split($c, "/");
