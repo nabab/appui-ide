@@ -5,7 +5,7 @@
     data() {
       return {
         myCode: this.source.content,
-        myTheme: "basicDark",
+        myTheme: "dracula",
         myMode: this.source.ext,
         ready: false
       };

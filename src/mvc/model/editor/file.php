@@ -19,7 +19,6 @@ if (!empty($model->data['url']) && isset($model->inc->ide)) {
 
   $file = $model->inc->ide->urlToReal($model->data['url']);
   $route = '';
-  //X::ddump("FILE", $file, $model->data['url'], $rep);
 
   //define the route for use in test code
   foreach ($model->data['routes'] as $i => $r) {

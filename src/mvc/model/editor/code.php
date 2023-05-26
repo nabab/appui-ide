@@ -19,6 +19,7 @@ if ($model->hasData('id_project')) {
   if (!$isHistory) {
     $project = new Project($model->db, $model->data['id_project']);
     $file = $project->urlToReal($model->data['url']);
+		$newPath = str_replace('/home/dev-qr/', '', $file);
     $config = $project->urlToConfig($model->data['url']);
     $model->inc->ide->setRecentFile($model->data['url']);
 
@@ -53,7 +54,8 @@ if ($model->hasData('id_project')) {
       "title" => $title,
       "url" => $model->data['url'],
       "id_project" => $model->data['id_project'],
-      "isEmpty" => $isEmpty
+      "isEmpty" => $isEmpty,
+      "path" => $newPath
     ];
   } else {
     $fs = new System();
