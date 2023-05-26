@@ -29,8 +29,7 @@
                     storage-full-name="appui-ide-class-editor-dropdown-classe"
                     source-value="class"
                     v-model="currentClass"
-                    source-text="class"
-                    :autobind="false"/>
+                    source-text="class"/>
 
     </div>
   </bbn-toolbar>
