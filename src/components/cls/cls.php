@@ -17,7 +17,7 @@
                 <template v-pre>
                   <div class="bbn-w-100 bbn-hspaddding bbn-vxspadding"
                        :title="source.summary">
-                  	<i :class="{
+                    <i :class="{
                                'nf nf-oct-person': source.visibility === 'public',
                                'nf nf-fa-unlock_alt': source.visibility === 'protected',
                                'nf nf-fa-lock': source.visibility === 'private',
@@ -37,7 +37,7 @@
                 <template v-pre>
                   <div class="bbn-w-100 bbn-hspaddding bbn-vxspadding"
                        :title="source.summary">
-                  	<i :class="{
+                    <i :class="{
                                'nf nf-oct-person': source.visibility === 'public',
                                'nf nf-fa-unlock_alt': source.visibility === 'protected',
                                'nf nf-fa-lock': source.visibility === 'private',
@@ -57,7 +57,7 @@
                 <template v-pre>
                   <div class="bbn-w-100 bbn-hspaddding bbn-vxspadding"
                        :title="source.summary">
-                  	<i :class="{
+                    <i :class="{
                                'nf nf-oct-person': source.visibility === 'public',
                                'nf nf-fa-unlock_alt': source.visibility === 'protected',
                                'nf nf-fa-lock': source.visibility === 'private',
@@ -74,18 +74,49 @@
     </bbn-pane>
     <bbn-pane>
       <div class="bbn-overlay">
-        <appui-newide-cls-editor v-if="!currentSelected"
-                                 :source="source"
-                                 :mode="mode"/>
-        <appui-newide-cls-method v-else-if="currentSelected.mode === 'method'"
-                                 :source="source.methods[currentSelected.value]"
-                                 :mode="mode"/>
-        <appui-newide-cls-property v-else-if="currentSelected.mode === 'prop'"
-                                   :source="source.properties[currentSelected.value]"
-                                   :mode="mode"/>
-        <appui-newide-cls-constant v-else-if="currentSelected.mode === 'constant'"
-                                   :source="source.constants[currentSelected.value]"
-                                   :mode="mode"/>
+        <bbn-router :nav="true"
+                    :menu="false"
+                    :breadcrumb="false"
+                    :visual="false">
+          <bbn-container url="reader"
+                         :static="true"
+                         :title="_('Reader')">
+            <appui-newide-cls-editor v-if="!currentSelected"
+                                     :source="source"
+                                     mode="read"/>
+            <appui-newide-cls-method v-else-if="currentSelected.mode === 'method'"
+                                     :source="source.methods[currentSelected.value]"
+                                     mode="read"/>
+            <appui-newide-cls-property v-else-if="currentSelected.mode === 'prop'"
+                                       :source="source.properties[currentSelected.value]"
+                                       mode="read"/>
+            <appui-newide-cls-constant v-else-if="currentSelected.mode === 'constant'"
+                                       :source="source.constants[currentSelected.value]"
+                                       mode="read"/>
+          </bbn-container>
+          <bbn-container url="editor"
+                         :static="true"
+                         :title="_('Editor')">
+            <appui-newide-cls-editor v-if="!currentSelected"
+                                     :source="source"
+                                     mode="write"/>
+            <appui-newide-cls-method v-else-if="currentSelected.mode === 'method'"
+                                     :source="source.methods[currentSelected.value]"
+                                     mode="write"/>
+            <appui-newide-cls-property v-else-if="currentSelected.mode === 'prop'"
+                                       :source="source.properties[currentSelected.value]"
+                                       mode="write"/>
+            <appui-newide-cls-constant v-else-if="currentSelected.mode === 'constant'"
+                                       :source="source.constants[currentSelected.value]"
+                                       mode="write"/>
+          </bbn-container>
+          <bbn-container url="test"
+                         :static="true"
+                         :title="_('Test')">
+
+          </bbn-container>
+        </bbn-router>
+
       </div>
     </bbn-pane>
   </bbn-splitter>
