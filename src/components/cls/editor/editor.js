@@ -11,6 +11,11 @@
         type: String,
         default: "read",
       }
-    }
+    },
+    data() {
+      return {
+    		read: (this.mode == "read" ? true : false),
+      }
+ 	 },
   }
 })();

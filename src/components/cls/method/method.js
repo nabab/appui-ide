@@ -12,6 +12,7 @@
       return {
         ready: false,
       	root: appui.plugins['appui-newide'] + '/',
+    		read: (this.mode == "read" ? true : false),
       }
     },
     computed: {
