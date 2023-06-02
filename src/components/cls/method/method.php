@@ -21,7 +21,8 @@
                    class="bbn-w-100"/>
       <div v-else class="bbn-w-80">
         <span><strong><u>Summury :</u></strong></span>
-        	<span> {{source.summary}} </span>
+        	<span v-if="source.summury"> {{source.summary}} </span>
+          <span v-else> (None) </span>
       	</div>
       </h3>
       <div class="bbn-w-100 bbn-small bbn-vmargin">
@@ -50,18 +51,21 @@
         </bbn-table>
       </div>
       <div class="bbn-grid-fields">
-        <label><?= _("Visibility") ?></label>
+        <label v-if="!read"><?= _("Visibility") ?></label>
+        <span v-else><strong><u>Visibility :</u></strong></span>
         <bbn-radio v-if="!read" v-model="source.visibility"
                    :source="visibilities"/>
         <span v-else
               :source="visibilities"> {{source.visibility}}
         </span>
 
-        <label><?= _("Description") ?></label>
+        <label v-if="!read"><?= _("Description") ?></label>
+        <span v-else><strong><u>Description :</u></strong></span>
         <bbn-markdown v-if="!read" v-model="source.description"
                       :autosize="true"/>
        	<div v-else class="bbn-w-70">
-        	<span> {{source.description}} </span>
+					<span v-if="source.description"> {{source.description}} </span>
+          <span v-else> (None) </span>
         </div>
         <label><?= _("Code") ?></label>
         <div>
@@ -80,7 +84,7 @@
           <bbn-code v-model="source.example"
                     :fill="false"
                     mode="purephp"
-                    :readonly="!read"/>
+                    :readonly="read"/>
         </div>
 
       </div>

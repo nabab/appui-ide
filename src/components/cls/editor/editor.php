@@ -14,7 +14,8 @@
                       placeholder="<?= _("Write a description for your class here") ?>"/>
         <div v-else class="bbn-w-70">
           <p><strong><u>Description :</u></strong></p><br>
-        	<span> {{source.doc.description}} </span>
+        	<span v-if="source.doc.description"> {{source.doc.description}} </span>
+          <span v-else> (None) </span>
       	</div>
       </div>
       <div class="bbn-grid-fields bbn-top-margin">
@@ -23,7 +24,7 @@
           <h3 v-else>
             <u>{{tag}} : </u>
           </h3>
-					<h3 v-if="!read" v-text="tag"/>
+					<!--h3 v-if="!read" v-text="tag"/-->
           <bbn-input v-if="!read" v-model="source.doc.tags[tag]"/>
           <h3 v-else> {{source.doc.tags[tag]}}</h3>
         </template>
