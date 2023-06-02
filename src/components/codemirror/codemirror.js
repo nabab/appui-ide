@@ -219,45 +219,40 @@
             extensions.push(cm.vue.vue());
             break;
           case "php":
+            if (window.lsp) {
+              let file = this.closest("appui-newide-coder").source.path; // app-ui/vendor/bbn/appui-newide/src/components/codemirror/codemirror.less
+              bbn.fn.log("FILE", "file:///" + file);
+              let lsPhp = window.lsp.languageServer({
+                serverUri: "wss:///" + window.location.hostname + ":443/lsp/php",
+                rootUri: "file:///home/dev-qr/",
+                documentUri: "file:///" + file,
+                languageId: 'php' 
+              });
+              extensions.push(lsPhp);
+            }
             extensions.push(cm.php.php({
               baseLanguage: cm.languageExtensions.html
             }));
             break;
           case "css":
-            if (window.lsp) {
-              let wsCss = new WebSocket("ws://localhost");
 
-              let lsCss = window.lsp.languageServer({
-                // WebSocket server uri and other client options.
-                ws,
-                rootUri: 'file:///',
-
-                // Alternatively, to share the same client across multiple instances of this plugin.
-                documentUri: `file:///${this.closest("appui-newide-coder").source.path}`,
-                languageId: 'less' // As defined at https://microsoft.github.io/language-server-protocol/specification#textDocumentItem.
-              });
-              extensions.push(lsCss);
-            }
 
             extensions.push(cm.css.css());
 
             break;
           case "less":
+
             if (window.lsp) {
-              let wsLess = new WebSocket("ws://localhost");
-
-              let lsLess = window.lsp.languageServer({
-                // WebSocket server uri and other client options.
-                ws,
-                rootUri: 'file:///',
-
-                // Alternatively, to share the same client across multiple instances of this plugin.
-                documentUri: `file:///${this.closest("appui-newide-coder").source.path}`,
-                languageId: 'less' // As defined at https://microsoft.github.io/language-server-protocol/specification#textDocumentItem.
+              let file = this.closest("appui-newide-coder").source.path; // app-ui/vendor/bbn/appui-newide/src/components/codemirror/codemirror.less
+              bbn.fn.log("FILE", "file:///" + file);
+              let lsCss = window.lsp.languageServer({
+                serverUri: "wss:///" + window.location.hostname + ":443/lsp/less",
+                rootUri: "file:///home/dev-qr/",
+                documentUri: "file:///" + file,
+                languageId: 'less' 
               });
-              extensions.push(lsLess);
+              extensions.push(lsCss);
             }
-
 
             extensions.push(cm.css.css());
 
@@ -272,7 +267,9 @@
             extensions.push(cm.markdown.markdown());
             break;
         }
-        extensions.push(cm.autocomplete.autocompletion({closeOnBlur: false, override: [this.completionSource]}));
+        if (this.currentMode !== "less" && this.currentMode !== "php") {
+          extensions.push(cm.autocomplete.autocompletion({closeOnBlur: false, override: [this.completionSource]}));
+        }
         bbn.fn.log(this.currentMode, extensions);
         return extensions;
       },
