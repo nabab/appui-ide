@@ -5,7 +5,6 @@
  **/
 
 use bbn\X;
-use bbn\Str;
 use bbn\Appui\Project;
 /** @var $model \bbn\Mvc\Model*/
 $types =  $model->inc->options->fullOptionsByCode('types', 'ide', 'appui');

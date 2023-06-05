@@ -72,36 +72,38 @@
         currentTheme: this.theme,
         state: null,
         lastKeyDown: null,
+        // for autocompletion to get last valid object create with current js file
         lastValidVueObject: this.getVueObject(),
-        jscompletion: []
       };
     },
     /**
                                                                         * @event mounted
                                                                         */
     mounted() {
-      bbn.fn.log(this.currentMode);
       if (!bbn.doc) {
         bbn.doc = {};
 
       }
       if (this.currentMode === 'js' && !bbn.doc['bbn-js']) {
+        // create json object in bbn.doc with bbn-js documentation
         bbn.fn.ajax("https://raw.githubusercontent.com/nabab/bbn-js/master/doc/tern.json", "json", null, (d) => {
           bbn.doc['bbn-js'] = d;
         });
       }
-      bbn.fn.log("COMPONENTS/CODEMIRROR THEME/MODE", this.theme, this.mode);
+      // load script for language server utility
       if (!window.lsp) {
         let lsp = document.createElement('script');
         lsp.src = 'lsp.js';
         document.getElementsByTagName('head')[0].appendChild(lsp);
       }
+      // load script for eslint for javascript linter
       if (!window.eslint4b) {
         let eslintScript = document.createElement('script');
         eslintScript.src = 'eslint4b.js';
         document.getElementsByTagName('head')[0].appendChild(eslintScript);
 
       }
+      // load script with codemirror6 and all extensions
       if (!window.codemirror6) {
         let cmScript = document.createElement('script');
         cmScript.src = '/cm.js';
@@ -148,14 +150,12 @@
                                                                           */
       getExtensions() {
         let cm = window.codemirror6;
-        bbn.fn.log(cm.theme, this.currentTheme, cm.theme[this.currentTheme]);
-
+        
         if (!cm.ext) {
-          bbn.fn.log("JJRLJRLJELJRLZJKLAJLKEJZKLRJELAJLZEJR");
+          // get basics extensions for editor like keymap, autocompletion...
           window.codemirror6.ext = cm.getBasicExtensions(cm);
           cm.ext = window.codemirror6.ext;
         }
-        bbn.fn.log("MODE", this.currentMode)
         if (!this.currentMode || !this.currentTheme) {
           throw new Error("You must provide a language and a theme");
         }
@@ -166,15 +166,18 @@
           throw new Error("Unknown theme");
         }
         let extensions = [];
+        // push each basic extension
         for (let n in cm.ext) {
           extensions.push(cm.ext[n]);
         }
+        // push current language extension and current theme extension
         extensions.push(cm.languageExtensions[modeCode[this.currentMode]]);
         extensions.push(cm.theme[this.currentTheme]);
         switch (this.currentMode) {
           case "javascript":
             extensions.push(cm.javascript.javascript());
             if (window.eslint4b) {
+              // create linter with eslint configuration
               extensions.push(cm.lint.linter(cm.javascript.esLint(new window.eslint4b(), {
                 parseOptions: {
                   ecmaVersion: 2019,
@@ -221,7 +224,7 @@
           case "php":
             if (window.lsp) {
               let file = this.closest("appui-newide-coder").source.path; // app-ui/vendor/bbn/appui-newide/src/components/codemirror/codemirror.less
-              bbn.fn.log("FILE", "file:///" + file);
+              // create language server extensions with configuration
               let lsPhp = window.lsp.languageServer({
                 serverUri: "wss:///" + window.location.hostname + ":443/lsp/php",
                 rootUri: "file:///home/dev-qr/",
@@ -230,6 +233,7 @@
               });
               extensions.push(lsPhp);
             }
+            // extend php with html
             extensions.push(cm.php.php({
               baseLanguage: cm.languageExtensions.html
             }));
@@ -241,7 +245,7 @@
 
             break;
           case "less":
-
+            // create language server extensions for less
             if (window.lsp) {
               let file = this.closest("appui-newide-coder").source.path; // app-ui/vendor/bbn/appui-newide/src/components/codemirror/codemirror.less
               bbn.fn.log("FILE", "file:///" + file);
@@ -267,10 +271,10 @@
             extensions.push(cm.markdown.markdown());
             break;
         }
+        // we can't override autocompletion because is already override with lsp
         if (this.currentMode !== "less" && this.currentMode !== "php") {
           extensions.push(cm.autocomplete.autocompletion({closeOnBlur: false, override: [this.completionSource]}));
         }
-        bbn.fn.log(this.currentMode, extensions);
         return extensions;
       },
       /**
@@ -281,13 +285,16 @@
                                                                           * @return {Object}
                                                                           */
       completionSource(context) {
+        // current word where the cursor is
         let word = context.matchBefore(/(this\.\w*)|\w+/);
+        // current node where the cursor is
         let node = codemirror6.language.syntaxTree(context.state).resolveInner(context.pos, -1)
+        // function used for autocompletion for a specific language
         let fn          = this.getWidgetCompletion();
+        // launch the autocompletion function with current context
         let res         = fn(context);
 
-
-        bbn.fn.log("AUTOCOMPLETE", node, res);
+        // create options array if not exist to add more autocompletion
         if (!res || !res.options) {
           res = {options: [
 
@@ -295,21 +302,17 @@
         }
 
 
+        // here I need the node so I can't use the precedent autocompletion function to get completion for this, bbn and more
         if (this.currentMode === 'js') {
           let js = this.getJavascriptCompletion(context, node);
           res.validFor = /^(?:[\w$\xa1-\uffff][\w$\d\xa1-\uffff]*|this\..*?)$/;
-          bbn.fn.log("AUTOCOMPLETE JS", js);
+          // we add it in the options array
           res.options.unshift(...js);
         }
-
-        bbn.fn.log(res);
-        if (node.name === '.') {
-          bbn.fn.log("ICI");
-        }
-
         return res;
       },
 
+      // create configuration with bbn component loaded in the dom
       createVueConfiguration() {
         const config = {
           extraTags: {},
@@ -330,6 +333,7 @@
 
         return config;
       },
+      // get first node of the current node-chain
       getFirstNode(node, context) {
         bbn.fn.log(node);
         while (node.prevSibling) {
@@ -337,6 +341,7 @@
         }
         return context.state.sliceDoc(node.from, node.to);
       },
+      // get nested prop in an object or array
       getNestedProp(obj, propString) {
         let propPath = propString.replace('this.', '').split('.');
         let currentProp = obj;
@@ -364,6 +369,7 @@
 
         return currentProp;
       },
+      // get the vue Object from current file
       getVueObject() {
         try {
           let vueObject = eval(this.value);
@@ -373,27 +379,15 @@
           return this.lastValidVueObject;
         }
       },
-      beforeDotIs(node, word, context) {
-        bbn.fn.log("MON REUF", node);
-        let previous = node.prevSibling;
-        if (previous) {
-          previous =  context.state.sliceDoc(previous.from, previous.to) === word;
-        }
-        bbn.fn.log(previous);
-        if ((node.name === '.' && node.prevSibling.name === word) || previous)
-          return true;
-        return false;
-      },
       getJavascriptCompletion(context, node) {
         let res = [];
         let first = this.getFirstNode(node, context);
-        bbn.fn.log("first", first);
 
+        // if the node-chain start with "this" we autocomplete this. or this. + nested key
         if (first && first.startsWith('this')) {
-          bbn.fn.log("LOL", this.getVueObject());
           let vueObject = new Vue(this.getVueObject());
+          // autocomplete for this.
           if (first === "this") {
-            bbn.fn.log("ICI No", vueObject);
             for (let key in vueObject) {
               bbn.fn.log(key);
               let type = "variable";
@@ -402,10 +396,10 @@
                   type = "function";
                 }
               } catch (error) {
-                bbn.fn.log("Just for debug, you can ignore this error", error);
               }
               res.push({label: key, type: type})
             }
+          // autocomplete for this[{{nested_key}}]  
           } else {
             try {
               let prop = this.getNestedProp(vueObject, first)
@@ -418,16 +412,14 @@
                       type = "function";
                     }
                   } catch (error) {
-                    bbn.fn.log("Just for debug, you can ignore this error", error);
                   }
                   res.push({label: key, type: type});
                 }
               }
             } catch (error) {
-              bbn.fn.log("Just for debug, you can ignore this error", error);
             }
           }
-          bbn.fn.log(res);
+        // same as this but for bbn
         } else if (first && first.startsWith('bbn')) {
           try {
             let bbnObject = eval(first);
@@ -442,6 +434,7 @@
                 if (bbn.fn.isFunction(bbnObject[key])) {
                   type = "function";
                 }
+                // if in bbn.doc[bbn-js] we have the documentation of the key we add it in the object to get it in the function to create the window
                 if (doc) {
                   final.doc = doc;
                   final.info = (completionNode) => {
@@ -479,7 +472,7 @@
           } catch (error) {
             bbn.fn.log(error);
           }
-
+        // default autocompletion, we can add autocompletion for function here
         } else {
           let defaultLabel = [
             {label: "this", type: "variable"},
@@ -492,6 +485,7 @@
 
         return res;
       },
+      // basic js completion source
       jsCompletionSource(context) {
         let validFor = /^(?:[\w$\xa1-\uffff][\w$\d\xa1-\uffff]*|this\..*?)$/;
         let inner = codemirror6.language.syntaxTree(context.state).resolve(context.pos, -1);
@@ -514,6 +508,7 @@
 
         const Myconfig = this.createVueConfiguration();
 
+        // return each autocompletion function for each language, for html we use another autocompletion with basic completion
         let res = null;
         switch (this.currentMode) {
           case 'html':
@@ -563,6 +558,7 @@
                                                                           */
       init() {
         let cm = window.codemirror6;
+        // get all needed extensions
         let extensions = this.getExtensions();
         let editorStateCfg = {
           doc: this.value,
