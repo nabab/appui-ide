@@ -14,6 +14,7 @@
     sql: 'sql',
     scss: 'css',
     test: 'test',
+    vue: 'vue'
   };
   return {
     /**
@@ -48,29 +49,17 @@
       theme: {
         type: String,
         default: 'ayuLight'
+      },
+      doc: {
+    		type: String,
+        default: ""
       }
     },
     data() {
       return {
-        /**
-                                                                            * Widget containing the codemirror instance
-                                                                            *
-                                                                            * @data {Object} [null] widget
-                                                                            */
-        widget: null,
-        /**
-                                                                            * Mode use to display the content of file
-                                                                            *
-                                                                            * @data {Object} [null] currentMode
-                                                                            */
+        myCode: this.doc,
         currentMode: this.mode,
-        /**
-                                                                            * Current theme use
-                                                                            *
-                                                                            * @data {Object} [null] currentTheme
-                                                                            */
         currentTheme: this.theme,
-        state: null,
         lastKeyDown: null,
         // for autocompletion to get last valid object create with current js file
         lastValidVueObject: this.getVueObject(),
@@ -107,39 +96,35 @@
       if (!window.codemirror6) {
         let cmScript = document.createElement('script');
         cmScript.src = '/cm.js';
-        cmScript.onload = () => {
-          // Both ESLint and CodeMirror scripts have been loaded
-          this.init();
-        };
         document.getElementsByTagName('head')[0].appendChild(cmScript);
       }
-      this.init();
 
     },
     methods: {
 
       foldAll() {
-        window.codemirror6.language.foldAll(this.widget);
+        
+        window.codemirror6.language.foldAll(this.getRef("code").widget);
         //window.codemirror6.language.foldInside(window.codemirror6.language.syntaxTree(this.widget));
       },
       unfoldAll() {
-        window.codemirror6.language.unfoldAll(this.widget);
+        window.codemirror6.language.unfoldAll(this.getRef("code").widget);
 
       },
       openSearchPanel() {
-        window.codemirror6.search.openSearchPanel(this.widget);
+        window.codemirror6.search.openSearchPanel(this.getRef("code").widget);
       },
       closeSearchPanel() {
-        window.codemirror6.search.closeSearchPanel(this.widget);
+        window.codemirror6.search.closeSearchPanel(this.getRef("code").widget);
       },
       findNext() {
-        window.codemirror6.search.findNext(this.widget);
+        window.codemirror6.search.findNext(this.getRef("code").widget);
       },
       findPrevious() {
-        window.codemirror6.search.findPrevious(this.widget);
+        window.codemirror6.search.findPrevious(this.getRef("code").widget);
       },
       replaceAll() {
-        window.codemirror6.search.replaceAll(this.widget);
+        window.codemirror6.search.replaceAll(this.getRef("code").widget);
       },
       /**
                                                                           * Return an array with extensions give in cfg
@@ -536,61 +521,10 @@
         }
         return res;
       },
-      /**
-                                                                          * Update code in editor and do an emitInput
-                                                                          *
-                                                                          * @method onChange
-                                                                          * @param {String} tr Text in text-area of the instance codemirror
-                                                                          * @return {Object}
-                                                                          */
-      onChange(tr) {
-        this.widget.update([tr]);
-        let value = this.widget.state.doc.toString();
-        if (value !== this.value) {
-          this.emitInput(value);
-        }
-      },
-      /**
-                                                                          * Initialize a new instance of codemirror in this.widget
-                                                                          *
-                                                                          * @method init
-                                                                          * @return {Object}
-                                                                          */
-      init() {
-        let cm = window.codemirror6;
-        // get all needed extensions
-        let extensions = this.getExtensions();
-        let editorStateCfg = {
-          doc: this.value,
-          extensions: extensions,
-        };
-        this.state = cm.state.EditorState.create(editorStateCfg);
-        this.widget = new cm.view.EditorView({
-          state: this.state,
-          parent: this.getRef('element'),
-          dispatch: this.onChange
-        });
-        bbn.fn.log(this.mode);
-        this.ready = true;
-      },
-      saveState() {
-        bbn.fn.log(this.state.toJSON());
-      },
       onKeyDown(event) {
         this.lastKeyDown = event;
-        if (event.key === ".") {
-          codemirror6.autocomplete.startCompletion(this.widget)
-        }
         this.$emit('keydown', event);
       }
     },
-    watch: {
-      theme() {
-        if (this.widget) {
-          this.widget.destroy();
-        }
-        this.init();
-      }
-    }
   };
 })();

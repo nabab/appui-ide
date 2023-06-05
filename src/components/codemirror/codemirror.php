@@ -1,7 +1,3 @@
 <!-- HTML Document -->
 
-<div :class="[componentClass, 'bbn-reset', 'bbn-overlay']"
-     @keydown="onKeyDown">
-  <div ref="element"
-       class="bbn-100"/>
-</div>
+<appui-newide-code ref="code" @keydown="onKeyDown" v-model="myCode" :extensions="getExtensions()" :theme="theme" :mode="mode"/>

@@ -37,7 +37,7 @@
           bbn.fn.log(this.source);
           bbn.fn.post(appui.plugins['appui-newide'] + '/editor/actions/save', {
             url: this.source.url,
-            content: this.myCode,
+            content: this.getRef("codemirror").myCode,
             id_project: this.source.id_project
           }, d => {
             bbn.fn.log(d);
