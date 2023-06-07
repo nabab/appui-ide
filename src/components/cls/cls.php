@@ -75,7 +75,7 @@
     <bbn-pane>
       <div class="bbn-overlay">
         <bbn-router :nav="true"
-                    :menu="false"
+                    :menu="[]"
                     :breadcrumb="false"
                     :visual="false">
           <bbn-container url="reader"
@@ -113,10 +113,15 @@
           <bbn-container url="test"
                          :static="true"
                          :title="_('Test')">
-
+            <appui-newide-cls-testor v-if="!currentSelected"
+                                     :source="source"
+                                     mode="write"/>
+            <appui-newide-cls-testor-method v-else-if="currentSelected.mode === 'method'"
+                                            :source="source.methods[currentSelected.value]"
+                                            :lib="source.lib"
+                                            mode="write"/>
           </bbn-container>
         </bbn-router>
-
       </div>
     </bbn-pane>
   </bbn-splitter>

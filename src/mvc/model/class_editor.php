@@ -8,8 +8,12 @@ use bbn\Parsers\Php;
 
 $parser = new Php();
 if ($model->hasData('class')) {
+  $data = $parser->analyzeClass($model->data['class']);
+  if ($model->hasData('lib')) {
+    $data['lib'] = $model->data['lib'];
+  }
   return [
-    'data' => $parser->analyzeClass($model->data['class'])
+    'data' => $data
   ];
 }
 else {

@@ -33,7 +33,7 @@
     watch: {
       currentClass(v) {
         this.isLoading = true;
-        bbn.fn.post(appui.plugins['appui-newide'] + '/class_editor', {class: v}, d => {
+        bbn.fn.post(appui.plugins['appui-newide'] + '/class_editor', {class: v, lib: this.currentLibrary}, d => {
           this.data = d.data;
           this.isLoading = false;
         });
