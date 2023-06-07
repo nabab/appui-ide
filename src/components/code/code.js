@@ -1,7 +1,6 @@
-(() =>{
+(() => {
   return {
-    mixins:
-    [
+    mixins: [
       bbn.vue.basicComponent,
       bbn.vue.inputComponent,
       bbn.vue.eventsComponent
@@ -17,7 +16,7 @@
       },
       extensions: {
         type: Array,
-        default: null   
+        default: null
       }
     },
     data() {
@@ -33,7 +32,7 @@
       },
       getExtensions() {
         let cm = window.codemirror6;
-        
+
         if (!this.mode || !this.theme) {
           throw new Error("You earmust provide a language and a theme");
         }
@@ -50,6 +49,9 @@
         extensions.push(cm.theme[this.theme]);
         switch (this.currentMode) {
           case "javascript":
+            extensions.push(cm.javascript.javascript());
+            break;
+          case "js":
             extensions.push(cm.javascript.javascript());
             break;
           case "html":
@@ -104,6 +106,43 @@
       },
       onKeyDown(event) {
         this.lastKeyDown = event;
+        if (event.ctrlKey && event.shiftKey && event.key.toLowerCase() === 'f') {
+          let newValue = "";
+          if ((this.mode === 'javascript' || this.mode === 'js') && window.beautifier.js) {
+            const options = {
+              indent_size: 2,
+              space_in_empty_paren: true
+            };
+            newValue = window.beautifier.js(this.widget.state.doc.toString(), options);
+          } else if ((this.mode === "css" || this.mode === "less") && window.beautifier.css) {
+            const options = {
+              indent_size: 2,
+              space_in_empty_paren: true
+            };
+            newValue = window.beautifier.css(this.widget.state.doc.toString(), options);
+          } else if (this.mode === "html" && window.beautifier.html) {
+            const options = {
+              indent_size: 2,
+              space_in_empty_paren: true,
+              wrap_attributes: 'force-aligned'
+            };
+            newValue = window.beautifier.html(this.widget.state.doc.toString(), options);
+          } else if (this.mode === "php") {
+            const options = {
+              indent_size: 2,
+              space_in_empty_paren: true
+            };
+            newValue = window.beautifier.html(this.widget.state.doc.toString(), options);
+          }
+
+          this.widget.dispatch({
+            changes: {
+              from: 0,
+              to: this.widget.state.doc.toString().length,
+              insert: newValue
+            }
+          })
+        }
         if (event.key === ".") {
           codemirror6.autocomplete.startCompletion(this.widget)
         }
@@ -122,8 +161,13 @@
         document.getElementsByTagName('head')[0].appendChild(cmScript);
       }
       this.init();
+
+      if (!window.beautifier && (mode === 'css' || mode === 'less' || mode === 'html' || mode === 'js' || mode === 'javascript')) {
+        let beautifierScript = document.createElement('script');
+        beautifierScript.src = "https://beautifier.io/js/lib/beautifier.min.js";
+        document.getElementsByTagName('head')[0].appendChild(beautifierScript);
+      }
     },
-    watch: {
-    }
+    watch: {}
   }
 })();

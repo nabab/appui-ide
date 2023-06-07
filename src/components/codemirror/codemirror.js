@@ -18,22 +18,21 @@
   };
   return {
     /**
-                                                                       * @mixin bbn.vue.basicComponent
-                                                                       * @mixin bbn.vue.inputComponent
-                                                                       * @mixin bbn.vue.eventsComponent
-                                                                       */
-    mixins:
-    [
+     * @mixin bbn.vue.basicComponent
+     * @mixin bbn.vue.inputComponent
+     * @mixin bbn.vue.eventsComponent
+     */
+    mixins: [
       bbn.vue.basicComponent,
       bbn.vue.inputComponent,
       bbn.vue.eventsComponent
     ],
     props: {
       /**
-                                                                          * Language passed in props of the component
-                                                                          *
-                                                                          * @prop {String} [php] mode
-                                                                          */
+       * Language passed in props of the component
+       *
+       * @prop {String} [php] mode
+       */
       mode: {
         type: String,
         default: 'js',
@@ -42,16 +41,16 @@
         }
       },
       /**
-                                                                          * Theme passed in props of the component
-                                                                          *
-                                                                          * @prop {String} [basicLight] theme
-                                                                          */
+       * Theme passed in props of the component
+       *
+       * @prop {String} [basicLight] theme
+       */
       theme: {
         type: String,
         default: 'ayuLight'
       },
       doc: {
-    		type: String,
+        type: String,
         default: ""
       }
     },
@@ -66,8 +65,8 @@
       };
     },
     /**
-                                                                        * @event mounted
-                                                                        */
+     * @event mounted
+     */
     mounted() {
       if (!bbn.doc) {
         bbn.doc = {};
@@ -103,7 +102,7 @@
     methods: {
 
       foldAll() {
-        
+
         window.codemirror6.language.foldAll(this.getRef("code").widget);
         //window.codemirror6.language.foldInside(window.codemirror6.language.syntaxTree(this.widget));
       },
@@ -127,15 +126,15 @@
         window.codemirror6.search.replaceAll(this.getRef("code").widget);
       },
       /**
-                                                                          * Return an array with extensions give in cfg
-                                                                          *
-                                                                          * @method getExtensions
-                                                                          * @param {Object} cfg Configue of extensions
-                                                                          * @return {Array}
-                                                                          */
+       * Return an array with extensions give in cfg
+       *
+       * @method getExtensions
+       * @param {Object} cfg Configue of extensions
+       * @return {Array}
+       */
       getExtensions() {
         let cm = window.codemirror6;
-        
+
         if (!cm.ext) {
           // get basics extensions for editor like keymap, autocompletion...
           window.codemirror6.ext = cm.getBasicExtensions(cm);
@@ -214,7 +213,7 @@
                 serverUri: "wss:///" + window.location.hostname + ":443/lsp/php",
                 rootUri: "file:///home/dev-qr/",
                 documentUri: "file:///" + file,
-                languageId: 'php' 
+                languageId: 'php'
               });
               extensions.push(lsPhp);
             }
@@ -238,7 +237,7 @@
                 serverUri: "wss:///" + window.location.hostname + ":443/lsp/less",
                 rootUri: "file:///home/dev-qr/",
                 documentUri: "file:///" + file,
-                languageId: 'less' 
+                languageId: 'less'
               });
               extensions.push(lsCss);
             }
@@ -258,32 +257,37 @@
         }
         // we can't override autocompletion because is already override with lsp
         if (this.currentMode !== "less" && this.currentMode !== "php") {
-          extensions.push(cm.autocomplete.autocompletion({closeOnBlur: false, override: [this.completionSource]}));
+          extensions.push(cm.autocomplete.autocompletion({
+            closeOnBlur: false,
+            override: [this.completionSource]
+          }));
         }
         return extensions;
       },
       /**
-                                                                          * Return an array with options of autocompletions
-                                                                          *
-                                                                          * @method completionSource
-                                                                          * @param {String} context Text in text-area of the instance codemirror
-                                                                          * @return {Object}
-                                                                          */
+       * Return an array with options of autocompletions
+       *
+       * @method completionSource
+       * @param {String} context Text in text-area of the instance codemirror
+       * @return {Object}
+       */
       completionSource(context) {
         // current word where the cursor is
         let word = context.matchBefore(/(this\.\w*)|\w+/);
         // current node where the cursor is
         let node = codemirror6.language.syntaxTree(context.state).resolveInner(context.pos, -1)
         // function used for autocompletion for a specific language
-        let fn          = this.getWidgetCompletion();
+        let fn = this.getWidgetCompletion();
         // launch the autocompletion function with current context
-        let res         = fn(context);
+        let res = fn(context);
 
         // create options array if not exist to add more autocompletion
         if (!res || !res.options) {
-          res = {options: [
+          res = {
+            options: [
 
-          ]};
+            ]
+          };
         }
 
 
@@ -291,6 +295,7 @@
         if (this.currentMode === 'js') {
           let js = this.getJavascriptCompletion(context, node);
           res.validFor = /^(?:[\w$\xa1-\uffff][\w$\d\xa1-\uffff]*|this\..*?)$/;
+          res.filter = false;
           // we add it in the options array
           res.options.unshift(...js);
         }
@@ -299,9 +304,15 @@
 
       // create configuration with bbn component loaded in the dom
       createVueConfiguration() {
+        const allClasses = Array.from(document.querySelectorAll('[class]')).flatMap(e => e.className.toString().split(/\s+/))
+        const classes = new Set()
+
+        allClasses.forEach(c => classes.add(c))
         const config = {
           extraTags: {},
-          extraGlobalAttributes: {},
+          extraGlobalAttributes: {
+            class: classes
+          },
         }
         let components = Object.keys(Vue.options.components).sort();
         bbn.fn.iterate(Vue.options.components, (cp, cpName) => {
@@ -315,6 +326,7 @@
             })
           }
         });
+
 
         return config;
       },
@@ -365,9 +377,10 @@
         }
       },
       getJavascriptCompletion(context, node) {
+        bbn.fn.log("node", node);
         let res = [];
         let first = this.getFirstNode(node, context);
-
+        bbn.fn.log("FIRST", first);
         // if the node-chain start with "this" we autocomplete this. or this. + nested key
         if (first && first.startsWith('this')) {
           let vueObject = new Vue(this.getVueObject());
@@ -380,15 +393,16 @@
                 if (typeof vueObject[key] === 'function') {
                   type = "function";
                 }
-              } catch (error) {
-              }
-              res.push({label: key, type: type})
+              } catch (error) {}
+              res.push({
+                label: key,
+                type: type
+              })
             }
-          // autocomplete for this[{{nested_key}}]  
+            // autocomplete for this[{{nested_key}}]  
           } else {
             try {
               let prop = this.getNestedProp(vueObject, first)
-              bbn.fn.log("PROP", prop);
               if (bbn.fn.isObject(prop)) {
                 for (let key in prop) {
                   let type = "variable";
@@ -396,15 +410,16 @@
                     if (typeof prop[key] === 'function') {
                       type = "function";
                     }
-                  } catch (error) {
-                  }
-                  res.push({label: key, type: type});
+                  } catch (error) {}
+                  res.push({
+                    label: key,
+                    type: type
+                  });
                 }
               }
-            } catch (error) {
-            }
+            } catch (error) {}
           }
-        // same as this but for bbn
+          // same as this but for bbn
         } else if (first && first.startsWith('bbn')) {
           try {
             let bbnObject = eval(first);
@@ -450,23 +465,74 @@
                   }
                 }
                 final.type = type;
-                bbn.fn.log("FINAL", final);
                 res.push(final);
               }
             }
-          } catch (error) {
-            bbn.fn.log(error);
-          }
-        // default autocompletion, we can add autocompletion for function here
+          } catch (error) {}
+          // default autocompletion, we can add autocompletion for function here
         } else {
-          let defaultLabel = [
-            {label: "this", type: "variable"},
-            {label: "bbn", type: "variable"}
-          ];
+          if (first !== "") {
+            try {
+              const result = eval(first);
+              if (result instanceof Object) {
+                for (let key in result) {
+                  let type = "variable";
+                  try {
+                    if (typeof result[key] === 'function') {
+                      type = "function";
+                    }
+                  } catch (error) {}
+                  res.push({
+                    label: key,
+                    type: type
+                  });
+                }
+              }
+            } catch (error) {}
+            res.unshift(...res);
 
-          res.unshift(...defaultLabel);
+          } else {
+            let defaultLabel = [{
+                label: "this",
+                type: "variable"
+              },
+              {
+                label: "bbn",
+                type: "variable"
+              }
+            ];
+
+            res.unshift(...defaultLabel);
+
+          }
+
         }
 
+
+        const customSort = (a, b) => {
+          const labelA = a.label.toLowerCase();
+          const labelB = b.label.toLowerCase();
+
+          if (labelA.startsWith('$') && !labelB.startsWith('$')) {
+            return 1;
+          }
+
+          if (labelA.startsWith('_') && !labelB.startsWith('_')) {
+            return 1;
+          }
+
+          if (!labelA.startsWith('$') && labelB.startsWith('$')) {
+            return -1;
+          }
+
+          if (!labelA.startsWith('_') && labelB.startsWith('_')) {
+            return -1;
+          }
+
+          return labelA.localeCompare(labelB);
+        }
+
+        bbn.fn.log("RES", res.sort(customSort));
 
         return res;
       },
@@ -475,7 +541,7 @@
         let validFor = /^(?:[\w$\xa1-\uffff][\w$\d\xa1-\uffff]*|this\..*?)$/;
         let inner = codemirror6.language.syntaxTree(context.state).resolve(context.pos, -1);
         if (inner.name == "TemplateString" || inner.name == "String" ||
-            inner.name == "LineComment" || inner.name == "BlockComment")
+          inner.name == "LineComment" || inner.name == "BlockComment")
           return null;
         let isWord = inner.to - inner.from < 20 && validFor.test(context.state.sliceDoc(inner.from, inner.to));
         console.log("CODEMIRROR6", !isWord && !context.explicit);
@@ -490,9 +556,7 @@
         };
       },
       getWidgetCompletion() {
-
         const Myconfig = this.createVueConfiguration();
-
         // return each autocompletion function for each language, for html we use another autocompletion with basic completion
         let res = null;
         switch (this.currentMode) {
