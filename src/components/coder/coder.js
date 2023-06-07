@@ -5,13 +5,17 @@
     data() {
       return {
         myCode: this.source.content,
-        myTheme: "basicDark",
+        myTheme: "dracula",
         myMode: this.source.ext,
         ready: false
       };
     },
     mounted() {
       bbn.fn.log("COMPONENTS/CODER SOURCE", this.source);
+      if (this.closest('appui-newide-editor')) {
+        this.closest('appui-newide-editor').getRecentFiles();
+
+      }
       if (!window.codemirror6) {
         bbn.fn.post(appui.plugins['appui-newide'] + '/cm6', d => {
           if (d.script) {
@@ -33,13 +37,13 @@
           bbn.fn.log(this.source);
           bbn.fn.post(appui.plugins['appui-newide'] + '/editor/actions/save', {
             url: this.source.url,
-            content: this.myCode,
+            content: this.getRef("codemirror").myCode,
             id_project: this.source.id_project
           }, d => {
             bbn.fn.log(d);
             if (d.success) {
               if (d.delete) {
-								appui.success(bbn._("Delete successfully"));
+                appui.success(bbn._("Delete successfully"));
               }
               else {
                 appui.success(bbn._("Save successfully"));

@@ -58,7 +58,8 @@
           extension: defaultExt,
           is_file: this.source.isFile,
           type: this.source.type || false,
-          path: (this.source.path === './') ? './' : this.source.path + (this.source.path.slice(-1) !== '/' ? '/' : '')
+          path: (this.source.path === './') ? './' : this.source.path + (this.source.path.slice(-1) !== '/' ? '/' : ''),
+          id_project: this.source.id_project
         }
       }
     },

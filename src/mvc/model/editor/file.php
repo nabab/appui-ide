@@ -13,12 +13,12 @@ if (!empty($model->data['url']) && isset($model->inc->ide)) {
   $id_project = $model->inc->options->fromCode(BBN_APP_NAME, "list", "project", "appui");
   $project = new Project($model->db, $id_project);
   $url = $model->data['url'];
+
   //die(var_dump($model->data['url']));
   $rep = $model->inc->ide->repositoryFromUrl($model->data['url']);
 
   $file = $model->inc->ide->urlToReal($model->data['url']);
   $route = '';
-  //X::ddump("FILE", $file, $model->data['url'], $rep);
 
   //define the route for use in test code
   foreach ($model->data['routes'] as $i => $r) {
@@ -113,26 +113,12 @@ if (!empty($model->data['url']) && isset($model->inc->ide)) {
   // we check if some tab of the components or mvc do not contain any files
 
   $cfg = $project->urlToPaths($model->data['url']);
-  $real = $model->data['url'];
-  $arr_real = X::split($real, '/');
-  array_pop($arr_real);
-  array_pop($arr_real);
-  array_pop($arr_real);
-  $real = X::join($arr_real, '/');
-  foreach ($cfg['files'] as &$type) {
-    $file = $type['path'];
-    $exists = null;
-    foreach ($type['extensions'] as $extension) {
-      $check = $real.'/'.$file.'.'.$extension['ext'];
-      if ($fs->exists($check)) {
-        $exists = basename($check);
-        break;
-      }
-    }
-    $type['file'] = $exists;
-  }
 
-  $res['files'] = $cfg['files'];
+  $real = substr($url, 0, strpos($url, "_end_") + strlen("_end_"));
+  foreach ($res['tabs'] as &$tab) {
+    $tab['file'] = $project->urlToReal($real . '/' . $tab['url']);
+  }
+  
 
   $res['url'] = $path;
   if (!empty($model->data['styleTab'])) {
@@ -155,6 +141,7 @@ if (!empty($model->data['url']) && isset($model->inc->ide)) {
       }
     }
   };
+  
 
   return $res;
 }

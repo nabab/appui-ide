@@ -10,7 +10,6 @@ use bbn\File\System;
 use bbn\Appui\Project;
 /** @var $model \bbn\Mvc\Model*/
 
-
 if ($model->hasData(['url']['id_project'])) {
   $delete = false;
   $project = new Project($model->db, $model->data['id_project']);
@@ -30,9 +29,13 @@ if ($model->hasData(['url']['id_project'])) {
     $file = $cfg['file'].'.'.$cfg['extensions'][0]['ext'];
     $fs->putContents($file, $model->data['content']);
   }
-  if (!$fs->exists($model->dataPath('appui-newide') . '/backup')) {
-    $fs->createPath($model->dataPath('appui-newide') . '/backup');
-  } 
+  if (!$fs->exists($model->dataPath('appui-newide') . 'backup/' . $model->data['id_project'] . '/' . $model->data['url'])) {
+    $fs->createPath($model->dataPath('appui-newide') . 'backup/'  . $model->data['id_project'] . '/'. $model->data['url']);
+  } else {
+    $fs->putContents($model->dataPath('appui-newide') . 'backup/'  . $model->data['id_project'] . '/'. $model->data['url'] . '/' . time() . '.' . pathinfo($file)['extension'], $model->data['content']);
+  }
+  
+  
   return [
     'file' => basename($file),
     'content' => $model->data['content'],

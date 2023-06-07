@@ -1,0 +1,15 @@
+{
+    "name": "root/lsp",
+    "authors": [
+        {
+            "name": "Quentin Robert",
+            "email": "quentin@bbn.solutions"
+        }
+    ],
+    "require": {
+        "cboden/ratchet": "^0.4.4",
+        "symfony/process": "^6.3",
+        "react/socket": "^1.12",
+        "react/event-loop": "^1.4"
+    }
+}

@@ -1,48 +1,50 @@
 /**
- * @file editor component
- * @description Component use to initiate ide with useful options
- * @copyright BBN Solutions
- * @author Lucas Courteaud
- */
+       * @file editor component
+       * @description Component use to initiate ide with useful options
+       * @copyright BBN Solutions
+       * @author Lucas Courteaud
+       */
 
 (() => {
   return {
     data() {
       return {
+        types: bbn.ide,
+        recentFiles: [],
         /**
-         * Root of the component
-         * @data {String} [appui.plugins['appui-newide'] + '/'] root
-         */
+               * Root of the component
+               * @data {String} [appui.plugins['appui-newide'] + '/'] root
+               */
         root: appui.plugins['appui-newide'] + '/',
         /**
-         * Options of all paths types
-         * @data {Array} [null] typeOptions
-         */
+               * Options of all paths types
+               * @data {Array} [null] typeOptions
+               */
         typeOptions: null,
         /**
-         * Id of the selected path
-         * @data {String} [''] currentPathId
-         */
-        currentPathId: this.source.project.path ? this.source.project.path[0].id : '',
+               * Id of the selected path
+               * @data {String} [''] currentPathId
+               */
+        currentPathId: this.source?.project?.path ? this.source?.project?.path[0]?.id : '',
         /**
-         * Enable / Disable the dropdown to select path
-         * @data {Boolean} [false] isDropdownPathDisabled
-         */
+               * Enable / Disable the dropdown to select path
+               * @data {Boolean} [false] isDropdownPathDisabled
+               */
         isDropdownPathDisabled: false,
         /**
-         * Id type of the selected path
-         * @data {String} [''] currentTypeCode
-         */
-        currentTypeCode: '',
+               * Id type of the selected path
+               * @data {String} [''] currentTypeCode
+               */
+        currentTypeCode: 'components',
         /**
-         * Name of the selected file/folder
-         * @data {String} [''] nameSelectedElem
-         */
+               * Name of the selected file/folder
+               * @data {String} [''] nameSelectedElem
+               */
         nameSelectedElem: '',
         /**
-         * Vue object of this component's container
-         * @data {Vue} [null] container
-         */
+               * Vue object of this component's container
+               * @data {Vue} [null] container
+               */
         container: null,
         menu: [
           {
@@ -139,6 +141,11 @@
                 text: bbn._('Save'),
                 action: this.save
               },
+              {
+                icon: 'nf nf-fa-file',
+                text: bbn._('Recent files'),
+                items: this.recentFiles
+              }
             ]
           },
           {
@@ -152,6 +159,7 @@
                 }
               },
               {
+                // just a comment for a test //
                 icon: 'nf nf-fa-search_minus',
                 text: bbn._('Find previous'),
                 action: () => {
@@ -194,11 +202,11 @@
       },
 
       /**
-       * Type of the current path
-       *
-       * @computed currentPathType
-       * @return {Object}
-       */
+             * Type of the current path
+             *
+             * @computed currentPathType
+             * @return {Object}
+             */
       currentType() {
         if (this.currentTypeCode && this.currentPathType.types) {
           return bbn.fn.getRow(this.currentPathType.types, {type: this.currentTypeCode});
@@ -212,11 +220,11 @@
         return null;
       },
       /**
-       * Type of the current path
-       *
-       * @computed currentPathType
-       * @return {Object}
-       */
+             * Type of the current path
+             *
+             * @computed currentPathType
+             * @return {Object}
+             */
       currentPathType() {
         if (this.currentPath) {
           return bbn.fn.getRow(this.typeOptions, {id: this.currentPath.id_alias});
@@ -224,11 +232,11 @@
         return null;
       },
       /**
-       * The current path
-       *
-       * @computed currentPath
-       * @return {Object}
-       */
+             * The current path
+             *
+             * @computed currentPath
+             * @return {Object}
+             */
       currentPath() {
         if (this.currentPathId) {
           return bbn.fn.getRow(this.source.project.path, {id: this.currentPathId});
@@ -236,20 +244,20 @@
         return null;
       },
       /**
-       * Name of the current path
-       *
-       * @computed currentPathName
-       * @return {String}
-       */
+             * Name of the current path
+             *
+             * @computed currentPathName
+             * @return {String}
+             */
       currentPathName() {
         return this.currentPath ? this.currentPath.text : "";
       },
       /**
-       * Current root of the selected file
-       *
-       * @computed currentRoot
-       * @return {String}
-       */
+             * Current root of the selected file
+             *
+             * @computed currentRoot
+             * @return {String}
+             */
       currentRoot() {
         let st = this.currentPath.parent_code + '/' + this.currentPath.code + '/';
         if (this.currentType) {
@@ -259,6 +267,37 @@
       }
     },
     methods: {
+      getRecentFiles() {
+        bbn.fn.post(appui.plugins['appui-newide'] + '/data/recent/files', {}, (d) => {
+          if (d.success) {
+            let res = [];
+            for (let i = 0; i < d.data.length; i++) {
+              let text = ((d.data[i].file).slice()).replace(/\/_end_.*/g, "");
+              if (!bbn.fn.getRow(res, {text: text})) {
+                res.push({
+                  icon: "nf nf-fa-file",
+                  file: d.data[i].file,
+                  text: text,
+                  action: (index, data) => {
+                    this.getRef('router').route('file\/' + data.file);
+                  }
+                })
+              }
+            }
+            let menu = this.getRef('mainMenu')?.currentData[0]?.data?.items;
+            if (menu) {
+              menu[menu.length - 1].items = res;
+            } else {
+              setTimeout(() => {
+                this.getRecentFiles();
+              }, 5000);
+            }
+          }
+        })
+      },
+      openHistory() {
+        this.find('appui-newide-editor-router').openHistory();
+      },
       test() {
         let cp = this.find('appui-newide-editor-router');
         if (cp) {
@@ -266,15 +305,16 @@
         }
       },
       /**
-       * New file|directory dialog
-       *
-       * @param string title The dialog's title
-       * @param bool isFile A boolean value to identify if you want create a file or a folder
-       * @param string path The current path
-       */
+             * New file|directory dialog
+             *
+             * @param string title The dialog's title
+             * @param bool isFile A boolean value to identify if you want create a file or a folder
+             * @param string path The current path
+             */
       openNew(title, isFile, node = false){
         let editor = this.source
         bbn.fn.log("lol" ,editor);
+        editor.types = this.types;
         let repositories = {};
         let selected = this.source.project.path[0];
         bbn.fn.log("HAAAAAAAAAAAAAAAAAAAAA", editor.types[this.currentTypeCode === 'classes' ? 'cls' : this.currentTypeCode]);
@@ -298,7 +338,8 @@
             text: repository.text,
             title: repository.code,
             types: repository.alias.types,
-            tabs: editor.types[this.currentTypeCode === 'classes' ? 'cls' : this.currentTypeCode].tabs
+            tabs: editor.types[this.currentTypeCode === 'classes' ? 'cls' : this.currentTypeCode].tabs,
+
           })
           if (repository.id === this.currentPathId) {
             selected = repositories[name];
@@ -310,6 +351,7 @@
           isFile: isFile,
           path: '',
           node: node,
+          id_project: this.closest('appui-project-ui').source.project.id,
           template: null,
           repositoryProject: selected,
           currentRep: selected.name,
@@ -371,10 +413,10 @@
         }
       },
       /**
-       * Opens a dialog for create a new file
-       *
-       * @param node  set at false if click of the context node is data of the node tree
-       */
+             * Opens a dialog for create a new file
+             *
+             * @param node  set at false if click of the context node is data of the node tree
+             */
       newElement(node = false){
         let title = bbn._('New File');
         if ( this.isProject && bbn.fn.isObject(node) &&
@@ -392,9 +434,9 @@
       },
 
       /**
-       * Opens a dialog for create a new directory
-       * @param node  set at false if click of the context node is data of the node tree
-       */
+             * Opens a dialog for create a new directory
+             * @param node  set at false if click of the context node is data of the node tree
+             */
       newDir(node){
         this.openNew(bbn._('New Directory'), false, node != undefined && node ? node : false);
       },
@@ -410,6 +452,7 @@
         this.openFile(d);
       },
       openFile(file) {
+        bbn.fn.log("FILE", file);
         let tab = '',
             link = '';
         bbn.fn.log("currentRoot = " + this.currentRoot);
@@ -432,6 +475,9 @@
           bbn.fn.log("link = " + link);
           this.getRef('router').route(link);
           bbn.fn.log("router", this.getRef('router'));
+          setTimeout(() => {
+            this.getRecentFiles();
+          }, 3000);
         }
       },
       treeReload() {
@@ -448,6 +494,7 @@
         }
       },
       mapTree(data) {
+        data.text += data.git === true ?  "  <i class='nf  nf-fa-github'></i>" : ""
         if (this.currentTab.tabs && data.tab) {
           data.bcolor = bbn.fn.getField(this.currentTab.tabs, 'bcolor', {url: data.tab}) || data.bcolor;
         }
@@ -665,9 +712,9 @@
       }
     },
     /**
-     * @event created
-     * @fires fn.post
-     */
+           * @event created
+           * @fires fn.post
+           */
     created() {
       if (!appui.projects.options.ide) {
         bbn.fn.post(appui.plugins['appui-newide'] + "/data/types", d => {
@@ -682,7 +729,17 @@
       }
     },
     mounted() {
+      if (!bbn.doc) {
+        bbn.doc = {};
+      }
+      this.getRecentFiles();
       this.container = this.closest('bbn-container');
+      if (!this.types) {
+        bbn.fn.post(this.root + 'data/path/types', {}, (d) => {
+          this.types = d.types;
+          bbn.ide = d.types;
+        });
+      }
     },
     watch: {
       currentTypeCode(v) {

@@ -75,6 +75,7 @@ if ($model->hasData(['repository'], true)) {
 
   //die(x::dump($cur_path, $rep_cfg, $is_mvc, $is_component, $is_project, $onlydirs, $tree_popup, $model->data));
   $difference_git = $model->getCachedModel('./git', ['path' => dirname($path)], 3600);
+
   //$difference_git = $model->getModel('./git', ['path' => dirname($path)]);
 
   //extensions list not to be considered

@@ -1,5 +1,5 @@
 <div class="bbn-overlay"
-     v-if="typeOptions">
+     v-if="typeOptions && types">
   <bbn-splitter orientation="vertical">
     <bbn-pane :size="43">
       <bbn-toolbar :button-space="true">
@@ -17,7 +17,6 @@
                     icon="nf nf-oct-sync"
                     style="margin-left: 2px"
                     :notext="true"/>
-        <div/>
         <div class="bbn-xspadding">
           <bbn-button title="<?=_('Testeeeee code!')?>"
                       @click="test"
@@ -25,15 +24,16 @@
                       style="margin-left: 2px"
                       ref="btnTest"
                       :notext="true"/>
-          <bbn-button>
-          </bbn-button>
-          <bbn-button>
-          </bbn-button>
-          <bbn-button>
+          <bbn-button title="<?=('Show history')?>"
+                      @click="openHistory"
+                      icon="nf nf-mdi-history"
+                      style="margin-left: 2px"
+                      :notext="true">
           </bbn-button>
         </div>
         <div/>
-        <bbn-menu :source="toolbarMenu">
+        <bbn-menu :source="toolbarMenu"
+                  ref="mainMenu">
         </bbn-menu>
       </bbn-toolbar>
     </bbn-pane>
@@ -59,6 +59,8 @@
                            type: currentTypeCode,
                            id_path: currentPathId
                            }"
+                    :storage="true"
+                    :storage-full-name="'appui-newide-type-th-' + source.project.id + '-' + currentRoot"
                     ref="tree"
                     @nodeDblclick="treeNodeActivate"
                     :icon-color="iconColor"
@@ -70,7 +72,9 @@
           <bbn-router :autoload="true"
                       ref="router"
                       :nav="true"
-                      :root="'newide/' + source.project.id + '/ide/'">
+                      :root="'newide/' + source.project.id + '/ide/'"
+                      :storage="true"
+                      :storage-full-name="'appui-newide-editor-' + source.project.id">
           </bbn-router>
         </bbn-pane>
         <bbn-pane :size="200"
@@ -83,3 +87,4 @@
   </bbn-splitter>
   <bbn-popup ref="popup"></bbn-popup>
 </div>
+<bbn-loader v-else></bbn-loader>
