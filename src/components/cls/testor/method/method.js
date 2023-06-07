@@ -10,13 +10,16 @@
       mode: {
         type: String,
         default: "read",
+      },
+      lib: {
+        type: String,
+        required: true
       }
     },
     data() {
       return {
         isLoading: false,
         libInstalled: false,
-        tests_info: [],
       }
     },
     methods: {
@@ -52,39 +55,19 @@
       },
     },
     mounted() {
+      bbn.fn.log("mounting test method component");
+      bbn.fn.log(this.lib);
       this.isLoading = true;
-      bbn.fn.post(appui.plugins['appui-newide'] + '/data/check_install', {lib: this.source.lib}, d => {
+      bbn.fn.post(appui.plugins['appui-newide'] + '/data/check_install', {lib: this.lib}, d => {
+        bbn.fn.log(d);
         if (d.success && d.found) {
           this.libInstalled = true;
         }
         else if (d.success && !d.found) {
           this.libInstalled = false;
         }
-        //this.isLoading = false;
-      });
-      bbn.fn.post(appui.plugins['appui-newide'] + '/data/available-tests', {class: this.source.name, lib: this.source.lib}, d => {
-        if (d.success) {
-          bbn.fn.log(d.data);
-          this.tests_info = d.data;
-        } else {
-          alert(d.error);
-        }
         this.isLoading = false;
       });
-    },
-    computed: {
-      methodList() {
-        let res = [];
-        bbn.fn.iterate(this.source.methods, (a, n) => {
-          res.push({
-            text: (a.static ? '::' : '->') + n,
-            value: n,
-            summary: a.summary,
-            visibility: a.visibility
-          });
-        });
-        return res;
-      },
     },
   }
 })();

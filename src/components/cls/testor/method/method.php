@@ -3,7 +3,7 @@
 <div class="appui-ide-cls-testor bbn-overlay bbn-padding">
   <bbn-scroll>
     <bbn-loader v-if="isLoading"/>
-    <div class="bbn-overlay bbn-flex-height">
+    <div v-else class="bbn-overlay bbn-flex-height">
       <bbn-toolbar class="bbn-hpadded">
         <div class="header">
           <bbn-button v-if="!libInstalled"
@@ -30,20 +30,29 @@
         </div>
       </bbn-toolbar>
       <div class="bbn-flex-fill body bbn-padding">
-        <div class="bbn-100 bbn-small">
-          <bbn-table :scrollable="true"
-                     :source="methodList">
-            <bbns-column title="<?= _("Methods") ?>"
-                         :width="300"
-                         field="value"/>
-            <bbns-column title="<?= _("Test Methods") ?>"
-                         field="default"/>
-            <bbns-column title="<?= _("Available Tests") ?>"
-                         :width="100"
-                         field="default"/>
-            <bbns-column title="<?= _("Tests Results") ?>"
-                         field="default"/>
-          </bbn-table>
+        <div class="bbn-w-80 code">
+          <h2>Pick your test to see and edit it</h2>
+          <bbn-dropdown iconUp="nf nf-fa-caret_up"
+                        iconDown="nf nf-fa-caret_down"
+                        :source="['all', 'test_***_method']"
+                        ></bbn-dropdown>
+          <h4>Source Code</h4>
+          <bbn-code v-model="source.code"
+                    :fill="false"
+                    mode="purephp"/>
+          <h4>Test output</h4>
+          <bbn-button title="Test"
+                      icon="nf nf-cod-run_all"
+                      class="test bbn-padding"
+                      @click.stop="">Run Tests</bbn-button>
+          <bbn-button title="Test"
+                      icon="nf nf-cod-run_all"
+                      class="test bbn-padding"
+                      @click.stop="">Run All Tests</bbn-button>
+          <br><br>
+          <bbn-code v-model="source.code"
+                    :fill="false"
+                    mode="purephp"/>
         </div>
       </div>
     </div>

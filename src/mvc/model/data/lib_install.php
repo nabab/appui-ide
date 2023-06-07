@@ -78,7 +78,12 @@ if ($model->hasData('lib') && $model->hasData('class')) {
       }
     }
     $dir = $model->dataPath("appui-newide") . "class_editor/" . $model->data['lib'] . "/";
-    $fs->createPath($dir);
+    if (file_exists($dir)) {
+      $fs->delete($dir, true);
+    }
+    else {
+    	$fs->createPath($dir);
+    }
     if (!$fs->isFile($dir . ".bbn")) {
       $fs->putContents($dir . ".bbn", json_encode([
         "time" => time(),
@@ -86,8 +91,6 @@ if ($model->hasData('lib') && $model->hasData('class')) {
       ]));
       $fs->copy($fullpath, $dir . "lib", true);
       chdir($dir . "lib");
-      //X::ddump($dir . "lib", getcwd());
-      //passthru("composer update", $res);
 
       $json = $content;
       $json['config'] = [
