@@ -20,7 +20,7 @@ if ($model->hasData('lib')) {
   $composer = $fs->scan($fullpath, function($a) {
     return strpos($a, "composer.json") !== false;
   });
- // X::ddump($composer);
+  // X::ddump($composer);
   if ($composer) {
     $content = $fs->decodeContents($composer[0], null, true);
     if (isset($content['autoload'])) {
@@ -28,11 +28,7 @@ if ($model->hasData('lib')) {
       if ($content['autoload']['psr-4']) {
         $psr_value = $content['autoload']['psr-4'];
       }
-<<<<<<< HEAD
-      elseif ($content['autoload']['psr-0']) {
-=======
       else if ($content['autoload']['psr-0']) {
->>>>>>> warren-dev
         $psr_value = $content['autoload']['psr-0'];
       }
       $psr_keys = array_keys($psr_value);
