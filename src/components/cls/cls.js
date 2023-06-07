@@ -13,6 +13,8 @@
           '\\stdClass',
           'null'
         ],
+       	mode: "read",
+        root: appui.plugins['appui-newide'] + '/',
         visibilities: [
           {
             text: bbn._("Public"),
@@ -107,7 +109,7 @@
             }
             break;
         }
-        
+
         return null;
       },
       methodList() {
@@ -145,6 +147,21 @@
           });
         });
         return res;
+      }
+    },
+    methods: {
+      save() {
+        let method = this.find('appui-newide-cls');
+        bbn.fn.post(this.root + 'generating', {
+          data: method.source
+        }, (d)=>{
+          if (d.success) {
+            appui.success("Class successfully Updated");
+          }
+          else {
+            appui.error("Error");
+          }
+        });
       }
     },
     watch: {

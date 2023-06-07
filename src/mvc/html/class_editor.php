@@ -18,12 +18,19 @@
     <div>
     </div>
     <div>
-      <bbn-dropdown :source="source.library"
+      <bbn-dropdown :source="source.libraries"
                     :storage="true"
-                    storage-full-name="appui-ide-class-editor-dropdown"
+                    storage-full-name="appui-ide-class-editor-dropdown-library"
+                    v-model="currentLibrary" />
+    </div>
+    <div v-if="currentLibrary">
+      <bbn-dropdown :source="root + 'data/classes/' + currentLibrary"
+                    :storage="true"
+                    storage-full-name="appui-ide-class-editor-dropdown-classe"
                     source-value="class"
                     v-model="currentClass"
                     source-text="class"/>
+
     </div>
   </bbn-toolbar>
   <div class="bbn-flex-fill">
