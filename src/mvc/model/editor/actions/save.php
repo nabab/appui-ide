@@ -15,14 +15,14 @@ if ($model->hasData(['url']['id_project'])) {
   $project = new Project($model->db, $model->data['id_project']);
   $fs = new System();
   $file = $project->urlToReal($model->data['url']);
-  
+  $succes = false;
   if (!empty($file)) {
     if (empty($model->data['content'])) {
-      $fs->delete($file);
+      $success = $fs->delete($file);
       $delete = true;
     }
     else {
-      $fs->putContents($file, $model->data['content']);
+      $success  = $fs->putContents($file, $model->data['content']);
     }
   } else {
     $cfg = $project->urlToConfig($model->data['url']);
@@ -37,6 +37,7 @@ if ($model->hasData(['url']['id_project'])) {
   
   
   return [
+    'success' => $success,
     'file' => basename($file),
     'content' => $model->data['content'],
     'delete' => $delete,

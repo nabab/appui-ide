@@ -19,10 +19,8 @@ if ($model->hasData('id_project')) {
   if (!$isHistory) {
     $project = new Project($model->db, $model->data['id_project']);
     $file = $project->urlToReal($model->data['url']);
-		$newPath = str_replace('/home/dev-qr/', '', $file);
     $config = $project->urlToConfig($model->data['url']);
     $model->inc->ide->setRecentFile($model->data['url']);
-
 
     if (!empty($file)) {
       $ext = Str::fileExt($file);
@@ -31,7 +29,7 @@ if ($model->hasData('id_project')) {
     }
     else {
       $cfg = $project->urlToConfig($model->data['url']);
-      $type = array_pop(X::split($model->data['url'], '/'));
+      $type = array_pop(X::split($model->data['url'], '/'));;
       $isEmpty = true;
       if ($type === 'code') {
         $ext = $cfg['typology']['extensions'][0]['ext'];
@@ -55,7 +53,7 @@ if ($model->hasData('id_project')) {
       "url" => $model->data['url'],
       "id_project" => $model->data['id_project'],
       "isEmpty" => $isEmpty,
-      "path" => $newPath
+      "path" => $config['file']
     ];
   } else {
     $fs = new System();

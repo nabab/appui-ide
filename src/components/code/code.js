@@ -162,7 +162,7 @@
       }
       this.init();
 
-      if (!window.beautifier && (mode === 'css' || mode === 'less' || mode === 'html' || mode === 'js' || mode === 'javascript')) {
+      if (!window.beautifier && (this.mode === 'css' || this.mode === 'less' || this.mode === 'html' || this.mode === 'js' || this.mode === 'javascript')) {
         let beautifierScript = document.createElement('script');
         beautifierScript.src = "https://beautifier.io/js/lib/beautifier.min.js";
         document.getElementsByTagName('head')[0].appendChild(beautifierScript);

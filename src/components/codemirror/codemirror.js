@@ -102,7 +102,6 @@
     methods: {
 
       foldAll() {
-
         window.codemirror6.language.foldAll(this.getRef("code").widget);
         //window.codemirror6.language.foldInside(window.codemirror6.language.syntaxTree(this.widget));
       },
@@ -204,6 +203,7 @@
             break;
           case "html":
             extensions.push(cm.vue.vue());
+            extensions.push(cm.elmet);
             break;
           case "php":
             if (window.lsp) {
@@ -215,7 +215,7 @@
                 documentUri: "file:///" + file,
                 languageId: 'php'
               });
-              extensions.push(lsPhp);
+              //extensions.push(lsPhp);
             }
             // extend php with html
             extensions.push(cm.php.php({
@@ -239,7 +239,7 @@
                 documentUri: "file:///" + file,
                 languageId: 'less'
               });
-              extensions.push(lsCss);
+              //extensions.push(lsCss);
             }
 
             extensions.push(cm.css.css());
@@ -295,7 +295,6 @@
         if (this.currentMode === 'js') {
           let js = this.getJavascriptCompletion(context, node);
           res.validFor = /^(?:[\w$\xa1-\uffff][\w$\d\xa1-\uffff]*|this\..*?)$/;
-          res.filter = false;
           // we add it in the options array
           res.options.unshift(...js);
         }
