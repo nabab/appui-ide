@@ -68,19 +68,36 @@ if ($model->hasData("lib") && $model->hasData("class")) {
           $libclass[] = $class;
         }
       }
-      $cur_class = end(X::split($cur_class, "\\"));
+      $class_split = X::split($cur_class, "\\");
+      array_shift($class_split);
+      $last_key = end(array_keys($class_split));
+      $cur_class = "";
+      foreach($class_split as $key => $value) {
+        $cur_class = $cur_class . $class_split[$key];
+        if ($key != $last_key) {
+          $cur_class = $cur_class . "\\";
+        }
+      }
       $currentDir = getcwd();
-      if (in_array($cur_class, $libclass)) {
+      $found = false;
+      foreach($libclass as $cls) {
+        if ($cls == $cur_class) {
+          $found = true;
+          break;
+        }
+      }
+      if ($found) {
         $test_autoload = $dir . $test_path . "autoload.php";
         if (file_exists($test_autoload)) {
           chdir($dir . $test_path);
           include_once("autoload.php");
           $test_class = $libtestnamespace . $cur_class . "Test";
           if (class_exists($test_class)) {
-            $test_file = $cur_class . "Test.php";
-            $output_xml = "../../tests/report_" . md5($test_file) . ".xml";
-            //X::ddump($test_file, $output, getcwd());
-            $exec = "../vendor/bin/phpunit $test_file --log-junit $output_xml --no-output";
+            chdir("../");
+            $test_class_path = str_replace("\\", "/", $cur_class);
+            $test_file = $test_path . $test_class_path . "Test.php";
+            $output_xml = "../tests/report_" . md5($test_file) . ".xml";
+            $exec = "vendor/bin/phpunit $test_file --log-junit $output_xml --no-output";
             exec($exec, $output, $retval);
             $xml->load($output_xml);
             $test_results = [];
@@ -137,9 +154,15 @@ if ($model->hasData("lib") && $model->hasData("class")) {
               }
             }
             $res["data"] = array_values($tmp);
-            X::ddump($res["data"]);
+            //X::ddump($res["data"]);
             $res["success"] = true;
           }
+          else {
+            $res["data"] = array_values($parser->analyzeClass($libnamespace . $cur_class)["methods"]);
+          }
+        }
+        else {
+          $res["data"] = array_values($parser->analyzeClass($libnamespace . $cur_class)["methods"]);
         }
       }
     }

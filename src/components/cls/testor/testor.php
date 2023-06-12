@@ -31,18 +31,20 @@
       </bbn-toolbar>
       <div class="bbn-flex-fill body bbn-padding">
         <div class="bbn-100 bbn-small">
-          <bbn-table :scrollable="true"
-                     :source="methodList">
+          <bbn-table
+                     :scrollable="true"
+                     :source="tests_info"
+                     ref="table">
             <bbns-column title="<?= _("Methods") ?>"
                          :width="300"
-                         field="value"/>
-            <bbns-column title="<?= _("Test Methods") ?>"
-                         field="default"/>
+                         field="method"/>
             <bbns-column title="<?= _("Available Tests") ?>"
-                         :width="100"
-                         field="default"/>
+                         :width="200"
+                         type="number"
+                         field="available_tests"/>
             <bbns-column title="<?= _("Tests Results") ?>"
-                         field="default"/>
+                         field="last_results"
+                         :render="renderTests"/>
           </bbn-table>
         </div>
       </div>
