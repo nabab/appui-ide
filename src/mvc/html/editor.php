@@ -1,4 +1,3 @@
-<appui-ide-editor :source="source"
-                  :project="source.project"
-                  :prefix="source.prefix">
-</appui-ide-editor>
+<!-- HTML Document -->
+
+<appui-ide-coder :source="source"></appui-ide-coder>

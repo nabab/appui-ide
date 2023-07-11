@@ -87,7 +87,7 @@
     },
     methods:{
       treeClass(data, tree, parent) {
-        bbn.fn.log("TREE CLASS" , arguments);
+        bbn.fn.log(["TREE CLASS" , data, tree, parent]);
         return parent.isRoot? 'bbn-xl' : '';
       },
       getSourceTreeLogs(){
@@ -256,7 +256,7 @@
     },
     computed:{
       files(){
-        if ( this.source.logs.length ){
+        if ( this.source?.logs?.length ){
           let allFiles = [];
           for( let a of this.source.logs ){
             allFiles.push({
@@ -268,6 +268,8 @@
           }
           return bbn.fn.order(allFiles, "text");
         }
+
+        return [];
       }
     },
     watch: {

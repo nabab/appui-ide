@@ -9,7 +9,7 @@
 </ul>
 {{/names}}
 </div>-->
-<div id="appui_constants_page"><?php
+<div id="appui_constants_page" class="bbn-padding"><?php
 if ( !empty($names) ){
   foreach ($names as $namespace){ ?>
   <h3><span><?=$namespace['prefix']?></span></h3>

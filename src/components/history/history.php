@@ -8,7 +8,7 @@
                 :source="source.root + 'history/tree'"
                 :data="initialData"
                 :map="transform"
-                @nodeDblclick="treeNodeActivate"
+                @nodedoubleclick="treeNodeActivate"
                 @load="loadedTree"
                 ref="treeHistory"
       ></bbn-tree>

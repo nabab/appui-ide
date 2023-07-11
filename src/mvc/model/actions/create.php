@@ -1,8 +1,141 @@
 <?php
-if ( isset($model->inc->ide) &&
-  !empty($model->inc->ide->create($model->data))
-){
-  return [ 'success' => true];
+
+use bbn\X;
+use bbn\Appui\Project;
+use bbn\File\System;
+
+if ($model->hasData(['repository', 'path', 'name', 'type', 'id_project', 'is_file'])) {
+  $count = 1;
+  $url = $model->data['repository']['name'] . '/' . ($model->data['type'] === 'classes' ? 'lib' : $model->data['type'])  . ($model->data['path'] !== '/' ? '/' : '') . '/';
+
+  $project = new Project($model->db, $model->data['id_project']);
+  $fs = new System();
+  $cfg = $project->urlToConfig($url);
+
+  $path = $cfg['file'];
+
+  $exist = false;
+
+
+
+  if ($model->data['type'] === 'mvc') {
+    //check if file exist
+    foreach($cfg['typology']['tabs'] as $tab) {
+      foreach($tab['extensions'] as $ext) {
+        $file_path = "";
+        if ($model->data['is_file']) {
+          $file_path = $path . $tab['path'] . ($model->data['path'] !== "/" ? $model->data['path'] : '') . $model->data['name'] . '.' . $ext['ext'];
+          $file_path = str_replace('//', '/', $file_path);
+        } else {
+          $file_path = $path . $tab['path'] . ($model->data['path'] !== "/" ? $model->data['path'] : '') . $model->data['name'];
+          $file_path = str_replace('//', '/', $file_path);
+        }
+        if ($fs->exists($file_path) && $model->data['is_file']) {
+          $exist = true;
+          break;
+        } else if ($fs->isDir($file_path)){
+          $exist = true;
+          break;
+        }
+      }
+    }
+
+    if ($exist) {
+      return [
+        'success' => "false",
+        'error' => 'already exist'
+      ];
+    }
+
+    if ($model->data['is_file']) {
+      // create file
+      $tab = $cfg['typology']['tabs'][0];
+      $ext = $tab['extensions'][0];
+      $file_path = $path . $tab['path'] . ($model->data['path'] !== "/" ? $model->data['path'] : '') . $model->data['name'] . '.' . $ext['ext'];
+      $file_path = str_replace('//', '/', $file_path);
+
+      $fs->putContents($file_path, $ext['default']);
+    } else {
+      // create directory
+      foreach($cfg['typology']['tabs'] as $tab) {
+        $file_path = "";
+
+        $file_path = $path . $tab['path'] . ($model->data['path'] !== "/" ? $model->data['path'] : '') . $model->data['name'];
+        $file_path = str_replace('//', '/', $file_path);
+        $fs->createPath($file_path);
+      }
+    }
+  } else if ($model->data['type'] === 'components') {
+    $path = $cfg['file'] . ($model->data['path'] != 'components/' ? str_replace('components/', '', $model->data['path'], $count) : '') . $model->data['name'];
+    $path = str_replace('//', '/', $path);
+    if ($fs->exists($path) && !$model->data['is_file']) {
+      return [
+        'success' => false,
+        'error' => 'already exist'
+      ];
+    } else {
+      $fs->createPath($path);
+    }
+
+    if ($model->data['is_file']) {
+      foreach($cfg['typology']['tabs'] as $tab) {
+        $path = $path . '/' . $model->data['name'] . '.' . $tab['extensions'][0]['ext'];
+        $path = str_replace('//', '/', $path);
+        $fs->putContents($path, $tab['extensions'][0]['default']);
+      }
+    }
+    return [
+      'success' => true,
+    ];
+  } else if ($model->data['type'] === 'cli') {
+    if ($model->data['is_file']) {
+
+      foreach($cfg['typology']['tabs'] as $tab) {
+        $path = $path . '/' . ($model->data['path'] != 'cli/' ? str_replace('/cli/', '', $model->data['path'], $count) : '') . $model->data['name'] . '.' . $tab['extensions'][0]['ext'];
+        $path = str_replace('//', '/', $path);
+        $fs->putContents($path, $tab['extensions'][0]['default']);
+      }
+    } else {
+      if ($fs->exists($cfg['file'] . $model->data['name'])) {
+        return [
+          'success' => false,
+          'error' => 'already exist'
+        ];
+      }
+
+      $fs->createPath($cfg['file'] . $model->data['name']);
+      return [
+        'success' => true,
+      ];
+    }
+
+  } else if ($model->data['type'] === 'classes') {
+    
+    if ($model->data['is_file']) {
+
+      foreach($cfg['typology']['tabs'] as $tab) {
+        $path = $path . '/' . ($model->data['path'] != 'lib/' ? str_replace('lib/', '', $model->data['path'], $count) : '') . $model->data['name'] . '.' . $tab['extensions'][0]['ext'];
+        $path = str_replace('//', '/', $path);
+        X::ddump($path);
+        $fs->putContents($path, $tab['extensions'][0]['default']);
+      }
+    } else {
+      if ($fs->exists($cfg['file'] . $model->data['name'])) {
+        return [
+          'success' => false,
+          'error' => 'already exist'
+        ];
+      }
+
+      $fs->createPath($cfg['file'] . $model->data['name']);
+      return [
+        'success' => true,
+      ];
+    }
+
+  }
+
+  X::ddump($cfg);
 }
 
 return [

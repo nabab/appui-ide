@@ -1,9 +1,14 @@
 <?php
+
+use bbn\Str;
+
 /** @var $model \bbn\Mvc\Model */
-$log_files = array_filter($model->inc->fs->getFiles(BBN_DATA_PATH.'logs'), function($a){
+/** @var array */
+$log_files = array_filter($model->inc->fs->getFiles($model->tmpPath().'logs'), function($a){
   return substr($a, -4) !== '.old';
 });
-if ( ($log_file = ini_get('error_log')) && (strpos($log_file, BBN_DATA_PATH.'logs') === false) ){
+
+if ( ($log_file = ini_get('error_log')) && (strpos($log_file, $model->tmpPath().'logs') === false) ){
   array_unshift($log_files, $log_file);
 }
 $res = [];
@@ -14,7 +19,7 @@ ksort($res);
 
 //case delete file  in folder
 if( !empty($model->data['delete_file']) ){
-  $path = BBN_DATA_PATH.'logs/'.$model->data['delete_file'];
+  $path = $model->tmpPath().'logs/'.$model->data['delete_file'];
   if ( $model->inc->fs->isFile($path) ){
     if ( !empty($model->inc->fs->delete($path)) ){
       return ['success' => true];
@@ -29,7 +34,7 @@ elseif ( !empty($model->data['log']) && !empty($res[$model->data['log']]) ){
   else{
 
     $file = escapeshellarg($res[$model->data['log']]); // for the security concious (should be everyone!)
-    $num_lines = isset($model->data['num_lines']) && \bbn\Str::isInteger($model->data['num_lines']) && ($model->data['num_lines'] > 0) && ($model->data['num_lines'] <= 5000) ? $model->data['num_lines'] : 100;
+    $num_lines = isset($model->data['num_lines']) && Str::isInteger($model->data['num_lines']) && ($model->data['num_lines'] > 0) && ($model->data['num_lines'] <= 5000) ? $model->data['num_lines'] : 100;
     $line = "tail -n $num_lines $file";
     exec($line, $output);
     $res = [];
@@ -49,7 +54,7 @@ else {
     exec($line, $output);
     //for content
     $output2=[];
-    $num_lines = isset($model->data['num_lines']) && \bbn\Str::isInteger($model->data['num_lines']) && ($model->data['num_lines'] > 0) && ($model->data['num_lines'] <= 5000) ? $model->data['num_lines'] : 100;
+    $num_lines = isset($model->data['num_lines']) && Str::isInteger($model->data['num_lines']) && ($model->data['num_lines'] > 0) && ($model->data['num_lines'] <= 5000) ? $model->data['num_lines'] : 100;
     $line2 = "tail -n $num_lines $file";
     exec($line2, $output2);
 

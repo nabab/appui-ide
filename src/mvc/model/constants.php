@@ -1,12 +1,14 @@
 <?php
 /** @var $model \bbn\Mvc\Model */
-if ( isset($model->data['name']) ){
+$data = ['names' => []];
+$prefs = [strtoupper(BBN_APP_PREFIX), 'BBN'];
+foreach ( $prefs as $i => $p ){
   $cs = get_defined_constants();
   $res = [
-    'prefix' => $model->data['name'],
+    'prefix' => $p,
     'constants' => []
   ];
-  $prefix = $model->data['name'].'_';
+  $prefix = $p.'_';
   foreach ( $cs as $k => $c ){
     if ( strpos($k, $prefix) === 0 ){
       array_push($res['constants'], [
@@ -15,5 +17,6 @@ if ( isset($model->data['name']) ){
       ]);
     }
   }
-  return $res;
+  $data['names'][$i] = $res;
 }
+return $data;

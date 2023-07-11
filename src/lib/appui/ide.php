@@ -1594,16 +1594,6 @@ class ide {
             $path .= '/src/';
           }
         break;
-
-        case 'home':
-          if (defined('BBN_HOME_PATH')) {
-            $path = BBN_HOME_PATH;
-            $path .= $repository['path'];
-            if ( $repository['alias_code'] === 'bbn-project' ){
-              $path .= '/src/';
-            }
-          }
-        break;
       }
     }
     return $path;

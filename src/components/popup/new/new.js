@@ -10,8 +10,9 @@
       }
     },
     data(){
+      bbn.fn.log("POPUP SOURCE", this.source);
       let rep =  this.source.type !== false ? this.source.repositoryProject : this.source.repositories[this.source.currentRep];
-      let defaultTab = '';
+      let defaultTab = 0;
       let defaultExt = '';
       let storage = this.getStorage();
       let template = storage.template || 'file';
@@ -26,6 +27,7 @@
         });
       }
       if ( this.source.isFile && rep.extensions ){
+        bbn.fn.log("EXTENSIONS", rep.extensions)
         defaultExt = rep.extensions[0].ext;
       }
       return {
@@ -56,7 +58,8 @@
           extension: defaultExt,
           is_file: this.source.isFile,
           type: this.source.type || false,
-          path: (this.source.path === './') ? './' : this.source.path + '/'
+          path: (this.source.path === './') ? './' : this.source.path + (this.source.path.slice(-1) !== '/' ? '/' : ''),
+          id_project: this.source.id_project
         }
       }
     },
@@ -132,8 +135,7 @@
       onSuccess(){
         let  componentEditor = this.closest('bbn-container').find('appui-ide-editor');
         if ( this.source.isFile ){
-          let link = this.source.root + 'editor/file/' + this.source.currentRep + '/' +
-            (this.isMVC && this.source.type === 'mvc' ? 'mvc/' : '');
+          let link = 'project/ui/' + this.source.project.id + '/' + 'ide/file/' + this.source.currentRep + '/' + (this.source.type === 'mvc' ? this.source.type + '/' : '')
           if ( this.data.path.startsWith('./') ){
             link += this.data.path.slice(2);
           }

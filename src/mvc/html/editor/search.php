@@ -1,1 +1,0 @@
-<appui-ide-search :source="source"></appui-ide-search>
