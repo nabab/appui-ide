@@ -260,6 +260,9 @@
              * @return {String}
              */
       currentRoot() {
+        if (!this.currentPath) {
+          return '';
+        }
         let st = this.currentPath.parent_code + '/' + this.currentPath.code + '/';
         if (this.currentType) {
           st += this.currentType.path;
