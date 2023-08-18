@@ -64,7 +64,6 @@
   <div class="bbn-flex-fill">
     <bbn-loader v-if="isLoading || !currentURL"/>
     <appui-newide-cls v-else-if="currentClass && data"
-                      :base-url="currentURL"
                       :infos="tests_info"
                       :installed="libInstalled"
                       :source="data"/>

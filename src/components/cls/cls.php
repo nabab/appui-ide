@@ -76,7 +76,6 @@
       <div class="bbn-overlay">
         <bbn-router :nav="true"
                     :menu="[]"
-                    :root="baseUrl"
                     :breadcrumb="false"
                     :visual="false">
           <bbn-container url="reader"
