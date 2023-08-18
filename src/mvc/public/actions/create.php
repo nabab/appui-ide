@@ -3,3 +3,4 @@
 
 
 $ctrl->action();
+//$ctrl->obj=$ctrl->getObjectModel('./mymodel');

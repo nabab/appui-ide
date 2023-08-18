@@ -96,7 +96,9 @@ if ($model->hasData("lib") && $model->hasData("class")) {
             chdir("../");
             $test_class_path = str_replace("\\", "/", $cur_class);
             $test_file = $test_path . $test_class_path . "Test.php";
-            $output_xml = "../tests/report_" . md5($test_file) . ".xml";
+            $dir_test = "../tests/". str_replace("\\", "/", $model->data["class"]);
+            //X::ddump($test_file);
+            $output_xml = $dir_test . "/report.xml";
             $exec = "vendor/bin/phpunit $test_file --log-junit $output_xml --no-output";
             exec($exec, $output, $retval);
             $xml->load($output_xml);
@@ -134,10 +136,9 @@ if ($model->hasData("lib") && $model->hasData("class")) {
                   continue;
                 }
                 $tmp[$m["name"]] = [
-                  "method" => $m["name"],
-                  "last_results" => [],
-                  "test_methods" => [],
                   "available_tests" => 0,
+                  "method" => $m["name"],
+                  "details" => [],
                 ];
               }
               $methods = array_keys($tmp);
@@ -147,14 +148,35 @@ if ($model->hasData("lib") && $model->hasData("class")) {
                 }
                 $testedMethod = X::split($m["name"], "_method_")[0];
                 if (in_array($testedMethod, $methods)) {
-                  $tmp[$testedMethod]["test_methods"][] = $m["name"];
-                  $tmp[$testedMethod]["last_results"][$m["name"]] = $test_results[$m["name"]];
-                  $tmp[$testedMethod]["available_tests"] = sizeof($tmp[$testedMethod]["test_methods"]);
+                  $tmp[$testedMethod]["details"][$m["name"]] = $test_results[$m["name"]];
+                  $tmp[$testedMethod]["details"][$m["name"]]["code"] = $parse_test["methods"][$m["name"]]["code"];
+                  $tmp[$testedMethod]["available_tests"] = sizeof(array_keys($tmp[$testedMethod]["details"]));
                 }
               }
             }
-            $res["data"] = array_values($tmp);
-            //X::ddump($res["data"]);
+            $res["data"] = $tmp;
+            $test_file = $dir_test . "/original.json";
+            if (file_exists($test_file)) {
+              $original = json_decode(file_get_contents($test_file), true);
+              if($original["modified"]) {
+                $res["modified"] = [];
+              	$res["modified"]["status"] = $original["modified"];
+                $res["modified"]["details"] = [];
+                $keys = array_keys($original);
+                foreach ($keys as $test_meth) {
+                  if ($test_meth !== "modified") {
+                    foreach ($original[$test_meth]["details"] as $m => $data) {
+                      if ($data["modified"]) {
+                        $res["modified"]["details"][$test_meth][] = $m;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+            else {
+              file_put_contents($test_file, json_encode($tmp, JSON_PRETTY_PRINT));
+            }
             $res["success"] = true;
           }
           else {

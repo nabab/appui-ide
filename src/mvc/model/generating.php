@@ -12,5 +12,6 @@ use bbn\Parsers\Generator;
 if ($model->hasData("data")) {
 	$x = new Generator($model->data["data"]);
   $res = $x->generateClass();
+  X::ddump($res);
   return ['data' => $res, 'success' => true];
 }

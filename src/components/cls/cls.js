@@ -2,6 +2,20 @@
 
 (() => {
   return {
+    props: {
+      baseUrl: {
+        type: String,
+        default: ""
+      },
+      infos: {
+      	type: Object,
+        required: true
+    	},
+      installed: {
+        type: Boolean,
+        required: true
+      },
+    },
     data() {
       return {
         types: [
@@ -122,7 +136,7 @@
             visibility: a.visibility
           });
         });
-        return res;
+        return bbn.fn.order(res, 'text');
       },
       propsList() {
         let res = [];
@@ -134,7 +148,7 @@
             visibility: a.visibility
           });
         });
-        return res;
+        return bbn.fn.order(res, 'text');
       },
       constList() {
         let res = [];
@@ -146,7 +160,7 @@
             visibility: a.visibility
           });
         });
-        return res;
+        return bbn.fn.order(res, 'text');
       }
     },
     methods: {

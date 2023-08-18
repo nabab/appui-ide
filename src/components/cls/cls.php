@@ -76,6 +76,7 @@
       <div class="bbn-overlay">
         <bbn-router :nav="true"
                     :menu="[]"
+                    :root="baseUrl"
                     :breadcrumb="false"
                     :visual="false">
           <bbn-container url="reader"
@@ -99,9 +100,13 @@
                          :title="_('Editor')">
             <appui-newide-cls-editor v-if="!currentSelected"
                                      :source="source"
+                       							 :infos="infos"
+                      							 :installed="installed"
                                      mode="write"/>
             <appui-newide-cls-method v-else-if="currentSelected.mode === 'method'"
                                      :source="source.methods[currentSelected.value]"
+                                     :infos="infos"
+                      							 :installed="installed"
                                      mode="write"/>
             <appui-newide-cls-property v-else-if="currentSelected.mode === 'prop'"
                                        :source="source.properties[currentSelected.value]"
@@ -115,9 +120,13 @@
                          :title="_('Test')">
             <appui-newide-cls-testor v-if="!currentSelected"
                                      :source="source"
+                                     :infos="infos"
+                      							 :installed="installed"
                                      mode="write"/>
             <appui-newide-cls-testor-method v-else-if="currentSelected.mode === 'method'"
                                          :source="source.methods[currentSelected.value]"
+                                         :infos="infos"
+                                         :installed="installed"
                                          :lib="source.lib"
                                          mode="write"/>
           </bbn-container>

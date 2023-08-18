@@ -109,7 +109,7 @@ if ($model->hasData('lib') && $model->hasData('class')) {
         putenv('COMPOSER_HOME=' . $comp_path);
         putenv('COMPOSER_DISABLE_XDEBUG_WARN=1');
         $ph = new Phar($model->appPath(true) . 'composer.phar');
-        $ph->extractTo($comp_path, null, true);
+        $ph->extractTo($dir."tests/install", null, true);
         $input = new Symfony\Component\Console\Input\ArrayInput(
           [
             'command' => 'install',
