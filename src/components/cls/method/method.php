@@ -47,9 +47,6 @@
             <label><?= _("IsFinal") ?></label>
             <bbn-checkbox :value="source.final"
                           ></bbn-checkbox>
-            <!--label><?= _("Returns") ?></label>
-            <bbn-combo v-model="source.returns"
-                       :source="types"/ -->
             <label><?= _("Code") ?><bbn-button :notext="true"
                       title="ViewCode"
                       :icon="viewSource ? 'nf nf-fa-eye_slash' : 'nf nf-fa-eye'"

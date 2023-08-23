@@ -15,6 +15,10 @@
         type: Boolean,
         required: true
       },
+      lib: {
+        type: String,
+        required: true
+      },
     },
     data() {
       return {
@@ -41,12 +45,6 @@
       },
       logContent (str) {
         bbn.fn.log(str)
-      },
-      formData() {
-        let method = this.closest('appui-newide-cls');
-        let data = method.source;
-        data.methods[this.source.name] = this.source;
-        return {data: data};
       },
       barButtons() {
         return [
@@ -156,15 +154,25 @@
         this.test_results = '<br>' + res + '<br>';
       },
       saveClass() {
-      
-    	},
+      	this.isLoading = true;
+        bbn.fn.post(appui.plugins['appui-newide'] + '/generating', {data: this.source, lib: this.lib,
+                                                                    class: this.source.class, method: this.source.name}, d => {
+          if (d.success) {
+            appui.success('Class Updated successfully');
+          }
+          else {
+            appui.error("Something went wrong");
+          }
+          this.isLoading = false;
+        });
+      }
     },
     mounted() {
-      this.$nextTick(() => this.ready = true);
       this.test_results = "";
       bbn.fn.log(this.source);
       this.code.original = this.source.code;
       this.code.current = this.source.code;
+      this.$nextTick(() => this.ready = true);
     },
     watch: {
       source() {
@@ -173,8 +181,8 @@
           this.ready = true;
         }, 250)
         this.test_results = "";
-        this.code.original = "";
-      	this.code.current = "";
+        this.code.original = this.source.code;
+      	this.code.current = this.source.code;
       },
       addingExample(v) {
         this.exampleCode = "";

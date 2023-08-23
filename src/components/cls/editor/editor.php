@@ -1,7 +1,22 @@
 <!-- HTML Document -->
 
 <div class="appui-ide-cls-editor bbn-overlay">
-  <bbn-form :source="source"
+  <div class="bbn-overlay bbn-flex-height">
+    <div class="bbn-flex-fill body bbn-padding">
+      <div class="bbn-w-100 code" v-if="installed">
+        <h1><?= _("Class") ?> <bbn-editable v-model="source.name"/></h1>
+        <bbn-markdown v-model="source.doc.description"
+                      placeholder="<?= _("Write a description for your class here") ?>"/>
+        <div class="bbn-grid-fields bbn-top-margin">
+          <template v-for="(val, tag) in source.doc.tags">
+            <label v-text="tag"/>
+            <bbn-input v-model="source.doc.tags[tag]"/>
+          </template>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--bbn-form :source="source"
             :scrollable="true"
             mode="big">
     <div class="bbn-padding">
@@ -19,5 +34,5 @@
         </template>
       </div>
     </div>
-  </bbn-form>
+  </bbn-form-->
 </div>

@@ -9,6 +9,9 @@
         modified: {
           "status": false,
         },
+        classmodified: {
+          "status": false,
+        },
         tests_info: null,
         currentClass: '',
         currentLibrary: '',
@@ -46,14 +49,16 @@
       },
       makeEnv() {
         this.isLoading = true;
-        bbn.fn.post(appui.plugins['appui-newide'] + '/data/lib_install', {class: this.source.name, lib: this.source.lib}, d => {
+        bbn.fn.post(appui.plugins['appui-newide'] + '/data/lib_install', {class: this.currentClass, lib: this.currentLibrary}, d => {
           this.alertResult(d);
-          bbn.fn.post(appui.plugins['appui-newide'] + '/data/available-tests', {class: this.source.class, lib: this.lib}, d => {
+          bbn.fn.post(appui.plugins['appui-newide'] + '/data/available-tests', {class: this.currentClass, lib: this.currentLibrary}, d => {
             if (d.success) {
               this.tests_info = d.data;
               if ('modified' in d) {
                 this.modified = d.modified;
-                bbn.fn.log(this.modified);
+              }
+              if ('classmodified' in d) {
+                this.classmodified = d.classmodified;
               }
             }
             else {
@@ -74,12 +79,15 @@
       },
       delEnv() {
         this.isLoading = true;
-        bbn.fn.post(appui.plugins['appui-newide'] + '/data/delete_install', {lib: this.source.lib}, d => {
+        bbn.fn.post(appui.plugins['appui-newide'] + '/data/delete_install', {lib: this.currentLibrary}, d => {
           if (d.success) {
             this.libInstalled = false;
             this.tests_info = null;
             this.isLoading = false;
             this.modified = {
+              "status": false,
+            };
+            this.classmodified = {
               "status": false,
             };
             this.isLoading = false;
@@ -108,10 +116,10 @@
     },
     watch: {
       currentClass(v) {
-        if (this.currentURL) {
+        /*if (this.currentURL) {
           this.currentURL = this.url + "/" + this.currentLibrary + "/" + bbn.fn.replaceAll("\\", "-", v);
           this.ct.currentURL = this.currentURL;
-        }
+        }*/
         this.isLoading = true;
         bbn.fn.post(appui.plugins['appui-newide'] + '/class_editor', {class: v, lib: this.currentLibrary}, d => {
           this.data = d.data;
@@ -124,7 +132,9 @@
                   this.tests_info = d.data;
                   if ('modified' in d) {
                     this.modified = d.modified;
-                    bbn.fn.log(this.modified);
+                  }
+                  if ('classmodified' in d) {
+                    this.classmodified = d.classmodified;
                   }
                 }
                 else {
@@ -150,9 +160,9 @@
         });
       },
       currentLibrary(v) {
-        if (this.currentURL) {
+        /*if (this.currentURL) {
         	this.ct.currentURL = this.url + "/" + v;
-        }
+        }*/
       }
     }
   };

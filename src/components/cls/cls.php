@@ -76,7 +76,6 @@
       <div class="bbn-overlay">
         <bbn-router :nav="true"
                     :menu="[]"
-                    :root="baseUrl"
                     :breadcrumb="false"
                     :visual="false">
           <bbn-container url="reader"
@@ -107,6 +106,7 @@
                                      :source="source.methods[currentSelected.value]"
                                      :infos="infos"
                       							 :installed="installed"
+                                     :lib="source.lib"
                                      mode="write"/>
             <appui-newide-cls-property v-else-if="currentSelected.mode === 'prop'"
                                        :source="source.properties[currentSelected.value]"

@@ -54,7 +54,7 @@
                   icon="nf nf-md-update"
                   class="update bbn-padding"
                   @click.stop="makeEnv">Update Test environment</bbn-button>
-      <bbn-button v-if="modified.status"
+      <bbn-button v-if="modified.status || classmodified.status"
                   title="Merge"
                   icon="nf nf-cod-repo_push"
                   class="push bbn-padding"
@@ -64,7 +64,6 @@
   <div class="bbn-flex-fill">
     <bbn-loader v-if="isLoading || !currentURL"/>
     <appui-newide-cls v-else-if="currentClass && data"
-                      :base-url="currentURL"
                       :infos="tests_info"
                       :installed="libInstalled"
                       :source="data"/>
@@ -73,6 +72,12 @@
       <div>
         <h2>
           <?= _("Pick a class!") ?>
+        </h2>
+        <h2>
+          <?= _("or") ?>
+        </h2>
+        <h2>
+          <?= _("Verify if test environment is installed!") ?>
         </h2>
       </div>
     </div>

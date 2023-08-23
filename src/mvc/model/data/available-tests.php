@@ -156,7 +156,8 @@ if ($model->hasData("lib") && $model->hasData("class")) {
             }
             $res["data"] = $tmp;
             $test_file = $dir_test . "/original.json";
-            if (file_exists($test_file)) {
+            $class_original = $dir_test . "/class-original.json";
+            if (file_exists($test_file) && file_exists($class_original)) {
               $original = json_decode(file_get_contents($test_file), true);
               if($original["modified"]) {
                 $res["modified"] = [];
@@ -173,9 +174,21 @@ if ($model->hasData("lib") && $model->hasData("class")) {
                   }
                 }
               }
+              $orig = json_decode(file_get_contents($class_original), true);
+              if($orig["modified"]) {
+                $res["classmodified"] = [];
+              	$res["classmodified"]["status"] = $orig["modified"];
+                $res["classmodified"]["details"] = [];
+                foreach ($orig['methods'] as $method => $infos) {
+                  if ($infos['modified']) {
+                    $res["classmodified"]["details"][] = $method;
+                  }
+                }
+              }
             }
             else {
               file_put_contents($test_file, json_encode($tmp, JSON_PRETTY_PRINT));
+              file_put_contents($class_original, json_encode($parse_cls, JSON_PRETTY_PRINT));
             }
             $res["success"] = true;
           }
