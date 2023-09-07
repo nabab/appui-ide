@@ -2,10 +2,10 @@
 
 <div class="appui-ide-cls-testor bbn-overlay bbn-padding">
   <bbn-scroll>
-    <bbn-loader v-if="isLoading"/>
-    <div v-else class="bbn-overlay bbn-flex-height">
-      <div class="bbn-flex-fill body bbn-padding">
-        <div class="bbn-w-100 code" v-if="installed">
+    <div class="bbn-overlay bbn-flex-height" v-if="installed">
+      <bbn-loader v-if="isLoading"/>
+      <div v-else class="bbn-flex-fill body bbn-padding">
+        <div class="bbn-w-100 code">
           <h2>Pick your test to see and edit it</h2>
           <div class="bbn-flex-width">
             <bbn-dropdown class="bbn-flex-fill"
@@ -19,10 +19,10 @@
           </div>
 
           <h4>Source Code <bbn-button :notext="true"
-                      title="ViewCode"
-                      :icon="viewSource ? 'nf nf-fa-eye_slash' : 'nf nf-fa-eye'"
-                      class="bbn-state-selected"
-                      @click.stop="viewSource = !viewSource"></bbn-button></h4>
+                                      title="ViewCode"
+                                      :icon="viewSource ? 'nf nf-fa-eye_slash' : 'nf nf-fa-eye'"
+                                      class="bbn-state-selected"
+                                      @click.stop="viewSource = !viewSource"></bbn-button></h4>
           <bbn-code class="bbn-vmargin"
                     v-if="viewSource"
                     v-model="source.code"
@@ -36,13 +36,22 @@
                        :source="barButtons"></bbn-toolbar>
           <br><br>
           <div class="bbn-w-100">
-            <bbn-code v-model="currentTestFunction != '' ? currentTestCode : newCode"
-                    ref="testcode"
-                    :fill="false"
-                    mode="purephp"
-                    :readonly="readonly"
-                    :writable="true"
-                    style="max-width: 1000px;"/>
+            <bbn-code v-if="currentTestFunction !== ''"
+                      v-model="currentTestCode"
+                      ref="testcode"
+                      :fill="false"
+                      mode="purephp"
+                      :readonly="readonly"
+                      :writable="true"
+                      style="max-width: 1000px;"/>
+            <bbn-code v-else
+                      v-model="newCode"
+                      ref="testcode"
+                      :fill="false"
+                      mode="purephp"
+                      :readonly="readonly"
+                      :writable="true"
+                      style="max-width: 1000px;"/>
           </div>
           <h4 class="bbn-vmargin bbn-w-100">Test(s) Output</h4>
           <br>
@@ -50,6 +59,13 @@
                v-html="test_results">
           </div>
         </div>
+      </div>
+    </div>
+    <div v-else class="bbn-overlay bbn-middle">
+      <div>
+        <h2>
+          <?= _("Verify if test environment is installed!") ?>
+        </h2>
       </div>
     </div>
   </bbn-scroll>

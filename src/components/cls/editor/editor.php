@@ -3,7 +3,8 @@
 <div class="appui-ide-cls-editor bbn-overlay">
   <div class="bbn-overlay bbn-flex-height">
     <div class="bbn-flex-fill body bbn-padding">
-      <div class="bbn-w-100 code" v-if="installed">
+      <!--div class="bbn-w-100 code" v-if="installed"-->
+      <div class="bbn-w-100 code">
         <h1><?= _("Class") ?> <bbn-editable v-model="source.name"/></h1>
         <bbn-markdown v-model="source.doc.description"
                       placeholder="<?= _("Write a description for your class here") ?>"/>

@@ -2,8 +2,8 @@
 
 <div class="appui-ide-cls-testor bbn-overlay bbn-padding">
   <bbn-scroll>
-    <bbn-loader v-if="isLoading"/>
-    <div class="bbn-overlay bbn-flex-height">
+    <div class="bbn-overlay bbn-flex-height" v-if="installed">
+      <bbn-loader v-if="isLoading"/>
       <div class="bbn-flex-fill body bbn-padding">
         <div class="bbn-100 bbn-small">
           <bbn-table v-if="infos"
@@ -22,6 +22,13 @@
                          :render="renderTests"/>
           </bbn-table>
         </div>
+      </div>
+    </div>
+    <div v-else class="bbn-overlay bbn-middle">
+      <div>
+        <h2>
+          <?= _("Verify if test environment is installed!") ?>
+        </h2>
       </div>
     </div>
   </bbn-scroll>

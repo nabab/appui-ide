@@ -19,11 +19,15 @@
         type: String,
         required: true
       },
+      libroot: {
+        type: String,
+        default: ""
+      },
     },
     data() {
       return {
         viewSource: true,
-        readonly: false,
+        readonly: this.installed ? false : true,
         ready: false,
         test_results: "",
         addingExample: false,
@@ -156,7 +160,7 @@
       saveClass() {
       	this.isLoading = true;
         bbn.fn.post(appui.plugins['appui-newide'] + '/generating', {data: this.source, lib: this.lib,
-                                                                    class: this.source.class, method: this.source.name}, d => {
+                                                                    class: this.source.class, method: this.source.name, root: this.libroot}, d => {
           if (d.success) {
             appui.success('Class Updated successfully');
           }
@@ -188,6 +192,7 @@
         this.exampleCode = "";
       },
       readonly(v) {
+        this.readonly = this.installed ? v : true;
         this.getRef("srccode").widget.setOption('readOnly', v);
         this.getRef("srccode").widget.refresh();
       }

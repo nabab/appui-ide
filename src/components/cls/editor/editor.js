@@ -18,7 +18,11 @@
       mode: {
         type: String,
         default: "read",
-      }
+      },
+      libroot: {
+        type: String,
+        default: ""
+      },
     }
   }
 })();

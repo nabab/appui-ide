@@ -8,9 +8,10 @@ $res = [
   'success' => false
 ];
 
-
-if ($model->hasData(['lib', 'root'])) {
+if ($model->hasData(['root', 'lib', 'namespace', 'classname']))
+{
   $env = new appui\newide\Environment($model->data['root'], $model->data['lib']);
-  $res = $env->delete();
+  $res = $env->createNewClass($model->data['namespace'], $model->data['classname']);
 }
+
 return $res;

@@ -22,6 +22,10 @@
       lib: {
         type: String,
         required: true
+      },
+      libroot: {
+        type: String,
+        default: ""
       }
     },
     data() {
@@ -191,12 +195,18 @@
       */
       getTestFunctionsList() {
         let cur_tests_info = this.infos[this.source.name];
-        bbn.fn.log(cur_tests_info);
-        this.testFunctionsList = Object.keys(cur_tests_info.details);
-        this.test_num = cur_tests_info.available_tests;
+        bbn.fn.log("NFO", cur_tests_info);
+        if (cur_tests_info) {
+          this.testFunctionsList = Object.keys(cur_tests_info.details);
+          this.test_num = cur_tests_info.available_tests;
+        }
+        else {
+          this.testFunctionsList = [];
+          this.test_num = 0;
+        }
       },
       getTestFunctionCode() {
-        if (this.currentTestFunction in this.infos) {
+        if (this.source.name in this.infos) {
           let cur_tests_info = this.infos[this.source.name];
           return cur_tests_info.details[this.currentTestFunction].code;
         }
@@ -251,11 +261,12 @@
           lib: this.lib,
           libfunction: this.source.name,
           function: this.currentTestFunction,
-          code: this.currentTestCode
+          code: this.currentTestCode,
+          root: this.libroot
         }, (d)=>{
           if (d.success) {
             this.isLoading = true;
-            bbn.fn.post(appui.plugins['appui-newide'] + '/data/available-tests', {class: this.source.class, lib: this.lib}, d => {
+            bbn.fn.post(appui.plugins['appui-newide'] + '/data/available-tests', {class: this.source.class, lib: this.lib, root: this.libroot}, d => {
               if (d.success) {
                 this.tests_info = d.data;
                 if ('modified' in d) {
@@ -299,6 +310,9 @@
       this.isLoading = true;
       if (this.installed) {
         this.getTestFunctionsList();
+      } else {
+        this.testFunctionsList = [];
+        this.test_num = 0;
       }
       this.isLoading = false;
     },

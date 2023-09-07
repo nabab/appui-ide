@@ -8,9 +8,9 @@
         required: true
       },
       infos: {
-      	type: Object,
+        type: Object,
         required: true
-    	},
+      },
       installed: {
         type: Boolean,
         required: true
@@ -113,20 +113,26 @@
         }
         for (let test in row.details) {
           if (row.details[test] != null) {
+            let title = '';
+            let color = 'yellow';
             if (row.details[test].status == "success") {
-              res += '<span class="nf nf-cod-circle_small_filled bbn-green"></span>  ';
+              color = 'green';
             }
             else if (row.details[test].status == "failure") {
-              res += '<span class="nf nf-cod-circle_small_filled bbn-orange"></span>  ';
+              color = 'orange';
             }
             else if (row.details[test].status == "skipped") {
-              res += '<span class="nf nf-cod-circle_small_filled bbn-cyan"></span>  ';
+              color = 'cyan';
             }
             else if (row.details[test].status == "error") {
-              res += '<span class="nf nf-cod-circle_small_filled bbn-red"></span>  ';
+              color = 'red';
             }
-          } else {
-            res += '<span class="nf nf-cod-circle_small_filled bbn-yellow"></span>  ';
+            if (row.details[test].error) {
+              title = row.details[test].error;
+            }
+            res += '<span class="nf nf-cod-circle_small_filled bbn-' + color + (
+            title ? '" title="' + bbn.fn.quotes2html(title) : ""
+            ) + '"></span>  ';
           }
         }
         return res;

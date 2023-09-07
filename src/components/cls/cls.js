@@ -15,6 +15,10 @@
         type: Boolean,
         required: true
       },
+      libroot: {
+        type: String,
+        default: ""
+      },
     },
     data() {
       return {
@@ -69,7 +73,25 @@
             bcolor: bbn.fn.getCssVar('red'),
             url: "methods",
             static: true,
-            idx: 0
+            idx: 0,
+            menu: [
+              {
+                text: bbn._("New Method"),
+                icon: 'nf nf-fa-plus',
+                action: () => {
+                  this.getPopup({
+                    component: 'appui-newide-cls-method-new',
+                    source: {
+                      lib: this.source.lib,
+                      root: this.libroot,
+                      class: this.source.name
+                    },
+                    title: bbn._("New Method"),
+                    width: 700,
+                  });
+                }
+              }
+            ]
           },
           {
 						title: bbn._("Properties list"),
@@ -79,7 +101,25 @@
             bcolor: bbn.fn.getCssVar('green'),
             url: "props",
             static: true,
-          	idx: 1
+          	idx: 1,
+            menu: [
+              {
+                text: bbn._("New Property"),
+                icon: 'nf nf-fa-plus',
+                action: () => {
+                  this.getPopup({
+                    component: 'appui-newide-cls-property-new',
+                    source: {
+                      lib: this.source.lib,
+                      root: this.libroot,
+                      class: this.source.name
+                    },
+                    title: bbn._("New Property"),
+                    width: 700,
+                  });
+                }
+              }
+            ]
           },
           {
 						title: bbn._("Constants list"),
@@ -89,7 +129,25 @@
             bcolor: bbn.fn.getCssVar('blue'),
             url: "constants",
             static: true,
-          	idx: 2
+          	idx: 2,
+            menu: [
+              {
+                text: bbn._("New Constant"),
+                icon: 'nf nf-fa-plus',
+                action: () => {
+                  this.getPopup({
+                    component: 'appui-newide-cls-constant-new',
+                    source: {
+                      lib: this.source.lib,
+                      root: this.libroot,
+                      class: this.source.name
+                    },
+                    title: bbn._("New Constant"),
+                    width: 700,
+                  });
+                }
+              }
+            ]
           }
         ],
         tabSelected: 0
@@ -176,6 +234,9 @@
             appui.error("Error");
           }
         });
+      },
+      addMethod() {
+        
       }
     },
     watch: {

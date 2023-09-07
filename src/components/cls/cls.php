@@ -5,6 +5,7 @@
     <bbn-pane :size="220">
       <div class="bbn-overlay bbn-flex-height">
         <bbn-tabs :source="tabs"
+                  :no-router="true"
                   v-model="tabSelected"
                   :fill="true"/>
         <div class="bbn-flex-fill">
@@ -12,6 +13,7 @@
                v-show="tabSelected === 0">
             <bbn-scroll>
               <bbn-list :source="methodList"
+                        ref="methodList"
                         @select="v => currentMethod = v.value || ''"
                         @unselect="currentMethod = ''">
                 <template v-pre>
@@ -83,9 +85,16 @@
                          :title="_('Reader')">
             <appui-newide-cls-editor v-if="!currentSelected"
                                      :source="source"
+                                     :infos="infos"
+                      							 :installed="installed"
+                                     :libroot="libroot"
                                      mode="read"/>
             <appui-newide-cls-method v-else-if="currentSelected.mode === 'method'"
                                      :source="source.methods[currentSelected.value]"
+                                     :infos="infos"
+                      							 :installed="installed"
+                                     :libroot="libroot"
+                                     :lib="source.lib"
                                      mode="read"/>
             <appui-newide-cls-property v-else-if="currentSelected.mode === 'prop'"
                                        :source="source.properties[currentSelected.value]"
@@ -101,11 +110,13 @@
                                      :source="source"
                        							 :infos="infos"
                       							 :installed="installed"
+                                     :libroot="libroot"
                                      mode="write"/>
             <appui-newide-cls-method v-else-if="currentSelected.mode === 'method'"
                                      :source="source.methods[currentSelected.value]"
                                      :infos="infos"
                       							 :installed="installed"
+                                     :libroot="libroot"
                                      :lib="source.lib"
                                      mode="write"/>
             <appui-newide-cls-property v-else-if="currentSelected.mode === 'prop'"
@@ -127,6 +138,7 @@
                                          :source="source.methods[currentSelected.value]"
                                          :infos="infos"
                                          :installed="installed"
+                                         :libroot="libroot"
                                          :lib="source.lib"
                                          mode="write"/>
           </bbn-container>

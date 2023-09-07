@@ -4,19 +4,22 @@
   <bbn-scroll v-if="ready">
     <div class="bbn-overlay bbn-flex-height">
       <div class="bbn-flex-fill body bbn-padding">
-        <div class="bbn-w-100 code" v-if="installed">
+        <!--div class="bbn-w-100 code" v-if="installed"-->
+        <div class="bbn-w-100 code">
           <h1>
-            <?= _("Method") ?> <bbn-editable v-model="source.name"/>
+            <?= _("Method") ?> <bbn-editable v-model="source.name"
+                                             :disabled="!installed"/>
           </h1>
           <h2>
             <bbn-input v-model="source.summary"
                        placeholder="<?= _("Summary") ?>"
-                       class="bbn-w-100"/>
+                       class="bbn-w-100"
+                       :readonly="!installed"/>
           </h2>
           <div class="bbn-w-100 bbn-small bbn-vmargin">
             <bbn-table v-if="source.arguments"
                        :scrollable="false"
-                       :editable="true"
+                       :editable="!installed"
                        :source="Object.values(source.arguments)">
               <bbns-column title="<?= _("Argument") ?>"
                            field="name"
@@ -43,9 +46,11 @@
           <div class="bbn-grid-fields">
             <label><?= _("Visibility") ?></label>
             <bbn-radio v-model="source.visibility"
-                       :source="visibilities"/>
+                       :source="visibilities"
+                       :disabled="true"/>
             <label><?= _("IsFinal") ?></label>
             <bbn-checkbox :value="source.final"
+                          :disabled="true"
                           ></bbn-checkbox>
             <label><?= _("Code") ?><bbn-button :notext="true"
                       title="ViewCode"
@@ -55,6 +60,7 @@
             <div v-if="viewSource">
               <bbn-toolbar class="bbn-radius"
                            style="max-width: 1000px;"
+                           :disabled="!installed"
                            :source="barButtons"></bbn-toolbar>
               <br><br>
               <bbn-code v-model="code.current"
@@ -81,17 +87,20 @@
 
             <label><?= _("Description") ?></label>
             <bbn-markdown v-model="source.description"
-                          :autosize="true"/>
+                          :autosize="true"
+                          :readonly="!installed"/>
             <template v-for="(p, index) in source.description_parts" v-if="p.type === 'code'">
               <label><?= _("Example") ?>
                 <bbn-button title="remove"
                             :notext="true"
                             icon="nf nf-mdi-delete_forever"
                             class="bbn-bg-red bbn-white"
+                            :disabled="!installed"
                             @click.stop="deleteExample(index)"></bbn-button></label>
               <div>
                 <bbn-code v-model="p.content"
                           :fill="false"
+                          :readonly="!installed"
                           mode="purephp"/>
               </div>
             </template>
@@ -101,11 +110,13 @@
                         icon="nf nf-oct-diff_added"
                         class="bbn-bg-blue bbn-white"
                         style="max-width: 130px;"
+                        :disabled="!installed"
                         @click.stop="addingExample = !addingExample"></bbn-button>
             <label v-if="addingExample"><?= _("New Example") ?></label>
             <div v-if="addingExample">
               <bbn-code v-model="exampleCode"
                         :fill="false"
+                        :readonly="!installed"
                         mode="purephp"/>
               <br>
               <bbn-button title="Save"
@@ -113,6 +124,7 @@
                           icon="nf nf-fa-save"
                           class="bbn-state-selected bbn-white"
                           style="max-width: 130px;"
+                          :disabled="!installed"
                           @click.stop="addExample"></bbn-button>
             </div>
             <br>
@@ -121,6 +133,7 @@
                   icon="nf nf-fa-check_circle"
                   class="bbn-state-selected bbn-padding bbn-white sub"
                   style="max-width: 200px;"
+                  :disabled="!installed"
                   @click.stop="saveClass"></bbn-button>
           </div>
         </div>
