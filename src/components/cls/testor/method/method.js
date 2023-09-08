@@ -304,7 +304,22 @@
       },
       addTest() {
         return "";
-      }
+      },
+      makeSuggestion() {
+        bbn.fn.post(appui.plugins['appui-newide'] + '/actions/suggest-test', {
+          lib: this.lib,
+          function_code: this.source.code,
+          root: this.libroot
+        }, (d)=>{
+          if (d.success) {
+            bbn.fn.log(d.data);
+            appui.success("Class successfully Updated");
+          }
+          else {
+            appui.error("Error");
+          }
+        });
+      },
     },
     mounted() {
       this.isLoading = true;

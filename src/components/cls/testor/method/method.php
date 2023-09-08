@@ -5,7 +5,7 @@
     <div class="bbn-overlay bbn-flex-height" v-if="installed">
       <bbn-loader v-if="isLoading"/>
       <div v-else class="bbn-flex-fill body bbn-padding">
-        <div class="bbn-w-100 code">
+        <div class="bbn-w-100 code" v-if="test_num !== 0">
           <h2>Pick your test to see and edit it</h2>
           <div class="bbn-flex-width">
             <bbn-dropdown class="bbn-flex-fill"
@@ -58,6 +58,32 @@
           <div class="bbn-w-100 res"
                v-html="test_results">
           </div>
+        </div>
+        <div class="bbn-w-100 code" v-else>
+          <h2>
+            <?= _("It seems they have no test for this function!") ?>
+          </h2>
+          <h4>Source Code <bbn-button :notext="true"
+                                      title="ViewCode"
+                                      :icon="viewSource ? 'nf nf-fa-eye_slash' : 'nf nf-fa-eye'"
+                                      class="bbn-state-selected"
+                                      @click.stop="viewSource = !viewSource"></bbn-button></h4>
+          <bbn-code class="bbn-vmargin"
+                    v-if="viewSource"
+                    v-model="source.code"
+                    :fill="false"
+                    mode="purephp"
+                    :readonly="true"
+                    style="max-width: 1000px;"/>
+          <h4>
+            <?= _("Click the button bellow to see test suggestion") ?>
+          </h4>
+          <bbn-button title="suggests"
+                      :text="_('Make Test suggestions')"
+                      icon="nf nf-mdi-playlist_plus"
+                      class="bbn-primary bbn-white"
+                      :disabled="!installed"
+                      @click.stop="makeSuggestion"></bbn-button>
         </div>
       </div>
     </div>
