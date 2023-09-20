@@ -80,16 +80,17 @@
                     :menu="[]"
                     :breadcrumb="false"
                     :visual="false">
-          <bbn-container url="reader"
+          <bbn-container url="doc"
                          :static="true"
-                         :title="_('Reader')">
-            <appui-newide-cls-editor v-if="!currentSelected"
+                         :title="_('Doc & Ex')">
+            <appui-newide-cls-doc v-if="!currentSelected"
                                      :source="source"
                                      :infos="infos"
                       							 :installed="installed"
                                      :libroot="libroot"
                                      mode="read"/>
-            <appui-newide-cls-method v-else-if="currentSelected.mode === 'method'"
+            <appui-newide-cls-method-doc
+                                     v-else-if="currentSelected.mode === 'method'"
                                      :source="source.methods[currentSelected.value]"
                                      :infos="infos"
                       							 :installed="installed"

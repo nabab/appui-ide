@@ -220,7 +220,7 @@
           },
           width: 350,
           title: bbn._("Add New Class"),
-        })
+        });
       },
       loadClass()
       {
@@ -347,6 +347,7 @@
         this.libraryChanging = true;
         bbn.fn.post(this.root + 'data/classes/' + this.libRoot + '/' + this.currentLibrary, d => {
           if (d.success) {
+            this.updateMenu();
             this.menu[3].items = this.classesToMenu(d.data);
             this.getRef('menu').$forceUpdate();
           }

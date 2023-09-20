@@ -12,19 +12,18 @@
                     @click.stop="goBack"></bbn-button>
           <h1>
             <?= _("Method") ?> <bbn-editable v-model="source.name"
-                                             :readonly="!installed"
-                                             :disabled="!installed"/>
+                                             :readonly="true"
+                                             :disabled="true"/>
           </h1>
-          <!--h2>
+          <h2>
             <bbn-input v-model="source.summary"
                        placeholder="<?= _("Summary") ?>"
                        class="bbn-w-100"
                        :readonly="!installed"/>
-          </h2-->
+          </h2>
           <div class="bbn-w-100 bbn-small bbn-vmargin">
             <bbn-table v-if="source.arguments"
                        :scrollable="false"
-                       :editable="!installed"
                        :source="Object.values(source.arguments)">
               <bbns-column title="<?= _("Argument") ?>"
                            field="name"
@@ -44,52 +43,18 @@
                            field="default"
                            :render="renderArgDefault"/>
               <bbns-column title="<?= _("Description") ?>"
-                           field="default"/>
+                           component="appui-newide-cls-argument-description"
+                           field="description"/>
             </bbn-table>
           </div>
 
           <div class="bbn-grid-fields">
-            <label><?= _("Visibility") ?></label>
-            <bbn-radio v-model="source.visibility"
-                       :source="visibilities"
-                       :disabled="true"/>
-            <label><?= _("IsFinal") ?></label>
-            <bbn-checkbox :value="source.final"
-                          :disabled="true"
-                          ></bbn-checkbox>
-            <label><?= _("Code") ?><bbn-button :notext="true"
-                      title="ViewCode"
-                      :icon="viewSource ? 'nf nf-fa-eye_slash' : 'nf nf-fa-eye'"
-                      class="bbn-state-selected"
-                      @click.stop="viewSource = !viewSource"></bbn-button></label>
-            <div v-if="viewSource">
-              <bbn-toolbar class="bbn-radius"
-                           style="max-width: 1000px;"
-                           :disabled="!installed"
-                           :source="barButtons"></bbn-toolbar>
-              <br><br>
-              <bbn-code v-model="code.current"
-                        ref="srccode"
-                        :fill="false"
-                        :readonly="readonly"
-                        mode="purephp"/>
-              <p v-if="code.current !== source.code" class="bbn-red">
-                Press the Save button (changes not saved yet ......)
-              </p>
-            </div>
-            <div v-else>
-              <br><br>
-            </div>
-            <label v-if="test_results != ''"><?= _("Test(s) Output    ") ?><bbn-button :notext="true"
-                      title="Clear"
-                      icon="nf nf-fa-remove"
-                      class="bbn-tertiary"
-                      @click.stop="test_results = ''"></bbn-button></label>
-            <div class="bbn-w-100 res"
-                 v-if="test_results != ''"
-                 v-html="test_results">
-            </div>
-            <!--template v-for="(p, index) in source.description_parts" v-if="p.type === 'code'">
+            <label><?= _("Description") ?></label>
+            <bbn-markdown v-model="source.description"
+                          :autosize="true"
+                          :disabled="!installed"
+                          :readonly="!installed"/>
+            <template v-for="(p, index) in source.description_parts" v-if="p.type === 'code'">
               <label><?= _("Example") ?>
                 <bbn-button title="remove"
                             :notext="true"
@@ -126,7 +91,7 @@
                           style="max-width: 130px;"
                           :disabled="!installed"
                           @click.stop="addExample"></bbn-button>
-            </div-->
+            </div>
             <br>
             <bbn-button title="Modify"
                   text="Save Modifications"

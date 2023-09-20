@@ -5,6 +5,17 @@
     <div class="bbn-overlay bbn-flex-height" v-if="installed">
       <bbn-loader v-if="isLoading"/>
       <div v-else class="bbn-flex-fill body bbn-padding">
+        <bbn-button title="Return"
+                    text="Back"
+                    class="bbn-red"
+                    :icon="'nf nf-fa-angle_left'"
+                    @click.stop="goBack"></bbn-button>
+        <br>
+        <h1>
+          <?= _("Method") ?> <bbn-editable v-model="source.name"
+                                           :readonly="!installed"
+                                           :disabled="true"/>
+        </h1>
         <div class="bbn-w-100 code" v-if="test_num !== 0">
           <h2>Pick your test to see and edit it</h2>
           <div class="bbn-flex-width">

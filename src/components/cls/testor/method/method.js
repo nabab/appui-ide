@@ -117,82 +117,6 @@
       }
     },
     methods: {
-      /*alertResult(resp) {
-        if (resp.success) {
-          this.libInstalled = true;
-          appui.success(bbn._("Test Environment created"));
-        }
-        else {
-          this.libInstalled = false;
-          appui.error(bbn._("Something went wrong: " + resp.error));
-        }
-      },
-      makeEnv() {
-        this.isLoading = true;
-        bbn.fn.post(appui.plugins['appui-newide'] + '/data/lib_install', {class: this.source.class, lib: this.lib}, d => {
-          this.alertResult(d);
-          bbn.fn.post(appui.plugins['appui-newide'] + '/data/available-tests', {class: this.source.class, lib: this.lib}, d => {
-            if (d.success) {
-              this.tests_info = d.data;
-              if ('modified' in d) {
-                this.modified = d.modified;
-                bbn.fn.log(this.modified);
-              }
-            }
-            else {
-              this.tests_info = [];
-              for (let method in d.data) {
-                let tmp = {
-                  "method": d.data[method].name,
-                  "details": [],
-                  "available_tests": "N/A"
-                };
-                this.tests_info.push(tmp);
-              }
-            }
-            this.isLoading = false;
-            bbn.fn.log("datas", this.tests_info);
-            this.getTestFunctionsList();
-          });
-        });
-      },
-      delEnv() {
-        this.isLoading = true;
-        bbn.fn.post(appui.plugins['appui-newide'] + '/data/delete_install', {lib: this.lib}, d => {
-          if (d.success) {
-            this.libInstalled = false;
-            appui.success(bbn._("Test Environment removed"));
-            bbn.fn.log("Source", this.source, "Lib", this.lib);
-            bbn.fn.post(appui.plugins['appui-newide'] + '/data/available-tests', {class: this.source.class, lib: this.lib}, d => {
-              if (d.success) {
-                this.tests_info = d.data;
-                if ('modified' in d) {
-                  this.modified = d.modified;
-                  bbn.fn.log(this.modified);
-                }
-              }
-              else {
-                for (let method in d.data) {
-                  let tmp = {
-                    "method": d.data[method].name,
-                    "details": [],
-                    "available_tests": "N/A"
-                  };
-                  this.tests_info.push(tmp);
-                }
-              }
-              this.isLoading = false;
-              bbn.fn.log("datas", this.tests_info);
-              this.getTestFunctionsList();
-            });
-          }
-          else {
-            appui.error(bbn._("Unable to remove Test Environment"));
-            this.isLoading = false;
-          }
-        });
-      },
-      */
       getTestFunctionsList() {
         let cur_tests_info = this.infos[this.source.name];
         bbn.fn.log("NFO", cur_tests_info);
@@ -313,6 +237,19 @@
         }, (d)=>{
           if (d.success) {
             bbn.fn.log(d.data);
+            this.getPopup({
+              component: 'appui-newide-cls-testor-method-suggest',
+              scrollable: true,
+              source: {
+                lib: this.lib,
+                root: this.libroot,
+                class: this.source.class,
+                methods: d.data
+              },
+              width: 600,
+              height: "90%",
+              title: bbn._("Test Suggestions"),
+            });
             appui.success("Class successfully Updated");
           }
           else {
@@ -320,6 +257,17 @@
           }
         });
       },
+      goBack()
+      {
+        const classComponent = this.closest('appui-newide-cls');
+        bbn.fn.log(classComponent);
+        if (classComponent) {
+          classComponent.currentMethod = "";
+          classComponent.currentProps = "";
+          classComponent.currentConst = "";
+          classComponent.currentCode = "";
+        }
+      }
     },
     mounted() {
       this.isLoading = true;
@@ -334,7 +282,12 @@
     watch: {
       currentTestFunction(v) {
         this.currentTestFunction = v;
-        this.currentTestCode = this.getTestFunctionCode();
+        if (this.currentTestFunction !== "") {
+        	this.currentTestCode = this.getTestFunctionCode();
+        }
+        else {
+          this.currentTestCode = "";
+        }
         this.test_results = "";
       },
       source(v) {

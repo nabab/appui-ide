@@ -12,7 +12,7 @@ $res = [
 if ($model->hasData(['lib', 'root', 'function_code'])) {
 	$ai = new Ai($model->db);
   $env = new appui\newide\Environment($model->data['root'], $model->data['lib']);
-  $res = $env->makeAiRequest('suggest-test', $ai, $model->data['function_code']);
+  $res = $env->makeAiRequest('ai-refactoring', $ai, $model->data['function_code']);
 }
 
 

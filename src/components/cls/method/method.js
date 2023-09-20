@@ -38,17 +38,17 @@
         },
         originalCode: "",
         root: appui.plugins['appui-newide'] + '/',
-      }
+      };
     },
     computed: {
       visibilities() {
-        return this.closest('appui-newide-cls').visibilities
+        return this.closest('appui-newide-cls').visibilities;
       },
       types() {
-        return this.closest('appui-newide-cls').types
+        return this.closest('appui-newide-cls').types;
       },
       logContent (str) {
-        bbn.fn.log(str)
+        bbn.fn.log(str);
       },
       barButtons() {
         return [
@@ -76,6 +76,17 @@
               action: () => {
                 this.readonly = !this.readonly;
               }
+            }
+          },
+          {
+            component:'bbn-button',
+            end: true,
+            options:{
+              title: "Refactor",
+              icon: "nf nf-cod-issue_reopened",
+              class: "bbn-tertiary",
+              text: "Refactor",
+              action: this.refactorCode
             }
           },
           {
@@ -162,6 +173,7 @@
         bbn.fn.post(appui.plugins['appui-newide'] + '/generating', {data: this.source, lib: this.lib,
                                                                     class: this.source.class, method: this.source.name, root: this.libroot}, d => {
           if (d.success) {
+            this.updateClass();
             appui.success('Class Updated successfully');
           }
           else {
@@ -169,6 +181,54 @@
           }
           this.isLoading = false;
         });
+      },
+      refactorCode() {
+        bbn.fn.post(appui.plugins['appui-newide'] + '/actions/ai-refactoring', {
+          lib: this.lib,
+          function_code: this.code.current,
+          root: this.libroot
+        }, (d)=>{
+          if (d.success) {
+            bbn.fn.log(d.data);
+            this.getPopup({
+              component: 'appui-newide-cls-method-refactor',
+              scrollable: true,
+              source: {
+                functionName: this.source.name,
+                method: d.data
+              },
+              width: 600,
+              height: "90%",
+              title: bbn._("Code Refactoring"),
+            });
+            appui.success("Done");
+          }
+          else {
+            appui.error("Error");
+          }
+        });
+      },
+      updateClass() {
+        const classEditor = this.closest('bbn-container').closest('bbn-container').getComponent();
+        classEditor.loadClass().then(() => {
+          setTimeout(() => {
+            const classComponent = classEditor.find('appui-newide-cls');
+            const method = bbn.fn.getRow(classComponent.methodList, {value: this.source.name});
+            classComponent.getRef('methodList').select(method);
+          }, 1000);
+        });
+      },
+      goBack()
+      {
+        //const classEditor = this.closest('bbn-container').getComponent();
+        const classComponent = this.closest('appui-newide-cls');
+        bbn.fn.log(classComponent);
+        if (classComponent) {
+          classComponent.currentMethod = "";
+          classComponent.currentProps = "";
+          classComponent.currentConst = "";
+          classComponent.currentCode = "";
+        }
       }
     },
     mounted() {
@@ -183,7 +243,7 @@
         this.ready = false;
         setTimeout(() => {
           this.ready = true;
-        }, 250)
+        }, 250);
         this.test_results = "";
         this.code.original = this.source.code;
       	this.code.current = this.source.code;
@@ -197,5 +257,5 @@
         this.getRef("srccode").widget.refresh();
       }
     }
-  }
+  };
 })();
