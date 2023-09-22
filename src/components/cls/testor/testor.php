@@ -2,11 +2,22 @@
 
 <div class="appui-ide-cls-testor bbn-overlay bbn-padding">
   <bbn-scroll>
-    <div class="bbn-overlay bbn-flex-height" v-if="installed">
+    <div class="bbn-overlay" v-if="installed">
       <bbn-loader v-if="isLoading"/>
-      <div class="bbn-flex-fill body bbn-padding">
-        <div class="bbn-100 bbn-small">
-          <bbn-table v-if="infos"
+      <div v-else class="bbn-overlay">
+        <div class="bbn-100 bbn-small bbn-flex-height">
+          <div v-if="hasMeth" class="bbn-padding">
+            <h3>
+              <?= _("Click the button bellow to see other Test class functions") ?>
+            </h3>
+            <bbn-button title="view"
+                        :text="_('View Other Functions')"
+                        icon="nf nf-mdi-playlist_plus"
+                        class="bbn-primary bbn-white"
+                        @click.stop="editTestMethods"></bbn-button>
+          </div>
+          <div class="bbn-flex-fill bbn-padding">
+            <bbn-table v-if="infos"
                      :scrollable="true"
                      :source="tableTestSource"
                      ref="table">
@@ -21,6 +32,7 @@
                          field="last_results"
                          :render="renderTests"/>
           </bbn-table>
+          </div>
         </div>
       </div>
     </div>

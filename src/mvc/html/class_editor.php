@@ -41,6 +41,7 @@
     <bbn-loader v-if="isLoading"/>
     <appui-newide-cls v-else-if="currentClass && data"
                       :infos="tests_info"
+                      :methinfos="methods_info"
                       :installed="libInstalled"
                       :libroot="libRoot"
                       :source="data"/>

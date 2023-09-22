@@ -15,7 +15,7 @@
       suggestions()
       {
         this.methods = [];
-        for (let method in this.source.methods) {
+        for (let method in this.source.methods || []) {
           let meth = this.source.methods[method];
           bbn.fn.log("METH", meth);
           let tmp = {

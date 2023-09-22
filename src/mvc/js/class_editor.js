@@ -44,6 +44,7 @@
           },
         ],
         tests_info: null,
+        methods_info: null,
         libtime: null,
         libraryChanging: false,
         currentClass: '',
@@ -166,6 +167,7 @@
           bbn.fn.post(appui.plugins['appui-newide'] + '/data/available-tests', {class: this.currentClass, lib: this.currentLibrary, root: this.libRoot}, d => {
             if (d.success) {
               this.tests_info = d.data;
+              this.methods_info = d.methods;
               if ('modified' in d) {
                 this.modified = d.modified;
               }
@@ -175,6 +177,7 @@
             }
             else {
               this.tests_info = {};
+              this.methods_info = {};
               for (let method in d.data) {
                 let tmp = {
                   "method": d.data[method].name,
@@ -235,6 +238,7 @@
                 bbn.fn.post(appui.plugins['appui-newide'] + '/data/available-tests', {class: this.currentClass, lib: this.currentLibrary, root: this.libRoot}, d => {
                   if (d.success) {
                     this.tests_info = d.data;
+                    this.methods_info = d.methods;
                     if ('modified' in d) {
                       this.modified = d.modified;
                     }
@@ -244,6 +248,7 @@
                   }
                   else {
                     this.tests_info = {};
+                    this.methods_info = {};
                     for (let method in d.data) {
                       let tmp = {
                         "method": d.data[method].name,
@@ -262,6 +267,7 @@
               else {
                 this.libInstalled = false;
                 this.tests_info = {};
+                this.methods_info = {};
                 for (let method in this.data.methods) {
                   let tmp = {
                     "method": this.data.methods[method].name,

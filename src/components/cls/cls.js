@@ -11,6 +11,10 @@
       	type: Object,
         required: true
     	},
+      methinfos: {
+      	type: Object,
+        required: true
+    	},
       installed: {
         type: Boolean,
         required: true

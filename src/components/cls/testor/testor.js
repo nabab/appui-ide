@@ -11,6 +11,10 @@
         type: Object,
         required: true
       },
+      methinfos: {
+      	type: Object,
+        required: true
+    	},
       installed: {
         type: Boolean,
         required: true
@@ -18,12 +22,16 @@
       mode: {
         type: String,
         default: "read",
+      },
+      libroot: {
+        type: String,
+        default: ""
       }
     },
     data() {
       return {
         isLoading: false
-      }
+      };
     },
     computed: {
       methodList() {
@@ -43,69 +51,32 @@
           return [];
         }
         return Object.values(this.infos);
+      },
+      hasMeth()
+      {
+        if (Object.keys(this.methinfos).length === 0) {
+          return false;
+        }
+        return true;
       }
     },
     methods: {
-      /*alertResult(resp) {
-        if (resp.success) {
-          this.libInstalled = true;
-          appui.success(bbn._("Test Environment created"));
-        }
-        else {
-          this.libInstalled = false;
-          appui.error(bbn._("Something went wrong: " + resp.error));
-        }
-      },
-      makeEnv() {
-        this.isLoading = true;
-        bbn.fn.post(appui.plugins['appui-newide'] + '/data/lib_install', {class: this.source.name, lib: this.source.lib}, d => {
-          this.alertResult(d);
-          bbn.fn.post(appui.plugins['appui-newide'] + '/data/available-tests', {class: this.source.name, lib: this.source.lib}, d => {
-            if (d.success) {
-              this.tests_info = d.data;
-              if ('modified' in d) {
-                this.modified = d.modified;
-                bbn.fn.log(this.modified);
-              }
-            }
-            else {
-              this.tests_info = [];
-              for (let method in d.data) {
-                let tmp = {
-                  "method": d.data[method].name,
-                  "details": [],
-                  "available_tests": "N/A"
-                };
-                this.tests_info.push(tmp);
-              }
-            }
-            this.isLoading = false;
-            this.$nextTick(() => {
-              this.getRef("table").updateData();
-            });
-          });
+      editTestMethods()
+      {
+        this.getPopup({
+          component: 'appui-newide-cls-testor-edit',
+          scrollable: true,
+          source: {
+            lib: this.source.lib,
+            root: this.libroot,
+            class: this.source.name,
+            methods: this.methinfos
+          },
+          width: 600,
+          height: "90%",
+          title: bbn._("Test Function Edition"),
         });
       },
-      delEnv() {
-        this.isLoading = true;
-        bbn.fn.post(appui.plugins['appui-newide'] + '/data/delete_install', {lib: this.source.lib}, d => {
-          if (d.success) {
-            this.libInstalled = false;
-            this.tests_info = null;
-            this.isLoading = false;
-            this.modified = {
-              "status": false,
-            };
-            this.$nextTick(() => {
-              this.getRef("table").updateData();
-            });
-          }
-          else {
-            appui.error(bbn._("Unable to remove Test Environment"));
-            this.isLoading = false;
-          }
-        });
-      },*/
       renderTests(row) {
         let res = "";
         if (!Object.keys(row.details).length) {

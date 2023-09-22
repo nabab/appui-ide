@@ -133,7 +133,9 @@
             <appui-newide-cls-testor v-if="!currentSelected"
                                      :source="source"
                                      :infos="infos"
+                                     :methinfos="methinfos"
                       							 :installed="installed"
+                                     :libroot="libroot"
                                      mode="write"/>
             <appui-newide-cls-testor-method v-else-if="currentSelected.mode === 'method'"
                                          :source="source.methods[currentSelected.value]"
