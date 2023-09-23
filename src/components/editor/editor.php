@@ -66,7 +66,8 @@
                     :icon-color="iconColor"
                     :draggable="true"
                     @move="moveNode"
-                    :menu="treeMenu"/>
+                    :menu="treeMenu"
+                    class="bbn-bottom-smargin"/>
         </bbn-pane>
         <bbn-pane>
           <bbn-router :autoload="true"

@@ -210,7 +210,7 @@
               let file = this.closest("appui-newide-coder").source.path; // app-ui/vendor/bbn/appui-newide/src/components/codemirror/codemirror.less
               // create language server extensions with configuration
               let lsPhp = window.lsp.languageServer({
-                serverUri: "wss:///" + window.location.hostname + ":443/lsp/php",
+                serverUri: "wss:///" + window.location.hostname + ":11001/lsp/php",
                 rootUri: "file:///home/dev-qr/",
                 documentUri: "file:///" + file,
                 languageId: 'php'
