@@ -1,6 +1,6 @@
 (() => {
   return {
-    mixins: [bbn.vue.basicComponent, bbn.vue.localStorageComponent],
+    mixins: [bbn.cp.mixins.basic, bbn.cp.mixins.localStorage],
     props: {
       storage: {
         default: true

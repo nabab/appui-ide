@@ -62,7 +62,7 @@
               ></bbn-tree> -->
               <bbn-tree :source="sourceTree"
                         :cls="treeClass"
-                        @select="selectLogFile"
+                        @nodeclick="selectLogFile"
                         ref="listFilesLog"
                         :min-expand-level="1"
                         v-if="sourceTree.length"
@@ -78,7 +78,6 @@
           <bbn-code :mode="type"
                     v-model="textContent"
                     :readonly="true"
-                    :theme="theme"
                     ref="code"
                     class="bbn-overlay"/>
         </div>

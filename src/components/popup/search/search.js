@@ -18,7 +18,7 @@
         bbn.fn.log(arguments, a ,"FOCUS");
       },
       close(){
-        var popup = bbn.vue.closest(this, "bbn-popup");
+        var popup = this.closest("bbn-popup");
         popup.close();
       },
       searchInElement(){

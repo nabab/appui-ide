@@ -8,20 +8,8 @@ $res = [
   'success' => false
 ];
 
-if ($model->hasData('lib')) {
-  try {
-    $dir = $model->dataPath("appui-ide") . "class_editor/" . $model->data['lib'] . "/";
-    if (file_exists($dir)) {
-      $res["success"] = true;
-      $res["found"] = true;
-    }
-    else {
-    	$res["success"] = true;
-      $res["found"] = false;
-    }
-  }
-  catch (Exception $e) {
-    $res["error"] = $e->getMessage();
-  }
+if ($model->hasData(['lib', 'root'])) {
+  $env = new appui\ide\Environment($model->data['root'], $model->data['lib']);
+  $res = $env->check();
 }
 return $res;

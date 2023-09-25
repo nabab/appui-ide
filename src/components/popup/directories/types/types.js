@@ -1,7 +1,7 @@
 (() => {
   let types;
   return {
-    mixins: [bbn.vue.localStorageComponent],
+    mixins: [bbn.cp.mixins.localStorage],
     props: ['source'],
     methods:{
       renderIconExts(ele){

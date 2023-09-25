@@ -5,6 +5,7 @@
     <bbn-pane :size="220">
       <div class="bbn-overlay bbn-flex-height">
         <bbn-tabs :source="tabs"
+                  :no-router="true"
                   v-model="tabSelected"
                   :fill="true"/>
         <div class="bbn-flex-fill">
@@ -12,6 +13,7 @@
                v-show="tabSelected === 0">
             <bbn-scroll>
               <bbn-list :source="methodList"
+                        ref="methodList"
                         @select="v => currentMethod = v.value || ''"
                         @unselect="currentMethod = ''">
                 <template v-pre>
@@ -78,14 +80,22 @@
                     :menu="[]"
                     :breadcrumb="false"
                     :visual="false">
-          <bbn-container url="reader"
+          <bbn-container url="doc"
                          :static="true"
-                         :title="_('Reader')">
-            <appui-ide-cls-editor v-if="!currentSelected"
+                         :title="_('Doc & Ex')">
+            <appui-ide-cls-doc v-if="!currentSelected"
                                      :source="source"
+                                     :infos="infos"
+                      							 :installed="installed"
+                                     :libroot="libroot"
                                      mode="read"/>
-            <appui-ide-cls-method v-else-if="currentSelected.mode === 'method'"
+            <appui-ide-cls-method-doc
+                                     v-else-if="currentSelected.mode === 'method'"
                                      :source="source.methods[currentSelected.value]"
+                                     :infos="infos"
+                      							 :installed="installed"
+                                     :libroot="libroot"
+                                     :lib="source.lib"
                                      mode="read"/>
             <appui-ide-cls-property v-else-if="currentSelected.mode === 'prop'"
                                        :source="source.properties[currentSelected.value]"
@@ -99,9 +109,16 @@
                          :title="_('Editor')">
             <appui-ide-cls-editor v-if="!currentSelected"
                                      :source="source"
+                       							 :infos="infos"
+                      							 :installed="installed"
+                                     :libroot="libroot"
                                      mode="write"/>
             <appui-ide-cls-method v-else-if="currentSelected.mode === 'method'"
                                      :source="source.methods[currentSelected.value]"
+                                     :infos="infos"
+                      							 :installed="installed"
+                                     :libroot="libroot"
+                                     :lib="source.lib"
                                      mode="write"/>
             <appui-ide-cls-property v-else-if="currentSelected.mode === 'prop'"
                                        :source="source.properties[currentSelected.value]"
@@ -115,9 +132,16 @@
                          :title="_('Test')">
             <appui-ide-cls-testor v-if="!currentSelected"
                                      :source="source"
+                                     :infos="infos"
+                                     :methinfos="methinfos"
+                      							 :installed="installed"
+                                     :libroot="libroot"
                                      mode="write"/>
             <appui-ide-cls-testor-method v-else-if="currentSelected.mode === 'method'"
                                             :source="source.methods[currentSelected.value]"
+                                         :infos="infos"
+                                         :installed="installed"
+                                         :libroot="libroot"
                                             :lib="source.lib"
                                             mode="write"/>
           </bbn-container>

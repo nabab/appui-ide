@@ -2,11 +2,6 @@
 
 (() => {
   return {
-    data() {
-      return {
-    		read: (this.mode == "read" ? true : false),
-	    }
-    },
 	 props: {
       mode: {
         type: String,

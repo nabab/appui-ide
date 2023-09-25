@@ -6,30 +6,114 @@
       mode: {
         type: String,
         default: "read",
-      }
+      },
+      infos: {
+        type: Object,
+        required: true
+      },
+      installed: {
+        type: Boolean,
+        required: true
+      },
+      lib: {
+        type: String,
+        required: true
+      },
+      libroot: {
+        type: String,
+        default: ""
+      },
     },
     data() {
       return {
+        viewSource: true,
+        readonly: this.installed ? false : true,
         ready: false,
-      	root: appui.plugins['appui-ide'] + '/',
-    		read: (this.mode == "read" ? true : false),
-      }
+        test_results: "",
+        addingExample: false,
+        exampleCode: "",
+        code: {
+          'original': "",
+          'current': ""
+        },
+        originalCode: "",
+        root: appui.plugins['appui-ide'] + '/',
+      };
     },
     computed: {
       visibilities() {
-        return this.closest('appui-ide-cls').visibilities
+        return this.closest('appui-ide-cls').visibilities;
       },
       types() {
-        return this.closest('appui-ide-cls').types
+        return this.closest('appui-ide-cls').types;
       },
       logContent (str) {
-        bbn.fn.log(str)
+        bbn.fn.log(str);
       },
-      formData() {
-        let method = this.closest('appui-ide-cls');
-        let data = method.source;
-        data.methods[this.source.name] = this.source;
-        return {data: data};
+      barButtons() {
+        return [
+          {
+            component:'bbn-button',
+            options:{
+              title: "Revert",
+              icon: "nf nf-mdi-restore",
+              class: "bbn-bg-blue bbn-white",
+              text: "Revert All Changes",
+              action: () => {
+                this.code.current = this.code.original;
+                this.source.code = this.code.current;
+              }
+            }
+          },
+          {
+            component:'bbn-button',
+            end: true,
+            options:{
+              title: "Edit",
+              icon: "nf nf-fa-edit",
+              class: "red",
+              text: (this.readonly) ? "Edit" : "Stop Edit",
+              action: () => {
+                this.readonly = !this.readonly;
+              }
+            }
+          },
+          {
+            component:'bbn-button',
+            end: true,
+            options:{
+              title: "Refactor",
+              icon: "nf nf-cod-issue_reopened",
+              class: "bbn-tertiary",
+              text: "Refactor",
+              action: this.refactorCode
+            }
+          },
+          {
+            component:'bbn-button',
+            end: true,
+            options:{
+              title: "Test",
+              icon: "nf nf-cod-bracket_error",
+              class: "yellow",
+              text: "Test",
+              action: this.testRun
+            }
+          },
+          {
+            component:'bbn-button',
+            end: true,
+            options:{
+              title: "Push",
+              icon: "nf nf-cod-bracket_dot",
+              class: "green",
+              text: "Save",
+              action: () => {
+                this.source.code = this.code.current;
+              }
+            }
+          }
+        ];
       }
     },
     methods: {
@@ -47,8 +131,111 @@
           appui.success("Class Successfully Updated");
         }
       },
+      addExample() {
+        if (this.exampleCode !== "") {
+          let obj = {
+            type: 'code',
+            content: this.exampleCode
+          };
+          this.source.description_parts.push(obj);
+        }
+        this.addingExample = false;
+      },
+      deleteExample(index) {
+        this.source.description_parts.splice(index, 1);
+      },
+      testRun() {
+        let cur_tests_info = this.infos[this.source.name];
+        let res = "";
+        this.test_results = res;
+        for (let test in cur_tests_info.details) {
+          if (cur_tests_info.details[test] != null) {
+            if (cur_tests_info.details[test].status == "success") {
+              res += '<p class="pres">' + test + ' ---> success  <span class="nf nf-cod-circle_small_filled bbn-green"></span>  </p>';
+            }
+            else if (cur_tests_info.details[test].status == "failure") {
+              res += '<p class="pres">' + test + ' ---> failure  <span class="nf nf-cod-circle_small_filled bbn-orange"></span>  </p>';
+            }
+            else if (cur_tests_info.details[test].status == "skipped") {
+              res += '<p class="pres">' + test + ' ---> skipped  <span class="nf nf-cod-circle_small_filled bbn-cyan"></span>  </p>';
+            }
+            else if (cur_tests_info.details[test].status == "error") {
+              res += '<p class="pres">' + test + ' ---> error  <span class="nf nf-cod-circle_small_filled bbn-red"></span>  </p>';
+            }
+          } else {
+            res += '<p class="pres">' + test + ' ---> result not found  <span class="nf nf-cod-circle_small_filled bbn-yellow"></span>  </p>';
+          }
+        }
+        this.test_results = '<br>' + res + '<br>';
+      },
+      saveClass() {
+      	this.isLoading = true;
+        bbn.fn.post(appui.plugins['appui-ide'] + '/generating', {data: this.source, lib: this.lib,
+                                                                    class: this.source.class, method: this.source.name, root: this.libroot}, d => {
+          if (d.success) {
+            this.updateClass();
+            appui.success('Class Updated successfully');
+          }
+          else {
+            appui.error("Something went wrong");
+          }
+          this.isLoading = false;
+        });
+      },
+      refactorCode() {
+        bbn.fn.post(appui.plugins['appui-ide'] + '/actions/ai-refactoring', {
+          lib: this.lib,
+          function_code: this.code.current,
+          root: this.libroot
+        }, (d)=>{
+          if (d.success) {
+            bbn.fn.log(d.data);
+            this.getPopup({
+              component: 'appui-ide-cls-method-refactor',
+              scrollable: true,
+              source: {
+                functionName: this.source.name,
+                method: d.data
+              },
+              width: 600,
+              height: "90%",
+              title: bbn._("Code Refactoring"),
+            });
+            appui.success("Done");
+          }
+          else {
+            appui.error("Error");
+          }
+        });
+      },
+      updateClass() {
+        const classEditor = this.closest('bbn-container').closest('bbn-container').getComponent();
+        classEditor.loadClass().then(() => {
+          setTimeout(() => {
+            const classComponent = classEditor.find('appui-ide-cls');
+            const method = bbn.fn.getRow(classComponent.methodList, {value: this.source.name});
+            classComponent.getRef('methodList').select(method);
+          }, 1000);
+        });
+      },
+      goBack()
+      {
+        //const classEditor = this.closest('bbn-container').getComponent();
+        const classComponent = this.closest('appui-ide-cls');
+        bbn.fn.log(classComponent);
+        if (classComponent) {
+          classComponent.currentMethod = "";
+          classComponent.currentProps = "";
+          classComponent.currentConst = "";
+          classComponent.currentCode = "";
+        }
+      }
     },
     mounted() {
+      this.test_results = "";
+      bbn.fn.log(this.source);
+      this.code.original = this.source.code;
+      this.code.current = this.source.code;
       this.$nextTick(() => this.ready = true);
     },
     watch: {
@@ -56,8 +243,19 @@
         this.ready = false;
         setTimeout(() => {
           this.ready = true;
-        }, 250)
+        }, 250);
+        this.test_results = "";
+        this.code.original = this.source.code;
+      	this.code.current = this.source.code;
+      },
+      addingExample(v) {
+        this.exampleCode = "";
+      },
+      readonly(v) {
+        this.readonly = this.installed ? v : true;
+        this.getRef("srccode").widget.setOption('readOnly', v);
+        this.getRef("srccode").widget.refresh();
       }
     }
-  }
+  };
 })();

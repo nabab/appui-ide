@@ -78,7 +78,7 @@
         }
       },
       changeExtension(idx, obj){
-        let code   = bbn.vue.find(this, 'bbn-code'),
+        let code   = this.find('bbn-code'),
             tab    = this.getRef('tabstrip').getVue(this.getRef('tabstrip').selected),
             oldExt = tab.source.extension,
             newExt = obj.key;

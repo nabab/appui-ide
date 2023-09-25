@@ -7,15 +7,31 @@
         type: Object,
         required: true
       },
+      infos: {
+      	type: Object,
+        required: true
+    	},
+      installed: {
+        type: Boolean,
+        required: true
+      },
       mode: {
         type: String,
         default: "read",
-      }
+      },
+      libroot: {
+        type: String,
+        default: ""
+      },
     },
-    data() {
-      return {
-    		read: (this.mode == "read" ? true : false),
+    computed: {
+      disabled()
+      {
+        if (this.mode === 'read') {
+          return true;
+        }
+        return false;
       }
- 	 },
-  }
+    }
+  };
 })();

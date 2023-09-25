@@ -296,7 +296,7 @@
       },//method for add block of code menu sub tab
       addSnippet(addCode){
         let tab = this.getRef('tabstrip').getVue(this.getRef('tabstrip').selected);
-        bbn.vue.find(tab, "bbn-code").addSnippet(addCode);
+        tab.find("bbn-code").addSnippet(addCode);
       },
       reloadTab(){
         let tab = this.getRef('tabstrip').getVue(this.getRef('tabstrip').selected);
@@ -319,7 +319,7 @@
       },
       //method change expension click of the menu subtab
       changeExtension(idx, obj){
-        let code   = bbn.vue.find(this, 'bbn-code'),
+        let code   = this.find('bbn-code'),
             tab    = this.getRef('tabstrip').getVue(this.getRef('tabstrip').selected),
             oldExt = tab.source.extension,
             newExt = obj.key;

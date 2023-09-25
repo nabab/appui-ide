@@ -1,9 +1,9 @@
 (() => {
   return {
     mixins: [
-      bbn.vue.basicComponent,
-      bbn.vue.inputComponent,
-      bbn.vue.eventsComponent
+      bbn.cp.mixins.basic,
+      bbn.cp.mixins.input,
+      bbn.cp.mixins.events
     ],
     props: {
       mode: {

@@ -23,8 +23,8 @@
     },
     methods:{
       closeForm(){
-        let popup = bbn.vue.closest(this, "bbn-popup"),
-            form = bbn.vue.find(this.closest('bbn-container'), 'appui-ide-popup-directories-form-types');
+        let popup = this.closest("bbn-popup"),
+            form = this.closest('bbn-container').find('appui-ide-popup-directories-form-types');
         if (this.source.type === "tabs") {
           if ( this.source.action === 'edit' ){
             this.source.listTabs[this.source.idTab]['extensions'][this.source.idExt] = this.extension;

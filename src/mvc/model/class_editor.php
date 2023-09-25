@@ -6,10 +6,26 @@ use bbn\Str;
 
 use bbn\Parsers\Php;
 
+//X::ddump($model->pluginPath('appui-ide'));
+
 $parser = new Php();
-if ($model->hasData('class')) {
-  $data = $parser->analyzeClass($model->data['class']);
-  if ($model->hasData('lib')) {
+if ($model->hasData(['class', 'lib', 'root'])) {
+  $env = new appui\ide\Environment($model->data['root'], $model->data['lib']);
+  $folder = $model->data['root'] !== 'app' ? "/" . $model->data['lib'] : '';
+  $dir = $model->dataPath("appui-ide") . "class_editor/" . $model->data['root'] . $folder;
+  //if there’s  test environment we get the class informations from there
+  if (is_dir($dir)) {
+    $cfg = [
+      'operation' => 'analyzeClass',
+      'class' => $model->data['class'],
+      'lib' => $model->data['lib'],
+      'dir' => $dir
+    ];
+    $data = $env->execute($cfg);
+  }
+  //otherwise we get it from its original location
+  else {
+    $data = $parser->analyzeClass($model->data['class']);
     $data['lib'] = $model->data['lib'];
   }
   return [
@@ -17,6 +33,5 @@ if ($model->hasData('class')) {
   ];
 }
 else {
-  $res = $model->getModel("./data/available-libraries");
-  return $res;
+  return $model->getModel("./data/available-libraries");
 }

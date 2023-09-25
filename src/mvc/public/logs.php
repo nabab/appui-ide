@@ -1,12 +1,14 @@
 <?php
 /* @var $ctrl \bbn\Mvc */
 //get content file log
-if ( isset($ctrl->post['log']) ){
-  $ctrl->data['log'] = $ctrl->post['log'];
-  $ctrl->data['clear'] = !empty($ctrl->post['clear']);
-  $ctrl->data['num_lines'] = isset($ctrl->post['num_lines']) && \bbn\Str::isInteger($ctrl->post['num_lines']) ? $ctrl->post['num_lines'] : 100;
-  $ctrl->setUrl($ctrl->pluginUrl('appui-ide').'/logs');
-  $ctrl->obj = $ctrl->getObjectModel();
+use bbn\Str;
+
+if (isset($ctrl->post['log'])) {
+  $ctrl->addData([
+    'log' => $ctrl->post['log'],
+    'clear' => !empty($ctrl->post['clear']),
+    'num_lines' => isset($ctrl->post['num_lines']) && Str::isInteger($ctrl->post['num_lines']) ? $ctrl->post['num_lines'] : 100
+  ])->action();
 }
 //for delete file
 elseif ( isset($ctrl->post['fileLog'], $ctrl->post['md5']) || isset($ctrl->post['delete_file']) ){
@@ -21,5 +23,5 @@ else {
   $ctrl->obj->bcolor = '#333';
   $ctrl->obj->fcolor = '#FFF';
   $ctrl->obj->icon = 'nf nf-fa-file_text';
-  $ctrl->setUrl($ctrl->data['root'].'logs')->combo("Log files", $ctrl->data);
+  $ctrl->setUrl($ctrl->pluginUrl('appui-ide').'/logs')->combo("Log files", $ctrl->data);
 }

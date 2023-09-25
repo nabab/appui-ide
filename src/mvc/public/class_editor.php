@@ -8,5 +8,5 @@ if (!empty($ctrl->post)) {
   $ctrl->action();
 }
 else {
-  $ctrl->combo(_("Class Editor"), true);
+  $ctrl->setUrl($ctrl->pluginUrl("appui-ide")."/class_editor")->combo(_("Class Editor"), true, 0);
 }

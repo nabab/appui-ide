@@ -104,7 +104,7 @@
 
         this.$nextTick(()=>{
           if ( editor.tempNodeofTree !== false ){
-            bbn.vue.closest(editor.tempNodeofTree, 'bbn-tree').reload();
+            editor.tempNodeofTree.closest('bbn-tree').reload();
             editor.tempNodeofTree = false;
           }
         });

@@ -7,7 +7,6 @@
 
 (() => {
   return {
-    mixins: [bbn.cp.mixins.basic, bbn.cp.mixins.localStorage],
     data() {
       return {
         types: bbn.ide || null,
@@ -26,7 +25,7 @@
                * Id of the selected path
                * @data {String} [''] currentPathId
                */
-        currentPathId: this.source?.project?.path ? this.source?.project?.path[0]?.id : '',
+        currentPathId: this.source?.project?.path ? this.source.project.path[0].id : '',
         /**
                * Enable / Disable the dropdown to select path
                * @data {Boolean} [false] isDropdownPathDisabled
@@ -71,7 +70,8 @@
           }
         ],
         copiedNode: null,
-        isCut: false
+        isCut: false,
+        ready: false
       };
     },
     computed: {
@@ -212,12 +212,14 @@
         if (this.currentTypeCode && this.currentPathType?.types) {
           return bbn.fn.getRow(this.currentPathType.types, {type: this.currentTypeCode});
         }
+
         return null;
       },
       currentTab() {
         if (this.currentTypeCode && this.typeOptions) {
           return bbn.fn.getRow(this.typeOptions, {code: this.currentTypeCode});
         }
+
         return null;
       },
       /**
@@ -230,6 +232,7 @@
         if (this.currentPath && this.typeOptions) {
           return bbn.fn.getRow(this.typeOptions, {id: this.currentPath.id_alias});
         }
+
         return null;
       },
       /**
@@ -239,9 +242,10 @@
              * @return {Object}
              */
       currentPath() {
-        if (this.currentPathId) {
+        if (this.currentPathId && this.source?.project?.path) {
           return bbn.fn.getRow(this.source.project.path, {id: this.currentPathId});
         }
+
         return null;
       },
       /**
@@ -260,9 +264,6 @@
              * @return {String}
              */
       currentRoot() {
-        if (!this.currentPath) {
-          return '';
-        }
         let st = this.currentPath.parent_code + '/' + this.currentPath.code + '/';
         if (this.currentType) {
           st += this.currentType.path;
@@ -321,7 +322,7 @@
         editor.types = this.types;
         let repositories = {};
         let selected = this.source.project.path[0];
-        //bbn.fn.log("HAAAAAAAAAAAAAAAAAAAAA", editor.types[this.currentTypeCode === 'classes' ? 'cls' : this.currentTypeCode]);
+        bbn.fn.log("HAAAAAAAAAAAAAAAAAAAAA", editor.types[this.currentTypeCode === 'classes' ? 'cls' : this.currentTypeCode]);
         for (let repository of this.source.project.path) {
           let name = repository.parent_code + '/' + repository.code;
           repositories[name] = bbn.fn.extend({}, {
@@ -342,8 +343,7 @@
             text: repository.text,
             title: repository.code,
             types: repository.alias.types,
-            tabs: editor.types[this.currentTypeCode === 'classes' ? 'cls' : this.currentTypeCode].tabs,
-
+            tabs: editor.types[this.currentTypeCode === 'classes' ? 'cls' : this.currentTypeCode].tabs
           })
           if (repository.id === this.currentPathId) {
             selected = repositories[name];
@@ -368,7 +368,7 @@
         };
         //case top menu
 
-        //bbn.fn.log("NEWIDE NODE", node);
+        bbn.fn.log("ide NODE", node);
         if ( this.currentTypeCode !== false ){
           src.type =  this.currentTypeCode;
           if (src.type !== 'mvc') {
@@ -383,8 +383,8 @@
             if( !node.isExpanded ){
               node.isExpanded = true;
             }
-            //src.parent = bbn.vue.find(node, 'bbn-tree');
-            this.nodeParent = bbn.vue.find(node, 'bbn-tree');
+            //src.parent = node.find('bbn-tree');
+            this.nodeParent = node.find('bbn-tree');
           }
           else{
             //src.parent= node.parent;
@@ -433,7 +433,7 @@
             title = bbn._('New Class');
           }
         }
-        //bbn.fn.log("NODE", node);
+        bbn.fn.log("NODE", node);
         this.openNew(title, true, node);
       },
 
@@ -541,7 +541,7 @@
         return url;
       },
       treeMenu(node) {
-        //bbn.fn.log("NODE", node);
+        bbn.fn.log("NODE", node);
         let res = [];
 
         res.push({
@@ -633,9 +633,9 @@
 
         if (this.copiedNode && node.data.folder) {
           if (node.data.numChildren > 0) {
-            this.nodeParent = bbn.vue.find(node, 'bbn-tree');
+            this.nodeParent = node.find('bbn-tree');
           } else {
-            this.nodeParent = bbn.vue.find(node.parent.$parent, 'bbn-tree');
+            this.nodeParent = node.parent.$parent.find('bbn-tree');
           }
           res.push({
             icon: 'nf nf-mdi-content_paste',
@@ -680,7 +680,7 @@
           icon: 'nf nf-fa-edit',
           text: bbn._('Rename'),
           action: () => {
-            this.nodeParent = bbn.vue.find(node.parent.$parent, 'bbn-tree');
+            this.nodeParent = node.parent.$parent.find('bbn-tree');
             this.getPopup({
               component: "appui-ide-form-rename",
               componentOptions: {
@@ -695,11 +695,11 @@
           icon: 'nf nf-fa-trash_o',
           text: bbn._('Delete'),
           action: () => {
-            this.nodeParent = bbn.vue.find(node.parent.$parent, 'bbn-tree');
+            this.nodeParent = node.parent.$parent.find('bbn-tree');
             bbn.fn.log("CHOICE", node);
             bbn.fn.log("CHOICE NODE PARENT", this.nodeParent);
             if (this.nodeParent && this.nodeParent.data.numChildren === 1) {
-              this.nodeParent = bbn.vue.find(node.$parent.$parent, 'bbn-tree');
+              this.nodeParent = node.parent.$parent.find('bbn-tree');
             }
             bbn.fn.log(node);
             this.getPopup({
@@ -713,61 +713,52 @@
         })
 
         return res;
-      },
-      async initData() {
-        if (!appui.projects.options.ide) {
-          const d = await bbn.fn.post(appui.plugins['appui-ide'] + "/data/types");
-          if (!d?.data?.types) {
-            throw new Error(bbn._("Impossible to retrieve the types"));
-          }
-          this.typeOptions = d.data.types;
-          appui.projects.options.ide = {
-            types: d.data.types
-          };
-        }
-        if (!this.types) {
-          const d = await bbn.fn.post(this.root + 'data/path/types');
-          if (!d.data.types) {
-            throw new Error(bbn._("Impossible to retrieve the second? types"));
-          }
-          this.types = d.data.types;
-          bbn.ide = d.data.types;
-        }
-
-        this.ready = true;
-        this.$forceUpdate();
-        this.getRecentFiles();
       }
     },
     /**
-     * @event created
-     * @fires fn.post
-     */
+           * @event created
+           * @fires fn.post
+           */
     created() {
-      if (!bbn.doc) {
-        bbn.doc = {};
+      if (!appui.projects.options.ide) {
+        bbn.fn.post(appui.plugins['appui-ide'] + "/data/types", d => {
+          this.typeOptions = d.types;
+          appui.projects.options.ide = {
+            types: d.types
+          };
+          this.typeOptions = appui.projects.options.ide.types;
+          this.ready = true;
+        });
+      }
+      else {
+        this.typeOptions = appui.projects.options.ide.types;
+        this.ready = true;
       }
     },
     mounted() {
-      this.initData();
+      if (!bbn.doc) {
+        bbn.doc = {};
+      }
+      this.getRecentFiles();
+      this.container = this.closest('bbn-container');
+      if (!this.types) {
+        bbn.fn.post(this.root + 'data/path/types', {}, (d) => {
+          this.types = d.types;
+          bbn.ide = d.types;
+        });
+      }
     },
     watch: {
       currentTypeCode(v) {
         if (v && this.currentPathType && this.currentPathType.types) {
           this.$nextTick(() => {
-            const tree = this.getRef('tree');
-            if (tree) {
-              tree.updateData();
-            }
+            this.getRef('tree').updateData();
           });
         }
       },
       currentPathId(v) {
         this.$nextTick(() => {
-          const tree = this.getRef('tree');
-          if (tree) {
-            tree.updateData();
-          }
+          this.getRef('tree').updateData();
         });
       }
     }

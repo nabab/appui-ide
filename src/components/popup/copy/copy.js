@@ -52,12 +52,12 @@
           appui.success(bbn._("Copy succesfully!"));
         }
         this.$nextTick(() => {
-          bbn.vue.closest(this, ".bbn-popup").close();
+          this.closest(".bbn-popup").close();
         });
       },
       failureActive(){
         appui.error(bbn._("Error!"));
-        bbn.vue.closest(this, ".bbn-popup").close();
+        this.closest(".bbn-popup").close();
       },
       selectDir(){
         this.getPopup().open({

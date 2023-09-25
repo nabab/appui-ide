@@ -75,14 +75,15 @@
         }),
         lignes: lignes[2],
         textContent: '',
-        type: "ruby",
+        type: "js",
         showText: false,
         interval: 5000,
         isPolling: false,
         updateTree: false,
         themes:themes,
         theme: 'pastel-on-dark',
-        sourceTree: []
+        sourceTree: [],
+        root: appui.plugins['appui-ide'] + '/',
       };
     },
     methods:{
@@ -91,7 +92,7 @@
         return parent.isRoot? 'bbn-xl' : '';
       },
       getSourceTreeLogs(){
-        this.post(this.source.root + 'tree_logs',{}, d => {
+        this.post(this.root + 'tree_logs',{}, d => {
           if ( d.data && d.data[0].items.length ){
             bbn.fn.each(d.data[0].items, (v, i)=>{
               if ( v.size !== undefined ){
@@ -109,7 +110,7 @@
       },
       onChange(clear, e){
         if ( this.fileLog.length && this.lignes ){
-          this.post(this.source.root + 'logs/' + this.fileLog, {
+          this.post(this.root + 'logs/' + this.fileLog, {
               log: this.fileLog,
               clear: clear ? 1 : "0",
               num_lines: this.lignes,
@@ -127,14 +128,14 @@
       },
       deleteFile(){
         this.confirm(bbn._('Are you sure you want to delete the file:') + ' ' + this.fileLog , () => {
-          this.post(this.source.root + 'logs', {
+          this.post(this.root + 'logs', {
             delete_file: this.fileLog,
           },
           d => {
             if ( d.success ){
               let path = bbn.env.path;
-              if ( path.indexOf(this.source.root + 'logs/') === 0 ){
-                let tmp = path.substring((this.source.root + 'logs/').length);
+              if ( path.indexOf(this.root + 'logs/') === 0 ){
+                let tmp = path.substring((this.root + 'logs/').length);
                 if ( tmp ){
                   let idx = bbn.fn.search(this.files, {text: tmp});
                   if ( idx > -1 ){
@@ -166,7 +167,7 @@
             if ( !this.isPolling ){
               this.isPolling = true;
 
-              this.post(this.source.root + 'logs', {
+              this.post(this.root + 'logs', {
                 fileLog: this.fileLog,
                 md5: this.md5Current,
                 num_lines: this.lignes
@@ -184,7 +185,7 @@
                   });
                 }
               });
-              /*this.post(this.source.root + 'tree_logs',{}, d => {
+              /*this.post(this.root + 'tree_logs',{}, d => {
                 if ( d.data && d.data[0].items.length ){
                   d.data[0].items = bbn.fn.order(d.data[0].items, 'mtime', 'desc')
                   let newData = d.data[0].items.map((item)=>{
@@ -229,15 +230,15 @@
     },
     /*created(){
       let path = bbn.env.path;
-      if ( path.indexOf(this.source.root + 'logs') === 0 ){
-        let tmp = path.substring((this.source.root + 'logs').length+1);
+      if ( path.indexOf(this.root + 'logs') === 0 ){
+        let tmp = path.substring((this.root + 'logs').length+1);
         bbn.fn.log("sswwssw", tmp);
         if ( tmp ){
           let idx = bbn.fn.search(this.files, {text: tmp});
           if ( idx > -1 ){
             this.fileLog = this.files[idx].value;
             this.onChange();
-            //this.closest("bbn-router").route(this.source.root + 'logs/' + val.toString());
+            //this.closest("bbn-router").route(this.root + 'logs/' + val.toString());
           }
         }
       }
@@ -274,7 +275,7 @@
     },
     watch: {
       fileLog: function(val, old){
-        this.closest("bbn-router").route(this.source.root + 'logs/' + val.toString());
+        this.closest("bbn-router").route(this.root + 'logs/' + val.toString());
 
         if ( val && !this.showText ){
           this.showText = true;

@@ -36,7 +36,7 @@
       imageExt = ['jpeg', 'png', 'jpg', 'tiff', 'gif'];
 
   return {
-    mixins: [bbn.vue.basicComponent, bbn.vue.localStorageComponent],
+    mixins: [bbn.cp.mixins.basic, bbn.cp.mixins.localStorage],
     props: {
       mode: {
         type: String,

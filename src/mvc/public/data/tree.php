@@ -4,4 +4,4 @@ use bbn\X;
 use bbn\Str;
 /** @var $ctrl \bbn\Mvc\Controller */
 
-$ctrl->action();
+$ctrl->cachedAction(24*3600);

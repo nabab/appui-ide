@@ -48,7 +48,7 @@
         props: ['source'],
         data(){
           return {
-            i18n: bbn.vue.closest(this, 'appui-ide-i18n')
+            i18n: this.closest('appui-ide-i18n')
           }
         },
         computed: {
@@ -74,7 +74,7 @@
           link_ide(){
             /** takes only the part of file name relative to the extension, +1 remove the / */
             let extension = this.source.file.slice(this.source.file.lastIndexOf('/') + 1, this.source.file.length),
-                tabnavActive = bbn.vue.closest(this, 'bbn-router');
+                tabnavActive = this.closest('bbn-router');
             if ( tabnavActive && extension ){
               tabnavActive.activate(extension);
             }

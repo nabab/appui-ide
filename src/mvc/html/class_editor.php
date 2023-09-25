@@ -1,13 +1,15 @@
 <div class="bbn-overlay bbn-flex-height">
   <bbn-toolbar class="bbn-hpadded">
-    <div>
+    <bbn-menu :source="menu"
+              ref="menu"/>
+    <!--div>
       <bbn-button :notext="true"
                   text="_('Select Class')"
                   icon="nf nf-fa-folder"/>
     </div>
     <div>
     </div>
-    <div>
+    <div v-if="libInstalled">
       <bbn-context :source="addActions">
         <bbn-button :notext="true"
                     text="_('Add ...')"
@@ -24,24 +26,36 @@
                     v-model="currentLibrary" />
     </div>
     <div v-if="currentLibrary">
-      <bbn-dropdown :source="root + 'data/classes/' + currentLibrary"
+      <bbn-dropdown :source="root + 'data/classes/' + libRoot + '/' + currentLibrary"
                     :storage="true"
+                    ref="classesList"
                     storage-full-name="appui-ide-class-editor-dropdown-classe"
                     source-value="class"
                     v-model="currentClass"
+                    v-if="!libraryChanging"
                     source-text="class"/>
 
-    </div>
+    </div-->
   </bbn-toolbar>
   <div class="bbn-flex-fill">
     <bbn-loader v-if="isLoading"/>
     <appui-ide-cls v-else-if="currentClass && data"
+                      :infos="tests_info"
+                      :methinfos="methods_info"
+                      :installed="libInstalled"
+                      :libroot="libRoot"
                       :source="data"/>
     <div v-else
          class="bbn-overlay bbn-middle">
       <div>
         <h2>
           <?= _("Pick a class!") ?>
+        </h2>
+        <h2>
+          <?= _("or") ?>
+        </h2>
+        <h2>
+          <?= _("Verify if test environment is installed!") ?>
         </h2>
       </div>
     </div>

@@ -9,7 +9,7 @@ if (defined('BBN_BASEURL') && !empty($ctrl->arguments)) {
   $ctrl->addData([
     'url' => implode('/', $ctrl->arguments),
     'routes' => $ctrl->getRoutes(),
-    'root' => 'ide/',
+    'root' => $root,
     'baseURL' => BBN_BASEURL
   ]);
   if (substr(BBN_BASEURL, -7) === '/_end_/') {

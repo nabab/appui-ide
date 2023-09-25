@@ -9,8 +9,18 @@ use bbn\Str;
 use bbn\Parsers\Generator;
 /** @var $model \bbn\Mvc\Model*/
 
-if ($model->hasData("data")) {
-	$x = new Generator($model->data["data"]);
-  $res = $x->generateClass();
-  return ['data' => $res, 'success' => true];
+$resp = [
+  'success' => false,
+];
+
+if ($model->hasData(['data', 'lib', 'class', 'method', 'root']))
+{
+  $env = new appui\ide\Environment($model->data['root'], $model->data['lib']);
+  $resp = $env->modifyLibraryClass(
+    $model->data['class'],
+    $model->data['data'],
+    $model->data['method']
+  );
 }
+
+return $resp;

@@ -7,107 +7,31 @@
         type: Object,
         required: true
       },
+      infos: {
+        type: Object,
+        required: true
+      },
+      methinfos: {
+      	type: Object,
+        required: true
+    	},
+      installed: {
+        type: Boolean,
+        required: true
+      },
       mode: {
         type: String,
         default: "read",
+      },
+      libroot: {
+        type: String,
+        default: ""
       }
     },
     data() {
       return {
-        isLoading: false,
-        libInstalled: false,
-        tests_info: [],
-      }
-    },
-    methods: {
-      alertResult(resp) {
-        if (resp.success) {
-          this.libInstalled = true;
-          appui.success(bbn._("Test Environment created"));
-        }
-        else {
-          this.libInstalled = false;
-          appui.error(bbn._("Something went wrong: " + resp.error));
-        }
-      },
-      makeEnv() {
-        this.isLoading = true;
-        bbn.fn.post(appui.plugins['appui-ide'] + '/data/lib_install', {class: this.source.name, lib: this.source.lib}, d => {
-          this.alertResult(d);
-          this.isLoading = false;
-        });
-      },
-      delEnv() {
-        this.isLoading = true;
-        bbn.fn.post(appui.plugins['appui-ide'] + '/data/delete_install', {lib: this.source.lib}, d => {
-          if (d.success) {
-            this.libInstalled = false;
-            appui.success(bbn._("Test Environment removed"));
-          }
-          else {
-            appui.error(bbn._("Unable to remove Test Environment"));
-          }
-          this.isLoading = false;
-        });
-      },
-      renderTests(row) {
-        let res = "";
-        if (!Object.keys(row.last_results).length) {
-          return "N/A";
-        }
-        for (let test in row.last_results) {
-          if (row.last_results[test] != null) {
-            if (row.last_results[test].status == "success") {
-              res += '<span class="nf nf-cod-circle_small_filled bbn-green"></span>  ';
-            }
-            else if (row.last_results[test].status == "failure") {
-              res += '<span class="nf nf-cod-circle_small_filled bbn-orange"></span>  ';
-            }
-            else if (row.last_results[test].status == "skipped") {
-              res += '<span class="nf nf-cod-circle_small_filled bbn-cyan"></span>  ';
-            }
-            else if (row.last_results[test].status == "error") {
-              res += '<span class="nf nf-cod-circle_small_filled bbn-red"></span>  ';
-            }
-          } else {
-            res += '<span class="nf nf-cod-circle_small_filled bbn-yellow"></span>  ';
-          }
-        }
-        return res;
-      },
-    },
-    mounted() {
-      this.isLoading = true;
-      bbn.fn.post(appui.plugins['appui-ide'] + '/data/check_install', {lib: this.source.lib}, d => {
-        if (d.success && d.found) {
-          this.libInstalled = true;
-        }
-        else if (d.success && !d.found) {
-          this.libInstalled = false;
-        }
-        //this.isLoading = false;
-      });
-      bbn.fn.post(appui.plugins['appui-ide'] + '/data/available-tests', {class: this.source.name, lib: this.source.lib}, d => {
-        if (d.success) {
-          this.tests_info = d.data;
-        }
-        else {
-          for (let method in d.data) {
-            let tmp = {
-              "method": d.data[method].name,
-              "last_results": [],
-              "test_methods": [],
-              "available_tests": "N/A"
-            };
-            this.tests_info.push(tmp);
-          }
-        }
-        this.isLoading = false;
-        this.$nextTick(() => {
-          this.getRef("table").updateData();
-        });
-        //bbn.fn.log("datas", this.tests_info);
-      });
+        isLoading: false
+      };
     },
     computed: {
       methodList() {
@@ -122,27 +46,104 @@
         });
         return res;
       },
-      getInfo() {
-        let res = [];
-        bbn.fn.post(appui.plugins['appui-ide'] + '/data/available-tests', {class: this.source.name, lib: this.source.lib}, d => {
-          if (d.success) {
-            res = d.data;
-          }
-          else {
-            for (let method in d.data) {
-              let tmp = {
-                "method": method.name,
-                "last_results": [],
-                "test_methods": [],
-                "available_tests": "N/A"
-              };
-              res.push(tmp);
-            }
-          }
+      tableTestSource() {
+        if (!this.infos) {
+          return [];
+        }
+        return Object.values(this.infos);
+      },
+      hasMeth()
+      {
+        if (Object.keys(this.methinfos).length === 0) {
+          return false;
+        }
+        return true;
+      }
+    },
+    methods: {
+      editTestMethods()
+      {
+        this.getPopup({
+          component: 'appui-ide-cls-testor-edit',
+          scrollable: true,
+          source: {
+            lib: this.source.lib,
+            root: this.libroot,
+            class: this.source.name,
+            methods: this.methinfos
+          },
+          width: 600,
+          height: "90%",
+          title: bbn._("Test Function Edition"),
         });
-        bbn.fn.log(res);
+      },
+      renderTests(row) {
+        let res = "";
+        if (!Object.keys(row.details).length) {
+          return "N/A";
+        }
+        for (let test in row.details) {
+          if (row.details[test] != null) {
+            let title = '';
+            let color = 'yellow';
+            if (row.details[test].status == "success") {
+              color = 'green';
+            }
+            else if (row.details[test].status == "failure") {
+              color = 'orange';
+            }
+            else if (row.details[test].status == "skipped") {
+              color = 'cyan';
+            }
+            else if (row.details[test].status == "error") {
+              color = 'red';
+            }
+            if (row.details[test].error) {
+              title = row.details[test].error;
+            }
+            res += '<span class="nf nf-cod-circle_small_filled bbn-' + color + (
+            title ? '" title="' + bbn.fn.quotes2html(title) : ""
+            ) + '"></span>  ';
+          }
+        }
         return res;
       },
     },
+    /*mounted() {
+      this.isLoading = true;
+      bbn.fn.post(appui.plugins['appui-ide'] + '/data/check_install', {lib: this.source.lib}, d => {
+        if (d.success && d.found) {
+          this.libInstalled = true;
+          bbn.fn.post(appui.plugins['appui-ide'] + '/data/available-tests', {class: this.source.name, lib: this.source.lib}, d => {
+            if (d.success) {
+              this.tests_info = d.data;
+              if ('modified' in d) {
+                this.modified = d.modified;
+                bbn.fn.log(this.modified);
+              }
+            }
+            else {
+              this.tests_info = [];
+              for (let method in d.data) {
+                let tmp = {
+                  "method": d.data[method].name,
+                  "details": [],
+                  "available_tests": "N/A"
+                };
+                this.tests_info.push(tmp);
+              }
+            }
+            this.isLoading = false;
+            this.$nextTick(() => {
+              this.getRef("table").updateData();
+            });
+          });
+        }
+        else if (d.success && !d.found) {
+          this.libInstalled = false;
+        	this.isLoading = false;
+        }
+      });
+    }*/
   }
 })();

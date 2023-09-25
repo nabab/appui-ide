@@ -16,13 +16,10 @@
         return null;
       },
       repo() {
-        if (this.editor) {
-          return bbn.fn.getRow(this.editorCfg.project.path, {'code': this.source.repository_content.code});
-        }
-        return null;
+        return this.editorCfg ? bbn.fn.getRow(this.editorCfg.project.path, {'code': this.source.repository_content.code}) : null;
       },
       root() {
-        return this.editor?.root;
+        return this.editor?.root || '';
       }
     },
     methods: {
@@ -106,7 +103,7 @@
             if ( found ){
               bbn.fn.log("FOUND HERE", found);
               bbn.version++;
-              bbn.vue.unloadComponent(found);
+              bbn.cp.unloadComponent(found);
               appui.info(bbn._("The component has been deleted") + '<br>' + bbn._("Loading a page with this component will redefine it."));
             } else {
               appui.error(bbn._("Impossible to retrieve the name of the component"));
@@ -312,11 +309,8 @@
       }
     },
     mounted() {
-      this.$nextTick(() => {
-        bbn.fn.log("RUTER EDITOR", this.closest('appui-ide-editor'));
-        this.editor = this.closest('appui-ide-editor');
-        this.initRouterSource();
-      })
+      this.editor = this.closest('appui-ide-editor');
+      this.initRouterSource();
     }
   };
 })();

@@ -345,7 +345,7 @@
 
       },
       success(){
-        bbn.vue.find(this.closest('bbn-container'), 'appui-ide-popup-directories-types').refreshListTypes();
+        this.closest('bbn-container').find('appui-ide-popup-directories-types').refreshListTypes();
         appui.success(bbn._("success"));
       },
       failure(){
@@ -387,7 +387,7 @@
     },
     watch: {
       show(val){
-        let originalData =  bbn.vue.find(this, 'bbn-form').originalData;
+        let originalData =  this.find('bbn-form').originalData;
         if( val === 'tabs' ){
           this.source.row.tabs = originalData.tabs;
           this.source.row.extensions = JSON.stringify([]);

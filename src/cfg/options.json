@@ -4038,7 +4038,7 @@
             {
               "pos": 2,
               "url": "php",
-              "icon": "icon-php",
+              "icon": "nf nf-md-language_php",
               "path": "public\/",
               "title": "Controller",
               "bcolor": "#5c9fd6",
@@ -4055,7 +4055,7 @@
             {
               "pos": 3,
               "url": "private",
-              "icon": "icon-php-alt",
+              "icon": "nf nf-md-language_php",
               "path": "private\/",
               "title": "Private",
               "bcolor": "#cccccc",
@@ -4073,7 +4073,7 @@
             {
               "pos": 4,
               "url": "model",
-              "icon": "icon-database",
+              "icon": "nf nf-md-database",
               "path": "model\/",
               "title": "Model",
               "bcolor": "#ee05cf",
@@ -4089,7 +4089,7 @@
             {
               "pos": 5,
               "url": "html",
-              "icon": "icon-html",
+              "icon": "nf nf-md-code_tags",
               "path": "html\/",
               "title": "View",
               "bcolor": "#58be1d",
@@ -4110,7 +4110,7 @@
             {
               "pos": 6,
               "url": "js",
-              "icon": "icon-javascript-alt",
+              "icon": "nf nf-md-language_javascript",
               "path": "js\/",
               "title": "JavaScript",
               "bcolor": "#f40505",
@@ -4131,7 +4131,7 @@
             {
               "pos": 7,
               "url": "css",
-              "icon": "icon-css",
+              "icon": "nf nf-seti-less",
               "path": "css\/",
               "title": "CSS",
               "bcolor": "#ff9900",
@@ -4164,7 +4164,7 @@
             {
               "pos": 1,
               "url": "private",
-              "icon": "icon-php-alt",
+              "icon": "nf nf-md-language_php",
               "path": "private\/",
               "title": "Private",
               "bcolor": "#cccccc",
@@ -4182,7 +4182,7 @@
             {
               "pos": 2,
               "url": "model",
-              "icon": "icon-database",
+              "icon": "nf nf-md-database",
               "path": "model\/",
               "title": "Model",
               "bcolor": "#ee05cf",
@@ -4198,7 +4198,7 @@
             {
               "pos": 3,
               "url": "html",
-              "icon": "icon-html",
+              "icon": "nf nf-md-code_tags",
               "path": "html\/",
               "title": "View",
               "bcolor": "#58be1d",
@@ -4219,7 +4219,7 @@
             {
               "pos": 4,
               "url": "js",
-              "icon": "icon-javascript-alt",
+              "icon": "nf nf-md-language_javascript",
               "path": "js\/",
               "title": "JavaScript",
               "bcolor": "#f40505",
@@ -4240,7 +4240,7 @@
             {
               "pos": 5,
               "url": "css",
-              "icon": "icon-css",
+              "icon": "nf nf-seti-less",
               "path": "css\/",
               "title": "CSS",
               "bcolor": "#ff9900",

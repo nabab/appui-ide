@@ -1,10 +1,12 @@
 <?php
 
 use bbn\Str;
+use bbn\File\System;
 
 /** @var $model \bbn\Mvc\Model */
 /** @var array */
-$log_files = array_filter($model->inc->fs->getFiles($model->tmpPath().'logs'), function($a){
+$fs = new System();
+$log_files = array_filter($fs->getFiles($model->dataPath().'logs'), function($a){
   return substr($a, -4) !== '.old';
 });
 
@@ -20,8 +22,8 @@ ksort($res);
 //case delete file  in folder
 if( !empty($model->data['delete_file']) ){
   $path = $model->tmpPath().'logs/'.$model->data['delete_file'];
-  if ( $model->inc->fs->isFile($path) ){
-    if ( !empty($model->inc->fs->delete($path)) ){
+  if ( $fs->isFile($path) ){
+    if ( !empty($fs->delete($path)) ){
       return ['success' => true];
     }
   }
