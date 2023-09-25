@@ -236,7 +236,7 @@
             // create language server extensions for less
             if (window.lsp) {
               let file = this.closest("appui-ide-coder").source.path; // app-ui/vendor/bbn/appui-ide/src/components/codemirror/codemirror.less
-              bbn.fn.log("FILE", "file:///" + file);
+              //bbn.fn.log("FILE", "file:///" + file);
               let lsCss = window.lsp.languageServer({
                 serverUri: "wss:///" + window.location.hostname + ":443/lsp/less",
                 rootUri: "file:///home/dev-qr/",
@@ -381,17 +381,17 @@
         }
       },
       getJavascriptCompletion(context, node) {
-        bbn.fn.log("node", node);
+        //bbn.fn.log("node", node);
         let res = [];
         let first = this.getFirstNode(node, context);
-        bbn.fn.log("FIRST", first);
+        //bbn.fn.log("FIRST", first);
         // if the node-chain start with "this" we autocomplete this. or this. + nested key
         if (first && first.startsWith('this')) {
           let vueObject = new Vue(this.getVueObject());
           // autocomplete for this.
           if (first === "this") {
             for (let key in vueObject) {
-              bbn.fn.log(key);
+              //bbn.fn.log(key);
               let type = "variable";
               try {
                 if (typeof vueObject[key] === 'function') {
@@ -427,7 +427,7 @@
         } else if (first && first.startsWith('bbn')) {
           try {
             let bbnObject = eval(first);
-            bbn.fn.log("FIRST", first);
+            //bbn.fn.log("FIRST", first);
             if (bbn.fn.isObject(bbnObject)) {
               for (let key in bbnObject) {
                 let final = {};
@@ -536,7 +536,7 @@
           return labelA.localeCompare(labelB);
         }
 
-        bbn.fn.log("RES", res.sort(customSort));
+        //bbn.fn.log("RES", res.sort(customSort));
 
         return res;
       },
@@ -548,7 +548,7 @@
           inner.name == "LineComment" || inner.name == "BlockComment")
           return null;
         let isWord = inner.to - inner.from < 20 && validFor.test(context.state.sliceDoc(inner.from, inner.to));
-        console.log("CODEMIRROR6", !isWord && !context.explicit);
+        //bbn.fn.log("CODEMIRROR6", !isWord && !context.explicit);
         if (!isWord && !context.explicit)
           if (inner.name !== '.')
             return null;
