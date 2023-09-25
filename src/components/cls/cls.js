@@ -84,7 +84,7 @@
                 icon: 'nf nf-fa-plus',
                 action: () => {
                   this.getPopup({
-                    component: 'appui-newide-cls-method-new',
+                    component: 'appui-ide-cls-method-new',
                     source: {
                       lib: this.source.lib,
                       root: this.libroot,
@@ -112,7 +112,7 @@
                 icon: 'nf nf-fa-plus',
                 action: () => {
                   this.getPopup({
-                    component: 'appui-newide-cls-property-new',
+                    component: 'appui-ide-cls-property-new',
                     source: {
                       lib: this.source.lib,
                       root: this.libroot,
@@ -140,7 +140,7 @@
                 icon: 'nf nf-fa-plus',
                 action: () => {
                   this.getPopup({
-                    component: 'appui-newide-cls-constant-new',
+                    component: 'appui-ide-cls-constant-new',
                     source: {
                       lib: this.source.lib,
                       root: this.libroot,
