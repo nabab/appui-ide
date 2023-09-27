@@ -116,6 +116,9 @@
               appui.error(d.error);
             }
           });
+      },
+      getPopup() {
+        return this.closest('bbn-container').getPopup(...arguments);
       }
     },
     mounted() {

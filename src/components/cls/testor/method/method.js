@@ -267,6 +267,9 @@
           classComponent.currentConst = "";
           classComponent.currentCode = "";
         }
+      },
+      getPopup() {
+        return this.closest('bbn-container').getPopup(...arguments);
       }
     },
     mounted() {
@@ -297,10 +300,6 @@
         this.test_results = "";
         this.readonly = true;
       },
-      readonly(v) {
-        this.getRef("testcode").widget.setOption('readOnly', v);
-        this.getRef("testcode").widget.refresh();
-      }
     }
   }
 })();
