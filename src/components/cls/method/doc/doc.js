@@ -3,6 +3,10 @@
 (() => {
   return {
     props: {
+      source: {
+        type: Object,
+        required: true
+      },
       mode: {
         type: String,
         default: "read",
@@ -42,11 +46,11 @@
       types() {
         return this.closest('appui-ide-cls').types;
       },
+    },
+    methods: {
       logContent (str) {
         bbn.fn.log(str);
       },
-    },
-    methods: {
       renderArgName(row) {
         return '<span class="bbn-mono">$' + row.name + '</span>';
       },

@@ -3,6 +3,10 @@
 (() => {
   return {
     props: {
+      source: {
+        type: Object,
+        required: true
+      },
       mode: {
         type: String,
         default: "read",
@@ -46,9 +50,6 @@
       },
       types() {
         return this.closest('appui-ide-cls').types;
-      },
-      logContent (str) {
-        bbn.fn.log(str);
       },
       barButtons() {
         return [
@@ -117,6 +118,9 @@
       }
     },
     methods: {
+      logContent (str) {
+        bbn.fn.log(str);
+      },
       renderArgName(row) {
         return '<span class="bbn-mono">$' + row.name + '</span>';
       },
