@@ -13,11 +13,15 @@ $res = [
 
 if ($model->hasData(['lib', 'root', 'class', 'function', 'code', 'libfunction'])) {
   $env = new appui\ide\Environment($model->data['root'], $model->data['lib']);
-  $res = $env->modifyTestClass(
+  $data = [
+    'function' => $model->data['function'],
+    'libfunction' => $model->data['libfunction'],
+    'code' => $model->data['code'],
+  ];
+  $res = $env->modifyClassMethod(
     $model->data['class'],
-    $model->data['function'],
-    $model->data['code'],
-    $model->data['libfunction']
+    $data,
+    'testclass'
   );
 }
 

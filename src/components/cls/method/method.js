@@ -194,7 +194,7 @@
         }, (d)=>{
           if (d.success) {
             bbn.fn.log(d.data);
-            this.getPopup({
+            this.closest('bbn-container').getPopup({
               component: 'appui-ide-cls-method-refactor',
               scrollable: true,
               source: {

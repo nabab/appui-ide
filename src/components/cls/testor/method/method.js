@@ -230,7 +230,32 @@
         return "";
       },
       makeSuggestion() {
-        bbn.fn.post(appui.plugins['appui-ide'] + '/actions/suggest-test', {
+        let meths = [];
+        let info = this.infos[this.source.name].details;
+        for (let test in this.testFunctionsList) {
+          let t = this.testFunctionsList[test];
+          let tmp = {
+            functionName: t,
+            functionString: info[t].code
+          };
+          meths.push(tmp);
+        }
+        this.closest('bbn-container').getPopup({
+          component: 'appui-ide-cls-testor-method-suggest',
+          scrollable: true,
+          source: {
+            lib: this.lib,
+            libfunction: this.source.name,
+            function_code: this.source.code,
+            root: this.libroot,
+            class: this.source.class,
+            methods: meths
+          },
+          width: 600,
+          height: "90%",
+          title: bbn._("Tests Editor"),
+        });
+        /*bbn.fn.post(appui.plugins['appui-newide'] + '/actions/suggest-test', {
           lib: this.lib,
           function_code: this.source.code,
           root: this.libroot
@@ -238,10 +263,11 @@
           if (d.success) {
             bbn.fn.log(d.data);
             this.getPopup({
-              component: 'appui-ide-cls-testor-method-suggest',
+              component: 'appui-newide-cls-testor-method-suggest',
               scrollable: true,
               source: {
                 lib: this.lib,
+                function_code: this.source.code,
                 root: this.libroot,
                 class: this.source.class,
                 methods: d.data
@@ -255,7 +281,7 @@
           else {
             appui.error("Error");
           }
-        });
+        });*/
       },
       goBack()
       {

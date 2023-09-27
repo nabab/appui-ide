@@ -63,7 +63,7 @@
     methods: {
       editTestMethods()
       {
-        this.getPopup({
+        this.closest('bbn-container').getPopup({
           component: 'appui-ide-cls-testor-edit',
           scrollable: true,
           source: {
