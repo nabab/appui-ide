@@ -41,6 +41,15 @@
                     mode="purephp"
                     :readonly="true"
                     style="max-width: 1000px;"/>
+          <h4>
+            <?= _("Click the button bellow to all tests and add suggestion") ?>
+          </h4>
+          <bbn-button title="view"
+                      :text="_('View all Tests')"
+                      icon="nf nf-mdi-code_braces"
+                      class="bbn-tertiary"
+                      :disabled="!installed"
+                      @click.stop="makeSuggestion"></bbn-button>
           <h4>Test Code</h4>
           <bbn-toolbar class="bbn-radius"
                        style="max-width: 1000px;"

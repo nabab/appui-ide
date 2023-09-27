@@ -25,7 +25,8 @@
                 root: this.source.root,
                 class: this.source.class,
                 function: meth.name,
-                code: meth.code
+                code: meth.code,
+                button: true,
               },
             }
           };

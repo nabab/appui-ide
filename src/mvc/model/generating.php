@@ -16,10 +16,13 @@ $resp = [
 if ($model->hasData(['data', 'lib', 'class', 'method', 'root']))
 {
   $env = new appui\ide\Environment($model->data['root'], $model->data['lib']);
-  $resp = $env->modifyLibraryClass(
+  $data = [
+    'function' => $model->data['method'],
+    'raw' => $model->data['data'],
+  ];
+  $resp = $env->modifyClassMethod(
     $model->data['class'],
-    $model->data['data'],
-    $model->data['method']
+    $data
   );
 }
 

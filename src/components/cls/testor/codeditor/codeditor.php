@@ -8,17 +8,17 @@
               :fill="false"
               :readonly="false"
               mode="purephp"/>
-    <p v-if="this.code.current !== this.source.code" class="bbn-red">
+    <p v-if="code.current !== source.code" class="bbn-red">
       Press the Save button (changes not saved yet ......)
     </p>
-    <br>
-    <div class="bbn-c">
+    <br v-if="source.button">
+    <div class="bbn-c" v-if="source.button">
       <bbn-button title="Modify"
                   text="Modify"
                   class="bbn-bg-green bbn-white"
                   :icon="'nf nf-fa-check_circle'"
                   @click.stop="confirm"></bbn-button>
     </div>
-    <br>
+    <br v-if="source.button">
   </div>
 </div>

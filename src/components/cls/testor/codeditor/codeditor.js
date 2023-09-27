@@ -50,6 +50,7 @@
                 bbn.fn.log(this.code.current !== this.source.code);
         				bbn.fn.log(this.source.code);
                 this.source.code = this.code.current;
+                this.source.changed = true;
                 this.$forceUpdate();
                 bbn.fn.log(this.source.code);
               }
@@ -68,7 +69,7 @@
           if (d.success) {
             bbn.fn.log(d.data);
             this.getPopup({
-              component: 'appui-ide-cls-method-refactor',
+              component: 'appui-newide-cls-method-refactor',
               scrollable: true,
               source: {
                 functionName: this.source.name,
@@ -89,7 +90,7 @@
         const classEditor = this.closest('bbn-container').closest('bbn-container').getComponent();
         classEditor.loadClass().then(() => {
           setTimeout(() => {
-            const classComponent = classEditor.find('appui-ide-cls');
+            const classComponent = classEditor.find('appui-newide-cls');
             const method = bbn.fn.getRow(classComponent.methodList, {value: this.formData.name});
             classComponent.getRef('methodList').select(method);
           }, 1000);
