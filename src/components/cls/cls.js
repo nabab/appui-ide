@@ -3,6 +3,10 @@
 (() => {
   return {
     props: {
+      source: {
+        type: Object,
+        required: true
+      },
       baseUrl: {
         type: String,
         default: ""
@@ -189,6 +193,7 @@
         return null;
       },
       methodList() {
+        bbn.fn.log("SRC CLS", this.source);
         let res = [];
         bbn.fn.iterate(this.source.methods, (a, n) => {
           res.push({
@@ -242,6 +247,9 @@
       addMethod() {
         
       }
+    },
+    mounted() {
+      bbn.fn.log("SRC CLS", this.source);
     },
     watch: {
       currentMethod(v) {
