@@ -16,7 +16,7 @@
                         ref="methodList"
                         @select="v => currentMethod = v.value || ''"
                         @unselect="currentMethod = ''">
-                <template v-pre>
+                <div v-pre>
                   <div class="bbn-w-100 bbn-hspaddding bbn-vxspadding"
                        :title="source.summary">
                     <i :class="{
@@ -27,7 +27,7 @@
                     <span class="bbn-left-smargin bbn-mono"
                           v-text="source.text"/>
                   </div>
-                </template>
+                </div>
               </bbn-list>
             </bbn-scroll>
           </div>
@@ -36,7 +36,7 @@
             <bbn-scroll>
               <bbn-list :source="propsList"
                         @select="v => currentProps = v.value || ''">
-                <template v-pre>
+                <div v-pre>
                   <div class="bbn-w-100 bbn-hspaddding bbn-vxspadding"
                        :title="source.summary">
                     <i :class="{
@@ -47,7 +47,7 @@
                     <span class="bbn-left-smargin bbn-mono"
                           v-text="source.text"/>
                   </div>
-                </template>
+                </div>
               </bbn-list>
             </bbn-scroll>
           </div>
@@ -56,7 +56,7 @@
             <bbn-scroll>
               <bbn-list :source="constList"
                         @select="v => currentConst = v.value || ''">
-                <template v-pre>
+                <div v-pre>
                   <div class="bbn-w-100 bbn-hspaddding bbn-vxspadding"
                        :title="source.summary">
                     <i :class="{
@@ -67,7 +67,7 @@
                     <span class="bbn-left-smargin bbn-mono"
                           v-text="source.text"/>
                   </div>
-                </template>
+                </div>
               </bbn-list>
             </bbn-scroll>
           </div>
