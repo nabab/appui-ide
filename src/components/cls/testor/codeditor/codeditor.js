@@ -69,7 +69,7 @@
           if (d.success) {
             bbn.fn.log(d.data);
             this.getPopup({
-              component: 'appui-newide-cls-method-refactor',
+              component: 'appui-ide-cls-method-refactor',
               scrollable: true,
               source: {
                 functionName: this.source.name,
@@ -90,7 +90,7 @@
         const classEditor = this.closest('bbn-container').closest('bbn-container').getComponent();
         classEditor.loadClass().then(() => {
           setTimeout(() => {
-            const classComponent = classEditor.find('appui-newide-cls');
+            const classComponent = classEditor.find('appui-ide-cls');
             const method = bbn.fn.getRow(classComponent.methodList, {value: this.formData.name});
             classComponent.getRef('methodList').select(method);
           }, 1000);
@@ -117,6 +117,9 @@
               appui.error(d.error);
             }
           });
+      },
+      getPopup() {
+        return this.closest('bbn-container').getPopup(...arguments);
       }
     },
     mounted() {

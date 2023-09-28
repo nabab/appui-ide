@@ -49,6 +49,8 @@
         libraryChanging: false,
         currentClass: '',
         currentLibrary: '',
+        currentMode: '',
+        currentPath: '',
         root: appui.plugins['appui-ide'] + '/',
         data: null,
         ct: null,
@@ -230,6 +232,7 @@
       {
         this.isLoading = true;
         return new Promise(resolve => {
+          const info = this.getInfoFromPath();
           bbn.fn.post(appui.plugins['appui-ide'] + '/class_editor', {class: this.currentClass, lib: this.currentLibrary, root: this.libRoot}, d => {
             this.data = d.data;
             bbn.fn.post(appui.plugins['appui-ide'] + '/data/check_install', {lib: this.currentLibrary, root: this.libRoot}, d => {
@@ -318,38 +321,113 @@
           res = res[0].items;
         }
         return res;
+      },
+      getPopup() {
+        return this.closest('bbn-container').getPopup(...arguments);
+      },
+      getInfoFromPath() {
+        const res = {
+          root: '',
+          library: '',
+          class: '',
+          mode: '',
+          path: ''
+        };
+
+        let url = this.closest('bbn-container').url;
+        let path = url.length >= bbn.env.path.length ? '' : bbn.env.path.substr(url.length + 1);
+        if (path) {
+          let params = path.split('/');
+          if (params.length > 2) {
+            res.root = params[0];
+            res.library = params[1] + '/' + params[2];
+            if (params.length > 3) {
+              res.class = bbn.fn.replaceAll("-", "\\", params[3]);
+              if (params.length > 4) {
+                res.mode = params[4];
+                if (params.length > 5) {
+                  res.path = params[5];
+                  if (params[6]) {
+                    res.path += '/' + params[6];
+      }
+                }
+              }
+            }
+          }
+        }
+
+        bbn.fn.log([url, path, res]);
+        return res;
+    },
+      getPathFromCfg() {
+        let url = this.closest('bbn-container').url;
+        if (this.currentLibrary) {
+          url += "/" + this.libRoot + "/" + this.currentLibrary;
+          if (this.currentClass) {
+            url += "/" + bbn.fn.replaceAll("\\", "-", this.currentClass);
+            if (this.currentMode) {
+              url += "/" + this.currentMode;
+              if (this.currentPath) {
+                url += "/" + this.currentPath;
+          }
+        }
+          }
+        }
+
+        let path = url.length < bbn.env.path.length ? '' : url.substr(bbn.env.path.length + 1);
+        if (path) {
+          let params = path.split('/');
+          if (params.length > 1) {
+            return params[0] + '/' + params[1];
+          }
+        }
+        return '';
       }
     },
     mounted() {
-      /*setTimeout(() => {
-        this.ct = this.closest('bbn-container');
-        let currentURL = this.ct.url;
-        if (this.currentLibrary) {
-          currentURL += "/" + this.currentLibrary;
-          if (this.currentClass) {
-            currentURL += "/" + bbn.fn.replaceAll("\\", "-", this.currentClass);
+      const info = this.getInfoFromPath();
+      if (info.library) {
+        setTimeout(() => {
+          bbn.fn.log(this.$isMounted);
+          this.currentLibrary = info.library;
+          if (info.class) {
+            setTimeout(() => {
+              this.currentClass = info.class;
+              if (info.mode) {
+                setTimeout(() => {
+                  this.currentMode = info.mode;
+                  if (info.path) {
+                    setTimeout(() => {
+                      this.currentPath = info.path;
+                    }, 100);
+                  }
+                }, 100);
+              }
+            }, 100);
           }
-        }
-        this.ct.currentURL = currentURL;
-        this.currentURL = currentURL;
-        this.url = this.ct.url;
       }, 250);
-      */
+      }
     },
     watch: {
       currentClass(v) {
+        this.currentPath = '';
+        this.$nextTick(() => {
+          this.closest('bbn-router').route(this.getPathFromCfg());
+        })
         /*if (this.currentURL) {
           this.currentURL = this.url + "/" + this.currentLibrary + "/" + bbn.fn.replaceAll("\\", "-", v);
           this.ct.currentURL = this.currentURL;
         }*/
         this.loadClass();
       },
-      currentLibrary(v) {
-        bbn.fn.log("currentLibrary is changing")
+      currentLibrary(v, ov) {
+        bbn.fn.log("currentLibrary is changing from " + v + " to " + ov);
         /*if (this.currentURL) {
         	this.ct.currentURL = this.url + "/" + v;
         }*/
         this.libraryChanging = true;
+        this.currentClass = '';
+        this.currentPath = '';
         this.menu[3].items.splice(0, this.menu[3].items.length);
         this.updateMenu();
         if (v) {
@@ -359,12 +437,17 @@
               this.updateMenu();
               this.getRef('menu').$forceUpdate();
               this.libraryChanging = false;
+              this.$nextTick(() => {
+                this.closest('bbn-router').route(this.getPathFromCfg());
+              });
             }
           });
-          //this.getRef('classesList').updateData();
         }
         else{
           this.libraryChanging = false;
+          this.$nextTick(() => {
+            this.closest('bbn-router').route(this.getPathFromCfg());
+          });
         }
       }
     }

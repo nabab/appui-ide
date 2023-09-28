@@ -44,6 +44,8 @@
                       :methinfos="methods_info"
                       :installed="libInstalled"
                       :libroot="libRoot"
+                      :path="currentPath"
+                      :mode="currentMode"
                       :source="data"/>
     <div v-else
          class="bbn-overlay bbn-middle">

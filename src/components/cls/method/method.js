@@ -194,7 +194,7 @@
         }, (d)=>{
           if (d.success) {
             bbn.fn.log(d.data);
-            this.closest('bbn-container').getPopup({
+            this.getPopup({
               component: 'appui-ide-cls-method-refactor',
               scrollable: true,
               source: {
@@ -233,6 +233,9 @@
           classComponent.currentConst = "";
           classComponent.currentCode = "";
         }
+      },
+      getPopup() {
+        return this.closest('bbn-container').getPopup(...arguments);
       }
     },
     mounted() {
@@ -256,9 +259,9 @@
         this.exampleCode = "";
       },
       readonly(v) {
-        this.readonly = this.installed ? v : true;
-        this.getRef("srccode").widget.setOption('readOnly', v);
-        this.getRef("srccode").widget.refresh();
+        if (!this.installed && !v) {
+          this.readonly = true;
+        }
       }
     }
   };

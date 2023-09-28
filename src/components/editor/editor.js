@@ -713,6 +713,9 @@
         })
 
         return res;
+      },
+      getPopup() {
+        return this.closest('bbn-container').getPopup(...arguments);
       }
     },
     /**

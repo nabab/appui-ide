@@ -78,6 +78,8 @@
       <div class="bbn-overlay">
         <bbn-router :nav="true"
                     :menu="[]"
+                    :autoload="false"
+                    :root="routerRoot"
                     :breadcrumb="false"
                     :visual="false">
           <bbn-container url="doc"

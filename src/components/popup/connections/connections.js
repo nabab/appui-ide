@@ -29,6 +29,9 @@
             })
           }
         }]
+      },
+      getPopup() {
+        return this.closest('bbn-container').getPopup(...arguments);
       }
     },
     components: {

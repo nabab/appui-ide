@@ -162,6 +162,9 @@
       }
     },
     computed: {
+      routerRoot() {
+        return this.root + 'class_editor/' + this.libroot + '/' + this.source.lib + '/' + bbn.fn.replaceAll('\\', '-', this.source.name) + '/';
+      },
       currentSelected() {
         switch (this.currentMode) {
           case 'method':
@@ -246,6 +249,9 @@
       },
       addMethod() {
         
+      },
+      getPopup() {
+        return this.closest('bbn-container').getPopup(...arguments);
       }
     },
     mounted() {

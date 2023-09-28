@@ -77,7 +77,7 @@
               },
             },
             "header": meth.functionName,
-            "component": "appui-newide-cls-testor-codeditor",
+            "component": "appui-ide-cls-testor-codeditor",
             "scrollable": true,
             "componentOptions": {
               "mode": "purephp",
@@ -111,7 +111,7 @@
       },
       suggestMore()
       {
-        bbn.fn.post(appui.plugins['appui-newide'] + '/actions/suggest-test', {
+        bbn.fn.post(appui.plugins['appui-ide'] + '/actions/suggest-test', {
           lib: this.source.lib,
           function_code: this.source.function_code,
           root: this.source.root
@@ -134,7 +134,7 @@
                   },
                 },
                 "header": meth.functionName,
-                "component": "appui-newide-cls-testor-method-codeinterface",
+                "component": "appui-ide-cls-testor-method-codeinterface",
                 "scrollable": true,
                 "componentOptions": {
                   "mode": "purephp",
@@ -181,7 +181,7 @@
         const classEditor = this.closest('bbn-container').closest('bbn-container').getComponent();
         classEditor.loadClass().then(() => {
           setTimeout(() => {
-            const classComponent = classEditor.find('appui-newide-cls');
+            const classComponent = classEditor.find('appui-ide-cls');
             const method = bbn.fn.getRow(classComponent.methodList, {value: this.source.current});
             classComponent.getRef('methodList').select(method);
           }, 1000);
@@ -263,7 +263,7 @@
       this.class = this.source.class;
       this.nativePost = [];
       this.aiPost = {};
-      this.url = appui.plugins['appui-newide'] + '/';
+      this.url = appui.plugins['appui-ide'] + '/';
       this.suggestions();
     },
   };

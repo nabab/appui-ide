@@ -84,6 +84,9 @@
         else{
           this.new_path = './';
         }
+      },
+      getPopup() {
+        return this.closest('bbn-container').getPopup(...arguments);
       }
     },
     computed: {
