@@ -72,7 +72,7 @@
               component: 'appui-ide-cls-method-refactor',
               scrollable: true,
               source: {
-                functionName: this.source.name,
+                functionName: this.source.function,
                 method: d.data
               },
               width: 600,
