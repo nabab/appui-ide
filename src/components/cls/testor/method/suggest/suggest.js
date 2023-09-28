@@ -4,9 +4,6 @@
   return {
     data() {
       return {
-        root: this.source.root,
-        lib: this.source.lib,
-        class: this.source.class,
         methods: [],
         nativePost: [],
         aiPost: {},
@@ -82,9 +79,9 @@
             "componentOptions": {
               "mode": "purephp",
               "source": {
-                lib: this.lib,
-                root: this.root,
-                class: this.class,
+                lib: this.source.lib,
+                root: this.source.root,
+                class: this.source.class,
                 function: meth.functionName,
                 code: meth.functionString,
                 button: false,
@@ -139,9 +136,9 @@
                 "componentOptions": {
                   "mode": "purephp",
                   "source": {
-                    lib: this.lib,
-                    root: this.root,
-                    class: this.class,
+                    lib: this.source.lib,
+                    root: this.source.root,
+                    class: this.source.class,
                     code: meth.functionString
                   },
                 }
@@ -178,7 +175,7 @@
         }
       },
       updateClass() {
-        const classEditor = this.closest('bbn-container').closest('bbn-container').getComponent();
+        const classEditor = this.closest('bbn-container').getComponent();
         classEditor.loadClass().then(() => {
           setTimeout(() => {
             const classComponent = classEditor.find('appui-ide-cls');
@@ -233,9 +230,9 @@
             bbn.fn.post(
               this.url + 'actions/add-test',
               {
-                lib: this.lib,
-                root: this.root,
-                class: this.class,
+                lib: this.source.lib,
+                root: this.source.root,
+                class: this.source.class,
                 tests: this.aiPost
               },
               (d)=>{
@@ -258,9 +255,6 @@
       }
     },
     mounted() {
-      this.root = this.source.root;
-      this.lib = this.source.lib;
-      this.class = this.source.class;
       this.nativePost = [];
       this.aiPost = {};
       this.url = appui.plugins['appui-ide'] + '/';

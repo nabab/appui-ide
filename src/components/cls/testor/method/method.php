@@ -1,6 +1,6 @@
 <!-- HTML Document -->
 
-<div class="appui-ide-cls-testor bbn-overlay bbn-padding">
+<div class="appui-ide-cls-testor-method bbn-overlay bbn-padding">
   <bbn-scroll>
     <div class="bbn-overlay bbn-flex-height" v-if="installed">
       <bbn-loader v-if="isLoading"/>

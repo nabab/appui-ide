@@ -105,7 +105,7 @@ class Environment
     $this->envDataDir = '/data';
   }
 
-  /**
+ /**
    * This function determines the path to the composer.json file for a specific library, considering the root property.
    * @return array
    */
@@ -483,9 +483,8 @@ class Environment
           if (file_exists($this->dir)) {
             $this->fs->delete($this->dir, true);
           }
-
           $path = $this->getEnvPath();
-
+          $this->fs->createPath($path);
 
           // Create and configure Composer environment
           if (!$this->fs->isFile($this->dir . "/.bbn")) {
@@ -804,7 +803,7 @@ class Environment
     $test_class_analysis = $this->getTestClassAnalysis($class);
 
     // Check if analysis information is available.
-    if (!is_null($test_class_analysis)) {
+    if (!is_null($test_class_analysis) && !empty($test_class_analysis)) {
       // Set the environment directory for the tests.
       $env_dir = $this->dir . $this->defaultDir . '/';
       // Change the current working directory to the environment directory.
@@ -1125,7 +1124,7 @@ class Environment
       $parse_test = $this->getTestClassAnalysis($class);
 
       // Check if the test class analysis is not null.
-      if (!is_null($parse_test)) {
+      if (!is_null($parse_test) && !empty($parse_test)) {
         // Get the file path of the test class.
         $test_file = $parse_test['fileName'];
 
@@ -1255,6 +1254,102 @@ class Environment
         $resp["error"] = $e->getMessage();
     }
     return $resp; // Return the response array indicating whether the modification was successful or if an error occurred.
+  }
+
+
+  private function analyzeClass(string $class, string $type): array
+  {
+    if ($type === 'libclass') {
+      $cfg = [
+        'operation' => 'analyzeClass',
+        'class' => $class,
+        'lib' => $this->lib,
+        'dir' => $this->dir . $this->defaultDir
+      ];
+      return $this->execute($cfg);
+    }
+    else {
+      $analysis = $this->getTestClassAnalysis($class);
+      return (is_null($analysis)) ? [] : $analysis;
+    }
+  }
+
+  private function modify(string $class, array $data, array $parse_cls, string $type = 'libclass'): array
+  {
+    $res = [
+      'success' => false,
+    ];
+  
+    $file = $parse_cls['fileName'];
+    $dir = $this->dir . $this->envDataDir . '/' . str_replace("\\", "/", $class);
+    $json_file = $dir . (($type === 'libclass') ? '/class-original.json' : '/original.json');
+    $function = $data['function'];
+    if (!empty($parse_cls["methods"]) && !empty($parse_cls["methods"][$function])) {
+      if ($type === 'libclass') {
+        $parse_cls['methods'][$function] = $data['raw'];
+        if (file_exists($json_file)) {
+          $original = json_decode(file_get_contents($json_file), true);
+          $original["modified"] = true;
+          if ($original['methods'][$function] && !empty($original['methods'][$function])) {
+              $original['methods'][$function] = $data['raw'];
+              $original['methods'][$function]["modified"] = true;
+          }
+          $res['original'] = $original;
+          file_put_contents($json_file, json_encode($original, JSON_PRETTY_PRINT));
+        }
+      }
+      else {
+        $libfunction = $data['libfunction'];
+        $code = $data['code'];
+        $parse_cls['methods'][$function]['code'] = $code;
+        if (file_exists($json_file)) {
+          $original = json_decode(file_get_contents($json_file), true);
+          $original["modified"] = true;
+          if ($libfunction !== '') {
+            if (!empty($original[$libfunction]["details"]) && !empty($original[$libfunction]["details"][$function])) {
+              $original[$libfunction]["details"][$function]["modified"] = true;
+              $original[$libfunction]["details"][$function]["code"] = $code;
+            }
+          }
+          $res['original'] = $original;
+          file_put_contents($json_file, json_encode($original, JSON_PRETTY_PRINT));
+        }
+      }
+      $generator = new Generator($parse_cls);
+      $gen = $generator->generateClass();
+      file_put_contents($file, $gen);
+      $res['success'] = true;
+      $res['data'] = $gen;
+    }
+    else {
+      $res['error'] = 'Method to modify not exists.';
+    }
+    return $res;
+  }
+
+  public function modifyClassMethod(string $class, array $data, string $type = 'libclass')
+  {
+    $res = [
+      'success' => false,
+    ];
+
+    try {
+      $parse_cls = $this->analyzeClass($class, $type);
+      if (!empty($parse_cls)) {
+        return $this->modify($class, $data, $parse_cls, $type);
+      }
+    }
+    catch (Exception $e) {
+      // If an exception is caught, set an error message in the result array.
+      $res["error"] = $e->getMessage();
+    }
+    return $res;
+  }
+
+
+  public function modifyBlock(string $class, array $data, string $type = 'libclass')
+  {
+    
   }
 
 
@@ -1399,6 +1494,77 @@ class Environment
   }
 
 
+  private function getConfig(string $type, array $data): array
+  {
+    if ($type === 'libclass') {
+      return [
+        'operation' => 'analyzeClass',
+        'class' => $data['class'],
+        'lib' => $this->lib,
+        'dir' => $this->dir . $this->defaultDir
+      ];
+    } else {
+      return [
+        'operation' => 'analyzeTestClass',
+        'dir' => $this->dir . $this->defaultDir,
+        'testdir' => $data['testdir'],
+        'testclass' => $data['class']
+      ];
+    }
+  }
+
+
+
+  private function process(string $operation, array $cfg, array $data, array $parse_cls)
+  {
+    $res = [
+      'success' => false,
+    ];
+  
+    try {
+      if ($this->checkErr($operation, $parse_cls, $data['name'])) {
+        $res["error"] = $operation . ' ' . $data['name'] . ' already exists in ' . $data['class'];
+      }
+      else {
+        $line = $this->getLine($operation, $data, $parse_cls);
+        $classFile = $parse_cls['fileName'];
+        if ($operation === 'method') {
+          $arr = array_map(
+            function($elem) {
+              return (!empty($elem)) ? ('  ' . $elem) : $elem;
+            }, 
+            X::split($data['code'], PHP_EOL)
+          );
+          array_unshift($arr, "");
+          $code = $arr;
+        }
+        else {
+          $code = X::split($data['code'], PHP_EOL);
+        }
+        $originalclass = X::split(file_get_contents($classFile), PHP_EOL);
+        $linesClass = $originalclass;
+        array_splice($linesClass, $line, 0, $code);
+        $newClass = X::join($linesClass, PHP_EOL);
+        file_put_contents($classFile, $newClass);
+        $parse_cls = $this->execute($cfg);
+        if (empty($parse_cls)) {
+          $res['error'] = 'Unable to add '. $operation . ' ' . $data['name'] . ' in ' . $data['class'];
+          $newClass = X::join($originalclass, PHP_EOL);
+          file_put_contents($classFile, $newClass);
+        }
+        else {
+          $res['success'] = true;
+        }
+      }
+    }
+    catch (Exception $e) {
+      // If an exception occurs, capture the error message.
+      $res["error"] = $e->getMessage();
+    }
+    return $res;
+  }
+
+
 
   /**
    * Create a new class, method, property, or constant in a PHP class file based on the provided operation and data.
@@ -1416,64 +1582,17 @@ class Environment
     ];
 
     try {
-      if ($type === 'libclass') {
-        $cfg = [
-          'operation' => 'analyzeClass',
-          'class' => $data['class'],
-          'lib' => $this->lib,
-          'dir' => $this->dir . $this->defaultDir
-        ];
-      } else {
-        $cfg = [
-          'operation' => 'analyzeTestClass',
-          'dir' => $this->dir . $this->defaultDir,
-          'testdir' => $data['testdir'],
-          'testclass' => $data['class']
-        ];
-      }
+      $cfg = $this->getConfig($type, $data);
       $parse_cls = $this->execute($cfg);
       if (!empty($parse_cls)) {
-        if ($this->checkErr($operation, $parse_cls, $data['name'])) {
-          $res["error"] = $operation . ' '. $data['name'] . ' already exists in ' . $data['class'];
-          return $res;
-        }
-        else {
-          $line = $this->getLine($operation, $data, $parse_cls);
-          if ($operation === 'method') {
-            $arr = array_map(
-              function($elem) {
-                if (!empty($elem)) {
-                  return '  ' . $elem;
-                }
-                return $elem;
-              }, 
-              X::split($data['code'], PHP_EOL)
-            );
-            array_unshift($arr, "");
-            $code = $arr;
-          }
-          else {
-            $code = X::split($data['code'], PHP_EOL);
-          }
-          $classFile = $parse_cls['fileName'];
-          $linesClass = X::split(file_get_contents($classFile), PHP_EOL);
-          array_splice($linesClass, $line, 0, $code);
-          $newClass = X::join($linesClass, PHP_EOL);
-          file_put_contents($classFile, $newClass);
-          $parse_cls = $this->execute($cfg);
-          if (empty($parse_cls)) {
-            $res['error'] = 'Class parsing return empty data.';
-            return $res;
-          }
-          $generator = new Generator($parse_cls);
-          $gen = $generator->generateClass();
-          file_put_contents($classFile, $gen);
-          $res['success'] = true;
-        }
+        $res = $this->process($operation, $cfg, $data, $parse_cls);
+        $parse_cls = $this->execute($cfg);
+        $generator = new Generator($parse_cls);
+        $gen = $generator->generateClass();
+        file_put_contents($parse_cls['fileName'], $gen);
       }
       else {
-        $res['error'] = 'Class parsing return empty data.';
-        return $res;
+        $res['error'] = 'Class not exists or faulty!';
       }
     }
     catch (Exception $e) {
@@ -1484,6 +1603,37 @@ class Environment
   }
 
 
+  public function createBlock(string $operation, array $block, string $type = 'libclass'): array
+  {
+    $res = [
+      'success' => false
+    ];
+
+    try {
+      $cfg = $this->getConfig($type, $block['utils']);
+      $parse_cls = $this->execute($cfg);
+      if (!empty($parse_cls)) {
+        $methods = $block['methods'];
+        foreach ($methods as $method) {
+          $tmp = $this->process($operation, $cfg, $method, $parse_cls);
+          $res['success'] = $res['success'] || $tmp['success'];
+          $res['error'] .= (!$tmp['success']) ? ($tmp['error'] . PHP_EOL) : ''; 
+        }
+        $parse_cls = $this->execute($cfg);
+        $generator = new Generator($parse_cls);
+        $gen = $generator->generateClass();
+        file_put_contents($parse_cls['fileName'], $gen);
+      }
+      else {
+        $res['error'] = 'Class not exists or faulty!';
+      }
+    }
+    catch (Exception $e) {
+      // If an exception occurs, capture the error message.
+      $res["error"] = $e->getMessage();
+    }
+    return $res;
+  }
 
   /**
    * Get a short code (prompt) based on the provided operation.
@@ -1728,28 +1878,26 @@ class Environment
           //X::ddump($op);
           if ($op) {
             X::log('All Things ready for the insertion ...', 'addtest');
+            $block = [
+              'utils' => [
+                'testdir' => $testdir,
+                'class' => $infos['testclass'],
+              ],
+              'methods' => [],
+            ];
             //$this->composerAction('update');
             foreach ($test as $t) {
               $data = [
-                'testdir' => $testdir,
                 'name' => $t['name'],
-                'class' => $infos['testclass'],
                 'code' => $t['code'],
                 'line' => 'Eof'
               ];
-              X::log('Inserting ...', 'addtest');
-              X::log($data, 'addtest');
-              $tmp = $this->create('method', $data, 'testclass');
-              X::log($tmp, 'addtest');
-              if (!$tmp['success']) {
-                if ($tmp['error'] === 'Class parsing return empty data.') {
-                  $res['error'] = "Class parsing return empty data.";
-                  return $res;
-                }
-                $res['message'] .= $tmp['error'] . PHP_EOL;
-              }
+              $block['methods'][] = $data;
             }
-            $res['success'] = true;
+            X::log('Inserting ...', 'addtest');
+            X::log($block, 'addtest');
+            $res = $this->createBlock('method', $block, 'testclass');
+            X::log($res, 'addtest');
             X::log("Well Done", 'addtest');
           }
           else {

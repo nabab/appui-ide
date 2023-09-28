@@ -229,6 +229,9 @@
       addTest() {
         return "";
       },
+      getPopup() {
+        return this.closest('bbn-container').getPopup(...arguments);
+      },
       makeSuggestion() {
         let meths = [];
         let info = this.infos[this.source.name].details;
@@ -240,7 +243,7 @@
           };
           meths.push(tmp);
         }
-        this.closest('bbn-container').getPopup({
+        this.getPopup({
           component: 'appui-ide-cls-testor-method-suggest',
           scrollable: true,
           source: {
@@ -255,33 +258,6 @@
           height: "90%",
           title: bbn._("Tests Editor"),
         });
-        /*bbn.fn.post(appui.plugins['appui-newide'] + '/actions/suggest-test', {
-          lib: this.lib,
-          function_code: this.source.code,
-          root: this.libroot
-        }, (d)=>{
-          if (d.success) {
-            bbn.fn.log(d.data);
-            this.getPopup({
-              component: 'appui-newide-cls-testor-method-suggest',
-              scrollable: true,
-              source: {
-                lib: this.lib,
-                function_code: this.source.code,
-                root: this.libroot,
-                class: this.source.class,
-                methods: d.data
-              },
-              width: 600,
-              height: "90%",
-              title: bbn._("Test Suggestions"),
-            });
-            appui.success("Class successfully Updated");
-          }
-          else {
-            appui.error("Error");
-          }
-        });*/
       },
       goBack()
       {
