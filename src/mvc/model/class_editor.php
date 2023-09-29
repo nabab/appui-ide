@@ -12,7 +12,7 @@ $parser = new Php();
 if ($model->hasData(['class', 'lib', 'root'])) {
   $env = new appui\ide\Environment($model->data['root'], $model->data['lib']);
   $folder = $model->data['root'] !== 'app' ? "/" . $model->data['lib'] : '';
-  $dir = $model->dataPath("appui-ide") . "class_editor/" . $model->data['root'] . $folder;
+  $dir = $model->dataPath("appui-ide") . "class_editor/" . $model->data['root'] . $folder . "/_env";;
   //if there’s  test environment we get the class informations from there
   if (is_dir($dir)) {
     $cfg = [

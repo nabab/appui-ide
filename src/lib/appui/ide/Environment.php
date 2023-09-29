@@ -100,12 +100,13 @@ class Environment
     $this->fs = new System();
     $this->parser = new Php();
     $this->xml = new DOMDocument();
-    $this->defaultDir = '';
+    $this->defaultDir = '/_env';
     $this->defaultAppLibDir = '/src/lib';
     $this->envDataDir = '/data';
+    var_dump('constructed');
   }
 
- /**
+  /**
    * This function determines the path to the composer.json file for a specific library, considering the root property.
    * @return array
    */
@@ -816,7 +817,7 @@ class Environment
       
       // Prepare the directory path for test output.
       $dir_test = '..' . $this->envDataDir . '/' . str_replace("\\", "/", $class);
-      
+
       // Create the directory if it does not exist.
       if (!file_exists($dir_test)) {
         $this->fs->createPath($dir_test);
@@ -828,6 +829,7 @@ class Environment
       // Construct the command to execute PHPUnit tests and capture the XML output.
       $exec = "vendor/bin/phpunit $test_file --log-junit $output_xml";
       exec($exec, $output, $retval);
+      //X::ddump(getcwd(), $exec, $output, $retval);
       
       // Parse the XML output and return the test results.
       return $this->parseTestsOutput($output_xml);

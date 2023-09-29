@@ -18,7 +18,7 @@
             items: [
               {
                 text: bbn._("New class"),
-                action: this.addClass
+                action: () => this.addClass()
               },
               {
                 text: bbn._("New trait"),
@@ -127,7 +127,7 @@
             {
             	text: bbn._("Delete"),
               icon: "nf nf-md-alert_remove",
-            	action: this.delEnv
+            	action: () => this.delEnv()
           	}
           );
           env.items.push(
