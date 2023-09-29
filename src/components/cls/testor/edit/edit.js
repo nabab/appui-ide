@@ -27,6 +27,7 @@
                 function: meth.name,
                 code: meth.code,
                 button: true,
+                changed: false,
               },
             }
           };
