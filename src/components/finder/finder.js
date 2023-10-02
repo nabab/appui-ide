@@ -499,7 +499,7 @@
           icon: 'nf nf-fa-trash',
           text: bbn._('Delete'),
           action: (node) => {
-            this.delete(node)
+            this.del(node)
           }
         })
         return objContext;
@@ -719,7 +719,7 @@
                            * Deletes the current selected node
                            * @param {*} node 
                            */
-      delete(node){
+      del(node){
         this.confirm(bbn._('Do you want to delete') + ' ' + node.data.value + '?', () => {
           let st = node.tree.data.path,
               //st = ( (this.mode === 'ftp') || (this.mode === 'ssh')) ? this.origin + this.currentPath : this.currentPath,

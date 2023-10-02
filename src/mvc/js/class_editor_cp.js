@@ -6,8 +6,8 @@
       return {
         tests_info: null,
         methods_info: null,
-        tests_info: null,
-        tests_info: null,
+        classmodified: null,
+        modified: null,
       }
     },
     mounted() {
@@ -35,10 +35,7 @@
             this.tests_info[d.data[method].name] = tmp;
           }
         }
-        this.isLoading = false;
         bbn.fn.log('Infos', this.tests_info);
-        this.updateMenu();
-        resolve();
       });
     },
   };

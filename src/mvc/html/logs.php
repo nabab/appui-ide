@@ -62,7 +62,7 @@
               ></bbn-tree> -->
               <bbn-tree :source="sourceTree"
                         :cls="treeClass"
-                        @nodeclick="selectLogFile"
+                        @select="selectLogFile"
                         ref="listFilesLog"
                         :min-expand-level="1"
                         v-if="sourceTree.length"
