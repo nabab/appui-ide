@@ -304,9 +304,164 @@
         this.find('appui-ide-editor-router').openHistory();
       },
       test() {
-        let cp = this.find('appui-ide-editor-router');
-        if (cp) {
-          cp.test();
+        const container = this.getRef('router').getFinalContainer();
+        const component = container.closest('appui-ide-editor-router');
+        bbn.fn.log(["COMPONENT change 1", component, this.source.isComponent, component.source]);
+        if (this.source.isComponent && component) {
+          let url = component.views[component.selected].url;
+          bbn.fn.log("URL change 1", url);
+          let root = '';
+          bbn.fn.log("ROOT change 1", root);
+          let cp = '';
+          bbn.fn.log("CP change 2", cp);
+          let foundComponents = false;
+          bbn.fn.log("FOUNDCOMPONENTS change 1", foundComponents);
+          // Removing file/ and /_end_
+          let bits = url.split('/');
+          bbn.fn.log("BITS change 1", bits);
+          bits.splice(0, 1);
+          bbn.fn.log("BITS change 2", bits);
+          bits.splice(bits.length - 2, 2);
+          bbn.fn.log("BITS change 3", bits);
+
+          bbn.fn.each(bits, (a) => {
+            if ( a === 'components' ){
+              foundComponents = true;
+              bbn.fn.log("FOUNDCOMPONENTS change 2", foundComponents);
+            }
+            else if ( !foundComponents ){
+              root += a + '/';
+              bbn.fn.log("ROOT change 2", root);
+            }
+            else {
+              cp += a + '-';
+              bbn.fn.log("CP change 3", cp);
+            }
+          });
+          if (cp) {
+            let found = false;
+            bbn.fn.log("FOUND change 1", found)
+            root = root.substring(0, root.length-1);
+            bbn.fn.log("ROOT change 3", root);
+            cp = cp.substring(0, cp.length-1);
+            bbn.fn.log("CP change 4", cp);
+            bbn.fn.log("ROOT", root, "CP", cp, "PREFIX", bbn.env.appPrefix);
+            if ( root === 'app/main' ){
+              found = bbn.env.appPrefix + '-' + cp;
+              bbn.fn.log("FOUND change 4", found)
+            }
+            else if ( root === 'BBN_CDN_PATH/lib/bbn-vue' ){
+              found = 'bbn-' + cp;
+              bbn.fn.log("FOUND change 5", found)
+            }
+            else{
+              bbn.fn.iterate(appui.plugins, (a, n) => {
+                if (root.indexOf('lib/' + n) === 0) {
+                  found = n + '-' + cp;
+                  bbn.fn.log("FOUND change 6", found)
+                  return false;
+                }
+              })
+            }
+            if ( found ){
+              bbn.fn.log("FOUND HERE", found);
+              bbn.version++;
+              bbn.cp.unloadComponent(found);
+              appui.info(bbn._("The component has been deleted") + '<br>' + bbn._("Loading a page with this component will redefine it."));
+            } else {
+              appui.error(bbn._("Impossible to retrieve the name of the component"));
+            }
+          }
+        }
+        else {
+          if ( component.source.settings ){
+            /** @todo All this part doesmn't work */
+            bbn.fn.log("THIS IS IN SETTINGS, CHECK IT IN components/editor");
+            let key = this.currentURL.substring(0, this.currentURL.indexOf('_end_/')+5),
+                mvc = this.findByKey(key).find('appui-ide-mvc').$data,
+                pathMVC = mvc.path;
+            bbn.fn.log("KEY change 1", key);
+            bbn.fn.log("MVC change 1", mvc);
+            bbn.fn.log("PATHMVC change 1", pathMVC);
+            if ( pathMVC.indexOf('mvc/') === 0 ){
+              pathMVC = pathMVC.replace("mvc/","");
+              bbn.fn.log("PATHMVC change 2", pathMVC);
+            }
+            let link = (mvc.route ? mvc.route + '/' : '') +
+                (pathMVC === 'mvc' ? '' : pathMVC + '/') +  mvc.filename;
+            bbn.fn.log("BEFORE THE LINK", bbn.fn.baseName(link));
+            if (bbn.fn.baseName(link) === 'index') {
+              window.open(bbn.env.host + '/' + link);
+            }
+            else {
+              appui.find('bbn-router').load(link, true);
+            }
+          }
+          else{
+            if ( component.source.isMVC ){
+              let pathMVC = component.source.path;
+              pathMVC = pathMVC.replace("mvc/","");
+              let link = component.source.route + pathMVC;
+
+              bbn.fn.log("BEFORE THE LINK", bbn.fn.baseName(link));
+              if (bbn.fn.baseName(link) === 'index') {
+                window.open(bbn.env.host + '/' + link);
+              }
+              else {
+                appui.find('bbn-router').load(link, true);
+              }
+
+              return true;
+            }
+            if ( typeof(this.find('appui-ide-coder').myMode) === 'string' ){
+              switch ( this.find('appui-ide-coder').myMode ){
+                case "php":
+                  if ( !this.isLib ){
+                    bbn.fn.post(
+                      this.root + "test",
+                      {
+                        code: this.value,
+                        file: this.fullPath
+                      },
+                      d => {
+                        const tn = this.closest('bbn-router'),
+                              idx = tn.views.length;
+                        tn.add({
+                          title: dayjs().format('HH:mm:ss'),
+                          icon: 'nf nf-fa-cogs',
+                          load: false,
+                          content: d.content,
+                          url: 'output' + idx,
+                          selected: true
+                        });
+                        this.$nextTick(()=>{
+                          tn.route('output' + idx);
+                        });
+                      }
+                    );
+                  }
+                  else{
+                    this.alert(bbn._('Unable to test classes!!'));
+                  }
+                  break;
+                case "js":
+                  eval(this.value);
+                  break;
+                case "svg":
+                  const oDocument = new DOMParser().parseFromString(this.value, "text/xml");
+                  if ( (oDocument.documentElement.nodeName == "parsererror") || !oDocument.documentElement){
+                    appui.alert("There is an XML error in this SVG");
+                  }
+                  else {
+                    let divElement = document.createElement('div').innerHTML = document.importNode(oDocument.documentElement, true);
+                    this.closest("bbn-container").popup(divElement.innerHTML, "Problem with SVG");
+                  }
+                  break;
+                default:
+                  appui.alert(this.value, "Test: " + this.source.mode);
+              }
+            }
+          }
         }
       },
       /**
@@ -695,19 +850,36 @@
           icon: 'nf nf-fa-trash_o',
           text: bbn._('Delete'),
           action: () => {
-            this.nodeParent = node.parent.$parent.find('bbn-tree');
-            bbn.fn.log("CHOICE", node);
-            bbn.fn.log("CHOICE NODE PARENT", this.nodeParent);
-            if (this.nodeParent && this.nodeParent.data.numChildren === 1) {
-              this.nodeParent = node.parent.$parent.find('bbn-tree');
-            }
-            bbn.fn.log(node);
-            this.getPopup({
-              component: "appui-ide-form-delete",
-              componentOptions: {
-                source: node.data
-              },
-              title: bbn._("Delete")
+            this.getPopup().confirm(bbn._("Are you sure you want to delete this file?"), () => {
+              let nodeParent = node.parent.$parent.find('bbn-tree');
+              if (nodeParent && nodeParent.data.numChildren === 1) {
+                nodeParent = node.parent.$parent.find('bbn-tree');
+              }
+              this.nodeParent = nodeParent;
+              let url = node.data.uid;
+              if (this.currentTypeCode && this.currentTypeCode === 'components') {
+                const bits = url.split('/');
+                for (let i = bits.length; i > 0; i--) {
+                  if (bits[i] === this.source.name && bits[i - 1] === this.source.name) {
+                    bits.splice(i - 1, 1);
+                    url = bits.join('/');
+                    break;
+                  }
+                }
+              }
+              url = this.currentRoot + url;
+              bbn.fn.post(this.root + 'editor/actions/delete', {
+                url,
+                id_project: this.source.project.id,
+                data: node.data
+              }, d => {
+                if (d.success) {
+                  appui.success(bbn._('Deleted'));
+                  this.nodeParent.reload();
+                } else {
+                  appui.error(bbn._('Error'));
+                }
+              })
             });
           }
         })

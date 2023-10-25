@@ -20,41 +20,66 @@ if ($model->hasData(['repository', 'path', 'name', 'type', 'id_project', 'is_fil
 
   if ($model->data['type'] === 'mvc') {
     //check if file exist
-    foreach($cfg['typology']['tabs'] as $tab) {
-      foreach($tab['extensions'] as $ext) {
-        $file_path = "";
-        if ($model->data['is_file']) {
-          $file_path = $path . $tab['path'] . ($model->data['path'] !== "/" ? $model->data['path'] : '') . $model->data['name'] . '.' . $ext['ext'];
-          $file_path = str_replace('//', '/', $file_path);
-        } else {
-          $file_path = $path . $tab['path'] . ($model->data['path'] !== "/" ? $model->data['path'] : '') . $model->data['name'];
-          $file_path = str_replace('//', '/', $file_path);
-        }
-        if ($fs->exists($file_path) && $model->data['is_file']) {
-          $exist = true;
-          break;
-        } else if ($fs->isDir($file_path)){
-          $exist = true;
-          break;
-        }
+    if (!$model->hasData('tab') || !isset($cfg['typology']['tabs'][$model->data['tab']])) {
+      return [
+        'success' => false,
+        'error' => X::_('Tab not found')
+      ];
+    }
+
+    $tab = $cfg['typology']['tabs'][$model->data['tab']];
+    foreach($tab['extensions'] as $ext) {
+      $file_path = "";
+      if ($model->data['is_file']) {
+        $file_path = $path . $tab['path'] . ($model->data['path'] !== "/" ? $model->data['path'] : '') . $model->data['name'] . '.' . $ext['ext'];
+        $file_path = str_replace('//', '/', $file_path);
+      } else {
+        $file_path = $path . $tab['path'] . ($model->data['path'] !== "/" ? $model->data['path'] : '') . $model->data['name'];
+        $file_path = str_replace('//', '/', $file_path);
+      }
+      if ($fs->exists($file_path) && $model->data['is_file']) {
+        $exist = true;
+        break;
+      } else if ($fs->isDir($file_path) && !$model->data['is_file']){
+        $exist = true;
+        break;
       }
     }
 
     if ($exist) {
       return [
+        'file' => $file_path,
         'success' => "false",
         'error' => 'already exist'
       ];
     }
 
+
+
     if ($model->data['is_file']) {
       // create file
-      $tab = $cfg['typology']['tabs'][0];
-      $ext = $tab['extensions'][0];
+      if ($model->hasData('extension')) {
+        $ext = X::getRow($tab['extensions'], ['ext' => $model->data['extension']]);
+        if (!$ext) {
+          return [
+            'success' => false,
+            'error' => X::_('Extension not found')
+          ];
+        }
+      }
+      else {
+        $ext = $tab['extensions'][0];
+      }
+
       $file_path = $path . $tab['path'] . ($model->data['path'] !== "/" ? $model->data['path'] : '') . $model->data['name'] . '.' . $ext['ext'];
       $file_path = str_replace('//', '/', $file_path);
+      X::ddump($file_path, $ext);
 
-      $fs->putContents($file_path, $ext['default']);
+      if ($fs->putContents($file_path, $ext['default'])) {
+        return [
+          'success' => true,
+        ];
+      }
     } else {
       // create directory
       foreach($cfg['typology']['tabs'] as $tab) {

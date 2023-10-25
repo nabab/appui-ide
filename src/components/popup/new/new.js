@@ -9,8 +9,7 @@
         default: 'appui-ide-popup-new'
       }
     },
-    data(){
-      bbn.fn.log("POPUP SOURCE", this.source);
+    data() {
       let rep =  this.source.type !== false ? this.source.repositoryProject : this.source.repositories[this.source.currentRep];
       let defaultTab = 0;
       let defaultExt = '';
@@ -135,7 +134,7 @@
       onSuccess(){
         let  componentEditor = this.closest('bbn-container').find('appui-ide-editor');
         if ( this.source.isFile ){
-          let link = 'project/ui/' + this.source.project.id + '/' + 'ide/file/' + this.source.currentRep + '/' + (this.source.type === 'mvc' ? this.source.type + '/' : '')
+          let link = appui.plugins['appui-project'] + '/ui/' + this.source.project.id + '/' + 'ide/file/' + this.source.currentRep + '/' + (this.source.type === 'mvc' ? this.source.type + '/' : '')
           if ( this.data.path.startsWith('./') ){
             link += this.data.path.slice(2);
           }
@@ -184,13 +183,15 @@
         appui.error(bbn._("Error!"));
       },
       selectDir(){
-        let data = bbn.fn.extend({}, this.$data, {operation: 'create'});
         this.closest("bbn-container").getPopup({
           width: 300,
           height: 400,
           title: bbn._('Path'),
           component: 'appui-ide-popup-path',
-          source: data
+          componentOptions: {
+            source: this.$dataValues,
+            operation: 'create'
+          }
         });
       },
       getRoot(){

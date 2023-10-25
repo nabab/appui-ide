@@ -21,6 +21,7 @@ if (defined('BBN_BASEURL') && !empty($ctrl->arguments)) {
     if ($ctrl->hasData('id_project')) {
       $url = $ctrl->pluginUrl('appui-project').'/ui/'.$ctrl->data['id_project'].'/ide/';
     }
+    //X::ddump($ctrl->arguments, $ctrl->data['url']);
     //$ctrl->data['url'] = $ctrl->inc->ide->set_origin_for_use($ctrl->arguments);
     $ctrl->combo('$url', true);
     if ($idx = array_search('_end_', $ctrl->arguments)) {

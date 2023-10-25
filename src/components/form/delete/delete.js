@@ -19,7 +19,7 @@
         url = this.urlRoot + url
         return {
           url: url.replace("//", "/"),
-          id_project: this.closest('appui-project-ui').source.project.id,
+          id_project: this.closest('bbn-container').find('appui-project-ui').source.project.id,
           data: this.source
         };
       }

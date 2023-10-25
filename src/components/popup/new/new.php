@@ -1,11 +1,11 @@
-<div style="min-width: min(50vw, 600px)">
+<div class="bbn-w-100">
   <bbn-form :source="data"
             :data="formData"
             :action="source.root + 'actions/create'"
             @success="onSuccess"
             @failure="failureActive">
-    <div class="bbn-padded bbn-flex-height">
-      <div class="bbn-flex-fill bbn-grid-fields"><label><?=_("Name")?></label>
+    <div class="bbn-padding bbn-w-100">
+      <div class="bbn-grid-fields"><label><?=_("Name")?></label>
         <div class="bbn-flex-width">
           <div class="bbn-flex-fill">
             <bbn-input v-model="data.name"
@@ -101,7 +101,7 @@
                        required="required"
                        class="bbn-w-100"/>
           </div>
-          <div>
+          <div class="bbn-nowrap">
             <bbn-button @click="selectDir"><?=_("Browse")?></bbn-button>
             <bbn-button @click="getRoot"><?=_("Root")?></bbn-button>
           </div>

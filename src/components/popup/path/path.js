@@ -7,9 +7,19 @@
 
 (() => {
   return {
+    props: {
+      operation: {
+        type: String,
+        required: true
+      },
+      source: {
+        type: Object,
+        required: true
+      }
+    },
     data(){
       return {
-        root: this.closest('bbn-container').find('appui-ide-editor').source.root
+        root: this.closest('bbn-container').find('appui-ide-editor').root
       }
     },
     computed: {
@@ -77,8 +87,8 @@
         }
         //check path
         path_destination = path_destination.replace( '//',  '/');
-        bbn.fn.log("aaa", path_destination, this.source.operation)
-        switch ( this.source.operation ){
+        bbn.fn.log("aaa", path_destination, this.operation)
+        switch ( this.operation ){
           case 'copy':{
             this.source.new_path = path_destination;
             //  this.source.pathTree = d.parent;
