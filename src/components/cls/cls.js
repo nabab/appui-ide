@@ -80,7 +80,7 @@
             fcolor: '#FFF',
             bcolor: bbn.fn.getCssVar('red'),
             url: "methods",
-            static: true,
+            fixed: true,
             idx: 0,
             menu: [
               {
@@ -108,7 +108,7 @@
             fcolor: '#FFF',
             bcolor: bbn.fn.getCssVar('green'),
             url: "props",
-            static: true,
+            fixed: true,
           	idx: 1,
             menu: [
               {
@@ -136,7 +136,7 @@
             fcolor: '#FFF',
             bcolor: bbn.fn.getCssVar('blue'),
             url: "constants",
-            static: true,
+            fixed: true,
           	idx: 2,
             menu: [
               {

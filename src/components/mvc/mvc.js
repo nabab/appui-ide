@@ -138,7 +138,7 @@
           bbn.fn.each(this.tabsRepository, (tab, idx) => {
             if ( tab.url !== '_ctrl' ){
               r.push({
-                static: true,
+                fixed: true,
                 load: true,
                 url: tab.url,
                 title: tab.title,
@@ -179,7 +179,7 @@
         if ( (this.tabsRepository !== undefined) && (this.emptyTabs !== undefined) && (this.sctrl.length) ){
           let ctrlRepo =  bbn.fn.getRow(this.tabsRepository, 'url' ,'_ctrl');
           let r = [{
-            static: true,
+            fixed: true,
             load: true,
             cached: false,
             title: this.titleTabCtrl,
@@ -196,7 +196,7 @@
           bbn.fn.each(this.tabsRepository, (tab, idx) => {
             if ( tab.url !== '_ctrl' ){
               r.push({
-                static: true,
+                fixed: true,
                 load: true,
                 url: tab.url,
                 title: tab.title,
@@ -248,7 +248,7 @@
         this.getRef('tabstrip').selected = '';
         this.getRef('tabstrip').add({
           load: true,
-          static: true,
+          fixed: true,
           url: val.url,
           bcolor: tab[0].bcolor,
           fcolor: tab[0].fcolor,

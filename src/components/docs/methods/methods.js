@@ -51,7 +51,7 @@
                 typeElement: 'member',
                 data:{
                   line: v['@attributes']['line'],
-                  static: v['@attributes']['static'],
+                  fixed: v['@attributes']['static'],
                   visibility: v['@attributes']['visibility'],
                   description: (v.description !== undefined && v.description.compact !== undefined)  ? v.description.compact : '-',
                   type: (v.dockblock !== undefined && v.docblock.var['@attributes'].type !== undefined ) ? v.docblock.var['@attributes'].type  : '-'
@@ -75,7 +75,7 @@
                 cls: "bbn-blue",
                 data:{
                   line: v['@attributes']['start'],
-                  static: v['@attributes']['static'],
+                  fixed: v['@attributes']['static'],
                   visibility: v['@attributes']['visibility'],
                   abstract: v['@attributes']['abstract'],
                   description: (v.description !== undefined && v.description.compact !== undefined)  ? v.description.compact : '-',

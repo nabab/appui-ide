@@ -35,7 +35,7 @@
           return {
             load: true,
             url: a.url,
-            static: true,
+            fixed: true,
             icon: a.icon,
             notext: true,
             bcolor: a.bcolor,

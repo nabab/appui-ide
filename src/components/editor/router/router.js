@@ -49,7 +49,7 @@
               this.routerSource.push({
                 load: true,
                 url: tab.url,
-                static: true,
+                fixed: true,
                 icon: tab.icon,
                 notext: true,
                 bcolor: tab.bcolor,
@@ -65,7 +65,7 @@
             this.routerSource.push({
               load: true,
               url: 'code',
-              static: true,
+              fixed: true,
               icon: null,
               notext: true,
               bcolor: this.repo.bcolor,
