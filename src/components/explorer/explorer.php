@@ -5,7 +5,7 @@
 
       <bbn-toolbar>
         <!--div class="bbn-hpadded">
-          <bbn-dropdown placeholder="<?=_('Connection')?>"
+          <bbn-dropdown placeholder="<?= _('Connection') ?>"
                         v-model="connection"
                         :source="source.dirs"
                         source-value="id"
@@ -13,27 +13,27 @@
           </bbn-dropdown>
         </div-->
         <div class="bbn-left-sspace">
-          <bbn-button ftitle="<?=_('Is connected')?>"
+          <bbn-button ftitle="<?= _('Is connected') ?>"
                       :icon="'nf nf-fa-lightbulb_o bbn-' + (isConnected ? 'green' : 'red')"
                       @click="connect"
                       :notext="true">
           </bbn-button>
         </div>
         <div class="bbn-left-sspace">
-          <bbn-button ftitle="<?=_('View choice')?>"
+          <bbn-button ftitle="<?= _('View choice') ?>"
                       icon="nf nf-fa-eye"
                       :notext="true"
                       @click="viewMode = viewMode == 'dual' ? 'columns': 'dual'">
           </bbn-button>
         </div>
         <div class="bbn-left-sspace">
-          <bbn-button ftitle="<?=_('Element size')?>"
+          <bbn-button ftitle="<?= _('Element size') ?>"
                       icon="nf nf-mdi-move_resize_variant"
                       :notext="true">
           </bbn-button>
         </div>
         <div class="bbn-hpadded">
-          <bbn-input placeholder="<?=_('Path')?>"
+          <bbn-input placeholder="<?= _('Path') ?>"
                      v-model="currentPath"
                      class="bbn-wider"
                      :readonly="true"

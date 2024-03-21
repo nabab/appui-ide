@@ -1,7 +1,7 @@
 <div class="bbn-overlay bbn-block">
   <bbn-toolbar class="bbn-r">
     <div style="margin-:2px">
-      <bbn-button title="<?=_('Save')?>"
+      <bbn-button title="<?= _('Save') ?>"
                   icon="nf nf-fa-save"
                   @click="savePermission"
                   bcolor="bbn-green"

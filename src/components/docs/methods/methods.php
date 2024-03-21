@@ -7,7 +7,7 @@
     <bbn-toolbar class="bbn-overlay">
       <div class="bbn-flex-width bbn-w-100">
         <div class="bbn-w-90 bbn-vmiddle">
-          <span class="bbn-b bbn-xl"><?=_("Class:")?></span>
+          <span class="bbn-b bbn-xl"><?= _("Class:") ?></span>
           <span class="bbn-xl"
                 style="margin-left: 10px"
                 v-text="source.class.full"
@@ -17,13 +17,13 @@
           <div class="bbn-w-30 bbn-r bbn-vmiddle bbn-spadded bbn-flex-width">
             <div class="bbn-flex-fill"></div>
             <div class="bbn-w-20 bbn-grid-fields bbn-spadded">
-              <label class="bbn-b"><?=_('Member')?></label>
+              <label class="bbn-b"><?= _('Member') ?></label>
               <div class="bbn-w-60 bbn-vmiddle">
                 <div class="bbn-w-90 bbn-h-50 bbn-bg-black"></div>
               </div>
             </div>
             <div class="bbn-w-20 bbn-grid-fields bbn-spadded">
-              <label class="bbn-b"><?=_('Method')?></label>
+              <label class="bbn-b"><?= _('Method') ?></label>
               <div class="bbn-w-60 bbn-vmiddle">
                 <div class="bbn-w-90 bbn-h-50 bbn-background-effect-tertiary"></div>
               </div>

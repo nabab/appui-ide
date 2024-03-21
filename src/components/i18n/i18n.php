@@ -13,7 +13,7 @@
   >
     <bbns-column field="original_exp"
                 :editable="false"
-                title="<?=_("Original Expression")?>"
+                title="<?= _("Original Expression") ?>"
     ></bbns-column>
   </bbn-table>
 </div>

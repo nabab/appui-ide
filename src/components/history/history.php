@@ -24,7 +24,7 @@
       <div v-if="noHistory" class="bbn-h-100 bbn-middle">
         <div class="bbn-card bbn-vmiddle bbn-c bbn-lpadded">
             <span class="bbn-xxxl bbn-c">
-              <?=_("No history")?>
+              <?= _("No history") ?>
             </span>
         </div>
       </div>

@@ -31,15 +31,15 @@
               v-text="_('Legend')+': '"/>
       </div>
       <div class="bbn-flex-fill bbn-c bbn-card bbn-grid-fields bbn-spadded">
-        <label class="bbn-b"><?=_('Current')?></label>
+        <label class="bbn-b"><?= _('Current') ?></label>
         <div class="bbn-w-100 bbn-vmiddle">
           <div class="bbn-w-90 bbn-h-50 bbn-bg-black"></div>
         </div>
-        <label class="bbn-b"><?=_('Parent')?></label>
+        <label class="bbn-b"><?= _('Parent') ?></label>
         <div class="bbn-w-100 bbn-vmiddle">
           <div class="bbn-w-90 bbn-h-50 bbn-bg-green"></div>
         </div>
-        <label class="bbn-b"><?=_('Trait')?></label>
+        <label class="bbn-b"><?= _('Trait') ?></label>
         <div class="bbn-w-100 bbn-vmiddle">
           <div class="bbn-w-90 bbn-h-50 bbn-bg-red"></div>
         </div>
@@ -60,7 +60,7 @@
        class="bbn-middle bbn-h-100">
     <div class="bbn-card bbn-vmiddle bbn-c bbn-lpadded">
       <span class="bbn-b bbn-xl bbn-c">
-        <?=_("Parser class or file js in component")?>
+        <?= _("Parser class or file js in component") ?>
       </span>
     </div>
   </div>
@@ -72,7 +72,7 @@
         >
           <div class="bbn-card bbn-vmiddle bbn-c bbn-lpadded">
             <span class="bbn-b bbn-xl bbn-c">
-            <?=_("Empty Tree Parser")?>
+            <?= _("Empty Tree Parser") ?>
             </span>
           </div>
         </div>
@@ -81,7 +81,7 @@
         >
           <div class="bbn-card bbn-vmiddle bbn-c bbn-lpadded">
             <span class="bbn-b bbn-xl bbn-c">
-              <?=_("Parser class or file js in component")?>
+              <?= _("Parser class or file js in component") ?>
             </span>
           </div>
         </div>

@@ -12,19 +12,19 @@
                         :disabled="isDropdownPathDisabled"/>
         </div>
         <div/>
-        <bbn-button title="<?=_('Refresh files list')?>"
+        <bbn-button title="<?= _('Refresh files list') ?>"
                     @click="treeReload()"
                     icon="nf nf-oct-sync"
                     style="margin-left: 2px"
                     :notext="true"/>
         <div class="bbn-xspadding">
-          <bbn-button title="<?=_('Testeeeee code!')?>"
+          <bbn-button title="<?= _('Testeeeee code!') ?>"
                       @click="test"
                       icon="nf nf-fa-magic"
                       style="margin-left: 2px"
                       ref="btnTest"
                       :notext="true"/>
-          <bbn-button title="<?=('Show history')?>"
+          <bbn-button title="<?= ('Show history') ?>"
                       @click="openHistory"
                       icon="nf nf-mdi-history"
                       style="margin-left: 2px"

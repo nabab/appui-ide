@@ -11,26 +11,26 @@
   <div class="bbn-grid-fields bbn-l bbn-padded">
     <label v-if="source.is_file"
            class="bbn-b"
-    ><?=_("Delete File")?>:</label>
+    ><?= _("Delete File") ?>:</label>
     <label v-else-if="source.data.is_vue"
            class="bbn-b"
-    ><?=_("Delete Component")?>:</label>
+    ><?= _("Delete Component") ?>:</label>
     <label v-else
            class="bbn-b"
-    ><?=_("Delete folder")?>:</label>
+    ><?= _("Delete folder") ?>:</label>
     <span class="bbn-vmiddle" v-text="source.name"></span>
     <div  v-if="showPannel"
           class="bbn-vmiddle"
     >
       <span v-if="source.is_mvc"
                class="bbn-b"
-      ><?=_("Delete all MVC")?>:</span>
+      ><?= _("Delete all MVC") ?>:</span>
       <span v-else-if="source.data.is_vue"
              class="bbn-b"
-      ><?=_("Delete all component")?>:</span>
+      ><?= _("Delete all component") ?>:</span>
       <span v-else
              class="bbn-b"
-      ><?=_("Delete all folder")?>:</span>
+      ><?= _("Delete all folder") ?>:</span>
       <bbn-checkbox v-model= "formData.all"
                     :value="true"
                     :novalue="false"

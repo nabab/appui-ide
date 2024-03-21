@@ -1,6 +1,6 @@
 <div class="bbn-block bbn-overlay bbn-padded">
     <div class="bbn-grid-fields">
-      <label><?=_('Code')?></label>
+      <label><?= _('Code') ?></label>
       <div>
         <bbn-input readonly="readonly"
                    style="margin: 0 10px"
@@ -8,7 +8,7 @@
         ></bbn-input>
       </div>
       <label>
-        <?=_('Title/Description')?>
+        <?= _('Title/Description') ?>
       </label>
       <div class="bbn-flex-width">
         <bbn-input maxlength="255"

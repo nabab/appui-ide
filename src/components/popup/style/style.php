@@ -1,7 +1,7 @@
 <bbn-form :buttons="btns">
   <div class="bbn-flex-height bbn-overlay bbn-l bbn-padded">
     <div class="bbn-smargin">
-      <label><?=_('Theme')?></label>
+      <label><?= _('Theme') ?></label>
       <bbn-dropdown v-if="themes.length > 0"
                     :source="themes"
                     v-model="themePreview"

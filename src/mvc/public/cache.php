@@ -6,5 +6,9 @@
 
 /** @var $ctrl \bbn\Mvc\Controller */
 
-
-$ctrl->setColor('#391E13', '#FFF')->setIcon('nf nf-mdi-cached')->combo("Cache management");
+if (empty($ctrl->post)) {
+  $ctrl->setColor('#391E13', '#FFF')->setIcon('nf nf-mdi-cached')->combo("Cache management");
+}
+else {
+  $ctrl->action();
+}

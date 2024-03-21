@@ -4,7 +4,7 @@
       <div v-if="source.imessages && source.imessages.length"
            style="margin-bottom: 1rem"
       >
-        <div><strong><?=_('EXISTING')?></strong></div>
+        <div><strong><?= _('EXISTING') ?></strong></div>
         <div v-for="imess in source.imessages"
              class="bbn-p"
              style="margin-left: 1rem"
@@ -12,9 +12,9 @@
         >
           <span v-text="imess.title"></span>
           |
-          <span><?=_('Start')?>: {{imess.start || 'x'}}</span>
+          <span><?= _('Start') ?>: {{imess.start || 'x'}}</span>
           |
-          <span><?=_('End')?>: {{imess.end || 'x'}}</span>
+          <span><?= _('End') ?>: {{imess.end || 'x'}}</span>
         </div>
       </div>
       <bbn-form action=""
@@ -25,7 +25,7 @@
         <div class="bbn-flex-width"
              style="margin-bottom: 10px"
         >
-          <span style="margin-right: 10px"><?=_('Title')?></span>
+          <span style="margin-right: 10px"><?= _('Title') ?></span>
           <bbn-input class="bbn-flex-fill"
                      v-model="imessage.title"
                      required="required"
@@ -37,16 +37,16 @@
           ></bbn-button>
           <bbn-button icon="nf nf-fa-plus"
                       @click="newImessage"
-                      title="<?=_('New')?>"
+                      title="<?= _('New') ?>"
           ></bbn-button>
         </div>
         <div style="margin-bottom: 10px">
-          <span style="margin-right: 10px"><?=_('Start')?></span>
+          <span style="margin-right: 10px"><?= _('Start') ?></span>
           <bbn-datetimepicker v-model="imessage.start"
                               :min="today"
                               @change="changeStart"
           ></bbn-datetimepicker>
-          <span style="margin: 0 10px"><?=_('End')?></span>
+          <span style="margin: 0 10px"><?= _('End') ?></span>
           <bbn-datetimepicker v-model="imessage.end"
                               :min="today"
           ></bbn-datetimepicker>

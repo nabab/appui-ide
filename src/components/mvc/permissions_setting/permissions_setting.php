@@ -1,14 +1,14 @@
 <!--div class="bbn-overlay">
-  <div class="bbn-header bbn-c"><?=('Permissions setting')?></div>
+  <div class="bbn-header bbn-c"><?= ('Permissions setting') ?></div>
     <div class="bbn-block bbn-hspadded bbn-100">
     <bbn-scroll>
       <div class="bbn-block bbn-w-100">
-        <span><?=_('Code')?></span>
+        <span><?= _('Code') ?></span>
         <bbn-input readonly="readonly"
                    style="margin: 0 10px"
                    :value="permissions.code"
         ></bbn-input>
-        <span><?=_('Title/Description')?></span>
+        <span><?= _('Title/Description') ?></span>
         <bbn-input maxlength="255"
                    style="width:400px; margin: 0 10px"
                    v-model="permissions.text"
@@ -18,7 +18,7 @@
                     @click="savePermission"
         ></bbn-button>
         <br>
-        <span style="margin-top: 5px"><?=_('Help')?></span>
+        <span style="margin-top: 5px"><?= _('Help') ?></span>
         <bbn-markdown class="bbn-iblock"
                  style="margin: 5px 10px 0 10px; width: 95%; vertical-align: top"
                  v-model="permissions.help"
@@ -29,15 +29,15 @@
         ></bbn-textarea>-->
       <!--/div>
       <div class="bbn-block bbn-block bbn-w-100" style="margin-top: 10px">
-        <div class="bbn-header bbn-c"><?=_('Children permissions')?></div>
+        <div class="bbn-header bbn-c"><?= _('Children permissions') ?></div>
         <div class="bbn-hspadded bbn-block bbn-w-100">
           <div class="bbn-w-100">
-            <span><?=_('Code')?></span>
+            <span><?= _('Code') ?></span>
             <bbn-input style="margin: 0 10px"
                        maxlength="255"
                        ref="perm_child_code"
             ></bbn-input>
-            <span><?=_('Title/Description')?></span>
+            <span><?= _('Title/Description') ?></span>
             <bbn-input maxlength="255"
                        style="margin: 0 10px; width: 60%"
                        @keydown.enter.prevent="addChildPermission"
@@ -55,14 +55,14 @@
             >
               <li>
                 <div style="margin-bottom: 5px">
-                  <label><?=_('Code')?></label>
+                  <label><?= _('Code') ?></label>
                   <bbn-input v-model="c.code"
                              @keydown.enter.prevent="saveChildPermission"
                              style="margin: 0 10px"
                              maxlength="255"
                              readonly="readonly"
                   ></bbn-input>
-                  <label><?=_('Title/Description')?></label>
+                  <label><?= _('Title/Description') ?></label>
                   <bbn-input maxlength="255"
                              style="width:400px; margin: 0 10px"
                              v-model="c.text"

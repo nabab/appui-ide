@@ -12,13 +12,13 @@
 <div id="appui_constants_page" class="bbn-padding"><?php
 if ( !empty($names) ){
   foreach ($names as $namespace){ ?>
-  <h3><span><?=$namespace['prefix']?></span></h3>
+  <h3><span><?= $namespace['prefix'] ?></span></h3>
     <ul><?php
     foreach ($namespace['constants'] as $content){ ?>
       <li>
-        <span class="bbn-prefix"><?=$content['prefix']?></span>
-        <span class="bbn-constant"><?=$content['constant']?></span>
-        <span class="bbn-value"><?=$content['value']?></span>
+        <span class="bbn-prefix"><?= $content['prefix'] ?></span>
+        <span class="bbn-constant"><?= $content['constant'] ?></span>
+        <span class="bbn-value"><?= $content['value'] ?></span>
       </li>
     <?php }?>
   </ul>

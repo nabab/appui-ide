@@ -5,7 +5,7 @@
           :scrollable="false"
 >
   <div class="bbn-grid-fields bbn-l bbn-padded">
-      <label><?=_("Name")?></label>
+      <label><?= _("Name") ?></label>
       <div class="bbn-flex-width">
         <bbn-input class="bbn-flex-fill"
                    v-model="new_name"

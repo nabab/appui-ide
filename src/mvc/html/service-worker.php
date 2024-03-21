@@ -28,17 +28,17 @@
           <bbn-splitter orientation="horizontal">
             <bbn-pane>
               <h3 class="bbn-c">
-                <?=_("Client")?>
+                <?= _("Client") ?>
               </h3>
             </bbn-pane>
             <bbn-pane>
               <h3 class="bbn-c">
-                <?=_("Request")?>
+                <?= _("Request") ?>
               </h3>
             </bbn-pane>
             <bbn-pane>
               <h3 class="bbn-c">
-                <?=_("Response")?>
+                <?= _("Response") ?>
               </h3>
             </bbn-pane>
           </bbn-splitter>

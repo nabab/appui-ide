@@ -5,7 +5,7 @@
             @success="onSuccess"
             @failure="failureActive">
     <div class="bbn-padding bbn-w-100">
-      <div class="bbn-grid-fields"><label><?=_("Name")?></label>
+      <div class="bbn-grid-fields"><label><?= _("Name") ?></label>
         <div class="bbn-flex-width">
           <div class="bbn-flex-fill">
             <bbn-input v-model="data.name"
@@ -35,7 +35,7 @@
         </div>
 
         <label v-if="data.template === 'file' && types.length">
-          <?=_("Type")?>
+          <?= _("Type") ?>
         </label>
         <div  v-if="(data.template === 'file') && types.length">
           <bbn-dropdown :source="types"
@@ -45,7 +45,7 @@
         </div>
 
         <label v-if="hasFileDetails">
-          <?=_("Controller")?>
+          <?= _("Controller") ?>
         </label>
         <div v-if="hasFileDetails">
           <bbn-radio :required="true"
@@ -54,7 +54,7 @@
         </div>
 
         <label v-if="hasFileDetails">
-          <?=_("Model")?>
+          <?= _("Model") ?>
         </label>
         <div v-if="hasFileDetails">
           <bbn-radio :required="true"
@@ -63,7 +63,7 @@
         </div>
 
         <label v-if="hasFileDetails">
-          <?=_("View HTML")?>
+          <?= _("View HTML") ?>
         </label>
         <div v-if="hasFileDetails">
           <bbn-radio :required="true"
@@ -74,7 +74,7 @@
         </div>
 
         <label v-if="hasFileDetails">
-          <?=_("Javascript")?>
+          <?= _("Javascript") ?>
         </label>
         <div v-if="hasFileDetails">
           <bbn-radio :required="true"
@@ -83,7 +83,7 @@
         </div>
 
         <label v-if="hasFileDetails">
-          <?=_("Styles CSS")?>
+          <?= _("Styles CSS") ?>
         </label>
         <div v-if="hasFileDetails">
           <bbn-radio :required="true"
@@ -93,7 +93,7 @@
                         :label="_('With a class')"/>
         </div>
 
-        <label><?=_("Path")?></label>
+        <label><?= _("Path") ?></label>
         <div class="bbn-flex-width">
           <div class="bbn-flex-fill">
             <bbn-input v-model="data.path"
@@ -102,8 +102,8 @@
                        class="bbn-w-100"/>
           </div>
           <div class="bbn-nowrap">
-            <bbn-button @click="selectDir"><?=_("Browse")?></bbn-button>
-            <bbn-button @click="getRoot"><?=_("Root")?></bbn-button>
+            <bbn-button @click="selectDir"><?= _("Browse") ?></bbn-button>
+            <bbn-button @click="getRoot"><?= _("Root") ?></bbn-button>
           </div>
         </div>
 

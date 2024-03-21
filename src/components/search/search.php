@@ -5,7 +5,7 @@
       <span>
         <strong>
           <i class="nf nf-fa-cogs"></i>
-          <?=_('Type:')?>
+          <?= _('Type:') ?>
         </strong>
         &nbsp;
       </span>
@@ -21,7 +21,7 @@
       <span>
         <strong>
           <i class="zmdi zmdi-search-in-file"></i>
-          <?=_('Search')?>
+          <?= _('Search') ?>
           <span v-text="'('+ typeSearch +') :'"></span>
         </strong>
         &nbsp;
@@ -34,14 +34,14 @@
       <span v-if="!source.component">
         <strong>
           <i class="zmdi zmdi-folder"></i>
-          <?=_('Folder:')?>
+          <?= _('Folder:') ?>
         </strong>
         &nbsp;
       </span>
       <span v-else>
         <strong>
           <i class="nf nf-fa-vuejs"></i>
-          <?=_('Component:')?>
+          <?= _('Component:') ?>
         </strong>
         &nbsp;
       </span>
@@ -54,7 +54,7 @@
     <div v-if="source.all">
       <span>
         <strong>
-          <?=_('Repositories:')?>
+          <?= _('Repositories:') ?>
         </strong>
         &nbsp;
       </span>
@@ -69,7 +69,7 @@
     <div>
       <span>
         <strong>
-          <?=_('Files:')?>
+          <?= _('Files:') ?>
         </strong>
         &nbsp;
       </span>
@@ -82,7 +82,7 @@
     <div>
       <span>
         <strong>
-          <?=_('Occourences:')?>
+          <?= _('Occourences:') ?>
         </strong>
         &nbsp;
       </span>
@@ -106,7 +106,7 @@
     >
       <span class="bbn-xxxl">
         <strong>
-          <?=_('no search result')?>
+          <?= _('no search result') ?>
         </strong>
       </span>
     </div>

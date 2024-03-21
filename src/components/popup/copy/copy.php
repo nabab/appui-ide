@@ -7,7 +7,7 @@
    <div class="bbn-padded bbn-flex-height">
      <div class="bbn-flex-fill bbn-grid-fields">
        <label>
-         <?=_("Name")?>
+         <?= _("Name") ?>
        </label>
        <div>
          <bbn-input v-model="new_name"
@@ -21,15 +21,15 @@
        </div>
 
        <label>
-         <?=_("Path")?>
+         <?= _("Path") ?>
        </label>
        <div>
          <bbn-input v-model="new_path"
                     readonly="readonly"
                     required="required"
          ></bbn-input>
-         <bbn-button @click="selectDir"><?=_("Browse")?></bbn-button>
-         <bbn-button @click="getRoot"><?=_("Root")?></bbn-button>
+         <bbn-button @click="selectDir"><?= _("Browse") ?></bbn-button>
+         <bbn-button @click="getRoot"><?= _("Root") ?></bbn-button>
        </div>
      </div>
   </div>

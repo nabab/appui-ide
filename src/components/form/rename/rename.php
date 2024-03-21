@@ -6,7 +6,7 @@
             @success="onSuccess"
             class="bbn-m">
     <div class="bbn-padded bbn-grid-fields" >
-      <label><?=_("Name")?></label>
+      <label><?= _("Name") ?></label>
       <div style="min-width: 30em;">
         <div class="bbn-flex-width">
           <bbn-input v-model="name"

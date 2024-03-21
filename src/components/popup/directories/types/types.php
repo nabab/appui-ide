@@ -4,7 +4,7 @@
              :scrollable="true"
              :sortable="true"
              :toolbar="[{
-               text: '<?=_('Add Type')?>',
+               text: '<?= _('Add Type') ?>',
                icon: 'nf nf-fa-plus',
                action: addType
              }]"
@@ -18,25 +18,25 @@
     <bbns-column field="id"
                  :hidden="true"
     ></bbns-column>
-    <bbns-column title="<?=_("Type")?>"
+    <bbns-column title="<?= _("Type") ?>"
                  field="text"
                  cls="bbn-c"
     ></bbns-column>
-    <bbns-column title= "<?=_("Extensions")?>"
+    <bbns-column title= "<?= _("Extensions") ?>"
                  field="extensions"
                  :width="70"
                  :render="renderIconExts"
                  cls="bbn-c"
                  default="[]"
     ></bbns-column>
-    <bbns-column title= "<?=_("Tabs")?>"
+    <bbns-column title= "<?= _("Tabs") ?>"
                  field="tabs"
                  :width="70"
                  :render="renderIconTabs"
                  cls="bbn-c"
                  default="[]"
     ></bbns-column>
-    <bbns-column title= "<?=_("Types")?>"
+    <bbns-column title= "<?= _("Types") ?>"
                  field="types"
                  :width="70"
                  :render="renderIconTypes"
@@ -47,17 +47,17 @@
                  cls="bbn-c"
                  :width="150"
                  :buttons="[{
-                   text: '<?=_("Edit")?>',
+                   text: '<?= _("Edit") ?>',
                    action: editType,
                    notext: true,
                    icon: 'nf nf-oct-pencil'
                  },{
-                   text: '<?=_("Copy")?>',
+                   text: '<?= _("Copy") ?>',
                    action: copyType,
                    notext: true,
                    icon: 'nf nf-fa-copy'
                  },{
-                   text: '<?=_("Delete")?>',
+                   text: '<?= _("Delete") ?>',
                    action: deleteType,
                    icon: 'nf nf-fa-trash',
                    notext: true
