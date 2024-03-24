@@ -3,7 +3,7 @@
   return {
     data(){
       return {
-        users: appui.app.users
+        users: appui.users
       };
     },
     methods: {
