@@ -4,7 +4,7 @@
               :scrollable="false"
               ref="tabstrip"
   >
-    <bbns-container :static="true"
+    <bbns-container :fixed="true"
                     :load="true"
                     url="code"
                     :menu="getMenu()"

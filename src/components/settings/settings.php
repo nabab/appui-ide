@@ -4,7 +4,7 @@
                 :scrollable="false"
                 ref="tabstrip"
     >
-      <bbn-container :static="true"
+      <bbn-container :fixed="true"
                      :load="false"
                      url="permissions"
                      :title="titles.permissions"
@@ -12,7 +12,7 @@
                      :source="source.permissions"
                      component="appui-ide-settings-permission"
       ></bbn-container>
-      <bbn-container :static="true"
+      <bbn-container :fixed="true"
                      :load="false"
                      url="sub_permission"
                      :title="titles.subPerm"
@@ -20,7 +20,7 @@
                      :source="source.permissions"
                      component="appui-ide-settings-sub_perm"
       ></bbn-container>
-      <bbn-container :static="true"
+      <bbn-container :fixed="true"
                      :load="false"
                      url="help"
                      :title="titles.help"
@@ -28,7 +28,7 @@
                      :source="source.permissions"
                      component="appui-ide-settings-help"
       ></bbn-container>
-      <bbn-container :static="true"
+      <bbn-container :fixed="true"
                      :load="false"
                      url="messages"
                      :title="titles.messages"

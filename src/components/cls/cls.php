@@ -83,7 +83,7 @@
                     :breadcrumb="false"
                     :visual="false">
           <bbn-container url="doc"
-                         :static="true"
+                         :fixed="true"
                          :title="_('Doc & Ex')">
             <appui-ide-cls-doc v-if="!currentSelected"
                                      :source="source"
@@ -107,7 +107,7 @@
                                        mode="read"/>
           </bbn-container>
           <bbn-container url="editor"
-                         :static="true"
+                         :fixed="true"
                          :title="_('Editor')">
             <appui-ide-cls-editor v-if="!currentSelected"
                                      :source="source"
@@ -130,7 +130,7 @@
                                        mode="write"/>
           </bbn-container>
           <bbn-container url="test"
-                         :static="true"
+                         :fixed="true"
                          :title="_('Test')">
             <appui-ide-cls-testor v-if="!currentSelected"
                                      :source="source"

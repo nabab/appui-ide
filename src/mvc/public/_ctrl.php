@@ -9,7 +9,7 @@ if (!isset($ctrl->inc->ide)) {
       $ctrl->inc->options,
       $ctrl->getRoutes(),
       $ctrl->inc->pref,
-      $ctrl->post['project'] ?? BBN_PROJECT
+      $ctrl->post['project'] ?? constant('BBN_PROJECT')
     )
   );
 }
