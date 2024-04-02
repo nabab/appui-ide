@@ -34,13 +34,13 @@
         let cm = window.codemirror6;
 
         if (!this.mode || !this.theme) {
-          throw new Error("You earmust provide a language and a theme");
+          throw Error("You earmust provide a language and a theme");
         }
         if (!cm.languageExtensions[this.mode]) {
-          throw new Error("Unknown language");
+          throw Error("Unknown language");
         }
         if (!cm.theme[this.theme]) {
-          throw new Error("Unknown theme");
+          throw Error("Unknown theme");
         }
         let extensions = [];
 

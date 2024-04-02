@@ -144,13 +144,13 @@
           cm.ext = window.codemirror6.ext;
         }
         if (!this.currentMode || !this.currentTheme) {
-          throw new Error("You must provide a language and a theme");
+          throw Error("You must provide a language and a theme");
         }
         if (!cm.languageExtensions[appuiIdeCodemirrorCp.modeCode[this.currentMode]]) {
-          throw new Error("Unknown language");
+          throw Error("Unknown language");
         }
         if (!cm.theme[this.currentTheme]) {
-          throw new Error("Unknown theme");
+          throw Error("Unknown theme");
         }
         let extensions = [];
         // push each basic extension
