@@ -1,5 +1,9 @@
 # Created by .ignore support plugin (hsz.mobi)
 /.idea
+composer.phar
+/vendor/
+.history
+.vscode
 
 [core]
 filemode = false
