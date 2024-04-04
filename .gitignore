@@ -5,3 +5,4 @@
 filemode = false
 *.* text eol=lf
 *.DS_Store
+.history
