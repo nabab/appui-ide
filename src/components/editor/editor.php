@@ -18,13 +18,13 @@
                     style="margin-left: 2px"
                     :notext="true"/>
         <div class="bbn-xspadding">
-          <bbn-button title="<?= _('Testeeeee code!') ?>"
+          <bbn-button title="<?= _('Test code!') ?>"
                       @click="test"
                       icon="nf nf-fa-magic"
                       style="margin-left: 2px"
                       ref="btnTest"
                       :notext="true"/>
-          <bbn-button title="<?= ('Show history') ?>"
+          <bbn-button title="<?= _('Show history') ?>"
                       @click="openHistory"
                       icon="nf nf-mdi-history"
                       style="margin-left: 2px"
@@ -37,44 +37,47 @@
         </bbn-menu>
       </bbn-toolbar>
     </bbn-pane>
-    <bbn-pane title="Files">
+    <bbn-pane>
       <bbn-splitter orientation="horizontal"
                     :resizable="true"
                     :collapsible="true">
         <bbn-pane :size="220"
-                  :min="40">
-          <bbn-input placeholder="Search Content"/>
-          <bbn-dropdown v-if="currentPathType && currentPathType.types"
-                        :source="currentPathType.types"
-                        source-value="type"
-                        source-url=""
-                        source-text="url"
-                        v-model="currentTypeCode"
+                  :min="40"
+                  :scrollable="false">
+          <div class="bbn-flex-height">
+            <div class="bbn-w-100 bbn-xspadding">
+              <bbn-input placeholder="Search Content"/>
+            </div>
+            <div class="bbn-w-100 bbn-xspadding">
+              <bbn-dropdown v-if="currentPathType?.types"
+                            :source="currentPathType.types"
+                            source-value="type"
+                            source-url=""
+                            source-text="url"
+                            v-model="currentTypeCode"/>
+            </div>
+            <div class="bbn-flex-fill bbn-bottom-spadding">
+              <bbn-tree :source="root + 'data/tree'"
+                        bbn-if="treeData"
+                        :map="mapTree"
+                        :data="treeData"
                         :storage="true"
-                        :storage-full-name="'appui-ide-type-dd-' + source.project.id + '-' + currentPathId"/>
-          <bbn-tree :source="root + 'data/tree'"
-                    :map="mapTree"
-                    :data="{
-                           id_project: source.project.id,
-                           type: currentTypeCode,
-                           id_path: currentPathId
-                           }"
-                    :storage="true"
-                    :storage-full-name="'appui-ide-type-th-' + source.project.id + '-' + currentRoot"
-                    ref="tree"
-                    @nodedoubleclick="treeNodeActivate"
-                    :icon-color="iconColor"
-                    :draggable="true"
-                    @move="moveNode"
-                    :menu="treeMenu"
-                    class="bbn-bottom-smargin"/>
+                        :storage-full-name="'appui-ide-type-th-' + source.project.id + '-' + currentRoot"
+                        ref="tree"
+                        @nodedoubleclick="treeNodeActivate"
+                        :icon-color="iconColor"
+                        :draggable="true"
+                        @move="moveNode"
+                        :menu="treeMenu"/>
+            </div>
+          </div>
         </bbn-pane>
         <bbn-pane>
           <bbn-router :autoload="true"
                       ref="router"
                       :nav="true"
                       :storage="true"
-                      :storage-full-name="'appui-ide-editor-' + source.project.id"/>
+                      :storage-full-name="'appui-ide-editor-router-' + source.project.id"/>
         </bbn-pane>
         <bbn-pane :size="200"
                   :min="40"

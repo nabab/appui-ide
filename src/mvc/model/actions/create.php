@@ -73,8 +73,6 @@ if ($model->hasData(['repository', 'path', 'name', 'type', 'id_project', 'is_fil
 
       $file_path = $path . $tab['path'] . ($model->data['path'] !== "/" ? $model->data['path'] : '') . $model->data['name'] . '.' . $ext['ext'];
       $file_path = str_replace('//', '/', $file_path);
-      X::ddump($file_path, $ext);
-
       if ($fs->putContents($file_path, $ext['default'])) {
         return [
           'success' => true,

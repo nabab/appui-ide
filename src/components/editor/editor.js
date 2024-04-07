@@ -7,6 +7,7 @@
 
 (() => {
   return {
+    mixins: [bbn.cp.mixins.basic, bbn.cp.mixins.localStorage],
     data() {
       return {
         types: bbn.ide || null,
@@ -25,7 +26,7 @@
                * Id of the selected path
                * @data {String} [''] currentPathId
                */
-        currentPathId: this.source?.project?.path ? this.source.project.path[0].id : '',
+        currentPathId: this.source?.project?.path?.[0]?.id,
         /**
                * Enable / Disable the dropdown to select path
                * @data {Boolean} [false] isDropdownPathDisabled
@@ -69,6 +70,7 @@
             action: this.save
           }
         ],
+        treeData: null,
         copiedNode: null,
         isCut: false,
         ready: false
@@ -523,7 +525,7 @@
         };
         //case top menu
 
-        bbn.fn.log("ide NODE", node);
+        //bbn.fn.log("ide NODE", node);
         if ( this.currentTypeCode !== false ){
           src.type =  this.currentTypeCode;
           if (src.type !== 'mvc') {
@@ -588,7 +590,8 @@
             title = bbn._('New Class');
           }
         }
-        bbn.fn.log("NODE", node);
+
+        //bbn.fn.log("NODE", node);
         this.openNew(title, true, node);
       },
 
@@ -696,7 +699,7 @@
         return url;
       },
       treeMenu(node) {
-        bbn.fn.log("NODE", node);
+        //bbn.fn.log("NODE", node);
         let res = [];
 
         res.push({
@@ -891,10 +894,22 @@
       }
     },
     /**
-           * @event created
-           * @fires fn.post
-           */
+     * @event created
+     * @fires fn.post
+     */
     created() {
+      const cfg = this.getStorage();
+      if (cfg.typeCode && (cfg.typeCode !== this.currentTypeCode)) {
+        this.currentTypeCode = cfg.typeCode;
+      }
+      if (cfg.pathId && (cfg.pathId !== this.currentPathId)) {
+        this.currentPathId = cfg.pathId;
+      }
+      this.treeData = {
+        id_project: this.source.project.id,
+        type: this.currentTypeCode,
+        id_path: this.currentPathId
+      };
       if (!appui.projects.options.ide) {
         bbn.fn.post(appui.plugins['appui-ide'] + "/data/types", d => {
           this.typeOptions = d.types;
@@ -925,15 +940,31 @@
     },
     watch: {
       currentTypeCode(v) {
+        this.treeData.type = v;
+        this.setStorage({
+          typeCode: this.currentTypeCode,
+          pathId: this.currentPathId
+        })
         if (v && this.currentPathType && this.currentPathType.types) {
           this.$nextTick(() => {
-            this.getRef('tree').updateData();
+            const tree = this.getRef('tree');
+            if (tree) {
+              tree.updateData();
+            }
           });
         }
       },
       currentPathId(v) {
+        this.treeData.id_path = v;
+        this.setStorage({
+          typeCode: this.currentTypeCode,
+          pathId: this.currentPathId
+        })
         this.$nextTick(() => {
-          this.getRef('tree').updateData();
+          const tree = this.getRef('tree');
+          if (tree) {
+            tree.updateData();
+          }
         });
       }
     }
