@@ -5,6 +5,9 @@
       return{
         root: appui.plugins['appui-ide'] + '/',
         selectedFile : "",
+        selectedFileCreation: '',
+        selectedFileExpire: '',
+        selectedFileHash: '',
         contentCache: ""
       }
     },
