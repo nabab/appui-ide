@@ -20,7 +20,7 @@
       <div class="bbn-overlay bbn-padded" style="border: 0.5px solid #CCC">
         <div class="bbn-flex-height" v-if="selectedFile.length && contentCache.length">
           <div class="bbn-w-100">
-            <div class="bbn-card bbn-padded bbn-l bbn-vmargin">
+            <div class="bbn-card bbn-padded bbn-m bbn-vmargin bbn-w-100">
               <div class="bbn-grid-fields" v-if="selectedFile">
                 <div class="bbn-grid-full bbn-b bbn-c" v-text="selectedFile"/>
                 <label class="bbn-b" v-text="_('Creation date') + ' :'"/>
