@@ -899,12 +899,15 @@
      */
     created() {
       const cfg = this.getStorage();
-      if (cfg.typeCode && (cfg.typeCode !== this.currentTypeCode)) {
-        this.currentTypeCode = cfg.typeCode;
+      if (cfg) {
+        if (cfg.typeCode && (cfg.typeCode !== this.currentTypeCode)) {
+          this.currentTypeCode = cfg.typeCode;
+        }
+        if (cfg.pathId && (cfg.pathId !== this.currentPathId)) {
+          this.currentPathId = cfg.pathId;
+        }
       }
-      if (cfg.pathId && (cfg.pathId !== this.currentPathId)) {
-        this.currentPathId = cfg.pathId;
-      }
+
       this.treeData = {
         id_project: this.source.project.id,
         type: this.currentTypeCode,

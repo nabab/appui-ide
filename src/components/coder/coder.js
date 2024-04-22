@@ -19,7 +19,7 @@
     },
     methods: {
       keydown(e) {
-        bbn.fn.log('keydown', e);
+        bbn.fn.log('keydown in appui-ide-coder', e);
         if (e.ctrlKey && (e.key.toLowerCase() === 's')) {
           e.preventDefault();
           e.stopImmediatePropagation();
@@ -32,10 +32,10 @@
             bbn.fn.log(d);
             if (d.success) {
               if (d.delete) {
-                appui.success(bbn._("Delete successfully"));
+                appui.success(bbn._("File %s deleted successfully", d.file));
               }
               else {
-                appui.success(bbn._("Save successfully"));
+                appui.success(bbn._("File %s saved successfully", d.file));
               }
             }
           });

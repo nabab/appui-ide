@@ -94,13 +94,6 @@
           document.getElementsByTagName('head')[0].appendChild(eslintScript);
 
         }
-        // load script with codemirror6 and all extensions
-        if (!window.codemirror6) {
-          let cmScript = document.createElement('script');
-          cmScript.src = '/cm.js';
-          document.getElementsByTagName('head')[0].appendChild(cmScript);
-        }
-
       },
       foldAll() {
         window.codemirror6.language.foldAll(this.getRef("code").widget);
@@ -284,6 +277,7 @@
         let fn = this.getWidgetCompletion();
         // launch the autocompletion function with current context
         let res = fn(context);
+        bbn.fn.log("COMPLETION RESULT", res);
 
         // create options array if not exist to add more autocompletion
         if (!res || !res.options) {
@@ -591,7 +585,6 @@
       },
       onKeyDown(event) {
         this.lastKeyDown = event;
-        this.$emit('keydown', event);
       }
     },
   };
