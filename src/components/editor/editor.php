@@ -7,8 +7,6 @@
           <bbn-dropdown :source="source.project.path"
                         source-value="id"
                         v-model="currentPathId"
-                        :storage="true"
-                        :storage-full-name="'appui-ide-path-dd-' + source.project.id"
                         :disabled="isDropdownPathDisabled"/>
         </div>
         <div/>
@@ -61,6 +59,7 @@
                         bbn-if="treeData"
                         :map="mapTree"
                         :data="treeData"
+                        uid="uid"
                         :storage="true"
                         :storage-full-name="'appui-ide-type-th-' + source.project.id + '-' + currentRoot"
                         ref="tree"

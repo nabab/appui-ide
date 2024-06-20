@@ -35,12 +35,12 @@
       },    
       saveChildPermission(e){
         //let inputs = $(e.target).closest('li').find('input'),
-        let inputs = e.target.closest('li').querySelectorAll('input')
-            obj = {
-              id: this.source.id,
-              code: inputs[0].value,
-              text: inputs[1].value
-            };
+        const inputs = e.target.closest('li').querySelectorAll('input');
+        const obj = {
+          id: this.source.id,
+          code: inputs[0].value,
+          text: inputs[1].value
+        };
 
         if ( obj.id && obj.code.length && obj.text.length ){
           this.post(appui.plugins['appui-ide'] + '/permissions/save', obj, (d) => {

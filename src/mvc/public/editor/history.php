@@ -5,5 +5,5 @@ use bbn\Str;
 /** @var $ctrl \bbn\Mvc\Controller */
 
 if ($ctrl->hasData('url')) {
-	$ctrl->combo('History', true)
+	$ctrl->combo('History', true);
 }
