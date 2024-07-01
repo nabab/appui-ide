@@ -4,8 +4,8 @@
   <bbn-code ref="code"
             @keydown="onKeyDown"
             @hook:mounted="init"
-            v-model="myCode"
-            :extensions="getExtensions()"
+            :extensions="getExtensions"
+            bbn-model="myCode"
             :theme="theme"
             :mode="mode" />
 </div>

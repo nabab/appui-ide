@@ -1,5 +1,4 @@
 // Javascript Document
-
 (() => {
 
   return {
@@ -27,7 +26,7 @@
           sql: 'sql',
           scss: 'css',
           test: 'test',
-          vue: 'vue'
+          bbn: 'bbn'
         }
       }
     },
@@ -66,6 +65,7 @@
         lastKeyDown: null,
         // for autocompletion to get last valid object create with current js file
         lastValidVueObject: this.getVueObject(),
+        editor: null
       };
     },
     methods: {
@@ -73,8 +73,8 @@
       init() {
         if (!bbn.doc) {
           bbn.doc = {};
-
         }
+
         if (this.currentMode === 'js' && !bbn.doc['bbn-js']) {
           // create json object in bbn.doc with bbn-js documentation
           bbn.fn.ajax("https://raw.githubusercontent.com/nabab/bbn-js/master/doc/tern.json", "json", null, (d) => {
@@ -92,31 +92,30 @@
           let eslintScript = document.createElement('script');
           eslintScript.src = 'eslint4b.js';
           document.getElementsByTagName('head')[0].appendChild(eslintScript);
-
         }
       },
       foldAll() {
-        window.codemirror6.language.foldAll(this.getRef("code").widget);
-        //window.codemirror6.language.foldInside(window.codemirror6.language.syntaxTree(this.widget));
+        this.editor.foldAll();
+        //bbnCodeCp.cm.language.foldInside(bbnCodeCp.cm.language.syntaxTree(this.widget));
       },
       unfoldAll() {
-        window.codemirror6.language.unfoldAll(this.getRef("code").widget);
+        this.editor.unfoldAll();
 
       },
       openSearchPanel() {
-        window.codemirror6.search.openSearchPanel(this.getRef("code").widget);
+        this.editor.openSearchPanel();
       },
       closeSearchPanel() {
-        window.codemirror6.search.closeSearchPanel(this.getRef("code").widget);
+        this.editor.closeSearchPanel();
       },
       findNext() {
-        window.codemirror6.search.findNext(this.getRef("code").widget);
+        this.editor.findNext();
       },
       findPrevious() {
-        window.codemirror6.search.findPrevious(this.getRef("code").widget);
+        this.editor.findPrevious();
       },
       replaceAll() {
-        window.codemirror6.search.replaceAll(this.getRef("code").widget);
+        this.editor.replaceAll();
       },
       /**
        * Return an array with extensions give in cfg
@@ -126,16 +125,12 @@
        * @return {Array}
        */
       getExtensions() {
-        let cm = window.codemirror6;
+        let cm = window.bbnCodeCp?.cm;
 
         if (!cm) {
           return [];
         }
-        if (!cm.ext) {
-          // get basics extensions for editor like keymap, autocompletion...
-          window.codemirror6.ext = cm.getBasicExtensions(cm);
-          cm.ext = window.codemirror6.ext;
-        }
+
         if (!this.currentMode || !this.currentTheme) {
           throw Error("You must provide a language and a theme");
         }
@@ -147,36 +142,14 @@
         }
         let extensions = [];
         // push each basic extension
-        for (let n in cm.ext) {
-          extensions.push(cm.ext[n]);
+        for (let n in cm.extensions) {
+          extensions.push(cm.extensions[n]);
         }
         // push current language extension and current theme extension
         extensions.push(cm.languageExtensions[appuiIdeCodemirrorCp.modeCode[this.currentMode]]);
         extensions.push(cm.theme[this.currentTheme]);
         switch (this.currentMode) {
           case "javascript":
-            extensions.push(cm.javascript.javascript());
-            if (window.eslint4b) {
-              // create linter with eslint configuration
-              extensions.push(cm.lint.linter(cm.javascript.esLint(new window.eslint4b(), {
-                parseOptions: {
-                  ecmaVersion: 2019,
-                  sourceType: 'script'
-                },
-                env: {
-                  browser: true
-                },
-                rules: {
-                  semi: ['error', 'never'],
-                },
-                globals: {
-                  bbn: 'readonly'
-                }
-              })));
-            }
-
-
-            break;
           case "js":
             extensions.push(cm.javascript.javascript());
             if (window.eslint4b) {
@@ -199,7 +172,7 @@
 
             break;
           case "html":
-            extensions.push(cm.vue.vue());
+            extensions.push(cm.bbn.bbn());
             extensions.push(cm.elmet);
             break;
           case "php":
@@ -259,6 +232,7 @@
             override: [a => this.completionSource(a)]
           }));
         }
+
         return extensions;
       },
       /**
@@ -272,7 +246,7 @@
         // current word where the cursor is
         let word = context.matchBefore(/(this\.\w*)|\w+/);
         // current node where the cursor is
-        let node = codemirror6.language.syntaxTree(context.state).resolveInner(context.pos, -1)
+        let node = bbnCodeCp.cm.language.syntaxTree(context.state).resolveInner(context.pos, -1)
         // function used for autocompletion for a specific language
         let fn = this.getWidgetCompletion();
         // launch the autocompletion function with current context
@@ -313,7 +287,7 @@
         }
         let components = bbn.cp.known.slice().sort();
         bbn.fn.iterate(components, cpName => {
-          const cp = eval(bbn.fn.camelize(cpName));
+          const cp = eval(bbn.fn.camelize(cpName + '-cp'));
           config.extraTags[cpName] = {};
           if (cp.bbnCfg && cp.bbnCfg.props) {
             config.extraTags[cpName].attrs = {}
@@ -537,12 +511,12 @@
       // basic js completion source
       jsCompletionSource(context) {
         let validFor = /^(?:[\w$\xa1-\uffff][\w$\d\xa1-\uffff]*|this\..*?)$/;
-        let inner = codemirror6.language.syntaxTree(context.state).resolve(context.pos, -1);
+        let inner = bbnCodeCp.cm.language.syntaxTree(context.state).resolve(context.pos, -1);
         if (inner.name == "TemplateString" || inner.name == "String" ||
           inner.name == "LineComment" || inner.name == "BlockComment")
           return null;
         let isWord = inner.to - inner.from < 20 && validFor.test(context.state.sliceDoc(inner.from, inner.to));
-        //bbn.fn.log("CODEMIRROR6", !isWord && !context.explicit);
+        //bbn.fn.log("bbnCodeCp.cm", !isWord && !context.explicit);
         if (!isWord && !context.explicit)
           if (inner.name !== '.')
             return null;
@@ -559,19 +533,19 @@
         let res = null;
         switch (this.currentMode) {
           case 'html':
-            res = window.codemirror6.html.htmlCompletionSourceWith(Myconfig);
+            res = bbnCodeCp.cm.html.htmlCompletionSourceWith(Myconfig);
             break;
           case 'php':
-            res = window.codemirror6.html.htmlCompletionSource;
+            res = bbnCodeCp.cm.html.htmlCompletionSource;
             break;
           case 'js':
             res = this.jsCompletionSource;
             break;
           case 'css':
-            res = window.codemirror6.css.cssCompletionSource;
+            res = bbnCodeCp.cm.css.cssCompletionSource;
             break;
           case 'less':
-            res = window.codemirror6.css.cssCompletionSource;
+            res = bbnCodeCp.cm.css.cssCompletionSource;
             break;
         }
         if (!res) {
@@ -584,8 +558,12 @@
         return res;
       },
       onKeyDown(event) {
-        this.lastKeyDown = event;
+        bbn.fn.log(["KEY DOWN ON CODEMIRROR", event]);
+        this.lastKeyDown = this.editor.lastKeyDown;
       }
     },
+    mounted() {
+      this.editor = this.getRef("code");
+    }
   };
 })();
