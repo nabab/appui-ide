@@ -176,16 +176,16 @@
             extensions.push(cm.elmet);
             break;
           case "php":
-            if (window.lsp) {
+            if (cm.lsp) {
               let file = this.closest("appui-ide-coder").source.path; // app-ui/vendor/bbn/appui-ide/src/components/codemirror/codemirror.less
               // create language server extensions with configuration
-              let lsPhp = window.lsp.languageServer({
-                serverUri: "wss:///" + window.location.hostname + ":443/lsp/php",
-                rootUri: "file:///home/dev-qr/",
-                documentUri: "file:///" + file,
+              let lsPhp = cm.lsp.languageServer({
+                serverUri: "wss:///" + window.location.hostname + "/ws",
+                rootUri: "file:///",
+                documentUri: "file:///" + file + ".php",
                 languageId: 'php'
               });
-              //extensions.push(lsPhp);
+              extensions.push(lsPhp);
             }
             // extend php with html
             extensions.push(cm.php.php({
@@ -193,27 +193,10 @@
             }));
             break;
           case "css":
-
-
             extensions.push(cm.css.css());
-
             break;
           case "less":
-            // create language server extensions for less
-            if (window.lsp) {
-              let file = this.closest("appui-ide-coder").source.path; // app-ui/vendor/bbn/appui-ide/src/components/codemirror/codemirror.less
-              //bbn.fn.log("FILE", "file:///" + file);
-              let lsCss = window.lsp.languageServer({
-                serverUri: "wss:///" + window.location.hostname + ":443/lsp/less",
-                rootUri: "file:///home/dev-qr/",
-                documentUri: "file:///" + file,
-                languageId: 'less'
-              });
-              //extensions.push(lsCss);
-            }
-
             extensions.push(cm.css.css());
-
             break;
           case "json":
             extensions.push(cm.json.json());
@@ -341,7 +324,8 @@
       // get the vue Object from current file
       getVueObject() {
         try {
-          let vueObject = eval(this.value);
+          bbn.fn.log("object", this.myCode)
+          let vueObject = eval(this.myCode);
           this.lastValidVueObject = vueObject;
           return vueObject;
         } catch (error) {
@@ -355,7 +339,7 @@
         //bbn.fn.log("FIRST", first);
         // if the node-chain start with "this" we autocomplete this. or this. + nested key
         if (first && first.startsWith('this')) {
-          let vueObject = new Vue(this.getVueObject());
+          let vueObject = bbn.cp.createApp(null, this.getVueObject());
           // autocomplete for this.
           if (first === "this") {
             for (let key in vueObject) {
