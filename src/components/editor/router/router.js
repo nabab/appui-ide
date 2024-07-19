@@ -26,7 +26,7 @@
       openHistory() {
         let component = this.closest('bbn-router');
         let url = component.views[component.selected].current;
-				this.getRef('tabstrip').load('history/' + url.split('/').pop(), false);
+				this.getRef('tabstrip').route('history/' + url.split('/').pop(), false);
       },
       getActive(getCode = false) {
         if (this.routerSource.length) {
