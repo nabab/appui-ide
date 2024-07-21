@@ -891,6 +891,13 @@
       },
       getPopup() {
         return this.closest('bbn-container').getPopup(...arguments);
+      },
+      setNodeData(node) {
+        if (!node) {
+          return this.treeData;
+        }
+
+        return bbn.fn.extend({}, this.treeData, {is_vue: node.is_vue, uid: node.uid, name: node.name});
       }
     },
     /**

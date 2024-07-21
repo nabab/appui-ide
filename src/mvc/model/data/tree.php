@@ -23,6 +23,7 @@ if (X::hasProps($model->data['data'], ['id_project', 'id_path'], true)) {
   if (!empty($model->data['data']['type'])) {
     $project = new Project($model->db, $model->data['data']['id_project']);
     $res = $project->openTree($path, $model->data['data']['id_path'], $model->data['data']['type']);
+    //X::ddump($path, $model->data['data']['uid'], $res);
   }
   return [
     'data' => $res ?? []

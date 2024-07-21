@@ -58,7 +58,7 @@
               <bbn-tree :source="root + 'data/tree'"
                         bbn-if="treeData"
                         :map="mapTree"
-                        :data="treeData"
+                        :data="setNodeData"
                         uid="uid"
                         :storage="true"
                         :storage-full-name="'appui-ide-type-th-' + source.project.id + '-' + currentRoot"

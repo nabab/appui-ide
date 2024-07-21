@@ -81,6 +81,7 @@
             bbn.doc['bbn-js'] = d;
           });
         }
+        /*
         // load script for language server utility
         if (!window.lsp) {
           let lsp = document.createElement('script');
@@ -93,6 +94,7 @@
           eslintScript.src = 'eslint4b.js';
           document.getElementsByTagName('head')[0].appendChild(eslintScript);
         }
+        */
       },
       foldAll() {
         this.editor.foldAll();
