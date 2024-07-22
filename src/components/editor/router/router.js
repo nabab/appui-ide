@@ -62,6 +62,7 @@
             });
           }
           else {
+            bbn.fn.log("PUSHING TABS");
             this.routerSource.push({
               load: true,
               url: 'code',

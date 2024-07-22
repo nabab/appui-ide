@@ -4,11 +4,13 @@ use bbn\Str;
 use bbn\File\System;
 use bbn\Appui\Project;
 /**
- * @var $model \bbn\Mvc\Model
+ * @var $model bbn\Mvc\Model
  */
 
 
+//$timer = new Timer();
 if (!empty($model->data['url']) && isset($model->inc->ide)) {
+  $timer->start('1st');
   $fs = new System();
   $id_project = $model->inc->options->fromCode(BBN_APP_NAME, "list", "project", "appui");
   $project = new Project($model->db, $id_project);
@@ -20,6 +22,8 @@ if (!empty($model->data['url']) && isset($model->inc->ide)) {
   $file = $model->inc->ide->urlToReal($model->data['url']);
   $route = '';
 
+  //$timer->stop('1st');
+  //$timer->start('2nd');
   //define the route for use in test code
   foreach ($model->data['routes'] as $i => $r) {
     if (strpos($file, $r['path']) === 0) {
@@ -30,9 +34,13 @@ if (!empty($model->data['url']) && isset($model->inc->ide)) {
   $path = str_replace($rep, '' , $url);
   $path = substr($path, 0, Strpos($path, '/_end_'));
 
+  //$timer->stop('2nd');
+  //$timer->start('3rd');
   $repository = $model->inc->ide->repository($rep);
 
   $f = $model->inc->ide->decipherPath($model->data['url']);
+  //$timer->stop('3rd');
+  //$timer->start('4th');
   //die(var_dump($f,$file, $model->data['url']));
   if ( is_array($repository) &&
       !empty($model->inc->ide->isProject($model->data['url'])) ||
@@ -68,23 +76,26 @@ if (!empty($model->data['url']) && isset($model->inc->ide)) {
       $repository['tabs'] = $tabs;
     }
   }
+  //$timer->stop('4th');
+  //$timer->start('5th');
 
   //model->data['url'] = implode("/", $stepUrl);
   if ( strpos($model->data['url'],'_end_/settings') !== false ){
     $url_settings = substr($model->data['url'], 0, Strpos($model->data['url'],'_end_/settings')).'_end_/'.($repository['alias_code'] !== 'components' ? "php" : 'js');
     $ctrl_file = $model->inc->ide->urlToReal($url_settings);
   }
-
-  $paths = $project->urlToPaths($model->data['url']);
+  //$timer->stop('5th');
+  //$timer->start('52nd');
   $title = array_pop(X::split($path, '/'));
-  X::log(["ext", Str::fileExt($file)], "idefile");
+  //X::log(["ext", Str::fileExt($file)], "idefile");
+  $urlWithoutEnd = str_replace('/_end_', '', $url);
   $res = [
-    'isMVC' => $model->inc->ide->isMVCFromUrl(str_replace('/_end_', '', $url)),
+    'isMVC' => $model->inc->ide->isMVCFromUrl($urlWithoutEnd),
     // isComponent is understood by a single repo with components
     // while isComponentByUrl is understood by the BBN project
-    'isComponent' => $model->inc->ide->isComponent($repository) || $model->inc->ide->isComponentFromUrl(str_replace('/_end_', '', $url)),
-    'isLib' => $model->inc->ide->isLibFromUrl(str_replace('/_end_', '', $url)),
-    'isCli' => $model->inc->ide->isCliFromUrl(str_replace('/_end_', '', $url)),
+    'isComponent' => $model->inc->ide->isComponent($repository) || $model->inc->ide->isComponentFromUrl($urlWithoutEnd),
+    'isLib' => $model->inc->ide->isLibFromUrl($urlWithoutEnd),
+    'isCli' => $model->inc->ide->isCliFromUrl($urlWithoutEnd),
     //'type' => !empty($type) ? $type : null,
     'title' => $title,
     'path' => $path,
@@ -94,11 +105,13 @@ if (!empty($model->data['url']) && isset($model->inc->ide)) {
     'route' => $route,
     'settings' => !empty($ctrl_file) ? $model->inc->fs->isFile($ctrl_file) : false,
     'ext' => Str::fileExt($file),
-    'styleTab' => isset($styleTabType) ? $styleTabType : [],
+    'styleTab' => $styleTabType ?? [],
     'files' => [],
     'id_project' => $id_project
   ];
 
+  //$timer->stop('52nd');
+  //$timer->start('6th');
   if ($res['isComponent'] && !empty($repository['types'])) {
     $res['tabs'] = $model->inc->ide->tabsOfTypeProject('components');
     $title = explode("/", $path);
@@ -107,19 +120,24 @@ if (!empty($model->data['url']) && isset($model->inc->ide)) {
       $res['title'] = implode('/', $title);
     }
   }
+
+  //$timer->stop('6th');
+  //$timer->start('7th');
   if ($res['isMVC'] && !empty($repository['types'])) {
     $res['tabs'] = $model->inc->ide->tabsOfTypeProject('mvc');
   }
   // we check if some tab of the components or mvc do not contain any files
 
-  $cfg = $project->urlToPaths($model->data['url']);
+  //$timer->stop('7th');
+  //$timer->start('9th');
 
   $real = substr($url, 0, strpos($url, "_end_") + strlen("_end_"));
   foreach ($res['tabs'] as &$tab) {
     $tab['file'] = $project->urlToReal($real . '/' . $tab['url']);
   }
   
-
+  //$timer->stop('9th');
+  //$timer->start('10th');
   $res['url'] = $path;
   if (!empty($model->data['styleTab'])) {
     $idx = null;
@@ -140,8 +158,9 @@ if (!empty($model->data['url']) && isset($model->inc->ide)) {
         $title = substr($model->data['title'],  $start + 1);
       }
     }
-  };
-  
+  }
 
+  //$timer->stop('10th');
+  //X::log($timer->results(), 'ide_timing');
   return $res;
 }

@@ -17,13 +17,12 @@ if (X::hasProps($model->data['data'], ['id_project', 'id_path'], true)) {
 
     if ($last_occurrence_pos !== false) {
       // replace the last occurrence with the desired string
-      $model->data['data']['uid'] = substr_replace($path, $model->data['data']['name'], $last_occurrence_pos, strlen($model->data['data']['name'] . '/' . $model->data['data']['name']));
+      $path = substr_replace($path, $model->data['data']['name'], $last_occurrence_pos, strlen($model->data['data']['name'] . '/' . $model->data['data']['name']));
     }
   }
   if (!empty($model->data['data']['type'])) {
     $project = new Project($model->db, $model->data['data']['id_project']);
     $res = $project->openTree($path, $model->data['data']['id_path'], $model->data['data']['type']);
-    //X::ddump($path, $model->data['data']['uid'], $res);
   }
   return [
     'data' => $res ?? []

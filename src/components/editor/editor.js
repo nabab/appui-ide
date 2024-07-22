@@ -614,23 +614,33 @@
         this.openFile(d);
       },
       openFile(file) {
-        bbn.fn.log("FILE", file);
-        let tab = '',
-            link = '';
-        bbn.fn.log("currentRoot = " + this.currentRoot);
+        bbn.fn.log("FILE22", file);
+        let tab = '';
+        let link = '';
+        let currentRoot = this.currentRoot;
+        let root = bbn.fn.getRow(this.source.project.path, {id: file.data.id_path});
+        if (root) {
+          currentRoot = root.parent_code + '/' + root.code + '/';
+          bbn.fn.log("THERE IS TYPE", file.data.type, currentRoot);
+          if (file.data.type) {
+            currentRoot += (file.data.type + '/');
+          }
+        }
+
+
         if ((file.data.type === 'mvc')) {
           tab = ((file.data.tab === "php") && (this.project === 'apst-app')) ? '/settings' :  '/' + file.data.tab;
           link = 'file/' +
-            this.currentRoot +
+            currentRoot +
             (file.data.dir || '') +
-            file.data.name +
+            file.data.uid +
             '/_end_' + (tab.indexOf('_') === 0 ? '/' + tab : tab);
         }
-        else if ((file.data.type === 'component')) {
-          link = 'file/' +  this.currentRoot + file.data.uid + '/_end_/' + (file.data.tab || 'js');
+        else if ((file.data.type === 'components')) {
+          link = 'file/' +  currentRoot + file.data.uid + '/_end_/' + (file.data.tab || 'js');
         }
         else{
-          link = 'file/' +  this.currentRoot + file.data.uid + '/_end_/' + (file.data.tab || 'code');
+          link = 'file/' +  currentRoot + file.data.uid + '/_end_/' + (file.data.tab || 'code');
         }
         if ( link ){
           link = link.replace(/\/\//g, '/');
@@ -671,7 +681,7 @@
           link = 'file/' +
             this.currentRoot +
             (file.data.dir || '') +
-            file.data.name +
+            file.data.uid +
             '/_end_' + (tab.indexOf('_') === 0 ? '/' + tab : tab);
         }
         else if ((file.data.type === 'component')) {

@@ -31,8 +31,7 @@
         </div>
         <div/>
         <bbn-menu :source="toolbarMenu"
-                  ref="mainMenu">
-        </bbn-menu>
+                  ref="mainMenu"/>
       </bbn-toolbar>
     </bbn-pane>
     <bbn-pane>
