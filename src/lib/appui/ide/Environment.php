@@ -103,7 +103,6 @@ class Environment
     $this->defaultDir = '/_env';
     $this->defaultAppLibDir = '/src/lib';
     $this->envDataDir = '/data';
-    var_dump('constructed');
   }
 
   /**
@@ -421,10 +420,15 @@ class Environment
     $comp_path = $this->dir . $this->defaultDir;
 
     // Change the current working directory to the Composer directory.
+    ini_set('phar.readonly', 0);
     chdir($comp_path);
 
     // Change the permissions of the 'composer.phar' file.
-    chmod("./composer.phar", 0740);
+    if (!file_exists(Mvc::getAppPath(true) . "composer.phar")) {
+      copy(Mvc::getLibPath() . 'bin/composer', Mvc::getAppPath(true) . "composer.phar");
+      chmod(Mvc::getAppPath(true) . "composer.phar", 0740);
+    }
+
 
     // Set environment variables for Composer.
     putenv('COMPOSER_HOME=' . $comp_path);

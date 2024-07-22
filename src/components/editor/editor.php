@@ -77,11 +77,11 @@
                       :storage="true"
                       :storage-full-name="'appui-ide-editor-router-' + source.project.id"/>
         </bbn-pane>
-        <bbn-pane :size="200"
+        <!--bbn-pane :size="200"
                   :min="40"
                   :collapsed="true">
           Structure
-        </bbn-pane>
+        </bbn-pane-->
       </bbn-splitter>
     </bbn-pane>
   </bbn-splitter>
