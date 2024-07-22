@@ -10,7 +10,7 @@ use bbn\Appui\Project;
 
 //$timer = new Timer();
 if (!empty($model->data['url']) && isset($model->inc->ide)) {
-  $timer->start('1st');
+  //$timer->start('1st');
   $fs = new System();
   $id_project = $model->inc->options->fromCode(BBN_APP_NAME, "list", "project", "appui");
   $project = new Project($model->db, $id_project);
