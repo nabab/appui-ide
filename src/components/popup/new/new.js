@@ -131,7 +131,12 @@
       },
     },
     methods: {
-      onSuccess(){
+      onChangeTemplate() {
+        this.$nextTick(() => {
+          this.closest('bbn-floater').fullResize();
+        });
+      },
+      onSuccess() {
         let  componentEditor = this.closest('bbn-container').find('appui-ide-editor');
         if ( this.source.isFile ){
           let link = appui.plugins['appui-project'] + '/ui/' + this.source.project.id + '/' + 'ide/file/' + this.source.currentRep + '/' + (this.source.type === 'mvc' ? this.source.type + '/' : '')

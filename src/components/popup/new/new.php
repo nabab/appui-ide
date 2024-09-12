@@ -31,6 +31,7 @@
           <bbn-radio :required="true"
                      :source="templates"
                      v-model="data.template"
+                     @change="onChangeTemplate"
                     :vertical="true"/>
         </div>
 

@@ -223,10 +223,12 @@ class Environment
           'psr_infos' => $psr_infos
         ];
         $library = $this->execute($cfg);
+        X::ddump($exists, $cfg, $library);
         $res['success'] = true;
       }
     }
     elseif ($composer && $this->root === 'app') { // If the root is 'app' and composer information is available.
+      X::ddump($exists);
       if (!$exists['found']) {
         // Get the library classes directly using the parser's getLibraryClasses() method.
         $libs = $this->parser->getLibraryClasses($fullpath);
