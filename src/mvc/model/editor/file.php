@@ -86,7 +86,8 @@ if (!empty($model->data['url']) && isset($model->inc->ide)) {
   }
   //$timer->stop('5th');
   //$timer->start('52nd');
-  $title = array_pop(X::split($path, '/'));
+  $parts = X::split($path, '/');
+  $title = array_pop($parts);
   //X::log(["ext", Str::fileExt($file)], "idefile");
   $urlWithoutEnd = str_replace('/_end_', '', $url);
   $res = [

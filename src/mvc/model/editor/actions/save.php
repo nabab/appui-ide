@@ -10,7 +10,7 @@ use bbn\File\System;
 use bbn\Appui\Project;
 /** @var $model \bbn\Mvc\Model*/
 
-if ($model->hasData(['url']['id_project'])) {
+if ($model->hasData(['url', 'id_project'])) {
   $delete = false;
   $project = new Project($model->db, $model->data['id_project']);
   $fs = new System();
