@@ -119,7 +119,7 @@
     computed: {
       /*routerSource(){
         if ( (this.tabsRepository !== undefined) && (this.emptyTabs !== undefined) && (this.sctrl.length) ){
-          let ctrlRepo = this.tabsRepository[bbn.fn.search(this.tabsRepository, 'url' ,'_ctrl')];
+          let ctrlRepo = this.tabsRepository[bbn.fn.search(this.tabsRepository, 'url' ,'_super')];
           let r = [{
             load: true,
             cached: false,
@@ -136,7 +136,7 @@
             icon: "nf nf-fa-cogs"
           }];
           bbn.fn.each(this.tabsRepository, (tab, idx) => {
-            if ( tab.url !== '_ctrl' ){
+            if ( tab.url !== '_super' ){
               r.push({
                 fixed: true,
                 load: true,
@@ -177,7 +177,7 @@
     methods: {
       setRouterSource(){
         if ( (this.tabsRepository !== undefined) && (this.emptyTabs !== undefined) && (this.sctrl.length) ){
-          let ctrlRepo =  bbn.fn.getRow(this.tabsRepository, 'url' ,'_ctrl');
+          let ctrlRepo =  bbn.fn.getRow(this.tabsRepository, 'url' ,'_super');
           let r = [{
             fixed: true,
             load: true,
@@ -194,7 +194,7 @@
             icon: "nf nf-fa-cogs"
           }];
           bbn.fn.each(this.tabsRepository, (tab, idx) => {
-            if ( tab.url !== '_ctrl' ){
+            if ( tab.url !== '_super' ){
               r.push({
                 fixed: true,
                 load: true,
@@ -216,7 +216,7 @@
       search: bbn.fn.search,
       listCtrls(){
         let path = "",
-            url  = "_ctrl",
+            url  = "_super",
             arr  = [{
               text: 'CTRL: ./',
               title: 'CTRL',

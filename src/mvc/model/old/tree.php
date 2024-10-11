@@ -198,8 +198,8 @@ if ($model->hasData(['repository'], true)) {
                 || (!empty($is_project)
                 && ((!empty($types_to_include) && empty($type) && in_array($name, $types_to_include, true)) || !empty($type))                )
             ) {
-              //we take the file name if it is not '_ctrl'
-              if ($name !== '_ctrl.php') {
+              //we take the file name if it is not '_super'
+              if ($name !== '_super.php') {
                 //take note if it is a file or not the element
                 $is_file = $model->inc->fs->isFile($t);
                 //if it's a file we take the name and extension distinctly
@@ -401,11 +401,11 @@ if ($model->hasData(['repository'], true)) {
       || !empty($tree_popup)
       || empty($model->data['type'])
   ) {
-    // Get all files and all folders of each mvc's tabs (_ctrl tab excluded)
+    // Get all files and all folders of each mvc's tabs (_super tab excluded)
     if (!empty($rep_cfg['tabs'])) {
       foreach ($rep_cfg['tabs'] as $i => $t){
         if (
-          ($t['url'] !== '_ctrl')
+          ($t['url'] !== '_super')
           && !empty($t['path'])
           && (
             empty($model->data['tab'])
@@ -472,7 +472,7 @@ if ($model->hasData(['repository'], true)) {
       $tabs = $model->inc->ide->tabsOfTypeProject($type);
       if(!empty($tabs)) {
         foreach ($tabs as $i => $t){
-          if (($t['url'] !== '_ctrl')
+          if (($t['url'] !== '_super')
               && !empty($t['path'])
               && ( empty($model->data['tab'])
               || ( !empty($model->data['tab'])
