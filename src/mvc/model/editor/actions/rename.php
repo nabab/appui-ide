@@ -8,7 +8,7 @@ use bbn\X;
 use bbn\Str;
 use bbn\File\System;
 use bbn\Appui\Project;
-/** @var $model \bbn\Mvc\Model*/
+/** @var bbn\Mvc\Model $model */
 
 // example of url : lib/appui-ide/mvc/editor/actions/rename
 

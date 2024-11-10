@@ -7,7 +7,7 @@
 use bbn\X;
 use bbn\Str;
 use bbn\Parsers\Generator;
-/** @var $model \bbn\Mvc\Model*/
+/** @var bbn\Mvc\Model $model */
 
 $resp = [
   'success' => false,

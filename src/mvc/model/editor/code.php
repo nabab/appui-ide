@@ -1,19 +1,17 @@
 <?php
-/**
-         * What is my purpose?
-         *
-         **/
-
 use bbn\X;
 use bbn\Str;
-use Exception;
 use bbn\Appui\Project;
 use bbn\File\System;
-/** @var $model \bbn\Mvc\Model*/
 
-$bytes = X::split($model->data['url'], '/');
-$type = array_pop($bytes);
-$isHistory = array_pop($bytes) === 'history';
+/** @var bbn\Mvc\Model $model */
+
+$isHistory = false;
+if ($model->hasData('url', true)) {
+  $bits = X::split($model->data['url'], '/');
+  $type = array_pop($bits);
+  $isHistory = array_pop($bits) === 'history';
+}
 
 if ($model->hasData('id_project')) {
   if (!$isHistory) {

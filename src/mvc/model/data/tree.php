@@ -7,7 +7,7 @@
 use bbn\X;
 use bbn\Str;
 use bbn\Appui\Project;
-/** @var $model \bbn\Mvc\Model*/
+/** @var bbn\Mvc\Model $model */
 
 if (X::hasProps($model->data['data'], ['id_project', 'id_path'], true)) {
   $path = $model->data['data']['uid'] ?? '';

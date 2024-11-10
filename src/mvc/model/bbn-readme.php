@@ -6,7 +6,7 @@
 
 use bbn\X;
 use bbn\Str;
-/** @var $model \bbn\Mvc\Model*/
+/** @var bbn\Mvc\Model $model */
 
 $file = $model->libPath()."bbn/bbn/README.md";
 if (file_exists($file)) {

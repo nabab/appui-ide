@@ -1,5 +1,5 @@
 <?php
-/** @var $model \bbn\Mvc\Model */
+/** @var bbn\Mvc\Model $model */
 $data = ['names' => []];
 $prefs = [strtoupper(BBN_APP_PREFIX), 'BBN'];
 foreach ( $prefs as $i => $p ){

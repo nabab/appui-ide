@@ -4,7 +4,7 @@
  *
  **/
 
-/** @var $ctrl \bbn\Mvc\Controller */
+/** @var bbn\Mvc\Controller $ctrl */
 
 if (empty($ctrl->post)) {
   $ctrl->setColor('#391E13', '#FFF')

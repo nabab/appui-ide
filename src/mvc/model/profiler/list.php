@@ -1,6 +1,6 @@
 <?php
 
-/** @var $model \bbn\Mvc\Model*/
+/** @var bbn\Mvc\Model $model */
 $profiler = new \bbn\Appui\Profiler($model->db);
 return [
   'root' => $model->data['root'],

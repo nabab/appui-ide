@@ -3,7 +3,7 @@
 use bbn\Str;
 use bbn\File\System;
 
-/** @var $model \bbn\Mvc\Model */
+/** @var bbn\Mvc\Model $model */
 /** @var array */
 $fs = new System();
 $log_files = array_filter($fs->getFiles($model->dataPath().'logs'), function($a){

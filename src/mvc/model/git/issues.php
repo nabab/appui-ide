@@ -1,6 +1,6 @@
 <?php
 
-/** @var $model \bbn\Mvc\Model*/
+/** @var bbn\Mvc\Model $model */
 
 $tmp = ['issues' => []];
 

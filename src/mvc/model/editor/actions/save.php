@@ -8,7 +8,7 @@ use bbn\X;
 use bbn\Str;
 use bbn\File\System;
 use bbn\Appui\Project;
-/** @var $model \bbn\Mvc\Model*/
+/** @var bbn\Mvc\Model $model */
 
 if ($model->hasData(['url', 'id_project'])) {
   $delete = false;

@@ -6,5 +6,5 @@
 
 use bbn\X;
 use bbn\Str;
-/** @var $ctrl \bbn\Mvc\Controller */
+/** @var bbn\Mvc\Controller $ctrl */
 $ctrl->setObj(['scrollable' => false])->combo('$url', true);

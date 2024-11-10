@@ -5,7 +5,7 @@ use bbn\Str;
 use bbn\File\System;
 use bbn\Appui\Project;
 
-/** @var $model \bbn\Mvc\Model*/
+/** @var bbn\Mvc\Model $model */
 
 // The URL example provided serves as a reference to understand the context.
 // example of url: lib/appui-ide/mvc/editor/actions/rename

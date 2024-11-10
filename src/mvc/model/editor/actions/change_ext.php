@@ -9,7 +9,7 @@ use bbn\Str;
 use bbn\File\System;
 use bbn\Appui\Project;
 
-/** @var $model \bbn\Mvc\Model*/
+/** @var bbn\Mvc\Model $model */
 
 if ($model->hasData(['url', 'ext', 'id_project'])) {
   $fs = new System();

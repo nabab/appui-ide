@@ -2,7 +2,7 @@
 
 use bbn\X;
 use bbn\Str;
-/** @var $ctrl \bbn\Mvc\Controller */
+/** @var bbn\Mvc\Controller $ctrl */
 
 //$ctrl->cachedAction(24*3600);
 $ctrl->action();

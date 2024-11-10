@@ -2,7 +2,7 @@
 
 use bbn\X;
 
-/** @var $model \bbn\Mvc\Model */
+/** @var bbn\Mvc\Model $model */
 if ($model->hasData(['repository'], true)) {
   $rep_cfg      = $model->inc->ide->repository($model->data['repository']);
   $is_mvc       = in_array($rep_cfg['alias_code'], ['mvc', 'sandbox']);

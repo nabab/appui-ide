@@ -1,6 +1,6 @@
 <?php
 
-/** @var $ctrl \bbn\Mvc\Controller */
+/** @var bbn\Mvc\Controller $ctrl */
 
 if ( !empty($dir) ){
   $res = $dir->historyClear($ctrl->post['url']);
