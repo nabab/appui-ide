@@ -76,9 +76,10 @@
                 :scrollable="false">
         <div v-if="textContent && textContent.length > 1" class="bbn-overlay">
           <bbn-code :mode="type"
-                    v-model="textContent"
+                    bbn-model="textContent"
                     :readonly="true"
                     ref="code"
+                    @hook:mounted="$refs.code.scrollBottom"
                     class="bbn-overlay"/>
         </div>
         <div v-else class="bbn-overlay bbn-middle">

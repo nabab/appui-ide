@@ -119,7 +119,7 @@
               this.textContent = d.content;
             	this.$nextTick(() => {
                 let code = this.getRef('code');
-                if (code) {
+                if (code?.scrollBottom) {
                   code.scrollBottom();
                 }
               });
