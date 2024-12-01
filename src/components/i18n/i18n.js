@@ -35,7 +35,7 @@
       /** don't hide column also if col.hidden === true */
       'toolbar': {
         template: `
-          <div class="bbn-padded bbn-r">
+          <div class="bbn-padding bbn-r">
             <span>` + bbn._("Select languages you want to hide from the table") + `:</span>
             <bbn-checkbox v-for="l in languages"
                           :key="l"
@@ -82,7 +82,7 @@
         },
         template:
         '<ul style="width:100%; list-style-type:none; padding-left:0">' +
-        '<li class="bbn-vspadded bbn-grid-fields" :source="source.file" >' +
+        '<li class="bbn-vspadding bbn-grid-fields" :source="source.file" >' +
         '<span class="bbn-lg">File:</span>' +
         '<a v-text="source.file" @click="link_ide" style="width:100%;cursor:pointer" title="Go to file"></a>' +
         ' </li>' +

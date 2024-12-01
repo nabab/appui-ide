@@ -1,6 +1,6 @@
 <div class="bbn-block bbn-100">
   <bbn-scroll>
-    <div class="bbn-grid-fields bbn-padded">
+    <div class="bbn-grid-fields bbn-padding">
       <label><?= _('Code') ?></label>
       <div>
         <bbn-input style="margin: 0 10px"
@@ -28,9 +28,9 @@
     </div>
     <ul v-for="perm in source.children"
         style="list-style: none"
-        class="bbn-padded"
+        class="bbn-padding"
     >
-      <li class="bbn-c bbn-padded">
+      <li class="bbn-c bbn-padding">
         <div style="margin-bottom: 5px">
           <label><?= _('Code') ?></label>
           <bbn-input v-model="perm.code"

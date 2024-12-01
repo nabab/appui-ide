@@ -5,7 +5,7 @@
             :source="renameSource"
             @success="onSuccess"
             class="bbn-m">
-    <div class="bbn-padded bbn-grid-fields" >
+    <div class="bbn-padding bbn-grid-fields" >
       <label><?= _("Name") ?></label>
       <div style="min-width: 30em;">
         <div class="bbn-flex-width">

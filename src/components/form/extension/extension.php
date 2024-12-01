@@ -1,5 +1,5 @@
 <!-- HTML Document -->
-<div class="bbn-overlay appui-ide-form-extension bbn-padded">
+<div class="bbn-overlay appui-ide-form-extension bbn-padding">
   <bbn-form :buttons="btns"
             :confirm-leave="false"
             :source="source"

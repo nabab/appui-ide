@@ -6,7 +6,7 @@
           <bbn-button @click="deleteAll"> <?= _('Delete all cache') ?></bbn-button>
         </div>
         <div class="bbn-flex-fill bbn-padding">
-          <bbn-tree class="tree bbn-padded"
+          <bbn-tree class="tree bbn-padding"
                     :source="root + 'cache'"
                     @select="getContent"
                     :menu="contextMenu"
@@ -17,10 +17,10 @@
       </div>
     </bbn-pane>
     <bbn-pane>
-      <div class="bbn-overlay bbn-padded" style="border: 0.5px solid #CCC">
+      <div class="bbn-overlay bbn-padding" style="border: 0.5px solid #CCC">
         <div class="bbn-flex-height" v-if="selectedFile.length && contentCache.length">
           <div class="bbn-w-100">
-            <div class="bbn-card bbn-padded bbn-m bbn-vmargin bbn-w-100">
+            <div class="bbn-card bbn-padding bbn-m bbn-vmargin bbn-w-100">
               <div class="bbn-grid-fields" v-if="selectedFile">
                 <div class="bbn-grid-full bbn-b bbn-c" v-text="selectedFile"/>
                 <label class="bbn-b" v-text="_('Creation date') + ' :'"/>
@@ -38,7 +38,7 @@
             </div>
           </div>
         </div>
-        <div class="bbn-overlay bbn-vmiddle bbn-padded" v-else>
+        <div class="bbn-overlay bbn-vmiddle bbn-padding" v-else>
           <div class="bbn-card bbn-h-100 bbn-vmiddle bbn-w-100 bbn-c">
               <span class="bbn-xxl bbn-w-100 bbn-c">
                 <?= _("Select a cache file") ?>

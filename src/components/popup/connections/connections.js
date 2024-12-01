@@ -38,7 +38,7 @@
       menu: {
         template: `
 <bbn-context :source="rowMenu">
-    <span class="bbn-iblock bbn-lg bbn-hspadded">
+    <span class="bbn-iblock bbn-lg bbn-hspadding">
       <i class="nf nf-mdi-dots_vertical"/>
   </span>
 </bbn-context>`,

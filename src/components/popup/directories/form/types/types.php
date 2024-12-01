@@ -4,7 +4,7 @@
           :source="source.row"
           :validation="validation"
 >
-  <div class="bbn-grid-fields bbn-l bbn-padded">
+  <div class="bbn-grid-fields bbn-l bbn-padding">
     <label><?= _('Text') ?></label>
     <bbn-input v-model="source.row.text"
                required="required"

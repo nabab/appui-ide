@@ -1,6 +1,6 @@
 <div class="bbn-overlay">
   <bbn-scroll>
-    <div class="bbn-w-100 bbn-padded" style="min-height: 500px">
+    <div class="bbn-w-100 bbn-padding" style="min-height: 500px">
       <div v-if="source.imessages && source.imessages.length"
            style="margin-bottom: 1rem"
       >

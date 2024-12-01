@@ -4,7 +4,7 @@
           @success="onSuccess"
           @failure="failureActive"
 >
-   <div class="bbn-padded bbn-flex-height">
+   <div class="bbn-padding bbn-flex-height">
      <div class="bbn-flex-fill bbn-grid-fields">
        <label>
          <?= _("Name") ?>

@@ -1,6 +1,6 @@
 <!-- HTML Document -->
 
-<div class="bbn-flex-height appui-ide-finder-pane bbn-bordered-right">
+<div class="bbn-flex-height appui-ide-finder-pane bbn-border-right">
   <div v-if="cp.uploading === source.path"
        class="bbn-flex-fill">
     <div class="bbn-right">
@@ -39,7 +39,7 @@
                  'bbn-overlay': true,
                  'bbn-state-default': true,
                  'bbn-state-active': active,
-                 'bbn-padded': true,
+                 'bbn-padding': true,
                  'bbn-alt-background': true,
                  'bbn-alt-bordered-top': true
                  }">

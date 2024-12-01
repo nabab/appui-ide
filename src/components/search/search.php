@@ -1,6 +1,6 @@
 <div class="bbn-overlay bbn-flex-height">
   <!--Search in current repository or all repositories-->
-  <div class="bbn-header bbn-padded bbn-w-100 bbn-h-35 bbn-vmiddle bbn-flex-width">
+  <div class="bbn-header bbn-padding bbn-w-100 bbn-h-35 bbn-vmiddle bbn-flex-width">
     <div v-if="!source.all && source.isProject">
       <span>
         <strong>
@@ -93,7 +93,7 @@
   </div>
   <div class="bbn-flex-fill">
     <div v-if="source.occurences > 0"
-          class="bbn-h-100 bbn-w-100 bbn-padded"
+          class="bbn-h-100 bbn-w-100 bbn-padding"
     >
       <bbn-tree class="tree"
                 :source="list"
@@ -102,7 +102,7 @@
       ></bbn-tree>
     </div>
     <div v-else
-          class="bbn-h-100 bbn-w-100 bbn-padded"
+          class="bbn-h-100 bbn-w-100 bbn-padding"
     >
       <span class="bbn-xxxl">
         <strong>

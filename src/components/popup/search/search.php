@@ -1,5 +1,5 @@
 <div class="bbn-overlay bbn-vmiddle">
-  <div class="bbn-w-70 bbn-padded">
+  <div class="bbn-w-70 bbn-padding">
     <bbn-input placeholder="<?= _('Search...') ?>"
                v-model="search"
                class="bbn-w-100"
@@ -7,7 +7,7 @@
                ref="search_input"
     ></bbn-input>
   </div>
-  <div class="bbn-w-30 bbn-padded">
+  <div class="bbn-w-30 bbn-padding">
     <bbn-checkbox label="<?= _('Match cases') ?>"
                   v-model="matchCaseSearch"
                   :value="!matchCaseSearch"

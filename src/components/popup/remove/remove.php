@@ -8,7 +8,7 @@
           ref="form"
           :buttons="btns"
 >
-  <div class="bbn-grid-fields bbn-l bbn-padded">
+  <div class="bbn-grid-fields bbn-l bbn-padding">
     <label v-if="source.is_file"
            class="bbn-b"
     ><?= _("Delete File") ?>:</label>
@@ -51,7 +51,7 @@
                     v-model="formData.ext"
                     style="width: 100px"
                     :disabled="formData.all"
-                    class="bbn-padded"
+                    class="bbn-padding"
                     @dataloaded="loaded"
                     required="required"
       ></bbn-dropdown>

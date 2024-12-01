@@ -14,15 +14,15 @@
           ></span>
         </div>
         <!-- Legend -->
-          <div class="bbn-w-30 bbn-r bbn-vmiddle bbn-spadded bbn-flex-width">
+          <div class="bbn-w-30 bbn-r bbn-vmiddle bbn-spadding bbn-flex-width">
             <div class="bbn-flex-fill"></div>
-            <div class="bbn-w-20 bbn-grid-fields bbn-spadded">
+            <div class="bbn-w-20 bbn-grid-fields bbn-spadding">
               <label class="bbn-b"><?= _('Member') ?></label>
               <div class="bbn-w-60 bbn-vmiddle">
                 <div class="bbn-w-90 bbn-h-50 bbn-bg-black"></div>
               </div>
             </div>
-            <div class="bbn-w-20 bbn-grid-fields bbn-spadded">
+            <div class="bbn-w-20 bbn-grid-fields bbn-spadding">
               <label class="bbn-b"><?= _('Method') ?></label>
               <div class="bbn-w-60 bbn-vmiddle">
                 <div class="bbn-w-90 bbn-h-50 bbn-background-effect-tertiary"></div>

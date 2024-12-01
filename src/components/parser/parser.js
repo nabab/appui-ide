@@ -46,7 +46,7 @@
               @click="getRow">
           <i :class="classIcon"></i>
           <span v-if="source.file" >File:</span>
-          <span :class="['bbn-spadded',{'bbn-green': source.type === 'parent', 'bbn-red': source.type === 'trait'}]"
+          <span :class="['bbn-spadding',{'bbn-green': source.type === 'parent', 'bbn-red': source.type === 'trait'}]"
                 :style="{cursor: (source.line !== undefined) && (source.line !== false) ? 'pointer' : 'default'}"
                 v-text="source.name"
           ></span>

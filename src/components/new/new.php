@@ -3,7 +3,7 @@
           class="bbn-overlay"
           :buttons="[]"
 >
-  <div class="bbn-padded">
+  <div class="bbn-padding">
     <div class="bbn-form-label mvc-ele" v-if="isMVC"><?= _("Type") ?></div>
     <div class="bbn-form-field mvc-ele" v-if="isMVC">
       <bbn-dropdown ref="types"

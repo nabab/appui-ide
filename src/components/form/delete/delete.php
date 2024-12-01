@@ -6,7 +6,7 @@
             @success="onSuccess"
             class="bbn-m"
             :prefilled="true">
-    <div class="bbn-padded bbn-grid-fields" >
+    <div class="bbn-padding bbn-grid-fields" >
       <label><?= _("Name") ?></label>
 			<div class="bbn-wide"
            v-text="source.name"></div>

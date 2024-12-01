@@ -7,7 +7,7 @@
             @failure="onFailure"
             class="bbn-m"
             :prefilled="true">
-    <div class="bbn-padded bbn-grid-fields" >
+    <div class="bbn-padding bbn-grid-fields" >
       <label><?= _("Name") ?></label>
       <div style="min-width: 30em;">
         <div class="bbn-flex-width">

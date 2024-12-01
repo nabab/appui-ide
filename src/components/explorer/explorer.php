@@ -1,10 +1,10 @@
 <!-- HTML Document -->
 <bbn-splitter orientation="vertical" class="appui-ide-finder">
-  <bbn-pane :size="40" class="bbn-bordered-bottom">
+  <bbn-pane :size="40" class="bbn-border-bottom">
     <div class="bbn-overlay bbn-middle">
 
       <bbn-toolbar>
-        <!--div class="bbn-hpadded">
+        <!--div class="bbn-hpadding">
           <bbn-dropdown placeholder="<?= _('Connection') ?>"
                         v-model="connection"
                         :source="source.dirs"
@@ -32,7 +32,7 @@
                       :notext="true">
           </bbn-button>
         </div>
-        <div class="bbn-hpadded">
+        <div class="bbn-hpadding">
           <bbn-input placeholder="<?= _('Path') ?>"
                      v-model="currentPath"
                      class="bbn-wider"

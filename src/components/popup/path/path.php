@@ -1,5 +1,5 @@
-<div class="tree bbn-ide-selectdir bbn-padded">
-  <div class="bbn-overlay bbn-padded">
+<div class="tree bbn-ide-selectdir bbn-padding">
+  <div class="bbn-overlay bbn-padding">
     <bbn-tree :source="root + 'tree'"
               :map="treeMapper"
               @select="treeNodeActivate"

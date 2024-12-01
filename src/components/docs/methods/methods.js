@@ -126,7 +126,7 @@
     },
     components: {
       'element':{
-        template:`<div class="bbn-padded bbn-flex-height">
+        template:`<div class="bbn-padding bbn-flex-height">
                     <div :class="['bbn-h-15', 'bbn-w-100', 'bbn-r', {
                         'bbn-header': source.typeElement === 'member',
                         'bbn-background-effect-tertiary': source.typeElement === 'method'
@@ -140,7 +140,7 @@
                         <span style="margin-left: 2px" class="bbn-b bbn-xxl">`+bbn._('Name:')+`</span>
                         <span class= "bbn-xxl" v-text="source.text" style="margin-left: 2px"></span>
                       </div>
-                      <div class="bbn-padded">
+                      <div class="bbn-padding">
                         <ul>
                           <li class="bbn-margin">
                             <div class="bbn-flex-width">

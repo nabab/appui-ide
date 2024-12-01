@@ -1,7 +1,7 @@
 <!-- HTML Document -->
-<div class="bbn-hpadded bbn-overlay bbn-flex-height">
+<div class="bbn-hpadding bbn-overlay bbn-flex-height">
   <div>
-    <div class="bbn-w-100 bbn-vpadded">
+    <div class="bbn-w-100 bbn-vpadding">
       <bbn-button icon="nf nf-fa-user_secret"
                   @click="type = 'session'">
       </bbn-button> 

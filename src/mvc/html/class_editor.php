@@ -1,5 +1,5 @@
 <div class="bbn-overlay bbn-flex-height">
-  <bbn-toolbar class="bbn-hpadded">
+  <bbn-toolbar class="bbn-hpadding">
     <bbn-menu :source="menu"
               ref="menu"/>
     <!--div>

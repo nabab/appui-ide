@@ -26,7 +26,7 @@
           <?= _("What kind of MVC file do you want to create ?") ?>
         </h3>
 
-        <div class="bbn-grid-full bbn-bottom-padded"
+        <div class="bbn-grid-full bbn-bottom-padding"
              v-if="isMVC && source.isFile">
           <bbn-radio :required="true"
                      :source="templates"

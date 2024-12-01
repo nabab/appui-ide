@@ -43,7 +43,7 @@
     <!-- File detail / Image preview -->
     <div v-if="preview && currentFile"
          class="appui-ide-finder-info-file-container bbn-flex-height">
-      <div class="bbn-grid-fields bbn-header bbn-widget bbn-spadded">
+      <div class="bbn-grid-fields bbn-header bbn-widget bbn-spadding">
         <span v-text="_('Filename')"/>
         <span v-text="currentFile ? currentFile.node.data.value : ''"/>
         <span v-if="currentFile.info && currentFile.info.size"
@@ -94,19 +94,19 @@
                     v-else-if="currentFile.info && !isImage && !isText && !isJson && isMarkdown && !isLoading"
                     v-model="currentFile.info.content"/>
       <div v-else-if="isImage && !isLoading"
-           class="bbn-flex-fill bbn-c bbn-padded">
+           class="bbn-flex-fill bbn-c bbn-padding">
         <!--need of origin for the filesystem to recognize the environment-->
         <img :src="root + 'actions/finder/image/' +  encodedURL + '/' + origin" style="max-width:80%">
       </div>
       <div v-else-if="currentFile.info && !currentFile.info.content && !isImage && !isText && !isJson && !isMarkdown && !isLoading"
-           class="bbn-padded bbn-medium bbn-b">
+           class="bbn-padding bbn-medium bbn-b">
         <div v-if="sizeInfo > 200000000"
              v-text="_('The content of the file exceeds the authorized limit (2mb)')"/>
         <div v-else
              v-text="_('The content of this file cannot be shown')"/>
       </div>
       <div v-else-if="isLoading"
-           class="bbn-padded bbn-medium bbn-b"
+           class="bbn-padding bbn-medium bbn-b"
            v-text="_('Loading file infos..')">
       </div>
     </div>

@@ -4,7 +4,7 @@
           @success="onSuccess"
           :scrollable="false"
 >
-  <div class="bbn-grid-fields bbn-l bbn-padded">
+  <div class="bbn-grid-fields bbn-l bbn-padding">
       <label><?= _("Name") ?></label>
       <div class="bbn-flex-width">
         <bbn-input class="bbn-flex-fill"

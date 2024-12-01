@@ -2,7 +2,7 @@
           :buttons="buttons"
           :action="root + 'finder/save'"
           ref="form">
-	<div class="bbn-flex-fill bbn-grid-fields bbn-padded">
+	<div class="bbn-flex-fill bbn-grid-fields bbn-padding">
      <label>Connection name</label>
      <bbn-input :required="true"
                 v-model="formSource.text"
