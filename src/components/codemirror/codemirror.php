@@ -8,4 +8,6 @@
             bbn-model="myCode"
             :theme="theme"
             :mode="mode" />
+  <div class="bbn-hidden"
+       ref="container"/>
 </div>

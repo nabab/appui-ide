@@ -341,7 +341,13 @@
         //bbn.fn.log("FIRST", first);
         // if the node-chain start with "this" we autocomplete this. or this. + nested key
         if (first && first.startsWith('this')) {
-          let vueObject = bbn.cp.createApp(null, this.getVueObject());
+          let vueObject;
+          try {
+            vueObject = this.$create(this.getVueObject(), this.getRef('container'));
+          }
+          catch (error) {
+            return [];
+          }
           // autocomplete for this.
           if (first === "this") {
             for (let key in vueObject) {
