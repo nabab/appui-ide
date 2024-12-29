@@ -17,7 +17,8 @@
       }
     },
     methods:{
-      changeTheme(){
+      changeTheme() {
+        throw new Error("changeTheme not implemented (to update!)");
         this.post(this.source.root + 'actions/change_theme',{
           theme: this.themePreview
         }, d => {

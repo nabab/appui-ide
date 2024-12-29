@@ -29,6 +29,7 @@
 				this.getRef('tabstrip').route('history/' + url.split('/').pop(), false);
       },
       getActive(getCode = false) {
+        throw new Error("getActive not implemented (to update!)");
         if (this.routerSource.length) {
           const ct = this.getRef('tabstrip').getFinalContainer();
           if (getCode) {

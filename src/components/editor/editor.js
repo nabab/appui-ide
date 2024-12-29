@@ -1,9 +1,9 @@
 /**
-       * @file editor component
-       * @description Component use to initiate ide with useful options
-       * @copyright BBN Solutions
-       * @author Lucas Courteaud
-       */
+ * @file editor component
+ * @description Component use to initiate ide with useful options
+ * @copyright BBN Solutions
+ * @author Lucas Courteaud
+ */
 
 (() => {
   return {
@@ -13,39 +13,39 @@
         types: bbn.ide || null,
         recentFiles: [],
         /**
-               * Root of the component
-               * @data {String} [appui.plugins['appui-ide'] + '/'] root
-               */
+         * Root of the component
+         * @data {String} [appui.plugins['appui-ide'] + '/'] root
+         */
         root: appui.plugins['appui-ide'] + '/',
         /**
-               * Options of all paths types
-               * @data {Array} [null] typeOptions
-               */
+         * Options of all paths types
+         * @data {Array} [null] typeOptions
+         */
         typeOptions: null,
         /**
-               * Id of the selected path
-               * @data {String} [''] currentPathId
-               */
+         * Id of the selected path
+         * @data {String} [''] currentPathId
+         */
         currentPathId: this.source?.project?.path?.[0]?.id,
         /**
-               * Enable / Disable the dropdown to select path
-               * @data {Boolean} [false] isDropdownPathDisabled
-               */
+         * Enable / Disable the dropdown to select path
+         * @data {Boolean} [false] isDropdownPathDisabled
+         */
         isDropdownPathDisabled: false,
         /**
-               * Id type of the selected path
-               * @data {String} [''] currentTypeCode
-               */
+         * Id type of the selected path
+         * @data {String} [''] currentTypeCode
+         */
         currentTypeCode: 'components',
         /**
-               * Name of the selected file/folder
-               * @data {String} [''] nameSelectedElem
-               */
+         * Name of the selected file/folder
+         * @data {String} [''] nameSelectedElem
+         */
         nameSelectedElem: '',
         /**
-               * Vue object of this component's container
-               * @data {Vue} [null] container
-               */
+         * Vue object of this component's container
+         * @data {Vue} [null] container
+         */
         container: null,
         menu: [
           {
@@ -77,6 +77,17 @@
       };
     },
     computed: {
+      currentEditor() {
+        const router = this.getRef('router');
+        if (router) {
+          const ct = router.getFinalContainer();
+          if (ct) {
+            return ct.find('bbn-code');
+          }
+        }
+
+        return null;
+      },
       toolbarMenu() {
         let menu = [
           {
@@ -105,7 +116,7 @@
                         url_src: this.getPathByNode(this.copiedNode),
                         url_dest: this.currentRoot,
                         data_src: this.copiedNode.data,
-                        data_dest: {uid: "/"},
+                        data_dest: { uid: "/" },
                         id_project: this.closest('appui-project-ui').source.project.id
                       }, (d) => {
                         if (d.success) {
@@ -125,9 +136,9 @@
                         source: {
                           name: this.copiedNode.data.name,
                           url_src: this.getPathByNode(this.copiedNode),
-                          url_dest:  this.currentRoot,
+                          url_dest: this.currentRoot,
                           data_src: this.copiedNode.data,
-                          data_dest: {uid: "/"},
+                          data_dest: { uid: "/" },
                           id_project: this.closest('appui-project-ui').source.project.id
                         }
                       },
@@ -150,15 +161,16 @@
                 items: this.recentFiles
               }
             ]
-          },
-          {
+          }, {
             text: bbn._('Search'),
             items: [
               {
                 icon: 'nf nf-fa-search',
                 text: bbn._('Find'),
                 action: () => {
-                  this.find('appui-ide-codemirror').openSearchPanel();
+                  if (this.currentEditor) {
+                    this.currentEditor.openSearchPanel();
+                  }
                 }
               },
               {
@@ -166,37 +178,60 @@
                 icon: 'nf nf-fa-search_minus',
                 text: bbn._('Find previous'),
                 action: () => {
-                  this.find('appui-ide-codemirror').findPrevious();
+                  if (this.currentEditor) {
+                    this.currentEditor.findPrevious();
+                  }
                 }
               },
               {
                 icon: 'nf nf-fa-search_plus',
                 text: bbn._('Find next'),
                 action: () => {
-                  this.find('appui-ide-codemirror').findNext();
+                  if (this.currentEditor) {
+                    this.currentEditor.findNext();
+                  }
                 }
               },
               {
                 icon: 'nf nf-mdi-find_replace',
                 text: bbn._('replace all'),
                 action: () => {
-                  this.find('appui-ide-codemirror').replaceAll();
+                  if (this.currentEditor) {
+                    this.currentEditor.replaceAll();
+                  }
                 }
               },
               {
                 icon: 'nf nf-cod-fold_up',
                 text: bbn._('Fold all'),
                 action: () => {
-                  this.find('appui-ide-codemirror').foldAll();
+                  if (this.currentEditor) {
+                    this.currentEditor.foldAll();
+                  }
                 }
               },
               {
                 icon: 'nf nf-cod-fold_down',
                 text: bbn._('Unfold all'),
                 action: () => {
-                  this.find('appui-ide-codemirror').unfoldAll();
+                  if (this.currentEditor) {
+                    this.currentEditor.unfoldAll();
+                  }
                 }
               }
+            ]
+          }, {
+            text: bbn._('Preferences'),
+            items: [
+              {
+                icon: 'nf nf-md-shape_plus',
+                text: bbn._('Theme'),
+                action: () => {
+                  if (this.currentEditor) {
+                    this.currentEditor.themeSettings();
+                  }
+                }
+              },
             ]
           }
         ];
@@ -205,66 +240,66 @@
       },
 
       /**
-             * Type of the current path
-             *
-             * @computed currentPathType
-             * @return {Object}
-             */
+       * Type of the current path
+       *
+       * @computed currentPathType
+       * @return {Object}
+       */
       currentType() {
         if (this.currentTypeCode && this.currentPathType?.types) {
-          return bbn.fn.getRow(this.currentPathType.types, {type: this.currentTypeCode});
+          return bbn.fn.getRow(this.currentPathType.types, { type: this.currentTypeCode });
         }
 
         return null;
       },
       currentTab() {
         if (this.currentTypeCode && this.typeOptions) {
-          return bbn.fn.getRow(this.typeOptions, {code: this.currentTypeCode});
+          return bbn.fn.getRow(this.typeOptions, { code: this.currentTypeCode });
         }
 
         return null;
       },
       /**
-             * Type of the current path
-             *
-             * @computed currentPathType
-             * @return {Object}
-             */
+       * Type of the current path
+       *
+       * @computed currentPathType
+       * @return {Object}
+       */
       currentPathType() {
         if (this.currentPath && this.typeOptions) {
-          return bbn.fn.getRow(this.typeOptions, {id: this.currentPath.id_alias});
+          return bbn.fn.getRow(this.typeOptions, { id: this.currentPath.id_alias });
         }
 
         return null;
       },
       /**
-             * The current path
-             *
-             * @computed currentPath
-             * @return {Object}
-             */
+       * The current path
+       *
+       * @computed currentPath
+       * @return {Object}
+       */
       currentPath() {
         if (this.currentPathId && this.source?.project?.path) {
-          return bbn.fn.getRow(this.source.project.path, {id: this.currentPathId});
+          return bbn.fn.getRow(this.source.project.path, { id: this.currentPathId });
         }
 
         return null;
       },
       /**
-             * Name of the current path
-             *
-             * @computed currentPathName
-             * @return {String}
-             */
+       * Name of the current path
+       *
+       * @computed currentPathName
+       * @return {String}
+       */
       currentPathName() {
         return this.currentPath ? this.currentPath.text : "";
       },
       /**
-             * Current root of the selected file
-             *
-             * @computed currentRoot
-             * @return {String}
-             */
+       * Current root of the selected file
+       *
+       * @computed currentRoot
+       * @return {String}
+       */
       currentRoot() {
         let st = this.currentPath.parent_code + '/' + this.currentPath.code + '/';
         if (this.currentType) {
@@ -280,7 +315,7 @@
             let res = [];
             for (let i = 0; i < d.data.length; i++) {
               let text = ((d.data[i].file).slice()).replace(/\/_end_.*/g, "");
-              if (!bbn.fn.getRow(res, {text: text})) {
+              if (!bbn.fn.getRow(res, { text: text })) {
                 res.push({
                   icon: "nf nf-fa-file",
                   file: d.data[i].file,
@@ -327,11 +362,11 @@
           bbn.fn.log("BITS change 3", bits);
 
           bbn.fn.each(bits, (a) => {
-            if ( a === 'components' ){
+            if (a === 'components') {
               foundComponents = true;
               bbn.fn.log("FOUNDCOMPONENTS change 2", foundComponents);
             }
-            else if ( !foundComponents ){
+            else if (!foundComponents) {
               root += a + '/';
               bbn.fn.log("ROOT change 2", root);
             }
@@ -343,20 +378,20 @@
           if (cp) {
             let found = false;
             bbn.fn.log("FOUND change 1", found)
-            root = root.substring(0, root.length-1);
+            root = root.substring(0, root.length - 1);
             bbn.fn.log("ROOT change 3", root);
-            cp = cp.substring(0, cp.length-1);
+            cp = cp.substring(0, cp.length - 1);
             bbn.fn.log("CP change 4", cp);
             bbn.fn.log("ROOT", root, "CP", cp, "PREFIX", bbn.env.appPrefix);
-            if ( root === 'app/main' ){
+            if (root === 'app/main') {
               found = bbn.env.appPrefix + '-' + cp;
               bbn.fn.log("FOUND change 4", found)
             }
-            else if ( root === 'BBN_CDN_PATH/lib/bbn-vue' ){
+            else if (root === 'BBN_CDN_PATH/lib/bbn-vue') {
               found = 'bbn-' + cp;
               bbn.fn.log("FOUND change 5", found)
             }
-            else{
+            else {
               bbn.fn.iterate(appui.plugins, (a, n) => {
                 if (root.indexOf('lib/' + n) === 0) {
                   found = n + '-' + cp;
@@ -365,7 +400,7 @@
                 }
               })
             }
-            if ( found ){
+            if (found) {
               bbn.fn.log("FOUND HERE", found);
               bbn.version++;
               bbn.cp.unloadComponent(found);
@@ -376,21 +411,21 @@
           }
         }
         else {
-          if ( component.source.settings ){
+          if (component.source.settings) {
             /** @todo All this part doesmn't work */
             bbn.fn.log("THIS IS IN SETTINGS, CHECK IT IN components/editor");
-            let key = this.currentURL.substring(0, this.currentURL.indexOf('_end_/')+5),
-                mvc = this.findByKey(key).find('appui-ide-mvc').$data,
-                pathMVC = mvc.path;
+            let key = this.currentURL.substring(0, this.currentURL.indexOf('_end_/') + 5),
+              mvc = this.findByKey(key).find('appui-ide-mvc').$data,
+              pathMVC = mvc.path;
             bbn.fn.log("KEY change 1", key);
             bbn.fn.log("MVC change 1", mvc);
             bbn.fn.log("PATHMVC change 1", pathMVC);
-            if ( pathMVC.indexOf('mvc/') === 0 ){
-              pathMVC = pathMVC.replace("mvc/","");
+            if (pathMVC.indexOf('mvc/') === 0) {
+              pathMVC = pathMVC.replace("mvc/", "");
               bbn.fn.log("PATHMVC change 2", pathMVC);
             }
             let link = (mvc.route ? mvc.route + '/' : '') +
-                (pathMVC === 'mvc' ? '' : pathMVC + '/') +  mvc.filename;
+              (pathMVC === 'mvc' ? '' : pathMVC + '/') + mvc.filename;
             bbn.fn.log("BEFORE THE LINK", bbn.fn.baseName(link));
             if (bbn.fn.baseName(link) === 'index') {
               window.open(bbn.env.host + '/' + link);
@@ -399,10 +434,10 @@
               appui.find('bbn-router').load(link, true);
             }
           }
-          else{
-            if ( component.source.isMVC ){
+          else {
+            if (component.source.isMVC) {
               let pathMVC = component.source.path;
-              pathMVC = pathMVC.replace("mvc/","");
+              pathMVC = pathMVC.replace("mvc/", "");
               let link = component.source.route + pathMVC;
 
               bbn.fn.log("BEFORE THE LINK", bbn.fn.baseName(link));
@@ -415,10 +450,10 @@
 
               return true;
             }
-            if ( typeof(this.find('appui-ide-coder').myMode) === 'string' ){
-              switch ( this.find('appui-ide-coder').myMode ){
+            if (typeof (this.find('appui-ide-coder').myMode) === 'string') {
+              switch (this.find('appui-ide-coder').myMode) {
                 case "php":
-                  if ( !this.isLib ){
+                  if (!this.isLib) {
                     bbn.fn.post(
                       this.root + "test",
                       {
@@ -427,7 +462,7 @@
                       },
                       d => {
                         const tn = this.closest('bbn-router'),
-                              idx = tn.views.length;
+                          idx = tn.views.length;
                         tn.add({
                           title: dayjs().format('HH:mm:ss'),
                           icon: 'nf nf-fa-cogs',
@@ -436,13 +471,13 @@
                           url: 'output' + idx,
                           selected: true
                         });
-                        this.$nextTick(()=>{
+                        this.$nextTick(() => {
                           tn.route('output' + idx);
                         });
                       }
                     );
                   }
-                  else{
+                  else {
                     this.alert(bbn._('Unable to test classes!!'));
                   }
                   break;
@@ -451,7 +486,7 @@
                   break;
                 case "svg":
                   const oDocument = new DOMParser().parseFromString(this.value, "text/xml");
-                  if ( (oDocument.documentElement.nodeName == "parsererror") || !oDocument.documentElement){
+                  if ((oDocument.documentElement.nodeName == "parsererror") || !oDocument.documentElement) {
                     appui.alert("There is an XML error in this SVG");
                   }
                   else {
@@ -467,15 +502,15 @@
         }
       },
       /**
-             * New file|directory dialog
-             *
-             * @param string title The dialog's title
-             * @param bool isFile A boolean value to identify if you want create a file or a folder
-             * @param string path The current path
-             */
-      openNew(title, isFile, node = false){
+       * New file|directory dialog
+       *
+       * @param string title The dialog's title
+       * @param bool isFile A boolean value to identify if you want create a file or a folder
+       * @param string path The current path
+       */
+      openNew(title, isFile, node = false) {
         let editor = this.source
-        bbn.fn.log("lol" ,editor);
+        bbn.fn.log("lol", editor);
         editor.types = this.types;
         let repositories = {};
         let selected = this.source.project.path[0];
@@ -526,33 +561,33 @@
         //case top menu
 
         //bbn.fn.log("ide NODE", node);
-        if ( this.currentTypeCode !== false ){
-          src.type =  this.currentTypeCode;
+        if (this.currentTypeCode !== false) {
+          src.type = this.currentTypeCode;
           if (src.type !== 'mvc') {
             src.path = selected.types.find(type => type.type === src.type).path
           }
         }
 
-        if (  bbn.fn.isObject(node) ) {
+        if (bbn.fn.isObject(node)) {
           bbn.fn.log("node in")
-          if ( node.numChildren > 0 ){
+          if (node.numChildren > 0) {
             bbn.fn.log("node in in")
-            if( !node.isExpanded ){
+            if (!node.isExpanded) {
               node.isExpanded = true;
             }
             //src.parent = node.find('bbn-tree');
             this.nodeParent = node.find('bbn-tree');
           }
-          else{
+          else {
             //src.parent= node.parent;
             this.nodeParent = node.parent;
           }
           //caseproject
 
-          if ( node.data.is_vue ){
-            src.path += node.data.uid.replace(node.data.name  + '/' + node.data.name, node.data.name);
+          if (node.data.is_vue) {
+            src.path += node.data.uid.replace(node.data.name + '/' + node.data.name, node.data.name);
           }//other types
-          else{
+          else {
             //src.path = node.data.path;
             src.path += node.data.uid;
           }
@@ -561,9 +596,9 @@
         }
         bbn.fn.log("SRC", src);
         //check path
-        src.path = src.path.replace( '//',  '/');
+        src.path = src.path.replace('//', '/');
         //src.prefix = this.prefix;
-        if ( !bbn.fn.isObject(node) || node.data.folder ){
+        if (!bbn.fn.isObject(node) || node.data.folder) {
           bbn.fn.log("ERJEJALJZRLJLKJRLEJZKL0");
           this.closest("bbn-container").getRef('popup').open({
             title: title,
@@ -574,19 +609,19 @@
         }
       },
       /**
-             * Opens a dialog for create a new file
-             *
-             * @param node  set at false if click of the context node is data of the node tree
-             */
-      newElement(node = false){
+       * Opens a dialog for create a new file
+       *
+       * @param node  set at false if click of the context node is data of the node tree
+       */
+      newElement(node = false) {
         let title = bbn._('New File');
-        if ( this.isProject && bbn.fn.isObject(node) &&
-            ((node.data.type !== false) || (this.typeProject !== false))
-           ){
-          if ( ((node !== false) && (node.data.type === 'components')) || (this.typeProject === 'components') ){
-            title = bbn._('New Component') +  ` <i class='nf nf-fa-vuejs'></i>`;
+        if (this.isProject && bbn.fn.isObject(node) &&
+          ((node.data.type !== false) || (this.typeProject !== false))
+        ) {
+          if (((node !== false) && (node.data.type === 'components')) || (this.typeProject === 'components')) {
+            title = bbn._('New Component') + ` <i class='nf nf-fa-vuejs'></i>`;
           }
-          else if ( ((node !== false) && (node.data.type === 'lib')) || (this.typeProject === 'lib') ){
+          else if (((node !== false) && (node.data.type === 'lib')) || (this.typeProject === 'lib')) {
             title = bbn._('New Class');
           }
         }
@@ -596,19 +631,19 @@
       },
 
       /**
-             * Opens a dialog for create a new directory
-             * @param node  set at false if click of the context node is data of the node tree
-             */
-      newDir(node){
+       * Opens a dialog for create a new directory
+       * @param node  set at false if click of the context node is data of the node tree
+       */
+      newDir(node) {
         this.openNew(bbn._('New Directory'), false, node != undefined && node ? node : false);
       },
-      iconColor(node){
+      iconColor(node) {
         return node.data.bcolor;
       },
       showNodeCode(node) {
         bbn.fn.log(node.data);
       },
-      treeNodeActivate(d, e){
+      treeNodeActivate(d, e) {
         e.preventDefault();
         bbn.fn.log("file = ", d);
         this.openFile(d);
@@ -618,7 +653,7 @@
         let tab = '';
         let link = '';
         let currentRoot = this.currentRoot;
-        let root = bbn.fn.getRow(this.source.project.path, {id: file.data.id_path});
+        let root = bbn.fn.getRow(this.source.project.path, { id: file.data.id_path });
         if (root) {
           currentRoot = root.parent_code + '/' + root.code + '/';
           bbn.fn.log("THERE IS TYPE", file.data.type, currentRoot);
@@ -629,7 +664,7 @@
 
 
         if ((file.data.type === 'mvc')) {
-          tab = ((file.data.tab === "php") && (this.project === 'apst-app')) ? '/settings' :  '/' + file.data.tab;
+          tab = ((file.data.tab === "php") && (this.project === 'apst-app')) ? '/settings' : '/' + file.data.tab;
           link = 'file/' +
             currentRoot +
             (file.data.dir || '') +
@@ -637,12 +672,12 @@
             '/_end_' + (tab.indexOf('_') === 0 ? '/' + tab : tab);
         }
         else if ((file.data.type === 'components')) {
-          link = 'file/' +  currentRoot + file.data.uid + '/_end_/' + (file.data.tab || 'js');
+          link = 'file/' + currentRoot + file.data.uid + '/_end_/' + (file.data.tab || 'js');
         }
-        else{
-          link = 'file/' +  currentRoot + file.data.uid + '/_end_/' + (file.data.tab || 'code');
+        else {
+          link = 'file/' + currentRoot + file.data.uid + '/_end_/' + (file.data.tab || 'code');
         }
-        if ( link ){
+        if (link) {
           link = link.replace(/\/\//g, '/');
           bbn.fn.log("link = " + link);
           this.getRef('router').route(link);
@@ -653,7 +688,7 @@
         }
       },
       treeReload() {
-        if ( this.getRef('tree') ){
+        if (this.getRef('tree')) {
           this.getRef('tree').reload();
         }
       },
@@ -666,18 +701,18 @@
         }
       },
       mapTree(data) {
-        data.text += data.git === true ?  "  <i class='nf  nf-fa-github'></i>" : ""
+        data.text += data.git === true ? "  <i class='nf  nf-fa-github'></i>" : ""
         if (this.currentTab.tabs && data.tab) {
-          data.bcolor = bbn.fn.getField(this.currentTab.tabs, 'bcolor', {url: data.tab}) || data.bcolor;
+          data.bcolor = bbn.fn.getField(this.currentTab.tabs, 'bcolor', { url: data.tab }) || data.bcolor;
         }
         return data;
       },
       getLink(file) {
         let tab = '',
-            link = '';
+          link = '';
         bbn.fn.log("currentRoot = " + this.currentRoot);
         if ((file.data.type === 'mvc')) {
-          tab = ((file.data.tab === "php") && (this.project === 'apst-app')) ? '/settings' :  '/' + file.data.tab;
+          tab = ((file.data.tab === "php") && (this.project === 'apst-app')) ? '/settings' : '/' + file.data.tab;
           link = 'file/' +
             this.currentRoot +
             (file.data.dir || '') +
@@ -685,12 +720,12 @@
             '/_end_' + (tab.indexOf('_') === 0 ? '/' + tab : tab);
         }
         else if ((file.data.type === 'component')) {
-          link = 'file/' +  this.currentRoot + file.data.uid + '/_end_/' + (file.data.tab || 'js');
+          link = 'file/' + this.currentRoot + file.data.uid + '/_end_/' + (file.data.tab || 'js');
         }
-        else{
-          link = 'file/' +  this.currentRoot + file.data.uid + '/_end_/' + (file.data.tab || 'code');
+        else {
+          link = 'file/' + this.currentRoot + file.data.uid + '/_end_/' + (file.data.tab || 'code');
         }
-        if ( link ){
+        if (link) {
           link = link.replace(/\/\//g, '/');
           bbn.fn.log("link = " + link);
           this.getRef('router').route(link);
@@ -702,7 +737,7 @@
         bbn.fn.log("node", node.data);
         let url = node.data.uid;
         if (this.currentTypeCode && this.currentTypeCode === 'components' && node.data.is_vue) {
-          url = node.data.uid.replace(node.data.name  + '/' + node.data.name, node.data.name);
+          url = node.data.uid.replace(node.data.name + '/' + node.data.name, node.data.name);
         }
         url = this.currentRoot + url;
         url = url.replace(/\/\//g, '/');
@@ -779,7 +814,7 @@
               new ClipboardItem({
                 'text/plain': new Blob([
                   this.copiedNode
-                ],{
+                ], {
                   type: 'text/plain'
                 })
               })
@@ -907,7 +942,7 @@
           return this.treeData;
         }
 
-        return bbn.fn.extend({}, this.treeData, {is_vue: node.is_vue, uid: node.uid, name: node.name});
+        return bbn.fn.extend({}, this.treeData, { is_vue: node.is_vue, uid: node.uid, name: node.name });
       }
     },
     /**

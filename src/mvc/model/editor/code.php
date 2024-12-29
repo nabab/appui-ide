@@ -40,7 +40,7 @@ if ($model->hasData('id_project')) {
     }
 
     if ($type === 'html') {
-      $ext = 'html';
+      //$ext = 'html';
     }
     $title = basename($model->data['url']);
     return [
