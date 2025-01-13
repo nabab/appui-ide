@@ -32,6 +32,8 @@ class Environment
 
   /**
    * This function extracts information, and constructs an array of available libraries along with their metadata.
+   * 
+   * ONLY LIBRARIES WITH A GIT REPOSITORY ARE CONSIDERED.
    * @return array
    */
   public static function getAvailableLibraries(): array
@@ -39,42 +41,49 @@ class Environment
     $fs = new System(); // Create an instance of the bbn\File\System class.
     $path = Mvc::getLibPath(); // Get the library path using the Mvc::getLibPath() method.
     $fs->cd($path); // Change the current directory to the library path.
-    
+
+    $composers = [];
     // Scan the current directory for files and filter them based on the presence of "composer.json".
-    $composers = $fs->scan(".", function($a) {
-        return strpos($a, "composer.json") !== false;
-    });
-    
+    $dirs = $fs->getDirs('.');
+    foreach ($dirs as $d) {
+      $ddirs = $fs->getDirs($d);
+      foreach ($ddirs as $dd) {
+        if ($fs->exists($dd . "/composer.json")) {
+          $composers[] = $dd . "/composer.json";
+        }
+      }
+    }
+
     // Initialize the result array with a default value.
     $res = [
-        'success' => false,
+      'success' => false,
     ];
 
     if ($composers) {
-        $res['success'] = true; // Update the success status in the result array.
-        $res['libraries'] = []; // Initialize an array to store library information.
+      $res['success'] = true; // Update the success status in the result array.
+      $res['libraries'] = []; // Initialize an array to store library information.
 
-        // Loop through each found "composer.json" file.
-        foreach($composers as $c) {
-          $content = $fs->decodeContents($c, null, true); // Decode the content of the composer.json file. 
-          // Check if "autoload" key exists in the decoded content.
-          if (isset($content['autoload'])) {
-            $bits = X::split($c, "/"); // Split the file path using "/" separator.
-            $lib = $bits[0] . "/" . $bits[1]; // Construct the library name.
-            $libpath = $path . $lib; // Create the full library path.
-            $libgit = $libpath . "/.git"; // Create the path to the .git folder.
-            
-            // Check if the .git folder exists within the library path.
-            if (in_array($libgit, $fs->scand($libpath, true), true)) {
-              // Add library information to the "libraries" array.
-              $res['libraries'][] = [
-                'text' => $lib,
-                'root' => 'lib',
-                'value' => $lib
-              ];
-            }
+      // Loop through each found "composer.json" file.
+      foreach ($composers as $c) {
+        $content = $fs->decodeContents($c, null, true); // Decode the content of the composer.json file. 
+        // Check if "autoload" key exists in the decoded content.
+        if (isset($content['autoload'])) {
+          $bits = X::split($c, "/"); // Split the file path using "/" separator.
+          $lib = $bits[0] . "/" . $bits[1]; // Construct the library name.
+          $libpath = $path . $lib; // Create the full library path.
+          $libgit = $libpath . "/.git"; // Create the path to the .git folder.
+
+          // Check if the .git folder exists within the library path.
+          if (in_array($libgit, $fs->scand($libpath, true), true)) {
+            // Add library information to the "libraries" array.
+            $res['libraries'][] = [
+              'text' => $lib,
+              'root' => 'lib',
+              'value' => $lib
+            ];
           }
         }
+      }
       // Add information about the "Main Library" to the "libraries" array.
       $res['libraries'][] = [
         'text' => X::_("Main Library"),
@@ -82,6 +91,7 @@ class Environment
         'value' => 'main'
       ];
     }
+
     return $res; // Return the result array containing library information.
   }
 
@@ -93,8 +103,7 @@ class Environment
   public function __construct(
     protected string $root,
     protected string $lib
-  )
-  {
+  ) {
     $this->router = __DIR__ . '/router-alt.php';
     $this->dir = Mvc::getDataPath("appui-ide") . "class_editor/" . $this->root . ($this->root !== 'app' ? "/" . $this->lib : '');
     $this->fs = new System();
@@ -118,21 +127,21 @@ class Environment
 
     // Check the value of the root property to determine the source of the composer.json file.
     if ($this->root === 'app') {
-        $composer = Mvc::{$func_name}(true) . 'composer.json'; // If root is 'app', use the composer.json file path within the app directory.
+      $composer = Mvc::{$func_name}(true) . 'composer.json'; // If root is 'app', use the composer.json file path within the app directory.
     } else {
-        // Scan the full library path for files and filter them based on the presence of "composer.json".
-        // Assign the first found composer.json file to the $composer variable.
-        if ($tmp = $this->fs->scan($fullpath, function($a) {
-            return strpos($a, "composer.json") !== false;
-        })) {
-            $composer = $tmp[0];
-        }
+      // Scan the full library path for files and filter them based on the presence of "composer.json".
+      // Assign the first found composer.json file to the $composer variable.
+      if ($tmp = $this->fs->scan($fullpath, function ($a) {
+        return strpos($a, "composer.json") !== false;
+      })) {
+        $composer = $tmp[0];
+      }
     }
 
     // Return an array containing composer.json file path and fullpath.
     return [
-        'composer' => $composer,
-        'fullpath' => $fullpath
+      'composer' => $composer,
+      'fullpath' => $fullpath
     ];
   }
 
@@ -145,27 +154,27 @@ class Environment
   public function getPsrInfos(string $composer, string $flag): ?array
   {
     if ($composer) { // Check if the composer information is provided.
-        $content = $this->fs->decodeContents($composer, null, true); // Decode the content of the provided composer.json file.
+      $content = $this->fs->decodeContents($composer, null, true); // Decode the content of the provided composer.json file.
 
-        if (isset($content[$flag])) { // Check if the specified flag (autoload or autoload-dev) exists in the content.
-            $autoload = $content[$flag]; // Retrieve the autoload or autoload-dev section from the content.
+      if (isset($content[$flag])) { // Check if the specified flag (autoload or autoload-dev) exists in the content.
+        $autoload = $content[$flag]; // Retrieve the autoload or autoload-dev section from the content.
 
-            // Check if the autoload section contains 'psr-4' or 'psr-0' autoload definitions.
-            if (isset($autoload['psr-4'])) {
-                $psr_value = $autoload['psr-4'];
-            } elseif (isset($autoload['psr-0'])) {
-                $psr_value = $autoload['psr-0'];
-            }
-
-            $psr_keys = array_keys($psr_value); // Get the keys (namespaces) defined within the PSR autoload section.
-
-            // Return an array containing the keys (namespaces) and the PSR autoload values.
-            return [
-                'psr_keys' => $psr_keys,
-                'psr_value' => $psr_value
-            ];
+        // Check if the autoload section contains 'psr-4' or 'psr-0' autoload definitions.
+        if (isset($autoload['psr-4'])) {
+          $psr_value = $autoload['psr-4'];
+        } elseif (isset($autoload['psr-0'])) {
+          $psr_value = $autoload['psr-0'];
         }
-        return null; // Return null if the specified flag is not found in the composer content.
+
+        $psr_keys = array_keys($psr_value); // Get the keys (namespaces) defined within the PSR autoload section.
+
+        // Return an array containing the keys (namespaces) and the PSR autoload values.
+        return [
+          'psr_keys' => $psr_keys,
+          'psr_value' => $psr_value
+        ];
+      }
+      return null; // Return null if the specified flag is not found in the composer content.
     }
 
     return null; // Return null if no composer information is provided.
@@ -179,7 +188,7 @@ class Environment
   public function getLibraryClasses(): array
   {
     $res = [
-        'success' => false,
+      'success' => false,
     ];
     $library = []; // An array to hold the library classes.
     $exists = $this->check();
@@ -189,8 +198,7 @@ class Environment
       $composer_infos = $this->getComposerInfos();
       $composer = $composer_infos['composer']; // The path to the composer.json file.
       $fullpath = $composer_infos['fullpath']; // The full path to the library.
-    }
-    else {
+    } else {
       $composer = $this->dir . $this->defaultDir . '/composer.json';
       $fullpath = $this->dir . $this->defaultDir;
     }
@@ -203,17 +211,16 @@ class Environment
           $psr_value = $psr_infos['psr_value']; // Retrieve the PSR autoload values.
 
           foreach ($psr_keys as $namespace) {
-              // Get the library classes using the parser's getLibraryClasses() method.
-              $libs = $this->parser->getLibraryClasses($fullpath . "/" . $psr_value[$namespace], $namespace);
+            // Get the library classes using the parser's getLibraryClasses() method.
+            $libs = $this->parser->getLibraryClasses($fullpath . "/" . $psr_value[$namespace], $namespace);
 
-              if ($libs) {
-                  $library = array_merge($library, $libs); // Merge the retrieved classes into the library array.
-              }
+            if ($libs) {
+              $library = array_merge($library, $libs); // Merge the retrieved classes into the library array.
+            }
           }
           $res['success'] = true; // Indicate that the operation was successful.
         }
-      }
-      else {
+      } else {
         // Check classes in the Test environment if it exists.
         $cfg = [
           'operation' => 'getLibraryClasses',
@@ -226,16 +233,14 @@ class Environment
         X::ddump($exists, $cfg, $library);
         $res['success'] = true;
       }
-    }
-    elseif ($composer && $this->root === 'app') { // If the root is 'app' and composer information is available.
+    } elseif ($composer && $this->root === 'app') { // If the root is 'app' and composer information is available.
       X::ddump($exists);
       if (!$exists['found']) {
         // Get the library classes directly using the parser's getLibraryClasses() method.
         $libs = $this->parser->getLibraryClasses($fullpath);
         $library = array_merge($library, $libs); // Merge the retrieved classes into the library array.
         $res['success'] = true; // Indicate that the operation was successful.
-      }
-      else {
+      } else {
         $psr_infos = $this->getPsrInfos($composer, 'autoload'); // Get PSR autoload information.
         // Check classes in the Test environment if it exists.
         $cfg = [
@@ -267,12 +272,12 @@ class Environment
     chdir(Mvc::getAppPath());
     // Construct a command to execute a PHP script using shell_exec().
     $output = shell_exec(
-        sprintf(
-            'php -f %s %s "%s"',
-            $this->router, // The path to the router script.
-            'test-process',
-            Str::escapeDquotes(json_encode($params)) // The parameters, JSON-encoded and escaped.
-        )
+      sprintf(
+        'php -f %s %s "%s"',
+        $this->router, // The path to the router script.
+        'test-process',
+        Str::escapeDquotes(json_encode($params)) // The parameters, JSON-encoded and escaped.
+      )
     );
 
     //X::ddump($output);
@@ -282,7 +287,7 @@ class Environment
     return $data; // Return the decoded data array.
   }
 
-  
+
   /**
    * Create a `composer.json` file with specific autoload configurations in a directory.
    *
@@ -346,7 +351,7 @@ class Environment
     if (!file_exists($dir . '/phpunit.xml') || !file_exists($dir . '/phpunit.xml.dist')) {
       // Define the content of the phpunit.xml file.
       $content =
-  '<?xml version="1.0"?>
+        '<?xml version="1.0"?>
   <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.1/phpunit.xsd"
             backupGlobals="true"
@@ -474,46 +479,46 @@ class Environment
    */
   public function install(): array
   {
-    
+
     $res = [
-        'success' => false
+      'success' => false
     ];
 
     try {
-        // Get composer and PSR info
-        $composer_infos = $this->getComposerInfos();
-        $composer = $composer_infos['composer'];
-        $fullpath = $composer_infos['fullpath'];
-        
-        if ($composer) {
-          // Delete existing directory or create it
-          if (file_exists($this->dir)) {
-            $this->fs->delete($this->dir, true);
-          }
-          $path = $this->getEnvPath();
-          $this->fs->createPath($path);
+      // Get composer and PSR info
+      $composer_infos = $this->getComposerInfos();
+      $composer = $composer_infos['composer'];
+      $fullpath = $composer_infos['fullpath'];
 
-          // Create and configure Composer environment
-          if (!$this->fs->isFile($this->dir . "/.bbn")) {
-            $t = time();
-            $res['libtime'] = $t;
-            $this->fs->putContents($this->dir . "/.bbn", json_encode([
-              "time" => $t,
-              "lib" => $this->lib
-            ]));
-            $this->fs->copy($fullpath, $path, true);
-            if ($this->root === 'app') {
-              $this->createComposer($composer, ($this->dir . $this->defaultDir));
-              $this->createTestDependencies($this->dir . $this->defaultDir);
-            }
-
-            // Modify composer.json and install dependencies
-            $this->composerAction('install');
-            $res["success"] = true;
-          }
+      if ($composer) {
+        // Delete existing directory or create it
+        if (file_exists($this->dir)) {
+          $this->fs->delete($this->dir, true);
         }
+        $path = $this->getEnvPath();
+        $this->fs->createPath($path);
+
+        // Create and configure Composer environment
+        if (!$this->fs->isFile($this->dir . "/.bbn")) {
+          $t = time();
+          $res['libtime'] = $t;
+          $this->fs->putContents($this->dir . "/.bbn", json_encode([
+            "time" => $t,
+            "lib" => $this->lib
+          ]));
+          $this->fs->copy($fullpath, $path, true);
+          if ($this->root === 'app') {
+            $this->createComposer($composer, ($this->dir . $this->defaultDir));
+            $this->createTestDependencies($this->dir . $this->defaultDir);
+          }
+
+          // Modify composer.json and install dependencies
+          $this->composerAction('install');
+          $res["success"] = true;
+        }
+      }
     } catch (Exception $e) {
-        $res["error"] = $e->getMessage();
+      $res["error"] = $e->getMessage();
     }
     return $res;
   }
@@ -527,19 +532,19 @@ class Environment
   public function delete(): array
   {
     $res = [
-        'success' => false
+      'success' => false
     ];
 
     try {
-        // Check if the directory exists.
-        if (file_exists($this->dir)) {
-            // Delete the directory recursively using the FileSystem (fs) object.
-            $this->fs->delete($this->dir, true);
-            $res["success"] = true; // Set success to true if the deletion was successful.
-        }
+      // Check if the directory exists.
+      if (file_exists($this->dir)) {
+        // Delete the directory recursively using the FileSystem (fs) object.
+        $this->fs->delete($this->dir, true);
+        $res["success"] = true; // Set success to true if the deletion was successful.
+      }
     } catch (Exception $e) {
-        // If an exception occurs during the deletion process, capture the error message.
-        $res["error"] = $e->getMessage();
+      // If an exception occurs during the deletion process, capture the error message.
+      $res["error"] = $e->getMessage();
     }
 
     return $res; // Return the result array indicating success or an error message.
@@ -554,26 +559,26 @@ class Environment
   public function check()
   {
     $res = [
-        'success' => false,
-        'found' => false
+      'success' => false,
+      'found' => false
     ];
-    
+
     try {
-        // Check if the directory exists.
-        if (file_exists($this->dir)) {
-          $data = (array)(json_decode(file_get_contents($this->dir . '/.bbn')));
-          $res['libtime'] = $data['time'];
-          $res["success"] = true; // Directory exists, set success to true.
-          $res["found"] = true;   // Also set 'found' to true.
-        } else {
-          $res["success"] = true; // Directory doesn't exist, set success to true.
-          $res["found"] = false;  // Set 'found' to false.
-        }
+      // Check if the directory exists.
+      if (file_exists($this->dir)) {
+        $data = (array)(json_decode(file_get_contents($this->dir . '/.bbn')));
+        $res['libtime'] = $data['time'];
+        $res["success"] = true; // Directory exists, set success to true.
+        $res["found"] = true;   // Also set 'found' to true.
+      } else {
+        $res["success"] = true; // Directory doesn't exist, set success to true.
+        $res["found"] = false;  // Set 'found' to false.
+      }
     } catch (Exception $e) {
-        // If an exception occurs, capture the error message.
-        $res["error"] = $e->getMessage();
+      // If an exception occurs, capture the error message.
+      $res["error"] = $e->getMessage();
     }
-    
+
     return $res; // Return the result array indicating whether the directory was found or if an error occurred.
   }
 
@@ -590,13 +595,13 @@ class Environment
   {
     // Load the XML file using the DOMDocument.
     $this->xml->load($output_xml);
-    
+
     // Initialize an array to store the parsed test results.
     $test_results = [];
-    
+
     // Get all <testcase> elements from the XML.
     $testcases = $this->xml->getElementsByTagName('testcase');
-    
+
     // Iterate through each <testcase> element in the XML.
     foreach ($testcases as $k => $test) {
       // Get the name attribute of the <testcase> element, which corresponds to the test method name.
@@ -607,7 +612,7 @@ class Environment
       $failure = $testcases->item($k)->getElementsByTagName('failure');
       // Check if there are <skipped> elements within the <testcase> element.
       $skipped = $testcases->item($k)->getElementsByTagName('skipped');
-      
+
       // Determine the status of the test based on the presence of <error>, <failure>, or <skipped> elements.
       if ($error->length) {
         $test_results[$method]["status"] = "error";
@@ -623,7 +628,7 @@ class Environment
         $test_results[$method]["status"] = "success";
       }
     }
-    
+
     // Return the parsed test results as an array.
     return $test_results;
   }
@@ -706,16 +711,16 @@ class Environment
   {
     // Construct the directory path for the test report based on the class name.
     $dir_test = $this->dir . $this->envDataDir . '/' . str_replace("\\", "/", $class);
-    
+
     // Construct the path to the test report XML file.
     $output_xml = $dir_test . "/report.xml";
-    
+
     // Check if the test report XML file exists.
     if (file_exists($output_xml)) {
       // If the file exists, parse its contents using the parseTestsOutput method.
       return $this->parseTestsOutput($output_xml);
     }
-    
+
     // If the file does not exist, return null to indicate that the test report is not available.
     return null;
   }
@@ -754,7 +759,7 @@ class Environment
     // If the test path is null, return null to indicate that test-related information is not available.
     return null;
   }
-  
+
 
   /**
    * This function analyzes a test class and returns its analysis if available.
@@ -815,12 +820,12 @@ class Environment
       $env_dir = $this->dir . $this->defaultDir . '/';
       // Change the current working directory to the environment directory.
       chdir($env_dir);
-      
+
       // Get the file path of the test class.
       $test_filepath = $test_class_analysis['fileName'];
       // Calculate the relative path to the test file.
       $test_file = str_replace($env_dir, '', $test_filepath);
-      
+
       // Prepare the directory path for test output.
       $dir_test = '..' . $this->envDataDir . '/' . str_replace("\\", "/", $class);
 
@@ -828,19 +833,19 @@ class Environment
       if (!file_exists($dir_test)) {
         $this->fs->createPath($dir_test);
       }
-      
+
       // Define the path for the XML output file.
       $output_xml = $dir_test . "/report.xml";
-      
+
       // Construct the command to execute PHPUnit tests and capture the XML output.
       $exec = "vendor/bin/phpunit $test_file --log-junit $output_xml";
       exec($exec, $output, $retval);
       //X::ddump(getcwd(), $exec, $output, $retval);
-      
+
       // Parse the XML output and return the test results.
       return $this->parseTestsOutput($output_xml);
     }
-    
+
     // Return null if test class analysis information is not available.
     return null;
   }
@@ -858,7 +863,7 @@ class Environment
   private function posNeedle(string $test_method, string $method_name): bool
   {
     $res = false; // Initialize a boolean result variable as false.
-    
+
     // Define an array of keywords to search for in the test method name.
     $keywords = [
       'Test',
@@ -879,7 +884,7 @@ class Environment
         str_starts_with($test_method, $word . '_' . $method_name) ||
         str_starts_with($test_method, $method_name . '_' . $word)
       );
-      
+
       // Update the result variable by performing a logical OR with the temporary result.
       $res = $res || $tmp;
     }
@@ -903,70 +908,70 @@ class Environment
   {
     // Get the test class analysis for the specified class.
     $parse_test = $this->getTestClassAnalysis($class);
-    
+
     // Check if both the parsed class and test data contain non-empty "methods" arrays.
     if (!empty($parse_test["methods"]) && !empty($parse_cls["methods"])) {
-        $tmp = []; // Temporary array to store interpreted test data.
-        $found = []; // Array to keep track of found methods in tests.
-        $meth = []; // Array to store untested methods.
+      $tmp = []; // Temporary array to store interpreted test data.
+      $found = []; // Array to keep track of found methods in tests.
+      $meth = []; // Array to store untested methods.
 
-        // Iterate through each method in the parsed class data.
-        foreach ($parse_cls["methods"] as $me) {
-          // Skip methods with a parent (e.g., inherited methods).
-          if (!empty($me["parent"])) {
-            continue;
-          }
-
-          // Initialize an entry for the method in the temporary array.
-          $tmp[$me["name"]] = [
-            "available_tests" => 0,
-            "method" => $me["name"],
-            "details" => [],
-          ];
-
-          $testedMethod = $me["name"];
-
-          // Skip methods with the name '_'.
-          if ($testedMethod === '_') {
-            continue;
-          }
-
-          // Iterate through each method in the parsed test data.
-          foreach ($parse_test["methods"] as $m) {
-            // Check if the method belongs to the same class.
-            if ($m["class"] !== $parse_test['name']) {
-              continue;
-            }
-
-            // Check if the method name contains the testedMethod as a substring.
-            if ($this->posNeedle($m["name"], $testedMethod) !== false) {
-              // Add the test result and code details to the method entry.
-              $tmp[$testedMethod]["details"][$m["name"]] = $test_results[$m["name"]];
-              $tmp[$testedMethod]["details"][$m["name"]]["code"] = $parse_test["methods"][$m["name"]]["code"];
-              
-              // Update the count of available tests for the method.
-              $tmp[$testedMethod]["available_tests"] = sizeof(array_keys($tmp[$testedMethod]["details"]));
-              
-              // Track the found method.
-              $found[] = $m["name"];
-            }
-          }
+      // Iterate through each method in the parsed class data.
+      foreach ($parse_cls["methods"] as $me) {
+        // Skip methods with a parent (e.g., inherited methods).
+        if (!empty($me["parent"])) {
+          continue;
         }
 
-        // Find untested methods and add them to the "meth" array.
-        foreach ($parse_test["methods"] as $m) {
-          if ($m["class"] === $parse_test['name'] && !in_array($m["name"], $found)) {
-            $meth[$m['name']] = $m;
-          }
-        }
-
-        // Return an array containing interpreted test data and untested methods.
-        return [
-          'tests' => $tmp,
-          'methods' => $meth
+        // Initialize an entry for the method in the temporary array.
+        $tmp[$me["name"]] = [
+          "available_tests" => 0,
+          "method" => $me["name"],
+          "details" => [],
         ];
+
+        $testedMethod = $me["name"];
+
+        // Skip methods with the name '_'.
+        if ($testedMethod === '_') {
+          continue;
+        }
+
+        // Iterate through each method in the parsed test data.
+        foreach ($parse_test["methods"] as $m) {
+          // Check if the method belongs to the same class.
+          if ($m["class"] !== $parse_test['name']) {
+            continue;
+          }
+
+          // Check if the method name contains the testedMethod as a substring.
+          if ($this->posNeedle($m["name"], $testedMethod) !== false) {
+            // Add the test result and code details to the method entry.
+            $tmp[$testedMethod]["details"][$m["name"]] = $test_results[$m["name"]];
+            $tmp[$testedMethod]["details"][$m["name"]]["code"] = $parse_test["methods"][$m["name"]]["code"];
+
+            // Update the count of available tests for the method.
+            $tmp[$testedMethod]["available_tests"] = sizeof(array_keys($tmp[$testedMethod]["details"]));
+
+            // Track the found method.
+            $found[] = $m["name"];
+          }
+        }
+      }
+
+      // Find untested methods and add them to the "meth" array.
+      foreach ($parse_test["methods"] as $m) {
+        if ($m["class"] === $parse_test['name'] && !in_array($m["name"], $found)) {
+          $meth[$m['name']] = $m;
+        }
+      }
+
+      // Return an array containing interpreted test data and untested methods.
+      return [
+        'tests' => $tmp,
+        'methods' => $meth
+      ];
     }
-    
+
     // Return an empty array if either the parsed class or test data is empty.
     return [];
   }
@@ -1001,7 +1006,7 @@ class Environment
       if ($original["modified"]) {
         $modified["status"] = $original["modified"];
         $modified["details"] = [];
-        
+
         // Get the keys (test method names) from the original test data.
         $keys = array_keys($original);
 
@@ -1187,8 +1192,8 @@ class Environment
         }
       }
     } catch (Exception $e) {
-        // If an exception is caught, set an error message in the result array.
-        $res["error"] = $e->getMessage();
+      // If an exception is caught, set an error message in the result array.
+      $res["error"] = $e->getMessage();
     }
 
     // Return the result array containing modification status and original JSON data.
@@ -1196,7 +1201,7 @@ class Environment
   }
 
 
-  
+
   /**
    * This function is responsible for modifying a method in a library class and updating the related metadata and files.
    * @param string $class
@@ -1209,57 +1214,57 @@ class Environment
     $resp = [
       'success' => false,
     ];
-    
+
     try {
-        // Configuration data for the class modification.
-        $cfg = [
-          'operation' => 'analyzeClass',
-          'class' => $class,
-          'lib' => $this->lib,
-          'dir' => $this->dir . $this->defaultDir
-        ];
-        
-        // Execute a command to get parsing information about the class.
-        $parse_cls = $this->execute($cfg);
-        
-        if (!empty($parse_cls)) {
-          // Modify the specified method's data in the parsed class information.
-          $parse_cls['methods'][$method] = $data;
-          
-          // Generate the updated class content using a generator.
-          $generator = new Generator($parse_cls);
-          $res = $generator->generateClass();
-          
-          $class_file = $parse_cls['fileName'];
-          
-          if (file_exists($class_file)) {
-            // Update the class file with the new content.
-            file_put_contents($class_file, $res);
-            
-            // Update the class's original JSON file with modification information.
-            $dir_test = $this->dir . $this->envDataDir . str_replace("\\", "/", $class);
-            $class_file_json = $dir_test . "/class-original.json";
-            
-            if (file_exists($class_file_json)) {
-              $original = json_decode(file_get_contents($class_file_json), true);
-              $original["modified"] = true;
-              
-              if ($original['methods'][$method] && !empty($original['methods'][$method])) {
-                  $original['methods'][$method] = $data;
-                  $original['methods'][$method]["modified"] = true;
-              }
-              
-              $resp["original"] = $original;
-              file_put_contents($class_file_json, json_encode($original, JSON_PRETTY_PRINT));
+      // Configuration data for the class modification.
+      $cfg = [
+        'operation' => 'analyzeClass',
+        'class' => $class,
+        'lib' => $this->lib,
+        'dir' => $this->dir . $this->defaultDir
+      ];
+
+      // Execute a command to get parsing information about the class.
+      $parse_cls = $this->execute($cfg);
+
+      if (!empty($parse_cls)) {
+        // Modify the specified method's data in the parsed class information.
+        $parse_cls['methods'][$method] = $data;
+
+        // Generate the updated class content using a generator.
+        $generator = new Generator($parse_cls);
+        $res = $generator->generateClass();
+
+        $class_file = $parse_cls['fileName'];
+
+        if (file_exists($class_file)) {
+          // Update the class file with the new content.
+          file_put_contents($class_file, $res);
+
+          // Update the class's original JSON file with modification information.
+          $dir_test = $this->dir . $this->envDataDir . str_replace("\\", "/", $class);
+          $class_file_json = $dir_test . "/class-original.json";
+
+          if (file_exists($class_file_json)) {
+            $original = json_decode(file_get_contents($class_file_json), true);
+            $original["modified"] = true;
+
+            if ($original['methods'][$method] && !empty($original['methods'][$method])) {
+              $original['methods'][$method] = $data;
+              $original['methods'][$method]["modified"] = true;
             }
-            // Set the response indicating success and provide the updated class content.
-            $resp['success'] = true;
-            $resp['data'] = $res;
+
+            $resp["original"] = $original;
+            file_put_contents($class_file_json, json_encode($original, JSON_PRETTY_PRINT));
           }
+          // Set the response indicating success and provide the updated class content.
+          $resp['success'] = true;
+          $resp['data'] = $res;
         }
+      }
     } catch (Exception $e) {
-        // If an exception occurs, capture the error message.
-        $resp["error"] = $e->getMessage();
+      // If an exception occurs, capture the error message.
+      $resp["error"] = $e->getMessage();
     }
     return $resp; // Return the response array indicating whether the modification was successful or if an error occurred.
   }
@@ -1275,8 +1280,7 @@ class Environment
         'dir' => $this->dir . $this->defaultDir
       ];
       return $this->execute($cfg);
-    }
-    else {
+    } else {
       $analysis = $this->getTestClassAnalysis($class);
       return (is_null($analysis)) ? [] : $analysis;
     }
@@ -1287,7 +1291,7 @@ class Environment
     $res = [
       'success' => false,
     ];
-  
+
     $file = $parse_cls['fileName'];
     $dir = $this->dir . $this->envDataDir . '/' . str_replace("\\", "/", $class);
     $json_file = $dir . (($type === 'libclass') ? '/class-original.json' : '/original.json');
@@ -1299,14 +1303,13 @@ class Environment
           $original = json_decode(file_get_contents($json_file), true);
           $original["modified"] = true;
           if ($original['methods'][$function] && !empty($original['methods'][$function])) {
-              $original['methods'][$function] = $data['raw'];
-              $original['methods'][$function]["modified"] = true;
+            $original['methods'][$function] = $data['raw'];
+            $original['methods'][$function]["modified"] = true;
           }
           $res['original'] = $original;
           file_put_contents($json_file, json_encode($original, JSON_PRETTY_PRINT));
         }
-      }
-      else {
+      } else {
         $libfunction = $data['libfunction'];
         $code = $data['code'];
         $parse_cls['methods'][$function]['code'] = $code;
@@ -1328,8 +1331,7 @@ class Environment
       file_put_contents($file, $gen);
       $res['success'] = true;
       $res['data'] = $gen;
-    }
-    else {
+    } else {
       $res['error'] = 'Method to modify not exists.';
     }
     return $res;
@@ -1346,8 +1348,7 @@ class Environment
       if (!empty($parse_cls)) {
         return $this->modify($class, $data, $parse_cls, $type);
       }
-    }
-    catch (Exception $e) {
+    } catch (Exception $e) {
       // If an exception is caught, set an error message in the result array.
       $res["error"] = $e->getMessage();
     }
@@ -1355,10 +1356,7 @@ class Environment
   }
 
 
-  public function modifyBlock(string $class, array $data, string $type = 'libclass')
-  {
-    
-  }
+  public function modifyBlock(string $class, array $data, string $type = 'libclass') {}
 
 
 
@@ -1391,8 +1389,8 @@ class Environment
 
         // Check if there is only one PSR-4 autoloading entry.
         if (count($psr_keys) == 1) {
-            $libnamespace = $psr_keys[0];
-            $lib_path = $psr_value[$libnamespace];
+          $libnamespace = $psr_keys[0];
+          $lib_path = $psr_value[$libnamespace];
         }
       }
 
@@ -1528,25 +1526,23 @@ class Environment
     $res = [
       'success' => false,
     ];
-  
+
     try {
       if ($this->checkErr($operation, $parse_cls, $data['name'])) {
         $res["error"] = $operation . ' ' . $data['name'] . ' already exists in ' . $data['class'];
-      }
-      else {
+      } else {
         $line = $this->getLine($operation, $data, $parse_cls);
         $classFile = $parse_cls['fileName'];
         if ($operation === 'method') {
           $arr = array_map(
-            function($elem) {
+            function ($elem) {
               return (!empty($elem)) ? ('  ' . $elem) : $elem;
-            }, 
+            },
             X::split($data['code'], PHP_EOL)
           );
           array_unshift($arr, "");
           $code = $arr;
-        }
-        else {
+        } else {
           $code = X::split($data['code'], PHP_EOL);
         }
         $originalclass = X::split(file_get_contents($classFile), PHP_EOL);
@@ -1556,16 +1552,14 @@ class Environment
         file_put_contents($classFile, $newClass);
         $parse_cls = $this->execute($cfg);
         if (empty($parse_cls)) {
-          $res['error'] = 'Unable to add '. $operation . ' ' . $data['name'] . ' in ' . $data['class'];
+          $res['error'] = 'Unable to add ' . $operation . ' ' . $data['name'] . ' in ' . $data['class'];
           $newClass = X::join($originalclass, PHP_EOL);
           file_put_contents($classFile, $newClass);
-        }
-        else {
+        } else {
           $res['success'] = true;
         }
       }
-    }
-    catch (Exception $e) {
+    } catch (Exception $e) {
       // If an exception occurs, capture the error message.
       $res["error"] = $e->getMessage();
     }
@@ -1598,12 +1592,10 @@ class Environment
         $generator = new Generator($parse_cls);
         $gen = $generator->generateClass();
         file_put_contents($parse_cls['fileName'], $gen);
-      }
-      else {
+      } else {
         $res['error'] = 'Class not exists or faulty!';
       }
-    }
-    catch (Exception $e) {
+    } catch (Exception $e) {
       // If an exception occurs, capture the error message.
       $res["error"] = $e->getMessage();
     }
@@ -1625,18 +1617,16 @@ class Environment
         foreach ($methods as $method) {
           $tmp = $this->process($operation, $cfg, $method, $parse_cls);
           $res['success'] = $res['success'] || $tmp['success'];
-          $res['error'] .= (!$tmp['success']) ? ($tmp['error'] . PHP_EOL) : ''; 
+          $res['error'] .= (!$tmp['success']) ? ($tmp['error'] . PHP_EOL) : '';
         }
         $parse_cls = $this->execute($cfg);
         $generator = new Generator($parse_cls);
         $gen = $generator->generateClass();
         file_put_contents($parse_cls['fileName'], $gen);
-      }
-      else {
+      } else {
         $res['error'] = 'Class not exists or faulty!';
       }
-    }
-    catch (Exception $e) {
+    } catch (Exception $e) {
       // If an exception occurs, capture the error message.
       $res["error"] = $e->getMessage();
     }
@@ -1678,8 +1668,7 @@ class Environment
     ];
     $short_code = $this->getPromptShortCode($operation);
     X::log("ShortCode: " . $short_code, 'ai_suggestion');
-    try
-    {
+    try {
       $prompt = $ai->getPromptByShortcode($short_code);
       X::log("Prompt :", 'ai_suggestion');
       X::log($prompt, 'ai_suggestion');
@@ -1696,8 +1685,7 @@ class Environment
           $res['data'] = (!empty($arr)) ? $arr : [];
           X::log("Data:", 'ai_suggestion');
           X::log($res, 'ai_suggestion');
-        }
-        else {
+        } else {
           $retry = $retry - 1;
           X::log("Retrying ....", 'ai_suggestion');
           X::log("Remaning Retry: " . $retry, 'ai_suggestion');
@@ -1705,18 +1693,15 @@ class Environment
             $res['data'] = [];
             X::log("Data:", 'ai_suggestion');
             X::log($res, 'ai_suggestion');
-          }
-          else {
+          } else {
             $res = $this->makeAiRequest($operation, $ai, $function_code, $retry);
           }
         }
-      }
-      else {
+      } else {
         $res['success'] = false;
         $res["error"] = 'Unable to get OpenAi prompt for this operation.';
       }
-    }
-    catch (Exception $e) {
+    } catch (Exception $e) {
       // If an exception occurs, capture the error message.
       $res["error"] = $e->getMessage();
     }
@@ -1730,10 +1715,10 @@ class Environment
     if (!file_exists($testdir)) {
       $this->fs->createPath($testdir);
     }
-    $content = "<?php" .PHP_EOL.PHP_EOL.PHP_EOL. "include_once __DIR__.'/../vendor/autoload.php';";
-    $content .= PHP_EOL.PHP_EOL.PHP_EOL. '$classLoader = new \Composer\Autoload\ClassLoader();';
-    $content .= PHP_EOL. '$classLoader->addPsr4("' . $namespace . '\", __DIR__, true);';
-    $content .= PHP_EOL. '$classLoader->register();' .PHP_EOL;
+    $content = "<?php" . PHP_EOL . PHP_EOL . PHP_EOL . "include_once __DIR__.'/../vendor/autoload.php';";
+    $content .= PHP_EOL . PHP_EOL . PHP_EOL . '$classLoader = new \Composer\Autoload\ClassLoader();';
+    $content .= PHP_EOL . '$classLoader->addPsr4("' . $namespace . '\", __DIR__, true);';
+    $content .= PHP_EOL . '$classLoader->register();' . PHP_EOL;
     file_put_contents($file_path, $content);
     X::log('Created ...', 'addtest');
   }
@@ -1771,11 +1756,11 @@ class Environment
       $composer = $dir . "/composer.json";
       $lib_path = "";
       $psr_infos = $this->getPsrInfos($composer, 'autoload-dev');
-      
+
       if (!is_null($psr_infos)) {
         $psr_keys = $psr_infos['psr_keys'];
         $psr_value = $psr_infos['psr_value'];
-        
+
         if (count($psr_keys) == 1) {
           $libnamespace = $psr_keys[0];
           $lib_path = $psr_value[$libnamespace];
@@ -1783,12 +1768,12 @@ class Environment
       }
       $lib_path = $lib_path !== "" ? '/' . $lib_path : '';
       $content = '<?php' . PHP_EOL . PHP_EOL . 'namespace ' . $namespace . ';' . PHP_EOL . PHP_EOL;
-      $uses = 'use '. $originalclass . ';' . PHP_EOL . 'use PHPUnit\Framework\TestCase;' . PHP_EOL . PHP_EOL . PHP_EOL . PHP_EOL;
+      $uses = 'use ' . $originalclass . ';' . PHP_EOL . 'use PHPUnit\Framework\TestCase;' . PHP_EOL . PHP_EOL . PHP_EOL . PHP_EOL;
       $content .= $uses;
       $label = 'class ' . $classname . ' extends TestCase';
-      $setUp = '  protected function setUp(): void' .PHP_EOL . '  {' . PHP_EOL . PHP_EOL . '  }';
-      $tearDown = '  protected function tearDown(): void' .PHP_EOL . '  {' . PHP_EOL . PHP_EOL . '  }';
-      $getInstance = '  public function getInstance(): void' .PHP_EOL . '  {' . PHP_EOL . PHP_EOL . '  }';
+      $setUp = '  protected function setUp(): void' . PHP_EOL . '  {' . PHP_EOL . PHP_EOL . '  }';
+      $tearDown = '  protected function tearDown(): void' . PHP_EOL . '  {' . PHP_EOL . PHP_EOL . '  }';
+      $getInstance = '  public function getInstance(): void' . PHP_EOL . '  {' . PHP_EOL . PHP_EOL . '  }';
       $defaultFunctions = $setUp . PHP_EOL . PHP_EOL . $tearDown . PHP_EOL . PHP_EOL . $getInstance;
       $content .= $label . PHP_EOL . '{' . PHP_EOL . PHP_EOL . $defaultFunctions . PHP_EOL . PHP_EOL . '}' . PHP_EOL;
       $pth = str_replace($libnamespace, '', $namespace);
@@ -1798,9 +1783,8 @@ class Environment
       $class_file = $dir . $lib_path . $pth . '/' . $classname . '.php';
       file_put_contents($class_file, $content);
       $res['success'] = true;
-      $res['filepath'] = $class_file; 
-    }
-    catch (Exception $e) {
+      $res['filepath'] = $class_file;
+    } catch (Exception $e) {
       // If an exception occurs, capture the error message.
       $res["error"] = $e->getMessage();
     }
@@ -1811,8 +1795,7 @@ class Environment
   private function prepareTestInsertion(string $class): bool
   {
     $res = false;
-    try
-    {
+    try {
       X::log('Running Composer update ...', 'addtest');
       $this->composerAction('update');
       X::log('Done ...', 'addtest');
@@ -1821,8 +1804,7 @@ class Environment
       if (class_exists($infos['testclass'])) {
         X::log('Test class ' . $infos['testclass'] . ' exists ...', 'addtest');
         $res = true;
-      }
-      else {
+      } else {
         X::log('Test class ' . $infos['testclass'] . ' not exists ...', 'addtest');
         $testclass = $infos['testclass'];
         $spl = X::split($testclass, '\\');
@@ -1831,8 +1813,7 @@ class Environment
 
         if (count($spl) === 1) {
           $namespace = $spl[0];
-        }
-        else {
+        } else {
           foreach ($spl as $i => $part) {
             $namespace .= ($i < (count($spl) - 1)) ? $part . '\\' : $part;
           }
@@ -1841,13 +1822,11 @@ class Environment
         $op = $this->createTestClass($namespace, $classname, $class);
         if ($op['success']) {
           $res = true;
-        }
-        else {
+        } else {
           $res = false;
         }
       }
-    }
-    catch (Exception $e) {
+    } catch (Exception $e) {
       // If an exception occurs, capture the error message.
       X::log($e->getMessage(), 'addtest');
     }
@@ -1861,9 +1840,8 @@ class Environment
       'success' => false,
       'message' => ''
     ];
-    X::log('Num: '. $num, 'addtest');
-    try
-    {
+    X::log('Num: ' . $num, 'addtest');
+    try {
       $infos = $this->getTestNamespace($class);
       X::log('getting TestNamespace:', 'addtest');
       X::log($infos, 'addtest');
@@ -1879,8 +1857,7 @@ class Environment
           }
           X::log('Restarting ...', 'addtest');
           return $this->addTestMethodsToClass($test, $class, $num + 1);
-        }
-        else {
+        } else {
           X::log('Test autoload exists ...', 'addtest');
           $op = $this->prepareTestInsertion($class);
           //X::ddump($op);
@@ -1907,15 +1884,13 @@ class Environment
             $res = $this->createBlock('method', $block, 'testclass');
             X::log($res, 'addtest');
             X::log("Well Done", 'addtest');
-          }
-          else {
+          } else {
             X::log("Insertion can't work", 'addtest');
             $res['success'] = false;
           }
           return $res;
         }
-      }
-      else {
+      } else {
         X::log('Infos not exists ...', 'addtest');
         $action = $this->addDefaultAutoloadDev();
         if ($action) {
@@ -1925,15 +1900,13 @@ class Environment
           }
           X::log('Restarting ...', 'addtest');
           return $this->addTestMethodsToClass($test, $class, $num + 1);
-        }
-        else {
+        } else {
           X::log('Autoload failed adding ...', 'addtest');
           $res["success"] = false;
-          return $res;  
+          return $res;
         }
       }
-    }
-    catch (Exception $e) {
+    } catch (Exception $e) {
       // If an exception occurs, capture the error message.
       $res["error"] = $e->getMessage();
     }

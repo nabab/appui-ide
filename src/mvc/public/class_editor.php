@@ -15,5 +15,5 @@ elseif (!empty(BBN_BASEURL) && $ctrl->hasArguments(4)) {
   ], true);
 }
 else {
-  $ctrl->setUrl($ctrl->pluginUrl("appui-ide")."/class_editor")->combo(_("Class Editor"), true, 0);
+  $ctrl->setUrl($ctrl->pluginUrl("appui-ide")."/class_editor")->combo(_("Class Editor"), true);
 }
