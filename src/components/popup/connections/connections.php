@@ -12,7 +12,7 @@
                :buttons="menu"
                :width="30"/>
   <bbns-column field="id"
-               :hidden="true"/>
+               :invisible="true"/>
   <bbns-column field="text"
                width="20em"/>
   <bbns-column field="type"

@@ -13,10 +13,10 @@
              :editable="true"
   >
     <bbns-column field="code"
-                 :hidden="true"
+                 :invisible="true"
     ></bbns-column>
     <bbns-column field="id"
-                 :hidden="true"
+                 :invisible="true"
     ></bbns-column>
     <bbns-column label="<?= _("Type") ?>"
                  field="text"
