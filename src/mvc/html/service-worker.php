@@ -7,11 +7,11 @@
             :resizable="false"
             :collapsible="false">
     <bbn-toolbar>
-      <bbn-button text="Check info" @click="checkInfo"></bbn-button>
-      <bbn-button text="Poll" @click="pollerSW"></bbn-button>
-      <bbn-button text="Clear" @click="clear"></bbn-button>
+      <bbn-button label="Check info" @click="checkInfo"></bbn-button>
+      <bbn-button label="Poll" @click="pollerSW"></bbn-button>
+      <bbn-button label="Clear" @click="clear"></bbn-button>
       <bbn-button :class="{'bbn-state-active': followLog}"
-                  text="Follow log"
+                  label="Follow log"
                   @click="followLog = !followLog"></bbn-button>
       <div class="bbn-toolbar-separator"></div>
       <bbn-initial v-for="(w, i) in windows"

@@ -25,7 +25,7 @@
               title: "Suggest More",
               icon: "nf nf-md-playlist_plus",
               class: "bbn-bg-blue bbn-white",
-              text: "Suggest More Tests",
+              label: "Suggest More Tests",
               action: this.suggestMore
             }
           },
@@ -36,7 +36,7 @@
               title: "New",
               icon: "nf nf-fa-plus_square_o",
               class: "bbn-state-selected",
-              text: "Add New Test",
+              label: "Add New Test",
               action: this.addTest
             }
           },
@@ -47,7 +47,7 @@
               title: "Confirm",
               icon: "nf nf-cod-checklist",
               class: "bbn-bg-green bbn-white",
-              text: "Confirm Modifications",
+              label: "Confirm Modifications",
               action: this.confirm
             }
           },

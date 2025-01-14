@@ -68,11 +68,11 @@
         <div class="bbn-grid-full bbn-right">
           <bbn-button icon="nf nf-fa-hand_paper_o"
                       @click="abortRequest('file')"
-                      :text="_('Abort request')"
+                      :label="_('Abort request')"
                       :title="_('Cancel the current request')"
                       v-if="isLoading"/>
           <bbn-button icon="nf nf-fa-save"
-                      :text="_('Save')"
+                      :label="_('Save')"
                       :notext="true"
                       @click="saveFile"/>
           <bbn-button icon="nf nf-fa-close"

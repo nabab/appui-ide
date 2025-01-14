@@ -11,7 +11,7 @@
               <?= _("Click the button bellow to see other Test class functions") ?>
             </h3>
             <bbn-button title="view"
-                        :text="_('View Other Functions')"
+                        :label="_('View Other Functions')"
                         icon="nf nf-mdi-playlist_plus"
                         class="bbn-primary bbn-white"
                         @click.stop="editTestMethods"></bbn-button>
@@ -21,14 +21,14 @@
                      :scrollable="true"
                      :source="tableTestSource"
                      ref="table">
-            <bbns-column title="<?= _("Methods") ?>"
+            <bbns-column label="<?= _("Methods") ?>"
                          :width="300"
                          field="method"/>
-            <bbns-column title="<?= _("Available Tests") ?>"
+            <bbns-column label="<?= _("Available Tests") ?>"
                          :width="200"
                          type="number"
                          field="available_tests"/>
-            <bbns-column title="<?= _("Tests Results") ?>"
+            <bbns-column label="<?= _("Tests Results") ?>"
                          field="last_results"
                          :render="renderTests"/>
           </bbn-table>

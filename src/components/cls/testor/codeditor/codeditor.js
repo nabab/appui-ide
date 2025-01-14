@@ -20,7 +20,7 @@
               title: "Revert",
               icon: "nf nf-mdi-restore",
               class: "bbn-bg-blue bbn-white",
-              text: "Revert All Changes",
+              label: "Revert All Changes",
               action: () => {
                 this.code.current = this.code.original;
                 this.source.code = this.code.current;
@@ -34,7 +34,7 @@
               title: "Refactor",
               icon: "nf nf-cod-issue_reopened",
               class: "bbn-tertiary",
-              text: "Refactor",
+              label: "Refactor",
               action: this.refactorCode
             }
           },
@@ -45,7 +45,7 @@
               title: "Push",
               icon: "nf nf-cod-bracket_dot",
               class: "bbn-state-selected",
-              text: "Save",
+              label: "Save",
               action: () => {
                 bbn.fn.log(this.code.current !== this.source.code);
         				bbn.fn.log(this.source.code);
@@ -77,7 +77,7 @@
               },
               width: 600,
               height: "90%",
-              title: bbn._("Code Refactoring"),
+              label: bbn._("Code Refactoring"),
             });
             appui.success("Done");
           }

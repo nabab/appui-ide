@@ -6,31 +6,31 @@
              :source="source.data"
              >
     <bbns-column field="date"
-                 :title="_('Date')"
+                 :label="_('Date')"
                  type="datetime"
                  :width="120"
                  ></bbns-column>
     <bbns-column field="short_id"
-                 :title="_('Commit')"
+                 :label="_('Commit')"
                  :render="renderUrl"
                  :width="90"
                  ></bbns-column>
     <bbns-column field="project"
-                 :title="_('Project Name')"
+                 :label="_('Project Name')"
                  :render="renderProject"
                  ></bbns-column>
     <bbns-column field="author"
-                 :title="_('Author')"
+                 :label="_('Author')"
                  ></bbns-column>
     <bbns-column field="author_email"
-                 :title="_('Author Email')"
+                 :label="_('Author Email')"
                  type="email"
                  ></bbns-column>
     <bbns-column field="title"
-                 :title="_('Title')"
+                 :label="_('Title')"
                  ></bbns-column>
     <bbns-column field="message"
-                 :title="_('Message')"
+                 :label="_('Message')"
                  ></bbns-column>
   </bbn-table>
 </div>

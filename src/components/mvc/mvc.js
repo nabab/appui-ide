@@ -123,7 +123,7 @@
           let r = [{
             load: true,
             cached: false,
-            title: this.titleTabCtrl,
+            label: this.titleTabCtrl,
             bcolor: ctrlRepo.bcolor,
             fcolor: ctrlRepo.fcolor,
             menu: this.listCtrls(),
@@ -132,7 +132,7 @@
             load: true,
             url: "settings",
             disabled: !this.source.settings,
-            title: bbn._("Settings"),
+            label: bbn._("Settings"),
             icon: "nf nf-fa-cogs"
           }];
           bbn.fn.each(this.tabsRepository, (tab, idx) => {
@@ -141,7 +141,7 @@
                 fixed: true,
                 load: true,
                 url: tab.url,
-                title: tab.title,
+                label: tab.title,
                 icon: tab.icon,
                 notext: true,
                 bcolor: tab.bcolor ,
@@ -182,7 +182,7 @@
             fixed: true,
             load: true,
             cached: false,
-            title: this.titleTabCtrl,
+            label: this.titleTabCtrl,
             bcolor: ctrlRepo.bcolor,
             fcolor: ctrlRepo.fcolor,
             menu: this.listCtrls(),
@@ -190,7 +190,7 @@
           }, {
             load: true,
             url: "settings",
-            title: bbn._("Settings"),
+            label: bbn._("Settings"),
             icon: "nf nf-fa-cogs"
           }];
           bbn.fn.each(this.tabsRepository, (tab, idx) => {
@@ -199,7 +199,7 @@
                 fixed: true,
                 load: true,
                 url: tab.url,
-                title: tab.title,
+                label: tab.title,
                 icon: tab.icon,
                 notext: true,
                 bcolor: tab.bcolor ,
@@ -219,7 +219,7 @@
             url  = "_super",
             arr  = [{
               text: 'CTRL: ./',
-              title: 'CTRL',
+              label: 'CTRL',
               icon: 'nf nf-fa-cogs',
               url: url,
               action: (a) => {
@@ -230,7 +230,7 @@
           path += val + "/";
           arr.push({
             text: `CTRL${(i + 1)}:   ${path}`,
-            title: `CTRL${(i + 1)}`,
+            label: `CTRL${(i + 1)}`,
             icon: 'nf nf-fa-cogs',
             scrollable: false,
             url: "_".repeat(i + 1) + url,
@@ -252,7 +252,7 @@
           url: val.url,
           bcolor: tab[0].bcolor,
           fcolor: tab[0].fcolor,
-          title: val.title,
+          label: val.title,
           scrollable: false,
           menu: tab[0].menu.slice()
         }, i);

@@ -13,7 +13,7 @@
         },
         btns: [
           'cancel', {
-            text: "Confirm",
+            label: "Confirm",
             title: "Confirm",
             class: "bbn-primary",
             icon: "nf nf-fa-check_circle",

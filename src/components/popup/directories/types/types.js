@@ -31,7 +31,7 @@
       },
       addType(){
         return this.getRef('types_table').insert({}, {
-          title: bbn._('Add new type'),
+          label: bbn._('Add new type'),
           height: '95%',
           width: '85%'
         });
@@ -50,7 +50,7 @@
         this.closest("bbn-container").getRef('popup').open({
           height: '95%',
           width: '85%',
-          title: titlePopup,
+          label: titlePopup,
           component: 'appui-ide-popup-directories-form-types',
           source:{
             row: copyType
@@ -90,7 +90,7 @@
           }
         }
         return this.getRef('types_table').edit(row, {
-          title: bbn._('Modify type') + ' ' + row.text,
+          label: bbn._('Modify type') + ' ' + row.text,
           height: '900',
           width: '820'
         }, idx)

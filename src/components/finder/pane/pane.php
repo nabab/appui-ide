@@ -18,7 +18,7 @@
                        }"
                 :save-url="root + 'actions/finder/upload'"
                 @success="cp.uploadSuccess"
-                :text="{
+                :label="{
                        uploadOrDrop: 'Select files or drag & drop it here'
                        }"/>
   </div>
@@ -73,7 +73,7 @@
         <div class="bbn-grid-full bbn-c" v-if="cp.isLoading && active">
           <bbn-button icon="nf nf-fa-hand_paper"
                       @click="cp.abortRequest(index)"
-                      :text="_('Abort request')"
+                      :label="_('Abort request')"
                       :title="_('Cancel the current request')"/>
         </div>
       </div>

@@ -24,7 +24,7 @@
           text: bbn._('New connection'),
           action: () => {
             this.getPopup({
-              title: bbn._('New connection configuration'),
+              label: bbn._('New connection configuration'),
               component: 'appui-ide-popup-connection'
             })
           }

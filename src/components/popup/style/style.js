@@ -8,7 +8,7 @@
         content: '<?php\n/*\n * Describe what it does!\n *\n **/\n\n$content = [\n  "field_one" => "a",\n  "field_two" => 1\n];\nvar_dump($content);',
         btns: [
           'cancel', {
-            text: 'Change',
+            label: 'Change',
             title: 'Change',
             class:'bbn-primary',
             icon: 'nf nf-fa-edit',

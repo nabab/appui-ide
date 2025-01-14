@@ -16,7 +16,7 @@
         <bbn-input v-model="name"
                    :required="true"/>
         <bbn-button class="bbn-state-selected"
-                    :text="_('Add your property')"
+                    :label="_('Add your property')"
                     @click.stop="prepare"/>
       </div>
 

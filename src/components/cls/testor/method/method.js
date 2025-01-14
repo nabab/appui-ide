@@ -53,7 +53,7 @@
               title: "Test",
               icon: "nf nf-cod-run_all",
               class: "bbn-state-selected",
-              text: "Run All " + this.test_num + " Tests",
+              label: "Run All " + this.test_num + " Tests",
               action: () => this.testRun('all')
             }
           },
@@ -63,7 +63,7 @@
               title: "New",
               icon: "nf nf-oct-diff_added",
               class: "blue",
-              text: "New",
+              label: "New",
               action: this.newTest
             }
           },
@@ -74,7 +74,7 @@
               title: "Edit",
               icon: "nf nf-fa-edit",
               class: "red",
-              text: (this.readonly) ? "Edit" : "Stop Edit",
+              label: (this.readonly) ? "Edit" : "Stop Edit",
               action: () => {
                 this.readonly = !this.readonly;
               }
@@ -87,7 +87,7 @@
               title: "Test",
               icon: "nf nf-cod-bracket_error",
               class: "yellow",
-              text: "Test",
+              label: "Test",
               action: () => {
                 if(this.currentTestFunction != '') {
                   this.testRun('');
@@ -102,7 +102,7 @@
               title: "Push",
               icon: "nf nf-cod-bracket_dot",
               class: "green",
-              text: "Save",
+              label: "Save",
               action: () => {
                 if(this.currentTestFunction != '') {
                   this.pushModification();
@@ -256,7 +256,7 @@
           },
           width: 600,
           height: "90%",
-          title: bbn._("Tests Editor"),
+          label: bbn._("Tests Editor"),
         });
       },
       goBack()

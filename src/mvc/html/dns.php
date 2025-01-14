@@ -2,7 +2,7 @@
   <bbn-dashboard class="bbn-padding bbn-margin"
                  :storage="true"
                  storage-full-name="appui-ide-dns-dashboard">
-    <bbn-widget class="domain" title="CURRENT MACHINE">
+    <bbn-widget class="domain" label="CURRENT MACHINE">
       <h3><i class="nf nf-md-home_circle"></i>  Hostname: {{source.hostname}}</h3>
       <h3><i class="nf nf-md-access_point_network"></i>  Network Interfaces Infos</h3>
       <ul v-for="interface in source.net_render">
@@ -26,7 +26,7 @@
         </li>
       </ul>
     </bbn-widget>
-    <bbn-widget class="domain" title="DNS RECORDS">
+    <bbn-widget class="domain" label="DNS RECORDS">
       <p><i class="nf nf-fa-info_circle"></i> Fetch DNS Resource Records associated with a hostname.</p>
       <div class="bbn-flex-width">
         <div class="bbn-flex-fill bbn-margin">
@@ -44,7 +44,7 @@
         </div>
       </div>
     </bbn-widget>
-    <!--<bbn-widget class="domain" title="checkdnsrr">
+    <!--<bbn-widget class="domain" label="checkdnsrr">
       <p><i class="nf nf-fa-info_circle"></i> Check DNS records corresponding to a given Internet host name or IP address</p>
       <div class="bbn-flex-width">
         <div class="bbn-flex-fill bbn-margin">
@@ -70,7 +70,7 @@
                     @click.stop="clear('checkdnsrr')">Clear results</bbn-button>
       </div>
     </bbn-widget>
-    <bbn-widget class="domain" title="gethostbyname">
+    <bbn-widget class="domain" label="gethostbyname">
       <p><i class="nf nf-fa-info_circle"></i> Get the IPv4 address corresponding to a given Internet host name</p>
       <div class="bbn-flex-width">
         <div class="bbn-flex-fill bbn-margin">
@@ -92,7 +92,7 @@
                     @click.stop="clear('gethostbyname')">Clear results</bbn-button>
       </div>
     </bbn-widget>-->
-    <bbn-widget class="domain" title="DOMAIN TO IPS">
+    <bbn-widget class="domain" label="DOMAIN TO IPS">
       <p><i class="nf nf-fa-info_circle"></i> Get a list of IPv4 addresses corresponding to a given Internet host name</p>
       <div class="bbn-flex-width">
         <div class="bbn-flex-fill bbn-margin">
@@ -110,7 +110,7 @@
         </div>
       </div>
     </bbn-widget>
-    <!--<bbn-widget class="domain" title="gethostname">
+    <!--<bbn-widget class="domain" label="gethostname">
       <p><i class="nf nf-fa-info_circle"></i> Gets the host name</p>
       <div class="bbn-flex-width">
         <div class="bbn-flex-fill bbn-margin">
@@ -131,7 +131,7 @@
                     @click.stop="clear('gethostname')">Clear results</bbn-button>
       </div>
     </bbn-widget>-->
-    <bbn-widget class="ip" title="REVERSE DNS">
+    <bbn-widget class="ip" label="REVERSE DNS">
       <p><i class="nf nf-fa-info_circle"></i> Get the Internet host name corresponding to a given IP address</p>
       <div class="bbn-flex-width">
         <div class="bbn-flex-fill bbn-margin">
@@ -154,7 +154,7 @@
                     @click.stop="clear('gethostbyaddr')">Clear results</bbn-button>
       </div>
     </bbn-widget>
-    <bbn-widget class="network" title="CHECK PORT FOR HOST">
+    <bbn-widget class="network" label="CHECK PORT FOR HOST">
       <p><i class="nf nf-fa-info_circle"></i> Check If a Port is Open on the given Host</p>
       <div class="bbn-flex-width">
         <div class="bbn-flex-fill bbn-margin">
@@ -187,7 +187,7 @@
                     @click.stop="clear('checkportopen')">Clear results</bbn-button>
       </div>
     </bbn-widget>
-    <!--<bbn-widget class="network" title="getservbyport">
+    <!--<bbn-widget class="network" label="getservbyport">
       <p><i class="nf nf-fa-info_circle"></i> Get Internet service which corresponds to port and protocol</p>
       <div class="bbn-flex-width">
         <div class="bbn-flex-fill bbn-margin">
@@ -213,7 +213,7 @@
                     @click.stop="clear('getservbyport')">Clear results</bbn-button>
       </div>
     </bbn-widget>
-    <bbn-widget class="network" title="net_get_interfaces">
+    <bbn-widget class="network" label="net_get_interfaces">
       <p><i class="nf nf-fa-info_circle"></i> Get network interfaces</p>
       <div class="bbn-flex-width">
         <div class="bbn-flex-fill bbn-margin">
@@ -241,20 +241,20 @@
                :source="result.dns_get_record">
       <bbns-column field="host"
                    :width="150"
-                   title="Host"
+                   label="Host"
                    ></bbns-column>
       <bbns-column field="class"
                    :width="80"
-                   title="Class"></bbns-column>
+                   label="Class"></bbns-column>
       <bbns-column field="ttl"
                    :width="80"
-                   title="TTL"></bbns-column>
+                   label="TTL"></bbns-column>
       <bbns-column field="type"
                    :width="80"
-                   title="Type"></bbns-column>
+                   label="Type"></bbns-column>
       <bbns-column field=""
                    :render="renderValue"
-                   title="Value"></bbns-column>
+                   label="Value"></bbns-column>
     </bbn-table>
     <ul class="c-margin bbn-black" v-if="showResult.gethostbynamel">
       <li>{{result.gethostbynamel[0]}}:

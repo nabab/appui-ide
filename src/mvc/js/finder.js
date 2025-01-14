@@ -48,7 +48,7 @@
               text: bbn._('Edit connections'),
               action: () => {
                 this.getPopup({
-                  title: bbn._('Edit connections configuration'),
+                  label: bbn._('Edit connections configuration'),
                   component: 'appui-ide-popup-connections',
                   componentOptions: {
                     source: this.source.connections

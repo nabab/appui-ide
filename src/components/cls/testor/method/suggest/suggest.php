@@ -13,7 +13,7 @@
     <!--br><br>
     <div class="bbn-c">
       <bbn-button title="AddTest"
-                  text="Confirm"
+                  label="Confirm"
                   class="bbn-green"
                   :icon="'nf nf-cod-checklist'"
                   @click.stop="confirm"></bbn-button>

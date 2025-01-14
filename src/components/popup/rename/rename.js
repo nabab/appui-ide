@@ -52,7 +52,7 @@
                       let newParamsTab = {
                         url: '',
                         current: '',
-                        title: ''
+                        label: ''
                       };
 
                       //  if the folder to be renamed is not the direct relative

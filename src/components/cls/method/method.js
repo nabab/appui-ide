@@ -56,7 +56,7 @@
           {
             component:'bbn-button',
             options:{
-              title: "Revert",
+              label: "Revert",
               icon: "nf nf-mdi-restore",
               class: "bbn-bg-blue bbn-white",
               text: "Revert All Changes",
@@ -70,7 +70,7 @@
             component:'bbn-button',
             end: true,
             options:{
-              title: "Edit",
+              label: "Edit",
               icon: "nf nf-fa-edit",
               class: "red",
               text: (this.readonly) ? "Edit" : "Stop Edit",
@@ -83,7 +83,7 @@
             component:'bbn-button',
             end: true,
             options:{
-              title: "Refactor",
+              label: "Refactor",
               icon: "nf nf-cod-issue_reopened",
               class: "bbn-tertiary",
               text: "Refactor",
@@ -94,7 +94,7 @@
             component:'bbn-button',
             end: true,
             options:{
-              title: "Test",
+              label: "Test",
               icon: "nf nf-cod-bracket_error",
               class: "yellow",
               text: "Test",
@@ -105,7 +105,7 @@
             component:'bbn-button',
             end: true,
             options:{
-              title: "Push",
+              label: "Push",
               icon: "nf nf-cod-bracket_dot",
               class: "green",
               text: "Save",
@@ -203,7 +203,7 @@
               },
               width: 600,
               height: "90%",
-              title: bbn._("Code Refactoring"),
+              label: bbn._("Code Refactoring"),
             });
             appui.success("Done");
           }

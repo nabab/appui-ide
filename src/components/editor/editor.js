@@ -142,7 +142,7 @@
                           id_project: this.closest('appui-project-ui').source.project.id
                         }
                       },
-                      title: bbn._('Copy')
+                      label: bbn._('Copy')
                     });
                   } else {
                     appui.error(bbn._('Nothing to paste'));
@@ -464,7 +464,7 @@
                         const tn = this.closest('bbn-router'),
                           idx = tn.views.length;
                         tn.add({
-                          title: dayjs().format('HH:mm:ss'),
+                          label: dayjs().format('HH:mm:ss'),
                           icon: 'nf nf-fa-cogs',
                           load: false,
                           content: d.content,
@@ -533,7 +533,7 @@
             path: repository.path,
             root: repository.parent_code,
             text: repository.text,
-            title: repository.code,
+            label: repository.code,
             types: repository.alias.types,
             tabs: editor.types[this.currentTypeCode === 'classes' ? 'cls' : this.currentTypeCode].tabs
           })
@@ -601,7 +601,7 @@
         if (!bbn.fn.isObject(node) || node.data.folder) {
           bbn.fn.log("ERJEJALJZRLJLKJRLEJZKL0");
           this.closest("bbn-container").getRef('popup').open({
-            title: title,
+            label: title,
             maximizable: true,
             component: 'appui-ide-popup-new',
             source: src,
@@ -873,7 +873,7 @@
                     id_project: this.closest('appui-project-ui').source.project.id
                   }
                 },
-                title: bbn._('Copy')
+                label: bbn._('Copy')
               });
             }
           });
@@ -889,7 +889,7 @@
               componentOptions: {
                 source: node.data
               },
-              title: bbn._("Rename")
+              label: bbn._("Rename")
             });
           }
         });

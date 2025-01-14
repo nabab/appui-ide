@@ -295,10 +295,10 @@
         }
 
         if (src) {
-          this.getPopup().open({
+          this.getPopup({
             width: 800,
             height: 600,
-            title: action === 'edit' ? bbn._('Edit Extension') : bbn._('Add Extension'),
+            label: action === 'edit' ? bbn._('Edit Extension') : bbn._('Add Extension'),
             component: 'appui-ide-form-extension',
             source: src
           });

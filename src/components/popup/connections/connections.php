@@ -8,7 +8,7 @@
            :pageable="true"
            :limit="20"
            :url="root + 'finder/actions'">
-  <bbns-column title=" "
+  <bbns-column label=" "
                :buttons="menu"
                :width="30"/>
   <bbns-column field="id"

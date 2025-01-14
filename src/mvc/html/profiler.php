@@ -3,7 +3,7 @@
   <bbn-router :nav="true"
               :autoload="true">
     <bbns-container url="list"
-                    :title="_('List')"
+                    :label="_('List')"
                     :load="true"
                     :pinned="true"
                     :closable="false"/>

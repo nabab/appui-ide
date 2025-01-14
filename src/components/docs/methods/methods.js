@@ -193,14 +193,14 @@
           return {
             columns:[{
               width: "120",
-              title: bbn._('Type'),
+              label: bbn._('Type'),
               render: this.renderType
             },{
               field: "text",
-              title: bbn._('Name'),
+              label: bbn._('Name'),
               width: "120",
             },{
-              title: bbn._('Description'),
+              label: bbn._('Description'),
               render: this.renderDescription
             }]
           }

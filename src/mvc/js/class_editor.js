@@ -225,7 +225,7 @@
             root: this.libRoot
           },
           width: 350,
-          title: bbn._("Add New Class"),
+          label: bbn._("Add New Class"),
         });
       },
       loadClass()

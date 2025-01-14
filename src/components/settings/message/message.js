@@ -4,7 +4,7 @@
     data(){
       return {
         imessage: {
-          title: '',
+          label: '',
           content: '',
           start: null,
           end: null,

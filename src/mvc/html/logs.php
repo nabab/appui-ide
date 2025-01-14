@@ -21,15 +21,15 @@
       &nbsp;
       <bbn-button @click="deleteFile"
                   icon="nf nf-mdi-delete_sweep"
-                  text="<?= _('Delete File') ?>"/>
+                  label="<?= _('Delete File') ?>"/>
       &nbsp;
       <bbn-button @click="onChange(1)"
                   icon="nf nf-fa-file"
-                  text="<?= _('Clear file') ?>"/>
+                  label="<?= _('Clear file') ?>"/>
       &nbsp;
       <bbn-button @click="onChange()"
                   icon="nf nf-oct-sync"
-                  text="<?= _('Refresh') ?>"/>
+                  label="<?= _('Refresh') ?>"/>
       &nbsp;
       <bbn-dropdown :source="themes"
                     v-model="theme"
@@ -50,7 +50,7 @@
           <div class="bbn-w-100 bbn-middle bbn-vspadding bbn-header">
             <bbn-button title="<?= _('Refresh') ?>"
                         @click="treeReload()"
-                        text="<?= _('Refresh files list') ?>"
+                        label="<?= _('Refresh files list') ?>"
                         icon="nf nf-oct-sync"/>
           </div>
           <div class="bbn-flex-fill" >

@@ -18,32 +18,32 @@
     <bbns-column field="id"
                  :hidden="true"
     ></bbns-column>
-    <bbns-column title="<?= _("Type") ?>"
+    <bbns-column label="<?= _("Type") ?>"
                  field="text"
                  cls="bbn-c"
     ></bbns-column>
-    <bbns-column title= "<?= _("Extensions") ?>"
+    <bbns-column label= "<?= _("Extensions") ?>"
                  field="extensions"
                  :width="70"
                  :render="renderIconExts"
                  cls="bbn-c"
                  default="[]"
     ></bbns-column>
-    <bbns-column title= "<?= _("Tabs") ?>"
+    <bbns-column label= "<?= _("Tabs") ?>"
                  field="tabs"
                  :width="70"
                  :render="renderIconTabs"
                  cls="bbn-c"
                  default="[]"
     ></bbns-column>
-    <bbns-column title= "<?= _("Types") ?>"
+    <bbns-column label= "<?= _("Types") ?>"
                  field="types"
                  :width="70"
                  :render="renderIconTypes"
                  cls="bbn-c"
                  default="[]"
     ></bbns-column>
-    <bbns-column title=" "
+    <bbns-column label=" "
                  cls="bbn-c"
                  :width="150"
                  :buttons="[{

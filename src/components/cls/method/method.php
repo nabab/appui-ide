@@ -6,7 +6,7 @@
       <div class="bbn-flex-fill body bbn-padding">
         <div class="bbn-w-100 code">
           <bbn-button title="Return"
-                    text="Back"
+                    label="Back"
                     class="bbn-red"
                     :icon="'nf nf-fa-angle_left'"
                     @click.stop="goBack"></bbn-button>
@@ -26,24 +26,24 @@
                        :scrollable="false"
                        :editable="!installed"
                        :source="Object.values(source.arguments)">
-              <bbns-column title="<?= _("Argument") ?>"
+              <bbns-column label="<?= _("Argument") ?>"
                            field="name"
                            :width="150"
                            :render="renderArgName"/>
-              <bbns-column title="<?= _("Type") ?>"
+              <bbns-column label="<?= _("Type") ?>"
                            :width="120"
                            field="type"
                            :render="renderArgType"/>
-              <bbns-column title="<?= _("Req.") ?>"
+              <bbns-column label="<?= _("Req.") ?>"
                            :width="50"
-                           ftitle="<?= _("Required") ?>"
+                           flabel="<?= _("Required") ?>"
                            field="required"
                            type="bool"/>
-              <bbns-column title="<?= _("Default") ?>"
+              <bbns-column label="<?= _("Default") ?>"
                            :width="150"
                            field="default"
                            :render="renderArgDefault"/>
-              <bbns-column title="<?= _("Description") ?>"
+              <bbns-column label="<?= _("Description") ?>"
                            field="default"/>
             </bbn-table>
           </div>
@@ -106,7 +106,7 @@
             </template>
             <br>
             <bbn-button title="Add Example"
-                        text="Add Example"
+                        label="Add Example"
                         icon="nf nf-oct-diff_added"
                         class="bbn-bg-blue bbn-white"
                         style="max-width: 130px;"
@@ -120,7 +120,7 @@
                         mode="purephp"/>
               <br>
               <bbn-button title="Save"
-                          text="Save"
+                          label="Save"
                           icon="nf nf-fa-save"
                           class="bbn-state-selected bbn-white"
                           style="max-width: 130px;"
@@ -129,7 +129,7 @@
             </div-->
             <br>
             <bbn-button title="Modify"
-                  text="Save Modifications"
+                  label="Save Modifications"
                   icon="nf nf-fa-check_circle"
                   class="bbn-state-selected bbn-padding bbn-white sub"
                   style="max-width: 200px;"

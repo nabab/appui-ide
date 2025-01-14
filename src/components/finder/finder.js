@@ -537,7 +537,7 @@
             path = tmp + '/';
           }
           node.getPopup({
-            title: bbn._('New Directory'),
+            label: bbn._('New Directory'),
             height: '150px',
             width: '350px',
             source: {
@@ -563,7 +563,7 @@
               tree = this.findAll('bbn-tree')[idx];
               treeUid = tree._uid;
               tree.getPopup({
-                title: bbn._('New Directory'),
+                label: bbn._('New Directory'),
                 height: '150px',
                 width: '350px',
                 source: {
@@ -700,7 +700,7 @@
         let currentPath = path;
         this.editingNode = node;
         node.getPopup({
-          title: bbn._('Rename'),
+          label: bbn._('Rename'),
           height: '150px',
           width: '350px',
           source: {

@@ -74,7 +74,7 @@
           },
           width: 600,
           height: "90%",
-          title: bbn._("Test Function Edition"),
+          label: bbn._("Test Function Edition"),
         });
       },
       renderTests(row) {

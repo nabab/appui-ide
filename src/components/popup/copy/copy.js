@@ -60,10 +60,10 @@
         this.closest(".bbn-popup").close();
       },
       selectDir(){
-        this.getPopup().open({
+        this.getPopup({
           width: 300,
           height: 400,
-          title: bbn._('Path'),
+          label: bbn._('Path'),
           component: 'appui-ide-popup-path',
           source: bbn.fn.extend(this.$data, {
             operation: 'copy',

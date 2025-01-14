@@ -4,14 +4,14 @@
            :source="repositoriesArray"
            :tr-style="trStyle">
   <bbns-column field="title"
-               title="Nom"
+               label="Nom"
                cls="bbn-b"/>
   <bbns-column field="name"
-               title="Root"/>
+               label="Root"/>
   <bbns-column field="alias_code"
-               title="Type"/>
+               label="Type"/>
   <bbns-column field="bcolor"
-               title="Color"/>
+               label="Color"/>
   <bbns-column field="path"
-               title="Path"/>
+               label="Path"/>
 </bbn-table>

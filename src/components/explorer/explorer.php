@@ -13,21 +13,21 @@
           </bbn-dropdown>
         </div-->
         <div class="bbn-left-sspace">
-          <bbn-button ftitle="<?= _('Is connected') ?>"
+          <bbn-button flabel="<?= _('Is connected') ?>"
                       :icon="'nf nf-fa-lightbulb_o bbn-' + (isConnected ? 'green' : 'red')"
                       @click="connect"
                       :notext="true">
           </bbn-button>
         </div>
         <div class="bbn-left-sspace">
-          <bbn-button ftitle="<?= _('View choice') ?>"
+          <bbn-button flabel="<?= _('View choice') ?>"
                       icon="nf nf-fa-eye"
                       :notext="true"
                       @click="viewMode = viewMode == 'dual' ? 'columns': 'dual'">
           </bbn-button>
         </div>
         <div class="bbn-left-sspace">
-          <bbn-button ftitle="<?= _('Element size') ?>"
+          <bbn-button flabel="<?= _('Element size') ?>"
                       icon="nf nf-mdi-move_resize_variant"
                       :notext="true">
           </bbn-button>

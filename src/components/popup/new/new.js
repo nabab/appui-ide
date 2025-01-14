@@ -191,7 +191,7 @@
         this.closest("bbn-container").getPopup({
           width: 300,
           height: 400,
-          title: bbn._('Path'),
+          label: bbn._('Path'),
           component: 'appui-ide-popup-path',
           componentOptions: {
             source: this.$dataValues,

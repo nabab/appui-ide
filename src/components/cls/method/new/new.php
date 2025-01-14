@@ -23,7 +23,7 @@
                       :source="methodsArray"
                       v-model="curMeth"/>
         <bbn-button class="bbn-state-selected"
-                    :text="_('Start writing your method')"
+                    :label="_('Start writing your method')"
                     @click.stop="prepare"/>
       </div>
 

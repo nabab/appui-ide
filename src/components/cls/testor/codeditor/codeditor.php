@@ -14,7 +14,7 @@
     <br v-if="source.button">
     <div class="bbn-c" v-if="source.button">
       <bbn-button title="Modify"
-                  text="Modify"
+                  label="Modify"
                   class="bbn-bg-green bbn-white"
                   :icon="'nf nf-fa-check_circle'"
                   @click.stop="confirm"></bbn-button>

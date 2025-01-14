@@ -84,7 +84,7 @@
                     :visual="false">
           <bbn-container url="doc"
                          :fixed="true"
-                         :title="_('Doc & Ex')">
+                         :label="_('Doc & Ex')">
             <appui-ide-cls-doc v-if="!currentSelected"
                                      :source="source"
                                      :infos="infos"
@@ -108,7 +108,7 @@
           </bbn-container>
           <bbn-container url="editor"
                          :fixed="true"
-                         :title="_('Editor')">
+                         :label="_('Editor')">
             <appui-ide-cls-editor v-if="!currentSelected"
                                      :source="source"
                        							 :infos="infos"
@@ -131,7 +131,7 @@
           </bbn-container>
           <bbn-container url="test"
                          :fixed="true"
-                         :title="_('Test')">
+                         :label="_('Test')">
             <appui-ide-cls-testor v-if="!currentSelected"
                                      :source="source"
                                      :infos="infos"

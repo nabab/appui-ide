@@ -6,7 +6,7 @@
       <bbn-loader v-if="isLoading"/>
       <div v-else class="bbn-flex-fill body bbn-padding">
         <bbn-button title="Return"
-                    text="Back"
+                    label="Back"
                     class="bbn-red"
                     :icon="'nf nf-fa-angle_left'"
                     @click.stop="goBack"></bbn-button>
@@ -45,7 +45,7 @@
             <?= _("Click the button bellow to all tests and add suggestion") ?>
           </h4>
           <bbn-button title="view"
-                      :text="_('View all Tests')"
+                      :label="_('View all Tests')"
                       icon="nf nf-mdi-code_braces"
                       class="bbn-tertiary"
                       :disabled="!installed"
@@ -99,7 +99,7 @@
             <?= _("Click the button bellow to see test suggestion") ?>
           </h4>
           <bbn-button title="suggests"
-                      :text="_('Make Test suggestions')"
+                      :label="_('Make Test suggestions')"
                       icon="nf nf-mdi-playlist_plus"
                       class="bbn-primary bbn-white"
                       :disabled="!installed"

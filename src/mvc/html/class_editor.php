@@ -4,7 +4,7 @@
               ref="menu"/>
     <!--div>
       <bbn-button :notext="true"
-                  text="_('Select Class')"
+                  label="_('Select Class')"
                   icon="nf nf-fa-folder"/>
     </div>
     <div>
@@ -12,7 +12,7 @@
     <div v-if="libInstalled">
       <bbn-context :source="addActions">
         <bbn-button :notext="true"
-                    text="_('Add ...')"
+                    label="_('Add ...')"
                     icon="nf nf-fa-plus">
         </bbn-button>
       </bbn-context>

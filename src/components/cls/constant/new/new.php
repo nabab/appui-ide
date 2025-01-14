@@ -11,7 +11,7 @@
         <bbn-input v-model="name"
                    :required="true"/>
         <bbn-button class="bbn-state-selected"
-                    :text="_('Add your constant')"
+                    :label="_('Add your constant')"
                     @click.stop="prepare"/>
       </div>
 

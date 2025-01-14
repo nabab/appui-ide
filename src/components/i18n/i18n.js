@@ -2,7 +2,7 @@
   return {
     props: ['source'],
     methods: {
-      insert_translation(row,idx){
+      insert_translation(row, idx) {
         //use a different controller
         this.post(this.source.i18n + 'actions/insert_translations', {
           row: row,
@@ -10,22 +10,22 @@
           id_option: this.source.id_option,
           langs: this.source.langs
         }, (d) => {
-          if ( d.success ){
+          if (d.success) {
             appui.success('Translation saved');
             this.getRef('table').updateData();
           }
-          else{
+          else {
             appui.error('An error occurred while saving translation');
           }
         });
       },
     },
     computed: {
-      columns(){
+      columns() {
         return this.source.langs.map((v) => {
           return {
             field: v,
-            title: bbn.fn.getField(this.source.primary, 'text', 'code', v),
+            label: bbn.fn.getField(this.source.primary, 'text', 'code', v),
             editable: true
           };
         });
@@ -46,21 +46,21 @@
             ></bbn-checkbox>
             </div>`,
         props: ['source'],
-        data(){
+        data() {
           return {
             i18n: this.closest('appui-ide-i18n')
           }
         },
         computed: {
-          languages(){
+          languages() {
             return this.i18n.source.langs;
           },
         },
         methods: {
-          hide_col(val){
-            if ( val ){
+          hide_col(val) {
+            if (val) {
               let idx = bbn.fn.search(this.i18n.getRef('table').cols, 'field', val);
-              if ( idx > -1 ){
+              if (idx > -1) {
                 this.i18n.getRef('table').cols[idx].hidden = !this.i18n.getRef('table').cols[idx].hidden;
                 this.i18n.getRef('table').$forceUpdate();
               }
@@ -71,22 +71,22 @@
       /** expander of the table, shows the path of the files containing the string */
       'file_linker': {
         methods: {
-          link_ide(){
+          link_ide() {
             /** takes only the part of file name relative to the extension, +1 remove the / */
             let extension = this.source.file.slice(this.source.file.lastIndexOf('/') + 1, this.source.file.length),
-                tabnavActive = this.closest('bbn-router');
-            if ( tabnavActive && extension ){
+              tabnavActive = this.closest('bbn-router');
+            if (tabnavActive && extension) {
               tabnavActive.activate(extension);
             }
           },
         },
         template:
-        '<ul style="width:100%; list-style-type:none; padding-left:0">' +
-        '<li class="bbn-vspadding bbn-grid-fields" :source="source.file" >' +
-        '<span class="bbn-lg">File:</span>' +
-        '<a v-text="source.file" @click="link_ide" style="width:100%;cursor:pointer" title="Go to file"></a>' +
-        ' </li>' +
-        '</ul>',
+          '<ul style="width:100%; list-style-type:none; padding-left:0">' +
+          '<li class="bbn-vspadding bbn-grid-fields" :source="source.file" >' +
+          '<span class="bbn-lg">File:</span>' +
+          '<a v-text="source.file" @click="link_ide" style="width:100%;cursor:pointer" title="Go to file"></a>' +
+          ' </li>' +
+          '</ul>',
         props: ['source'],
 
       },

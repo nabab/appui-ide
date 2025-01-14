@@ -74,7 +74,7 @@
         currentMode: "",
         tabs: [
           {
-						title: bbn._("Methods list"),
+						label: bbn._("Methods list"),
             notext: true,
             icon: 'nf nf-cod-symbol_method',
             fcolor: '#FFF',
@@ -94,7 +94,7 @@
                       root: this.libroot,
                       class: this.source.name
                     },
-                    title: bbn._("New Method"),
+                    label: bbn._("New Method"),
                     width: 700,
                   });
                 }
@@ -102,7 +102,7 @@
             ]
           },
           {
-						title: bbn._("Properties list"),
+						label: bbn._("Properties list"),
             notext: true,
             icon: 'nf nf-cod-symbol_property',
             fcolor: '#FFF',
@@ -122,7 +122,7 @@
                       root: this.libroot,
                       class: this.source.name
                     },
-                    title: bbn._("New Property"),
+                    label: bbn._("New Property"),
                     width: 700,
                   });
                 }
@@ -130,7 +130,7 @@
             ]
           },
           {
-						title: bbn._("Constants list"),
+						label: bbn._("Constants list"),
             notext: true,
             icon: 'nf nf-cod-symbol_constant',
             fcolor: '#FFF',
@@ -150,7 +150,7 @@
                       root: this.libroot,
                       class: this.source.name
                     },
-                    title: bbn._("New Constant"),
+                    label: bbn._("New Constant"),
                     width: 700,
                   });
                 }
