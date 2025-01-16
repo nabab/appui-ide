@@ -1,4 +1,4 @@
 <?php
 $ctrl->setTitle(_("Infos PHP"))
-  ->setIcon('nf nf-mdi-language_php')
+  ->setIcon('nf nf-md-language_php')
   ->combo();

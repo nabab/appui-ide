@@ -63,7 +63,7 @@
 
         <div v-text="_('Size')"/>
         <div v-if="!source.size">
-          <bbn-button icon="nf nf-mdi-scale"
+          <bbn-button icon="nf nf-md-scale"
                       class="bbn-xs"
                       @click="cp.get_size(p)"
                       :title="_('Get dir size')"/>

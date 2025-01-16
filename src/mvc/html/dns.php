@@ -178,7 +178,7 @@
         <p v-if="showResult.checkportopen"
            v-for="res in result.checkportopen">
           {{res[0]}} --> Port {{res[1]}}:
-          <i v-if="!res[2]" class="nf nf-mdi-lan_disconnect ic bbn-red"></i> <span v-if="!res[2]" class="bbn-red">Unreachable</span>
+          <i v-if="!res[2]" class="nf nf-md-lan_disconnect ic bbn-red"></i> <span v-if="!res[2]" class="bbn-red">Unreachable</span>
           <i v-else class="nf nf-cod-debug_disconnect ic bbn-green"></i> <span v-if="res[2]" class="bbn-green">Reachable</span>
         </p>
         <bbn-button title="Edit"

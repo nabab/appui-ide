@@ -26,7 +26,7 @@
           	<span>Access bbn ide logs to debug errors or more</span>
           </li>
           <li>
-            <i class="nf nf-mdi-apple_finder bbn-large"></i>  <a :href="root + 'finder'" v-text="_('Finder')"></a><br>
+            <i class="nf nf-md-apple_finder bbn-large"></i>  <a :href="root + 'finder'" v-text="_('Finder')"></a><br>
           	<span>Access bbn ide file finder</span>
           </li>
           <li>
@@ -61,7 +61,7 @@
           <div class="bbn-flex-fill bbn-ratio">
             <a :href="root + 'dns'">
               <div class="bbn-block bbn-space bbn-c bbn-padding dns">
-                <i class="nf nf-mdi-dns"></i>
+                <i class="nf nf-md-dns"></i>
                 Dns Tool
               </div>
             </a>

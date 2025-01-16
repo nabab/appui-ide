@@ -20,7 +20,7 @@
                     style="width: 150px"/>
       &nbsp;
       <bbn-button @click="deleteFile"
-                  icon="nf nf-mdi-delete_sweep"
+                  icon="nf nf-md-delete_sweep"
                   label="<?= _('Delete File') ?>"/>
       &nbsp;
       <bbn-button @click="onChange(1)"

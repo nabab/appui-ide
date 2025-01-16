@@ -22,6 +22,6 @@ if ( isset($ctrl->post['data'], $ctrl->post['data']['path'])) {
 else{
   $ctrl->setColor('#35BCFA', '#FFF')
     ->setUrl($ctrl->pluginUrl('appui-ide').'/finder')
-    ->setIcon('nf nf-mdi-apple_finder bbn-large')
+    ->setIcon('nf nf-md-apple_finder bbn-large')
     ->combo('Finder', true);
 }

@@ -321,7 +321,7 @@ if ($model->hasData(['repository'], true)) {
                   }
                   //case component o folder who contain other component
                   elseif (!empty($component) && !empty($is_vue)) {
-                    $icon = "nf nf-mdi-vuejs";
+                    $icon = "nf nf-md-vuejs";
                   }
                   //case folder
                   else {

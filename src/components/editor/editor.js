@@ -107,7 +107,7 @@
                 }]
               },
               {
-                icon: "nf nf-mdi-content_paste",
+                icon: "nf nf-md-content_paste",
                 text: bbn._('Paste'),
                 action: () => {
                   if (this.copiedNode) {
@@ -193,7 +193,7 @@
                 }
               },
               {
-                icon: 'nf nf-mdi-find_replace',
+                icon: 'nf nf-md-find_replace',
                 text: bbn._('replace all'),
                 action: () => {
                   if (this.currentEditor) {
@@ -804,7 +804,7 @@
         }
 
         res.push({
-          icon: 'nf nf-mdi-content_copy',
+          icon: 'nf nf-md-content_copy',
           text: bbn._('Copy'),
           action: async () => {
             bbn.fn.log(node);
@@ -841,7 +841,7 @@
             this.nodeParent = node.parent.$parent.find('bbn-tree');
           }
           res.push({
-            icon: 'nf nf-mdi-content_paste',
+            icon: 'nf nf-md-content_paste',
             text: bbn._('Paste'),
             action: () => {
               if (this.isCut) {

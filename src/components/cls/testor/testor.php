@@ -12,7 +12,7 @@
             </h3>
             <bbn-button title="view"
                         :label="_('View Other Functions')"
-                        icon="nf nf-mdi-playlist_plus"
+                        icon="nf nf-md-playlist_plus"
                         class="bbn-primary bbn-white"
                         @click.stop="editTestMethods"></bbn-button>
           </div>

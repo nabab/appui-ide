@@ -70,9 +70,9 @@
                 return "nf nf-dev-code";
               }
               else if ( (this.source.type !== undefined) && (this.source.file === true) ){
-                return "nf nf-mdi-subdirectory_arrow_right";
+                return "nf nf-md-subdirectory_arrow_right";
               }
-              return 'nf nf-mdi-function';
+              return 'nf nf-md-function';
             }
             else if ( editor.possibilityParser === 'component' ){
               if ( (this.source.eleComponent !== undefined) ){
@@ -83,10 +83,10 @@
                   return "nf nf-fa-eye";
                 }
                 else if ( this.source.eleComponent === 'methods' ){
-                  return 'nf nf-mdi-function';
+                  return 'nf nf-md-function';
                 }
               }
-              return "nf nf-mdi-vuejs";
+              return "nf nf-md-vuejs";
             }
           }
         },

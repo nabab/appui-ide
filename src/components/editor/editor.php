@@ -24,7 +24,7 @@
                       :notext="true"/>
           <bbn-button title="<?= _('Show history') ?>"
                       @click="openHistory"
-                      icon="nf nf-mdi-history"
+                      icon="nf nf-md-history"
                       style="margin-left: 2px"
                       :notext="true">
           </bbn-button>

@@ -18,7 +18,7 @@
             component:'bbn-button',
             options:{
               title: "Revert",
-              icon: "nf nf-mdi-restore",
+              icon: "nf nf-md-restore",
               class: "bbn-bg-blue bbn-white",
               label: "Revert All Changes",
               action: () => {

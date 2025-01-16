@@ -39,7 +39,7 @@
         template: `
 <bbn-context :source="rowMenu">
     <span class="bbn-iblock bbn-lg bbn-hspadding">
-      <i class="nf nf-mdi-dots_vertical"/>
+      <i class="nf nf-md-dots_vertical"/>
   </span>
 </bbn-context>`,
         props: ['source'],

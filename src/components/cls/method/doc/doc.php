@@ -58,7 +58,7 @@
               <label><?= _("Example") ?>
                 <bbn-button title="remove"
                             :notext="true"
-                            icon="nf nf-mdi-delete_forever"
+                            icon="nf nf-md-delete_forever"
                             class="bbn-bg-red bbn-white"
                             :disabled="!installed"
                             @click.stop="deleteExample(index)"></bbn-button></label>

@@ -8,7 +8,7 @@
                      :load="false"
                      url="permissions"
                      :label="titles.permissions"
-                     icon="nf nf-mdi-apple_keyboard_option"
+                     icon="nf nf-md-apple_keyboard_option"
                      :source="source.permissions"
                      component="appui-ide-settings-permission"
       ></bbn-container>
@@ -24,7 +24,7 @@
                      :load="false"
                      url="help"
                      :label="titles.help"
-                     icon="nf nf-mdi-help_circle"
+                     icon="nf nf-md-help_circle"
                      :source="source.permissions"
                      component="appui-ide-settings-help"
       ></bbn-container>
@@ -32,7 +32,7 @@
                      :load="false"
                      url="messages"
                      :label="titles.messages"
-                     icon="nf nf-mdi-message_text"
+                     icon="nf nf-md-message_text"
                      :source="source"
                      component="appui-ide-settings-message"
       ></bbn-container>

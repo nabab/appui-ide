@@ -28,7 +28,7 @@
         </div>
         <div class="bbn-left-sspace">
           <bbn-button flabel="<?= _('Element size') ?>"
-                      icon="nf nf-mdi-move_resize_variant"
+                      icon="nf nf-md-move_resize_variant"
                       :notext="true">
           </bbn-button>
         </div>

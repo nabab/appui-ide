@@ -70,7 +70,7 @@
             if ( v['@attributes']['name'] !== undefined  ){
               obj = {
                 text: v['@attributes']['name'],
-                icon: 'nf nf-mdi-function',
+                icon: 'nf nf-md-function',
                 typeElement: 'method',
                 cls: "bbn-blue",
                 data:{

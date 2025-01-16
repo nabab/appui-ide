@@ -8,7 +8,7 @@
 
 if (empty($ctrl->post)) {
   $ctrl->setColor('#391E13', '#FFF')
-       ->setIcon('nf nf-mdi-cached')
+       ->setIcon('nf nf-md-cached')
        ->setData(['main' => 1])
        ->setObj(['scrollable' => false])
        ->combo("Cache management");

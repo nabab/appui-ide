@@ -46,7 +46,7 @@
           </h4>
           <bbn-button title="view"
                       :label="_('View all Tests')"
-                      icon="nf nf-mdi-code_braces"
+                      icon="nf nf-md-code_braces"
                       class="bbn-tertiary"
                       :disabled="!installed"
                       @click.stop="makeSuggestion"></bbn-button>
@@ -100,7 +100,7 @@
           </h4>
           <bbn-button title="suggests"
                       :label="_('Make Test suggestions')"
-                      icon="nf nf-mdi-playlist_plus"
+                      icon="nf nf-md-playlist_plus"
                       class="bbn-primary bbn-white"
                       :disabled="!installed"
                       @click.stop="makeSuggestion"></bbn-button>

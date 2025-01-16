@@ -2,7 +2,7 @@
 <div class="bbn-overlay bbn-flex-height appui-finder">
   <bbn-toolbar>
     <div class="bbn-xl bbn-hpadding bbn-vspadding">
-      <i class="nf nf-mdi-apple_finder bbn-large"></i> &nbsp;
+      <i class="nf nf-md-apple_finder bbn-large"></i> &nbsp;
       File finder
     </div>
     <div>
