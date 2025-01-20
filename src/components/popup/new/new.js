@@ -42,8 +42,8 @@
           {value: 'file', text: bbn._('Single MVC file')}
         ],
         data: {
-          tab: ((this.source.tab_mvc !== undefined) && this.source.tab_mvc.length && (this.source.type === 'mvc')) ?
-                  bbn.fn.search(rep.tabs, 'url', this.source.tab_mvc) :
+          tab: ((this.source.tab_mvc !== undefined) && this.source.tab && (this.source.type === 'mvc')) ?
+                  bbn.fn.search(rep.tabs, 'url', this.source.tab) :
                   defaultTab,
           name: '',
           controller: '',

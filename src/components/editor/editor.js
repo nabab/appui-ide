@@ -568,7 +568,7 @@
           }
         }
 
-        if (bbn.fn.isObject(node)) {
+        if (bbn.fn.isObject(node?.data)) {
           bbn.fn.log("node in")
           if (node.numChildren > 0) {
             bbn.fn.log("node in in")
@@ -593,13 +593,16 @@
           }
 
           src.allData = node.data;
+          src.tab = node.data.tab;
+          src.type = node.data.type;
         }
         bbn.fn.log("SRC", src);
         //check path
         src.path = src.path.replace('//', '/');
+
         //src.prefix = this.prefix;
-        if (!bbn.fn.isObject(node) || node.data.folder) {
-          bbn.fn.log("ERJEJALJZRLJLKJRLEJZKL0");
+        if (!bbn.fn.isObject(node?.data) || node.data.folder) {
+          bbn.fn.log("ERJEJALJZRLJLKJRLEJZKL0", src.path, node.data.uid);
           this.closest("bbn-container").getRef('popup').open({
             label: title,
             maximizable: true,
