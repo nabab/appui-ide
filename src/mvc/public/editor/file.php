@@ -1,7 +1,7 @@
 <?php
 use bbn\X;
 /**
- * @var $ctrl \bbn\Mvc\Controller
+ * @var bbn\Mvc\Controller $ctrl
  */
 
 if (defined('BBN_BASEURL') && !empty($ctrl->arguments)) {
@@ -27,6 +27,15 @@ if (defined('BBN_BASEURL') && !empty($ctrl->arguments)) {
     if ($idx = array_search('_end_', $ctrl->arguments)) {
       $url = X::join(array_slice($ctrl->arguments, 0, $idx+1), '/');
       $ctrl->setUrl($url);
+    }
+
+    if ($ctrl->obj->data['isMVC'] && (strpos($ctrl->obj->title, '/'.'mvc/') === 0)) {
+      $ctrl->setTitle(substr($ctrl->obj->title, 5));
+      $ctrl->setColor('#34495e', '#FFF');
+    }
+    elseif ($ctrl->obj->data['isComponent'] && (strpos($ctrl->obj->title, '/'.'components/') === 0)) {
+      $ctrl->setTitle(substr($ctrl->obj->title, 12));
+      $ctrl->setColor('#183b14', '#FFF');
     }
   }
 

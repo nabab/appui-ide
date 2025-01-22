@@ -56,18 +56,18 @@
               items: [{
                 icon: 'nf nf-fa-file',
                 text: bbn._('Element'),
-                action: this.newElement
+                action: a => this.newElement()
               }, {
                 icon: 'nf nf-fa-folder',
                 text: bbn._('Directory'),
-                action: this.newDir
+                action: a => this.newDir()
               }]
             }]
           },
           {
             icon: 'nf nf-fa-save',
             text: bbn._('Save'),
-            action: this.save
+            action: a => this.save()
           }
         ],
         treeData: null,
@@ -602,7 +602,6 @@
 
         //src.prefix = this.prefix;
         if (!bbn.fn.isObject(node?.data) || node.data.folder) {
-          bbn.fn.log("ERJEJALJZRLJLKJRLEJZKL0", src.path, node.data.uid);
           this.closest("bbn-container").getRef('popup').open({
             label: title,
             maximizable: true,
@@ -667,12 +666,12 @@
 
 
         if ((file.data.type === 'mvc')) {
-          tab = ((file.data.tab === "php") && (this.project === 'apst-app')) ? '/settings' : '/' + file.data.tab;
+          tab = file.data.tab;
           link = 'file/' +
             currentRoot +
             (file.data.dir || '') +
             file.data.uid +
-            '/_end_' + (tab.indexOf('_') === 0 ? '/' + tab : tab);
+            '/_end_/' + tab;
         }
         else if ((file.data.type === 'components')) {
           link = 'file/' + currentRoot + file.data.uid + '/_end_/' + (file.data.tab || 'js');
@@ -715,19 +714,20 @@
           link = '';
         bbn.fn.log("currentRoot = " + this.currentRoot);
         if ((file.data.type === 'mvc')) {
-          tab = ((file.data.tab === "php") && (this.project === 'apst-app')) ? '/settings' : '/' + file.data.tab;
+          tab = file.data.tab;
           link = 'file/' +
             this.currentRoot +
             (file.data.dir || '') +
             file.data.uid +
-            '/_end_' + (tab.indexOf('_') === 0 ? '/' + tab : tab);
+            '/_end_/' + tab;
         }
         else if ((file.data.type === 'component')) {
-          link = 'file/' + this.currentRoot + file.data.uid + '/_end_/' + (file.data.tab || 'js');
+          link = 'file/' + this.currentRoot + file.data.uid + '/_end_/' + (tab || 'js');
         }
         else {
-          link = 'file/' + this.currentRoot + file.data.uid + '/_end_/' + (file.data.tab || 'code');
+          link = 'file/' + this.currentRoot + file.data.uid + '/_end_/' + (tab || 'code');
         }
+
         if (link) {
           link = link.replace(/\/\//g, '/');
           bbn.fn.log("link = " + link);

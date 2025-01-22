@@ -6,7 +6,7 @@
       return {
         root: appui.plugins['appui-ide'] + '/',
         name: this.source.name,
-        urlRoot: this.closest('appui-ide-editor').currentRoot,
+        urlRoot: this.closest('bbn-container').find('appui-ide-editor').currentRoot,
       };
     },
     computed: {
