@@ -65,7 +65,7 @@
                           ref="tree"
                           @nodedoubleclick="treeNodeActivate"
                           :icon-color="iconColor"
-                          :draggable="true"
+                          :drag="true"
                           @move="moveNode"
                           :menu="treeMenu"/>
               </div>
