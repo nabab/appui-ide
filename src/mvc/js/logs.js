@@ -74,7 +74,7 @@
           };
         }),
         lignes: lignes[2],
-        textContent: '',
+        text: '',
         type: "js",
         showText: false,
         interval: 5000,
@@ -116,7 +116,7 @@
               num_lines: this.lignes,
             },
             d => {
-              this.textContent = d.content;
+              this.text = d.content;
             	this.$nextTick(() => {
                 let code = this.getRef('code');
                 if (code?.scrollBottom) {
@@ -175,7 +175,7 @@
               (d)=>{
                 this.isPolling = false;
                 if ( d.change ){
-                  this.textContent = d.content;
+                  this.text = d.content;
                   this.md5Current = d.md5;
                   let code = this.getRef('code');
                   this.$nextTick(()=>{
