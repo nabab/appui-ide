@@ -15,7 +15,7 @@ if ($model->hasData(['url', 'id_project'])) {
   $project = new Project($model->db, $model->data['id_project']);
   $fs = new System();
   $file = $project->urlToReal($model->data['url']);
-  $succes = false;
+  $success = false;
   if (!empty($file)) {
     if (empty($model->data['content'])) {
       $success = $fs->delete($file);

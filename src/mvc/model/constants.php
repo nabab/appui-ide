@@ -17,6 +17,6 @@ foreach ( $prefs as $i => $p ){
       ]);
     }
   }
-  $data['names'][$i] = $res;
+  $data['names'][] = $res;
 }
 return $data;

@@ -10,7 +10,7 @@ if ($model->hasData(['repository', 'path', 'name', 'type', 'id_project', 'is_fil
 
   $project = new Project($model->db, $model->data['id_project']);
   $fs = new System();
-  $cfg = $project->urlToConfig($url);
+  $cfg = $project->urlToConfig($url, true);
 
   $path = $cfg['file'];
 

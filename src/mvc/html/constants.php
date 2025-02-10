@@ -16,7 +16,7 @@ if ( !empty($names) ){
     <ul><?php
     foreach ($namespace['constants'] as $content){ ?>
       <li>
-        <span class="bbn-prefix"><?= $content['prefix'] ?></span>
+        <span class="bbn-prefix"><?= $namespace['prefix'] ?></span>
         <span class="bbn-constant"><?= $content['constant'] ?></span>
         <span class="bbn-value"><?= $content['value'] ?></span>
       </li>
