@@ -133,8 +133,10 @@ if (!empty($model->data['url']) && isset($model->inc->ide)) {
   //$timer->start('9th');
 
   $real = substr($url, 0, strpos($url, "_end_") + strlen("_end_"));
-  foreach ($res['tabs'] as &$tab) {
-    $tab['file'] = $project->urlToReal($real . '/' . $tab['url']);
+  if (!empty($res['tabs'])) {
+    foreach ($res['tabs'] as &$tab) {
+      $tab['file'] = $project->urlToReal($real . '/' . $tab['url']);
+    }
   }
   
   //$timer->stop('9th');

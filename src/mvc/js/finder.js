@@ -160,7 +160,7 @@
       },
       isConnected(){
         while ( this.numCols ){
-          this.remove()
+          this.removeItem()
         }
         setTimeout(() => {
           this.add('');

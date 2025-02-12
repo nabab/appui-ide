@@ -232,7 +232,7 @@
           });
         }
       },
-      remove(){
+      removeItem(){
         this.dirs.pop();
       },
       /**
@@ -289,7 +289,7 @@
           path += node.data.value;
           if ( this.currentPath !== path ){
             while ( num <= this.numCols ){
-              this.remove();
+              this.removeItem();
             }
             if ( node.data.dir ){
               this.currentFile = false;
@@ -849,7 +849,7 @@
       },
       isConnected(){
         while ( this.numCols ){
-          this.remove()
+          this.removeItem()
         }
         setTimeout(() => {
           this.add('');
