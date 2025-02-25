@@ -11,7 +11,7 @@
                     "dashboard",
                     "appui"
                 ],
-                "icon": "nf nf-mdi-widgets",
+                "icon": "nf nf-md-widgets",
                 "items": [
                     {
                         "text": "IDE recent files",

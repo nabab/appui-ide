@@ -88,8 +88,8 @@
     },
     methods:{
       treeClass(data, tree, parent) {
-        bbn.fn.log(["TREE CLASS" , data, tree, parent]);
-        return parent.isRoot? 'bbn-xl' : '';
+        //bbn.fn.log(["TREE CLASS" , data, tree, parent]);
+        return parent.isRoot? 'bbn-xl bbn-capital' : '';
       },
       getSourceTreeLogs(){
         this.post(this.root + 'tree_logs',{}, d => {
@@ -274,8 +274,11 @@
       }
     },
     watch: {
-      fileLog: function(val, old){
-        this.closest("bbn-router").route(this.root + 'logs/' + val.toString());
+      fileLog(val, old){
+        const router = this.closest("bbn-router");
+        if (router) {
+          router.route(this.root + 'logs/' + val.toString());
+        }
 
         if ( val && !this.showText ){
           this.showText = true;

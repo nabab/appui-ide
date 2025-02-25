@@ -6,7 +6,7 @@
     {
       "text": "Editor",
       "num": 1,
-      "icon": "nf nf-mdi-code_array",
+      "icon": "nf nf-md-code_array",
       "link": "editor"
     },
     {
@@ -72,13 +72,13 @@
     {
       "text": "Finder",
       "num": 12,
-      "icon": "nf nf-mdi-apple_finder",
+      "icon": "nf nf-md-apple_finder",
       "link": "finder"
     },
     {
       "text": "Profiler",
       "num": 13,
-      "icon": "nf nf-mdi-face_profile",
+      "icon": "nf nf-md-face_profile",
       "link": "profiler"
     }
   ]

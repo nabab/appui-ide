@@ -3757,7 +3757,7 @@
             {
                 "text": "Main application",
                 "code": "BBN_APP_PATH",
-                "icon": "nf nf-mdi-folder_star"
+                "icon": "nf nf-md-folder_star"
             },
             {
                 "text": "Static directory",
@@ -3772,7 +3772,7 @@
             {
                 "text": "Data directory",
                 "code": "BBN_DATA_PATH",
-                "icon": "nf nf-mdi-folder_account"
+                "icon": "nf nf-md-folder_account"
             }
         ]
     },
@@ -3783,7 +3783,7 @@
         },
         "text": "Paths' types",
         "code": "types",
-        "icon": "nf nf-mdi-shape_outline",
+        "icon": "nf nf-md-shape_outline",
         "items": [
             {
                 "text": "Projects BBN",
@@ -3802,7 +3802,7 @@
                     },
                     {
                         "url": "components",
-                        "icon": "nf nf-mdi-vuejs\n",
+                        "icon": "nf nf-md-vuejs\n",
                         "path": "components\/",
                         "type": "components",
                         "bcolor": "#302c2b",
@@ -3812,7 +3812,7 @@
                     },
                     {
                         "url": "lib",
-                        "icon": "nf nf-mdi-library",
+                        "icon": "nf nf-md-library",
                         "path": "lib\/",
                         "type": "classes",
                         "bcolor": "#302c2b",
@@ -3862,7 +3862,7 @@
             {
                 "text": "Components",
                 "code": "components",
-                "icon": "nf nf-mdi-vuejs",
+                "icon": "nf nf-md-vuejs",
                 "tabs": [
                     {
                         "pos": 1,
@@ -3962,7 +3962,7 @@
             {
                 "text": "JavaScript",
                 "code": "js",
-                "icon": "nf nf-mdi-language_javascript",
+                "icon": "nf nf-md-language_javascript",
                 "extensions": [
                     {
                         "ext": "js",
@@ -4249,7 +4249,7 @@
             {
                 "text": "PHP",
                 "code": "php",
-                "icon": "nf nf-mdi-language_php",
+                "icon": "nf nf-md-language_php",
                 "extensions": [
                     {
                         "ext": "php",
@@ -4261,7 +4261,7 @@
             {
                 "text": "Scripts",
                 "code": "scripts",
-                "icon": "nf nf-mdi-language_javascript",
+                "icon": "nf nf-md-language_javascript",
                 "extensions": [
                     {
                         "ext": "php",
@@ -4285,7 +4285,7 @@
     {
         "text": "File preferences",
         "code": "files",
-        "icon": "nf nf-mdi-folder_account"
+        "icon": "nf nf-md-folder_account"
     },
     {
         "text": "Opened files",
