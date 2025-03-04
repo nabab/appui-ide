@@ -70,7 +70,7 @@
         uploaded: [],
         //defined when the button new folder/file is clicked on the bottom of the tree
         currentContextPath: '',
-        isConnected: false,
+        hasConnection: false,
         sizeInfo: 0,
         data: [],
         host: '',
@@ -412,7 +412,7 @@
           name: p.name,
           path: p.path,
           origin: this.origin
-        }, this.isConnected ? {
+        }, this.hasConnection ? {
           host: this.host,
           user: this.user,
           pass: this.pass
@@ -833,21 +833,21 @@
         //bbn.fn.log('isloading->>>>', val, new Date())
       },
       host(newVal, oldVal){
-        if ( this.isConnected ){
+        if ( this.hasConnection ){
           this.checkDisconnect(this.getRef('host'), oldVal)
         }
       },
       user(newVal, oldVal){
-        if ( this.isConnected ){
+        if ( this.hasConnection ){
           this.checkDisconnect(this.getRef('user'), oldVal)
         }
       },
       pass(newVal, oldVal){
-        if ( this.isConnected ){
+        if ( this.hasConnection ){
           this.checkDisconnect(this.getRef('pass'), oldVal)
         }
       },
-      isConnected(){
+      hasConnection(){
         while ( this.numCols ){
           this.removeItem()
         }

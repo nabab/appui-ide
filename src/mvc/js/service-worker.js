@@ -48,17 +48,20 @@
           appui.poll({poll: true});
         },
         addToLog(data) {
+          bbn.fn.log('addToLog', data);
           if (data.logs) {
             let code = this.getRef('code');
+            let log = '';
             bbn.fn.each(data.logs, a => {
               if (a && (typeof a === 'object')) {
-                this.log += JSON.stringify(a, null, 2);
+                log += JSON.stringify(a, null, 2);
               }
               else {
-                this.log += a;
+                log += a;
               }
-              this.log += "\n";
+              log += "\n";
             });
+            this.log = this.log + log;
             setTimeout(() => {
               if (this.followLog) {
                 code.scrollBottom()
@@ -131,10 +134,10 @@
         }
       },
       created(){
-        appui.$on('swlog', this.addToLog);
+        appui.$on('swlog', e => this.addToLog(e));
       },
       beforeDestroy(){
-        appui.$off('swlog', this.addToLog);
+        appui.$off('swlog', e => this.addToLog(e));
       }
     };
   })()

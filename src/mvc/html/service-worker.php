@@ -1,5 +1,5 @@
 <!-- HTML Document -->
-<bbn-splitter class="appui-ide-service-worker-component"
+<bbn-splitter class="appui-ide-service-worker-component bbn-overlay"
               orientation="vertical"
               :resizable="true"
               :collapsible="true">
@@ -11,7 +11,7 @@
       <bbn-button label="Poll" @click="pollerSW"></bbn-button>
       <bbn-button label="Clear" @click="clear"></bbn-button>
       <bbn-button :class="{'bbn-state-active': followLog}"
-                  label="Follow log"
+                  :label="followLog ? _('Follow log') : _('Unfollow')"
                   @click="followLog = !followLog"></bbn-button>
       <div class="bbn-toolbar-separator"></div>
       <bbn-initial v-for="(w, i) in windows"

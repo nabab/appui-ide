@@ -14,7 +14,7 @@
         menu: [],
         connection: this.source.connection,
         path: '',
-        isConnected: false,
+        hasConnection: false,
         data: [],
         host: '',
         user: '',
@@ -88,7 +88,7 @@
       },
       checkDisconnect(ele, oldVal){
         this.getPopup().confirm(bbn._("Are you sure you wanna disconnect?"), () => {
-          this.isConnected = false;
+          this.hasConnection = false;
         }, () => {
           if ( ele ){
             ele.$emit('input', oldVal)
@@ -100,14 +100,14 @@
         return bbn.fn.extend({  
           name: p.name,
           path: p.path
-        }, this.isConnected ? {
+        }, this.hasConnection ? {
           host: this.host,
           user: this.user,
           pass: this.pass
         } : {})
       },
       connect(){
-        if ( this.isConnected ){
+        if ( this.hasConnection ){
           this.checkDisconnect();
           return;
         }
@@ -121,7 +121,7 @@
           }, (d) => {
             bbn.fn.log(d);
             if ( d.success ){
-              this.isConnected = true;
+              this.hasConnection = true;
             }
             else{
               appui.error(bbn._("Impossible to connect"))
@@ -144,21 +144,21 @@
         bbn.fn.log('isloading->>>>', val, new Date())
       },
       host(newVal, oldVal){
-        if ( this.isConnected ){
+        if ( this.hasConnection ){
           this.checkDisconnect(this.getRef('host'), oldVal)
         }
       },
       user(newVal, oldVal){
-        if ( this.isConnected ){
+        if ( this.hasConnection ){
           this.checkDisconnect(this.getRef('user'), oldVal)
         }
       },
       pass(newVal, oldVal){
-        if ( this.isConnected ){
+        if ( this.hasConnection ){
           this.checkDisconnect(this.getRef('pass'), oldVal)
         }
       },
-      isConnected(){
+      hasConnection(){
         while ( this.numCols ){
           this.removeItem()
         }

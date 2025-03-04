@@ -16,6 +16,8 @@
     <bbn-router :nav="true"
                 :root="source.root + 'finder/'"
                 :base-url="source.root + 'finder/'"
-                :autoload="true"/>
+                :url-navigation="true"
+                :autoload="true"
+                class="bbn-overlay"/>
   </div>
 </div>
