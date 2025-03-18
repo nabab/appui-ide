@@ -29,8 +29,8 @@
                 :map="cp.mapTree"
                 :menu="cp.itemsContextMenu"
                 :key="'/' + source.path"
-                @load="cp.updateInfo"
-                @select="cp.select"/>
+                @load="updateInfo"
+                @select="select"/>
     </div>
   </div>
 

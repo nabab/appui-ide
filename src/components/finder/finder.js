@@ -269,6 +269,7 @@
                            * @param {*} node 
                            */
       select(node){
+        bbn.fn.log(["SELECT NODE", node])
         // Reinit
         this.isImage = false;
         this.isJson = false;

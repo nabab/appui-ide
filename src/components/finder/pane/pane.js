@@ -21,6 +21,14 @@
         cp: null
       }
     },
+    methods: {
+      select(node) {
+        return this.cp.select(node);
+      },
+      updateInfo() {
+        return this.cp.updateInfo();
+      }
+    },
     created(){
       this.cp = this.closest("appui-ide-finder")
     },
