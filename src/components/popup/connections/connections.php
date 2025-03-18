@@ -8,18 +8,23 @@
            :pageable="true"
            :limit="20"
            :url="root + 'finder/actions'">
-  <bbns-column label=" "
-               :buttons="menu"
+  <bbns-column :buttons="menu"
                :width="30"/>
   <bbns-column field="id"
                :invisible="true"/>
   <bbns-column field="text"
-               width="20em"/>
+               width="20em"
+               label="<?=_("Name")?>"/>
   <bbns-column field="type"
-               :width="80"/>
+               :width="70"
+               label="<?=_("Type")?>"/>
   <bbns-column field="host"
-               width="15em"/>
-  <bbns-column field="path"/>
+               width="15em"
+               label="<?=_("Host")?>"/>
+  <bbns-column field="path"
+               :width="400"
+               label="<?=_("Path")?>"/>
   <bbns-column field="user"
-               width="15em"/>
+               width="15em"
+               label="<?=_("User")?>"/>
 </bbn-table>
