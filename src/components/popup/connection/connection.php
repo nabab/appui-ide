@@ -1,35 +1,37 @@
 <bbn-form :source="formSource"
           :buttons="buttons"
           :action="root + 'finder/save'"
-          ref="form">
+          ref="form"
+          @success="onSuccess">
 	<div class="bbn-flex-fill bbn-grid-fields bbn-padding">
-     <label>Connection name</label>
+     <label><?=_("Connection name")?></label>
      <bbn-input :required="true"
-                v-model="formSource.text"
+                bbn-model="formSource.text"
                 :readonly="isTested"/>
-    <label>Connection type</label>
+    <label><?=_("Connection type")?></label>
     <bbn-dropdown :source="types"
-                  v-model="type"
+                  bbn-model="type"
                   :readonly="isTested"
                   :required="true"/>
-     <label v-if="formSource.type !== 'local'">Host</label>
-     <bbn-input v-if="formSource.type !== 'local'"
+     <label bbn-if="formSource.type !== 'local'"><?=_("Host")?></label>
+     <bbn-input bbn-if="formSource.type !== 'local'"
                 :required="true"
-                v-model="formSource.host"
+                bbn-model="formSource.host"
                 :readonly="isTested"/>
-     <label v-if="formSource.type !== 'local'">User</label>
-     <bbn-input v-if="formSource.type !== 'local'"
+     <label bbn-if="formSource.type !== 'local'"><?=_("User")?></label>
+     <bbn-input bbn-if="formSource.type !== 'local'"
                 :required="true"
-                v-model="formSource.user"
+                bbn-model="formSource.user"
                 :readonly="isTested"/>
-     <label v-if="formSource.type !== 'local'">Password</label>
-     <bbn-input v-if="formSource.type !== 'local'"
+     <label bbn-if="formSource.type !== 'local'"><?=_("Password")?></label>
+     <bbn-input bbn-if="formSource.type !== 'local'"
                 :required="true"
                 type="password"
-                v-model="formSource.pass"
+                bbn-model="formSource.pass"
                 :readonly="isTested"/>
-     <label>Path</label>
-     <bbn-input v-model="formSource.path"
-                :readonly="isTested"/>
+     <label><?=_("Path")?></label>
+     <bbn-input bbn-model="formSource.path"
+                :readonly="isTested"
+                class="bbn-wider"/>
   </div>
 </bbn-form>

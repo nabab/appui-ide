@@ -6,15 +6,31 @@
       return {
         root: appui.plugins['appui-ide'] + '/',
         formSource: {
-          path: "",
-          host: "",
-          user: "",
-          pass: "",
-          text: "",
-          type: "local"
+          id: this.source?.row?.id || "",
+          path: this.source?.row?.path || "",
+          host: this.source?.row?.host || "",
+          user: this.source?.row?.user || "",
+          pass: this.source?.row?.pass || "",
+          text: this.source?.row?.text || "",
+          type: this.source?.row?.type || "local"
         },
-        type: "local",
-        types: [{text: 'Local', value: 'local'},{text:'SSH', value:'ssh'}, {text: 'FTP', value: 'ftp'}, {text: 'FTPS', value: 'ftps'}, {text: 'NextCloud', value:'nextcloud'}],
+        type: this.source?.row?.type || "local",
+        types: [{
+          text: 'Local',
+          value: 'local'
+        }, {
+          text: 'SSH',
+          value: 'ssh'
+        }, {
+          text: 'FTP',
+          value: 'ftp'
+        }, {
+          text: 'FTPS',
+          value: 'ftps'
+        }, {
+          text: 'NextCloud',
+          value: 'nextcloud'
+        }],
         isTested: false,
       }
     },
@@ -51,16 +67,29 @@
     methods: {
       onSuccess(d) {
         if (d.success && d.data) {
-          let container = this.closest('bbn-container');
-          let cp = container.getComponent();
-          cp.source.connections.push(d.data);
-          cp.updateMenu();
+          const container = this.closest('bbn-container');
+          const cp = container.getComponent();
+          if (!this.formSource.id) {
+            cp.source.connections.push(d.data);
+            cp.updateMenu();
+          }
+          else {
+            const idx = bbn.fn.search(cp.source.connections, 'id', d.data.id);
+            if (idx > -1) {
+              cp.source.connections.splice(idx, 1, d.data);
+              cp.updateMenu();
+            }
+          }
+
+          appui.success();
+        }
+        else {
+          appui.error();
         }
       }
     },
     watch: {
       type() {
-        bbn.fn.log('onResize');
         this.formSource.type = this.type;
         setTimeout(() => {
         	this.closest('bbn-floater').onResize(true);

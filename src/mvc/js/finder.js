@@ -41,7 +41,7 @@
             ]
           }, {
             text: bbn._('Connections'),
-            items: this.source.connections.map(a => {
+            items: bbn.fn.clone(this.source.connections).map(a => {
               a.url = this.source.root + 'finder/source/' + a.id;
               return a;
             }).concat([{
@@ -69,7 +69,6 @@
     methods: {
       updateMenu() {
         let menu = this.getRef('menu');
-        bbn.fn.log("JJRJZLJLK3", menu);
         if (menu) {
           menu.updateData();
         }

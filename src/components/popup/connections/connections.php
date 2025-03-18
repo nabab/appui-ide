@@ -5,9 +5,11 @@
            :scrollable="false"
            button-mode="menu"
            editable="popup"
+           editor="appui-ide-popup-connection"
            :pageable="true"
            :limit="20"
-           :url="root + 'finder/actions'">
+           :url="root + 'finder/actions'"
+           ref="table">
   <bbns-column :buttons="menu"
                :width="30"/>
   <bbns-column field="id"
