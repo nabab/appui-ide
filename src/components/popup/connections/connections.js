@@ -21,7 +21,7 @@
     methods: {
       getToolbarButtons() {
         return [{
-          text: bbn._('New connection'),
+          label: bbn._('New connection'),
           action: () => {
             this.getPopup({
               label: bbn._('New connection configuration'),

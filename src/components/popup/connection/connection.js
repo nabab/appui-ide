@@ -22,20 +22,20 @@
       buttons() {
         if (this.isTested) {
           return [{
-            text: bbn._("Cancel"),
+            label: bbn._("Cancel"),
             action: () => {
               this.isTested = false;
             }
           }, {
-            text: bbn._("Confirm"),
+            label: bbn._("Confirm"),
             action: 'submit'
           }]
         }
         return [{
-          text: bbn._("Cancel"),
+          label: bbn._("Cancel"),
           action: 'cancel'
         }, {
-          text: bbn._("Test"),
+          label: bbn._("Test"),
           action: () => {
             if (this.$refs.form.isValid()) {
             	bbn.fn.post(this.root + 'finder/test', this.formSource, d => {
