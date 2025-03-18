@@ -812,8 +812,6 @@
           this.viewMode = cfg.mode;
         }
       }
-    },
-    mounted(){
       if ( this.path ){
         bbn.fn.each(this.path.split('/'), (a) => {
           if ( a ){
@@ -821,6 +819,8 @@
           }
         });
       }
+    },
+    mounted(){
     },
     watch: {
       viewMode(value) {
