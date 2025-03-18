@@ -31,7 +31,7 @@
         connection: this.source.connection,
         currentPath: '',
         path: '',
-        isConnected: false,
+        connected: false,
         data: [],
         host: '',
         user: '',
@@ -68,7 +68,7 @@
       },
       checkDisconnect(ele, oldVal){
         this.getPopup().confirm(bbn._("Are you sure you wanna disconnect?"), () => {
-          this.isConnected = false;
+          this.connected = false;
         }, () => {
           if ( ele ){
             ele.$emit('input', oldVal)
@@ -80,14 +80,14 @@
         return bbn.fn.extend({
           name: p.name,
           path: p.path
-        }, this.isConnected ? {
+        }, this.connected ? {
           host: this.host,
           user: this.user,
           pass: this.pass
         } : {})
       },
       connect(){
-        if ( this.isConnected ){
+        if ( this.connected ){
           this.checkDisconnect();
           return;
         }
@@ -101,7 +101,7 @@
           }, (d) => {
             bbn.fn.log('ok', d);
             if ( d.success ){
-              this.isConnected = true;
+              this.connected = true;
             }
             else{
               appui.error(bbn._("Impossible to connect"))

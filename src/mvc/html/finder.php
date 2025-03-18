@@ -17,6 +17,7 @@
                 :root="source.root + 'finder/'"
                 :base-url="source.root + 'finder/'"
                 :url-navigation="true"
+                :scrollable="false"
                 :autoload="true"
                 class="bbn-overlay"/>
   </div>
