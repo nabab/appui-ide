@@ -51,12 +51,12 @@
     },
     methods: {
       updatePath(path){
-        bbn.fn.log("UPDATE PATH", path);
+        //bbn.fn.log("UPDATE PATH", path);
         this.currentPath = path;
       },
       abortRequest(a){
         alert( a)
-        bbn.fn.log(a, this.dirs)
+        //bbn.fn.log(a, this.dirs)
         if ( a === 'dir' ){
           bbn.fn.abort(appui.plugins['appui-ide'] + '/finder')
           /* this.dirs.pop();*/

@@ -1,5 +1,6 @@
 <?php
 use bbn\Appui\Ide;
+use bbn\File\System;
 
 if (!isset($ctrl->inc->ide)) {
   $ctrl->addInc(
@@ -12,6 +13,10 @@ if (!isset($ctrl->inc->ide)) {
       $ctrl->post['project'] ?? constant('BBN_PROJECT')
     )
   );
+}
+
+if (!isset($ctrl->inc->fs)) {
+  $ctrl->addInc('fs',  new System());
 }
 
 return true;
