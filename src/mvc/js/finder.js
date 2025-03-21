@@ -118,7 +118,7 @@
             pass: this.pass,
             test: 1
           }, (d) => {
-            bbn.fn.log(d);
+            //bbn.fn.log(d);
             if ( d.success ){
               this.hasConnection = true;
             }
@@ -132,14 +132,13 @@
         return this.closest('bbn-container').getPopup(...arguments);
       },
     },
-    beforeMount() {
-      this.updateMenu();
-    },
-    mounted(){
-      bbn.fn.log(this.menu);
+    mounted() {
+      setTimeout(() => {
+        this.updateMenu();
+      }, 1000);
     },
     watch: {
-      isLoading(val){
+      isLoading(val) {
         bbn.fn.log('isloading->>>>', val, new Date())
       },
       host(newVal, oldVal){
