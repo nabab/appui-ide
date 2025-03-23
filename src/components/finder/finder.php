@@ -84,23 +84,29 @@
         </div>
         <bbn-code class="bbn-flex-fill"
                   v-if="currentFile.info && currentFile.info.content && !isImage && !isText && !isJson && !isMarkdown && !isLoading"
-                  v-model="currentFile.info.content"/>
+                  v-model="currentFile.info.content"
+                  @hook:mounted="updateScroll"/>
         <bbn-json-editor class="bbn-flex-fill"
                          v-else-if="currentFile.info && !isImage && !isText && isJson && !isMarkdown && !isLoading"
-                         v-model="currentFile.info.content"/>
+                         v-model="currentFile.info.content"
+                         @hook:mounted="updateScroll"/>
         <bbn-textarea class="bbn-flex-fill"
                       v-else-if="currentFile.info && !isImage && isText && !isJson && !isMarkdown && !isLoading"
-                      v-model="currentFile.info.content"/>
+                      v-model="currentFile.info.content"
+                      @hook:mounted="updateScroll"/>
         <bbn-markdown class="bbn-flex-fill"
                       v-else-if="currentFile.info && !isImage && !isText && !isJson && isMarkdown && !isLoading"
-                      v-model="currentFile.info.content"/>
+                      v-model="currentFile.info.content"
+                      @hook:mounted="updateScroll"/>
         <div v-else-if="isImage && !isLoading"
-             class="bbn-flex-fill bbn-c bbn-padding">
+             class="bbn-flex-fill bbn-c bbn-padding"
+             @hook:create="updateScroll">
           <!--need of origin for the filesystem to recognize the environment-->
           <img :src="root + 'actions/finder/image/' +  encodedURL + '/' + origin" style="max-width:80%">
         </div>
         <div v-else-if="currentFile.info && !currentFile.info.content && !isImage && !isText && !isJson && !isMarkdown && !isLoading"
-             class="bbn-padding bbn-medium bbn-b">
+             class="bbn-padding bbn-medium bbn-b"
+             @hook:create="updateScroll">
           <div v-if="sizeInfo > 200000000"
                v-text="_('The content of the file exceeds the authorized limit (2mb)')"/>
           <div v-else
@@ -108,7 +114,8 @@
         </div>
         <div v-else-if="isLoading"
              class="bbn-padding bbn-medium bbn-b"
-             v-text="_('Loading file infos..')">
+             v-text="_('Loading file infos..')"
+             @hook:create="updateScroll">
         </div>
       </div>
     </div>

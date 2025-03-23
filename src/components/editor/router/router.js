@@ -55,6 +55,7 @@
                 notext: true,
                 bcolor: tab.bcolor,
                 fcolor: tab.fcolor,
+                scrollable: false,
                 cls: tab.file ? '' : 'empty-tab',
                 menu: () => {
                   return this.getMenu(tab);
@@ -72,6 +73,7 @@
               notext: true,
               bcolor: this.repo.bcolor,
               fcolor: this.repo.fcolor,
+              scrollable: false,
               menu: () => {
                 return this.getMenu(this.source.url);
               }

@@ -2,6 +2,7 @@
 (() => {
   let logPoller = null;
   return {
+    mixins: [bbn.cp.mixins.basic],
     data(){
       let lignes     = [10, 25, 50, 100, 150, 250, 500, 1000, 2000, 5000];
       let themes     = [];
@@ -63,7 +64,7 @@
       });
       themes = bbn.fn.order(themes, "text");
 
-      return{
+      return {
         fileLog: '',
         md5Current: '',
         autoRefreshFile: false,
@@ -109,6 +110,7 @@
         });
       },
       onChange(clear, e){
+        bbn.fn.log("onChange", this.fileLog, this.lignes);
         if ( this.fileLog.length && this.lignes ){
           this.post(this.root + 'logs/' + this.fileLog, {
               log: this.fileLog,
@@ -116,6 +118,7 @@
               num_lines: this.lignes,
             },
             d => {
+              bbn.fn.log("onChange2", d);
               this.text = d.content;
             	this.$nextTick(() => {
                 let code = this.getRef('code');

@@ -13,6 +13,7 @@
             @keydown="keydown"
             @hook:mounted="init"
             bbn-model="myCode"
+            :scrollable="true"
             :theme="currentTheme"
             :mode="currentMode" />
   <div class="bbn-hidden"
