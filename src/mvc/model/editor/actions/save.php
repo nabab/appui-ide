@@ -15,6 +15,10 @@ if ($model->hasData(['url', 'id_project'])) {
   $project = new Project($model->db, $model->data['id_project']);
   $fs = new System();
   $file = $project->urlToReal($model->data['url']);
+  if (!$fs->isDir(dirname($file))) {
+    $fs->createPath(dirname($file));
+  }
+
   $success = false;
   if (!empty($file)) {
     if (empty($model->data['content'])) {

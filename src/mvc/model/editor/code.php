@@ -27,7 +27,7 @@ if ($model->hasData('id_project')) {
     }
     else {
       $cfg = $project->urlToConfig($model->data['url']);
-      $type = array_pop(X::split($model->data['url'], '/'));;
+      $type = substr($model->data['url'], strrpos($model->data['url'], '/') + 1);;
       $isEmpty = true;
       if ($type === 'code') {
         $ext = $cfg['typology']['extensions'][0]['ext'];
