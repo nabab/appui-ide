@@ -133,11 +133,13 @@
           this.log = '';
         }
       },
-      created(){
+      created() {
         appui.$on('swlog', e => this.addToLog(e));
+        appui.$on('received', e => bbn.fn.log(e));
       },
       beforeDestroy(){
         appui.$off('swlog', e => this.addToLog(e));
+        appui.$off('received', e => bbn.fn.log(e));
       }
     };
   })()
