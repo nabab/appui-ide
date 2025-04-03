@@ -7,7 +7,7 @@
  */
 if ($ctrl->hasArguments()) {
   $ctrl->addData([
-    'root' => APPUI_IDE_ROOT,
+    'root' => $ctrl->pluginUrl('appui-ide'),
     'id' => $ctrl->arguments[0]
   ])
     ->combo('$title', true);
