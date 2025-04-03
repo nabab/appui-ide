@@ -5,5 +5,5 @@
  * @var $ctrl \bbn\Mvc\Controller 
  *
  */
-$ctrl->addData(['root' => $ctrl->pluginUrl('appui-ide')])
+$ctrl->addData(['root' => $ctrl->pluginUrl('appui-ide').'/'])
   ->combo(_('List'), true);
