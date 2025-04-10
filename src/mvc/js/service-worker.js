@@ -134,12 +134,14 @@
         }
       },
       created() {
-        appui.$on('swlog', e => this.addToLog(e));
-        appui.$on('received', e => bbn.fn.log(e));
+        bbn.fn.log('created');
+        appui.$on('swlog', this.addToLog);
+        appui.$on('received', bbn.fn.log);
       },
       beforeDestroy(){
-        appui.$off('swlog', e => this.addToLog(e));
-        appui.$off('received', e => bbn.fn.log(e));
+        bbn.fn.log('before destroy');
+        appui.$off('swlog', this.addToLog);
+        appui.$off('received', bbn.fn.log);
       }
     };
   })()
