@@ -32,7 +32,7 @@
     },
     computed: {
       menuData() {
-        return [
+        return this.source?.connections ? [
           {
             text: bbn._('Favorites'),
             items: [
@@ -63,7 +63,7 @@
               {text: bbn._('Preferences'), url: 't2'}
             ]
           }
-        ]
+        ] : []
       }
     },
     methods: {

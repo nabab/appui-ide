@@ -13,6 +13,7 @@ if ($model->hasData(['repository', 'path', 'name', 'type', 'id_project', 'is_fil
   $cfg = $project->urlToConfig($url, true);
 
   $path = $cfg['file'];
+  X::ddump($path, $url);
 
   $exist = false;
 

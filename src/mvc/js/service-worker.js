@@ -48,7 +48,7 @@
           appui.poll({poll: true});
         },
         addToLog(data) {
-          bbn.fn.log('addToLog', data);
+          //bbn.fn.log('addToLog', data);
           if (data.logs) {
             let code = this.getRef('code');
             let log = '';
@@ -136,12 +136,12 @@
       created() {
         bbn.fn.log('created');
         appui.$on('swlog', this.addToLog);
-        appui.$on('received', bbn.fn.log);
+        //appui.$on('received', bbn.fn.log);
       },
       beforeDestroy(){
         bbn.fn.log('before destroy');
         appui.$off('swlog', this.addToLog);
-        appui.$off('received', bbn.fn.log);
+        //appui.$off('received', bbn.fn.log);
       }
     };
   })()
