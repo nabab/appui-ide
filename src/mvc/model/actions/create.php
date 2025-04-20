@@ -6,18 +6,13 @@ use bbn\File\System;
 
 if ($model->hasData(['repository', 'path', 'name', 'type', 'id_project', 'is_file'])) {
   $count = 1;
-  $url = $model->data['repository']['name'] . '/' . ($model->data['type'] === 'classes' ? 'lib' : $model->data['type'])  . ($model->data['path'] !== '/' ? '/' : '') . '/';
-
+  $model->data['path'] = trim($model->data['path'], '/');
+  $url = $model->data['repository']['name'] . '/' . ($model->data['type'] === 'classes' ? 'lib' : $model->data['type'])  . ($model->data['path'] !== '/' ? '/' . $model->data['path'] : '') . '/';
   $project = new Project($model->db, $model->data['id_project']);
   $fs = new System();
   $cfg = $project->urlToConfig($url, true);
-
   $path = $cfg['file'];
-  X::ddump($path, $url);
-
   $exist = false;
-
-
 
   if ($model->data['type'] === 'mvc') {
     //check if file exist
@@ -29,13 +24,17 @@ if ($model->hasData(['repository', 'path', 'name', 'type', 'id_project', 'is_fil
     }
 
     $tab = $cfg['typology']['tabs'][$model->data['tab']];
+    if ($tab['path'] !== 'public/') {
+      $path = str_replace('/public/', '/' . $tab['path'], $path);
+    }
+
     foreach($tab['extensions'] as $ext) {
       $file_path = "";
       if ($model->data['is_file']) {
-        $file_path = $path . $tab['path'] . ($model->data['path'] !== "/" ? $model->data['path'] : '') . $model->data['name'] . '.' . $ext['ext'];
+        $file_path = $path . $model->data['name'] . '.' . $ext['ext'];
         $file_path = str_replace('//', '/', $file_path);
       } else {
-        $file_path = $path . $tab['path'] . ($model->data['path'] !== "/" ? $model->data['path'] : '') . $model->data['name'];
+        $file_path = $path . $model->data['name'];
         $file_path = str_replace('//', '/', $file_path);
       }
       if ($fs->exists($file_path) && $model->data['is_file']) {
@@ -72,7 +71,7 @@ if ($model->hasData(['repository', 'path', 'name', 'type', 'id_project', 'is_fil
         $ext = $tab['extensions'][0];
       }
 
-      $file_path = $path . $tab['path'] . ($model->data['path'] !== "/" ? $model->data['path'] : '') . $model->data['name'] . '.' . $ext['ext'];
+      $file_path = $path . $model->data['name'] . '.' . $ext['ext'];
       $file_path = str_replace('//', '/', $file_path);
       if ($fs->putContents($file_path, $ext['default'])) {
         return [
@@ -84,12 +83,13 @@ if ($model->hasData(['repository', 'path', 'name', 'type', 'id_project', 'is_fil
       foreach($cfg['typology']['tabs'] as $tab) {
         $file_path = "";
 
-        $file_path = $path . $tab['path'] . ($model->data['path'] !== "/" ? $model->data['path'] : '') . $model->data['name'];
+        $file_path = $path . $model->data['name'];
         $file_path = str_replace('//', '/', $file_path);
         $fs->createPath($file_path);
       }
     }
-  } else if ($model->data['type'] === 'components') {
+  }
+  else if ($model->data['type'] === 'components') {
     $path = $cfg['file'] . ($model->data['path'] != 'components/' ? str_replace('components/', '', $model->data['path'], $count) : '') . $model->data['name'];
     $path = str_replace('//', '/', $path);
     if ($fs->exists($path) && !$model->data['is_file']) {

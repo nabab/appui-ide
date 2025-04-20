@@ -1,6 +1,6 @@
 <!-- HTML Document -->
 <div class="bbn-overlay bbn-flex-height">
-  <div class="bbn-flex-width bbn-w-100 bbn-spadding bbn-header">
+  <div class="bbn-flex-items bbn-w-100 bbn-spadding bbn-header">
     <div>
       <span v-if="fileLog.length"
             class="bbn-b bbn-middle bbn-xl"
@@ -10,7 +10,7 @@
         <?= _('Manager Log') ?>s
       </span>
     </div>
-    <div class="bbn-flex-fill bbn-r">
+    <div class="bbn-r">
       <bbn-checkbox label="<?= _('Auto') ?>"
                     v-model="autoRefreshFile"
                     :value="!autoRefreshFile"/>
