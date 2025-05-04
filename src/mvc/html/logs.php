@@ -47,7 +47,7 @@
                 :collapsible="true"
                 :resizable="true">
         <div class="bbn-flex-height">
-          <div class="bbn-w-100 bbn-middle bbn-vspadding bbn-header">
+          <div class="bbn-w-100 bbn-vmiddle bbn-vspadding bbn-header">
             <bbn-button title="<?= _('Refresh') ?>"
                         @click="treeReload()"
                         label="<?= _('Refresh files list') ?>"
