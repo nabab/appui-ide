@@ -440,12 +440,12 @@
               pathMVC = pathMVC.replace("mvc/", "");
               let link = component.source.route + pathMVC;
 
-              bbn.fn.log("BEFORE THE LINK", bbn.fn.baseName(link));
+              bbn.fn.log(["BEFORE THE LINK", bbn.fn.baseName(link), link]);
               if (bbn.fn.baseName(link) === 'index') {
                 window.open(bbn.env.host + '/' + link);
               }
               else {
-                appui.find('bbn-router').load(link, true);
+                appui.route(link, true);
               }
 
               return true;
