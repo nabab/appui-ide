@@ -157,7 +157,7 @@
             link += '/code';
           }
           if ( link.indexOf('//') !== -1 ){
-            link= link.replace('//', '/');
+            link = link.replace('//', '/');
           }
           bbn.fn.link(link);
           appui.success(this.isComponent === true ? bbn._("Component created!") : bbn._("File created!"));
@@ -165,11 +165,7 @@
         else{
           appui.success(bbn._("Directory created!"));
         }
-        if ( (this.data.path === './')  ||
-          (this.data.path === 'components/') ||
-          (this.data.path === 'mvc/') ||
-          (this.data.path === 'lib/') ||
-          (this.data.path === 'cli/') ||
+        if (['/', './', 'components/', 'mvc/', 'lib/', 'cli/'].includes(this.data.path) ||
           (this.source.parent === false)
         ){
           componentEditor.treeReload();
