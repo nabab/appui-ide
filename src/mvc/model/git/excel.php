@@ -10,7 +10,7 @@ if ( !empty($model->data['excel']) && !empty($model->data['data']) ){
     }
     foreach ( $row as $i => $r ){
       if ( 
-        (($idx = \bbn\X::find($cfg, ['field' => $i])) === null ) ||
+        (($idx = \bbn\X::search($cfg, ['field' => $i])) === null ) ||
         !!$cfg[$idx]['hidden']
       ){
         unset($row[$i]);
