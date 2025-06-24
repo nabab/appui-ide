@@ -5,8 +5,8 @@
         <div class="bbn-w-100 bbn-padding">
           <bbn-button @click="deleteAll"> <?= _('Delete all cache') ?></bbn-button>
         </div>
-        <div class="bbn-flex-fill bbn-padding">
-          <bbn-tree class="tree bbn-padding"
+        <div class="bbn-flex-fill">
+          <bbn-tree class="tree bbn-100"
                     :source="root + 'cache'"
                     @select="getContent"
                     :menu="contextMenu"

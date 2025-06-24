@@ -48,7 +48,14 @@
           appui.poll({poll: true});
         },
         addToLog(data) {
-          //bbn.fn.log('addToLog', data);
+          if (!data) {
+            return;
+          }
+
+          if (bbn.fn.isString(data)) {
+            this.log += (data + "\n");
+            return;
+          }
           if (data.logs) {
             let code = this.getRef('code');
             let log = '';
@@ -134,13 +141,11 @@
         }
       },
       created() {
-        bbn.fn.log('created');
-        appui.$on('swlog', this.addToLog);
+        appui.$on('sw-log', this.addToLog);
         //appui.$on('received', bbn.fn.log);
       },
       beforeDestroy(){
-        bbn.fn.log('before destroy');
-        appui.$off('swlog', this.addToLog);
+        appui.$off('sw-log', this.addToLog);
         //appui.$off('received', bbn.fn.log);
       }
     };

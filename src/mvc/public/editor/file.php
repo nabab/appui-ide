@@ -12,6 +12,7 @@ if (defined('BBN_BASEURL') && !empty($ctrl->arguments)) {
     'root' => $root,
     'baseURL' => BBN_BASEURL
   ]);
+
   if (substr(BBN_BASEURL, -7) === '/_end_/') {
     $ctrl->addToObj($root . 'editor/code', $ctrl->data, true);
   }
@@ -31,11 +32,11 @@ if (defined('BBN_BASEURL') && !empty($ctrl->arguments)) {
 
     if ($ctrl->obj->data['isMVC'] && (strpos($ctrl->obj->title, '/'.'mvc/') === 0)) {
       $ctrl->setTitle(substr($ctrl->obj->title, 5));
-      $ctrl->setColor('#34495e', '#FFF');
+      $ctrl->setColor('var(--navy)', '#FFF');
     }
     elseif ($ctrl->obj->data['isComponent'] && (strpos($ctrl->obj->title, '/'.'components/') === 0)) {
       $ctrl->setTitle(substr($ctrl->obj->title, 12));
-      $ctrl->setColor('#183b14', '#FFF');
+      $ctrl->setColor('var(--brown)', '#FFF');
     }
   }
 

@@ -514,7 +514,7 @@
         editor.types = this.types;
         let repositories = {};
         let selected = this.source.project.path[0];
-        bbn.fn.log("HAAAAAAAAAAAAAAAAAAAAA", editor.types[this.currentTypeCode === 'classes' ? 'cls' : this.currentTypeCode]);
+        bbn.fn.log(["HAAAAAAAAAAAAAAAAAAAAA", editor.types[this.currentTypeCode === 'classes' ? 'cls' : this.currentTypeCode]]);
         for (let repository of this.source.project.path) {
           let name = repository.parent_code + '/' + repository.code;
           repositories[name] = bbn.fn.extend({}, {

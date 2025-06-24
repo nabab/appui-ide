@@ -21,6 +21,10 @@ if ($model->hasData(['url', 'id_project'])) {
 
   $success = false;
   if (!empty($file)) {
+    if (!$fs->exists(dirname($file))) {
+      $fs->createPath(dirname($file));
+    }
+
     if (empty($model->data['content'])) {
       $success = $fs->delete($file);
       $delete = true;
@@ -31,6 +35,10 @@ if ($model->hasData(['url', 'id_project'])) {
   } else {
     $cfg = $project->urlToConfig($model->data['url']);
     $file = $cfg['file'].'.'.$cfg['extensions'][0]['ext'];
+    if (!$fs->exists(dirname($file))) {
+      $fs->createPath(dirname($file));
+    }
+
     $fs->putContents($file, $model->data['content']);
   }
   if (!$fs->exists($model->dataPath('appui-ide') . 'backup/' . $model->data['id_project'] . '/' . $model->data['url'])) {
