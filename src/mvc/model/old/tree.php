@@ -16,7 +16,7 @@ if ($model->hasData(['repository'], true)) {
 
   // Defining current path
   //case of a component we treat the '$current_path' differently
-  if ($model->hasData('is_vue', true)) {
+  if ($model->hasData('isComponent', true)) {
     $cur_path = explode('/', $model->data['uid']);
     array_pop($cur_path);
     $cur_path  = implode('/', $cur_path);
@@ -189,7 +189,7 @@ if ($model->hasData(['repository'], true)) {
               && (strpos(basename($t),".") !== 0)
           ) {
             $component = false;
-            $is_vue    = false;
+            $isComponent    = false;
             $name      = basename($t);
 
             //filter any folders that we want to see in the root in case of a project
@@ -236,7 +236,7 @@ if ($model->hasData(['repository'], true)) {
                           $item = explode(".", basename($f))[0];
                           if ($item === basename($t)) {
                             $arr[]  = \bbn\Str::fileExt($f);
-                            $is_vue = true;
+                            $isComponent = true;
                           }
                         }
                       }
@@ -265,7 +265,7 @@ if ($model->hasData(['repository'], true)) {
                           if ($item === basename($t)) {
                             $folder    = false;
                             $arr[]     = \bbn\Str::fileExt($f);
-                            $is_vue    = true;
+                            $isComponent    = true;
                             $component = true;
                             if (!empty($ext) && (in_array($ext, $excludeds) === false)) {
                               $num_check++;
@@ -320,7 +320,7 @@ if ($model->hasData(['repository'], true)) {
                     }
                   }
                   //case component o folder who contain other component
-                  elseif (!empty($component) && !empty($is_vue)) {
+                  elseif (!empty($component) && !empty($isComponent)) {
                     $icon = "nf nf-md-vuejs";
                   }
                   //case folder
@@ -340,7 +340,7 @@ if ($model->hasData(['repository'], true)) {
                     'is_svg' => !empty($is_file) && ($ext === 'svg'),
                     'is_viewable' => !empty($is_file) && \in_array($ext, $file_check['viewables']) && ($ext !== 'svg'),
                     'is_image' => !empty($is_file) && \in_array($ext, $file_check['images']),
-                    'is_vue' => $is_vue,
+                    'isComponent' => $isComponent,
                     'dir' => $cur_path,
                     'icon' => $icon,
                     'bcolor' => !empty($color) ? $color : false,

@@ -17,7 +17,7 @@ if (!empty($model->data['url']) && isset($model->inc->ide)) {
   $url = $model->data['url'];
 
   //die(var_dump($model->data['url']));
-  $rep = $model->inc->ide->repositoryFromUrl($model->data['url']);
+  $rep = $project->repositoryFromUrl($model->data['url']);
 
   $file = $model->inc->ide->urlToReal($model->data['url']);
   $route = '';

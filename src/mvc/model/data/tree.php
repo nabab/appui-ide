@@ -11,7 +11,7 @@ use bbn\Appui\Project;
 
 if (X::hasProps($model->data['data'], ['id_project', 'id_path'], true)) {
   $path = $model->data['data']['uid'] ?? '';
-  if (X::hasProps($model->data['data'], ['is_vue', 'name'], true)) {
+  if (X::hasProps($model->data['data'], ['isComponent', 'name'], true)) {
     // find the position of the last occurrence of the string
     $last_occurrence_pos = strrpos($model->data['data']['uid'], $model->data['data']['name'] . '/' . $model->data['data']['name']);
 

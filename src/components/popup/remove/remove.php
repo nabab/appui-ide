@@ -12,7 +12,7 @@
     <label v-if="source.is_file"
            class="bbn-b"
     ><?= _("Delete File") ?>:</label>
-    <label v-else-if="source.data.is_vue"
+    <label v-else-if="source.data.isComponent"
            class="bbn-b"
     ><?= _("Delete Component") ?>:</label>
     <label v-else
@@ -25,7 +25,7 @@
       <span v-if="source.is_mvc"
                class="bbn-b"
       ><?= _("Delete all MVC") ?>:</span>
-      <span v-else-if="source.data.is_vue"
+      <span v-else-if="source.data.isComponent"
              class="bbn-b"
       ><?= _("Delete all component") ?>:</span>
       <span v-else
@@ -46,7 +46,7 @@
                     :disabled="formData.all"
                     v-if="list.length > 0"
       ></bbn-dropdown>
-      <bbn-dropdown v-if="exts.length && (source.is_file || source.data.is_vue)"
+      <bbn-dropdown v-if="exts.length && (source.is_file || source.data.isComponent)"
                     :source="exts"
                     v-model="formData.ext"
                     style="width: 100px"

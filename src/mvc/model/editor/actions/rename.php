@@ -49,7 +49,7 @@ if ($model->hasData(['url', 'name', 'id_project'])) {
       }
     }
   } else {
-    if ($model->data['data']['folder'] && !$model->data['data']['is_vue']) {
+    if ($model->data['data']['folder'] && !$model->data['data']['isComponent']) {
       if ($fs->isDir($cfg['file'])) {
         $fs->rename($cfg['file'], $model->data['name']);
       }
@@ -57,7 +57,7 @@ if ($model->hasData(['url', 'name', 'id_project'])) {
       foreach($cfg['typology']['tabs'] as $tab) {
         foreach($tab['extensions'] as $extension) {
           $check = $path.'/'.$file.'.'.$extension['ext'];
-          if ($model->data['data']['is_vue']) {
+          if ($model->data['data']['isComponent']) {
             $check = $cfg['file'] . '/' . $model->data['data']['name'] . '.' .  $extension['ext'];
           }
           $check = str_replace('//', '/', $check);
@@ -67,7 +67,7 @@ if ($model->hasData(['url', 'name', 'id_project'])) {
           }
         }
       }
-      if ($model->data['data']['folder'] && $model->data['data']['is_vue']) {
+      if ($model->data['data']['folder'] && $model->data['data']['isComponent']) {
         if ($fs->isDir($cfg['file'])) {
           $fs->rename($cfg['file'], $model->data['name']);
         }

@@ -34,7 +34,7 @@
             }
             url += '_project_/' +  this.source.type + '/';
 
-            if ( this.source.is_vue ){
+            if ( this.source.isComponent ){
               let name = this.source.path.slice();
               name = name.split('/').pop();
               url += '_vue_/' + name + '/';

@@ -15,7 +15,7 @@
           section: ""
         },
         listExts: {},
-        showPannel:(this.source.is_component && this.source.data.is_vue && !this.source.only_component) || this.source.is_mvc ? true : false,
+        showPannel:(this.source.is_component && this.source.data.isComponent && !this.source.only_component) || this.source.is_mvc ? true : false,
         btns: [
           'cancel',
           {
@@ -44,7 +44,7 @@
           text += bbn._('Are you sure you want to delete') + ' ';
           // files mvc or  files components
           if ( (this.source.is_file) ||
-            (this.source.is_component && this.source.data.is_vue && !this.source.only_component)
+            (this.source.is_component && this.source.data.isComponent && !this.source.only_component)
           ){
             if (  this.formData.ext !== "" ){
               text += bbn._('file') + ' : ' + this.source.name + this.formData.ext + '?';
@@ -57,7 +57,7 @@
             }
           }
           // only component
-          else if ( this.source.is_component && this.source.data.is_vue && this.source.only_component){
+          else if ( this.source.is_component && this.source.data.isComponent && this.source.only_component){
             text += bbn._('the component') + ' ' + this.source.name + ' ? ';
           }
         }

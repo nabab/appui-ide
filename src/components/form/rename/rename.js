@@ -13,7 +13,7 @@
       renameSource() {
         let editor = this.closest('bbn-container').find('appui-ide-editor');
         let url = this.source.uid;
-        if (editor && editor.currentTypeCode && editor.currentTypeCode === 'components' && this.source.is_vue) {
+        if (editor && editor.currentTypeCode && editor.currentTypeCode === 'components' && this.source.isComponent) {
           url = this.source.uid.replace(this.source.name  + '/' + this.source.name, this.source.name);
         }
         return {

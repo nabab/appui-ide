@@ -42,7 +42,7 @@
           {value: 'file', text: bbn._('Single MVC file')}
         ],
         data: {
-          tab: ((this.source.tab_mvc !== undefined) && this.source.tab && (this.source.type === 'mvc')) ?
+          tab: (this.source.tab && (this.source.type === 'mvc')) ?
                   bbn.fn.search(rep.tabs, 'url', this.source.tab) :
                   defaultTab,
           name: '',
@@ -131,6 +131,13 @@
       },
     },
     methods: {
+      validate() {
+        if (this.data.name && !['_super', '_end_'].includes(this.data.name)) {
+          return true;
+        }
+
+        return false;
+      },
       onChangeTemplate() {
         this.$nextTick(() => {
           this.closest('bbn-floater').fullResize();

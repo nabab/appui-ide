@@ -301,6 +301,10 @@
        * @return {String}
        */
       currentRoot() {
+        if (!this.currentPath) {
+          return '';
+        }
+
         let st = this.currentPath.parent_code + '/' + this.currentPath.code + '/';
         if (this.currentType) {
           st += this.currentType.path;
@@ -513,8 +517,7 @@
         bbn.fn.log("lol", editor);
         editor.types = this.types;
         let repositories = {};
-        let selected = this.source.project.path[0];
-        bbn.fn.log(["HAAAAAAAAAAAAAAAAAAAAA", editor.types[this.currentTypeCode === 'classes' ? 'cls' : this.currentTypeCode]]);
+        let repositoryProject = this.source.project.path[0];
         for (let repository of this.source.project.path) {
           let name = repository.parent_code + '/' + repository.code;
           repositories[name] = bbn.fn.extend({}, {
@@ -527,7 +530,7 @@
             id_alias: repository.id_alias,
             id_parent: repository.id_parent ?? null,
             language: repository.language,
-            name: name,
+            name,
             num: repository.alias.num,
             num_children: repository.alias.num_children,
             path: repository.path,
@@ -538,20 +541,20 @@
             tabs: editor.types[this.currentTypeCode === 'classes' ? 'cls' : this.currentTypeCode].tabs
           })
           if (repository.id === this.currentPathId) {
-            selected = repositories[name];
-            bbn.fn.log("SELECTED", selected);
+            repositoryProject = repositories[name];
+            bbn.fn.log("repositoryProject", repositoryProject);
           }
         }
         let src = {
           allData: false,
-          isFile: isFile,
+          isFile,
           path: '',
-          node: node,
+          node,
           id_project: this.closest('appui-project-ui').source.project.id,
           template: null,
-          repositoryProject: selected,
-          currentRep: selected.name,
-          repositories: repositories,
+          repositoryProject,
+          currentRep: repositoryProject.name,
+          repositories,
           root: this.root,
           project: editor.project,
           //parent: false,
@@ -564,19 +567,17 @@
         if (this.currentTypeCode !== false) {
           src.type = this.currentTypeCode;
           if (src.type !== 'mvc') {
-            src.path = selected.types.find(type => type.type === src.type).path
+            src.path = repositoryProject.types.find(type => type.type === src.type).path
           }
         }
 
         if (bbn.fn.isObject(node?.data)) {
-          bbn.fn.log("node in")
           if (node.numChildren > 0) {
-            bbn.fn.log("node in in")
             if (!node.isExpanded) {
               node.isExpanded = true;
             }
             //src.parent = node.find('bbn-tree');
-            this.nodeParent = node.find('bbn-tree');
+            this.nodeParent = node.getRef('tree');
           }
           else {
             //src.parent= node.parent;
@@ -584,7 +585,7 @@
           }
           //caseproject
 
-          if (node.data.is_vue) {
+          if (node.data.isComponent) {
             src.path += node.data.uid.replace(node.data.name + '/' + node.data.name, node.data.name);
           }//other types
           else {
@@ -592,6 +593,7 @@
             src.path += node.data.uid;
           }
 
+          bbn.fn.log("OPEN NEW", node.data)
           src.allData = node.data;
           src.tab = node.data.tab;
           src.type = node.data.type;
@@ -739,7 +741,7 @@
         bbn.fn.log("CURRENT", this.currentRoot);
         bbn.fn.log("node", node.data);
         let url = node.data.uid;
-        if (this.currentTypeCode && this.currentTypeCode === 'components' && node.data.is_vue) {
+        if (this.currentTypeCode && this.currentTypeCode === 'components' && node.data.isComponent) {
           url = node.data.uid.replace(node.data.name + '/' + node.data.name, node.data.name);
         }
         url = this.currentRoot + url;
@@ -945,7 +947,7 @@
           return this.treeData;
         }
 
-        return bbn.fn.extend({}, this.treeData, { is_vue: node.is_vue, uid: node.uid, name: node.name });
+        return bbn.fn.extend({}, this.treeData, { isComponent: node.isComponent, uid: node.uid, name: node.name });
       }
     },
     /**

@@ -83,7 +83,7 @@ if ($model->hasData(['url_src', 'url_dest', 'id_project', 'data_src', 'data_dest
 
       foreach($cfg_src['typology']['tabs'] as $tab) {
         foreach($tab['extensions'] as $extension) {
-          if ($model->data['data_src']['is_vue']) {
+          if ($model->data['data_src']['isComponent']) {
             $check_src = $cfg_src['file'] . '/' . $model->data['data_src']['name'] . '.' .  $extension['ext'];
             $check_dest = $cfg_dest['file'];
           }

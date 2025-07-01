@@ -79,7 +79,7 @@
           path_destination = path_destination.substring(1);
         }
         if ( ((this.source.rep.alias_code === "bbn-project") && (d.type === 'components')) || this.source.isComponent === true ){
-          if ( d.data.is_vue === true ){
+          if ( d.data.isComponent === true ){
             if (  path_destination.indexOf(d.data.name + '/' + d.data.name + '/') > -1 ){
               path_destination = path_destination.replace( d.data.name + '/' + d.data.name, d.data.name + '/');
             }
