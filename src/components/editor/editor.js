@@ -517,8 +517,12 @@
         bbn.fn.log("lol", editor);
         editor.types = this.types;
         let repositories = {};
-        let repositoryProject = this.source.project.path[0];
+        let repositoryProject;
         for (let repository of this.source.project.path) {
+          if (!repository.alias) {
+            bbn.fn.log("NO ATLAS", repository)
+            continue;
+          }
           let name = repository.parent_code + '/' + repository.code;
           repositories[name] = bbn.fn.extend({}, {
             alias_code: repository.alias.code,
@@ -545,6 +549,11 @@
             bbn.fn.log("repositoryProject", repositoryProject);
           }
         }
+        if (!repositoryProject) {
+          bbn.fn.log("NO REPOSITORY PROJECT");
+          return;
+        }
+
         let src = {
           allData: false,
           isFile,
