@@ -12,12 +12,12 @@
                     "show_code": 1,
                     "schema": [
                         {
-                            "title": "URL",
+                            "label": "URL",
                             "field": "url",
                             "type": "url"
                         },
                         {
-                            "field": "cat",
+                            "label": "cat",
                             "title": "Category",
                             "type": "string"
                         }
@@ -2577,7 +2577,7 @@
                     "show_code": 1,
                     "schema": [
                         {
-                            "title": "URL",
+                            "label": "URL",
                             "field": "url",
                             "type": "url"
                         }
@@ -2973,7 +2973,7 @@
                     "show_code": 1,
                     "schema": [
                         {
-                            "title": "URL",
+                            "label": "URL",
                             "field": "url",
                             "type": "url"
                         }
@@ -3549,7 +3549,7 @@
                     "show_code": 1,
                     "schema": [
                         {
-                            "title": "URL",
+                            "label": "URL",
                             "field": "url",
                             "type": "url"
                         }
