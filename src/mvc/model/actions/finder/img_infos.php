@@ -12,7 +12,7 @@ if ( !empty($model->data['path']) ){
     'info' => $info 
   ];
 }*/
-$img = $model->contentPath().'mails/img/logo-apst.jpg';
+$img = $model->contentPath().'mails/img/logo-bbn.png';
 $max_width = 100;
 $max_height = 200;
 $i = new \bbn\File\Image($img);
