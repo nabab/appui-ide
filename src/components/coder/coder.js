@@ -106,11 +106,12 @@
        * @return {Array}
        */
       getExtensions() {
-        let cm = window.bbnCodeCp?.cm;
+        let cm = this.constructor.cm;
 
         if (!cm) {
           return [];
         }
+
 
         if (!this.currentMode || !this.currentTheme) {
           throw Error("You must provide a language and a theme");
@@ -157,7 +158,7 @@
             extensions.push(cm.elmet);
             break;
           case "php":
-            if (cm.lsp) {
+            if (cm.lsp && false) {
               let file = this.closest("appui-ide-coder").source.path; // app-ui/vendor/bbn/appui-ide/src/components/codemirror/codemirror.less
               // create language server extensions with configuration
               let lsPhp = cm.lsp.languageServer({
@@ -167,6 +168,9 @@
                 languageId: 'php'
               });
               extensions.push(lsPhp);
+            }
+            else {
+              extensions.push(cm.languageExtensions.php);
             }
             /*
             // extend php with html
@@ -191,7 +195,7 @@
             break;
         }
         // we can't override autocompletion because is already override with lsp
-        if (this.currentMode !== "less" && this.currentMode !== "php") {
+        if (!['less'].includes(this.currentMode)) {
           extensions.push(cm.autocomplete.autocompletion({
             closeOnBlur: false,
             override: [a => this.completionSource(a)]
