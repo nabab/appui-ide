@@ -576,7 +576,7 @@
         if (this.currentTypeCode !== false) {
           src.type = this.currentTypeCode;
           if (src.type !== 'mvc') {
-            src.path = repositoryProject.types.find(type => type.type === src.type).path
+            //src.path = repositoryProject.types.find(type => type.type === src.type).path
           }
         }
 
@@ -585,14 +585,7 @@
             if (!node.isExpanded) {
               node.isExpanded = true;
             }
-            //src.parent = node.find('bbn-tree');
-            this.nodeParent = node.getRef('tree');
           }
-          else {
-            //src.parent= node.parent;
-            this.nodeParent = node.parent;
-          }
-          //caseproject
 
           if (node.data.isComponent) {
             src.path += node.data.uid.replace(node.data.name + '/' + node.data.name, node.data.name);
@@ -607,11 +600,12 @@
           src.tab = node.data.tab;
           src.type = node.data.type;
         }
-        bbn.fn.log("SRC", src);
+        bbn.fn.log(["SRC", src, node]);
         //check path
         src.path = src.path.replace('//', '/');
 
         //src.prefix = this.prefix;
+        bbn.fn.log("PATH: " + src.path);
         if (!bbn.fn.isObject(node?.data) || node.data.folder) {
           this.closest("bbn-container").getRef('popup').open({
             label: title,
@@ -648,7 +642,7 @@
        * @param node  set at false if click of the context node is data of the node tree
        */
       newDir(node) {
-        this.openNew(bbn._('New Directory'), false, node != undefined && node ? node : false);
+        this.openNew(bbn._('New Directory'), false, node);
       },
       iconColor(node) {
         return node.data.bcolor;
@@ -661,7 +655,7 @@
         bbn.fn.log("file = ", d);
         this.openFile(d);
       },
-      openFile(file) {
+      openFile(file, node) {
         bbn.fn.log("FILE22", file);
         let tab = '';
         let link = '';
@@ -709,7 +703,7 @@
         if (dest.data.folder) {
         }
         else {
-          alert(bbn._('The recipient node is not a folder'));
+          appui.error(bbn._('The recipient node is not a folder'));
           this.treeReload();
         }
       },
@@ -758,6 +752,7 @@
         return url;
       },
       treeMenu(node) {
+        const nodeParent = node.parent.$parent.find('bbn-tree');
         //bbn.fn.log("NODE", node);
         let res = [];
 
@@ -772,8 +767,8 @@
         if (this.currentTypeCode === 'components') {
           res.push(
             {
-              icon: 'nf nf-fa-create',
-              text: bbn._('New components'),
+              icon: 'nf nf-md-cube_outline',
+              text: bbn._('New component'),
               action: () => {
                 this.openNew(bbn._('New Component'), true, node);
               }
@@ -849,11 +844,6 @@
         })
 
         if (this.copiedNode && node.data.folder) {
-          if (node.data.numChildren > 0) {
-            this.nodeParent = node.find('bbn-tree');
-          } else {
-            this.nodeParent = node.parent.$parent.find('bbn-tree');
-          }
           res.push({
             icon: 'nf nf-md-content_paste',
             text: bbn._('Paste'),
@@ -868,7 +858,7 @@
                 }, (d) => {
                   if (d.success) {
                     appui.success(bbn._('Success'));
-                    this.nodeParent.reload();
+                    nodeParent.reload();
                   } else {
                     appui.error(bbn._('Error'));
                   }
@@ -879,6 +869,7 @@
                 component: "appui-ide-form-copy",
                 componentOptions: {
                   source: {
+                    node,
                     name: this.copiedNode.data.name,
                     url_src: this.getPathByNode(this.copiedNode),
                     url_dest: this.getPathByNode(node),
@@ -897,56 +888,91 @@
           icon: 'nf nf-fa-edit',
           text: bbn._('Rename'),
           action: () => {
-            this.nodeParent = node.parent.$parent.find('bbn-tree');
             this.getPopup({
               component: "appui-ide-form-rename",
               componentOptions: {
-                source: node.data
+                source: bbn.fn.extend({}, node.data, {node})
               },
               label: bbn._("Rename")
             });
           }
         });
 
-        res.push({
-          icon: 'nf nf-fa-trash_o',
-          text: bbn._('Delete'),
-          action: () => {
-            this.getPopup().confirm(bbn._("Are you sure you want to delete this file?"), () => {
-              let nodeParent = node.parent.$parent.find('bbn-tree');
-              if (nodeParent && nodeParent.data.numChildren === 1) {
-                nodeParent = node.parent.$parent.find('bbn-tree');
-              }
-              this.nodeParent = nodeParent;
-              let url = node.data.uid;
-              if (this.currentTypeCode && this.currentTypeCode === 'components') {
-                const bits = url.split('/');
-                for (let i = bits.length; i > 0; i--) {
-                  if (bits[i] === this.source.name && bits[i - 1] === this.source.name) {
+        if (node.data.isComponent) {
+          if (node.data.numChildren) {
+            res.push({
+              icon: 'nf nf-fa-trash_o',
+              text: bbn._('Delete the whole folder'),
+              action: () => {
+                this.getPopup().confirm(bbn._("Are you sure you want to delete this folder?"), () => {
+                  let url = node.data.uid;
+                  const bits = url.split('/');
+                  if ((bits[bits.length-1] === this.source.name) && (bits[bits.length-2] === this.source.name)) {
                     bits.splice(i - 1, 1);
                     url = bits.join('/');
-                    break;
+                  }
+                  url = this.currentRoot + url;
+                  this.realDelete(nodeParent, {
+                    url,
+                    id_project: this.source.project.id,
+                    data: bbn.fn.extend({}, node.data, {folder: true})
+                  })
+                });
+              }
+            })
+          }
+
+          res.push({
+            icon: 'nf nf-fa-trash_o',
+            text: bbn._('Delete'),
+            action: () => {
+              this.getPopup().confirm(bbn._("Are you sure you want to delete this component?"), () => {
+                let url = node.data.uid;
+                if (this.currentTypeCode && this.currentTypeCode === 'components') {
+                  const bits = url.split('/');
+                  if ((bits[bits.length-1] === this.source.name) && (bits[bits.length-2] === this.source.name)) {
+                    bits.splice(i - 1, 1);
+                    url = bits.join('/');
                   }
                 }
-              }
-              url = this.currentRoot + url;
-              bbn.fn.post(this.root + 'editor/actions/delete', {
-                url,
-                id_project: this.source.project.id,
-                data: node.data
-              }, d => {
-                if (d.success) {
-                  appui.success(bbn._('Deleted'));
-                  this.nodeParent.reload();
-                } else {
-                  appui.error(bbn._('Error'));
-                }
-              })
-            });
-          }
-        })
+                url = this.currentRoot + url;
+                this.realDelete(nodeParent, {
+                  url,
+                  id_project: this.source.project.id,
+                  data: bbn.fn.extend({}, node.data, {folder: false})
+                })
+              });
+            }
+          })
+        }
+        else {
+          res.push({
+            icon: 'nf nf-fa-trash_o',
+            text: bbn._('Delete'),
+            action: () => {
+              this.getPopup().confirm(bbn._("Are you sure you want to delete this file?"), () => {
+                let url = this.currentRoot + node.data.uid;
+                this.realDelete(nodeParent, {
+                  url,
+                  id_project: this.source.project.id,
+                  data: node.data
+                })
+              });
+            }
+          })
+        }
 
         return res;
+      },
+      realDelete(nodeParent, cfg) {
+        bbn.fn.post(this.root + 'editor/actions/delete', cfg, d => {
+          if (d.success) {
+            appui.success(bbn._('Deleted'));
+            nodeParent.reload();
+          } else {
+            appui.error(bbn._('Error'));
+          }
+        })
       },
       getPopup() {
         return this.closest('bbn-container').getPopup(...arguments);

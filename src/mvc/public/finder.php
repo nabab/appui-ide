@@ -15,7 +15,7 @@ die(var_dump(
 ));
 */
 
-/** @var $this \bbn\Mvc\Controller */
+/** @var bbn\Mvc\Controller $ctrl */
 if ( isset($ctrl->post['data'], $ctrl->post['data']['path'])) {
   $ctrl->addData($ctrl->post['data'])->action();
 }

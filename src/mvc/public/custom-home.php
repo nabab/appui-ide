@@ -1,6 +1,6 @@
 <?php
 
-/** @var \bbn\Mvc\Controller $ctrl The current controller */
+/** @var bbn\Mvc\Controller $ctrl The current controller */
 
 if (!isset($ctrl->inc->ide)) {
   $ctrl->addInc(

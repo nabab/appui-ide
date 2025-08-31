@@ -27,12 +27,15 @@
     methods: {
       onSuccess(data) {
         appui.success(bbn._('Delete Successfully'));
-        let editor = this.closest('appui-ide-editor')
-        bbn.fn.log("NODE PARENT", editor.nodeParent);
-        if (editor.nodeParent && editor.nodeParent.reload) {
-          editor.nodeParent.reload();
-          editor.nodeParent = null;
+        let nodeParent;
+        if (this.source.node) {
+          nodeParent = this.source.node.parent.$parent.find('bbn-tree');
+        }
+        
+        if (nodeParent) {
+          nodeParent.reload();
         } else {
+          let editor = this.closest('appui-ide-editor')
           editor.treeReload();
         }
       }

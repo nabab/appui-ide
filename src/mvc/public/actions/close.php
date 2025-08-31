@@ -1,6 +1,6 @@
 <?php
 /**
- * @var \bbn\Mvc\Controller $ctrl
+ * @var bbn\Mvc\Controller $ctrl
  * @var \bbn\Ide\Directories $ctrl->inc->dir
  */
 if ( isset($ctrl->inc->dir, $ctrl->post['dir'], $ctrl->post['url'], $ctrl->post['editors']) ){

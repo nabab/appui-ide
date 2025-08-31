@@ -40,13 +40,19 @@
     data() {
       return {
         ready: false,
-        myCode: this.source?.content,
+        userCode: this.source?.content,
+        originalCode: this.source?.content,
         currentMode: this.source?.ext,
         currentTheme: this.theme,
         // for autocompletion to get last valid object create with current js file
         lastValidVueObject: this.getVueObject(),
         editor: null
       };
+    },
+    computed: {
+      isClean() {
+        return this.userCode === this.originalCode;
+      }
     },
     methods: {
       init() {
@@ -312,8 +318,8 @@
       // get the vue Object from current file
       getVueObject() {
         try {
-          bbn.fn.log("object", this.myCode)
-          let cpObj = eval(this.myCode);
+          bbn.fn.log("object", this.userCode)
+          let cpObj = eval(this.userCode);
           this.lastValidVueObject = cpObj;
           return cpObj;
         } catch (error) {
@@ -538,28 +544,38 @@
         }
         return res;
       },
+      save() {
+        this.getRef('code').forceUpdate(this.getRef('code').value);
+        bbn.fn.post(appui.plugins['appui-ide'] + '/editor/actions/save', {
+          url: this.source.url,
+          content: this.userCode,
+          id_project: this.source.id_project
+        }, d => {
+          bbn.fn.log(d);
+          if (d.success) {
+            if (d.delete) {
+              appui.success(bbn._("File %s deleted successfully", d.file));
+            }
+            else {
+              this.originalCode = this.userCode;
+              appui.success(bbn._("File %s saved successfully", d.file));
+            }
+          }
+        });
+      },
       keydown(e) {
         if (e.ctrlKey && (e.key.toLowerCase() === 's')) {
           bbn.fn.log(['saving from appui-ide-coder', e, this.source]);
           e.preventDefault();
           e.stopImmediatePropagation();
-          bbn.fn.post(appui.plugins['appui-ide'] + '/editor/actions/save', {
-            url: this.source.url,
-            content: this.myCode,
-            id_project: this.source.id_project
-          }, d => {
-            bbn.fn.log(d);
-            if (d.success) {
-              if (d.delete) {
-                appui.success(bbn._("File %s deleted successfully", d.file));
-              }
-              else {
-                appui.success(bbn._("File %s saved successfully", d.file));
-              }
-            }
-          });
+          this.save();
         }
       },
+    },
+    watch: {
+      isClean(v) {
+        this.closest('bbn-container').dirty = !v;
+      }
     },
     mounted() {
       if (this.closest('appui-ide-editor')) {

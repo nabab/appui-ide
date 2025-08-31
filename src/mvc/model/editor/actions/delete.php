@@ -62,7 +62,6 @@ if ($model->hasData(['url', 'id_project'])) {
 
     // If it's supposed to be a folder...
     if ($model->data['data']['folder']) {
-
       // Check if the directory exists.
       if ($fs->isDir($cfg['file'])) {
         // If the directory exists, delete it.
@@ -70,15 +69,14 @@ if ($model->hasData(['url', 'id_project'])) {
         $count++; // Increment the deletion counter.
       }
 
-    } else { // If it's not a folder (i.e., it's a file)...
+    } elseif (!empty($cfg['typology'])) { // If it's not a folder (i.e., it's a file)...
 
       // Loop through the file typologies.
-      foreach ($cfg['typology']['tabs'] as $tab) {
+      foreach ($cfg['typology']['tabs'] ?? [] as $tab) {
         // Loop through file extensions associated with the typology.
         foreach ($tab['extensions'] as $extension) {
           // Construct the complete file path.
           $check = $path . '/' . $file . '.' . $extension['ext'];
-          $check = str_replace('//', '/', $check); // Clean up the path.
 
           // Check if the file exists.
           if ($fs->isFile($check)) {
@@ -87,6 +85,11 @@ if ($model->hasData(['url', 'id_project'])) {
             $count++; // Increment the deletion counter.
           }
         }
+      }
+
+      if (!$fs->getNumFiles($path)) {
+        $fs->delete($path);
+        $count++;
       }
     }
   }

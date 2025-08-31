@@ -5,7 +5,7 @@
  * Date: 08/01/2018
  * Time: 12:58
  *
- * @var $ctrl \bbn\Mvc\Controller
+ * @var bbn\Mvc\Controller $ctrl
  */
 
 if (

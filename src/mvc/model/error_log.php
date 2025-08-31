@@ -1,7 +1,7 @@
 <?php
 use bbn\X;
 use bbn\Str;
-/** @var \bbn\Mvc\Model $model */
+/** @var bbn\Mvc\Model $model */
 
 $file = $model->dataPath().'logs/_php_error.json';
 if ( $model->inc->fs->isFile($file) ){

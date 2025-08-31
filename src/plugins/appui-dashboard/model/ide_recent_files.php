@@ -1,5 +1,5 @@
 <?php
-/** @var \bbn\Mvc\Model $model */
+/** @var bbn\Mvc\Model $model */
 
 $model->data['limit'] = isset($model->data['limit']) && is_int($model->data['limit']) ? $model->data['limit'] : 5;
 $model->data['start'] = isset($model->data['start']) && is_int($model->data['start']) ? $model->data['start'] : 0;

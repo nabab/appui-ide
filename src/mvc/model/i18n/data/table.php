@@ -6,6 +6,9 @@
  * time: 12.46
  */
 
+use bbn\Mvc;
+use bbn\Appui\I18n;
+
 /** @todo disable the i18n button if $model->data['data']['file_name'] doesn't exist */
 if ( $model->data['table_path'] !== '' ){
   $table_path = $model->data['table_path'].'/';
@@ -26,12 +29,12 @@ if (
   $success = false;
   $lang = $repository['language'];
   /** instantiate i18n class */
-  $translation = new \bbn\Appui\I18n($model->db);
+  $translation = new I18n($model->db);
 
 
 
   /** @var  $partial_path join to the path of the parent the path of the current repository */
-  $partial_path = $repository['bbn_path'] === 'BBN_APP_PATH' ? \bbn\Mvc::getAppPath() : constant($repository['bbn_path']);
+  $partial_path = $repository['bbn_path'] === 'BBN_APP_PATH' ? Mvc::getAppPath() : constant($repository['bbn_path']);
   $partial_path .= $repository['path'];
 
   /** @var (array) $paths will be fill with the path to explore */

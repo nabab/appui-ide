@@ -1,7 +1,7 @@
 <?php
 
 
-/** @var $this \bbn\Mvc\Controller */
+/** @var bbn\Mvc\Controller $ctrl */
 if ( !empty($ctrl->files) ){
   $file = $ctrl->files['file'];
   $content = file_get_contents($file['tmp_name']);

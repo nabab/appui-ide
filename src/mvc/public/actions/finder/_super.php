@@ -1,6 +1,6 @@
 <?php
 
-/** @var $this \bbn\Mvc\Controller */
+/** @var bbn\Mvc\Controller $ctrl */
 
 if ( isset($ctrl->post['origin']) && ($p = $ctrl->inc->pref->get($ctrl->post['origin'])) ){
   $fields = ['path', 'host', 'user', 'type'];

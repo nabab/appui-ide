@@ -3867,7 +3867,7 @@
                     {
                         "pos": 1,
                         "url": "js",
-                        "icon": "icon-javascript-alt",
+                        "icon": "nf nf-dev-javascript",
                         "path": "js\/",
                         "title": "JavaScript",
                         "bcolor": "#f40505",
@@ -3884,7 +3884,7 @@
                     {
                         "pos": 2,
                         "url": "html",
-                        "icon": "icon-html",
+                        "icon": "nf nf-dev-html5",
                         "path": "html\/",
                         "title": "View",
                         "bcolor": "#58be1d",
@@ -3905,7 +3905,7 @@
                     {
                         "pos": 3,
                         "url": "css",
-                        "icon": "icon-css",
+                        "icon": "nf nf-dev-css3",
                         "path": "css\/",
                         "title": "CSS",
                         "bcolor": "#ff9900",
@@ -3928,7 +3928,7 @@
             {
                 "text": "CSS",
                 "code": "css",
-                "icon": "nf nf-fa-css3",
+                "icon": "nf nf-dev-css3",
                 "extensions": [
                     {
                         "ext": "less",
@@ -3950,7 +3950,7 @@
             {
                 "text": "HTML",
                 "code": "html",
-                "icon": "nf nf-fa-html5",
+                "icon": "nf nf-dev-html5",
                 "extensions": [
                     {
                         "ext": "html",
@@ -3962,7 +3962,7 @@
             {
                 "text": "JavaScript",
                 "code": "js",
-                "icon": "nf nf-md-language_javascript",
+                "icon": "nf nf-dev-javascript",
                 "extensions": [
                     {
                         "ext": "js",
@@ -4006,10 +4006,10 @@
                     {
                         "ext": "php",
                         "pos": 1,
-                        "url": "_ctrl",
+                        "url": "_super",
                         "path": "public\/",
-                        "fixed": "_ctrl.php",
-                        "title": "CTRL",
+                        "fixed": "_super.php",
+                        "title": "SUPER",
                         "bcolor": "#24288f",
                         "fcolor": "#fdfdfd",
                         "recursive": 1,
@@ -4024,7 +4024,7 @@
                     {
                         "pos": 2,
                         "url": "php",
-                        "icon": "nf nf-md-language_php",
+                        "icon": "nf nf-dev-php",
                         "path": "public\/",
                         "title": "Controller",
                         "bcolor": "#5c9fd6",
@@ -4041,7 +4041,7 @@
                     {
                         "pos": 3,
                         "url": "private",
-                        "icon": "nf nf-md-language_php",
+                        "icon": "nf nf-dev-php",
                         "path": "private\/",
                         "title": "Private",
                         "bcolor": "#cccccc",
@@ -4075,7 +4075,7 @@
                     {
                         "pos": 5,
                         "url": "html",
-                        "icon": "nf nf-md-code_tags",
+                        "icon": "nf nf-dev-html5",
                         "path": "html\/",
                         "title": "View",
                         "bcolor": "#58be1d",
@@ -4096,7 +4096,7 @@
                     {
                         "pos": 6,
                         "url": "js",
-                        "icon": "nf nf-md-language_javascript",
+                        "icon": "nf nf-dev-javascript",
                         "path": "js\/",
                         "title": "JavaScript",
                         "bcolor": "#f40505",
@@ -4117,7 +4117,7 @@
                     {
                         "pos": 7,
                         "url": "css",
-                        "icon": "nf nf-seti-less",
+                        "icon": "nf nf-dev-css3",
                         "path": "css\/",
                         "title": "CSS",
                         "bcolor": "#ff9900",

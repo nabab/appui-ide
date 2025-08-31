@@ -5,7 +5,7 @@
  * Date: 07/02/2019
  * Time: 14:35
  *
- * @var $ctrl \bbn\Mvc\Controller
+ * @var bbn\Mvc\Controller $ctrl
  */
 $ctrl->action();
 

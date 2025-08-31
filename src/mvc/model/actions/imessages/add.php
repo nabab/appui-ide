@@ -5,7 +5,7 @@
  * Date: 22/03/2018
  * Time: 20:07
  *
- * @var $model \bbn\Mvc\Model
+ * @var bbn\Mvc\Model $model
  */
 
 if ( !empty($model->data['id_option']) &&

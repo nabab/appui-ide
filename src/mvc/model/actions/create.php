@@ -90,8 +90,7 @@ if ($model->hasData(['repository', 'path', 'name', 'type', 'id_project', 'is_fil
     }
   }
   else if ($model->data['type'] === 'components') {
-    $path = $cfg['file'] . ($model->data['path'] != 'components/' ? str_replace('components/', '', $model->data['path'], $count) : '') . $model->data['name'];
-    $path = str_replace('//', '/', $path);
+    $path = $cfg['file'] . $model->data['name'];
     if ($fs->exists($path) && !$model->data['is_file']) {
       return [
         'success' => false,

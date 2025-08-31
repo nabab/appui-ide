@@ -36,20 +36,22 @@
       onSuccess(){
         let componentEditor = this.closest('bbn-container').find('appui-ide-editor');
         //const tab = this.closest("bbn-container");
-        if ( componentEditor.nodeParent !== false ){
-          componentEditor.nodeParent.reload();
-          this.$nextTick(()=>{
-            componentEditor.$set(componentEditor, 'nodeParent', false);
-          });
-        }
-        else{
-          componentEditor.getRef('filesList').reload();
-        }
         if ( this.isFile && !this.source.isMVC ){
           appui.success(bbn._("Copy file succesfully!"));
         }
         else{
           appui.success(bbn._("Copy succesfully!"));
+        }
+        let nodeParent;
+        if (this.source.node) {
+          nodeParent = this.source.node.parent.$parent.find('bbn-tree');
+        }
+
+        if (nodeParent) {
+          nodeParent.reload();
+        } else {
+          let editor = this.closest('appui-ide-editor');
+          editor.treeReload();
         }
         this.$nextTick(() => {
           this.closest(".bbn-popup").close();

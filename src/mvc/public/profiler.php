@@ -2,7 +2,7 @@
 
 use bbn\X;
 
-/** @var $this \bbn\Mvc\Controller */
+/** @var bbn\Mvc\Controller $ctrl */
 if (defined('BBN_BASEURL') && empty(BBN_BASEURL) ){
   $url = $ctrl->pluginUrl('appui-ide').'/profiler';
   $ctrl->setUrl($url)

@@ -2,7 +2,7 @@
 /*
  * Describe what it does!
  *
- * @var $ctrl \bbn\Mvc\Controller 
+ * @var bbn\Mvc\Controller $ctrl 
  *
  */
 $ctrl->addData(['root' => $ctrl->pluginUrl('appui-ide').'/'])

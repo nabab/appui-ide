@@ -25,9 +25,19 @@
       }
     },
     methods: {
-      onSuccess(data) {
+      onSuccess() {
         appui.success(bbn._('Rename Successfully'));
-        this.closest('appui-ide-editor').nodeParent.reload();
+        let nodeParent;
+        if (this.source.node) {
+          nodeParent = this.source.node.parent.$parent.find('bbn-tree');
+        }
+
+        if (nodeParent) {
+          nodeParent.reload();
+        } else {
+          let editor = this.closest('appui-ide-editor');
+          editor.treeReload();
+        }
       }
     }
   };

@@ -1,5 +1,7 @@
 <?php
-/* @var \bbn\Mvc\Model $model */
+/* @var bbn\Mvc\Model $model */
+use bbn\X;
+use bbn\Mvc;
 if ( !empty($model->data['excel']) && !empty($model->data['data']) ){
   $cfg = $model->data['excel'];
   $data = array_map(function($row) use($cfg){
@@ -10,7 +12,7 @@ if ( !empty($model->data['excel']) && !empty($model->data['data']) ){
     }
     foreach ( $row as $i => $r ){
       if ( 
-        (($idx = \bbn\X::search($cfg, ['field' => $i])) === null ) ||
+        (($idx = X::search($cfg, ['field' => $i])) === null ) ||
         !!$cfg[$idx]['hidden']
       ){
         unset($row[$i]);
@@ -28,8 +30,8 @@ if ( !empty($model->data['excel']) && !empty($model->data['data']) ){
     }
     return $ret;
   }, $model->data['data']);
-  $path = \bbn\X::makeStoragePath(\bbn\Mvc::getUserTmpPath()) . 'export_' . date('d-m-Y_H-i-s') . '.xlsx';
-  if ( \bbn\X::toExcel($data, $path, true, $cfg) ){
+  $path = X::makeStoragePath(Mvc::getUserTmpPath()) . 'export_' . date('d-m-Y_H-i-s') . '.xlsx';
+  if ( X::toExcel($data, $path, true, $cfg) ){
     return ['excel_file' => $path];
   }
 }

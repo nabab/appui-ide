@@ -4,7 +4,7 @@
  *
  **/
 
-/** @var $model \bbn\Mvc\Model*/
+/** @var bbn\Mvc\Model $model*/
 use bbn\X;
 
 if (isset($model->data['path']) && isset($model->data['content'])) {

@@ -26,12 +26,13 @@
         });
       }
       if ( this.source.isFile && rep.extensions ){
-        bbn.fn.log("EXTENSIONS", rep.extensions)
+        bbn.fn.log("EXTENSIONS", rep)
         defaultExt = rep.extensions[0].ext;
       }
+      bbn.fn.log("REP", rep);
       return {
-        isMVC: ((rep !== undefined) && (rep.tabs !== undefined) && ((rep.alias_code !== "components") && (rep.alias_code !== "bbn-project"))) || ((rep !== undefined) && (this.source.type === "mvc")),
-        isComponent: ((rep !== undefined) && (rep.tabs !== undefined) && ((rep.alias_code === "components") && (rep.alias_code !== "bbn-project"))) || (this.source.type === "components"),
+        isMVC: ((rep?.tabs !== undefined) && ((rep.alias_code !== "components") && (rep.alias_code !== "bbn-project"))) || ((rep !== undefined) && (this.source.type === "mvc")),
+        isComponent: ((rep?.tabs !== undefined) && ((rep.alias_code === "components") && (rep.alias_code !== "bbn-project"))) || (this.source.type === "components"),
         rep: rep,
         type:  this.source.type || false,
         templates: [
@@ -146,7 +147,7 @@
       onSuccess() {
         let  componentEditor = this.closest('bbn-container').find('appui-ide-editor');
         if ( this.source.isFile ){
-          let link = appui.plugins['appui-project'] + '/ui/' + this.source.project.id + '/' + 'ide/file/' + this.source.currentRep + '/' + (this.source.type === 'mvc' ? this.source.type + '/' : '')
+          let link = appui.plugins['appui-project'] + '/ui/' + this.source.project.id + '/' + 'ide/file/' + this.source.currentRep + '/' + this.source.type + '/';
           if ( this.data.path.startsWith('./') ){
             link += this.data.path.slice(2);
           }
@@ -161,8 +162,14 @@
             link += '/' + this.rep.tabs[this.data.tab]['url'];
           }
           else if ( (this.data.tab === 0) && this.data.extension ){
-            link += '/code';
+            if (this.isComponent) {
+              link += '/js';
+            }
+            else {
+              link += '/code';
+            }
           }
+
           if ( link.indexOf('//') !== -1 ){
             link = link.replace('//', '/');
           }
@@ -178,13 +185,17 @@
           componentEditor.treeReload();
         }
         else{
-          if ( componentEditor.nodeParent !== false ){
-            componentEditor.nodeParent.reload();
-            this.$nextTick(()=>{
-              componentEditor.$set(componentEditor, 'nodeParent', false);
-            });
+          let nodeParent;
+          if (this.source.node) {
+            nodeParent = this.source.node.parent.$parent.find('bbn-tree');
           }
-          //this.source.parent.reload();
+
+          if (nodeParent) {
+            nodeParent.reload();
+          } else {
+            let editor = this.closest('appui-ide-editor');
+            editor.treeReload();
+          }
         }
       },
       failureActive(){

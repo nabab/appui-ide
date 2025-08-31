@@ -12,7 +12,7 @@
             ref="code"
             @keydown="keydown"
             @hook:mounted="init"
-            bbn-model="myCode"
+            bbn-model="userCode"
             :scrollable="true"
             :theme="currentTheme"
             :mode="currentMode" />

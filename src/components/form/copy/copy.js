@@ -21,15 +21,19 @@
     methods: {
       onSuccess(data) {
         appui.success(bbn._('Rename Successfully'));
-        let editor = this.closest('appui-ide-editor');
-        if (editor.nodeParent && editor.nodeParent.reload) {
-          editor.nodeParent.reload();
-          editor.nodeParent = null;
-        } else {
+        let nodeParent;
+        if (this.source.node) {
+          nodeParent = this.source.node.parent.$parent.find('bbn-tree')
+        }
+        if (nodeParent?.reload) {
+          nodeParent.reload();
+        }
+        else {
+          let editor = this.closest('appui-ide-editor')
           editor.treeReload();
         }
       },
-      onFailure(data) {
+      onFailure() {
         appui.error(bbn._('Rename failure'));
       }
     }
