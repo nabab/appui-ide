@@ -267,8 +267,8 @@
        * 
        * @param {*} node 
        */
-      select(node) {
-        bbn.fn.log(["SELECT NODE", node.data.value, node.data.file, node.tree.data.path, node.closest('appui-ide-finder-pane').index])
+      select(node, pane) {
+        bbn.fn.log(["SELECT NODE", node.data.value, node.data.file, node.tree.data.path, node.index, node.closest('appui-ide-finder-pane').index])
         // Reinit
         this.isImage = false;
         this.isJson = false;
@@ -278,24 +278,47 @@
 
         if (node.data.value) {
           let path = '';
-          let num = 2;
           if (node.tree.data.path && (node.tree.data.path !== '.')) {
             path += node.tree.data.path;
-            if (path.indexOf("./") == 0) {
-              path = bbn.fn.substr(path, 2);
-            }
-            num += path.split('/').length;
           }
+
+          if (bbn.fn.substr(path, 0, 2) !== './') {
+            path = './' + path;
+          }
+
+          if (path) {
+            path += '/';
+          }
+
           path += node.data.value;
+          if (node.data.dir) {
+            path += '/';
+          }
+
           if (this.currentPath !== path) {
-            if (this.numCols >= num) {
-              this.dirs.splice(num - (this.numCols + 1));
+            let realI;
+            bbn.fn.each(path.split('/'), (bit, i) => {
+              if (!bit) {
+                return;
+              }
+
+              if (this.dirs[i]?.name !== bit) {
+                return false;
+              }
+
+              realI = i;
+            });
+            if (this.dirs.length > realI + 1) {
+              this.dirs.splice(realI + 1);
             }
+
             if (node.data.dir) {
               this.currentFile = false;
               this.dirInfo = node.data;
-              this.add(node.data.value);
-              this.$forceUpdate();
+              this.$nextTick(() => {
+                this.add(node.data.value);
+                this.$forceUpdate();
+              });
             }
             else if (node.data.file) {
               let idx = node.data.value.lastIndexOf('.'),

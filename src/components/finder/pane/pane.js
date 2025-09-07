@@ -23,7 +23,7 @@
     },
     methods: {
       select(node) {
-        return this.cp.select(node);
+        return this.cp.select(node, this);
       },
       updateInfo() {
         return this.cp.updateInfo();
