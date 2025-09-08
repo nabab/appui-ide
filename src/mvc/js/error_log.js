@@ -18,9 +18,9 @@
 	</div>
 	<div class="bbn-flex-fill">
     <bbn-table :source="source.backtrace" :scrollable="true">
-      <bbns-column field="function" :render="showFn"></bbns-column>
-      <bbns-column field="file"></bbns-column>
-      <bbns-column field="line" :width="80" cls="bbn-b"></bbns-column>
+      <bbns-column field="action"/>
+      <bbns-column field="file"/>
+      <bbns-column field="line" :width="80" cls="bbn-b"/>
     </bbn-table>
 	</div>
 </div>`,
