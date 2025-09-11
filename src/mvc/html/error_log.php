@@ -1,5 +1,9 @@
 <!-- HTML Document -->
-<bbn-table :source="source.data" :sortable="true" :filterable="true">
+<bbn-table :source="source.data"
+           :sortable="true"
+           :filterable="true"
+           :pageable="true"
+           :limit="50">
   <bbns-column field="last_date"
                type="datetime"
                :label="_('Last date')"
