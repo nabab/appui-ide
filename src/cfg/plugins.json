@@ -4,14 +4,13 @@
         "code": "dashboard",
         "items": [
             {
-                "text": "Widgets",
                 "code": "widgets",
                 "id_alias": [
                     "widgets",
                     "dashboard",
-                    "appui"
+                    "appui",
+                    "plugins"
                 ],
-                "icon": "nf nf-md-widgets",
                 "items": [
                     {
                         "text": "IDE recent files",
