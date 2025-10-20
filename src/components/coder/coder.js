@@ -45,7 +45,7 @@
         currentMode: this.source?.ext,
         currentTheme: this.theme,
         // for autocompletion to get last valid object create with current js file
-        lastValidVueObject: this.getVueObject(),
+        lastValidVueObject: this.getComponentObject(),
         editor: null
       };
     },
@@ -140,6 +140,7 @@
           case "javascript":
           case "js":
             extensions.push(cm.javascript.javascript());
+            extensions.push(cm.javascript.javascript().support);
             if (window.eslint4b) {
               extensions.push(cm.lint.linter(cm.javascript.esLint(new window.eslint4b(), {
                 parseOptions: {
@@ -316,7 +317,7 @@
         return currentProp;
       },
       // get the vue Object from current file
-      getVueObject() {
+      getComponentObject() {
         try {
           bbn.fn.log("object", this.userCode)
           let cpObj = eval(this.userCode);
@@ -336,7 +337,7 @@
         if (false && first && first.startsWith('this')) {
           const cpObj = bbn.fn.createObject();
           try {
-            addToObject(cpObj, this.getVueObject());
+            addToObject(cpObj, this.getComponentObject());
           }
           catch (error) {
             bbn.fn.log("ERROR", error);
@@ -545,7 +546,6 @@
         return res;
       },
       save() {
-        this.getRef('code').forceUpdate(this.getRef('code').value);
         bbn.fn.post(appui.plugins['appui-ide'] + '/editor/actions/save', {
           url: this.source.url,
           content: this.userCode,

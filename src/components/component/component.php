@@ -2,7 +2,7 @@
 <div class="bbn-overlay">
   <div class="bbn-h-100 code">
     <bbn-router :autoload="false"
-                :nav="true"
+                mode="tabs"
                 :source="routerSource"
                 ref="tabstripComponents"
     ></bbn-router>

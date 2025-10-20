@@ -13,7 +13,7 @@
     </div>
   </bbn-toolbar>
   <div class="bbn-flex-fill">
-    <bbn-router :nav="true"
+    <bbn-router mode="tabs"
                 :root="source.root + 'finder/'"
                 :base-url="source.root + 'finder/'"
                 :url-navigation="true"

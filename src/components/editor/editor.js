@@ -430,7 +430,6 @@
             }
             let link = (mvc.route ? mvc.route + '/' : '') +
               (pathMVC === 'mvc' ? '' : pathMVC + '/') + mvc.filename;
-            bbn.fn.log("BEFORE THE LINK", bbn.fn.baseName(link));
             if (bbn.fn.baseName(link) === 'index') {
               window.open(bbn.env.host + '/' + link);
             }
@@ -443,8 +442,6 @@
               let pathMVC = component.source.path;
               pathMVC = pathMVC.replace("mvc/", "");
               let link = component.source.route + pathMVC;
-
-              bbn.fn.log(["BEFORE THE LINK", bbn.fn.baseName(link), link]);
               if (bbn.fn.baseName(link) === 'index') {
                 window.open(bbn.env.host + '/' + link);
               }
@@ -452,7 +449,7 @@
                 appui.route(link, true);
               }
 
-              return true;
+              return;
             }
             if (typeof (this.find('appui-ide-coder').myMode) === 'string') {
               switch (this.find('appui-ide-coder').myMode) {

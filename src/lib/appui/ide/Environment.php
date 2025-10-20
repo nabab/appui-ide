@@ -329,8 +329,10 @@ class Environment
 
       // Write the modified JSON data to the `composer.json` file.
       // The JSON data is formatted with JSON_PRETTY_PRINT for readability.
-      return file_put_contents($file, json_encode($json, JSON_PRETTY_PRINT));
+      return (int)file_put_contents($file, json_encode($json, JSON_PRETTY_PRINT));
     }
+
+    return false;
   }
 
 
@@ -1648,11 +1650,9 @@ class Environment
       case 'suggest-test':
         // If the operation is 'suggest-test', return the associated short code.
         return 'method-tests-json';
-        break;
       case 'ai-refactoring':
         // If the operation is 'ai-refactoring', return the associated short code.
         return 'method-refactor-json';
-        break;
       default:
         // Throw an exception if an invalid operation is provided.
         throw new Exception(X::_("Only the following words are allowed: 'suggest-test', 'ai-refactoring'"));
@@ -1673,7 +1673,7 @@ class Environment
       X::log("Prompt :", 'ai_suggestion');
       X::log($prompt, 'ai_suggestion');
       if (!empty($prompt)) {
-        $response = $ai->getPromptResponse($prompt['id'], $function_code, false);
+        $response = $ai->getPromptResponse($prompt['id'], $function_code);
         X::log("Response:", 'ai_suggestion');
         X::log($response, 'ai_suggestion');
         if ($response['success']) {

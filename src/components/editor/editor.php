@@ -70,7 +70,7 @@
       <bbn-pane>
         <bbn-router :autoload="true"
                     ref="router"
-                    :nav="true"
+                    mode="tabs"
                     :splittable="true"
                     :storage="true"
                     :storage-full-name="'appui-ide-editor-router-' + source.project.id"/>

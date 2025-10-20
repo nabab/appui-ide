@@ -1,6 +1,6 @@
 <div class="bbn-overlay">
   <div class="bbn-h-100 code">
-    <bbn-router :nav="true"
+    <bbn-router mode="tabs"
                 :scrollable="false"
                 ref="tabstrip"
     >

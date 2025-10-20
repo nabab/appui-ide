@@ -5,15 +5,16 @@ use bbn\X;
  */
 
 if (defined('BBN_BASEURL') && !empty($ctrl->arguments)) {
+  $base = constant('BBN_BASEURL');
   $root = $ctrl->pluginUrl('appui-ide') . '/';
   $ctrl->addData([
     'url' => implode('/', $ctrl->arguments),
     'routes' => $ctrl->getRoutes(),
     'root' => $root,
-    'baseURL' => BBN_BASEURL
+    'baseURL' => $base
   ]);
 
-  if (substr(BBN_BASEURL, -7) === '/_end_/') {
+  if (substr($base, -7) === '/_end_/') {
     $ctrl->addToObj($root . 'editor/code', $ctrl->data, true);
   }
   else {

@@ -1,6 +1,6 @@
 <div class="bbn-overlay component-file">
   <bbn-router :autoload="false"
-              :nav="true"
+              mode="tabs"
               :scrollable="false"
               ref="tabstrip"
   >

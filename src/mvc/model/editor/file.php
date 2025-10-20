@@ -36,6 +36,7 @@ if (!empty($model->data['url']) && isset($model->inc->ide)) {
 
   //$timer->stop('2nd');
   //$timer->start('3rd');
+  $model->inc->ide->setProject($id_project);
   $repository = $model->inc->ide->repository($rep);
 
   $f = $model->inc->ide->decipherPath($model->data['url']);

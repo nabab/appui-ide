@@ -76,7 +76,7 @@
     </bbn-pane>
     <bbn-pane>
       <div class="bbn-overlay">
-        <bbn-router :nav="true"
+        <bbn-router mode="tabs"
                     :menu="[]"
                     :autoload="false"
                     :root="routerRoot"
