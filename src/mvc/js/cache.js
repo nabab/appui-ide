@@ -1,8 +1,8 @@
 // Javascript Document
 (()=>{
   return {
-    data(){
-      return{
+    data() {
+      return {
         root: appui.plugins['appui-ide'] + '/',
         selectedFile : "",
         selectedFileCreation: '',
@@ -30,15 +30,43 @@
         }
       },
       deleteAll(){
-        this.post( this.root + 'cache',{
-          deleteAll: true,
-          deleteContent: 0
-          }, d => {
-          if ( d.success ){
-            this.contentCache = "";
-            this.getRef('cacheList').reload();
+        this.confirm(
+          bbn._("Are you sure you want to delete all the application's cache?"),
+          () => {
+            this.post(
+              this.root + 'cache',
+              {
+                deleteAll: true,
+                deleteContent: 0
+              },
+              d => {
+                if ( d.success ){
+                  this.contentCache = "";
+                  this.getRef('cacheList').reload();
+                }
+              }
+            );
           }
-        });
+        );
+      },
+      deleteUsers() {
+        this.confirm(
+          bbn._("Are you sure you want to delete all the users' cache?"), 
+          () => {
+            this.post(
+              this.root + 'cache',
+              {
+                deleteAll: true,
+                users: true
+              },
+              d => {
+                if ( d.success ){
+                  appui.success(bbn._("All users cache deleted"))
+                }
+              }
+            );
+          }
+        );
       },
       treeMapper(ele){
         return {

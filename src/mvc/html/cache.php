@@ -3,6 +3,11 @@
     <bbn-pane :scrollable="false">
       <div class="bbn-flex-height">
         <div class="bbn-w-100 bbn-padding">
+          <h2><?= _("Users cache") ?></h2>
+          <bbn-button @click="deleteUsers"> <?= _('Delete all cache') ?></bbn-button>
+        </div>
+        <div class="bbn-w-100 bbn-padding">
+          <h2><?= _("Application cache") ?></h2>
           <bbn-button @click="deleteAll"> <?= _('Delete all cache') ?></bbn-button>
         </div>
         <div class="bbn-flex-fill">

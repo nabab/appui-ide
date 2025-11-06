@@ -27,6 +27,15 @@ if (!$model->hasData('main')) {
   if (!empty($model->data['cache']) && Str::checkPath($folderCache.$model->data['cache'])) {
     return json_decode(file_get_contents($folderCache.$model->data['cache']));
   }
+  elseif(!empty($model->data['users'])) {
+    $root = $model->tmpPath() . 'users';
+    $userFolders = $model->inc->fs->getDirs($root);
+    foreach ($userFolders as $userFolder) {
+      if ($model->inc->fs->isDir($userFolder . '/tmp/cache')) {
+        $model->inc->fs->delete($userFolder . '/tmp/cache', false);
+      }
+    }
+  }
   //case click button for delte all cache
   elseif(!empty($model->data['deleteAll'])) {
     if ($model->inc->fs->delete($folderCache, false)) {

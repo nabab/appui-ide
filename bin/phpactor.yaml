@@ -1,0 +1,6 @@
+core:
+  min_memory_limit: 1810612736,
+class_to_file:
+  brute_force_conversion: false
+
+
