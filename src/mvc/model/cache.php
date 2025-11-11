@@ -35,6 +35,10 @@ if (!$model->hasData('main')) {
         $model->inc->fs->delete($userFolder . '/tmp/cache', false);
       }
     }
+
+    return [
+      'success' => true
+    ];
   }
   //case click button for delte all cache
   elseif(!empty($model->data['deleteAll'])) {
