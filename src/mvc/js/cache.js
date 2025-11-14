@@ -43,6 +43,7 @@
                 if ( d.success ){
                   this.contentCache = "";
                   this.getRef('cacheList').reload();
+                  appui.success(bbn._("All the global cache have been deleted"))
                 }
               }
             );
@@ -61,7 +62,25 @@
               },
               d => {
                 if ( d.success ){
-                  appui.success(bbn._("All users cache deleted"))
+                  appui.success(bbn._("All users cache have been deleted"))
+                }
+              }
+            );
+          }
+        );
+      },
+      deleteUser() {
+        this.confirm(
+          bbn._("Are you sure you want to delete your cache?"), 
+          () => {
+            this.post(
+              this.root + 'cache',
+              {
+                user: true
+              },
+              d => {
+                if ( d.success ){
+                  appui.success(bbn._("Your cache has been deleted"))
                 }
               }
             );

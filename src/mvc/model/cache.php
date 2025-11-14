@@ -27,6 +27,16 @@ if (!$model->hasData('main')) {
   if (!empty($model->data['cache']) && Str::checkPath($folderCache.$model->data['cache'])) {
     return json_decode(file_get_contents($folderCache.$model->data['cache']));
   }
+  elseif(!empty($model->data['user'])) {
+    $userFolder = $model->tmpPath() . 'users/' . $model->inc->user->getId();
+    if ($model->inc->fs->isDir($userFolder . '/tmp/cache')) {
+      $model->inc->fs->delete($userFolder . '/tmp/cache', false);
+    }
+
+    return [
+      'success' => true
+    ];
+  }
   elseif(!empty($model->data['users'])) {
     $root = $model->tmpPath() . 'users';
     $userFolders = $model->inc->fs->getDirs($root);
