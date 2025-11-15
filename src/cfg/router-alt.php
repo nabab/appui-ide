@@ -214,7 +214,7 @@ and put it in the public root of your web server and call it from your browser.
     . '://' . BBN_SERVER_NAME
     . (BBN_PORT && !in_array(BBN_PORT, [80, 443]) ? ':' . BBN_PORT : '')
     . (BBN_CUR_PATH ? BBN_CUR_PATH : '');
-  if (substr($url, -1) !== '/') {
+  if (mb_substr($url, -1) !== '/') {
     $url .= '/';
   }
 
@@ -253,7 +253,7 @@ and put it in the public root of your web server and call it from your browser.
   // Classes autoloaders
   spl_autoload_register(
     function ($class_name) {
-      if ((strpos($class_name, '/') === false) && (strpos($class_name, '.') === false)) {
+      if ((mb_strpos($class_name, '/') === false) && (mb_strpos($class_name, '.') === false)) {
         $cls = explode('\\', $class_name);
         $path = implode('/', $cls);
         if (file_exists(BBN_APP_PATH . 'src/lib/' . $path . '.php')) {

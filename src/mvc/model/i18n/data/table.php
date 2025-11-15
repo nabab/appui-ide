@@ -6,6 +6,7 @@
  * time: 12.46
  */
 
+use bbn\Str;
 use bbn\Mvc;
 use bbn\Appui\I18n;
 
@@ -49,7 +50,7 @@ if (
     foreach ( $repository['tabs'] as $t => $val ) {
       $extensions[$val['path']] = $repository['tabs'][$t]['extensions'];
       /** don't take _ctrl that has the same path of public */
-      if ( substr($val['url'], 0, 1) !== '_' ){
+      if ( Str::sub($val['url'], 0, 1) !== '_' ){
         $dir_name[$val['path']] = $partial_path . $val['path'];
       }
 

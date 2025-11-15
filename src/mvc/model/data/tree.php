@@ -13,11 +13,11 @@ if (X::hasProps($model->data['data'], ['id_project', 'id_path'], true)) {
   $path = $model->data['data']['uid'] ?? '';
   if (X::hasProps($model->data['data'], ['isComponent', 'name'], true)) {
     // find the position of the last occurrence of the string
-    $last_occurrence_pos = strrpos($model->data['data']['uid'], $model->data['data']['name'] . '/' . $model->data['data']['name']);
+    $last_occurrence_pos = Str::rpos($model->data['data']['uid'], $model->data['data']['name'] . '/' . $model->data['data']['name']);
 
     if ($last_occurrence_pos !== false) {
       // replace the last occurrence with the desired string
-      $path = substr_replace($path, $model->data['data']['name'], $last_occurrence_pos, strlen($model->data['data']['name'] . '/' . $model->data['data']['name']));
+      $path = substr_replace($path, $model->data['data']['name'], $last_occurrence_pos, Str::len($model->data['data']['name'] . '/' . $model->data['data']['name']));
     }
   }
   if (!empty($model->data['data']['type'])) {

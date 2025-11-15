@@ -7,10 +7,10 @@ use bbn\File\System;
 /** @var array */
 $fs = new System();
 $log_files = array_filter($fs->getFiles($model->dataPath().'logs'), function($a){
-  return substr($a, -4) !== '.old';
+  return Str::sub($a, -4) !== '.old';
 });
 
-if ( ($log_file = ini_get('error_log')) && (strpos($log_file, $model->tmpPath().'logs') === false) ){
+if ( ($log_file = ini_get('error_log')) && (Str::pos($log_file, $model->tmpPath().'logs') === false) ){
   array_unshift($log_files, $log_file);
 }
 $res = [];

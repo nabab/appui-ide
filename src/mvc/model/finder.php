@@ -1,13 +1,14 @@
 <?php
 
 use bbn\X;
+use bbn\Str;
 use bbn\Appui\Passwords;
 use bbn\File\System;
 //X::ddump($model->inc->pref->get($model->data['origin']));
 
 if (
   isset($model->data['path'], $model->data['origin']) &&
-  (strpos($model->data['path'], '../') === false) &&
+  (Str::pos($model->data['path'], '../') === false) &&
   ($p = $model->inc->pref->get($model->data['origin']))
 ){
   $fields = ['path', 'host', 'user', 'type'];

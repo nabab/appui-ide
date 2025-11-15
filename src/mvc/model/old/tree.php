@@ -1,6 +1,7 @@
 <?php
 
 use bbn\X;
+use bbn\Str;
 
 /** @var bbn\Mvc\Model $model */
 if ($model->hasData(['repository'], true)) {
@@ -53,7 +54,7 @@ if ($model->hasData(['repository'], true)) {
   }
 
   //check backslash
-  while (strpos($cur_path, '//') !== false) {
+  while (Str::pos($cur_path, '//') !== false) {
     $cur_path = str_replace('//', '/', $cur_path);
   }
 
@@ -64,8 +65,8 @@ if ($model->hasData(['repository'], true)) {
 
   /*
   if ($model->hasData('type', true)
-      && (strpos('/', $model->data['type']) === false)
-      && (strpos('.', $model->data['type']) === false)
+      && (Str::pos('/', $model->data['type']) === false)
+      && (Str::pos('.', $model->data['type']) === false)
       && (is_dir($path.$model->data['type']))
   ) {
     $path .= $model->data['type'].'/';
@@ -139,7 +140,7 @@ if ($model->hasData(['repository'], true)) {
       if (is_array($folders)) {
         if(count($folders) > 0) {
           foreach ($folders as $i => $folder){
-            if (strpos($folder, '.') === 0) {
+            if (Str::pos($folder, '.') === 0) {
               unset($folders[$i]);
             }
           }
@@ -161,7 +162,7 @@ if ($model->hasData(['repository'], true)) {
     $info_git = false;
     if (!empty($difference_git['ide'])) {
       foreach($difference_git['ide'] as $commit){
-        $info_git = strpos($commit['ele'], $ele) === 0;
+        $info_git = Str::pos($commit['ele'], $ele) === 0;
         if (!empty($info_git)) {
           return $info_git;
         }
@@ -174,7 +175,7 @@ if ($model->hasData(['repository'], true)) {
   // function for create the node for tree
   $get = function ($real, $color, $tab = false, $type = false, $types =[]) use (&$folders, &$files,$check_git ,  $onlydirs,$cur_path, $file_check, $excludeds, $opt, $types_to_include, $is_project, $tree_popup, $dirs, $model)
   {
-    if(!empty($real) && !empty(strpos($real,'//'))) {
+    if(!empty($real) && !empty(Str::pos($real,'//'))) {
       $real = str_replace('//','/', $real);
     }
 
@@ -186,7 +187,7 @@ if ($model->hasData(['repository'], true)) {
         foreach ($todo as $t){
           //we can only enter if it is a component type and there is no other child element with the same name or that is not a component type
           if (((((\bbn\Str::fileExt($t, 1)[0] !== basename($cur_path)) && $model->inc->fs->isDir($t)) && ($type === 'components')) || ($type !== 'components'))
-              && (strpos(basename($t),".") !== 0)
+              && (Str::pos(basename($t),".") !== 0)
           ) {
             $component = false;
             $isComponent    = false;
@@ -281,7 +282,7 @@ if ($model->hasData(['repository'], true)) {
                               $ele  = explode(".", basename($f));
                               $item = $ele[0];
                               $ext  = isset($ele[1]) ? $ele[1] : false;
-                              if (($model->inc->fs->isDir($f) && (strpos(basename($f), '.') === 0))
+                              if (($model->inc->fs->isDir($f) && (Str::pos(basename($f), '.') === 0))
                                   || ($model->inc->fs->isFile($f) && (($item !== basename($t)) || (!empty($ext) && (in_array($ext, $excludeds) === true))))
                               ) {
                                 $element_exluded++;

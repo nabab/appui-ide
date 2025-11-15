@@ -1,5 +1,6 @@
 <?php
 use bbn\X;
+use bbn\Str;
 /**
  * @var bbn\Mvc\Controller $ctrl
  */
@@ -14,7 +15,7 @@ if (defined('BBN_BASEURL') && !empty($ctrl->arguments)) {
     'baseURL' => $base
   ]);
 
-  if (substr($base, -7) === '/_end_/') {
+  if (Str::sub($base, -7) === '/_end_/') {
     $ctrl->addToObj($root . 'editor/code', $ctrl->data, true);
   }
   else {
@@ -31,21 +32,21 @@ if (defined('BBN_BASEURL') && !empty($ctrl->arguments)) {
       $ctrl->setUrl($url);
     }
 
-    if ($ctrl->obj->data['isMVC'] && (strpos($ctrl->obj->title, '/'.'mvc/') === 0)) {
-      $ctrl->setTitle(substr($ctrl->obj->title, 5));
+    if ($ctrl->obj->data['isMVC'] && (Str::pos($ctrl->obj->title, '/'.'mvc/') === 0)) {
+      $ctrl->setTitle(Str::sub($ctrl->obj->title, 5));
       $ctrl->setColor('var(--navy)', '#FFF');
     }
-    elseif ($ctrl->obj->data['isComponent'] && (strpos($ctrl->obj->title, '/'.'components/') === 0)) {
-      $ctrl->setTitle(substr($ctrl->obj->title, 12));
+    elseif ($ctrl->obj->data['isComponent'] && (Str::pos($ctrl->obj->title, '/'.'components/') === 0)) {
+      $ctrl->setTitle(Str::sub($ctrl->obj->title, 12));
       $ctrl->setColor('var(--brown)', '#FFF');
     }
   }
 
-  /*if ( !empty($title) && (strlen($title) > 20) ){
+  /*if ( !empty($title) && (Str::len($title) > 20) ){
       $ctrl->obj->ftitle = $title;
-      $start = strlen($title) - 20;
+      $start = Str::len($title) - 20;
       $start = ($start + 3);
-      $title = '...'.substr($title,$start);
+      $title = '...' . Str::sub($title,$start);
     }
 
     echo $ctrl

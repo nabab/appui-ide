@@ -1,4 +1,5 @@
 <?php
+use bbn\Str;
 /** @var bbn\Mvc\Model $model */
 $data = ['names' => []];
 $prefs = [strtoupper(BBN_APP_PREFIX), 'BBN'];
@@ -10,9 +11,9 @@ foreach ( $prefs as $i => $p ){
   ];
   $prefix = $p.'_';
   foreach ( $cs as $k => $c ){
-    if ( strpos($k, $prefix) === 0 ){
+    if ( Str::pos($k, $prefix) === 0 ){
       array_push($res['constants'], [
-        'constant' => substr($k, strlen($prefix)),
+        'constant' => Str::sub($k, Str::len($prefix)),
         'value' => $c
       ]);
     }

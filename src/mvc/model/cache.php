@@ -85,7 +85,7 @@ if (!$model->hasData('main')) {
   
     if (!empty($content)) {
       foreach ($content as $i => $path) {
-        $nodePath = substr($path, strlen($folderCache));
+        $nodePath = Str::sub($path, Str::len($folderCache));
         $arr = explode("/", $path);
         $element = $arr[count($arr)-1];
   
@@ -99,7 +99,7 @@ if (!$model->hasData('main')) {
         ];
   
   
-        if ((strpos($path, $fullPath) === 0)  && $model->inc->fs->isDir($fullPath)) {
+        if ((Str::pos($path, $fullPath) === 0)  && $model->inc->fs->isDir($fullPath)) {
           if (!empty($model->data['path'])) {
             $paths = $model->data['path'];
           }

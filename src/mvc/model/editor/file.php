@@ -26,13 +26,13 @@ if (!empty($model->data['url']) && isset($model->inc->ide)) {
   //$timer->start('2nd');
   //define the route for use in test code
   foreach ($model->data['routes'] as $i => $r) {
-    if (strpos($file, $r['path']) === 0) {
+    if (Str::pos($file, $r['path']) === 0) {
       $route = $i;
       break;
     }
   }
   $path = str_replace($rep, '' , $url);
-  $path = substr($path, 0, Strpos($path, '/_end_'));
+  $path = Str::sub($path, 0, Strpos($path, '/_end_'));
 
   //$timer->stop('2nd');
   //$timer->start('3rd');
@@ -81,8 +81,8 @@ if (!empty($model->data['url']) && isset($model->inc->ide)) {
   //$timer->start('5th');
 
   //model->data['url'] = implode("/", $stepUrl);
-  if ( strpos($model->data['url'],'_end_/settings') !== false ){
-    $url_settings = substr($model->data['url'], 0, Strpos($model->data['url'],'_end_/settings')).'_end_/'.($repository['alias_code'] !== 'components' ? "php" : 'js');
+  if ( Str::pos($model->data['url'],'_end_/settings') !== false ){
+    $url_settings = Str::sub($model->data['url'], 0, Strpos($model->data['url'],'_end_/settings')).'_end_/'.($repository['alias_code'] !== 'components' ? "php" : 'js');
     $ctrl_file = $model->inc->ide->urlToReal($url_settings);
   }
   //$timer->stop('5th');
@@ -133,7 +133,7 @@ if (!empty($model->data['url']) && isset($model->inc->ide)) {
   //$timer->stop('7th');
   //$timer->start('9th');
 
-  $real = substr($url, 0, strpos($url, "_end_") + strlen("_end_"));
+  $real = Str::sub($url, 0, Str::pos($url, "_end_") + Str::len("_end_"));
   if (!empty($res['tabs'])) {
     foreach ($res['tabs'] as &$tab) {
       $tab['file'] = $project->urlToReal($real . '/' . $tab['url']);
@@ -159,7 +159,7 @@ if (!empty($model->data['url']) && isset($model->inc->ide)) {
     }
     if ($idx && $model->data['styleTab'][$idx]) {
       if ($start = stripos($model->data['title'], '/')) {
-        $title = substr($model->data['title'],  $start + 1);
+        $title = Str::sub($model->data['title'],  $start + 1);
       }
     }
   }

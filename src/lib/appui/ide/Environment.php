@@ -132,7 +132,7 @@ class Environment
       // Scan the full library path for files and filter them based on the presence of "composer.json".
       // Assign the first found composer.json file to the $composer variable.
       if ($tmp = $this->fs->scan($fullpath, function ($a) {
-        return strpos($a, "composer.json") !== false;
+        return Str::pos($a, "composer.json") !== false;
       })) {
         $composer = $tmp[0];
       }

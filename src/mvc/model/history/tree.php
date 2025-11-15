@@ -1,4 +1,6 @@
 <?php
+use bbn\Str;
+
 if (!isset($model->inc->ide)) {
   throw new \Exception(_("No IDE object!"));
 }
@@ -60,7 +62,7 @@ elseif (isset($model->data['url'])
 ){
   $path = $model->inc->ide->getDataPath('appui-ide').'backup/'.
     $model->data['repository_cfg']['root'].'/'.
-    substr($model->data['url'], Strpos($model->data['url'],$model->data['repository_cfg']['code'],1));
+    Str::sub($model->data['url'], Strpos($model->data['url'],$model->data['repository_cfg']['code'],1));
   
   if ( $model->inc->fs->isFile($path) ){
     $code= $model->inc->fs->getContents($path);

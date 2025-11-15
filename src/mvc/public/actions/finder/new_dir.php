@@ -1,9 +1,10 @@
 <?php
+use bbn\Str;
 
 $success = false;
 if ( isset($ctrl->post['path'], $ctrl->post['new'], $ctrl->post['node']['value'], $ctrl->post['newDir'] ) ){
   
-  if ( strpos( $ctrl->post['path'], './') === 0 ){
+  if ( Str::pos( $ctrl->post['path'], './') === 0 ){
     $path = '';
   }
   else {

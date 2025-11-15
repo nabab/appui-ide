@@ -1,4 +1,5 @@
 <?php
+use bbn\Str;
 
 $arr = [
   'ide' => [],
@@ -18,7 +19,7 @@ if ($model->hasData('path')) {
   if ( !empty($difference_git) ){
     $arr['elements'] = array_map(function($a) use($path){
       return [
-        'ele' => $path.'/'.(!empty($i = strpos($a['file'], ' -> ')) ? substr($a['file'], $i+4)  : $a['file']),
+        'ele' => $path.'/'.(!empty($i = Str::pos($a['file'], ' -> ')) ? Str::sub($a['file'], $i+4)  : $a['file']),
         'state' => $a['action']
       ];
     }, $difference_git);
