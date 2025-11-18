@@ -10,7 +10,7 @@
           end: null,
           id_option: this.source.permissions ? this.source.permissions.id : null
         },
-        today: dayjs().format('YYYY-MM-DD HH:mm:ss')
+        today: bbn.date().format('YYYY-MM-DD HH:mm:ss')
       }
     },
     computed: {

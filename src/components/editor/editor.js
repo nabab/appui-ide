@@ -465,7 +465,7 @@
                         const tn = this.closest('bbn-router'),
                           idx = tn.views.length;
                         tn.add({
-                          label: dayjs().format('HH:mm:ss'),
+                          label: bbn.date().format('HH:mm:ss'),
                           icon: 'nf nf-fa-cogs',
                           load: false,
                           content: d.content,

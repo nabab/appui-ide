@@ -50,9 +50,9 @@ if ($model->hasData(['url', 'id_project'])) {
   
   return [
     'success' => $success,
+    'real' => $file,
     'file' => basename($file),
     'content' => $model->data['content'],
-    'delete' => $delete,
-    'success' => true
+    'delete' => $delete
   ];
 }
