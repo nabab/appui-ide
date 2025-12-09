@@ -3855,7 +3855,7 @@
                     {
                         "ext": "php",
                         "mode": "php",
-                        "default": "<?php\n\/*\n *  Describe what it does\n *\n **\/"
+                        "default": "<?php\n\n/** @var bbn\\Mvc\\Controller $ctrl */\n\n"
                     }
                 ]
             },

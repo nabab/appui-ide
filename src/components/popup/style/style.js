@@ -5,7 +5,7 @@
       return {
         themes: [],
         themePreview: this.source.themeCode,
-        content: '<?php\n/*\n * Describe what it does!\n *\n **/\n\n$content = [\n  "field_one" => "a",\n  "field_two" => 1\n];\nvar_dump($content);',
+        content: '<?php\n\n$content = [\n  "field_one" => "a",\n  "field_two" => 1\n];\nvar_dump($content);',
         btns: [
           'cancel', {
             label: 'Change',

@@ -1,10 +1,5 @@
 <?php
-/*
- * Describe what it does!
- *
- * @var bbn\Mvc\Controller $ctrl
- *
- */
+/** @var bbn\Mvc\Controller $ctrl */
 if ($ctrl->hasArguments()) {
   $ctrl->addData([
     'root' => $ctrl->pluginUrl('appui-ide'),
