@@ -52,30 +52,17 @@ if (!$model->hasData('main')) {
   }
   //case click button for delte all cache
   elseif(!empty($model->data['deleteAll'])) {
-    if ($model->inc->fs->delete($folderCache, false)) {
-      return [
-        'success' => true
-      ];
-    }
-    else {
-      return [
-        'success' => false
-      ];
-    }
+    $cache = Cache::getEngine();
+    return [
+      'success' => (bool)$cache->deleteAll()
+    ];
   }
   //case delete a cache or file or folder in tree
   elseif (!empty($model->data['deleteCache']) && Str::checkPath($model->data['deleteCache'])) {
-    $ele = $folderCache.$model->data['deleteCache'];
-    if (!empty($model->inc->fs->delete($ele, $model->data['deleteCache']))) {
-      return [
-        'success' => true
-      ];
-    }
-    else {
-      return [
-        'success' => false
-      ];
-    }
+    $cache = Cache::getEngine();
+    return [
+      'success' => (bool)$cache->deleteAll($model->data['deleteCache'])
+    ];
   }//in this block retur tha data of all cache for tree
   else {
     $content = $model->inc->fs->getFiles($fullPath, true);
