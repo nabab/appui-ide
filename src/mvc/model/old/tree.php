@@ -316,8 +316,8 @@ if ($model->hasData(['repository'], true)) {
                     elseif ($ext === 'less') {
                       $icon = 'nf nf-dev-less';
                     }
-                    else{
-                      $icon = "icon-$ext";
+                    elseif (empty($icon)) {
+                      $icon = "nf nf-oct-terminal";
                     }
                   }
                   //case component o folder who contain other component
