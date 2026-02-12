@@ -175,7 +175,7 @@
     },
     watch: {
       contentCache(val){
-        if( !val.length ){
+        if( !val?.length ){
           this.selectedFile = "";
         }
       }

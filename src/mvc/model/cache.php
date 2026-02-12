@@ -6,6 +6,7 @@ use bbn\File\System;
 
 /** @var bbn\Mvc\Model $model */
 if (!$model->hasData('main')) {
+  $cache = Cache::getEngine();
   if (!isset($model->inc->fs)) {
     $model->addInc('fs',  new System());
   }
@@ -25,16 +26,11 @@ if (!$model->hasData('main')) {
   }*/
   
   if (!empty($model->data['cache']) && Str::checkPath($folderCache.$model->data['cache'])) {
-    return json_decode(file_get_contents($folderCache.$model->data['cache']));
+    return $cache->getFull($model->data['cache']);
   }
   elseif(!empty($model->data['user'])) {
-    $userFolder = $model->tmpPath() . 'users/' . $model->inc->user->getId();
-    if ($model->inc->fs->isDir($userFolder . '/tmp/cache')) {
-      $model->inc->fs->delete($userFolder . '/tmp/cache', false);
-    }
-
     return [
-      'success' => true
+      'success' => $model->inc->user->deleteAllCache()
     ];
   }
   elseif(!empty($model->data['users'])) {
@@ -52,57 +48,19 @@ if (!$model->hasData('main')) {
   }
   //case click button for delte all cache
   elseif(!empty($model->data['deleteAll'])) {
-    $cache = Cache::getEngine();
     return [
       'success' => (bool)$cache->deleteAll()
     ];
   }
   //case delete a cache or file or folder in tree
   elseif (!empty($model->data['deleteCache']) && Str::checkPath($model->data['deleteCache'])) {
-    $cache = Cache::getEngine();
     return [
-      'success' => (bool)$cache->deleteAll($model->data['deleteCache'])
+      'success' => $cache->deleteAll($model->data['deleteCache'])
     ];
   }//in this block retur tha data of all cache for tree
   else {
-    $content = $model->inc->fs->getFiles($fullPath, true);
     $cache = Cache::getEngine();
-    $all = [];
-    $paths = [];
-  
-    if (!empty($content)) {
-      foreach ($content as $i => $path) {
-        $nodePath = Str::sub($path, Str::len($folderCache));
-        $arr = explode("/", $path);
-        $element = $arr[count($arr)-1];
-  
-        $ele =  [
-          'text' => $element,
-          //'path' => [],
-          'nodePath' => $nodePath,
-          'items'=> [],
-          'num' => $model->inc->fs->isDir($path) ? count($model->inc->fs->getFiles($path, true)) : 0,
-          'folder' => $model->inc->fs->isDir($path)
-        ];
-  
-  
-        if ((Str::pos($path, $fullPath) === 0)  && $model->inc->fs->isDir($fullPath)) {
-          if (!empty($model->data['path'])) {
-            $paths = $model->data['path'];
-          }
-          else {
-            $paths = [];
-          }
-
-          if (!in_array($ele, $paths)) {
-            $paths[] = $ele;
-          }
-        }
-
-        $ele['path'] = $paths;
-        array_push($all, $ele);
-      }
-    }
+    $all = $cache->browse($model->data['nodePath'] ?? '');
 
     return ['data' => $all];
   }
