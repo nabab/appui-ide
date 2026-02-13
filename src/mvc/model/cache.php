@@ -53,7 +53,7 @@ if (!$model->hasData('main')) {
     ];
   }
   //case delete a cache or file or folder in tree
-  elseif (!empty($model->data['deleteCache']) && Str::checkPath($model->data['deleteCache'])) {
+  elseif (!empty($model->data['deleteCache'])) {
     return [
       'success' => $cache->deleteAll($model->data['deleteCache'])
     ];
