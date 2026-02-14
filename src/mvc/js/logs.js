@@ -183,7 +183,7 @@
                   let code = this.getRef('code');
                   this.$nextTick(()=>{
                     if ( code !== undefined ){
-                      code.widget.setCursor( code.widget.lastLine() , 0);
+                      code.widget.goToBottom();
                     }
                   });
                 }

@@ -75,8 +75,7 @@
                 :resizable="true"
                 :scrollable="false">
         <div v-if="text && text.length" class="bbn-overlay">
-          <bbn-code :mode="type"
-                    bbn-model="text"
+          <bbn-code bbn-model="text"
                     :readonly="true"
                     ref="code"
                     @hook:mounted="$refs.code.scrollBottom"
