@@ -71,8 +71,7 @@
             return this.rep.tabs[this.data.tab].extensions
           }
           else{
-            this.numExt = 0;
-            this.numExt = this.rep.extensions.length;
+            this.numExt = this.rep.extensions?.length || 0;
             return this.rep.extensions
           }
         }

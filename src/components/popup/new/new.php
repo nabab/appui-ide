@@ -15,7 +15,7 @@
                        ref="filename"
                        class="bbn-w-100"/>
           </div>
-          <bbn-dropdown bbn-if="source.isFile && availableExtensions && (availableExtensions.length > 1)"
+          <bbn-dropdown bbn-if="source.isFile && (availableExtensions?.length > 1)"
                         :source="extensions"
                         bbn-model="data.extension"
                         required="required"
