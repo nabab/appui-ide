@@ -7,7 +7,7 @@ use bbn\Str;
 if (!empty($ctrl->post)) {
   $ctrl->action();
 }
-elseif (!empty(BBN_BASEURL) && $ctrl->hasArguments(4)) {
+elseif ($ctrl->getConstant('baseURL') && $ctrl->hasArguments(4)) {
   $ctrl->add('./class_editor_cp', [
     'root' => $ctrl->arguments[0],
     'lib' => $ctrl->arguments[1] . '/' . $ctrl->arguments[2],

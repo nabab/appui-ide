@@ -3,7 +3,7 @@
 use bbn\X;
 
 /** @var bbn\Mvc\Controller $ctrl */
-if (defined('BBN_BASEURL') && empty(BBN_BASEURL) ){
+if (!$ctrl->getConstant('baseURL')){
   $url = $ctrl->pluginUrl('appui-ide').'/profiler';
   $ctrl->setUrl($url)
     ->setColor('#888', '#FFF')

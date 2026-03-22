@@ -5,8 +5,8 @@ use bbn\Str;
  * @var bbn\Mvc\Controller $ctrl
  */
 
-if (defined('BBN_BASEURL') && !empty($ctrl->arguments)) {
-  $base = constant('BBN_BASEURL');
+if ($ctrl->getConstant('baseURL') && !empty($ctrl->arguments)) {
+  $base = $ctrl->getConstant('baseURL');
   $root = $ctrl->pluginUrl('appui-ide') . '/';
   $ctrl->addData([
     'url' => implode('/', $ctrl->arguments),
