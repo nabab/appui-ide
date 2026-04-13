@@ -122,8 +122,8 @@
               this.text = d.content;
             	this.$nextTick(() => {
                 let code = this.getRef('code');
-                if (code?.scrollBottom) {
-                  code.scrollBottom();
+                if (code?.scrollToBottom) {
+                  code.scrollToBottom();
                 }
               });
             });

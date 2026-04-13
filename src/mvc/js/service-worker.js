@@ -71,7 +71,7 @@
             this.log = this.log + log;
             setTimeout(() => {
               if (this.followLog) {
-                code.scrollBottom()
+                code.scrollToBottom()
               }
             }, 250)
           }

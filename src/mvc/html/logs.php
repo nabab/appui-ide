@@ -78,7 +78,7 @@
           <bbn-code bbn-model="text"
                     :readonly="true"
                     ref="code"
-                    @hook:mounted="$refs.code.scrollBottom"
+                    @hook:mounted="$refs.code.scrollToBottom"
                     class="bbn-overlay"/>
         </div>
         <div v-else class="bbn-overlay bbn-middle">

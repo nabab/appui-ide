@@ -26,7 +26,8 @@ if (!$model->hasData('main')) {
   }*/
   
   if (!empty($model->data['cache']) && Str::checkPath($folderCache.$model->data['cache'])) {
-    return $cache->getFull($model->data['cache']);
+    $info = $cache->info($model->data['cache']);
+    return array_merge($info, ['value' => $cache->getFull($model->data['cache'])]);
   }
   elseif(!empty($model->data['user'])) {
     return [
