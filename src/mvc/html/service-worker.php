@@ -14,7 +14,7 @@
                   :label="followLog ? _('Follow log') : _('Unfollow')"
                   @click="followLog = !followLog"></bbn-button>
       <div class="bbn-toolbar-separator"></div>
-      <bbn-initial v-for="(w, i) in windows"
+      <bbn-initial bbn-for="(w, i) in windows"
                    :key="w.id"
                    :letters="(i+1).toString()"
                    class="bbn-hsmargin"
@@ -52,7 +52,7 @@
                         @select="selectClient"></bbn-list>
             </bbn-pane>
             <bbn-pane>
-              <bbn-json-editor v-model="clientJSON" readonly="readonly"></bbn-json-editor>
+              <bbn-json-editor bbn-model="clientJSON" readonly="readonly"></bbn-json-editor>
             </bbn-pane>
             <bbn-pane :size="120">
               <bbn-list :source="requestLogs"
@@ -61,7 +61,7 @@
                         @select="selectRequest"></bbn-list>
             </bbn-pane>
             <bbn-pane>
-              <bbn-json-editor v-model="requestJSON" readonly="readonly"></bbn-json-editor>
+              <bbn-json-editor bbn-model="requestJSON" readonly="readonly"></bbn-json-editor>
             </bbn-pane>
             <bbn-pane :size="120">
               <bbn-list :source="responseLogs"
@@ -70,7 +70,7 @@
                         @select="selectResponse"></bbn-list>
             </bbn-pane>
             <bbn-pane>
-              <bbn-json-editor v-model="responseJSON" readonly="readonly"></bbn-json-editor>
+              <bbn-json-editor bbn-model="responseJSON" readonly="readonly"></bbn-json-editor>
             </bbn-pane>
           </bbn-splitter>
         </bbn-pane>
@@ -78,6 +78,6 @@
     </div>
   </bbn-pane>
 	<bbn-pane>
-    <bbn-code ref="code" type="ruby" v-model="log" class="bbn-100" readonly="readonly"></bbn-code>
+    <bbn-code ref="code" bbn-model="log" class="bbn-100" readonly="readonly"></bbn-code>
   </bbn-pane>
 </bbn-splitter>

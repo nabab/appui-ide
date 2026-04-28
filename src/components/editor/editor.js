@@ -1024,7 +1024,7 @@
       this.getRecentFiles();
       this.container = this.closest('bbn-container');
       if (!this.types) {
-        bbn.fn.post(this.root + 'data/path/types', {}, (d) => {
+        this.post(this.root + 'data/path/types', {}, (d) => {
           this.types = d.types;
           bbn.ide = d.types;
         });

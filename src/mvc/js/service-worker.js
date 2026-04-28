@@ -141,11 +141,11 @@
         }
       },
       created() {
-        appui.$on('sw-log', this.addToLog);
+        appui.$on('swlog', this.addToLog);
         //appui.$on('received', bbn.fn.log);
       },
       beforeDestroy(){
-        appui.$off('sw-log', this.addToLog);
+        appui.$off('swlog', this.addToLog);
         //appui.$off('received', bbn.fn.log);
       }
     };
