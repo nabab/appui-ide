@@ -255,8 +255,8 @@
       this.getSourceTreeLogs();
     },
     beforeDestroy(){
-      clearInterval(bbn.var.logPoller);
-      bbn.var.logPoller = false;
+      clearInterval(bbn.data.logPoller);
+      bbn.data.logPoller = false;
     },
     computed:{
       files(){
