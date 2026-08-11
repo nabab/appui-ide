@@ -2,6 +2,7 @@
 <bbn-table :source="source.data"
            :pageable="true"
            :filterable="true"
+           :limits="[50, 100, 500, 1000, 2000, 5000, 10000]"
            :sortable="true">
   <bbns-column field="child"
                :label="_('Process')"/>
