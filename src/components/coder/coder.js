@@ -319,7 +319,7 @@
       // get the vue Object from current file
       getComponentObject() {
         try {
-          bbn.fn.log("object", this.userCode)
+          //bbn.fn.log("coder: object", this.userCode)
           let cpObj = eval(this.userCode);
           this.lastValidVueObject = cpObj;
           return cpObj;

@@ -44,9 +44,8 @@
       initRouterSource() {
         if (this.editorCfg) {
           if (this.source.tabs) {
-            bbn.fn.log("TABS", this.source.tabs);
+            //bbn.fn.log("TABS", this.source.tabs);
             this.source.tabs.forEach(tab => {
-              bbn.fn.log(tab);
               this.routerSource.push({
                 load: true,
                 url: tab.url,
@@ -64,7 +63,6 @@
             });
           }
           else {
-            bbn.fn.log("PUSHING TABS");
             this.routerSource.push({
               load: true,
               url: 'code',
@@ -82,7 +80,7 @@
         }
       },
       changeExt(ext) {
-        bbn.fn.log(this.source);
+        //bbn.fn.log(this.source);
         bbn.fn.post(appui.plugins['appui-ide'] + '/editor/actions/change_ext', {
           url: this.source,
           ext: ext
@@ -93,7 +91,7 @@
         });
       },
       getMenu(tab){
-        bbn.fn.log("getMenu", arguments);
+        //bbn.fn.log("getMenu", arguments);
         let menu = [{
           icon: 'nf nf-fa-refresh',
           text: bbn._("Refresh code"),
