@@ -1,5 +1,5 @@
 <?php
-/* @var bbn\Mvc\Model $model */
+/** @var bbn\Mvc\Model $model */
 use bbn\X;
 use bbn\Mvc;
 if ( !empty($model->data['excel']) && !empty($model->data['data']) ){

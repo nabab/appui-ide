@@ -1,5 +1,5 @@
 <?php
-/* @var $ctrl \bbn\Mvc */
+/** @var $ctrl \bbn\Mvc */
 //get content file log
 use bbn\Str;
 
