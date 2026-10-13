@@ -5,8 +5,14 @@ use bbn\Str;
 
 $file = $model->dataPath().'logs/_php_error.json';
 if ( $model->inc->fs->isFile($file) ){
-  $json = json_decode(file_get_contents($file), true);
-  return ['data' => array_values($json['data'])];
+  try {
+    $json = json_decode(file_get_contents($file), true);
+  }
+  catch(Exception $e) {
+    return ['data' => [], 'error' => X::_("Error decoding JSON")];
+  }
+
+  return ['data' => array_values($json['data'] ?? [])];
 }
 else {
   return ['data' => [], 'error' => X::_("No file")];
